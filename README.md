@@ -1,6 +1,5 @@
 # Entitas-Java
-Entity Component System (ECS) Entitas
-Implementation of the [Entitas](https://github.com/sschmid/Entitas-CSharp) entity framework in Java 8.
+Entity Component System (ECS) Implementation of the [Entitas](https://github.com/sschmid/Entitas-CSharp) entity framework in Java 8.
 
 # Overview
 ```
