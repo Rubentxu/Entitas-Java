@@ -31,7 +31,7 @@ public class Entity {
         _components = new IComponent[totalComponents];
     }
 
-    public int getcreationIndex() {
+    public int getCreationIndex() {
         return _creationIndex;
     }
 
@@ -217,7 +217,7 @@ public class Entity {
     @Override
     public String toString() {
         if (_toStringCache == null) {
-            StringBuilder sb = (new StringBuilder()).append("Entity_").append(_creationIndex).append("(").append(getretainCount()).append(")").append("(");
+            StringBuilder sb = (new StringBuilder()).append("Entity_").append(_creationIndex).append("(").append(getRetainCount()).append(")").append("(");
 
             final String sEPARATOR = ", ";
             IComponent[] components = getComponents();
@@ -235,7 +235,7 @@ public class Entity {
         return _toStringCache;
     }
 
-    public int getretainCount() {
+    public int getRetainCount() {
         return owners.size();
     }
 

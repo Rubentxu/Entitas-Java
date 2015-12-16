@@ -99,7 +99,7 @@ public class Pool {
             }
         }
 
-        if (entity.getretainCount() == 1) {
+        if (entity.getRetainCount() == 1) {
             entity.OnEntityReleased.removeListener("_cachedOnEntityReleased");
             _reusableEntities.push(entity);
         } else {
