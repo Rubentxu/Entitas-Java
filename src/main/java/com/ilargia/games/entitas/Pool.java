@@ -76,7 +76,6 @@ public class Pool {
                 listener.poolChanged(this, entity);
             }
         }
-
         return entity;
     }
 
