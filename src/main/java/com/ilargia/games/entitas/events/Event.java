@@ -34,4 +34,9 @@ public final class Event<T> {
         return allListeners;
     }
 
+    public void clear() {
+        namedListeners.clear();
+        anonymousListeners.clear();
+    }
+
 }

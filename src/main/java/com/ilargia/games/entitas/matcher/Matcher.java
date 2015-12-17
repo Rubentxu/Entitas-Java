@@ -119,7 +119,7 @@ public class Matcher implements IAllOfMatcher, IAnyOfMatcher, INoneOfMatcher {
     }
 
     private static void appendIndices(StringBuilder sb, String prefix, List<Integer> indexArray, String[] componentNames) {
-        final String sEPARATOR = ", ";
+        final String SEPARATOR = ", ";
         sb.append(prefix);
         sb.append("(");
         int lastSeparator = indexArray.size() - 1;
@@ -132,7 +132,7 @@ public class Matcher implements IAllOfMatcher, IAnyOfMatcher, INoneOfMatcher {
             }
 
             if (i < lastSeparator) {
-                sb.append(sEPARATOR);
+                sb.append(SEPARATOR);
             }
         }
         sb.append(")");

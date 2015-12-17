@@ -13,42 +13,43 @@ import java.util.List;
 
 public class Entity {
 
-    public final HashSet<Object> owners = new HashSet<>();
-    public Event<EntityChanged> OnComponentAdded = new Event<EntityChanged>();
-    public Event<EntityChanged> OnComponentRemoved = new Event<EntityChanged>();
-    public Event<ComponentReplaced> OnComponentReplaced = new Event<ComponentReplaced>();
-    public String[] componentNames;
-    public int _creationIndex;
-    public boolean _isEnabled = true;
-    public Event<EntityReleased> OnEntityReleased = new Event<EntityReleased>();
+    private int _creationIndex;
+    private boolean _isEnabled;
     private IComponent[] _components;
     private IComponent[] _componentsCache;
     private List<Integer> _componentIndicesCache;
     private String _toStringCache;
 
+    public final HashSet<Object> owners;
+    public Event<EntityChanged> OnComponentAdded;
+    public Event<EntityChanged> OnComponentRemoved;
+    public Event<ComponentReplaced> OnComponentReplaced;
+    public Event<EntityReleased> OnEntityReleased;
+
 
     public Entity(int totalComponents) {
         _components = new IComponent[totalComponents];
-    }
+        _isEnabled = true;
+        owners = new HashSet<>();
+        OnComponentAdded = new Event<EntityChanged>();
+        OnComponentRemoved = new Event<EntityChanged>();
+        OnComponentReplaced = new Event<ComponentReplaced>();
+        OnEntityReleased = new Event<EntityReleased>();
 
-    public int getCreationIndex() {
-        return _creationIndex;
     }
 
     public Entity addComponent(int index, IComponent component) {
+        if(index > _components.length-1) {
+            String errorMsg = "Cannot add component at index " + index + "; Max index " +_components.length;
+            throw new EntityDoesNotHaveComponentException(errorMsg, index);
+        }
+
         if (!_isEnabled) {
             throw new EntityIsNotEnabledException("Cannot add component!");
         }
 
         if (hasComponent(index)) {
-            String errorMsg;
-            if (componentNames == null) {
-                errorMsg = "Cannot add component at index " + index + " to " + this;
-            } else {
-                errorMsg = "Cannot add component " + componentNames[index] + " to " + this;
-            }
-
-            throw new EntityAlreadyHasComponentException(errorMsg, index);
+            throw new EntityAlreadyHasComponentException("Cannot add component at index " + index + " to " + this, index);
         }
 
         _components[index] = component;
@@ -60,8 +61,8 @@ public class Entity {
                 listener.entityChanged(this, index, component);
             }
         }
-
         return this;
+
     }
 
     public Entity removeComponent(int index) {
@@ -70,16 +71,9 @@ public class Entity {
         }
 
         if (!hasComponent(index)) {
-            String errorMsg;
-            if (componentNames == null) {
-                errorMsg = "Cannot remove component at index " + index + " from " + this;
-            } else {
-                errorMsg = "Cannot remove component " + componentNames[index] + " from " + this;
-            }
-
+            String errorMsg = "Cannot remove component at index " + index + " from " + this;
             throw new EntityDoesNotHaveComponentException(errorMsg, index);
         }
-
         replaceComponentInternal(index, null);
 
         return this;
@@ -127,24 +121,17 @@ public class Entity {
         }
     }
 
-    public IComponent getComponent(int index) {
+    public <T extends IComponent> T getComponent(int index) {
         if (!hasComponent(index)) {
-            String errorMsg;
-            if (componentNames == null) {
-                errorMsg = "Cannot get component at index " + index + " from " + this;
-            } else {
-                errorMsg = "Cannot get component " + componentNames[index] + " from " + this;
-            }
-
+            String errorMsg = "Cannot get component at index " + index + " from " + this;
             throw new EntityDoesNotHaveComponentException(errorMsg, index);
         }
-
-        return _components[index];
+        return (T) _components[index];
     }
 
     public IComponent[] getComponents() {
         if (_componentsCache == null) {
-            ArrayList<IComponent> components = new ArrayList<IComponent>();
+            List<IComponent> components = new ArrayList<IComponent>();
             for (int i = 0, componentsLength = _components.length; i < componentsLength; i++) {
                 IComponent component = _components[i];
                 if (component != null) {
@@ -154,8 +141,8 @@ public class Entity {
 
             _componentsCache = components.toArray(new IComponent[0]);
         }
-
         return _componentsCache;
+
     }
 
     public List<Integer> getComponentIndices() {
@@ -166,34 +153,38 @@ public class Entity {
                     indices.add(i);
                 }
             }
-
             _componentIndicesCache = indices;
         }
         return _componentIndicesCache;
+
     }
 
     public boolean hasComponent(int index) {
-        return _components[index] != null;
+        try {
+            return _components[index] != null;
+        } catch (ArrayIndexOutOfBoundsException ex) {
+            return false;
+        }
     }
 
     public boolean hasComponents(List<Integer> indices) {
-        for (int i = 0, indicesLength = indices.size(); i < indicesLength; i++) {
-            if (_components[indices.get(i)] == null) {
+        for (Integer index : indices) {
+            if (_components[index] == null) {
                 return false;
             }
         }
-
         return true;
+
     }
 
     public boolean hasAnyComponent(List<Integer> indices) {
-        for (int i = 0, indicesLength = indices.size(); i < indicesLength; i++) {
-            if (_components[indices.get(i)] != null) {
+        for (Integer index : indices) {
+            if (_components[index] != null) {
                 return true;
             }
         }
-
         return false;
+
     }
 
     public void removeAllComponents() {
@@ -207,25 +198,25 @@ public class Entity {
 
     public void destroy() {
         removeAllComponents();
-        OnComponentAdded = null;
-        OnComponentReplaced = null;
-        OnComponentRemoved = null;
-        componentNames = null;
+        OnComponentAdded.clear();
+        OnComponentReplaced.clear();
+        OnComponentRemoved.clear();
         _isEnabled = false;
     }
 
     @Override
     public String toString() {
         if (_toStringCache == null) {
-            StringBuilder sb = (new StringBuilder()).append("Entity_").append(_creationIndex).append("(").append(getRetainCount()).append(")").append("(");
+            StringBuilder sb = (new StringBuilder()).append("Entity_").append(_creationIndex).append("(").
+                    append(getRetainCount()).append(")").append("(");
 
-            final String sEPARATOR = ", ";
+            final String SEPARATOR = ", ";
             IComponent[] components = getComponents();
             int lastSeparator = components.length - 1;
             for (int i = 0, componentsLength = components.length; i < componentsLength; i++) {
                 sb.append(components[i].getClass().getName());
                 if (i < lastSeparator) {
-                    sb.append(sEPARATOR);
+                    sb.append(SEPARATOR);
                 }
             }
 
@@ -261,5 +252,20 @@ public class Entity {
         }
     }
 
+    public int getCreationIndex() {
+        return _creationIndex;
+    }
+
+    public void setCreationIndex(int _creationIndex) {
+        this._creationIndex = _creationIndex;
+    }
+
+    public boolean isEnabled() {
+        return _isEnabled;
+    }
+
+    public void setEnabled(boolean _isEnabled) {
+        this._isEnabled = _isEnabled;
+    }
 
 }
