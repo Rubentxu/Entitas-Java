@@ -10,8 +10,8 @@ import java.util.*;
 
 public class Pool {
 
-    private final Stack<Entity> _reusableEntities = new Stack<>();
-    private final HashSet<Entity> _retainedEntities = new HashSet<>();
+    private final Stack<Entity> _reusableEntities;
+    private final Set<Entity> _retainedEntities;
     private int _totalComponents;
     private int _creationIndex;
     private Set<Entity> _entitiesCache;
@@ -19,15 +19,15 @@ public class Pool {
     private ComponentReplaced _cachedUpdateGroupsComponentReplaced;
     private EntityReleased _cachedOnEntityReleased;
 
-    protected final HashSet<Entity> _entities = new HashSet<>();
-    protected final HashMap<IMatcher, Group> _groups = new HashMap<>();
-    protected ArrayList<ArrayList<Group>> _groupsForIndex;
+    protected final Set<Entity> _entities;
+    protected final Map<IMatcher, Group> _groups;
+    protected List<List<Group>> _groupsForIndex;
 
-    public Event<PoolChanged> OnEntityCreated = new Event<PoolChanged>();
-    public Event<PoolChanged> OnEntityWillBeDestroyed = new Event<PoolChanged>();
-    public Event<PoolChanged> OnEntityDestroyed = new Event<PoolChanged>();
-    public Event<PoolGroupChanged> OnGroupCreated = new Event<PoolGroupChanged>();
-    public Event<PoolGroupChanged> OnGroupCleared = new Event<PoolGroupChanged>();
+    public Event<PoolChanged> OnEntityCreated;
+    public Event<PoolChanged> OnEntityWillBeDestroyed;
+    public Event<PoolChanged> OnEntityDestroyed;
+    public Event<PoolGroupChanged> OnGroupCreated;
+    public Event<PoolGroupChanged> OnGroupCleared;
 
 
     public Pool(int totalComponents) {
@@ -37,7 +37,7 @@ public class Pool {
     public Pool(int totalComponents, int startCreationIndex) {
         _totalComponents = totalComponents;
         _creationIndex = startCreationIndex;
-        _groupsForIndex = new ArrayList<ArrayList<Group>>(totalComponents);
+        _groupsForIndex = new ArrayList<>(totalComponents);
 
         // Cache delegates to avoid gc allocations
         _cachedUpdateGroupsComponentAddedOrRemoved = (Entity entity, int index, IComponent component)
@@ -47,21 +47,28 @@ public class Pool {
                                                     -> updateGroupsComponentReplaced(entity, index, previousComponent, newComponent);
 
         _cachedOnEntityReleased = (Entity entity) -> onEntityReleased(entity);
+
+        _reusableEntities = new Stack<>();
+        _retainedEntities = new HashSet<>();
+        _entities = new HashSet<>();
+        _groups = new HashMap<>();
+        OnEntityCreated = new Event<PoolChanged>();
+        OnEntityWillBeDestroyed = new Event<PoolChanged>();
+        OnEntityDestroyed = new Event<PoolChanged>();
+        OnGroupCreated = new Event<PoolGroupChanged>();
+        OnGroupCleared = new Event<PoolGroupChanged>();
+
     }
 
-    public int gettotalComponents() {
-        return _totalComponents;
-    }
-
-    public int getcount() {
+    public int getCount() {
         return _entities.size();
     }
 
-    public int getreusableEntitiesCount() {
+    public int getReusableEntitiesCount() {
         return _reusableEntities.size();
     }
 
-    public int getretainedEntitiesCount() {
+    public int getRetainedEntitiesCount() {
         return _retainedEntities.size();
     }
 
@@ -75,7 +82,7 @@ public class Pool {
         entity.OnComponentAdded.addListener(_cachedUpdateGroupsComponentAddedOrRemoved);
         entity.OnComponentRemoved.addListener(_cachedUpdateGroupsComponentAddedOrRemoved);
         entity.OnComponentReplaced.addListener(_cachedUpdateGroupsComponentReplaced);
-        entity.OnEntityReleased.addListener(_cachedOnEntityReleased);
+        entity.OnEntityReleased.addListener("_cachedOnEntityReleased",_cachedOnEntityReleased);
 
         if (OnEntityCreated != null) {
             for (PoolChanged listener : OnEntityCreated.listeners()) {
@@ -137,8 +144,8 @@ public class Pool {
             _entitiesCache = new HashSet<Entity>(_entities.size());
             _entitiesCache = _entities;
         }
-
         return _entitiesCache;
+
     }
 
     public Group getGroup(IMatcher matcher) {
@@ -192,7 +199,7 @@ public class Pool {
     }
 
     protected void updateGroupsComponentAddedOrRemoved(Entity entity, int index, IComponent component) {
-        ArrayList<Group> groups = _groupsForIndex.get(index);
+       List<Group> groups = _groupsForIndex.get(index);
         if (groups != null) {
             ArrayList<Event<GroupChanged>> events = new ArrayList<Event<GroupChanged>>();
             for (int i = 0, groupsCount = groups.size(); i < groupsCount; i++) {
@@ -211,7 +218,7 @@ public class Pool {
     }
 
     protected void updateGroupsComponentReplaced(Entity entity, int index, IComponent previousComponent, IComponent newComponent) {
-        ArrayList<Group> groups = _groupsForIndex.get(index);
+        List<Group> groups = _groupsForIndex.get(index);
         if (groups != null) {
             for (Group g : groups) {
                 g.updateEntity(entity, index, previousComponent, newComponent);
@@ -225,6 +232,7 @@ public class Pool {
             throw new EntityIsNotDestroyedException("Cannot release entity.");
         }
         entity.OnEntityReleased.removeListener("_cachedOnEntityReleased");
+        System.out.println("OnEntityReleased");
         _retainedEntities.remove(entity);
         _reusableEntities.push(entity);
     }

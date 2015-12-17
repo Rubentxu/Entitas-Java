@@ -234,7 +234,6 @@ public class Entity {
         if (!owners.add(owner)) {
             throw new EntityIsAlreadyRetainedByOwnerException(owner);
         }
-
         return this;
     }
 
