@@ -3,6 +3,7 @@ package com.ilargia.games.entitas;
 import com.ilargia.games.entitas.exceptions.EntityIsNotDestroyedException;
 import com.ilargia.games.entitas.exceptions.PoolDoesNotContainEntityException;
 import com.ilargia.games.entitas.exceptions.PoolStillHasRetainedEntitiesException;
+import com.ilargia.games.entitas.matcher.Matcher;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -110,6 +111,12 @@ public class PoolTest {
     @Test(expected = EntityIsNotDestroyedException.class)
     public void EntityIsNotDestroyedExceptionTest() {
         entity.release(pool);
+    }
+
+    @Test
+    public void getGroupTest() {
+        pool.getEntities(Matcher.AllOf(Matcher.Move, Matcher.Position));
+        pool.getGroup(Matcher.AllOf(1)).getEntities();
     }
 
 }
