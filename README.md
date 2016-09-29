@@ -28,6 +28,8 @@ Entity Component System (ECS) Implementation of the [Entitas](https://github.com
                  |  e     e   |
                  +------------+
 ```
+[![Build Status](https://travis-ci.org/Rubentxu/entitas-java.svg?branch=master)](https://travis-ci.org/Rubentxu/entitas-java)
+
 # Different language?
 Entitas is also available in
 - [C#](https://github.com/sschmid/Entitas-CSharp)
