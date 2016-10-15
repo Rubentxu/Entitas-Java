@@ -1,9 +1,16 @@
 language: java
 script: ./gradlew build -x test
-
+sudo: required
 jdk:
   - oraclejdk8
 
+install: true
+
+script:
+  - sudo apt-get update && sudo apt-get install oracle-java8-installer
+  - java -version
+before_install:
+   - chmod a+x gradlew
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
   - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
@@ -11,3 +18,5 @@ cache:
   directories:
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
+after_success:
+      - bash <(curl -s https://codecov.io/bash)
