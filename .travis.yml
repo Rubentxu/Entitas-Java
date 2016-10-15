@@ -1,5 +1,4 @@
 language: java
-script: ./gradlew assemble
 sudo: required
 jdk:
   - oraclejdk8
@@ -7,8 +6,7 @@ jdk:
 install: true
 
 script:
-  - sudo apt-get update && sudo apt-get install oracle-java8-installer
-  - java -version
+   - ./gradlew assemble
 
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
