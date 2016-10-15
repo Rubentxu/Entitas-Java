@@ -1,5 +1,9 @@
 package com.ilargia.games.entitas;
 
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.IdentityMap;
+import com.badlogic.gdx.utils.ObjectMap;
+import com.badlogic.gdx.utils.ObjectSet;
 import com.ilargia.games.entitas.events.Event;
 import com.ilargia.games.entitas.exceptions.EntityIsNotDestroyedException;
 import com.ilargia.games.entitas.exceptions.PoolDoesNotContainEntityException;
@@ -11,17 +15,17 @@ import java.util.*;
 public class Pool {
 
     private final Stack<Entity> _reusableEntities;
-    private final Set<Entity> _retainedEntities;
+    private final ObjectSet<Entity> _retainedEntities;
     private int _totalComponents;
     private int _creationIndex;
-    private Set<Entity> _entitiesCache;
+    private ObjectSet<Entity> _entitiesCache;
     private EntityChanged _cachedUpdateGroupsComponentAddedOrRemoved;
     private ComponentReplaced _cachedUpdateGroupsComponentReplaced;
     private EntityReleased _cachedOnEntityReleased;
 
-    protected final Set<Entity> _entities;
-    protected final Map<IMatcher, Group> _groups;
-    protected List<List<Group>> _groupsForIndex;
+    protected final ObjectSet<Entity> _entities;
+    protected final ObjectMap<IMatcher, Group> _groups;
+    protected Array<Array<Group>> _groupsForIndex;
 
     public Event<PoolChanged> OnEntityCreated;
     public Event<PoolChanged> OnEntityWillBeDestroyed;
@@ -37,7 +41,7 @@ public class Pool {
     public Pool(int totalComponents, int startCreationIndex) {
         _totalComponents = totalComponents;
         _creationIndex = startCreationIndex;
-        _groupsForIndex = new ArrayList<>(totalComponents);
+        _groupsForIndex = new Array<>(totalComponents);
 
         // Cache delegates to avoid gc allocations
         _cachedUpdateGroupsComponentAddedOrRemoved = (Entity entity, int index, IComponent component)
@@ -49,9 +53,9 @@ public class Pool {
         _cachedOnEntityReleased = (Entity entity) -> onEntityReleased(entity);
 
         _reusableEntities = new Stack<>();
-        _retainedEntities = new HashSet<>();
-        _entities = new HashSet<>();
-        _groups = new HashMap<>();
+        _retainedEntities = new ObjectSet<>();
+        _entities = new ObjectSet<>();
+        _groups = new ObjectMap<>();
         OnEntityCreated = new Event<PoolChanged>();
         OnEntityWillBeDestroyed = new Event<PoolChanged>();
         OnEntityDestroyed = new Event<PoolChanged>();
@@ -61,7 +65,7 @@ public class Pool {
     }
 
     public int getCount() {
-        return _entities.size();
+        return _entities.size;
     }
 
     public int getReusableEntitiesCount() {
@@ -69,7 +73,7 @@ public class Pool {
     }
 
     public int getRetainedEntitiesCount() {
-        return _retainedEntities.size();
+        return _retainedEntities.size;
     }
 
     public Entity createEntity() {
@@ -129,7 +133,7 @@ public class Pool {
         }
         _entities.clear();
 
-        if (_retainedEntities.size() != 0) {
+        if (_retainedEntities.size != 0) {
             throw new PoolStillHasRetainedEntitiesException();
         }
 
@@ -139,9 +143,9 @@ public class Pool {
         return _entities.contains(entity);
     }
 
-    public Set<Entity> getEntities() {
+    public ObjectSet<Entity> getEntities() {
         if (_entitiesCache == null) {
-            _entitiesCache = new HashSet<Entity>(_entities.size());
+            _entitiesCache = new ObjectSet<Entity>(_entities.size);
             _entitiesCache = _entities;
         }
         return _entitiesCache;
@@ -157,9 +161,9 @@ public class Pool {
             }
             _groups.put(matcher, group);
 
-            for (int index : matcher.getindices()) {
+            for (int index : matcher.getindices().items) {
                 if (_groupsForIndex.get(index) == null) {
-                    _groupsForIndex.add(index, new ArrayList<Group>());
+                    _groupsForIndex.insert(index, new Array<Group>());
                 }
                 _groupsForIndex.get(index).add(group);
             }
@@ -189,7 +193,7 @@ public class Pool {
         }
         _groups.clear();
 
-        for (int i = 0, groupsForIndexLength = _groupsForIndex.size(); i < groupsForIndexLength; i++) {
+        for (int i = 0, groupsForIndexLength = _groupsForIndex.size; i < groupsForIndexLength; i++) {
             _groupsForIndex.set(i, null);
         }
     }
@@ -199,10 +203,10 @@ public class Pool {
     }
 
     protected void updateGroupsComponentAddedOrRemoved(Entity entity, int index, IComponent component) {
-       List<Group> groups = _groupsForIndex.get(index);
+       Array<Group> groups = _groupsForIndex.get(index);
         if (groups != null) {
             ArrayList<Event<GroupChanged>> events = new ArrayList<Event<GroupChanged>>();
-            for (int i = 0, groupsCount = groups.size(); i < groupsCount; i++) {
+            for (int i = 0, groupsCount = groups.size; i < groupsCount; i++) {
                 events.add(groups.get(i).handleEntity(entity));
             }
             for (int i = 0, eventsCount = events.size(); i < eventsCount; i++) {
@@ -218,7 +222,7 @@ public class Pool {
     }
 
     protected void updateGroupsComponentReplaced(Entity entity, int index, IComponent previousComponent, IComponent newComponent) {
-        List<Group> groups = _groupsForIndex.get(index);
+        Array<Group> groups = _groupsForIndex.get(index);
         if (groups != null) {
             for (Group g : groups) {
                 g.updateEntity(entity, index, previousComponent, newComponent);

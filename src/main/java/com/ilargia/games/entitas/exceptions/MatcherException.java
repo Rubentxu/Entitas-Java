@@ -6,7 +6,7 @@ import com.ilargia.games.entitas.interfaces.IMatcher;
 public class MatcherException extends RuntimeException {
 
     public MatcherException(IMatcher matcher) {
-        super("matcher.indices.Length must be 1 but was " + matcher.getindices().size());
+        super("length matcher index must contain at least one, and has " + matcher.getindices().size);
     }
 
 }

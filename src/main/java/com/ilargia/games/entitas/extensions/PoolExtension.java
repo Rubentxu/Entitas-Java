@@ -1,5 +1,6 @@
 package com.ilargia.games.entitas.extensions;
 
+import com.badlogic.gdx.utils.Array;
 import com.ilargia.games.entitas.Entity;
 import com.ilargia.games.entitas.Pool;
 import com.ilargia.games.entitas.ReactiveSystem;
@@ -10,7 +11,7 @@ import com.ilargia.games.entitas.interfaces.ISystem;
 
 public final class PoolExtension {
 
-    public static Entity[] getEntities(Pool pool, IMatcher matcher) {
+    public static Array<Entity> getEntities(Pool pool, IMatcher matcher) {
         return pool.getGroup(matcher).getEntities();
 
     }

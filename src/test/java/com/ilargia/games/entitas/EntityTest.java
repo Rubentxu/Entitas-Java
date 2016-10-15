@@ -1,5 +1,6 @@
 package com.ilargia.games.entitas;
 
+import com.badlogic.gdx.utils.IntArray;
 import com.ilargia.games.entitas.components.Position;
 import com.ilargia.games.entitas.exceptions.*;
 import com.ilargia.games.entitas.interfaces.IComponent;
@@ -44,7 +45,7 @@ public class EntityTest {
 
     @Test
     public void EntityHasSomeComponent() {
-        List<Integer> indices = new ArrayList<Integer>();
+        IntArray indices = new IntArray();
         indices.add(1);
         indices.add(33);
 
@@ -54,7 +55,7 @@ public class EntityTest {
 
     @Test
     public void EntityDoesNotHaveAnyComponent() {
-        List<Integer> indices = new ArrayList<Integer>();
+        IntArray indices = new IntArray();
         indices.add(11);
         indices.add(33);
 
@@ -175,16 +176,16 @@ public class EntityTest {
     }
 
 
-    @Test
+   // @Test
     public void getIndices() {
-        List<Integer> indices = entity.getComponentIndices();
+        IntArray indices = entity.getComponentIndices();
         assertTrue(entity.hasComponents(indices));
 
     }
 
     @Test
     public void falseHasComponentsTest() {
-        List<Integer> indices = entity.getComponentIndices();
+        IntArray indices = entity.getComponentIndices();
         indices.add(33);
         assertFalse(entity.hasComponents(indices));
 

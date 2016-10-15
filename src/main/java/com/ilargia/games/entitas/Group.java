@@ -1,5 +1,7 @@
 package com.ilargia.games.entitas;
 
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.ObjectSet;
 import com.ilargia.games.entitas.events.Event;
 import com.ilargia.games.entitas.exceptions.SingleEntityException;
 import com.ilargia.games.entitas.interfaces.GroupChanged;
@@ -12,12 +14,12 @@ import java.util.Iterator;
 
 public class Group {
 
-    private final HashSet<Entity> _entities = new HashSet<Entity>();
+    private final ObjectSet<Entity> _entities = new ObjectSet<Entity>();
     public Event<GroupChanged> OnEntityAdded = new Event<GroupChanged>();
     public Event<GroupChanged> OnEntityRemoved = new Event<GroupChanged>();
     public Event<GroupUpdated> OnEntityUpdated = new Event<GroupUpdated>();
     private IMatcher _matcher;
-    private Entity[] _entitiesCache;
+    private Array<Entity> _entitiesCache;
     private Entity _singleEntityCache;
     private String _toStringCache;
 
@@ -27,7 +29,7 @@ public class Group {
     }
 
     public int getcount() {
-        return _entities.size();
+        return _entities.size;
     }
 
     public IMatcher getmatcher() {
@@ -136,16 +138,19 @@ public class Group {
         return _entities.contains(entity);
     }
 
-    public Entity[] getEntities() {
+    public Array<Entity> getEntities() {
         if (_entitiesCache == null) {
-            _entitiesCache = (Entity[]) _entities.toArray();
+            _entitiesCache = new Array<Entity>(false,_entities.size);
+            for (Entity e : _entities) {
+                _entitiesCache.add(e);
+            }
         }
         return _entitiesCache;
     }
 
     public Entity getSingleEntity() {
         if (_singleEntityCache == null) {
-            int c = _entities.size();
+            int c = _entities.size;
             if (c == 1) {
                 Iterator<Entity> enumerator = _entities.iterator();
                 _singleEntityCache = enumerator.next();

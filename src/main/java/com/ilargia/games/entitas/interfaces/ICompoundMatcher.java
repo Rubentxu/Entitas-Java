@@ -1,13 +1,15 @@
 package com.ilargia.games.entitas.interfaces;
 
+import com.badlogic.gdx.utils.IntArray;
+
 import java.util.List;
 
 public interface ICompoundMatcher extends IMatcher {
 
-    List<Integer> getallOfIndices();
+    IntArray getallOfIndices();
 
-    List<Integer> getanyOfIndices();
+    IntArray getanyOfIndices();
 
-    List<Integer> getnoneOfIndices();
+    IntArray getnoneOfIndices();
 
 }

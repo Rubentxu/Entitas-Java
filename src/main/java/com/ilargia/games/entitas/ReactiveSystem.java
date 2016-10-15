@@ -1,5 +1,6 @@
 package com.ilargia.games.entitas;
 
+import com.badlogic.gdx.utils.Array;
 import com.ilargia.games.entitas.events.GroupEventType;
 import com.ilargia.games.entitas.interfaces.*;
 import com.ilargia.games.entitas.matcher.TriggerOnEvent;
@@ -12,7 +13,7 @@ public class ReactiveSystem implements IExecuteSystem {
     private IMatcher _ensureComponents;
     private IMatcher _excludeComponents;
     private boolean _clearAfterExecute;
-    private ArrayList<Entity> _buffer;
+    private Array<Entity> _buffer;
 
     public ReactiveSystem(Pool pool, IReactiveSystem subSystem) {
         this(pool, subSystem, new TriggerOnEvent[]{subSystem.getTrigger()});
@@ -44,7 +45,7 @@ public class ReactiveSystem implements IExecuteSystem {
             eventTypes[i] = trigger.eventType;
         }
         _observer = new GroupObserver(groups, eventTypes);
-        _buffer = new ArrayList<Entity>();
+        _buffer = new Array<Entity>();
     }
 
     public IReactiveExecuteSystem getsubsystem() {
@@ -64,7 +65,7 @@ public class ReactiveSystem implements IExecuteSystem {
     }
 
     public void execute() {
-        if (_observer.getcollectedEntities().size() != 0) {
+        if (_observer.getcollectedEntities().size != 0) {
             if (_ensureComponents != null) {
                 if (_excludeComponents != null) {
                     for (Entity e : _observer.getcollectedEntities()) {
@@ -92,9 +93,9 @@ public class ReactiveSystem implements IExecuteSystem {
             }
 
             _observer.clearCollectedEntities();
-            if (_buffer.size() != 0) {
+            if (_buffer.size != 0) {
                 _subsystem.execute(_buffer);
-                for (int i = 0, bufferCount = _buffer.size(); i < bufferCount; i++) {
+                for (int i = 0, bufferCount = _buffer.size; i < bufferCount; i++) {
                     _buffer.get(i).release(this);
                 }
                 _buffer.clear();

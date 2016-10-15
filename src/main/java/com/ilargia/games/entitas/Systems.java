@@ -1,5 +1,6 @@
 package com.ilargia.games.entitas;
 
+import com.badlogic.gdx.utils.Array;
 import com.ilargia.games.entitas.interfaces.IExecuteSystem;
 import com.ilargia.games.entitas.interfaces.IInitializeSystem;
 import com.ilargia.games.entitas.interfaces.IReactiveExecuteSystem;
@@ -9,12 +10,12 @@ import java.util.ArrayList;
 
 public class Systems implements IInitializeSystem, IExecuteSystem {
 
-    protected ArrayList<IInitializeSystem> _initializeSystems;
-    protected ArrayList<IExecuteSystem> _executeSystems;
+    protected Array<IInitializeSystem> _initializeSystems;
+    protected Array<IExecuteSystem> _executeSystems;
 
     public Systems() {
-        _initializeSystems = new ArrayList<IInitializeSystem>();
-        _executeSystems = new ArrayList<IExecuteSystem>();
+        _initializeSystems = new Array<IInitializeSystem>();
+        _executeSystems = new Array<IExecuteSystem>();
     }
 
     public <T> Systems add(Class<T> systemType) throws IllegalAccessException, InstantiationException {
@@ -53,7 +54,7 @@ public class Systems implements IInitializeSystem, IExecuteSystem {
     }
 
     public void activateReactiveSystems() {
-        for (int i = 0, exeSysCount = _executeSystems.size(); i < exeSysCount; i++) {
+        for (int i = 0, exeSysCount = _executeSystems.size; i < exeSysCount; i++) {
             ReactiveSystem reactiveSystem = (ReactiveSystem) ((_executeSystems.get(i) instanceof ReactiveSystem) ? _executeSystems.get(i) : null);
             if (reactiveSystem != null) {
                 reactiveSystem.activate();
@@ -67,7 +68,7 @@ public class Systems implements IInitializeSystem, IExecuteSystem {
     }
 
     public void deactivateReactiveSystems() {
-        for (int i = 0, exeSysCount = _executeSystems.size(); i < exeSysCount; i++) {
+        for (int i = 0, exeSysCount = _executeSystems.size; i < exeSysCount; i++) {
             ReactiveSystem reactiveSystem = (ReactiveSystem) ((_executeSystems.get(i) instanceof ReactiveSystem) ? _executeSystems.get(i) : null);
             if (reactiveSystem != null) {
                 reactiveSystem.deactivate();
@@ -81,7 +82,7 @@ public class Systems implements IInitializeSystem, IExecuteSystem {
     }
 
     public void clearReactiveSystems() {
-        for (int i = 0, exeSysCount = _executeSystems.size(); i < exeSysCount; i++) {
+        for (int i = 0, exeSysCount = _executeSystems.size; i < exeSysCount; i++) {
             ReactiveSystem reactiveSystem = (ReactiveSystem) ((_executeSystems.get(i) instanceof ReactiveSystem) ? _executeSystems.get(i) : null);
             if (reactiveSystem != null) {
                 reactiveSystem.clear();

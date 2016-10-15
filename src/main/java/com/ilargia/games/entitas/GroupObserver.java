@@ -1,14 +1,16 @@
 package com.ilargia.games.entitas;
 
+import com.badlogic.gdx.utils.ObjectSet;
 import com.ilargia.games.entitas.events.GroupEventType;
 import com.ilargia.games.entitas.exceptions.GroupObserverException;
 import com.ilargia.games.entitas.interfaces.GroupChanged;
 import com.ilargia.games.entitas.interfaces.IComponent;
 
 import java.util.HashSet;
+import java.util.Objects;
 
 public class GroupObserver {
-    private HashSet<Entity> _collectedEntities;
+    private ObjectSet<Entity> _collectedEntities;
     private Group[] _groups;
     private GroupEventType[] _eventTypes;
     private GroupChanged _addEntityCache;
@@ -23,14 +25,14 @@ public class GroupObserver {
             throw new GroupObserverException("Unbalanced count with groups (" + groups.length + ") and event types (" + eventTypes.length + ")");
         }
 
-        _collectedEntities = new HashSet<Entity>();
+        _collectedEntities = new ObjectSet<Entity>();
         _groups = groups;
         _eventTypes = eventTypes;
         _addEntityCache = (Group group, Entity entity, int index, IComponent component) -> addEntity(group, entity, index, component);
         activate();
     }
 
-    public HashSet<Entity> getcollectedEntities() {
+    public ObjectSet<Entity> getcollectedEntities() {
         return _collectedEntities;
     }
 

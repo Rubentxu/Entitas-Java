@@ -1,5 +1,7 @@
 package com.ilargia.games.entitas;
 
+import com.badlogic.gdx.utils.IntArray;
+import com.badlogic.gdx.utils.ObjectSet;
 import com.ilargia.games.entitas.events.Event;
 import com.ilargia.games.entitas.exceptions.*;
 import com.ilargia.games.entitas.interfaces.ComponentReplaced;
@@ -17,10 +19,10 @@ public class Entity {
     private boolean _isEnabled;
     private IComponent[] _components;
     private IComponent[] _componentsCache;
-    private List<Integer> _componentIndicesCache;
+    private IntArray _componentIndicesCache;
     private String _toStringCache;
 
-    public final HashSet<Object> owners;
+    public final ObjectSet<Object> owners;
     public Event<EntityChanged> OnComponentAdded;
     public Event<EntityChanged> OnComponentRemoved;
     public Event<ComponentReplaced> OnComponentReplaced;
@@ -30,7 +32,7 @@ public class Entity {
     public Entity(int totalComponents) {
         _components = new IComponent[totalComponents];
         _isEnabled = true;
-        owners = new HashSet<>();
+        owners = new ObjectSet<>();
         OnComponentAdded = new Event<EntityChanged>();
         OnComponentRemoved = new Event<EntityChanged>();
         OnComponentReplaced = new Event<ComponentReplaced>();
@@ -145,9 +147,9 @@ public class Entity {
 
     }
 
-    public List<Integer> getComponentIndices() {
+    public IntArray getComponentIndices() {
         if (_componentIndicesCache == null) {
-            ArrayList<Integer> indices = new ArrayList<Integer>();
+            IntArray indices = new IntArray();
             for (int i = 0, componentsLength = _components.length; i < componentsLength; i++) {
                 if (_components[i] != null) {
                     indices.add(i);
@@ -167,8 +169,8 @@ public class Entity {
         }
     }
 
-    public boolean hasComponents(List<Integer> indices) {
-        for (Integer index : indices) {
+    public boolean hasComponents(IntArray indices) {
+        for (int index : indices.items) {
             if (_components[index] == null) {
                 return false;
             }
@@ -177,8 +179,8 @@ public class Entity {
 
     }
 
-    public boolean hasAnyComponent(List<Integer> indices) {
-        for (Integer index : indices) {
+    public boolean hasAnyComponent(IntArray indices) {
+        for (int index : indices.items) {
             if (_components[index] != null) {
                 return true;
             }
@@ -227,7 +229,7 @@ public class Entity {
     }
 
     public int getRetainCount() {
-        return owners.size();
+        return owners.size;
     }
 
     public Entity retain(Object owner) {
@@ -242,7 +244,7 @@ public class Entity {
             throw new EntityIsNotRetainedByOwnerException(owner);
         }
 
-        if (owners.isEmpty()) {
+        if (owners.size < 1) {
             if (OnEntityReleased != null) {
                 for (EntityReleased listener : OnEntityReleased.listeners()) {
                     listener.entityReleased(this);
