@@ -1,5 +1,8 @@
 language: java
-script: ./gradlew build -x test 
+script: ./gradlew build -x test
+
+jdk:
+  - oraclejdk8
 
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
