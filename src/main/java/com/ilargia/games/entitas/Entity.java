@@ -7,18 +7,16 @@ import com.ilargia.games.entitas.exceptions.*;
 import com.ilargia.games.entitas.interfaces.ComponentReplaced;
 import com.ilargia.games.entitas.interfaces.EntityChanged;
 import com.ilargia.games.entitas.interfaces.EntityReleased;
-import com.ilargia.games.entitas.interfaces.IComponent;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 public class Entity {
 
     private int _creationIndex;
     private boolean _isEnabled;
-    private IComponent[] _components;
-    private IComponent[] _componentsCache;
+    private Component[] _components;
+    private Component[] _componentsCache;
     private IntArray _componentIndicesCache;
     private String _toStringCache;
 
@@ -30,7 +28,7 @@ public class Entity {
 
 
     public Entity(int totalComponents) {
-        _components = new IComponent[totalComponents];
+        _components = new Component[totalComponents];
         _isEnabled = true;
         owners = new ObjectSet<>();
         OnComponentAdded = new Event<EntityChanged>();
@@ -40,7 +38,7 @@ public class Entity {
 
     }
 
-    public Entity addComponent(int index, IComponent component) {
+    public Entity addComponent(int index, Component component) {
         if(index > _components.length-1) {
             String errorMsg = "Cannot add component at index " + index + "; Max index " +_components.length;
             throw new EntityDoesNotHaveComponentException(errorMsg, index);
@@ -81,7 +79,7 @@ public class Entity {
         return this;
     }
 
-    public Entity replaceComponent(int index, IComponent component) {
+    public Entity replaceComponent(int index, Component component) {
         if (!_isEnabled) {
             throw new EntityIsNotEnabledException("Cannot replace component!");
         }
@@ -94,8 +92,8 @@ public class Entity {
         return this;
     }
 
-    private void replaceComponentInternal(int index, IComponent replacement) {
-        IComponent previousComponent = _components[index];
+    private void replaceComponentInternal(int index, Component replacement) {
+        Component previousComponent = _components[index];
         if (previousComponent == replacement) {
             if (OnComponentReplaced != null) {
                 for (ComponentReplaced listener : OnComponentReplaced.listeners()) {
@@ -123,7 +121,7 @@ public class Entity {
         }
     }
 
-    public <T extends IComponent> T getComponent(int index) {
+    public <T extends Component> T getComponent(int index) {
         if (!hasComponent(index)) {
             String errorMsg = "Cannot get component at index " + index + " from " + this;
             throw new EntityDoesNotHaveComponentException(errorMsg, index);
@@ -131,17 +129,17 @@ public class Entity {
         return (T) _components[index];
     }
 
-    public IComponent[] getComponents() {
+    public Component[] getComponents() {
         if (_componentsCache == null) {
-            List<IComponent> components = new ArrayList<IComponent>();
+            List<Component> components = new ArrayList<Component>();
             for (int i = 0, componentsLength = _components.length; i < componentsLength; i++) {
-                IComponent component = _components[i];
+                Component component = _components[i];
                 if (component != null) {
                     components.add(component);
                 }
             }
 
-            _componentsCache = components.toArray(new IComponent[0]);
+            _componentsCache = components.toArray(new Component[0]);
         }
         return _componentsCache;
 
@@ -213,7 +211,7 @@ public class Entity {
                     append(getRetainCount()).append(")").append("(");
 
             final String SEPARATOR = ", ";
-            IComponent[] components = getComponents();
+            Component[] components = getComponents();
             int lastSeparator = components.length - 1;
             for (int i = 0, componentsLength = components.length; i < componentsLength; i++) {
                 sb.append(components[i].getClass().getName());

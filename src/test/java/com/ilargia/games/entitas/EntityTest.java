@@ -1,16 +1,15 @@
 package com.ilargia.games.entitas;
 
 import com.badlogic.gdx.utils.IntArray;
+import com.ilargia.games.entitas.components.Movable;
 import com.ilargia.games.entitas.components.Position;
+import com.ilargia.games.entitas.components.Views;
 import com.ilargia.games.entitas.exceptions.*;
-import com.ilargia.games.entitas.interfaces.IComponent;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -26,8 +25,17 @@ public class EntityTest {
     public void setUp() throws Exception {
         entity = new Entity(100);
         entity.setCreationIndex(1);
-        entity.addComponent(1, new Position(100, 100));
-        entity.addComponent(2, new Position(100, 100));
+//        entity.addComponent(Position.getType(), new Position(100, 100));
+//        entity.addComponent(Position.getType(), new Position(100, 100));
+
+    }
+
+    @Test
+    public void componentTypes() {
+        assertEquals(0, Component.getIdComponent(Position.class));
+        assertEquals(0,  Component.getIdComponent(Position.class));
+        assertEquals(1,  Component.getIdComponent(Movable.class));
+        assertEquals(2, Component.getIdComponent(Views.class));
 
     }
 
@@ -71,7 +79,7 @@ public class EntityTest {
 
     @Test
     public void OnComponentAddedTest() {
-        entity.OnComponentAdded.addListener((Entity e,int index, IComponent c) -> assertEquals(55, index));
+        entity.OnComponentAdded.addListener((Entity e,int index, Component c) -> assertEquals(55, index));
         entity.addComponent(55, new Position(100, 100));
 
     }
@@ -79,7 +87,7 @@ public class EntityTest {
 
     @Test
     public void OnComponentReplacedTest() {
-        entity.OnComponentReplaced.addListener((Entity e, int index, IComponent c, IComponent n)
+        entity.OnComponentReplaced.addListener((Entity e, int index, Component c, Component n)
                 -> assertEquals(33F, ((Position)n).getX(), 0.1f));
         entity.replaceComponent(1, new Position(33, 100));
 
@@ -87,7 +95,7 @@ public class EntityTest {
 
     @Test
     public void OnComponentReplaced2Test() {
-        entity.OnComponentReplaced.addListener((Entity e, int index, IComponent c, IComponent n)
+        entity.OnComponentReplaced.addListener((Entity e, int index, Component c, Component n)
                 -> assertEquals(100F, ((Position)n).getX(), 0.1f));
         entity.replaceComponent(1, entity.getComponent(1));
 
@@ -96,7 +104,7 @@ public class EntityTest {
 
     @Test
     public void OnComponentRemovedTest() {
-        entity.OnComponentRemoved.addListener((Entity e, int index, IComponent c)
+        entity.OnComponentRemoved.addListener((Entity e, int index, Component c)
                                                 -> assertFalse(e.hasComponent(index)));
         entity.removeComponent(1);
 

@@ -1,7 +1,6 @@
 package com.ilargia.games.entitas;
 
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.IdentityMap;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectSet;
 import com.ilargia.games.entitas.events.Event;
@@ -44,10 +43,10 @@ public class Pool {
         _groupsForIndex = new Array<>(totalComponents);
 
         // Cache delegates to avoid gc allocations
-        _cachedUpdateGroupsComponentAddedOrRemoved = (Entity entity, int index, IComponent component)
+        _cachedUpdateGroupsComponentAddedOrRemoved = (Entity entity, int index, Component component)
                                                         -> updateGroupsComponentAddedOrRemoved(entity, index, component);
 
-        _cachedUpdateGroupsComponentReplaced = (Entity entity, int index, IComponent previousComponent, IComponent newComponent)
+        _cachedUpdateGroupsComponentReplaced = (Entity entity, int index, Component previousComponent, Component newComponent)
                                                     -> updateGroupsComponentReplaced(entity, index, previousComponent, newComponent);
 
         _cachedOnEntityReleased = (Entity entity) -> onEntityReleased(entity);
@@ -202,7 +201,7 @@ public class Pool {
         _creationIndex = 0;
     }
 
-    protected void updateGroupsComponentAddedOrRemoved(Entity entity, int index, IComponent component) {
+    protected void updateGroupsComponentAddedOrRemoved(Entity entity, int index, Component component) {
        Array<Group> groups = _groupsForIndex.get(index);
         if (groups != null) {
             ArrayList<Event<GroupChanged>> events = new ArrayList<Event<GroupChanged>>();
@@ -221,7 +220,7 @@ public class Pool {
 
     }
 
-    protected void updateGroupsComponentReplaced(Entity entity, int index, IComponent previousComponent, IComponent newComponent) {
+    protected void updateGroupsComponentReplaced(Entity entity, int index, Component previousComponent, Component newComponent) {
         Array<Group> groups = _groupsForIndex.get(index);
         if (groups != null) {
             for (Group g : groups) {
