@@ -2,7 +2,7 @@
 Entity Component System (ECS) Implementation of the [Entitas](https://github.com/sschmid/Entitas-CSharp) entity framework in Java 8.
 
 [![Build Status](https://travis-ci.org/Rubentxu/entitas-java.svg?branch=master)](https://travis-ci.org/Rubentxu/entitas-java)
-
+[![Coverage Status](https://coveralls.io/repos/github/Rubentxu/entitas-java/badge.svg)](https://coveralls.io/github/Rubentxu/entitas-java)
 # Overview
 ```
 +------------------+
