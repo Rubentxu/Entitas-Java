@@ -1,5 +1,5 @@
 language: java
-script: ./gradlew build -x test
+script: ./gradlew assemble
 sudo: required
 jdk:
   - oraclejdk8
