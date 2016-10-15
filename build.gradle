@@ -1,4 +1,5 @@
 apply plugin: 'java'
+apply plugin: 'jacoco'
 group 'com.ilargia.games'
 version '0.1.0'
 
