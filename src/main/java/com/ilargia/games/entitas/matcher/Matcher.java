@@ -1,7 +1,5 @@
 package com.ilargia.games.entitas.matcher;
 
-import com.badlogic.gdx.utils.IntArray;
-import com.badlogic.gdx.utils.ObjectSet;
 import com.ilargia.games.entitas.Entity;
 import com.ilargia.games.entitas.exceptions.MatcherException;
 import com.ilargia.games.entitas.interfaces.IAllOfMatcher;
@@ -15,27 +13,26 @@ import java.util.*;
 public class Matcher implements IAllOfMatcher, IAnyOfMatcher, INoneOfMatcher {
 
     public String[] componentNames;
-    private IntArray _indices;
-    private IntArray _allOfIndices;
-    private IntArray _anyOfIndices;
-    private IntArray _noneOfIndices;
+    private int[] _indices;
+    private int[] _allOfIndices;
+    private int[] _anyOfIndices;
+    private int[] _noneOfIndices;
     private int _hash;
     private boolean _isHashCached;
     private String _toStringCache;
 
-
-    private Matcher() {
-    }
+    private Matcher() {}
 
     private static  int[] MergeIndices(IMatcher... matchers) {
-        IntArray indices = new  IntArray(matchers.length);
-        for ( IMatcher matcher: matchers) {
-            if (matcher.getindices().size < 1) {
+        int[] indices = new int[matchers.length];
+        for (int i = 0; i < matchers.length; i++) {
+            IMatcher matcher = matchers[i];
+            if(matcher.getindices().length != 1) {
                 throw new MatcherException(matcher);
             }
-            indices.addAll(matcher.getindices());
+            indices[i] = matcher.getindices()[0];
         }
-        return indices.items;
+        return indices;
     }
 
     private static String[] getComponentNames(IMatcher[] matchers) {
@@ -56,27 +53,27 @@ public class Matcher implements IAllOfMatcher, IAnyOfMatcher, INoneOfMatcher {
         }
     }
 
-    private static IntArray DistinctIndices(int... indices) {
-        IntArray indicesSet = new IntArray(indices);
-        IntArray indicesList =  indicesSet;
-        indicesList.sort();
+    private static int[] DistinctIndices(int... indices) {
+        int[] indicesSet = new int[indices.length];
+        int[] indicesList =  indicesSet;
+//        indicesList..sort();
         return indicesList;
 
     }
 
-    private static boolean equalIndices(IntArray i1, IntArray i2) {
+    private static boolean equalIndices(int[] i1, int[] i2) {
         if ((i1 == null) != (i2 == null)) {
             return false;
         }
         if (i1 == null) {
             return true;
         }
-        if (i1.size != i2.size) {
+        if (i1.length != i2.length) {
             return false;
         }
 
-        for (int i = 0, indicesLength = i1.size; i < indicesLength; i++) {
-            if (i1.get(i) != i2.get(i)) {
+        for (int i = 0, indicesLength = i1.length; i < indicesLength; i++) {
+            if (i1[i] != i2[i]) {
                 return false;
             }
         }
@@ -84,12 +81,12 @@ public class Matcher implements IAllOfMatcher, IAnyOfMatcher, INoneOfMatcher {
 
     }
 
-    private static int applyHash(int hash, IntArray indices, int i1, int i2) {
+    private static int applyHash(int hash, int[] indices, int i1, int i2) {
         if (indices != null) {
-            for (int i = 0, indicesLength = indices.size; i < indicesLength; i++) {
-                hash ^= indices.get(i) * i1;
+            for (int i = 0, indicesLength = indices.length; i < indicesLength; i++) {
+                hash ^= indices[i] * i1;
             }
-            hash ^= indices.size * i2;
+            hash ^= indices.length * i2;
         }
 
         return hash;
@@ -119,13 +116,13 @@ public class Matcher implements IAllOfMatcher, IAnyOfMatcher, INoneOfMatcher {
         return anyOfMatcher;
     }
 
-    private static void appendIndices(StringBuilder sb, String prefix, IntArray indexArray, String[] componentNames) {
+    private static void appendIndices(StringBuilder sb, String prefix, int[] indexArray, String[] componentNames) {
         final String SEPARATOR = ", ";
         sb.append(prefix);
         sb.append("(");
-        int lastSeparator = indexArray.size - 1;
-        for (int i = 0, indicesLength = indexArray.size; i < indicesLength; i++) {
-            int index = indexArray.get(i);
+        int lastSeparator = indexArray.length - 1;
+        for (int i = 0, indicesLength = indexArray.length; i < indicesLength; i++) {
+            int index = indexArray[i];
             if (componentNames == null) {
                 sb.append(index);
             } else {
@@ -139,22 +136,22 @@ public class Matcher implements IAllOfMatcher, IAnyOfMatcher, INoneOfMatcher {
         sb.append(")");
     }
 
-    public IntArray getallOfIndices() {
+    public int[] getallOfIndices() {
         return _allOfIndices;
     }
 
-    public IntArray getanyOfIndices() {
+    public int[] getanyOfIndices() {
         return _anyOfIndices;
     }
 
-    public IntArray getindices() {
+    public int[] getindices() {
         if (_indices == null) {
             _indices = mergeIndices();
         }
         return _indices;
     }
 
-    public IntArray getnoneOfIndices() {
+    public int[] getnoneOfIndices() {
         return _noneOfIndices;
     }
 
@@ -185,20 +182,31 @@ public class Matcher implements IAllOfMatcher, IAnyOfMatcher, INoneOfMatcher {
         return matchesAllOf && matchesAnyOf && matchesNoneOf;
     }
 
-    private IntArray mergeIndices() {
-        int totalIndices = (_allOfIndices != null ? _allOfIndices.size : 0) + (_anyOfIndices != null ? _anyOfIndices.size : 0) + (_noneOfIndices != null ? _noneOfIndices.size : 0);
+    private int[] mergeIndices() {
+        List<Integer> indicesList = new ArrayList<>();
 
-        IntArray indicesList = new IntArray();
-        if (_allOfIndices != null) {
-            indicesList.addAll(_allOfIndices);
+        if(_allOfIndices != null) {
+            for (int it : _allOfIndices) {
+                indicesList.add(it);
+            }
         }
-        if (_anyOfIndices != null) {
-            indicesList.addAll(_anyOfIndices);
+        if(_anyOfIndices != null) {
+            for (int it : _anyOfIndices) {
+                indicesList.add(it);
+            }
         }
-        if (_noneOfIndices != null) {
-            indicesList.addAll(_noneOfIndices);
+        if(_noneOfIndices != null) {
+            for (int it : _noneOfIndices) {
+                indicesList.add(it);
+            }
+
         }
-        return DistinctIndices(indicesList.items);
+//
+        int[] mergedIndices =  DistinctIndices(indicesList.stream().mapToInt(i -> i).toArray());
+
+        EntitasCache.PushIntList(indicesList);
+
+        return mergedIndices;
 
     }
 

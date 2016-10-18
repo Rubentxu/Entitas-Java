@@ -4,6 +4,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectSet;
 import com.ilargia.games.entitas.events.Event;
 import com.ilargia.games.entitas.exceptions.SingleEntityException;
+import com.ilargia.games.entitas.interfaces.IComponent;
 import com.ilargia.games.entitas.interfaces.GroupChanged;
 import com.ilargia.games.entitas.interfaces.GroupUpdated;
 import com.ilargia.games.entitas.interfaces.IMatcher;
@@ -42,7 +43,7 @@ public class Group {
         }
     }
 
-    public void handleEntity(Entity entity, int index, Component component) {
+    public void handleEntity(Entity entity, int index, IComponent component) {
         if (_matcher.matches(entity)) {
             addEntity(entity, index, component);
         } else {
@@ -55,7 +56,7 @@ public class Group {
 
     }
 
-    public void updateEntity(Entity entity, int index, Component previousComponent, Component newComponent) {
+    public void updateEntity(Entity entity, int index, IComponent previousComponent, IComponent newComponent) {
         if (_entities.contains(entity)) {
             if (OnEntityRemoved != null) {
                 for (GroupChanged listener : OnEntityRemoved.listeners()) {
@@ -91,7 +92,7 @@ public class Group {
         return added;
     }
 
-    private void addEntity(Entity entity, int index, Component component) {
+    private void addEntity(Entity entity, int index, IComponent component) {
         if (addEntitySilently(entity) && OnEntityAdded != null) {
             for (GroupChanged listener : OnEntityAdded.listeners()) {
                 listener.groupChanged(this, entity, index, component);
@@ -114,7 +115,7 @@ public class Group {
         return removed;
     }
 
-    private void removeEntity(Entity entity, int index, Component component) {
+    private void removeEntity(Entity entity, int index, IComponent component) {
         boolean removed = _entities.remove(entity);
         if (removed) {
             _entitiesCache = null;

@@ -1,11 +1,11 @@
 package com.ilargia.games.entitas.components;
 
-import com.ilargia.games.entitas.Component;
+import com.ilargia.games.entitas.interfaces.IComponent;
 
 /**
  * Created by rdcabrera on 16/12/2015.
  */
-public class Position extends Component {
+public class Position extends IComponent {
     private float x, y;
 
     public Position(float x, float y) {

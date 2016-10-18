@@ -1,8 +1,8 @@
 package com.ilargia.games.entitas.components;
 
-import com.ilargia.games.entitas.Component;
+import com.ilargia.games.entitas.interfaces.IComponent;
 
 
-public class Views extends Component {
+public class Views extends IComponent {
 
 }

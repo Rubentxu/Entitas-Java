@@ -1,24 +1,28 @@
 package com.ilargia.games.entitas;
 
-import com.badlogic.gdx.utils.IntArray;
 import com.badlogic.gdx.utils.ObjectSet;
 import com.ilargia.games.entitas.events.Event;
 import com.ilargia.games.entitas.exceptions.*;
+import com.ilargia.games.entitas.interfaces.IComponent;
 import com.ilargia.games.entitas.interfaces.ComponentReplaced;
 import com.ilargia.games.entitas.interfaces.EntityChanged;
 import com.ilargia.games.entitas.interfaces.EntityReleased;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 public class Entity {
 
     private int _creationIndex;
     private boolean _isEnabled;
-    private Component[] _components;
-    private Component[] _componentsCache;
-    private IntArray _componentIndicesCache;
+    private IComponent[] _components;
+    private Stack<IComponent>[] _componentPools;
+    private IComponent[] _componentsCache;
+    private int[] _componentIndicesCache;
     private String _toStringCache;
+    private int _totalComponents;
+    private PoolMetaData _poolMetaData;
 
     public final ObjectSet<Object> owners;
     public Event<EntityChanged> OnComponentAdded;
@@ -27,8 +31,11 @@ public class Entity {
     public Event<EntityReleased> OnEntityReleased;
 
 
-    public Entity(int totalComponents) {
-        _components = new Component[totalComponents];
+    public Entity(int totalComponents, Stack<IComponent>[] componentPools,
+                  PoolMetaData poolMetaData) {
+        _components = new IComponent[totalComponents];
+        _totalComponents = totalComponents;
+        _componentPools = componentPools;
         _isEnabled = true;
         owners = new ObjectSet<>();
         OnComponentAdded = new Event<EntityChanged>();
@@ -36,27 +43,41 @@ public class Entity {
         OnComponentReplaced = new Event<ComponentReplaced>();
         OnEntityReleased = new Event<EntityReleased>();
 
+        if(poolMetaData != null) {
+            _poolMetaData = poolMetaData;
+        } else {
+
+            String[] componentNames = new String[totalComponents];
+            for(Integer i = 0; i < componentNames.length; i++) {
+                componentNames[i] = i.toString();
+            }
+            _poolMetaData = new PoolMetaData("No Pool", componentNames, null);
+        }
+
     }
 
-    public Entity addComponent(int index, Component component) {
-        if(index > _components.length-1) {
-            String errorMsg = "Cannot add component at index " + index + "; Max index " +_components.length;
-            throw new EntityDoesNotHaveComponentException(errorMsg, index);
+
+    public Entity addComponent(IComponent component) {
+        return addComponent(IComponent.getIdComponent(component.getClass()), component);
+    }
+
+    public Entity addComponent(int index, IComponent component) {
+        if(!_isEnabled) {
+            throw new EntityIsNotEnabledException("Cannot add component '" + _poolMetaData.componentNames[index] + "' to " + this + "!");
         }
 
-        if (!_isEnabled) {
-            throw new EntityIsNotEnabledException("Cannot add component!");
-        }
-
-        if (hasComponent(index)) {
-            throw new EntityAlreadyHasComponentException("Cannot add component at index " + index + " to " + this, index);
+        if(hasComponent(index)) {
+            throw new EntityAlreadyHasComponentException(index, "Cannot add component '" + _poolMetaData.componentNames[index] +
+                            "' to " + this + "!", "You should check if an entity already has the component " +
+                            "before adding it or use entity.ReplaceComponent()."
+            );
         }
 
         _components[index] = component;
         _componentsCache = null;
         _componentIndicesCache = null;
         _toStringCache = null;
-        if (OnComponentAdded != null) {
+        if(OnComponentAdded != null) {
             for (EntityChanged listener : OnComponentAdded.listeners()) {
                 listener.entityChanged(this, index, component);
             }
@@ -67,11 +88,14 @@ public class Entity {
 
     public Entity removeComponent(int index) {
         if (!_isEnabled) {
-            throw new EntityIsNotEnabledException("Cannot remove component!");
+            throw new EntityIsNotEnabledException("Cannot remove component!"+
+                    _poolMetaData.componentNames[index] +
+                    "' from " + this + "!");
         }
 
         if (!hasComponent(index)) {
-            String errorMsg = "Cannot remove component at index " + index + " from " + this;
+            String errorMsg = "Cannot remove component " + poolMetaData.componentNames[index] +
+                    "' from " + this + "!";
             throw new EntityDoesNotHaveComponentException(errorMsg, index);
         }
         replaceComponentInternal(index, null);
@@ -79,9 +103,12 @@ public class Entity {
         return this;
     }
 
-    public Entity replaceComponent(int index, Component component) {
+
+    public Entity replaceComponent(int index, IComponent component) {
         if (!_isEnabled) {
-            throw new EntityIsNotEnabledException("Cannot replace component!");
+            throw new EntityIsNotEnabledException("Cannot replace component!"+
+                    _poolMetaData.componentNames[index] +
+                    "' on " + this + "!");
         }
 
         if (hasComponent(index)) {
@@ -92,68 +119,77 @@ public class Entity {
         return this;
     }
 
-    private void replaceComponentInternal(int index, Component replacement) {
-        Component previousComponent = _components[index];
-        if (previousComponent == replacement) {
-            if (OnComponentReplaced != null) {
-                for (ComponentReplaced listener : OnComponentReplaced.listeners()) {
-                    listener.componentReplaced(this, index, previousComponent, replacement);
-                }
-            }
-        } else {
+    private void replaceComponentInternal(int index, IComponent replacement) {
+        _toStringCache = null;
+        IComponent previousComponent = _components[index];
+
+        if(replacement != previousComponent) {
             _components[index] = replacement;
             _componentsCache = null;
-            if (replacement == null) {
-                _componentIndicesCache = null;
-                _toStringCache = null;
-                if (OnComponentRemoved != null) {
+            if(replacement != null) {
+                if(OnComponentReplaced != null) {
                     for (EntityChanged listener : OnComponentRemoved.listeners()) {
                         listener.entityChanged(this, index, previousComponent);
                     }
                 }
             } else {
-                if (OnComponentReplaced != null) {
-                    for (ComponentReplaced listener : OnComponentReplaced.listeners()) {
-                        listener.componentReplaced(this, index, previousComponent, replacement);
+                _componentIndicesCache = null;
+                if(OnComponentRemoved != null) {
+                    for (EntityChanged listener : OnComponentRemoved.listeners()) {
+                        listener.entityChanged(this, index, previousComponent);
                     }
                 }
             }
+            getComponentPool(index).Push(previousComponent);
+
+        } else {
+            if(OnComponentReplaced != null) {
+                for (ComponentReplaced listener : OnComponentReplaced.listeners()) {
+                    listener.componentReplaced(this, index, previousComponent, replacement);
+                }
+            }
         }
+
     }
 
-    public <T extends Component> T getComponent(int index) {
+    public IComponent getComponent(int index) {
         if (!hasComponent(index)) {
-            String errorMsg = "Cannot get component at index " + index + " from " + this;
+            String errorMsg = "Cannot get component at index " +
+                    _poolMetaData.componentNames[index] + "' from " +
+                    this + "!";
             throw new EntityDoesNotHaveComponentException(errorMsg, index);
         }
-        return (T) _components[index];
+        return _components[index];
+
     }
 
-    public Component[] getComponents() {
+    public IComponent[] getComponents() {
         if (_componentsCache == null) {
-            List<Component> components = new ArrayList<Component>();
-            for (int i = 0, componentsLength = _components.length; i < componentsLength; i++) {
-                Component component = _components[i];
+            List<IComponent> components =  EntitasCache.getIComponentList();
+            for (int i = 0; i < _components.length; i++) {
+                IComponent component = _components[i];
                 if (component != null) {
                     components.add(component);
                 }
             }
 
-            _componentsCache = components.toArray(new Component[0]);
+            _componentsCache = components.toArray(new IComponent[components.size()]);
+            EntitasCache.pushIComponentList(components);
         }
         return _componentsCache;
 
     }
 
-    public IntArray getComponentIndices() {
+    public int[] getComponentIndices() {
         if (_componentIndicesCache == null) {
-            IntArray indices = new IntArray();
-            for (int i = 0, componentsLength = _components.length; i < componentsLength; i++) {
+            List<Integer> indices = EntitasCache.getIntList();
+            for (int i = 0; i < _components.length; i++) {
                 if (_components[i] != null) {
                     indices.add(i);
                 }
             }
-            _componentIndicesCache = indices;
+            _componentIndicesCache = indices.stream().mapToInt(i->i).toArray();
+            EntitasCache.pushIntList(indices);
         }
         return _componentIndicesCache;
 
@@ -167,8 +203,8 @@ public class Entity {
         }
     }
 
-    public boolean hasComponents(IntArray indices) {
-        for (int index : indices.items) {
+    public boolean hasComponents(int[] indices) {
+        for (int index : indices) {
             if (_components[index] == null) {
                 return false;
             }
@@ -177,9 +213,9 @@ public class Entity {
 
     }
 
-    public boolean hasAnyComponent(IntArray indices) {
-        for (int index : indices.items) {
-            if (_components[index] != null) {
+    public boolean hasAnyComponent(int[] indices) {
+        for(int i = 0; i < indices.length; i++) {
+            if(_components[indices[i]] != null) {
                 return true;
             }
         }
@@ -187,20 +223,44 @@ public class Entity {
 
     }
 
+
     public void removeAllComponents() {
         _toStringCache = null;
-        for (int i = 0, componentsLength = _components.length; i < componentsLength; i++) {
+        for (int i = 0; i < _components.length; i++) {
             if (_components[i] != null) {
                 replaceComponent(i, null);
             }
         }
     }
 
+    public Stack<IComponent> getComponentPool(int index) {
+        Stack<IComponent> componentPool = _componentPools[index];
+        if(componentPool == null) {
+            componentPool = new Stack<IComponent>();
+            _componentPools[index] = componentPool;
+        }
+
+        return componentPool;
+    }
+
+    public IComponent createComponent(int index, Type type) {
+        Stack<IComponent> componentPool = getComponentPool(index);
+        return componentPool.size() > 0
+                ? componentPool.pop()
+                : (IComponent)Activator.createInstance(type);
+    }
+
+    public <T> createComponent(int index)  {
+        Stack<IComponent> componentPool = getComponentPool(index);
+        return componentPool.size() > 0 ? (T)componentPool.pop() : new T();
+    }
+
+
     public void destroy() {
         removeAllComponents();
-        OnComponentAdded.clear();
-        OnComponentReplaced.clear();
-        OnComponentRemoved.clear();
+        OnComponentAdded = null;
+        OnComponentReplaced = null;
+        OnComponentRemoved = null;
         _isEnabled = false;
     }
 
@@ -211,7 +271,7 @@ public class Entity {
                     append(getRetainCount()).append(")").append("(");
 
             final String SEPARATOR = ", ";
-            Component[] components = getComponents();
+            IComponent[] components = getComponents();
             int lastSeparator = components.length - 1;
             for (int i = 0, componentsLength = components.length; i < componentsLength; i++) {
                 sb.append(components[i].getClass().getName());
@@ -226,29 +286,32 @@ public class Entity {
         return _toStringCache;
     }
 
+    int _retainCount;
     public int getRetainCount() {
-        return owners.size;
+        return _retainCount;
     }
 
     public Entity retain(Object owner) {
-        if (!owners.add(owner)) {
-            throw new EntityIsAlreadyRetainedByOwnerException(owner);
-        }
+        _retainCount += 1;
+        _toStringCache = null;
         return this;
     }
 
     public void release(Object owner) {
-        if (!owners.remove(owner)) {
-            throw new EntityIsNotRetainedByOwnerException(owner);
-        }
+        _retainCount -= 1;
 
-        if (owners.size < 1) {
+        if(_retainCount == 0) {
+            _toStringCache = null;
             if (OnEntityReleased != null) {
                 for (EntityReleased listener : OnEntityReleased.listeners()) {
                     listener.entityReleased(this);
                 }
             }
         }
+    }
+
+    void removeAllOnEntityReleasedHandlers() {
+        OnEntityReleased = null;
     }
 
     public int getCreationIndex() {
@@ -265,6 +328,10 @@ public class Entity {
 
     public void setEnabled(boolean _isEnabled) {
         this._isEnabled = _isEnabled;
+    }
+
+    public Stack<IComponent>[] getComponentPools() {
+        return _componentPools;
     }
 
 }

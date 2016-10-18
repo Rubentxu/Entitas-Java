@@ -6,10 +6,10 @@ import java.util.List;
 
 public interface ICompoundMatcher extends IMatcher {
 
-    IntArray getallOfIndices();
+    int[] getallOfIndices();
 
-    IntArray getanyOfIndices();
+    int[] getanyOfIndices();
 
-    IntArray getnoneOfIndices();
+    int[] getnoneOfIndices();
 
 }

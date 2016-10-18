@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface IMatcher {
 
-    IntArray getindices();
+    int[] getindices();
 
     boolean matches(Entity entity);
 

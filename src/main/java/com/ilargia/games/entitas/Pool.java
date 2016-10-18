@@ -43,10 +43,10 @@ public class Pool {
         _groupsForIndex = new Array<>(totalComponents);
 
         // Cache delegates to avoid gc allocations
-        _cachedUpdateGroupsComponentAddedOrRemoved = (Entity entity, int index, Component component)
+        _cachedUpdateGroupsComponentAddedOrRemoved = (Entity entity, int index, IComponent component)
                                                         -> updateGroupsComponentAddedOrRemoved(entity, index, component);
 
-        _cachedUpdateGroupsComponentReplaced = (Entity entity, int index, Component previousComponent, Component newComponent)
+        _cachedUpdateGroupsComponentReplaced = (Entity entity, int index, IComponent previousComponent, IComponent newComponent)
                                                     -> updateGroupsComponentReplaced(entity, index, previousComponent, newComponent);
 
         _cachedOnEntityReleased = (Entity entity) -> onEntityReleased(entity);
@@ -201,7 +201,7 @@ public class Pool {
         _creationIndex = 0;
     }
 
-    protected void updateGroupsComponentAddedOrRemoved(Entity entity, int index, Component component) {
+    protected void updateGroupsComponentAddedOrRemoved(Entity entity, int index, IComponent component) {
        Array<Group> groups = _groupsForIndex.get(index);
         if (groups != null) {
             ArrayList<Event<GroupChanged>> events = new ArrayList<Event<GroupChanged>>();
@@ -220,7 +220,7 @@ public class Pool {
 
     }
 
-    protected void updateGroupsComponentReplaced(Entity entity, int index, Component previousComponent, Component newComponent) {
+    protected void updateGroupsComponentReplaced(Entity entity, int index, IComponent previousComponent, IComponent newComponent) {
         Array<Group> groups = _groupsForIndex.get(index);
         if (groups != null) {
             for (Group g : groups) {
