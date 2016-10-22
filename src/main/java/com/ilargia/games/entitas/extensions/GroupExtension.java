@@ -1,7 +1,6 @@
 package com.ilargia.games.entitas.extensions;
 
 import com.ilargia.games.entitas.Group;
-import com.ilargia.games.entitas.GroupObserver;
 import com.ilargia.games.entitas.events.GroupEventType;
 
 public final class GroupExtension {

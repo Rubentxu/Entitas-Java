@@ -10,25 +10,24 @@ public class EntityIndex<T> extends AbstractEntityIndex<T> {
 
     private ObjectMap<T, ObjectSet<Entity>> _index;
 
-    protected EntityIndex(Group group, Func<Entity, IComponent, T> key) {
+    protected EntityIndex(Group group, Func<Entity, IComponent, T> key) throws EntityIndexException {
         super(group, key);
         _index = new ObjectMap<T, ObjectSet<Entity>>();
         activate();
     }
 
     @Override
-    public void activate() {
+    public void activate() throws EntityIndexException {
         super.activate();
         indexEntities(_group);
     }
 
     public ObjectSet<Entity> getEntities(T key) {
         ObjectSet<Entity> entities = null;
-        if (_index.get(key, entities)) {
-            entities = new ObjectSet<Entity>(EntityEqualityComparer.comparer);
+        if (!_index.containsKey(key)) {
+            entities = new ObjectSet<Entity>();
             _index.put(key, entities);
         }
-
         return entities;
     }
 

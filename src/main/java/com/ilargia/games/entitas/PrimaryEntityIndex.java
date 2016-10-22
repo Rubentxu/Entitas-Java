@@ -4,26 +4,18 @@ import com.badlogic.gdx.utils.ObjectMap;
 import com.ilargia.games.entitas.exceptions.EntityIndexException;
 import com.ilargia.games.entitas.interfaces.IComponent;
 
-import java.util.Dictionary;
-
 public class PrimaryEntityIndex<T> extends AbstractEntityIndex<T> {
 
     private ObjectMap<T, Entity> _index;
 
-    protected PrimaryEntityIndex(Group group, Func<Entity, IComponent, T> getKey) {
+    protected PrimaryEntityIndex(Group group, Func<Entity, IComponent, T> getKey) throws EntityIndexException {
         super(group, getKey);
         _index = new ObjectMap<T, Entity>();
         activate();
     }
 
-    public PrimaryEntityIndex(Group group, Func<Entity, IComponent, T> getKey, IEqualityComparer<T> comparer) {
-        super(group, getKey);
-        _index = new ObjectMap<T, Entity>(comparer);
-        activate();
-    }
-
     @Override
-    public void activate() {
+    public void activate() throws EntityIndexException {
         super.activate();
         indexEntities(_group);
     }

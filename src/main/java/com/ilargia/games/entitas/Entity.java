@@ -2,6 +2,7 @@ package com.ilargia.games.entitas;
 
 import com.badlogic.gdx.utils.ObjectSet;
 import com.ilargia.games.entitas.events.Event;
+import com.ilargia.games.entitas.events.EventSource;
 import com.ilargia.games.entitas.exceptions.*;
 import com.ilargia.games.entitas.interfaces.IComponent;
 import com.ilargia.games.entitas.interfaces.ComponentReplaced;
@@ -23,25 +24,19 @@ public class Entity {
     private String _toStringCache;
     private int _totalComponents;
     private PoolMetaData _poolMetaData;
+    private EventSource _source;
 
-    public final ObjectSet<Object> owners;
-    public Event<EntityChanged> OnComponentAdded;
-    public Event<EntityChanged> OnComponentRemoved;
-    public Event<ComponentReplaced> OnComponentReplaced;
-    public Event<EntityReleased> OnEntityReleased;
+    public ObjectSet<Object> owners;
 
 
-    public Entity(int totalComponents, Stack<IComponent>[] componentPools,
-                  PoolMetaData poolMetaData) {
+
+    public Entity(int totalComponents, Stack<IComponent>[] componentPools, PoolMetaData poolMetaData, EventSource source) {
         _components = new IComponent[totalComponents];
         _totalComponents = totalComponents;
         _componentPools = componentPools;
         _isEnabled = true;
         owners = new ObjectSet<>();
-        OnComponentAdded = new Event<EntityChanged>();
-        OnComponentRemoved = new Event<EntityChanged>();
-        OnComponentReplaced = new Event<ComponentReplaced>();
-        OnEntityReleased = new Event<EntityReleased>();
+        _source = source;
 
         if(poolMetaData != null) {
             _poolMetaData = poolMetaData;
@@ -127,24 +122,24 @@ public class Entity {
             _components[index] = replacement;
             _componentsCache = null;
             if(replacement != null) {
-                if(OnComponentReplaced != null) {
-                    for (EntityChanged listener : OnComponentRemoved.listeners()) {
+                if(_source.OnComponentReplaced != null) {
+                    for (EntityChanged listener : _source.OnComponentRemoved.listeners()) {
                         listener.entityChanged(this, index, previousComponent);
                     }
                 }
             } else {
                 _componentIndicesCache = null;
-                if(OnComponentRemoved != null) {
-                    for (EntityChanged listener : OnComponentRemoved.listeners()) {
+                if(_source.OnComponentRemoved != null) {
+                    for (EntityChanged listener : _source.OnComponentRemoved.listeners()) {
                         listener.entityChanged(this, index, previousComponent);
                     }
                 }
             }
-            getComponentPool(index).Push(previousComponent);
+            getComponentPool(index).push(previousComponent);
 
         } else {
-            if(OnComponentReplaced != null) {
-                for (ComponentReplaced listener : OnComponentReplaced.listeners()) {
+            if(_source.OnComponentReplaced != null) {
+                for (ComponentReplaced listener : _source.OnComponentReplaced.listeners()) {
                     listener.componentReplaced(this, index, previousComponent, replacement);
                 }
             }
@@ -258,9 +253,6 @@ public class Entity {
 
     public void destroy() {
         removeAllComponents();
-        OnComponentAdded = null;
-        OnComponentReplaced = null;
-        OnComponentRemoved = null;
         _isEnabled = false;
     }
 
@@ -302,8 +294,8 @@ public class Entity {
 
         if(_retainCount == 0) {
             _toStringCache = null;
-            if (OnEntityReleased != null) {
-                for (EntityReleased listener : OnEntityReleased.listeners()) {
+            if (_source.OnEntityReleased != null) {
+                for (EntityReleased listener : _source.OnEntityReleased.listeners()) {
                     listener.entityReleased(this);
                 }
             }
@@ -311,7 +303,7 @@ public class Entity {
     }
 
     void removeAllOnEntityReleasedHandlers() {
-        OnEntityReleased = null;
+        _source.OnEntityReleased = null;
     }
 
     public int getCreationIndex() {

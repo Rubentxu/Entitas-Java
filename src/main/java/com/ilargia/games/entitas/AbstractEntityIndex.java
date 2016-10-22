@@ -31,7 +31,7 @@ public abstract class AbstractEntityIndex<T> implements IEntityIndex {
     }
 
     @Override
-    public void activate() {
+    public void activate() throws EntityIndexException {
         _group.OnEntityAdded.addListener(onEntityAdded);
         _group.OnEntityRemoved.addListener((Group group, Entity entity, int index, IComponent component) -> {
             removeEntity(entity, component);
@@ -47,7 +47,7 @@ public abstract class AbstractEntityIndex<T> implements IEntityIndex {
 
     }
 
-    protected void indexEntities(Group group) {
+    protected void indexEntities(Group group) throws EntityIndexException {
         Array<Entity> entities = group.getEntities();
         for (int i = 0; i < entities.size; i++) {
             addEntity(entities.items[i], null);

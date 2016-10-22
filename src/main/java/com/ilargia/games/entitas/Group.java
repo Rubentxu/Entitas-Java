@@ -3,6 +3,7 @@ package com.ilargia.games.entitas;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectSet;
 import com.ilargia.games.entitas.events.Event;
+import com.ilargia.games.entitas.exceptions.EntityIndexException;
 import com.ilargia.games.entitas.exceptions.SingleEntityException;
 import com.ilargia.games.entitas.interfaces.IComponent;
 import com.ilargia.games.entitas.interfaces.GroupChanged;
@@ -13,10 +14,11 @@ import java.util.Iterator;
 
 public class Group {
 
-    private final ObjectSet<Entity> _entities = new ObjectSet<Entity>();
     public Event<GroupChanged> OnEntityAdded = new Event<GroupChanged>();
     public Event<GroupChanged> OnEntityRemoved = new Event<GroupChanged>();
     public Event<GroupUpdated> OnEntityUpdated = new Event<GroupUpdated>();
+
+    private final ObjectSet<Entity> _entities = new ObjectSet<Entity>();
     private IMatcher _matcher;
     private Array<Entity> _entitiesCache;
     private Entity _singleEntityCache;
@@ -27,14 +29,6 @@ public class Group {
         _matcher = matcher;
     }
 
-    public int getcount() {
-        return _entities.size;
-    }
-
-    public IMatcher getmatcher() {
-        return _matcher;
-    }
-
     public void handleEntitySilently(Entity entity) {
         if (_matcher.matches(entity)) {
             addEntitySilently(entity);
@@ -43,7 +37,7 @@ public class Group {
         }
     }
 
-    public void handleEntity(Entity entity, int index, IComponent component) {
+    public void handleEntity(Entity entity, int index, IComponent component) throws EntityIndexException {
         if (_matcher.matches(entity)) {
             addEntity(entity, index, component);
         } else {
@@ -51,12 +45,8 @@ public class Group {
         }
     }
 
-    public Event<GroupChanged> handleEntity(Entity entity) {
-        return _matcher.matches(entity) ? addEntity(entity) : removeEntity(entity);
 
-    }
-
-    public void updateEntity(Entity entity, int index, IComponent previousComponent, IComponent newComponent) {
+    public void updateEntity(Entity entity, int index, IComponent previousComponent, IComponent newComponent) throws EntityIndexException {
         if (_entities.contains(entity)) {
             if (OnEntityRemoved != null) {
                 for (GroupChanged listener : OnEntityRemoved.listeners()) {
@@ -77,31 +67,39 @@ public class Group {
     }
 
     public void removeAllEventHandlers() {
-        OnEntityAdded = null;
-        OnEntityRemoved = null;
-        OnEntityUpdated = null;
+        OnEntityAdded.clear();
+        OnEntityRemoved.clear();
+        OnEntityUpdated.clear();
+    }
+
+    public Event<GroupChanged> handleEntity(Entity entity) {
+        return _matcher.matches(entity)
+                ? (addEntitySilently(entity) ? OnEntityAdded : null)
+                : (removeEntitySilently(entity) ? OnEntityRemoved : null);
+
     }
 
     private boolean addEntitySilently(Entity entity) {
-        boolean added = _entities.add(entity);
-        if (added) {
-            _entitiesCache = null;
-            _singleEntityCache = null;
-            entity.retain(this);
+        if(entity.isEnabled()) {
+            boolean added = _entities.add(entity);
+            if(added) {
+                _entitiesCache = null;
+                _singleEntityCache = null;
+                entity.retain(this);
+            }
+
+            return added;
         }
-        return added;
+
+        return false;
     }
 
-    private void addEntity(Entity entity, int index, IComponent component) {
+    private void addEntity(Entity entity, int index, IComponent component) throws EntityIndexException {
         if (addEntitySilently(entity) && OnEntityAdded != null) {
             for (GroupChanged listener : OnEntityAdded.listeners()) {
                 listener.groupChanged(this, entity, index, component);
             }
         }
-    }
-
-    private Event<GroupChanged> addEntity(Entity entity) {
-        return addEntitySilently(entity) ? OnEntityAdded : null;
     }
 
     private boolean removeEntitySilently(Entity entity) {
@@ -115,7 +113,7 @@ public class Group {
         return removed;
     }
 
-    private void removeEntity(Entity entity, int index, IComponent component) {
+    private void removeEntity(Entity entity, int index, IComponent component) throws EntityIndexException {
         boolean removed = _entities.remove(entity);
         if (removed) {
             _entitiesCache = null;
@@ -129,25 +127,21 @@ public class Group {
         }
     }
 
-    private Event<GroupChanged> removeEntity(Entity entity) {
-        return removeEntitySilently(entity) ? OnEntityRemoved : null;
-    }
-
     public boolean containsEntity(Entity entity) {
         return _entities.contains(entity);
     }
 
-    public Array<Entity> getEntities() {
+    public Entity[] getEntities() {
         if (_entitiesCache == null) {
             _entitiesCache = new Array<Entity>(false,_entities.size);
             for (Entity e : _entities) {
                 _entitiesCache.add(e);
             }
         }
-        return _entitiesCache;
+        return _entitiesCache.items;
     }
 
-    public Entity getSingleEntity() {
+    public Entity getSingleEntity() throws SingleEntityException {
         if (_singleEntityCache == null) {
             int c = _entities.size;
             if (c == 1) {
@@ -156,11 +150,21 @@ public class Group {
             } else if (c == 0) {
                 return null;
             } else {
-                throw new SingleEntityException(_matcher);
+                throw new SingleEntityException(this);
             }
         }
         return _singleEntityCache;
     }
+
+
+    public int getcount() {
+        return _entities.size;
+    }
+
+    public IMatcher getmatcher() {
+        return _matcher;
+    }
+
 
     @Override
     public String toString() {
