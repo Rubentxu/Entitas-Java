@@ -8,7 +8,7 @@ import com.ilargia.games.entitas.interfaces.IComponent;
 
 public class EntityCollector {
 
-    private ObjectSet<Entity> _collectedEntities;
+    public ObjectSet<Entity> _collectedEntities;
     private Group[] _groups;
     private GroupEventType[] _eventTypes;
     GroupChanged _addEntityCache;
@@ -22,7 +22,7 @@ public class EntityCollector {
 
     public EntityCollector(Group[] groups, GroupEventType[] eventTypes) throws EntityCollectorException {
         _groups = groups;
-        _collectedEntities = new ObjectSet<>(EntityEqualityComparer.comparer);
+        _collectedEntities = new ObjectSet<>();
         _eventTypes = eventTypes;
 
         if(groups.length != eventTypes.length) {
@@ -32,7 +32,12 @@ public class EntityCollector {
             );
         }
 
-        _addEntityCache = addEntity;
+        _addEntityCache = (Group group,Entity entity, int index, IComponent component) -> {
+            boolean added = _collectedEntities.add(entity);
+            if(added) {
+                entity.retain(this);
+            }
+        };
         activate();
     }
 
@@ -41,14 +46,15 @@ public class EntityCollector {
             Group group = _groups[i];
             GroupEventType eventType = _eventTypes[i];
             if(eventType == GroupEventType.OnEntityAdded) {
-                group.OnEntityAdded.addListener(_addEntityCache);
+
+                group.OnEntityAdded =_addEntityCache;
 
             } else if(eventType == GroupEventType.OnEntityRemoved) {
-                group.OnEntityRemoved.addListener(_addEntityCache);
+                group.OnEntityRemoved = _addEntityCache;
 
             } else if(eventType == GroupEventType.OnEntityAddedOrRemoved) {
-                group.OnEntityAdded.addListener(_addEntityCache);
-                group.OnEntityRemoved.addListener(_addEntityCache);
+                group.OnEntityAdded =_addEntityCache;
+                group.OnEntityRemoved =_addEntityCache;
 
             }
         }
@@ -57,7 +63,7 @@ public class EntityCollector {
     public void deactivate() {
         for (int i = 0; i < _groups.length; i++) {
             Group group = _groups[i];
-            group.OnEntityAdded.addListener(_addEntityCache);
+            group.OnEntityAdded =_addEntityCache;
 
         }
         clearCollectedEntities();

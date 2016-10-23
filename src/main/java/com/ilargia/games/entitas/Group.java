@@ -14,9 +14,9 @@ import java.util.Iterator;
 
 public class Group {
 
-    public Event<GroupChanged> OnEntityAdded = new Event<GroupChanged>();
-    public Event<GroupChanged> OnEntityRemoved = new Event<GroupChanged>();
-    public Event<GroupUpdated> OnEntityUpdated = new Event<GroupUpdated>();
+    public GroupChanged OnEntityAdded;
+    public GroupChanged OnEntityRemoved;
+    public GroupUpdated OnEntityUpdated;
 
     private final ObjectSet<Entity> _entities = new ObjectSet<Entity>();
     private IMatcher _matcher;
@@ -49,30 +49,24 @@ public class Group {
     public void updateEntity(Entity entity, int index, IComponent previousComponent, IComponent newComponent) throws EntityIndexException {
         if (_entities.contains(entity)) {
             if (OnEntityRemoved != null) {
-                for (GroupChanged listener : OnEntityRemoved.listeners()) {
-                    listener.groupChanged(this, entity, index, previousComponent);
-                }
+                OnEntityRemoved.groupChanged(this, entity, index, previousComponent);
             }
             if (OnEntityAdded != null) {
-                for (GroupChanged listener : OnEntityAdded.listeners()) {
-                    listener.groupChanged(this, entity, index, newComponent);
-                }
+                OnEntityAdded.groupChanged(this, entity, index, previousComponent);
             }
             if (OnEntityUpdated != null) {
-                for (GroupUpdated listener : OnEntityUpdated.listeners()) {
-                    listener.groupUpdated(this, entity, index, previousComponent, newComponent);
-                }
+                OnEntityUpdated.groupUpdated(this, entity, index, previousComponent, newComponent);
             }
         }
     }
 
     public void removeAllEventHandlers() {
-        OnEntityAdded.clear();
-        OnEntityRemoved.clear();
-        OnEntityUpdated.clear();
+        OnEntityAdded = null;
+        OnEntityRemoved = null;
+        OnEntityUpdated = null;
     }
 
-    public Event<GroupChanged> handleEntity(Entity entity) {
+    public GroupChanged handleEntity(Entity entity) {
         return _matcher.matches(entity)
                 ? (addEntitySilently(entity) ? OnEntityAdded : null)
                 : (removeEntitySilently(entity) ? OnEntityRemoved : null);
@@ -80,25 +74,20 @@ public class Group {
     }
 
     private boolean addEntitySilently(Entity entity) {
-        if(entity.isEnabled()) {
-            boolean added = _entities.add(entity);
-            if(added) {
-                _entitiesCache = null;
-                _singleEntityCache = null;
-                entity.retain(this);
-            }
-
-            return added;
+        boolean added = _entities.add(entity);
+        if (added) {
+            _entitiesCache = null;
+            _singleEntityCache = null;
+            entity.retain(this);
         }
 
-        return false;
+        return added;
+
     }
 
-    private void addEntity(Entity entity, int index, IComponent component) throws EntityIndexException {
+    private void addEntity(Entity entity, int index, IComponent component) {
         if (addEntitySilently(entity) && OnEntityAdded != null) {
-            for (GroupChanged listener : OnEntityAdded.listeners()) {
-                listener.groupChanged(this, entity, index, component);
-            }
+            OnEntityAdded.groupChanged(this, entity, index, component);
         }
     }
 
@@ -113,15 +102,13 @@ public class Group {
         return removed;
     }
 
-    private void removeEntity(Entity entity, int index, IComponent component) throws EntityIndexException {
+    private void removeEntity(Entity entity, int index, IComponent component) {
         boolean removed = _entities.remove(entity);
         if (removed) {
             _entitiesCache = null;
             _singleEntityCache = null;
             if (OnEntityRemoved != null) {
-                for (GroupChanged listener : OnEntityRemoved.listeners()) {
-                    listener.groupChanged(this, entity, index, component);
-                }
+                OnEntityRemoved.groupChanged(this, entity, index, component);
             }
             entity.release(this);
         }
@@ -133,7 +120,7 @@ public class Group {
 
     public Entity[] getEntities() {
         if (_entitiesCache == null) {
-            _entitiesCache = new Array<Entity>(false,_entities.size);
+            _entitiesCache = new Array<Entity>(false, _entities.size);
             for (Entity e : _entities) {
                 _entitiesCache.add(e);
             }
@@ -141,7 +128,7 @@ public class Group {
         return _entitiesCache.items;
     }
 
-    public Entity getSingleEntity() throws SingleEntityException {
+    public Entity getSingleEntity() {
         if (_singleEntityCache == null) {
             int c = _entities.size;
             if (c == 1) {

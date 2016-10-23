@@ -32,25 +32,23 @@ public abstract class AbstractEntityIndex<T> implements IEntityIndex {
 
     @Override
     public void activate() throws EntityIndexException {
-        _group.OnEntityAdded.addListener(onEntityAdded);
-        _group.OnEntityRemoved.addListener((Group group, Entity entity, int index, IComponent component) -> {
-            removeEntity(entity, component);
-        });
+        _group.OnEntityAdded = onEntityAdded;
+        _group.OnEntityRemoved = onEntityRemoved;
 
     }
 
     @Override
     public void deactivate(){
-        _group.OnEntityAdded.addListener(onEntityAdded);
-        _group.OnEntityRemoved.addListener(onEntityRemoved);
+        _group.OnEntityAdded = null;
+        _group.OnEntityRemoved = null;
         clear();
 
     }
 
-    protected void indexEntities(Group group) throws EntityIndexException {
-        Array<Entity> entities = group.getEntities();
-        for (int i = 0; i < entities.size; i++) {
-            addEntity(entities.items[i], null);
+    protected void indexEntities(Group group) {
+        Entity[] entities = group.getEntities();
+        for (int i = 0; i < entities.length; i++) {
+            addEntity(entities[i], null);
         }
     }
 

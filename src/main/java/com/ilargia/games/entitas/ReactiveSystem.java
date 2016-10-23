@@ -8,22 +8,28 @@ import com.ilargia.games.entitas.matcher.TriggerOnEvent;
 import java.util.ArrayList;
 
 public class ReactiveSystem implements IExecuteSystem {
+
     private IReactiveExecuteSystem _subsystem;
-    private GroupObserver _observer;
+    private EntityCollector _collector;
     private IMatcher _ensureComponents;
     private IMatcher _excludeComponents;
     private boolean _clearAfterExecute;
     private Array<Entity> _buffer;
+    private String _toStringCache;
 
     public ReactiveSystem(Pool pool, IReactiveSystem subSystem) {
-        this(pool, subSystem, new TriggerOnEvent[]{subSystem.getTrigger()});
+        this( subSystem, createEntityCollector(pool, new TriggerOnEvent[] { subSystem.getTrigger() }));
     }
 
     public ReactiveSystem(Pool pool, IMultiReactiveSystem subSystem) {
-        this(pool, subSystem, subSystem.getTriggers());
+        this(subSystem, createEntityCollector(pool, subSystem.getTriggers()));
     }
 
-    private ReactiveSystem(Pool pool, IReactiveExecuteSystem subSystem, TriggerOnEvent[] triggers) {
+    public ReactiveSystem(IEntityCollectorSystem subSystem) {
+            this(subSystem, subSystem.getEntityCollector());
+    }
+
+    private ReactiveSystem(IReactiveExecuteSystem subSystem, EntityCollector collector) {
         _subsystem = subSystem;
         IEnsureComponents ensureComponents = (IEnsureComponents) ((subSystem instanceof IEnsureComponents) ? subSystem : null);
         if (ensureComponents != null) {
@@ -36,6 +42,17 @@ public class ReactiveSystem implements IExecuteSystem {
 
         _clearAfterExecute = ((IClearReactiveSystem) ((subSystem instanceof IClearReactiveSystem) ? subSystem : null)) != null;
 
+        _collector = collector;
+        _buffer = new Array<Entity>();
+    }
+
+
+
+    public IReactiveExecuteSystem getSubsystem() {
+        return _subsystem;
+    }
+
+    static EntityCollector createEntityCollector(Pool pool, TriggerOnEvent[] triggers) {
         int triggersLength = triggers.length;
         Group[] groups = new Group[triggersLength];
         GroupEventType[] eventTypes = new GroupEventType[triggersLength];
@@ -44,55 +61,52 @@ public class ReactiveSystem implements IExecuteSystem {
             groups[i] = pool.getGroup(trigger.trigger);
             eventTypes[i] = trigger.eventType;
         }
-        _observer = new GroupObserver(groups, eventTypes);
-        _buffer = new Array<Entity>();
+
+        return new EntityCollector(groups, eventTypes);
     }
 
-    public IReactiveExecuteSystem getsubsystem() {
-        return _subsystem;
-    }
 
     public void activate() {
-        _observer.activate();
+        _collector.activate();
     }
 
     public void deactivate() {
-        _observer.deactivate();
+        _collector.deactivate();
     }
 
     public void clear() {
-        _observer.clearCollectedEntities();
+        _collector.clearCollectedEntities();
     }
 
     public void execute() {
-        if (_observer.getcollectedEntities().size != 0) {
+        if (_collector._collectedEntities.size != 0) {
             if (_ensureComponents != null) {
                 if (_excludeComponents != null) {
-                    for (Entity e : _observer.getcollectedEntities()) {
+                    for (Entity e : _collector._collectedEntities) {
                         if (_ensureComponents.matches(e) && !_excludeComponents.matches(e)) {
                             _buffer.add(e.retain(this));
                         }
                     }
                 } else {
-                    for (Entity e : _observer.getcollectedEntities()) {
+                    for (Entity e : _collector._collectedEntities) {
                         if (_ensureComponents.matches(e)) {
                             _buffer.add(e.retain(this));
                         }
                     }
                 }
             } else if (_excludeComponents != null) {
-                for (Entity e : _observer.getcollectedEntities()) {
+                for (Entity e : _collector._collectedEntities) {
                     if (!_excludeComponents.matches(e)) {
                         _buffer.add(e.retain(this));
                     }
                 }
             } else {
-                for (Entity e : _observer.getcollectedEntities()) {
+                for (Entity e : _collector._collectedEntities) {
                     _buffer.add(e.retain(this));
                 }
             }
 
-            _observer.clearCollectedEntities();
+            _collector.clearCollectedEntities();
             if (_buffer.size != 0) {
                 _subsystem.execute(_buffer);
                 for (int i = 0, bufferCount = _buffer.size; i < bufferCount; i++) {
@@ -100,9 +114,18 @@ public class ReactiveSystem implements IExecuteSystem {
                 }
                 _buffer.clear();
                 if (_clearAfterExecute) {
-                    _observer.clearCollectedEntities();
+                    _collector.clearCollectedEntities();
                 }
             }
         }
+    }
+
+    @Override
+    public  String toString() {
+        if(_toStringCache == null) {
+            _toStringCache = "ReactiveSystem(" + _subsystem + ")";
+        }
+
+        return _toStringCache;
     }
 }

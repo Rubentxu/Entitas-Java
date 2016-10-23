@@ -27,6 +27,8 @@ public class EntityIndex<T> extends AbstractEntityIndex<T> {
         if (!_index.containsKey(key)) {
             entities = new ObjectSet<Entity>();
             _index.put(key, entities);
+        } else {
+            entities = _index.get(key);
         }
         return entities;
     }
@@ -40,7 +42,6 @@ public class EntityIndex<T> extends AbstractEntityIndex<T> {
 
     @Override
     protected void removeEntity(Entity entity, IComponent component) {
-
         getEntities(_key.getKey(entity, component)).remove(entity);
         entity.release(this);
     }
