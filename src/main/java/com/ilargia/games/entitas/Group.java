@@ -2,7 +2,6 @@ package com.ilargia.games.entitas;
 
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectSet;
-import com.ilargia.games.entitas.events.Event;
 import com.ilargia.games.entitas.exceptions.EntityIndexException;
 import com.ilargia.games.entitas.exceptions.SingleEntityException;
 import com.ilargia.games.entitas.interfaces.IComponent;

@@ -1,6 +1,7 @@
 package com.ilargia.games.entitas.matcher;
 
 import com.ilargia.games.entitas.Entity;
+import com.ilargia.games.entitas.caching.EntitasCache;
 import com.ilargia.games.entitas.exceptions.MatcherException;
 import com.ilargia.games.entitas.interfaces.IAllOfMatcher;
 import com.ilargia.games.entitas.interfaces.IAnyOfMatcher;
@@ -204,7 +205,7 @@ public class Matcher implements IAllOfMatcher, IAnyOfMatcher, INoneOfMatcher {
 //
         int[] mergedIndices =  DistinctIndices(indicesList.stream().mapToInt(i -> i).toArray());
 
-        EntitasCache.PushIntList(indicesList);
+        EntitasCache.pushIntList(indicesList);
 
         return mergedIndices;
 
