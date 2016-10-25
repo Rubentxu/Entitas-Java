@@ -165,7 +165,7 @@ public class Pool {
             }
             _groups.put(matcher, group);
 
-            for (int index : matcher.getindices()) {
+            for (int index : matcher.getIndices()) {
                 if (_groupsForIndex[index] == null) {
                     _groupsForIndex[index] = new Array<Group>();
                 }

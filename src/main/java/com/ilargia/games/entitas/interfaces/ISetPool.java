@@ -1,4 +1,4 @@
-package com.ilargia.games.entitas.extensions;
+package com.ilargia.games.entitas.interfaces;
 
 import com.ilargia.games.entitas.Pool;
 

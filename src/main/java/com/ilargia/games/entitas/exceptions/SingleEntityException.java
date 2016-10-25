@@ -4,9 +4,10 @@ import com.ilargia.games.entitas.Group;
 
 public class SingleEntityException extends EntitasException {
 
-    public SingleEntityException(Group group) {
-        super( "Cannot get the single entity from " + group +
-                "!\nGroup contains " + group.getcount() + " entities:","");
+    public SingleEntityException(int count) {
+        super("Expected exactly one entity in collection but found " + count + "!",
+                "Use collection.SingleEntity() only when you are sure that there " +
+                        "is exactly one entity.");
     }
 
 }
