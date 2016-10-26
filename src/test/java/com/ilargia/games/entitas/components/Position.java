@@ -5,7 +5,7 @@ import com.ilargia.games.entitas.interfaces.IComponent;
 /**
  * Created by rdcabrera on 16/12/2015.
  */
-public class Position extends IComponent {
+public class Position implements IComponent {
     private float x, y;
 
     public Position(float x, float y) {

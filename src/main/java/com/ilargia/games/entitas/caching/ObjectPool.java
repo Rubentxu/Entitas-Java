@@ -5,24 +5,27 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class ObjectPool<T> {
-    Function<Class<T>, T> _factoryMethod;
-    Consumer<T> _resetMethod;
-    Stack<T> _pool;
+    public interface Factory<T> {
+        T create();
+    }
+    private Factory<T> _factoryMethod;
+    private Consumer<T> _resetMethod;
+    private Stack<T> _pool;
 
     public ObjectPool() {
 
     }
 
-    public ObjectPool(Function<Class<T>, T> factoryMethod, Consumer<T> resetMethod) {
+    public ObjectPool(Factory<T> factoryMethod, Consumer<T> resetMethod) {
         _factoryMethod = factoryMethod;
         _resetMethod = resetMethod;
         _pool = new Stack<T>();
     }
 
 
-    public T get(Class<T> clazz) {
+    public T get() {
         return _pool.size() == 0
-                ? _factoryMethod.apply(clazz)
+                ? _factoryMethod.create()
                 : _pool.pop();
     }
 
@@ -31,6 +34,10 @@ public class ObjectPool<T> {
             _resetMethod.accept(obj);
         }
         _pool.push(obj);
+    }
+
+    public void reset() {
+        _pool.clear();
     }
 }
 

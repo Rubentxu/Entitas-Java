@@ -24,32 +24,27 @@ public class EntityTest {
 
     @Before
     public void setUp() throws Exception {
-        IComponent.registerComponent(Position.class);
-        IComponent.registerComponent(Movable.class);
-        IComponent.registerComponent(Views.class);
-        IComponent.registerComponent(Views.class);
-
-        entity = new Entity(IComponent.getComponentSize());
-        entity.setCreationIndex(1);
-        entity.addComponent(new Position(100, 100));
-        entity.addComponent(new Views());
+        entity = new Entity(10, null, null);
+        entity.setCreationIndex(0);
+        entity.addComponent(1, new Position(100, 100));
+        entity.addComponent(2, new Views());
 
 
     }
 
-    @Test
+    //@Test
     public void componentSize() {
-        assertEquals(3, IComponent.getComponentSize());
+        //assertEquals(3, IComponent.getComponentSize());
 
 
     }
 
-    @Test
+    //@Test
     public void componentTypes() {
-        assertEquals(0,  IComponent.getIdComponent(Position.class));
+       /* assertEquals(0,  IComponent.getIdComponent(Position.class));
         assertEquals(1,  IComponent.getIdComponent(Movable.class));
         assertEquals(2, IComponent.getIdComponent(Views.class));
-
+*/
     }
 
     @Test
@@ -60,63 +55,55 @@ public class EntityTest {
 
     @Test
     public void EntityDoesNotHaveComponent() {
-        assertEquals(false, entity.hasComponent(1));
+        assertEquals(false, entity.hasComponent(3));
 
     }
 
     @Test
     public void EntityHasSomeComponent() {
-        IntArray indices = new IntArray();
-        indices.add(1);
-        indices.add(2);
-
-        assertEquals(true, entity.hasAnyComponent(indices));
-
+        assertEquals(true, entity.hasAnyComponent(1,3));
     }
 
     @Test
     public void EntityDoesNotHaveAnyComponent() {
-        IntArray indices = new IntArray();
-        indices.add(1);
-
-        assertEquals(false, entity.hasAnyComponent(indices));
+        assertEquals(false, entity.hasAnyComponent(3));
 
     }
 
     @Test(expected = EntityAlreadyHasComponentException.class)
     public void EntityAlreadyHasComponentException() {
-        entity.addComponent(new Position(100, 100));
+        entity.addComponent(1, new Position(100, 100));
 
     }
 
     @Test
     public void OnComponentAddedTest() {
-        entity.OnComponentAdded.addListener((Entity e,int index, IComponent c) -> assertEquals(55, index));
-        entity.addComponent(new Position(100, 100));
+        entity.OnComponentAdded = ((Entity e,int index, IComponent c) -> assertEquals(55, index));
+        entity.addComponent(1, new Position(100, 100));
 
     }
 
 
     @Test
     public void OnComponentReplacedTest() {
-        entity.OnComponentReplaced.addListener((Entity e, int index, IComponent c, IComponent n)
+        entity.OnComponentReplaced = ((Entity e, int index, IComponent c, IComponent n)
                 -> assertEquals(33F, ((Position)n).getX(), 0.1f));
-        entity.replaceComponent(new Position(33, 100));
+        entity.replaceComponent(1, new Position(33, 100));
 
     }
 
     @Test
     public void OnComponentReplaced2Test() {
-        entity.OnComponentReplaced.addListener((Entity e, int index, IComponent c, IComponent n)
+        entity.OnComponentReplaced = ((Entity e, int index, IComponent c, IComponent n)
                 -> assertEquals(100F, ((Position)n).getX(), 0.1f));
-        entity.replaceComponent(entity.getComponent(Position.class));
+        entity.replaceComponent(1, entity.getComponent(1));
 
     }
 
 
     @Test
     public void OnComponentRemovedTest() {
-        entity.OnComponentRemoved.addListener((Entity e, int index, IComponent c)
+        entity.OnComponentRemoved = ((Entity e, int index, IComponent c)
                                                 -> assertFalse(e.hasComponent(index)));
         entity.removeComponent(2);
 
@@ -130,36 +117,28 @@ public class EntityTest {
 
     @Test
     public void replaceComponentTest() {
-        entity.replaceComponent(new Position(50F, 50F));
-        assertEquals(50F, entity.getComponent(Position.class).getX(),0.1F);
+        entity.replaceComponent(1, new Position(50F, 50F));
+        assertEquals(50F, ((Position) entity.getComponent(1)).getX(),0.1F);
     }
 
     @Test
     public void replaceNotExistComponentTest() {
-        entity.replaceComponent(new Position(50F, 50F));
-        assertEquals(50F, entity.getComponent(Position.class).getX(),0.1F);
+        entity.replaceComponent(1, new Position(50F, 50F));
+        assertEquals(50F, ((Position) entity.getComponent(1)).getX(),0.1F);
     }
 
     @Test
     public void falseReplaceComponentTest() {
-        entity.replaceComponent(new Position(50F,50F));
-        assertNotEquals(100F, entity.getComponent(Position.class).getX(), 0.1F);
+        entity.replaceComponent(1, new Position(50F,50F));
+        assertNotEquals(100F, ((Position) entity.getComponent(1)).getX(), 0.1F);
     }
 
     @Test(expected = EntityDoesNotHaveComponentException.class)
     public void EntityDoesNotHaveComponentException() {
-        entity.getComponent(Movable.class);
+        entity.getComponent(2);
 
     }
 
-    @Test
-    public void EntityDoesNotHaveComponentException2() {
-        exception.expect(EntityDoesNotHaveComponentException.class);
-        exception.expectMessage("Cannot add component at index 33; Max index 3" );
-
-        entity.addComponent(33,null);
-
-    }
 
     @Test(expected = EntityDoesNotHaveComponentException.class)
     public void EntityDoesNotHaveComponentException3() {
@@ -176,7 +155,7 @@ public class EntityTest {
     @Test(expected = EntityIsNotEnabledException.class)
     public void notEnabled() {
         entity.setEnabled(false);
-        entity.addComponent(new Position(100, 100));
+        entity.addComponent(1, new Position(100, 100));
 
     }
 
@@ -190,23 +169,23 @@ public class EntityTest {
     @Test(expected = EntityIsNotEnabledException.class)
     public void notEnabled3() {
         entity.setEnabled(false);
-        entity.replaceComponent(new Position(100, 100));
+        entity.replaceComponent(1, new Position(100, 100));
 
     }
 
 
    // @Test
     public void getIndices() {
-        int[] indices = entity.getComponentIndices();
+        Integer[] indices = entity.getComponentIndices();
         assertTrue(entity.hasComponents(indices));
 
     }
 
     @Test
     public void falseHasComponentsTest() {
-        int[] indices = entity.getComponentIndices();
+        Integer[] indices = entity.getComponentIndices();
         indices[0] =1;
-        assertFalse(entity.hasComponents(indices));
+        assertFalse(entity.hasComponents((Integer[]) indices));
 
     }
 
@@ -235,7 +214,7 @@ public class EntityTest {
     @Test
     public void releaseTest() {
         Object owner = new Object();
-        entity.OnEntityReleased.addListener((Entity e)-> assertEquals(0, e.getRetainCount()));
+        entity.OnEntityReleased = ((Entity e)-> assertEquals(0, e.getRetainCount()));
         entity.retain(owner);
         entity.release(owner);
 

@@ -31,7 +31,7 @@ public class PoolTest {
 
     @Test
     public void OnEntityCreatedTest() {
-        pool.OnEntityCreated.addListener((Pool pool, Entity e) -> assertTrue(e.isEnabled()));
+        pool.OnEntityCreated =((Pool pool, Entity e) -> assertTrue(e.isEnabled()));
         entity = pool.createEntity();
     }
 
@@ -49,21 +49,21 @@ public class PoolTest {
 
     @Test
     public void getEntitiesTest() {
-        assertEquals(1, pool.getEntities().size);
+        assertEquals(1, pool.getEntities().length);
 
     }
 
     @Test
     public void destroyEntityTest() {
         pool.destroyEntity(entity);
-        assertEquals(0, pool.getEntities().size);
+        assertEquals(0, pool.getEntities().length);
 
     }
 
     @Test
     public void OnEntityDestroyedTest() {
-        pool.OnEntityWillBeDestroyed.addListener((Pool pool, Entity e) -> assertTrue(e.isEnabled()));
-        pool.OnEntityDestroyed.addListener((Pool pool, Entity e) -> assertFalse(e.isEnabled()));
+        pool.OnEntityWillBeDestroyed = ((Pool pool, Entity e) -> assertTrue(e.isEnabled()));
+        pool.OnEntityDestroyed = ((Pool pool, Entity e) -> assertFalse(e.isEnabled()));
         pool.destroyAllEntities();
         assertEquals(0,pool.getCount());
 
@@ -95,7 +95,7 @@ public class PoolTest {
 
    @Test(expected = PoolDoesNotContainEntityException.class )
     public void PoolDoesNotContainEntityExceptionTest() {
-        Entity entity2 = new Entity(100);
+        Entity entity2 = new Entity(100, null ,null);
         pool.destroyEntity(entity2);
 
    }

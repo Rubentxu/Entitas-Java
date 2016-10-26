@@ -16,10 +16,10 @@ import java.util.Arrays;
 public class Matcher implements IAllOfMatcher, IAnyOfMatcher, INoneOfMatcher {
 
     public String[] componentNames;
-    private int[] _indices;
-    private int[] _allOfIndices;
-    private int[] _anyOfIndices;
-    private int[] _noneOfIndices;
+    private Integer[] _indices;
+    private Integer[] _allOfIndices;
+    private Integer[] _anyOfIndices;
+    private Integer[] _noneOfIndices;
     private int _hash;
     private boolean _isHashCached;
     private String _toStringCache;
@@ -45,7 +45,7 @@ public class Matcher implements IAllOfMatcher, IAnyOfMatcher, INoneOfMatcher {
         }
     }
 
-    private static int[] distinctIndices(Integer... indices) {
+    private static Integer[] distinctIndices(Integer... indices) {
         ObjectSet<Integer> indicesSet = EntitasCache.getIntHashSet();
 
         indicesSet.addAll(indices);
@@ -54,11 +54,11 @@ public class Matcher implements IAllOfMatcher, IAnyOfMatcher, INoneOfMatcher {
         Arrays.sort(uniqueIndices.items);
 
         EntitasCache.pushIntHashSet(indicesSet);
-        return Arrays.stream(uniqueIndices.items).mapToInt(Integer::intValue).toArray();
+        return uniqueIndices.items;
 
     }
 
-    private static boolean equalIndices(int[] i1, int[] i2) {
+    private static boolean equalIndices(Integer[] i1, Integer[] i2) {
         if ((i1 == null) != (i2 == null)) {
             return false;
         }
@@ -78,7 +78,7 @@ public class Matcher implements IAllOfMatcher, IAnyOfMatcher, INoneOfMatcher {
 
     }
 
-    private static int applyHash(int hash, int[] indices, int i1, int i2) {
+    private static int applyHash(int hash, Integer[] indices, int i1, int i2) {
         if (indices != null) {
             for (int i = 0, indicesLength = indices.length; i < indicesLength; i++) {
                 hash ^= indices[i] * i1;
@@ -113,7 +113,7 @@ public class Matcher implements IAllOfMatcher, IAnyOfMatcher, INoneOfMatcher {
 
     }
 
-    private static void appendIndices(StringBuilder sb, String prefix, int[] indexArray, String[] componentNames) {
+    private static void appendIndices(StringBuilder sb, String prefix, Integer[] indexArray, String[] componentNames) {
         final String SEPARATOR = ", ";
         sb.append(prefix);
         sb.append("(");
@@ -133,8 +133,8 @@ public class Matcher implements IAllOfMatcher, IAnyOfMatcher, INoneOfMatcher {
         sb.append(")");
     }
 
-    static int[] mergeIndices(IMatcher... matchers) {
-        int[] indices = new int[matchers.length];
+    static Integer[] mergeIndices(IMatcher... matchers) {
+        Integer[] indices = new Integer[matchers.length];
         for (int i = 0; i < matchers.length; i++) {
             IMatcher matcher = matchers[i];
             if (matcher.getIndices().length != 1) {
@@ -158,22 +158,22 @@ public class Matcher implements IAllOfMatcher, IAnyOfMatcher, INoneOfMatcher {
         return indices;
     }
 
-    public int[] getAllOfIndices() {
+    public Integer[] getAllOfIndices() {
         return _allOfIndices;
     }
 
-    public int[] getAnyOfIndices() {
+    public Integer[] getAnyOfIndices() {
         return _anyOfIndices;
     }
 
-    public int[] getIndices() {
+    public Integer[] getIndices() {
         if (_indices == null) {
             _indices = mergeIndices();
         }
         return _indices;
     }
 
-    public int[] getNoneOfIndices() {
+    public Integer[] getNoneOfIndices() {
         return _noneOfIndices;
     }
 
@@ -204,8 +204,8 @@ public class Matcher implements IAllOfMatcher, IAnyOfMatcher, INoneOfMatcher {
         return matchesAllOf && matchesAnyOf && matchesNoneOf;
     }
 
-    private int[] mergeIndices() {
-        Array<Integer> indicesList = EntitasCache.getIntList();
+    private Integer[] mergeIndices() {
+        Array<Integer> indicesList = EntitasCache.getIntArray();
 
         if (_allOfIndices != null) {
             for (int it : _allOfIndices) {
@@ -223,8 +223,8 @@ public class Matcher implements IAllOfMatcher, IAnyOfMatcher, INoneOfMatcher {
             }
 
         }
-        EntitasCache.pushIntList(indicesList);
-        return EntitasCache.getIntArray();
+        EntitasCache.pushIntArray(indicesList);
+        return EntitasCache.getIntArray().items;
 
     }
 

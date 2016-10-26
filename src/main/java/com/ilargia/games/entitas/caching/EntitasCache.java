@@ -8,55 +8,61 @@ import com.ilargia.games.entitas.interfaces.IComponent;
 
 public class EntitasCache {
 
-    static ObjectCache _cache = new ObjectCache();
+    static ObjectPool<Array<IComponent>> componentArray;
+    static ObjectPool<Array<Integer>> integerArray;
+    static ObjectPool<ObjectSet<Integer>> integerSet;
+    static ObjectPool<Array<GroupChanged>> groupChangedArray;
+
+
+    public EntitasCache() {
+        componentArray = new ObjectPool<>();
+        integerArray = new ObjectPool<>();
+        integerSet = new ObjectPool<>();
+        groupChangedArray = new ObjectPool<>();
+    }
+
 
     public static Array<IComponent> getIComponentList() {
-        return _cache.<Array<IComponent>>get();
+        return componentArray.get();
     }
 
     public static void pushIComponentList(Array<IComponent> list) {
         list.clear();
-        _cache.push(list);
+        componentArray.push(list);
     }
 
-    public static Array<Integer> getIntList() {
-        return _cache.<Array<Integer>>get();
+    public static Array<Integer> getIntArray() {
+        return integerArray.get();
     }
 
-    public static int[] getIntArray() {
-        Array<Integer> indicesList = _cache.<Array<Integer>>get();
-        int[] indicesArray = new int[indicesList.size];
-        for (int i = 0; i < indicesList.size; i++) {
-            indicesArray[i] = indicesList.get(i);
-        }
-        return indicesArray;
-    }
-
-    public static void pushIntList(Array<Integer> list) {
+    public static void pushIntArray(Array<Integer> list) {
         list.clear();
-        _cache.push(list);
+        integerArray.push(list);
     }
 
     public static ObjectSet<Integer> getIntHashSet() {
-        return _cache.<ObjectSet<Integer>>get();
+        return integerSet.get();
     }
 
     public static void pushIntHashSet(ObjectSet<Integer> hashSet) {
         hashSet.clear();
-        _cache.push(hashSet);
+        integerSet.push(hashSet);
     }
 
     public static Array<GroupChanged> getGroupChangedList() {
-        return _cache.<Array<GroupChanged>>get();
+        return groupChangedArray.get();
 
     }
 
     public static void pushGroupChangedList(Array<GroupChanged> list) {
         list.clear();
-        _cache.push(list);
+        groupChangedArray.push(list);
     }
 
     public static void reset() {
-        _cache.reset();
+        componentArray.reset();
+        integerArray.reset();
+        integerSet.reset();
+        groupChangedArray.reset();
     }
 }

@@ -162,14 +162,14 @@ public class Entity {
 
     public Integer[] getComponentIndices() {
         if (_componentIndicesCache == null) {
-            Array<Integer> indices = EntitasCache.getIntList();
+            Array<Integer> indices = EntitasCache.getIntArray();
             for (int i = 0; i < _components.length; i++) {
                 if (_components[i] != null) {
                     indices.add(i);
                 }
             }
             _componentIndicesCache = indices.toArray();
-            EntitasCache.pushIntList(indices);
+            EntitasCache.pushIntArray(indices);
         }
         return _componentIndicesCache;
 
@@ -183,7 +183,7 @@ public class Entity {
         }
     }
 
-    public boolean hasComponents(int[] indices) {
+    public boolean hasComponents(Integer ...indices) {
         for (int index : indices) {
             if (_components[index] == null) {
                 return false;
@@ -193,7 +193,7 @@ public class Entity {
 
     }
 
-    public boolean hasAnyComponent(int[] indices) {
+    public boolean hasAnyComponent(Integer ...indices) {
         for (int i = 0; i < indices.length; i++) {
             if (_components[indices[i]] != null) {
                 return true;
@@ -243,16 +243,16 @@ public class Entity {
         if (_toStringCache == null) {
             StringBuilder sb = (new StringBuilder()).append("Entity_").append(_creationIndex).append("(").
                     append(getRetainCount()).append(")").append("(");
-
-            final String SEPARATOR = ", ";
-            IComponent[] components = getComponents();
-            int lastSeparator = components.length - 1;
-            for (int i = 0, componentsLength = components.length; i < componentsLength; i++) {
-                sb.append(components[i].getClass().getName());
-                if (i < lastSeparator) {
-                    sb.append(SEPARATOR);
-                }
-            }
+//
+//            final String SEPARATOR = ", ";
+//            IComponent[] components = getComponents();
+//            int lastSeparator = components.length - 1;
+//            for (int i = 0, componentsLength = components.length; i < componentsLength; i++) {
+//                sb.append(components[i].getClass().getName());
+//                if (i < lastSeparator) {
+//                    sb.append(SEPARATOR);
+//                }
+//            }
 
             sb.append(")");
             _toStringCache = sb.toString();

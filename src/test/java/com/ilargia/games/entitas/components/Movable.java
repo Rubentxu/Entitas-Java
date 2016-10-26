@@ -3,7 +3,7 @@ package com.ilargia.games.entitas.components;
 import com.ilargia.games.entitas.interfaces.IComponent;
 
 
-public class Movable extends IComponent {
+public class Movable implements IComponent {
     private boolean isMovable = false;
 
     public Movable(boolean isMovable) {
