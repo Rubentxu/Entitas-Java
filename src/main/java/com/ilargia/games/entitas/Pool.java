@@ -7,7 +7,7 @@ import com.ilargia.games.entitas.caching.EntitasCache;
 import com.ilargia.games.entitas.exceptions.*;
 import com.ilargia.games.entitas.interfaces.*;
 
-import java.util.*;
+import java.util.Stack;
 
 public class Pool {
 
@@ -21,14 +21,14 @@ public class Pool {
     public EntityReleased _cachedEntityReleased;
 
     public int _totalComponents;
+    protected ObjectMap<IMatcher, Group> _groups;
+    protected Array<Group>[] _groupsForIndex;
     private int _creationIndex;
     private ObjectSet<Entity> _entities;
     private Stack<Entity> _reusableEntities;
     private ObjectSet<Entity> _retainedEntities;
     private Entity[] _entitiesCache;
     private PoolMetaData _metaData;
-    protected ObjectMap<IMatcher, Group> _groups;
-    protected Array<Group>[] _groupsForIndex;
     private Stack<IComponent>[] _componentPools;
     private ObjectMap<String, IEntityIndex> _entityIndices;
 
@@ -41,15 +41,15 @@ public class Pool {
         _totalComponents = totalComponents;
         _creationIndex = startCreationIndex;
 
-        if(metaData != null) {
+        if (metaData != null) {
             _metaData = metaData;
 
-            if(metaData.componentNames.length != totalComponents) {
+            if (metaData.componentNames.length != totalComponents) {
                 throw new PoolMetaDataException(this, metaData);
             }
         } else {
             String[] componentNames = new String[totalComponents];
-                String prefix = "Index ";
+            String prefix = "Index ";
             for (int i = 0; i < componentNames.length; i++) {
                 componentNames[i] = prefix + i;
             }
@@ -62,10 +62,16 @@ public class Pool {
         _componentPools = new Stack[totalComponents];
         _entityIndices = new ObjectMap<>();
 
-        _cachedEntityChanged = (Entity e, int idx, IComponent c)-> { updateGroupsComponentAddedOrRemoved(e, idx, c); };
+        _cachedEntityChanged = (Entity e, int idx, IComponent c) -> {
+            updateGroupsComponentAddedOrRemoved(e, idx, c);
+        };
         _cachedComponentReplaced = (Entity e, int idx, IComponent pc, IComponent nc)
-                -> { updateGroupsComponentReplaced(e, idx, pc, nc); };
-        _cachedEntityReleased = (Entity e)-> { onEntityReleased(e); };
+                -> {
+            updateGroupsComponentReplaced(e, idx, pc, nc);
+        };
+        _cachedEntityReleased = (Entity e) -> {
+            onEntityReleased(e);
+        };
 
         _reusableEntities = new Stack<>();
         _retainedEntities = new ObjectSet<>();
@@ -146,7 +152,7 @@ public class Pool {
         if (_entitiesCache == null) {
             _entitiesCache = new Entity[_entities.size];
             int i = 0;
-            for (Entity e: _entities) {
+            for (Entity e : _entities) {
                 _entitiesCache[i] = e;
                 i++;
             }
@@ -199,7 +205,7 @@ public class Pool {
     }
 
     public void addEntityIndex(String name, IEntityIndex entityIndex) {
-        if(_entityIndices.containsKey(name)) {
+        if (_entityIndices.containsKey(name)) {
             throw new PoolEntityIndexDoesAlreadyExistException(this, name);
         }
         _entityIndices.put(name, entityIndex);
@@ -208,7 +214,7 @@ public class Pool {
 
     public IEntityIndex getEntityIndex(String name) {
         IEntityIndex entityIndex;
-        if(!_entityIndices.containsKey(name)) {
+        if (!_entityIndices.containsKey(name)) {
             throw new PoolEntityIndexDoesNotExistException(this, name);
         } else {
             entityIndex = _entityIndices.get(name);
@@ -218,7 +224,7 @@ public class Pool {
     }
 
     public void DeactivateAndRemoveEntityIndices() {
-        for( IEntityIndex entityIndex : _entityIndices.values()) {
+        for (IEntityIndex entityIndex : _entityIndices.values()) {
             entityIndex.deactivate();
         }
         _entityIndices.clear();
@@ -231,7 +237,7 @@ public class Pool {
 
     public void ClearComponentPool(int index) {
         Stack<IComponent> componentPool = _componentPools[index];
-        if(componentPool != null) {
+        if (componentPool != null) {
             componentPool.clear();
         }
     }
@@ -258,13 +264,13 @@ public class Pool {
 
 
     public void updateGroupsComponentAddedOrRemoved(Entity entity, int index, IComponent component) throws EntityIndexException {
-       Array<Group> groups = _groupsForIndex[index];
+        Array<Group> groups = _groupsForIndex[index];
         if (groups != null) {
             Array<GroupChanged> events = EntitasCache.getGroupChangedList();
             for (int i = 0, groupsCount = groups.size; i < groupsCount; i++) {
                 events.add(groups.get(i).handleEntity(entity));
             }
-            for(int i = 0; i < events.size; i++) {
+            for (int i = 0; i < events.size; i++) {
                 GroupChanged groupChangedEvent = events.get(i);
                 if (groupChangedEvent != null) {
                     groupChangedEvent.groupChanged(groups.get(i), entity, index, component);
@@ -296,10 +302,12 @@ public class Pool {
 
 
     public Stack<IComponent>[] getComponentPools() {
-         return _componentPools;
+        return _componentPools;
     }
 
-    public PoolMetaData getMetaData() { return _metaData; }
+    public PoolMetaData getMetaData() {
+        return _metaData;
+    }
 
     public int getCount() {
         return _entities.size;

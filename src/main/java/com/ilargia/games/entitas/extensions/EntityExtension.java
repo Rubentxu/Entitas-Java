@@ -2,9 +2,6 @@ package com.ilargia.games.entitas.extensions;
 
 
 import com.ilargia.games.entitas.Entity;
-import com.ilargia.games.entitas.interfaces.IComponent;
-
-import java.lang.reflect.Type;
 
 public final class EntityExtension {
 

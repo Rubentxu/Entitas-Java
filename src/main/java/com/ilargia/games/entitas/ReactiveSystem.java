@@ -5,8 +5,6 @@ import com.ilargia.games.entitas.events.GroupEventType;
 import com.ilargia.games.entitas.interfaces.*;
 import com.ilargia.games.entitas.matcher.TriggerOnEvent;
 
-import java.util.ArrayList;
-
 public class ReactiveSystem implements IExecuteSystem {
 
     private IReactiveExecuteSystem _subsystem;
@@ -18,7 +16,7 @@ public class ReactiveSystem implements IExecuteSystem {
     private String _toStringCache;
 
     public ReactiveSystem(Pool pool, IReactiveSystem subSystem) {
-        this( subSystem, createEntityCollector(pool, new TriggerOnEvent[] { subSystem.getTrigger() }));
+        this(subSystem, createEntityCollector(pool, new TriggerOnEvent[]{subSystem.getTrigger()}));
     }
 
     public ReactiveSystem(Pool pool, IMultiReactiveSystem subSystem) {
@@ -26,7 +24,7 @@ public class ReactiveSystem implements IExecuteSystem {
     }
 
     public ReactiveSystem(IEntityCollectorSystem subSystem) {
-            this(subSystem, subSystem.getEntityCollector());
+        this(subSystem, subSystem.getEntityCollector());
     }
 
     private ReactiveSystem(IReactiveExecuteSystem subSystem, EntityCollector collector) {
@@ -46,12 +44,6 @@ public class ReactiveSystem implements IExecuteSystem {
         _buffer = new Array<Entity>();
     }
 
-
-
-    public IReactiveExecuteSystem getSubsystem() {
-        return _subsystem;
-    }
-
     static EntityCollector createEntityCollector(Pool pool, TriggerOnEvent[] triggers) {
         int triggersLength = triggers.length;
         Group[] groups = new Group[triggersLength];
@@ -65,6 +57,9 @@ public class ReactiveSystem implements IExecuteSystem {
         return new EntityCollector(groups, eventTypes);
     }
 
+    public IReactiveExecuteSystem getSubsystem() {
+        return _subsystem;
+    }
 
     public void activate() {
         _collector.activate();
@@ -121,8 +116,8 @@ public class ReactiveSystem implements IExecuteSystem {
     }
 
     @Override
-    public  String toString() {
-        if(_toStringCache == null) {
+    public String toString() {
+        if (_toStringCache == null) {
             _toStringCache = "ReactiveSystem(" + _subsystem + ")";
         }
 

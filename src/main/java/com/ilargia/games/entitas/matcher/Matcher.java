@@ -133,6 +133,31 @@ public class Matcher implements IAllOfMatcher, IAnyOfMatcher, INoneOfMatcher {
         sb.append(")");
     }
 
+    static int[] mergeIndices(IMatcher... matchers) {
+        int[] indices = new int[matchers.length];
+        for (int i = 0; i < matchers.length; i++) {
+            IMatcher matcher = matchers[i];
+            if (matcher.getIndices().length != 1) {
+                throw new MatcherException(matcher);
+            }
+            indices[i] = matcher.getIndices()[0];
+        }
+
+        return indices;
+    }
+
+    private static Integer[] MergeIndices(IMatcher... matchers) {
+        Integer[] indices = new Integer[matchers.length];
+        for (int i = 0; i < matchers.length; i++) {
+            IMatcher matcher = matchers[i];
+            if (matcher.getIndices().length != 1) {
+                throw new MatcherException(matcher);
+            }
+            indices[i] = matcher.getIndices()[0];
+        }
+        return indices;
+    }
+
     public int[] getAllOfIndices() {
         return _allOfIndices;
     }
@@ -172,7 +197,6 @@ public class Matcher implements IAllOfMatcher, IAnyOfMatcher, INoneOfMatcher {
         return noneOf(MergeIndices(matchers));
     }
 
-
     public boolean matches(Entity entity) {
         boolean matchesAllOf = _allOfIndices == null || entity.hasComponents(_allOfIndices);
         boolean matchesAnyOf = _anyOfIndices == null || entity.hasAnyComponent(_anyOfIndices);
@@ -203,33 +227,6 @@ public class Matcher implements IAllOfMatcher, IAnyOfMatcher, INoneOfMatcher {
         return EntitasCache.getIntArray();
 
     }
-
-    static int[] mergeIndices(IMatcher... matchers) {
-        int[] indices = new int[matchers.length];
-        for (int i = 0; i < matchers.length; i++) {
-            IMatcher matcher = matchers[i];
-            if (matcher.getIndices().length != 1) {
-                throw new MatcherException(matcher);
-            }
-            indices[i] = matcher.getIndices()[0];
-        }
-
-        return indices;
-    }
-
-
-    private static Integer[] MergeIndices(IMatcher... matchers) {
-        Integer[] indices = new Integer[matchers.length];
-        for (int i = 0; i < matchers.length; i++) {
-            IMatcher matcher = matchers[i];
-            if (matcher.getIndices().length != 1) {
-                throw new MatcherException(matcher);
-            }
-            indices[i] = matcher.getIndices()[0];
-        }
-        return indices;
-    }
-
 
     @Override
     public boolean equals(Object obj) {

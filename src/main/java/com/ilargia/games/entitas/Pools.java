@@ -17,7 +17,7 @@ public class Pools {
     }
 
     public static Pools getSharedInstance() {
-        if(_sharedInstance == null) {
+        if (_sharedInstance == null) {
             _sharedInstance = new Pools();
         }
         return _sharedInstance;

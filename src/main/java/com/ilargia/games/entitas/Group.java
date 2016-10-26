@@ -4,21 +4,19 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectSet;
 import com.ilargia.games.entitas.exceptions.EntityIndexException;
 import com.ilargia.games.entitas.exceptions.GroupSingleEntityException;
-import com.ilargia.games.entitas.exceptions.SingleEntityException;
-import com.ilargia.games.entitas.interfaces.IComponent;
 import com.ilargia.games.entitas.interfaces.GroupChanged;
 import com.ilargia.games.entitas.interfaces.GroupUpdated;
+import com.ilargia.games.entitas.interfaces.IComponent;
 import com.ilargia.games.entitas.interfaces.IMatcher;
 
 import java.util.Iterator;
 
 public class Group {
 
+    private final ObjectSet<Entity> _entities = new ObjectSet<Entity>();
     public GroupChanged OnEntityAdded;
     public GroupChanged OnEntityRemoved;
     public GroupUpdated OnEntityUpdated;
-
-    private final ObjectSet<Entity> _entities = new ObjectSet<Entity>();
     private IMatcher _matcher;
     private Array<Entity> _entitiesCache;
     private Entity _singleEntityCache;

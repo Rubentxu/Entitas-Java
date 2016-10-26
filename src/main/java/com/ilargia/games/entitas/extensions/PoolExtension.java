@@ -44,20 +44,20 @@ public final class PoolExtension {
         setPools(system, pools);
 
         IReactiveSystem reactiveSystem = (IReactiveSystem) ((system instanceof IReactiveSystem) ? system : null);
-        if(reactiveSystem != null) {
+        if (reactiveSystem != null) {
             return new ReactiveSystem(pool, reactiveSystem);
         }
         IMultiReactiveSystem multiReactiveSystem = (IMultiReactiveSystem) ((system instanceof IMultiReactiveSystem) ? system : null);
-        if(multiReactiveSystem != null) {
+        if (multiReactiveSystem != null) {
             return new ReactiveSystem(pool, multiReactiveSystem);
         }
         IEntityCollectorSystem entityCollectorSystem = (IEntityCollectorSystem) ((system instanceof IEntityCollectorSystem) ? system : null);
-        if(entityCollectorSystem != null) {
+        if (entityCollectorSystem != null) {
             return new ReactiveSystem(entityCollectorSystem);
         }
 
-        throw new EntitasException( "Could not create ReactiveSystem for " + system + "!", "The system has to implement IReactiveSystem, " +
-                        "IMultiReactiveSystem or IEntityCollectorSystem.");
+        throw new EntitasException("Could not create ReactiveSystem for " + system + "!", "The system has to implement IReactiveSystem, " +
+                "IMultiReactiveSystem or IEntityCollectorSystem.");
     }
 
     public static ISystem CreateSystem(Pools pools, ISystem system) {
@@ -70,12 +70,12 @@ public final class PoolExtension {
         setPools(system, pools);
 
         IEntityCollectorSystem entityCollectorSystem = (IEntityCollectorSystem) ((system instanceof IEntityCollectorSystem) ? system : null);
-        if(entityCollectorSystem != null) {
+        if (entityCollectorSystem != null) {
             return new ReactiveSystem(entityCollectorSystem);
         }
 
-        throw new EntitasException("Could not create ReactiveSystem for " + system + "!","Only IEntityCollectorSystem is supported for " +
-                        "pools.CreateSystem(system).");
+        throw new EntitasException("Could not create ReactiveSystem for " + system + "!", "Only IEntityCollectorSystem is supported for " +
+                "pools.CreateSystem(system).");
     }
 
 
@@ -89,7 +89,7 @@ public final class PoolExtension {
 
     public static void setPools(ISystem system, Pools pools) {
         ISetPools poolsSystem = (ISetPools) ((system instanceof ISetPool) ? system : null);
-        if(poolsSystem != null) {
+        if (poolsSystem != null) {
             poolsSystem.setPools(pools);
         }
     }
@@ -99,7 +99,7 @@ public final class PoolExtension {
         return createEntityCollector(pools, matcher, GroupEventType.OnEntityAdded);
     }
 
-    public static EntityCollector createEntityCollector(Pool[] pools, IMatcher matcher, GroupEventType eventType ) {
+    public static EntityCollector createEntityCollector(Pool[] pools, IMatcher matcher, GroupEventType eventType) {
         Group[] groups = new Group[pools.length];
         GroupEventType[] eventTypes = new GroupEventType[pools.length];
 

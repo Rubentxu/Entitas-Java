@@ -36,10 +36,10 @@ public class Systems implements IInitializeSystem, IExecuteSystem, ICleanupSyste
         }
 
         ICleanupSystem cleanupSystem = reactiveSystem != null
-                ? (ICleanupSystem)reactiveSystem.getSubsystem()
-                : (ICleanupSystem)system;
+                ? (ICleanupSystem) reactiveSystem.getSubsystem()
+                : (ICleanupSystem) system;
 
-        if(cleanupSystem != null) {
+        if (cleanupSystem != null) {
             _cleanupSystems.add(cleanupSystem);
         }
 
@@ -47,7 +47,7 @@ public class Systems implements IInitializeSystem, IExecuteSystem, ICleanupSyste
                 ? (ITearDownSystem) reactiveSystem.getSubsystem()
                 : (ITearDownSystem) system;
 
-        if(tearDownSystem != null) {
+        if (tearDownSystem != null) {
             _tearDownSystems.add(tearDownSystem);
         }
         return this;

@@ -1,7 +1,5 @@
 package com.ilargia.games.entitas.exceptions;
 
-import com.ilargia.games.entitas.Group;
-
 public class SingleEntityException extends EntitasException {
 
     public SingleEntityException(int count) {
