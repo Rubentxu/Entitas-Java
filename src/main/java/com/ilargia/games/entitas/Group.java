@@ -3,6 +3,7 @@ package com.ilargia.games.entitas;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectSet;
 import com.ilargia.games.entitas.exceptions.EntityIndexException;
+import com.ilargia.games.entitas.exceptions.GroupSingleEntityException;
 import com.ilargia.games.entitas.exceptions.SingleEntityException;
 import com.ilargia.games.entitas.interfaces.IComponent;
 import com.ilargia.games.entitas.interfaces.GroupChanged;
@@ -136,7 +137,7 @@ public class Group {
             } else if (c == 0) {
                 return null;
             } else {
-                throw new SingleEntityException(this);
+                throw new GroupSingleEntityException(this);
             }
         }
         return _singleEntityCache;
