@@ -179,7 +179,7 @@ public class Entity {
         try {
             return _components[index] != null;
         } catch (ArrayIndexOutOfBoundsException ex) {
-            return false;
+            throw new EntityDoesNotHaveComponentException("ArrayIndexOutOfBoundsException", index);
         }
     }
 
