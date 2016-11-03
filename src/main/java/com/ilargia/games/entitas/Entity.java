@@ -12,6 +12,7 @@ import com.ilargia.games.entitas.interfaces.EntityReleased;
 import com.ilargia.games.entitas.interfaces.IComponent;
 
 import java.lang.reflect.ParameterizedType;
+import java.util.ArrayList;
 import java.util.Stack;
 
 public class Entity {
@@ -145,20 +146,22 @@ public class Entity {
 
     public IComponent[] getComponents() {
         if (_componentsCache == null) {
-            Array<IComponent> components = EntitasCache.getIComponentList();
+            ArrayList<IComponent> componentsCache = EntitasCache.getIComponentList();
+
             for (int i = 0; i < _components.length; i++) {
                 IComponent component = _components[i];
                 if (component != null) {
-                    components.add(component);
+                    componentsCache.add(component);
                 }
             }
-
-            _componentsCache = components.items;
-            EntitasCache.pushIComponentList(components);
+            _componentsCache= new IComponent[componentsCache.size()];
+            componentsCache.toArray(_componentsCache);
+            EntitasCache.pushIComponentList(componentsCache);
         }
         return _componentsCache;
 
     }
+
 
     public Integer[] getComponentIndices() {
         if (_componentIndicesCache == null) {

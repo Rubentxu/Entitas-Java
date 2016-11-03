@@ -12,9 +12,7 @@ public class ObjectPool<T> {
     private Consumer<T> _resetMethod;
     private Stack<T> _pool;
 
-    public ObjectPool() {
-
-    }
+    private ObjectPool() { }
 
     public ObjectPool(Factory<T> factoryMethod, Consumer<T> resetMethod) {
         _factoryMethod = factoryMethod;

@@ -1,6 +1,7 @@
 package com.ilargia.games.entitas;
 
 import com.badlogic.gdx.utils.IntArray;
+import com.ilargia.games.entitas.caching.EntitasCache;
 import com.ilargia.games.entitas.components.Movable;
 import com.ilargia.games.entitas.components.Position;
 import com.ilargia.games.entitas.components.Views;
@@ -12,6 +13,8 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 
+import java.util.Stack;
+
 import static org.junit.Assert.*;
 
 public class EntityTest {
@@ -20,11 +23,14 @@ public class EntityTest {
     public ExpectedException exception = ExpectedException.none();
 
     private Entity entity;
+    private Stack<IComponent>[] _componentPools;
 
 
     @Before
     public void setUp() throws Exception {
-        entity = new Entity(10, null, null);
+        _componentPools = new Stack[10];
+        EntitasCache cache = new EntitasCache();
+        entity = new Entity(10, _componentPools, null);
         entity.setCreationIndex(0);
         entity.addComponent(1, new Position(100, 100));
         entity.addComponent(2, new Views());
@@ -78,8 +84,8 @@ public class EntityTest {
 
     @Test
     public void OnComponentAddedTest() {
-        entity.OnComponentAdded = ((Entity e,int index, IComponent c) -> assertEquals(55, index));
-        entity.addComponent(1, new Position(100, 100));
+        entity.OnComponentAdded = ((Entity e,int index, IComponent c) -> assertEquals(3, index));
+        entity.addComponent(3, new Position(100, 100));
 
     }
 
@@ -135,7 +141,7 @@ public class EntityTest {
 
     @Test(expected = EntityDoesNotHaveComponentException.class)
     public void EntityDoesNotHaveComponentException() {
-        entity.getComponent(2);
+        entity.getComponent(3);
 
     }
 
@@ -184,7 +190,7 @@ public class EntityTest {
     @Test
     public void falseHasComponentsTest() {
         Integer[] indices = entity.getComponentIndices();
-        indices[0] =1;
+        indices[0] =3;
         assertFalse(entity.hasComponents((Integer[]) indices));
 
     }
@@ -220,18 +226,6 @@ public class EntityTest {
 
     }
 
-    @Test(expected = EntityIsNotRetainedByOwnerException.class)
-    public void EntityIsNotRetainedByOwnerExceptionTest() {
-        Object owner = new Object();
-        entity.release(owner);
-    }
-
-    @Test(expected = EntityIsAlreadyRetainedByOwnerException.class)
-    public void EntityIsAlreadyRetainedByOwnerExceptionTest() {
-        Object owner = new Object();
-        entity.retain(owner);
-        entity.retain(owner);
-    }
 
 }
 
