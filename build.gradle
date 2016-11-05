@@ -1,5 +1,4 @@
 apply plugin: 'java'
-apply plugin: 'jacoco'
 group 'com.ilargia.games'
 version '0.1.0'
 
@@ -16,15 +15,6 @@ ext {
 
 dependencies {
     compile "com.badlogicgames.gdx:gdx:$gdxVersion"
-    compile group: 'com.squareup', name: 'javapoet', version: '1.7.0'
+    compile group: 'org.jboss.forge.roaster', name: 'roaster-api', version: '2.19.1.Final'
     testCompile group: 'junit', name: 'junit', version: '4.11'
 }
-
-jacocoTestReport {
-    reports {
-        xml.enabled = true
-        html.enabled = true
-    }
-}
-
-check.dependsOn jacocoTestReport
