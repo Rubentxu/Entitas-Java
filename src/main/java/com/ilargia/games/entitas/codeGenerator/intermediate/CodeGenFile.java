@@ -1,12 +1,14 @@
 package com.ilargia.games.entitas.codeGenerator.intermediate;
 
+import org.jboss.forge.roaster.model.source.JavaClassSource;
+
 public class CodeGenFile {
 
     public String fileName;
-    public String fileContent;
+    public JavaClassSource fileContent;
     public String generatorName;
 
-    public CodeGenFile(String fileName, String fileContent, String generatorName) {
+    public CodeGenFile(String fileName, JavaClassSource fileContent, String generatorName) {
         this.fileName = fileName;
         this.fileContent = fileContent;
         this.generatorName = generatorName;

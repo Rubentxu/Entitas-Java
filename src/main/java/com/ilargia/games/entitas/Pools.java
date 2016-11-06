@@ -7,10 +7,7 @@ public class Pools {
 
     static Pools _sharedInstance;
 
-    public static Pool CreatePool(String poolName,
-                                  int totalComponents,
-                                  String[] componentNames,
-                                  Type[] componentTypes) {
+    public static Pool createPool(String poolName, int totalComponents, String[] componentNames, Type[] componentTypes) {
         Pool pool = new Pool(totalComponents, 0, new PoolMetaData(poolName, componentNames, componentTypes));
 
         return pool;
