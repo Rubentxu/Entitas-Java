@@ -3,15 +3,12 @@ package com.ilargia.games.entitas;
 import com.ilargia.games.entitas.exceptions.EntityIsNotDestroyedException;
 import com.ilargia.games.entitas.exceptions.PoolDoesNotContainEntityException;
 import com.ilargia.games.entitas.exceptions.PoolStillHasRetainedEntitiesException;
-import com.ilargia.games.entitas.matcher.Matcher;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class PoolTest {
 
@@ -31,7 +28,7 @@ public class PoolTest {
 
     @Test
     public void OnEntityCreatedTest() {
-        pool.OnEntityCreated =((Pool pool, Entity e) -> assertTrue(e.isEnabled()));
+        pool.OnEntityCreated = ((Pool pool, Entity e) -> assertTrue(e.isEnabled()));
         entity = pool.createEntity();
     }
 
@@ -65,7 +62,7 @@ public class PoolTest {
         pool.OnEntityWillBeDestroyed = ((Pool pool, Entity e) -> assertTrue(e.isEnabled()));
         pool.OnEntityDestroyed = ((Pool pool, Entity e) -> assertFalse(e.isEnabled()));
         pool.destroyAllEntities();
-        assertEquals(0,pool.getCount());
+        assertEquals(0, pool.getCount());
 
     }
 
@@ -73,7 +70,7 @@ public class PoolTest {
     public void getReusableEntitiesCountTest() {
         Entity entity2 = pool.createEntity();
         pool.destroyEntity(entity2);
-        assertEquals(1,pool.getReusableEntitiesCount());
+        assertEquals(1, pool.getReusableEntitiesCount());
 
     }
 
@@ -85,7 +82,7 @@ public class PoolTest {
 
     }
 
-    @Test(expected = PoolStillHasRetainedEntitiesException.class )
+    @Test(expected = PoolStillHasRetainedEntitiesException.class)
     public void PoolStillHasRetainedEntitiesExceptionTest() {
         entity.retain(new Object());
         pool.destroyAllEntities();
@@ -93,12 +90,12 @@ public class PoolTest {
 
     }
 
-   @Test(expected = PoolDoesNotContainEntityException.class )
+    @Test(expected = PoolDoesNotContainEntityException.class)
     public void PoolDoesNotContainEntityExceptionTest() {
-        Entity entity2 = new Entity(100, null ,null);
+        Entity entity2 = new Entity(100, null, null);
         pool.destroyEntity(entity2);
 
-   }
+    }
 
     @Test
     public void onEntityReleasedTest() {
@@ -106,7 +103,7 @@ public class PoolTest {
         entity.release(pool);
 
         assertEquals(1, pool.getReusableEntitiesCount());
-   }
+    }
 
     @Test(expected = EntityIsNotDestroyedException.class)
     public void EntityIsNotDestroyedExceptionTest() {

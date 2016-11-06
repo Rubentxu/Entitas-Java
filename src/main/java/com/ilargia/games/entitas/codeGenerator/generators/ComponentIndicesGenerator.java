@@ -1,7 +1,6 @@
 package com.ilargia.games.entitas.codeGenerator.generators;
 
 
-import com.ilargia.games.entitas.Pool;
 import com.ilargia.games.entitas.codeGenerator.CodeGenerator;
 import com.ilargia.games.entitas.codeGenerator.interfaces.IComponentCodeGenerator;
 import com.ilargia.games.entitas.codeGenerator.interfaces.IPoolCodeGenerator;
@@ -34,7 +33,7 @@ public class ComponentIndicesGenerator implements IComponentCodeGenerator, IPool
     }
 
     private JavaClassSource generateIndicesLookup(String lookupTag, ComponentInfo[] componentInfos) {
-        JavaClassSource javaClass = Roaster.parse(JavaClassSource.class, String.format("public static class {0} {}", lookupTag));
+        JavaClassSource javaClass = Roaster.parse(JavaClassSource.class, String.format("public class %1$s {}", lookupTag));
         addIndices(componentInfos, javaClass);
         addComponentNames(componentInfos, javaClass);
         addComponentTypes(componentInfos, javaClass);
@@ -51,18 +50,18 @@ public class ComponentIndicesGenerator implements IComponentCodeGenerator, IPool
                         .setName(capitalize(info.typeName))
                         .setType("int")
                         .setLiteralInitializer(i.toString())
+                        .setPublic()
                         .setStatic(true)
-                        .setFinal(true)
-                        .setPublic();
+                        .setFinal(true);
             }
         }
         javaClass.addField()
                 .setName("totalComponents")
                 .setType("int")
                 .setLiteralInitializer(Integer.toString(componentInfos.length))
+                .setPublic()
                 .setStatic(true)
-                .setFinal(true)
-                .setPublic();
+                .setFinal(true);
 
 
         return javaClass;
@@ -84,8 +83,8 @@ public class ComponentIndicesGenerator implements IComponentCodeGenerator, IPool
         javaClass.addMethod()
                 .setName("componentNames")
                 .setReturnType("String[]")
-                .setStatic(true)
                 .setPublic()
+                .setStatic(true)
                 .setBody(code);
 
     }
@@ -106,8 +105,8 @@ public class ComponentIndicesGenerator implements IComponentCodeGenerator, IPool
         javaClass.addMethod()
                 .setName("componentTypes")
                 .setReturnType("Class[]")
-                .setStatic(true)
                 .setPublic()
+                .setStatic(true)
                 .setBody(code);
 
     }

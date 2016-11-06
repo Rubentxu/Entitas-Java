@@ -30,16 +30,17 @@ public class PoolsGenerator implements IPoolCodeGenerator {
 
     }
 
-    private void createPoolsMethod(JavaClassSource javaClass,String[] poolNames) {
+    private void createPoolsMethod(JavaClassSource javaClass, String[] poolNames) {
         Arrays.stream(poolNames).forEach((poolName) -> {
-            String createMethodName = String.format("create{0}Pool",poolName);
+            String createMethodName = String.format("create%1$sPool", capitalize(poolName));
+            String body = String.format("return super.createPool(\"%1$s\", %2$s.totalComponents, %2$s.componentNames, %1$s.componentTypes);",
+                    capitalize(poolName), capitalize(poolName) + CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG);
             javaClass.addMethod()
                     .setPublic()
                     .setStatic(true)
                     .setName(createMethodName)
                     .setReturnType(Pool.class)
-                    .setBody(String.format("return createPool(\"{0}\", {1}.totalComponents, {1}.componentNames, {1.componentTypes);",
-                            capitalize(poolName), poolName.join(CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG) ));
+                    .setBody(body);
 
         });
 
@@ -58,14 +59,14 @@ public class PoolsGenerator implements IPoolCodeGenerator {
                 .setPublic()
                 .setName("allPools")
                 .setReturnType("Pool[]")
-                .setBody(String.format("return new Pool[] { {0} };",allPoolsList ));
+                .setBody(String.format("return new Pool[] { %1$s };", allPoolsList));
 
 
     }
 
     private void createMethodSetAllPools(JavaClassSource javaClass, String[] poolNames) {
         String setAllPools = Arrays.stream(poolNames).reduce("\n", (acc, poolName) ->
-                acc + "    " + poolName.toLowerCase() + " = Create" + capitalize(poolName) + "Pool();\n "
+                acc + "    " + poolName.toLowerCase() + " = create" + capitalize(poolName) + "Pool();\n "
         );
 
         javaClass.addMethod()

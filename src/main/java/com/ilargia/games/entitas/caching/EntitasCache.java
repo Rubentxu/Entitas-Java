@@ -10,10 +10,18 @@ import java.util.ArrayList;
 
 public class EntitasCache {
 
-    private static ObjectPool<ArrayList<IComponent>> componentArray = new ObjectPool<ArrayList<IComponent>>(()->{ return new ArrayList<IComponent>(); } , null);
-    private static ObjectPool<Array<Integer>> integerArray= new ObjectPool<Array<Integer>>(()->{ return new Array<Integer>(true, 16,Integer.class); } , null);
-    private static ObjectPool<ObjectSet<Integer>> integerSet= new ObjectPool<ObjectSet<Integer>>(()->{ return new ObjectSet<Integer>(); } , null);
-    private static ObjectPool<Array<GroupChanged>> groupChangedArray= new ObjectPool<Array<GroupChanged>>(()->{ return new Array<GroupChanged>(true, 16,GroupChanged.class); } , null);
+    private static ObjectPool<ArrayList<IComponent>> componentArray = new ObjectPool<ArrayList<IComponent>>(() -> {
+        return new ArrayList<IComponent>();
+    }, null);
+    private static ObjectPool<Array<Integer>> integerArray = new ObjectPool<Array<Integer>>(() -> {
+        return new Array<Integer>(true, 16, Integer.class);
+    }, null);
+    private static ObjectPool<ObjectSet<Integer>> integerSet = new ObjectPool<ObjectSet<Integer>>(() -> {
+        return new ObjectSet<Integer>();
+    }, null);
+    private static ObjectPool<Array<GroupChanged>> groupChangedArray = new ObjectPool<Array<GroupChanged>>(() -> {
+        return new Array<GroupChanged>(true, 16, GroupChanged.class);
+    }, null);
 
 
     public static ArrayList<IComponent> getIComponentList() {

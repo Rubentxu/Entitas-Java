@@ -16,5 +16,6 @@ ext {
 dependencies {
     compile "com.badlogicgames.gdx:gdx:$gdxVersion"
     compile group: 'org.jboss.forge.roaster', name: 'roaster-api', version: '2.19.1.Final'
+    compile group: 'org.jboss.forge.roaster', name: 'roaster-jdt', version: '2.19.1.Final'
     testCompile group: 'junit', name: 'junit', version: '4.11'
 }

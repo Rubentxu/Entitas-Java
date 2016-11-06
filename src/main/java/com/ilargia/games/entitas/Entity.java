@@ -154,7 +154,7 @@ public class Entity {
                     componentsCache.add(component);
                 }
             }
-            _componentsCache= new IComponent[componentsCache.size()];
+            _componentsCache = new IComponent[componentsCache.size()];
             componentsCache.toArray(_componentsCache);
             EntitasCache.pushIComponentList(componentsCache);
         }
@@ -186,7 +186,7 @@ public class Entity {
         }
     }
 
-    public boolean hasComponents(Integer ...indices) {
+    public boolean hasComponents(Integer... indices) {
         for (int index : indices) {
             if (_components[index] == null) {
                 return false;
@@ -196,7 +196,7 @@ public class Entity {
 
     }
 
-    public boolean hasAnyComponent(Integer ...indices) {
+    public boolean hasAnyComponent(Integer... indices) {
         for (int i = 0; i < indices.length; i++) {
             if (_components[indices[i]] != null) {
                 return true;

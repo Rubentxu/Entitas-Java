@@ -1,17 +1,16 @@
 package com.ilargia.games.entitas;
 
-import com.badlogic.gdx.utils.IntArray;
 import com.ilargia.games.entitas.caching.EntitasCache;
-import com.ilargia.games.entitas.components.Movable;
 import com.ilargia.games.entitas.components.Position;
 import com.ilargia.games.entitas.components.Views;
-import com.ilargia.games.entitas.exceptions.*;
+import com.ilargia.games.entitas.exceptions.EntityAlreadyHasComponentException;
+import com.ilargia.games.entitas.exceptions.EntityDoesNotHaveComponentException;
+import com.ilargia.games.entitas.exceptions.EntityIsNotEnabledException;
 import com.ilargia.games.entitas.interfaces.IComponent;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-
 
 import java.util.Stack;
 
@@ -67,7 +66,7 @@ public class EntityTest {
 
     @Test
     public void EntityHasSomeComponent() {
-        assertEquals(true, entity.hasAnyComponent(1,3));
+        assertEquals(true, entity.hasAnyComponent(1, 3));
     }
 
     @Test
@@ -84,7 +83,7 @@ public class EntityTest {
 
     @Test
     public void OnComponentAddedTest() {
-        entity.OnComponentAdded = ((Entity e,int index, IComponent c) -> assertEquals(3, index));
+        entity.OnComponentAdded = ((Entity e, int index, IComponent c) -> assertEquals(3, index));
         entity.addComponent(3, new Position(100, 100));
 
     }
@@ -93,7 +92,7 @@ public class EntityTest {
     @Test
     public void OnComponentReplacedTest() {
         entity.OnComponentReplaced = ((Entity e, int index, IComponent c, IComponent n)
-                -> assertEquals(33F, ((Position)n).getX(), 0.1f));
+                -> assertEquals(33F, ((Position) n).getX(), 0.1f));
         entity.replaceComponent(1, new Position(33, 100));
 
     }
@@ -101,7 +100,7 @@ public class EntityTest {
     @Test
     public void OnComponentReplaced2Test() {
         entity.OnComponentReplaced = ((Entity e, int index, IComponent c, IComponent n)
-                -> assertEquals(100F, ((Position)n).getX(), 0.1f));
+                -> assertEquals(100F, ((Position) n).getX(), 0.1f));
         entity.replaceComponent(1, entity.getComponent(1));
 
     }
@@ -110,7 +109,7 @@ public class EntityTest {
     @Test
     public void OnComponentRemovedTest() {
         entity.OnComponentRemoved = ((Entity e, int index, IComponent c)
-                                                -> assertFalse(e.hasComponent(index)));
+                -> assertFalse(e.hasComponent(index)));
         entity.removeComponent(2);
 
     }
@@ -124,18 +123,18 @@ public class EntityTest {
     @Test
     public void replaceComponentTest() {
         entity.replaceComponent(1, new Position(50F, 50F));
-        assertEquals(50F, ((Position) entity.getComponent(1)).getX(),0.1F);
+        assertEquals(50F, ((Position) entity.getComponent(1)).getX(), 0.1F);
     }
 
     @Test
     public void replaceNotExistComponentTest() {
         entity.replaceComponent(1, new Position(50F, 50F));
-        assertEquals(50F, ((Position) entity.getComponent(1)).getX(),0.1F);
+        assertEquals(50F, ((Position) entity.getComponent(1)).getX(), 0.1F);
     }
 
     @Test
     public void falseReplaceComponentTest() {
-        entity.replaceComponent(1, new Position(50F,50F));
+        entity.replaceComponent(1, new Position(50F, 50F));
         assertNotEquals(100F, ((Position) entity.getComponent(1)).getX(), 0.1F);
     }
 
@@ -180,7 +179,7 @@ public class EntityTest {
     }
 
 
-   // @Test
+    // @Test
     public void getIndices() {
         Integer[] indices = entity.getComponentIndices();
         assertTrue(entity.hasComponents(indices));
@@ -190,7 +189,7 @@ public class EntityTest {
     @Test
     public void falseHasComponentsTest() {
         Integer[] indices = entity.getComponentIndices();
-        indices[0] =3;
+        indices[0] = 3;
         assertFalse(entity.hasComponents((Integer[]) indices));
 
     }
@@ -220,7 +219,7 @@ public class EntityTest {
     @Test
     public void releaseTest() {
         Object owner = new Object();
-        entity.OnEntityReleased = ((Entity e)-> assertEquals(0, e.getRetainCount()));
+        entity.OnEntityReleased = ((Entity e) -> assertEquals(0, e.getRetainCount()));
         entity.retain(owner);
         entity.release(owner);
 
