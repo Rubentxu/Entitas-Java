@@ -14,7 +14,7 @@ public class PoolsGeneratorTest {
     @Before
     public void setUp() throws Exception {
         generator = new PoolsGenerator();
-        poolNames = new String[]{"pruebas", "test"};
+        poolNames = new String[]{"pruebas", "test", "core"};
 
 
     }

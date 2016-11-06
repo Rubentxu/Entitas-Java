@@ -19,7 +19,7 @@ public class ComponentIndicesGeneratorTest {
 
     }
 
-   // @Test
+    @Test
     public void componentSize() {
         CodeGenFile[] result = generator.generate(poolNames);
 

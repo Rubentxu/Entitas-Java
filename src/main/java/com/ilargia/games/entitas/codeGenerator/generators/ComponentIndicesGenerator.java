@@ -10,6 +10,12 @@ import org.jboss.forge.roaster.Roaster;
 import org.jboss.forge.roaster.model.source.JavaClassSource;
 
 import java.util.Arrays;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class ComponentIndicesGenerator implements IComponentCodeGenerator, IPoolCodeGenerator {
 
@@ -29,7 +35,18 @@ public class ComponentIndicesGenerator implements IComponentCodeGenerator, IPool
 
     @Override
     public CodeGenFile[] generate(ComponentInfo[] componentInfos) {
-        return new CodeGenFile[0];
+        ComponentInfo[] orderedComponentInfos = (ComponentInfo[]) Arrays.stream(componentInfos)
+                .sorted(Comparator.comparing((info) -> info.typeName))
+                .toArray();
+
+        return (CodeGenFile[]) Arrays.stream(componentInfos)
+                .map(info -> {
+                    return new CodeGenFile(
+                            info.fullTypeName,
+                            generateIndicesLookup(info.fullTypeName, componentInfos),
+                            "ComponentIndicesGenerator");
+                }).toArray();
+
     }
 
     private JavaClassSource generateIndicesLookup(String lookupTag, ComponentInfo[] componentInfos) {
@@ -37,6 +54,7 @@ public class ComponentIndicesGenerator implements IComponentCodeGenerator, IPool
         addIndices(componentInfos, javaClass);
         addComponentNames(componentInfos, javaClass);
         addComponentTypes(componentInfos, javaClass);
+        System.out.println(javaClass);
         return javaClass;
 
     }
@@ -112,8 +130,9 @@ public class ComponentIndicesGenerator implements IComponentCodeGenerator, IPool
     }
 
 
-    private String capitalize(final String string) {
-        char[] chars = string.toLowerCase().toCharArray();
+
+    private String capitalize(final String String) {
+        char[] chars = String.toLowerCase().toCharArray();
         boolean found = false;
         for (int i = 0; i < chars.length; i++) {
             if (!found && Character.isLetter(chars[i])) {

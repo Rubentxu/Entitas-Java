@@ -33,7 +33,7 @@ public class PoolsGenerator implements IPoolCodeGenerator {
     private void createPoolsMethod(JavaClassSource javaClass, String[] poolNames) {
         Arrays.stream(poolNames).forEach((poolName) -> {
             String createMethodName = String.format("create%1$sPool", capitalize(poolName));
-            String body = String.format("return super.createPool(\"%1$s\", %2$s.totalComponents, %2$s.componentNames, %1$s.componentTypes);",
+            String body = String.format("return super.createPool(\"%1$s\", %2$s.totalComponents, %2$s.componentNames, %2$s.componentTypes);",
                     capitalize(poolName), capitalize(poolName) + CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG);
             javaClass.addMethod()
                     .setPublic()
@@ -49,10 +49,7 @@ public class PoolsGenerator implements IPoolCodeGenerator {
     private void createMethodAllPools(JavaClassSource javaClass, String[] poolNames) {
 
         String allPoolsList = Arrays.stream(poolNames).reduce("", (acc, poolName) -> {
-            if (acc.equals("")) {
-                return acc + poolName.toLowerCase() + ", ";
-            }
-            return acc + poolName.toLowerCase();
+            return acc + poolName.toLowerCase() + ", ";
         });
 
         javaClass.addMethod()
