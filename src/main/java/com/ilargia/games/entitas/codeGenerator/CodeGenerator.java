@@ -32,10 +32,11 @@ public class CodeGenerator {
     );
 
 
-    public static CodeGenFile[] generate(ICodeGeneratorDataProvider provider, String directory, ICodeGenerator[] codeGenerators) {
+    public static CodeGenFile[] generate(ICodeGeneratorDataProvider provider, String componentsDirectory,
+                                         String destinyDirectory, ICodeGenerator[] codeGenerators) {
 
         ArrayList<CodeGenFile> generatedFiles = new ArrayList<CodeGenFile>();
-        ComponentInfo[] componentInfos = provider.getComponentInfos();
+        ComponentInfo[] componentInfos = provider.componentInfos(componentsDirectory);
         CodeGenFile[] files = new CodeGenFile[0];
 
         for (int i = 0; i < codeGenerators.length; i++) {
@@ -59,7 +60,7 @@ public class CodeGenerator {
             }
 
             Collections.addAll(generatedFiles, files);
-            writeFiles(directory, files);
+            writeFiles(destinyDirectory, files);
         }
 
 

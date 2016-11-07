@@ -1,11 +1,14 @@
 package com.ilargia.games.entitas.codeGenerator.intermediate;
 
+import org.jboss.forge.roaster.model.source.FieldSource;
+import org.jboss.forge.roaster.model.source.JavaClassSource;
+
 import java.util.List;
 
 public class ComponentInfo {
 
     public String fullTypeName;
-    public List<PublicMemberInfo> memberInfos;
+    public List<FieldSource<JavaClassSource>> memberInfos;
     public String[] pools;
     public boolean isSingleEntity;
     public String singleComponentPrefix;
@@ -17,7 +20,7 @@ public class ComponentInfo {
     public String typeName;
     public boolean isSingletonComponent;
 
-    public ComponentInfo(String fullTypeName, List<PublicMemberInfo> memberInfos, String[] pools,
+    public ComponentInfo(String fullTypeName, String name, List<FieldSource<JavaClassSource>> memberInfos, String[] pools,
                          boolean isSingleEntity, String singleComponentPrefix,
                          boolean generateComponent, boolean generateMethods, boolean generateIndex, boolean hideInBlueprintInspector) {
 
@@ -32,7 +35,7 @@ public class ComponentInfo {
         this.hideInBlueprintInspector = hideInBlueprintInspector;
 
         String[] nameSplit = fullTypeName.split(".");
-        typeName = nameSplit[nameSplit.length - 1];
+        typeName = name;
 
         isSingletonComponent = memberInfos.size() == 0;
     }

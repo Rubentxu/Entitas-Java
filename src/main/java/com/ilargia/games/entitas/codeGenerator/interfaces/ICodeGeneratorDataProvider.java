@@ -4,7 +4,7 @@ import com.ilargia.games.entitas.codeGenerator.intermediate.ComponentInfo;
 
 public interface ICodeGeneratorDataProvider {
 
-    ComponentInfo[] getComponentInfos();
+    ComponentInfo[] componentInfos(String path);
 
     // Expected behaviour:
     // - Make pool names distinct
