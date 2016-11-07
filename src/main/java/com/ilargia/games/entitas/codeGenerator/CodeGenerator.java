@@ -32,11 +32,10 @@ public class CodeGenerator {
     );
 
 
-    public static CodeGenFile[] generate(ICodeGeneratorDataProvider provider, String componentsDirectory,
-                                         String destinyDirectory, ICodeGenerator[] codeGenerators) {
+    public static CodeGenFile[] generate(ICodeGeneratorDataProvider provider, String destinyDirectory, ICodeGenerator[] codeGenerators) throws IOException {
 
         ArrayList<CodeGenFile> generatedFiles = new ArrayList<CodeGenFile>();
-        ComponentInfo[] componentInfos = provider.componentInfos(componentsDirectory);
+        ComponentInfo[] componentInfos = provider.componentInfos();
         CodeGenFile[] files = new CodeGenFile[0];
 
         for (int i = 0; i < codeGenerators.length; i++) {

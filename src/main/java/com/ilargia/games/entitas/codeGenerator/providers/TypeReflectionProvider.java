@@ -10,6 +10,7 @@ import org.jboss.forge.roaster.model.source.JavaClassSource;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -20,13 +21,18 @@ public class TypeReflectionProvider implements ICodeGeneratorDataProvider {
     private ComponentInfo[] _componentInfos;
     private String[] _poolNames;
     private String[] _blueprintNames;
+    private String path;
 
-    TypeReflectionProvider(String[] poolNames, String[] blueprintNames, String componentsDirectory) {
-        Set pools = new HashSet<String>(Arrays.asList(poolNames));
-        if (poolNames.length == 0) {
+    public TypeReflectionProvider(String[] poolNames, String[] blueprintNames, String componentsDirectory) throws IOException {
+        path = componentsDirectory;
+        Set pools = null;
+        if(poolNames !=null ) pools= new HashSet<String>(Arrays.asList(poolNames));
+        if (poolNames ==null || poolNames.length == 0) {
+            poolNames = new String[0];
+            pools = new HashSet();
             pools.add(CodeGenerator.DEFAULT_POOL_NAME);
         }
-        _componentInfos = componentInfos(componentsDirectory);
+        _componentInfos = componentInfos();
         ((List) pools.stream()
                 .map(poolName -> capitalize(poolName.toString()))
                 .sorted(naturalOrder())
@@ -34,27 +40,29 @@ public class TypeReflectionProvider implements ICodeGeneratorDataProvider {
 
         _blueprintNames = blueprintNames;
 
+
     }
 
 
     @Override
-    public ComponentInfo[] componentInfos(String path) {
-        List<ComponentInfo> list = readFileComponents(path).stream()
-                .map((file) -> {
-                    try {
-                        return Roaster.parse(JavaClassSource.class, file);
-                    } catch (FileNotFoundException e) {
-                        return null;
-                    }
-                }).filter((source) -> source != null)
-                .filter((source) -> source.getInterfaces().toString().matches(".*\\bIComponent\\b.*"))
-                .map((source) -> createComponentInfo(source))
-                .collect(Collectors.toList());
+    public ComponentInfo[] componentInfos() throws IOException {
+        if(_componentInfos == null || _componentInfos.length == 0) {
+            List<ComponentInfo> list = readFileComponents(path).stream()
+                    .map((file) -> {
+                        try {
+                            return Roaster.parse(JavaClassSource.class, file);
+                        } catch (FileNotFoundException e) {
+                            return null;
+                        }
+                    }).filter((source) -> source != null)
+                    .filter((source) -> source.getInterfaces().toString().matches(".*\\bIComponent\\b.*"))
+                    .map((source) -> createComponentInfo(source))
+                    .collect(Collectors.toList());
 
-        ComponentInfo[] array = new ComponentInfo[0];
-        list.toArray(array);
-
-        return array;
+            _componentInfos = new ComponentInfo[0];
+            _componentInfos = list.toArray(_componentInfos);
+        }
+        return _componentInfos;
 
     }
 
@@ -89,12 +97,13 @@ public class TypeReflectionProvider implements ICodeGeneratorDataProvider {
         );
     }
 
-    public static List<File> readFileComponents(String pathname) {
+    public static List<File> readFileComponents(String pathname) throws IOException {
         List<File> recursiveList = new ArrayList<File>();
         File d = new File(pathname);
         if (d.isDirectory()) {
-            for (String f : d.list()) {
-                readFileComponents(f);
+            File[] listFiles = d.listFiles();
+            for (int i=0; i < listFiles.length; i++) {
+                recursiveList.addAll(readFileComponents(listFiles[i].getCanonicalPath()));
             }
         } else {
             recursiveList.add(d);
