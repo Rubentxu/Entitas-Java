@@ -1,11 +1,8 @@
-package com.ilargia.games.entitas.provider;
+package com.ilargia.games.entitas.codeGenerator.provider;
 
 
-import com.ilargia.games.entitas.codeGenerator.generators.ComponentIndicesGenerator;
-import com.ilargia.games.entitas.codeGenerator.intermediate.CodeGenFile;
 import com.ilargia.games.entitas.codeGenerator.intermediate.ComponentInfo;
 import com.ilargia.games.entitas.codeGenerator.providers.TypeReflectionProvider;
-import org.jboss.forge.roaster.Roaster;
 import org.junit.Before;
 import org.junit.Test;
 

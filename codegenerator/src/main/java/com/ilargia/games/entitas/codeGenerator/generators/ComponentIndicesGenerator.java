@@ -9,48 +9,67 @@ import com.ilargia.games.entitas.codeGenerator.intermediate.ComponentInfo;
 import org.jboss.forge.roaster.Roaster;
 import org.jboss.forge.roaster.model.source.JavaClassSource;
 
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Function;
+import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class ComponentIndicesGenerator implements IComponentCodeGenerator, IPoolCodeGenerator {
 
     @Override
     public CodeGenFile[] generate(String[] poolNames) {
         ComponentInfo[] emptyInfos = new ComponentInfo[0];
-        return (CodeGenFile[]) Arrays.stream(poolNames)
+
+        return (CodeGenFile[]) ((List) Arrays.stream(poolNames)
                 .map((poolName) -> poolName + CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG)
-                .map(lookupTag -> {
+                .map(poolName -> {
                     return new CodeGenFile(
-                            lookupTag,
-                            generateIndicesLookup(lookupTag, emptyInfos),
+                            poolName,
+                            generateIndicesLookup(poolName, emptyInfos),
                             "ComponentIndicesGenerator");
-                }).toArray();
+                }).collect(Collectors.toList()))
+                .toArray(new CodeGenFile[0]);
+
+    }
+
+    public Map<String, List<ComponentInfo>> generateMap(ComponentInfo[] componentInfos) {
+        Map<String, List<ComponentInfo>> poolsComponents = new HashMap<>();
+
+        for (int i = 0; i < componentInfos.length; i++) {
+            ComponentInfo info = componentInfos[i];
+            for (int j = 0; j < info.pools.length; j++) {
+                String poolName = info.pools[j];
+                if (!poolsComponents.containsKey(poolName)) {
+                    poolsComponents.put(poolName, new ArrayList<>());
+                }
+                List<ComponentInfo> list = poolsComponents.get(poolName);
+                list.add(info);
+            }
+        }
+
+        return poolsComponents;
 
     }
 
     @Override
     public CodeGenFile[] generate(ComponentInfo[] componentInfos) {
-        ComponentInfo[] orderedComponentInfos = (ComponentInfo[]) Arrays.stream(componentInfos)
-                .sorted(Comparator.comparing((info) -> info.typeName))
-                .toArray();
+        Map<String, List<ComponentInfo>> mapPoolsComponents = generateMap(componentInfos);
 
-        return (CodeGenFile[]) Arrays.stream(componentInfos)
-                .map(info -> {
+        return (CodeGenFile[]) ((List) mapPoolsComponents.keySet().stream()
+                .map(poolName -> {
                     return new CodeGenFile(
-                            info.fullTypeName,
-                            generateIndicesLookup(info.fullTypeName, componentInfos),
+                            poolName,
+                            generateIndicesLookup(poolName, mapPoolsComponents.get(poolName)),
                             "ComponentIndicesGenerator");
-                }).toArray();
+                }).collect(Collectors.toList()))
+                .toArray(new CodeGenFile[0]);
 
     }
 
-    private JavaClassSource generateIndicesLookup(String lookupTag, ComponentInfo[] componentInfos) {
-        JavaClassSource javaClass = Roaster.parse(JavaClassSource.class, String.format("public class %1$s {}", lookupTag));
+    private JavaClassSource generateIndicesLookup(String poolName, List<ComponentInfo> componentInfos) {
+        return  generateIndicesLookup(poolName, (ComponentInfo[]) componentInfos.toArray(new ComponentInfo[0]));
+    }
+
+    private JavaClassSource generateIndicesLookup(String poolName, ComponentInfo[] componentInfos) {
+        JavaClassSource javaClass = Roaster.parse(JavaClassSource.class, String.format("public class %1$s {}", poolName));
         addIndices(componentInfos, javaClass);
         addComponentNames(componentInfos, javaClass);
         addComponentTypes(componentInfos, javaClass);
@@ -58,6 +77,8 @@ public class ComponentIndicesGenerator implements IComponentCodeGenerator, IPool
         return javaClass;
 
     }
+
+
 
 
     public JavaClassSource addIndices(ComponentInfo[] componentInfos, JavaClassSource javaClass) {
@@ -128,7 +149,6 @@ public class ComponentIndicesGenerator implements IComponentCodeGenerator, IPool
                 .setBody(code);
 
     }
-
 
 
     private String capitalize(final String String) {

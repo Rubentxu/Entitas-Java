@@ -3,6 +3,36 @@ apply plugin: 'java'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
-// mainClassName = "com.indignado.functional.test.FlyingDartTest"
+// project.ext.mainClassName = "com.indignado.functional.test.FlyingDartTest"
 
 
+/*
+task(codegenerator, dependsOn: 'classes', type: JavaExec) {
+    main = 'com.ilargia.games.CodeGenerator'
+    classpath = sourceSets.main.runtimeClasspath
+    args 'dirComponents dirDestino'
+    standardInput = System.in
+    workingDir = project.assetsDir
+    ignoreExitValue = true
+
+}
+
+task dist(type: Jar) {
+    from files(sourceSets.main.output.classesDir)
+    from files(sourceSets.main.output.resourcesDir)
+    from {configurations.compile.collect {zipTree(it)}}
+    from files(project.assetsDir);
+
+    manifest {
+        attributes 'Main-Class': project.mainClassName
+    }
+}
+dist.dependsOn classes
+
+
+public static void main(String[] args) {
+    String dirComponents = args[0];
+    String  dirDestino = args[1];
+    System.out.println(String.format("Buscando componentes en path %s codigo gnerado en path %s", dirComponents, dirDestino));
+    CodeGenerator generator =  new CodeGenerator(arg[0], arg[1]);
+}*/

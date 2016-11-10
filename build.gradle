@@ -12,7 +12,7 @@ ext {
 allprojects {
     apply plugin: 'java'
     apply plugin: "eclipse"
-    apply plugin: "idea"    
+    apply plugin: "idea"
 
     idea {
         module {
@@ -32,9 +32,9 @@ allprojects {
 
 
 project(":entitas") {
-    dependencies {       
-  	compile "com.badlogicgames.gdx:gdx:$gdxVersion"    	
-    	testCompile group: 'junit', name: 'junit', version: '4.11'
+    dependencies {
+        compile "com.badlogicgames.gdx:gdx:$gdxVersion"
+        testCompile group: 'junit', name: 'junit', version: '4.11'
 
     }
 
@@ -44,8 +44,9 @@ project(":entitas") {
 project(":codegenerator") {
     dependencies {
         compile group: 'org.jboss.forge.roaster', name: 'roaster-api', version: '2.19.1.Final'
-    	compile group: 'org.jboss.forge.roaster', name: 'roaster-jdt', version: '2.19.1.Final'
-
+        compile group: 'org.jboss.forge.roaster', name: 'roaster-jdt', version: '2.19.1.Final'
+        testCompile project(":entitas")
+        testCompile group: 'junit', name: 'junit', version: '4.11'
     }
 
 }
