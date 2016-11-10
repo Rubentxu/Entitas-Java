@@ -1,6 +1,6 @@
 package com.ilargia.games.entitas.codeGenerator.generators;
 
-import com.ilargia.games.entitas.Pool;
+
 import com.ilargia.games.entitas.codeGenerator.CodeGenerator;
 import com.ilargia.games.entitas.codeGenerator.interfaces.IPoolCodeGenerator;
 import com.ilargia.games.entitas.codeGenerator.intermediate.CodeGenFile;
@@ -39,7 +39,7 @@ public class PoolsGenerator implements IPoolCodeGenerator {
                     .setPublic()
                     .setStatic(true)
                     .setName(createMethodName)
-                    .setReturnType(Pool.class)
+                    .setReturnType("Pool")
                     .setBody(body);
 
         });
@@ -77,7 +77,7 @@ public class PoolsGenerator implements IPoolCodeGenerator {
         Arrays.stream(poolNames).forEach((poolName) -> {
             javaClass.addField()
                     .setName(poolName.toLowerCase())
-                    .setType(Pool.class)
+                    .setType("Pool")
                     .setPublic();
 
         });

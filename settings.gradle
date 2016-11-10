@@ -1,2 +1,1 @@
-rootProject.name = 'entitas-java'
-
+include 'entitas', "codegenerator"

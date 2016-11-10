@@ -3,6 +3,7 @@ package com.ilargia.games.entitas.codeGenerator.intermediate;
 import org.jboss.forge.roaster.model.source.FieldSource;
 import org.jboss.forge.roaster.model.source.JavaClassSource;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class ComponentInfo {
@@ -38,5 +39,22 @@ public class ComponentInfo {
         typeName = name;
 
         isSingletonComponent = memberInfos.size() == 0;
+    }
+
+    @Override
+    public String toString() {
+        return "ComponentInfo{" +
+                "fullTypeName='" + fullTypeName + '\'' +
+                ", memberInfos=" + memberInfos +
+                ", pools=" + Arrays.toString(pools) +
+                ", isSingleEntity=" + isSingleEntity +
+                ", singleComponentPrefix='" + singleComponentPrefix + '\'' +
+                ", generateComponent=" + generateComponent +
+                ", generateMethods=" + generateMethods +
+                ", generateIndex=" + generateIndex +
+                ", hideInBlueprintInspector=" + hideInBlueprintInspector +
+                ", typeName='" + typeName + '\'' +
+                ", isSingletonComponent=" + isSingletonComponent +
+                '}';
     }
 }
