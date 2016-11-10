@@ -28,14 +28,6 @@ public class ComponentIndicesGeneratorTest {
     }
 
     @Test
-    public void generatePoolNames() {
-        CodeGenFile[] result = generator.generate(poolNames);
-
-        assertEquals(2, result.length);
-
-    }
-
-    @Test
     public void generateComponentInfos() {
         ComponentInfo[] componentInfos = new ComponentInfo[3];
         List<FieldSource<JavaClassSource>> memberInfos = new ArrayList<>();
@@ -45,13 +37,13 @@ public class ComponentIndicesGeneratorTest {
         memberInfos.add(field);
         memberInfos.add(field2);
 
-        componentInfos[0] = new ComponentInfo("com.pruebas.Renderable","Renderable", memberInfos, new String[] {"pruebas"},
+        componentInfos[0] = new ComponentInfo("com.ilargia.games.entitas.components.Position","Position", memberInfos, new String[] {"pruebas"},
                false, "", false, false, false, false);
-        componentInfos[1] = new ComponentInfo("com.pruebas.Movable","Movable", memberInfos, new String[] {"pruebas"},
+        componentInfos[1] = new ComponentInfo("com.ilargia.games.entitas.components.Movable","Movable", memberInfos, new String[] {"pruebas"},
                 false, "", false, false, false, false);
         componentInfos[2] = new ComponentInfo("com.pruebas.Movable","Movable", memberInfos, new String[] {"rubentxu"},
                 false, "", false, false, false, false);
-        CodeGenFile[] result = generator.generate(componentInfos);
+        CodeGenFile[] result = generator.generate(componentInfos,"com.pruebas.entitas");
 
         assertEquals(2, result.length);
 

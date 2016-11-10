@@ -13,9 +13,11 @@ import java.util.Arrays;
 public class PoolsGenerator implements IPoolCodeGenerator {
 
     @Override
-    public CodeGenFile[] generate(String[] poolNames) {
+    public CodeGenFile[] generate(String[] poolNames, String pkgDestiny) {
 
         JavaClassSource javaClass = Roaster.parse(JavaClassSource.class, "public class Pools extends com.ilargia.games.entitas.Pools {}");
+        javaClass.setPackage(pkgDestiny);
+        javaClass.addImport("com.ilargia.games.entitas.Pool");
 
         createPoolsMethod(javaClass, poolNames);
         createMethodAllPools(javaClass, poolNames);

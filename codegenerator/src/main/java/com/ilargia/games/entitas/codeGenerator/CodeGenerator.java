@@ -42,19 +42,19 @@ public class CodeGenerator {
 
             if (codeGenerators[i] instanceof IPoolCodeGenerator) {
                 IPoolCodeGenerator generator = (IPoolCodeGenerator) codeGenerators[i];
-                files = generator.generate(provider.poolNames());
+                files = generator.generate(provider.poolNames(),"com.pruebas.entitas");
 
             }
 
             if (codeGenerators[i] instanceof IComponentCodeGenerator) {
                 IComponentCodeGenerator generator = (IComponentCodeGenerator) codeGenerators[i];
-                files = generator.generate(componentInfos);
+                files = generator.generate(componentInfos,"com.pruebas.entitas");
 
             }
 
             if (codeGenerators[i] instanceof IBlueprintsCodeGenerator) {
                 IBlueprintsCodeGenerator generator = (IBlueprintsCodeGenerator) codeGenerators[i];
-                files = generator.generate(provider.blueprintNames());
+                files = generator.generate(provider.blueprintNames(),"com.pruebas.entitas");
 
             }
 

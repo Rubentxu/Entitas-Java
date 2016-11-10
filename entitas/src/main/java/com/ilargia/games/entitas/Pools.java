@@ -1,13 +1,11 @@
 package com.ilargia.games.entitas;
 
 
-import java.lang.reflect.Type;
-
 public class Pools {
 
     static Pools _sharedInstance;
 
-    public static Pool createPool(String poolName, int totalComponents, String[] componentNames, Type[] componentTypes) {
+    public static Pool createPool(String poolName, int totalComponents, String[] componentNames, Class[] componentTypes) {
         Pool pool = new Pool(totalComponents, 0, new PoolMetaData(poolName, componentNames, componentTypes));
 
         return pool;

@@ -21,7 +21,7 @@ public class PoolsGeneratorTest {
 
     @Test
     public void componentSize() {
-        CodeGenFile[] result = generator.generate(poolNames);
+        CodeGenFile[] result = generator.generate(poolNames,"com.pruebas.entitas");
 
         System.out.println(Roaster.format(result[0].fileContent.toString()));
         //assertEquals(3, IComponent.getComponentSize());
