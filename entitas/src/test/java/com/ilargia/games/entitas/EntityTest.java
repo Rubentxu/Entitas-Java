@@ -157,6 +157,12 @@ public class EntityTest {
 
     }
 
+    @Test
+    public void createComponent() throws InstantiationException, IllegalAccessException {
+        entity.createComponent(1, Position.class);
+
+    }
+
     @Test(expected = EntityIsNotEnabledException.class)
     public void notEnabled() {
         entity.setEnabled(false);

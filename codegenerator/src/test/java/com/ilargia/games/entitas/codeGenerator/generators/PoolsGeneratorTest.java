@@ -2,8 +2,11 @@ package com.ilargia.games.entitas.codeGenerator.generators;
 
 import com.ilargia.games.entitas.codeGenerator.intermediate.CodeGenFile;
 import org.jboss.forge.roaster.Roaster;
+import org.jboss.forge.roaster.model.source.JavaClassSource;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.List;
 
 public class PoolsGeneratorTest {
 
@@ -21,9 +24,9 @@ public class PoolsGeneratorTest {
 
     @Test
     public void componentSize() {
-        CodeGenFile[] result = generator.generate(poolNames,"com.pruebas.entitas");
+        List<JavaClassSource> result = generator.generate(poolNames,"com.pruebas.entitas");
 
-        System.out.println(Roaster.format(result[0].fileContent.toString()));
+        System.out.println(Roaster.format(result.get(0).toString()));
         //assertEquals(3, IComponent.getComponentSize());
 
 

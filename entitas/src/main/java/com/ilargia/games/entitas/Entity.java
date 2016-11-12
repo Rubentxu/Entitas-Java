@@ -2,6 +2,9 @@ package com.ilargia.games.entitas;
 
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectSet;
+import com.badlogic.gdx.utils.reflect.ClassReflection;
+import com.badlogic.gdx.utils.reflect.Constructor;
+import com.badlogic.gdx.utils.reflect.ReflectionException;
 import com.ilargia.games.entitas.caching.EntitasCache;
 import com.ilargia.games.entitas.exceptions.EntityAlreadyHasComponentException;
 import com.ilargia.games.entitas.exceptions.EntityDoesNotHaveComponentException;
@@ -22,7 +25,7 @@ public class Entity {
     public ComponentReplaced OnComponentReplaced;
     public EntityReleased OnEntityReleased;
     public ObjectSet<Object> owners;
-    int _retainCount;
+    public int _retainCount;
     private int _creationIndex;
     private boolean _isEnabled;
     private IComponent[] _components;
@@ -34,7 +37,7 @@ public class Entity {
     private PoolMetaData _poolMetaData;
 
 
-    public Entity(int totalComponents, Stack<IComponent>[] componentPools, PoolMetaData poolMetaData) {
+    public Entity(int totalComponents,Stack<IComponent>[] componentPools, PoolMetaData poolMetaData) {
         _components = new IComponent[totalComponents];
         _totalComponents = totalComponents;
         _componentPools = componentPools;
@@ -225,12 +228,28 @@ public class Entity {
         return componentPool;
     }
 
-    public <T> T createComponent(int index) throws IllegalAccessException, InstantiationException {
-        Class<T> clazz = (Class<T>)
-                ((ParameterizedType) getClass().getGenericSuperclass())
-                        .getActualTypeArguments()[0];
+    public <T extends IComponent> T createComponent(int index, Class<T> clazz)  {
         Stack<IComponent> componentPool = getComponentPool(index);
-        return componentPool.size() > 0 ? (T) componentPool.pop() : clazz.newInstance();
+        try {
+            return componentPool.size() > 0 ? (T) componentPool.pop() : (T) findConstructor(clazz).newInstance();
+        } catch (ReflectionException e) {
+            return null;
+        }
+
+    }
+
+    private Constructor findConstructor(Class type) {
+        try {
+            return ClassReflection.getConstructor(type, (Class[]) null);
+        } catch (Exception ex1) {
+            try {
+                Constructor constructor = ClassReflection.getDeclaredConstructor(type);
+                constructor.setAccessible(true);
+                return constructor;
+            } catch (ReflectionException ex2) {
+                return null;
+            }
+        }
     }
 
     public void destroy() {

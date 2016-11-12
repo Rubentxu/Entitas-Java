@@ -5,6 +5,7 @@ import com.ilargia.games.entitas.codeGenerator.interfaces.*;
 import com.ilargia.games.entitas.codeGenerator.intermediate.CodeGenFile;
 import com.ilargia.games.entitas.codeGenerator.intermediate.ComponentInfo;
 import org.jboss.forge.roaster.Roaster;
+import org.jboss.forge.roaster.model.source.JavaClassSource;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -13,6 +14,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 public class CodeGenerator {
 
@@ -36,29 +38,28 @@ public class CodeGenerator {
 
         ArrayList<CodeGenFile> generatedFiles = new ArrayList<CodeGenFile>();
         ComponentInfo[] componentInfos = provider.componentInfos();
-        CodeGenFile[] files = new CodeGenFile[0];
+        List<JavaClassSource> files = new ArrayList<>();
+
 
         for (int i = 0; i < codeGenerators.length; i++) {
 
             if (codeGenerators[i] instanceof IPoolCodeGenerator) {
                 IPoolCodeGenerator generator = (IPoolCodeGenerator) codeGenerators[i];
-                files = generator.generate(provider.poolNames(),"com.pruebas.entitas");
+                files.addAll(generator.generate(provider.poolNames(),"com.pruebas.entitas"));
 
             }
 
             if (codeGenerators[i] instanceof IComponentCodeGenerator) {
                 IComponentCodeGenerator generator = (IComponentCodeGenerator) codeGenerators[i];
-                files = generator.generate(componentInfos,"com.pruebas.entitas");
+                files.addAll(generator.generate(componentInfos,"com.pruebas.entitas"));
 
             }
 
             if (codeGenerators[i] instanceof IBlueprintsCodeGenerator) {
                 IBlueprintsCodeGenerator generator = (IBlueprintsCodeGenerator) codeGenerators[i];
-                files = generator.generate(provider.blueprintNames(),"com.pruebas.entitas");
+                files.addAll(generator.generate(provider.blueprintNames(),"com.pruebas.entitas"));
 
             }
-
-            Collections.addAll(generatedFiles, files);
             writeFiles(destinyDirectory, files);
         }
 
@@ -67,18 +68,17 @@ public class CodeGenerator {
 
     }
 
-    static void writeFiles(String directoryName, CodeGenFile[] files) {
+    static void writeFiles(String directoryName, List<JavaClassSource> files) {
 
         File directory = new File(String.valueOf(directoryName));
         if (!directory.exists()) {
             directory.mkdir();
         }
 
-        Arrays.stream(files).forEach((file) -> {
-            String fileName = directory.getPath() + file.fileName + ".java";
-            String fileContent = Roaster.format(file.fileContent.toString());
-            String header = String.format(AUTO_GENERATED_HEADER_FORMAT, file.generatorName);
-            write(fileName, header + fileContent);
+        files.stream().forEach((file) -> {
+            String fileName = directory.getPath() + file.getName() + ".java";
+            String header = String.format(AUTO_GENERATED_HEADER_FORMAT, "CodeGenerator");
+            write(fileName, header + file);
 
         });
 
@@ -95,6 +95,20 @@ public class CodeGenerator {
             e.printStackTrace();
             System.exit(-1);
         }
+    }
+
+    public static String capitalize(final String string) {
+        char[] chars = string.toLowerCase().toCharArray();
+        boolean found = false;
+        for (int i = 0; i < chars.length; i++) {
+            if (!found && Character.isLetter(chars[i])) {
+                chars[i] = Character.toUpperCase(chars[i]);
+                found = true;
+            } else if (Character.isWhitespace(chars[i]) || chars[i] == '.' || chars[i] == '\'') { // You can add other chars here
+                found = false;
+            }
+        }
+        return String.valueOf(chars);
     }
 
 }

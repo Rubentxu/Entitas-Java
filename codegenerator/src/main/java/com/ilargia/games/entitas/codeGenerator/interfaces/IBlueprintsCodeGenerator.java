@@ -2,9 +2,12 @@ package com.ilargia.games.entitas.codeGenerator.interfaces;
 
 
 import com.ilargia.games.entitas.codeGenerator.intermediate.CodeGenFile;
+import org.jboss.forge.roaster.model.source.JavaClassSource;
+
+import java.util.List;
 
 public interface IBlueprintsCodeGenerator extends ICodeGenerator {
 
-    CodeGenFile[] generate(String[] blueprintNames, String pkgDestiny);
+    public List<JavaClassSource> generate(String[] blueprintNames, String pkgDestiny);
 
 }

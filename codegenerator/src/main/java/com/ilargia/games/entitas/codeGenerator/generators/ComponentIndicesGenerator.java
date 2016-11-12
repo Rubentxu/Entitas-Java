@@ -15,17 +15,12 @@ import java.util.stream.Collectors;
 public class ComponentIndicesGenerator implements IComponentCodeGenerator {
 
     @Override
-    public CodeGenFile[] generate(ComponentInfo[] componentInfos, String pkgDestiny) {
+    public List<JavaClassSource> generate(ComponentInfo[] componentInfos, String pkgDestiny) {
         Map<String, List<ComponentInfo>> mapPoolsComponents = generateMap(componentInfos);
 
-        return (CodeGenFile[]) ((List) mapPoolsComponents.keySet().stream()
-                .map(poolName -> {
-                    return new CodeGenFile(
-                            poolName,
-                            generateIndicesLookup(poolName, mapPoolsComponents.get(poolName), pkgDestiny),
-                            "ComponentIndicesGenerator");
-                }).collect(Collectors.toList()))
-                .toArray(new CodeGenFile[0]);
+        return (List) mapPoolsComponents.keySet().stream()
+                .map(poolName -> generateIndicesLookup(poolName, mapPoolsComponents.get(poolName), pkgDestiny)
+                ).collect(Collectors.toList());
 
     }
 

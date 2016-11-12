@@ -7,14 +7,16 @@ import com.ilargia.games.entitas.codeGenerator.intermediate.CodeGenFile;
 import org.jboss.forge.roaster.Roaster;
 import org.jboss.forge.roaster.model.source.JavaClassSource;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 
 public class PoolsGenerator implements IPoolCodeGenerator {
 
     @Override
-    public CodeGenFile[] generate(String[] poolNames, String pkgDestiny) {
-
+    public List<JavaClassSource> generate(String[] poolNames, String pkgDestiny) {
+        List<JavaClassSource> result = new ArrayList<>();
         JavaClassSource javaClass = Roaster.parse(JavaClassSource.class, "public class Pools extends com.ilargia.games.entitas.Pools {}");
         javaClass.setPackage(pkgDestiny);
         javaClass.addImport("com.ilargia.games.entitas.Pool");
@@ -23,12 +25,8 @@ public class PoolsGenerator implements IPoolCodeGenerator {
         createMethodAllPools(javaClass, poolNames);
         createMethodSetAllPools(javaClass, poolNames);
         createPoolFields(javaClass, poolNames);
-
-        return new CodeGenFile[]{new CodeGenFile(
-                "Pools",
-                javaClass,
-                "PoolsGenerator"
-        )};
+        result.add(javaClass);
+        return result;
 
     }
 
