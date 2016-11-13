@@ -61,17 +61,18 @@ public class ComponentInfo {
     @Override
     public String toString() {
         return "ComponentInfo{" +
-                "fullTypeName='" + fullTypeName + '\'' +
-                ", memberInfos=" + memberInfos +
-                ", pools=" + Arrays.toString(pools) +
-                ", isSingleEntity=" + isSingleEntity +
-                ", singleComponentPrefix='" + singleComponentPrefix + '\'' +
-                ", generateComponent=" + generateComponent +
-                ", generateMethods=" + generateMethods +
-                ", generateIndex=" + generateIndex +
-                ", hideInBlueprintInspector=" + hideInBlueprintInspector +
-                ", typeName='" + typeName + '\'' +
-                ", isSingletonComponent=" + isSingletonComponent +
+                "nameComponent='" + nameComponent + '\'' +
+                ",\n fullTypeName='" + fullTypeName + '\'' +
+                ",\n memberInfos=" + memberInfos +
+                ",\n pools=" + Arrays.toString(pools) +
+                ",\n isSingleEntity=" + isSingleEntity +
+                ",\n singleComponentPrefix='" + singleComponentPrefix + '\'' +
+                ",\n generateComponent=" + generateComponent +
+                ",\n generateMethods=" + generateMethods +
+                ",\n generateIndex=" + generateIndex +
+                ",\n hideInBlueprintInspector=" + hideInBlueprintInspector +
+                ",\n typeName='" + typeName + '\'' +
+                ",\n isSingletonComponent=" + isSingletonComponent +
                 '}';
     }
 }

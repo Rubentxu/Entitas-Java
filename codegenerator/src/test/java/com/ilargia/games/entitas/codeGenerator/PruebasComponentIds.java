@@ -1,5 +1,6 @@
 package com.ilargia.games.entitas.codeGenerator;
 
+import com.ilargia.games.entitas.Entity;
 import com.ilargia.games.entitas.components.Position;
 import com.ilargia.games.entitas.components.Movable;
 
@@ -17,3 +18,5 @@ public class PruebasComponentIds {
         return new Class[]{Position.class, Movable.class};
     }
 }
+
+
