@@ -31,7 +31,7 @@ public class ComponentInfo {
         this.memberInfos = memberInfos;
         this.pools = pools;
         this.isSingleEntity = isSingleEntity;
-        this.singleComponentPrefix = singleComponentPrefix;
+        this.singleComponentPrefix = (singleComponentPrefix!=null && !singleComponentPrefix.isEmpty())?singleComponentPrefix: "is";
         this.generateComponent = generateComponent;
         this.generateMethods = generateMethods;
         this.generateIndex = generateIndex;
@@ -41,7 +41,7 @@ public class ComponentInfo {
                                 ? typeName.toLowerCase()
                                 :typeName.toLowerCase()+ CodeGenerator.COMPONENT_SUFFIX;
 
-        isSingletonComponent = memberInfos.size() == 0;
+        isSingletonComponent = memberInfos == null || memberInfos.size() == 0;
     }
 
     private String capitalize(final String String) {

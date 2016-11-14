@@ -22,7 +22,7 @@ public class ComponentExtensionsGenerator implements IComponentCodeGenerator {
         JavaClassSource entitas = Roaster.parse(JavaClassSource.class, "public class Entitas {}");
         entitas.setPackage(pkgDestiny);
 
-        JavaClassSource matcher = Roaster.parse(JavaClassSource.class, "public class Entitas {}");
+        JavaClassSource matcher = Roaster.parse(JavaClassSource.class, "public class Matcher {}");
         matcher.setPackage(pkgDestiny);
 
         for (int i = 0; i <componentInfos.length; i++) {
@@ -41,6 +41,11 @@ public class ComponentExtensionsGenerator implements IComponentCodeGenerator {
     private JavaClassSource generateComponentExtension(ComponentInfo info, JavaClassSource entitas, JavaClassSource matcher) {
         addEntityMethods(info, entitas);
 
+        if(info.isSingleEntity) {
+            addPoolMethods(info, entitas);
+        }
+
+
         if(info.generateComponent) {
             // Add default matcher
             addMatcher(info, true);
@@ -53,6 +58,77 @@ public class ComponentExtensionsGenerator implements IComponentCodeGenerator {
         }
         return entitas;
     }
+
+    private void addPoolMethods(ComponentInfo info, JavaClassSource entitas) {
+        addPoolGetMethods(info, entitas);
+        addPoolHasMethods(info, entitas);
+    }
+
+    private void addPoolGetMethods(ComponentInfo info, JavaClassSource source) {
+        source.addMethod()
+                .setName(String.format("get%1$sEntity", CodeGenerator.capitalize(info.typeName)))
+                .setReturnType("Entity")
+                .setPublic()
+                .setStatic(true)
+                .setParameters("Pool pool")
+                .setBody(String.format("return pool.getGroup(%1$sMatcher.%2$s).getSingleEntity();"
+                        , CodeGenerator.capitalize(info.pools[0]), CodeGenerator.capitalize(info.typeName) ));
+
+        if (!info.isSingletonComponent) {
+            source.addMethod()
+                    .setName(String.format("get%1$s", info.typeName))
+                    .setReturnType(info.typeName)
+                    .setPublic()
+                    .setStatic(true)
+                    .setParameters("Pool pool")
+                    .setBody(String.format("return Entitas.get%1$s(Entitas.get%1$sEntity(pool));"
+                            , CodeGenerator.capitalize(info.typeName)));
+
+        }
+    }
+
+    private void addPoolHasMethods(ComponentInfo info, JavaClassSource source) {
+        if (info.isSingletonComponent) {
+            source.addMethod()
+                    .setName(String.format("%1$s%2$s", info.singleComponentPrefix, CodeGenerator.capitalize(info.typeName)))
+                    .setReturnType("boolean")
+                    .setPublic()
+                    .setStatic(true)
+                    .setFinal(true)
+                    .setParameters("Pool pool")
+                    .setBody(String.format("return Entitas.get%1$sEntity(pool) != null;",
+                            CodeGenerator.capitalize(info.typeName)));
+
+            source.addMethod()
+                    .setName(String.format("set%1$s", info.typeName))
+                    .setReturnTypeVoid()
+                    .setPublic()
+                    .setStatic(true)
+                    .setFinal(true)
+                    .setParameters("Pool pool, boolean value")
+                    .setBody(String.format(" Entity entity = Entitas.get%1$sEntity(pool);\n" +
+                                    "        if(value != (entity != null)) {\n" +
+                                    "             if(value) {\n" +
+                                    "                  Entitas.set%1$s(pool.createEntity(), true);\n" +
+                                    "             } else {\n" +
+                                    "                  pool.destroyEntity(entity);\n" +
+                                    "             }\n" +
+                                    "        }", CodeGenerator.capitalize(info.typeName)));
+
+
+        } else {
+            source.addMethod()
+                    .setName(String.format("has%1$s", CodeGenerator.capitalize(info.typeName)))
+                    .setReturnType("boolean")
+                    .setPublic()
+                    .setStatic(true)
+                    .setParameters("Pool pool")
+                    .setBody(String.format("return Entitas.get%1$sEntity(pool) != null; ",
+                            CodeGenerator.capitalize(info.typeName)));
+
+        }
+    }
+
 
     private void addMatcher(ComponentInfo info, boolean b) {
 
@@ -73,7 +149,7 @@ public class ComponentExtensionsGenerator implements IComponentCodeGenerator {
 
         if (info.isSingletonComponent) {
             source.addField()
-                    .setName(info.typeName.toLowerCase())
+                    .setName(info.typeName.toLowerCase()+CodeGenerator.COMPONENT_SUFFIX)
                     .setType(info.typeName)
                     .setLiteralInitializer(String.format("new %1$s();", info.typeName))
                     .setPublic()
@@ -114,8 +190,8 @@ public class ComponentExtensionsGenerator implements IComponentCodeGenerator {
                     .setPublic()
                     .setStatic(true)
                     .setFinal(true)
-                    .setParameters("Entity entity")
-                    .setBody(String.format(" if(value != %3$s) {\n" +
+                    .setParameters("Entity entity, boolean value")
+                    .setBody(String.format(" if(value != entity.hasComponent(%1$s.%2$s)) {\n" +
                                     "                    if(value) {\n" +
                                     "                        entity.addComponent(%1$s.%2$s, %3$s);\n" +
                                     "                    } else {\n" +
