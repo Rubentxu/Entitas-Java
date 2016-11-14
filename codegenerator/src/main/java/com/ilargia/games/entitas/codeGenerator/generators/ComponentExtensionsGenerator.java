@@ -45,16 +45,18 @@ public class ComponentExtensionsGenerator implements IComponentCodeGenerator {
             addPoolMethods(info, entitas);
         }
 
-
+        // Add default matcher
+        addMatcher(info, true);
         if(info.generateComponent) {
-            // Add default matcher
-            addMatcher(info, true);
-
             // Add custom matchers
-//            code += addMatcher(componentInfo);
-//            return addUsings("Entitas")
-//                    + generateComponent(componentInfo)
-//                    + code;
+//            addMatcher(info, false);
+//            generateComponent(componentInfo)
+
+        }
+
+        boolean hasCustomPools = info.pools.length > 1 || info.pools[0] != CodeGenerator.DEFAULT_POOL_NAME;
+        if(hasCustomPools) {
+            addMatcher(info, false);
         }
         return entitas;
     }
