@@ -62,6 +62,9 @@ public class ComponentExtensionsGenerator implements IComponentCodeGenerator {
     private void addPoolMethods(ComponentInfo info, JavaClassSource entitas) {
         addPoolGetMethods(info, entitas);
         addPoolHasMethods(info, entitas);
+        addPoolAddMethods(info, entitas);
+        addPoolReplaceMethods(info, entitas);
+        addPoolRemoveMethods(info, entitas);
     }
 
     private void addPoolGetMethods(ComponentInfo info, JavaClassSource source) {
@@ -129,6 +132,61 @@ public class ComponentExtensionsGenerator implements IComponentCodeGenerator {
         }
     }
 
+    private void addPoolAddMethods(ComponentInfo info, JavaClassSource source) {
+        if (!info.isSingletonComponent) {
+            source.addMethod()
+                    .setName(String.format("set%1$s", CodeGenerator.capitalize(info.typeName)))
+                    .setReturnType("Entity")
+                    .setPublic()
+                    .setStatic(true)
+                    .setParameters("Pool pool," + memberNamesWithType(info.memberInfos))
+                    .setBody(String.format( "if(Entitas.has%1$s(pool)) {\n" +
+                                    "            throw new EntitasException(\"Could not set %1$s!\" + pool + \" already has an entity with %1$s!\", " +
+                                    "\"You should check if the pool already has a %1$sEntity before setting it or use pool.Replace%1$s().\");" +
+                                    "         }\n" +
+                                    "         Entity entity = pool.createEntity();\n" +
+                                    "         Entitas.add%1$s(entity, %2$s);\n" +
+                                    "         return entity;"
+                            , CodeGenerator.capitalize(info.typeName), memberNames(info.memberInfos)));
+
+        }
+    }
+
+    private void addPoolReplaceMethods(ComponentInfo info, JavaClassSource source) {
+        if (!info.isSingletonComponent) {
+            source.addMethod()
+                    .setName(String.format("replace%1$s", CodeGenerator.capitalize(info.typeName)))
+                    .setReturnType("Entity")
+                    .setPublic()
+                    .setStatic(true)
+                    .setParameters("Pool pool," + memberNamesWithType(info.memberInfos))
+                    .setBody(String.format( "Entity entity = Entitas.get%1$sEntity(pool);" +
+                                    "         if(entity == null) {" +
+                                    "            entity = Entitas.set%1$s(pool, %2$s);" +
+                                    "         } else { " +
+                                    "           Entitas.replace%1$s(entity, %2$s);" +
+                                    "         }" +
+                                    "         return entity;"
+                            , CodeGenerator.capitalize(info.typeName), memberNames(info.memberInfos)));
+
+        }
+    }
+
+
+    private void addPoolRemoveMethods(ComponentInfo info, JavaClassSource source) {
+        if (!info.isSingletonComponent) {
+            source.addMethod()
+                    .setName(String.format("remove%1$s", CodeGenerator.capitalize(info.typeName)))
+                    .setReturnTypeVoid()
+                    .setPublic()
+                    .setStatic(true)
+                    .setParameters("Pool pool" )
+                    .setBody(String.format( "pool.destroyEntity(Entitas.get%1$sEntity(pool));"
+                            , CodeGenerator.capitalize(info.typeName), memberNames(info.memberInfos)));
+
+        }
+
+    }
 
     private void addMatcher(ComponentInfo info, boolean b) {
 
@@ -282,6 +340,13 @@ public class ComponentExtensionsGenerator implements IComponentCodeGenerator {
                 }
         ).collect(Collectors.joining("\n"));
 
+    }
+
+
+    public static String memberNames(List<FieldSource<JavaClassSource>> memberInfos) {
+        return memberInfos.stream()
+                .map(info -> "_" + info.getName())
+                .collect(Collectors.joining(", "));
     }
 
 
