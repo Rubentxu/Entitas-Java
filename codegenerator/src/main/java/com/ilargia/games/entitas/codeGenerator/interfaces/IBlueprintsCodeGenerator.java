@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface IBlueprintsCodeGenerator extends ICodeGenerator {
 
-    public List<JavaClassSource> generate(String[] blueprintNames, String pkgDestiny);
+    public List<JavaClassSource> generate(List<String> blueprintNames, String pkgDestiny);
 
 }

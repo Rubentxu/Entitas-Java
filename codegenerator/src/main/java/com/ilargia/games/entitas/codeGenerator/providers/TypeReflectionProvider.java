@@ -18,25 +18,25 @@ import static java.util.Comparator.naturalOrder;
 
 public class TypeReflectionProvider implements ICodeGeneratorDataProvider {
 
-    private ComponentInfo[] _componentInfos;
-    private String[] _poolNames;
-    private String[] _blueprintNames;
+    private List<ComponentInfo> _componentInfos= new ArrayList<>();
+    private List<String> _poolNames;
+    private List<String> _blueprintNames;
     private String path;
 
-    public TypeReflectionProvider(String[] poolNames, String[] blueprintNames, String componentsDirectory) throws IOException {
+    public TypeReflectionProvider(List<String> poolNames, List<String> blueprintNames, String componentsDirectory) throws IOException {
         path = componentsDirectory;
         Set pools = null;
-        if(poolNames !=null ) pools= new HashSet<String>(Arrays.asList(poolNames));
-        if (poolNames ==null || poolNames.length == 0) {
-            poolNames = new String[0];
+        if(poolNames !=null ) pools= new HashSet<String>(poolNames);
+        if (poolNames ==null || poolNames.size() == 0) {
+            poolNames = new ArrayList<>();
             pools = new HashSet();
             pools.add(CodeGenerator.DEFAULT_POOL_NAME);
         }
         _componentInfos = componentInfos();
-        ((List) pools.stream()
+        poolNames = ((List) pools.stream()
                 .map(poolName -> capitalize(poolName.toString()))
                 .sorted(naturalOrder())
-                .collect(Collectors.toList())).toArray(poolNames);
+                .collect(Collectors.toList()));
 
         _blueprintNames = blueprintNames;
 
@@ -45,9 +45,9 @@ public class TypeReflectionProvider implements ICodeGeneratorDataProvider {
 
 
     @Override
-    public ComponentInfo[] componentInfos() throws IOException {
-        if(_componentInfos == null || _componentInfos.length == 0) {
-            List<ComponentInfo> list = readFileComponents(path).stream()
+    public List<ComponentInfo> componentInfos() throws IOException {
+        if(_componentInfos == null || _componentInfos.size() == 0) {
+            _componentInfos.addAll(readFileComponents(path).stream()
                     .map((file) -> {
                         try {
                             return Roaster.parse(JavaClassSource.class, file);
@@ -57,23 +57,21 @@ public class TypeReflectionProvider implements ICodeGeneratorDataProvider {
                     }).filter((source) -> source != null)
                     .filter((source) -> source.getInterfaces().toString().matches(".*\\bIComponent\\b.*"))
                     .map((source) -> createComponentInfo(source))
-                    .collect(Collectors.toList());
+                    .collect(Collectors.toList()));
 
-            _componentInfos = new ComponentInfo[0];
-            _componentInfos = list.toArray(_componentInfos);
         }
         return _componentInfos;
 
     }
 
     @Override
-    public String[] poolNames() {
-        return new String[0];
+    public List<String> poolNames() {
+        return new ArrayList<>();
     }
 
     @Override
-    public String[] blueprintNames() {
-        return new String[0];
+    public List<String> blueprintNames() {
+        return new ArrayList<>();
     }
 
     public static ComponentInfo createComponentInfo(JavaClassSource component) {

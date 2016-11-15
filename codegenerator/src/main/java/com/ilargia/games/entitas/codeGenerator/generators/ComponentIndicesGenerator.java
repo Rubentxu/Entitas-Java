@@ -15,31 +15,12 @@ import java.util.stream.Collectors;
 public class ComponentIndicesGenerator implements IComponentCodeGenerator {
 
     @Override
-    public List<JavaClassSource> generate(ComponentInfo[] componentInfos, String pkgDestiny) {
-        Map<String, List<ComponentInfo>> mapPoolsComponents = generateMap(componentInfos);
+    public List<JavaClassSource> generate(List<ComponentInfo> componentInfos, String pkgDestiny) {
+        Map<String, List<ComponentInfo>> mapPoolsComponents = CodeGenerator.generateMap(componentInfos);
 
         return (List) mapPoolsComponents.keySet().stream()
                 .map(poolName -> generateIndicesLookup(poolName, mapPoolsComponents.get(poolName), pkgDestiny)
                 ).collect(Collectors.toList());
-
-    }
-
-    public Map<String, List<ComponentInfo>> generateMap(ComponentInfo[] componentInfos) {
-        Map<String, List<ComponentInfo>> poolsComponents = new HashMap<>();
-
-        for (int i = 0; i < componentInfos.length; i++) {
-            ComponentInfo info = componentInfos[i];
-            for (int j = 0; j < info.pools.length; j++) {
-                String poolName = info.pools[j];
-                if (!poolsComponents.containsKey(poolName)) {
-                    poolsComponents.put(poolName, new ArrayList<>());
-                }
-                List<ComponentInfo> list = poolsComponents.get(poolName);
-                list.add(info);
-            }
-        }
-
-        return poolsComponents;
 
     }
 
@@ -49,7 +30,7 @@ public class ComponentIndicesGenerator implements IComponentCodeGenerator {
 
     private JavaClassSource generateIndicesLookup(String poolName, ComponentInfo[] componentInfos, String pkgDestiny) {
         JavaClassSource javaClass = Roaster.parse(JavaClassSource.class, String.format("public class %1$s {}",
-                capitalize(poolName) + CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG));
+                CodeGenerator.capitalize(poolName) + CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG));
         javaClass.setPackage(pkgDestiny);
         addIndices(componentInfos, javaClass);
         addComponentNames(componentInfos, javaClass);
@@ -64,7 +45,7 @@ public class ComponentIndicesGenerator implements IComponentCodeGenerator {
             ComponentInfo info = componentInfos[i];
             if (info != null) {
                 javaClass.addField()
-                        .setName(capitalize(info.typeName))
+                        .setName(CodeGenerator.capitalize(info.typeName))
                         .setType("int")
                         .setLiteralInitializer(i.toString())
                         .setPublic()
@@ -129,20 +110,6 @@ public class ComponentIndicesGenerator implements IComponentCodeGenerator {
                 .setStatic(true)
                 .setBody(codeFinal.toString());
 
-    }
-
-    private String capitalize(final String String) {
-        char[] chars = String.toLowerCase().toCharArray();
-        boolean found = false;
-        for (int i = 0; i < chars.length; i++) {
-            if (!found && Character.isLetter(chars[i])) {
-                chars[i] = Character.toUpperCase(chars[i]);
-                found = true;
-            } else if (Character.isWhitespace(chars[i]) || chars[i] == '.' || chars[i] == '\'') { // You can add other chars here
-                found = false;
-            }
-        }
-        return String.valueOf(chars);
     }
 
 }

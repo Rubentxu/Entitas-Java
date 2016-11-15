@@ -17,19 +17,20 @@ public class ComponentIndicesGeneratorTest {
 
     static final public int totalComponents = 0;
     private ComponentIndicesGenerator generator;
-    private String[] poolNames;
+    private List<String> poolNames;
 
     @Before
     public void setUp() throws Exception {
         generator = new ComponentIndicesGenerator();
-        poolNames = new String[]{"pruebas", "rubentxu"};
-
+        poolNames = new ArrayList<String>();
+        poolNames.add("pruebas");
+        poolNames.add("coreTest");
 
     }
 
     @Test
     public void generateComponentInfos() {
-        ComponentInfo[] componentInfos = new ComponentInfo[3];
+        List<ComponentInfo> componentInfos = new ArrayList<>();
         List<FieldSource<JavaClassSource>> memberInfos = new ArrayList<>();
         final JavaClassSource javaClass = Roaster.create(JavaClassSource.class);
         final FieldSource<JavaClassSource> field = javaClass.addField("public byte content1[], content2;");
@@ -37,12 +38,12 @@ public class ComponentIndicesGeneratorTest {
         memberInfos.add(field);
         memberInfos.add(field2);
 
-        componentInfos[0] = new ComponentInfo("com.ilargia.games.entitas.components.Position","Position", memberInfos, new String[] {"pruebas"},
-               false, "", false, false, false, false);
-        componentInfos[1] = new ComponentInfo("com.ilargia.games.entitas.components.Movable","Movable", memberInfos, new String[] {"pruebas"},
-                false, "", false, false, false, false);
-        componentInfos[2] = new ComponentInfo("com.pruebas.Movable","Movable", memberInfos, new String[] {"rubentxu"},
-                false, "", false, false, false, false);
+        componentInfos.add(new ComponentInfo("com.ilargia.games.entitas.components.Position","Position", memberInfos, poolNames,
+               false, "", false, false, false, false));
+        componentInfos.add(new ComponentInfo("com.ilargia.games.entitas.components.Movable","Movable", memberInfos, poolNames,
+                false, "", false, false, false, false));
+        componentInfos.add(new ComponentInfo("com.pruebas.Movable","Movable", memberInfos,poolNames,
+                false, "", false, false, false, false));
         List<JavaClassSource> result = generator.generate(componentInfos,"com.pruebas.entitas");
 
         assertEquals(2, result.size());

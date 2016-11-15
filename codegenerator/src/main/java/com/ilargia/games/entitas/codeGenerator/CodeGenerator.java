@@ -11,10 +11,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class CodeGenerator {
 
@@ -37,7 +34,7 @@ public class CodeGenerator {
     public static CodeGenFile[] generate(ICodeGeneratorDataProvider provider, String destinyDirectory, ICodeGenerator[] codeGenerators) throws IOException {
 
         ArrayList<CodeGenFile> generatedFiles = new ArrayList<CodeGenFile>();
-        ComponentInfo[] componentInfos = provider.componentInfos();
+        List<ComponentInfo> componentInfos = provider.componentInfos();
         List<JavaClassSource> files = new ArrayList<>();
 
 
@@ -111,6 +108,22 @@ public class CodeGenerator {
         return String.valueOf(chars);
     }
 
+    public static Map<String, List<ComponentInfo>> generateMap(List<ComponentInfo> componentInfos) {
+        Map<String, List<ComponentInfo>> poolsComponents = new HashMap<>();
+
+        for (ComponentInfo info : componentInfos) {
+            for (String poolName : info.pools) {
+                if (!poolsComponents.containsKey(poolName)) {
+                    poolsComponents.put(poolName, new ArrayList<>());
+                }
+                List<ComponentInfo> list = poolsComponents.get(poolName);
+                list.add(info);
+            }
+        }
+
+        return poolsComponents;
+
+    }
 }
 
 

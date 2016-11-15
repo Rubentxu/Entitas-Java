@@ -7,6 +7,6 @@ import org.jboss.forge.roaster.model.source.JavaClassSource;
 import java.util.List;
 
 public interface IPoolCodeGenerator extends ICodeGenerator {
-    public List<JavaClassSource> generate(String[] poolNames, String pkgDestiny);
+    public List<JavaClassSource> generate(List<String> poolNames, String pkgDestiny);
 
 }

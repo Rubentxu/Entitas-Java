@@ -12,18 +12,17 @@ public class ComponentInfo {
     public String nameComponent;
     public String fullTypeName;
     public List<FieldSource<JavaClassSource>> memberInfos;
-    public String[] pools;
+    public List<String> pools;
     public boolean isSingleEntity;
     public String singleComponentPrefix;
     public boolean generateComponent;
     public boolean generateMethods;
     public boolean generateIndex;
     public boolean hideInBlueprintInspector;
-
     public String typeName;
     public boolean isSingletonComponent;
 
-    public ComponentInfo(String fullTypeName, String typeName, List<FieldSource<JavaClassSource>> memberInfos, String[] pools,
+    public ComponentInfo(String fullTypeName, String typeName, List<FieldSource<JavaClassSource>> memberInfos, List<String> pools,
                          boolean isSingleEntity, String singleComponentPrefix,
                          boolean generateComponent, boolean generateMethods, boolean generateIndex, boolean hideInBlueprintInspector) {
 
@@ -64,7 +63,7 @@ public class ComponentInfo {
                 "nameComponent='" + nameComponent + '\'' +
                 ",\n fullTypeName='" + fullTypeName + '\'' +
                 ",\n memberInfos=" + memberInfos +
-                ",\n pools=" + Arrays.toString(pools) +
+                ",\n pools=" + pools +
                 ",\n isSingleEntity=" + isSingleEntity +
                 ",\n singleComponentPrefix='" + singleComponentPrefix + '\'' +
                 ",\n generateComponent=" + generateComponent +

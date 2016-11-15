@@ -15,18 +15,20 @@ import static org.junit.Assert.assertEquals;
 public class ComponentExtensionGeneratorTest {
 
     private ComponentExtensionsGenerator generator;
-    private String[] poolNames;
+    private List<String> poolNames;
 
     @Before
     public void setUp() throws Exception {
         generator = new ComponentExtensionsGenerator();
-        poolNames = new String[]{"pruebas", "rubentxu"};
+        poolNames = new ArrayList<String>();
+        poolNames.add("pruebas");
+        poolNames.add("core");
 
     }
 
     @Test
     public void generateComponentInfos() {
-        ComponentInfo[] componentInfos = new ComponentInfo[2];
+        List<ComponentInfo> componentInfos = new ArrayList();
         List<FieldSource<JavaClassSource>> memberInfos = new ArrayList<>();
         List<FieldSource<JavaClassSource>> memberInfos2 = new ArrayList<>();
         final JavaClassSource javaClass = Roaster.create(JavaClassSource.class);
@@ -37,10 +39,11 @@ public class ComponentExtensionGeneratorTest {
         memberInfos.add(field2);
         memberInfos2.add(field3);
 
-        componentInfos[0] = new ComponentInfo("com.ilargia.games.entitas.components.Position", "Position", memberInfos, new String[]{"pruebas"},
-                false, "", true, true, false, false);
-        componentInfos[1] = new ComponentInfo("com.ilargia.games.entitas.components.Movable", "Movable", memberInfos2, new String[]{"pruebas"},
-                true, "", true, true, false, false);
+
+        componentInfos.add(new ComponentInfo("com.ilargia.games.entitas.components.Position", "Position", memberInfos, poolNames,
+                false, "", true, true, false, false));
+        componentInfos.add(new ComponentInfo("com.ilargia.games.entitas.components.Movable", "Movable", memberInfos2, poolNames,
+                true, "", true, true, false, false));
 
         List<JavaClassSource> result = generator.generate(componentInfos, "com.pruebas.entitas");
 

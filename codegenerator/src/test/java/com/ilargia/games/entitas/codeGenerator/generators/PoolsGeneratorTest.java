@@ -6,19 +6,22 @@ import org.jboss.forge.roaster.model.source.JavaClassSource;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class PoolsGeneratorTest {
 
     static final public int totalComponents = 0;
     private PoolsGenerator generator;
-    private String[] poolNames;
+    private List<String> poolNames;
 
     @Before
     public void setUp() throws Exception {
         generator = new PoolsGenerator();
-        poolNames = new String[]{"pruebas", "test", "core"};
-
+        poolNames = new ArrayList<>();
+        poolNames.add("pruebas");
+        poolNames.add("test");
+        poolNames.add("core");
 
     }
 

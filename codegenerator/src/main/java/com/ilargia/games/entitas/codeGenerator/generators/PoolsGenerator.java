@@ -15,7 +15,7 @@ import java.util.List;
 public class PoolsGenerator implements IPoolCodeGenerator {
 
     @Override
-    public List<JavaClassSource> generate(String[] poolNames, String pkgDestiny) {
+    public List<JavaClassSource> generate(List<String> poolNames, String pkgDestiny) {
         List<JavaClassSource> result = new ArrayList<>();
         JavaClassSource javaClass = Roaster.parse(JavaClassSource.class, "public class Pools extends com.ilargia.games.entitas.Pools {}");
         javaClass.setPackage(pkgDestiny);
@@ -30,8 +30,8 @@ public class PoolsGenerator implements IPoolCodeGenerator {
 
     }
 
-    private void createPoolsMethod(JavaClassSource javaClass, String[] poolNames) {
-        Arrays.stream(poolNames).forEach((poolName) -> {
+    private void createPoolsMethod(JavaClassSource javaClass, List<String> poolNames) {
+        poolNames.forEach((poolName) -> {
             String createMethodName = String.format("create%1$sPool", capitalize(poolName));
             String body = String.format("return super.createPool(\"%1$s\", %2$s.totalComponents, %2$s.componentNames, %2$s.componentTypes);",
                     capitalize(poolName), capitalize(poolName) + CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG);
@@ -46,9 +46,9 @@ public class PoolsGenerator implements IPoolCodeGenerator {
 
     }
 
-    private void createMethodAllPools(JavaClassSource javaClass, String[] poolNames) {
+    private void createMethodAllPools(JavaClassSource javaClass, List<String> poolNames) {
 
-        String allPoolsList = Arrays.stream(poolNames).reduce("", (acc, poolName) -> {
+        String allPoolsList = poolNames.stream().reduce("", (acc, poolName) -> {
             return acc + poolName.toLowerCase() + ", ";
         });
 
@@ -61,8 +61,8 @@ public class PoolsGenerator implements IPoolCodeGenerator {
 
     }
 
-    private void createMethodSetAllPools(JavaClassSource javaClass, String[] poolNames) {
-        String setAllPools = Arrays.stream(poolNames).reduce("\n", (acc, poolName) ->
+    private void createMethodSetAllPools(JavaClassSource javaClass, List<String> poolNames) {
+        String setAllPools = poolNames.stream().reduce("\n", (acc, poolName) ->
                 acc + "    " + poolName.toLowerCase() + " = create" + capitalize(poolName) + "Pool();\n "
         );
 
@@ -73,8 +73,8 @@ public class PoolsGenerator implements IPoolCodeGenerator {
                 .setBody(setAllPools);
     }
 
-    private void createPoolFields(JavaClassSource javaClass, String[] poolNames) {
-        Arrays.stream(poolNames).forEach((poolName) -> {
+    private void createPoolFields(JavaClassSource javaClass, List<String> poolNames) {
+       poolNames.forEach((poolName) -> {
             javaClass.addField()
                     .setName(poolName.toLowerCase())
                     .setType("Pool")

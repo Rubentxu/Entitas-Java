@@ -3,62 +3,82 @@ package com.ilargia.games.entitas.codeGenerator.generators;
 
 import com.ilargia.games.entitas.codeGenerator.CodeGenerator;
 import com.ilargia.games.entitas.codeGenerator.interfaces.IComponentCodeGenerator;
-import com.ilargia.games.entitas.codeGenerator.intermediate.CodeGenFile;
 import com.ilargia.games.entitas.codeGenerator.intermediate.ComponentInfo;
 import org.jboss.forge.roaster.Roaster;
 import org.jboss.forge.roaster.model.source.FieldSource;
 import org.jboss.forge.roaster.model.source.JavaClassSource;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class ComponentExtensionsGenerator implements IComponentCodeGenerator {
 
     @Override
-    public List<JavaClassSource> generate(ComponentInfo[] componentInfos, String pkgDestiny) {
+    public List<JavaClassSource> generate(List<ComponentInfo> infos, String pkgDestiny) {
+        Map<String, List<ComponentInfo>> mapPoolsComponents = CodeGenerator.generateMap(infos);
+
         List<JavaClassSource> result = new ArrayList<>();
         JavaClassSource entitas = Roaster.parse(JavaClassSource.class, "public class Entitas {}");
         entitas.setPackage(pkgDestiny);
+        JavaClassSource defaultMatcher = Roaster.parse(JavaClassSource.class, "public class Entitas {}");
+        entitas.setPackage(pkgDestiny);
+        result.add(entitas);
+        result.add(defaultMatcher);
 
-        JavaClassSource matcher = Roaster.parse(JavaClassSource.class, "public class Matcher {}");
-        matcher.setPackage(pkgDestiny);
-
-        for (int i = 0; i <componentInfos.length; i++) {
-            if(componentInfos[i].generateMethods)
-                generateComponentExtension(componentInfos[i], entitas, matcher);
-
+        for (ComponentInfo info : infos) {
+            if (info.generateMethods) {
+                generateComponentExtension(info, entitas);
+            }
         }
 
+        result.addAll((List) mapPoolsComponents.keySet().stream()
+                .map(poolName -> generateMatchers(poolName, mapPoolsComponents.get(poolName), pkgDestiny)
+                ).collect(Collectors.toList()));
         System.out.println(Roaster.format(entitas.toString()));
-        System.out.println(Roaster.format(matcher.toString()));
-        result.add(entitas);
-        result.add(matcher);
+
         return result;
     }
 
-    private JavaClassSource generateComponentExtension(ComponentInfo info, JavaClassSource entitas, JavaClassSource matcher) {
+    private JavaClassSource generateComponentExtension(ComponentInfo info, JavaClassSource entitas) {
         addEntityMethods(info, entitas);
 
-        if(info.isSingleEntity) {
+        if (info.isSingleEntity) {
             addPoolMethods(info, entitas);
         }
 
-        // Add default matcher
-        addMatcher(info, true);
-        if(info.generateComponent) {
-            // Add custom matchers
+//        // Add default matcher
+//        addMatcher(info, true);
+//        if(info.generateComponent) {
+//            // Add custom matchers
+////            addMatcher(info, false);
+////            generateComponent(componentInfo)
+//
+//        }
+//
+//        boolean hasCustomPools = info.pools.size() > 1 || info.pools.get(0) != CodeGenerator.DEFAULT_POOL_NAME;
+//        if(hasCustomPools) {
 //            addMatcher(info, false);
-//            generateComponent(componentInfo)
-
-        }
-
-        boolean hasCustomPools = info.pools.length > 1 || info.pools[0] != CodeGenerator.DEFAULT_POOL_NAME;
-        if(hasCustomPools) {
-            addMatcher(info, false);
-        }
+//        }
         return entitas;
+    }
+
+
+    private JavaClassSource generateMatchers(String poolName, List<ComponentInfo> componentInfos, String pkgDestiny) {
+        JavaClassSource javaClass = Roaster.parse(JavaClassSource.class, String.format("public class %1$s {}",
+                CodeGenerator.capitalize(poolName) + "Matcher"));
+        javaClass.setPackage(pkgDestiny);
+        javaClass.addImport("com.ilargia.games.entitas.interfaces.IMatcher");
+        javaClass.addImport("com.ilargia.games.entitas.matcher.Matcher");
+
+        for (ComponentInfo info : componentInfos) {
+            javaClass.addImport(info.fullTypeName);
+            addMatcher(poolName, info, javaClass);
+            addMatcherMethods(poolName, info, javaClass);
+        }
+        System.out.println(javaClass);
+        return javaClass;
     }
 
     private void addPoolMethods(ComponentInfo info, JavaClassSource entitas) {
@@ -77,7 +97,7 @@ public class ComponentExtensionsGenerator implements IComponentCodeGenerator {
                 .setStatic(true)
                 .setParameters("Pool pool")
                 .setBody(String.format("return pool.getGroup(%1$sMatcher.%2$s).getSingleEntity();"
-                        , CodeGenerator.capitalize(info.pools[0]), CodeGenerator.capitalize(info.typeName) ));
+                        , CodeGenerator.capitalize(info.pools.get(0)), CodeGenerator.capitalize(info.typeName)));
 
         if (!info.isSingletonComponent) {
             source.addMethod()
@@ -112,13 +132,13 @@ public class ComponentExtensionsGenerator implements IComponentCodeGenerator {
                     .setFinal(true)
                     .setParameters("Pool pool, boolean value")
                     .setBody(String.format(" Entity entity = Entitas.get%1$sEntity(pool);\n" +
-                                    "        if(value != (entity != null)) {\n" +
-                                    "             if(value) {\n" +
-                                    "                  Entitas.set%1$s(pool.createEntity(), true);\n" +
-                                    "             } else {\n" +
-                                    "                  pool.destroyEntity(entity);\n" +
-                                    "             }\n" +
-                                    "        }", CodeGenerator.capitalize(info.typeName)));
+                            "        if(value != (entity != null)) {\n" +
+                            "             if(value) {\n" +
+                            "                  Entitas.set%1$s(pool.createEntity(), true);\n" +
+                            "             } else {\n" +
+                            "                  pool.destroyEntity(entity);\n" +
+                            "             }\n" +
+                            "        }", CodeGenerator.capitalize(info.typeName)));
 
 
         } else {
@@ -142,7 +162,7 @@ public class ComponentExtensionsGenerator implements IComponentCodeGenerator {
                     .setPublic()
                     .setStatic(true)
                     .setParameters("Pool pool," + memberNamesWithType(info.memberInfos))
-                    .setBody(String.format( "if(Entitas.has%1$s(pool)) {\n" +
+                    .setBody(String.format("if(Entitas.has%1$s(pool)) {\n" +
                                     "            throw new EntitasException(\"Could not set %1$s!\" + pool + \" already has an entity with %1$s!\", " +
                                     "\"You should check if the pool already has a %1$sEntity before setting it or use pool.Replace%1$s().\");" +
                                     "         }\n" +
@@ -162,7 +182,7 @@ public class ComponentExtensionsGenerator implements IComponentCodeGenerator {
                     .setPublic()
                     .setStatic(true)
                     .setParameters("Pool pool," + memberNamesWithType(info.memberInfos))
-                    .setBody(String.format( "Entity entity = Entitas.get%1$sEntity(pool);" +
+                    .setBody(String.format("Entity entity = Entitas.get%1$sEntity(pool);" +
                                     "         if(entity == null) {" +
                                     "            entity = Entitas.set%1$s(pool, %2$s);" +
                                     "         } else { " +
@@ -182,20 +202,43 @@ public class ComponentExtensionsGenerator implements IComponentCodeGenerator {
                     .setReturnTypeVoid()
                     .setPublic()
                     .setStatic(true)
-                    .setParameters("Pool pool" )
-                    .setBody(String.format( "pool.destroyEntity(Entitas.get%1$sEntity(pool));"
+                    .setParameters("Pool pool")
+                    .setBody(String.format("pool.destroyEntity(Entitas.get%1$sEntity(pool));"
                             , CodeGenerator.capitalize(info.typeName), memberNames(info.memberInfos)));
 
         }
 
     }
 
-    private void addMatcher(ComponentInfo info, boolean b) {
+    private JavaClassSource addMatcher(String poolName, ComponentInfo info, JavaClassSource javaClass) {
+        javaClass.addField()
+                .setName("_matcher" + CodeGenerator.capitalize(info.typeName))
+                .setType("IMatcher")
+                .setPublic()
+                .setStatic(true);
+        return null;
+    }
+
+    private void addMatcherMethods(String poolName, ComponentInfo info, JavaClassSource javaClass) {
+        String body =  "if (_matcher%2$s == null) {"+
+                        "   Matcher matcher = (Matcher)Matcher.allOf(%1$s.%2$s);"+
+                        "   matcher.componentNames = %1$s.componentNames;"+
+                        "   _matcher%2$s = matcher;"+
+                        "}"+
+                "return _matcher%2$s;";
+
+        javaClass.addMethod()
+                .setName(CodeGenerator.capitalize(info.typeName))
+                .setReturnType("IMatcher")
+                .setPublic()
+                .setStatic(true)
+                .setBody(String.format(body, CodeGenerator.capitalize(poolName) + CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG,
+                        CodeGenerator.capitalize(info.typeName)));
 
     }
 
 
-    private void addEntityMethods(ComponentInfo componentInfo, JavaClassSource source ) {
+    private void addEntityMethods(ComponentInfo componentInfo, JavaClassSource source) {
         addGetMethods(componentInfo, source);
         addHasMethods(componentInfo, source);
         addAddMethods(componentInfo, source);
@@ -209,7 +252,7 @@ public class ComponentExtensionsGenerator implements IComponentCodeGenerator {
 
         if (info.isSingletonComponent) {
             source.addField()
-                    .setName(info.typeName.toLowerCase()+CodeGenerator.COMPONENT_SUFFIX)
+                    .setName(info.typeName.toLowerCase() + CodeGenerator.COMPONENT_SUFFIX)
                     .setType(info.typeName)
                     .setLiteralInitializer(String.format("new %1$s();", info.typeName))
                     .setPublic()
@@ -224,7 +267,7 @@ public class ComponentExtensionsGenerator implements IComponentCodeGenerator {
                     .setStatic(true)
                     .setParameters("Entity entity")
                     .setBody(String.format("return (%1$s)entity.getComponent(%2$s.%1$s);"
-                            , info.typeName, CodeGenerator.capitalize(info.pools[0]) + CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG));
+                            , info.typeName, CodeGenerator.capitalize(info.pools.get(0)) + CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG));
 
         }
     }
@@ -241,7 +284,7 @@ public class ComponentExtensionsGenerator implements IComponentCodeGenerator {
                     .setFinal(true)
                     .setParameters("Entity entity")
                     .setBody(String.format("return entity.hasComponent(%1$s.%2$s);",
-                            CodeGenerator.capitalize(info.pools[0]) + CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG,
+                            CodeGenerator.capitalize(info.pools.get(0)) + CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG,
                             info.typeName));
 
             source.addMethod()
@@ -257,7 +300,7 @@ public class ComponentExtensionsGenerator implements IComponentCodeGenerator {
                                     "                    } else {\n" +
                                     "                        entity.removeComponent(%1$s.%2$s);\n" +
                                     "                    }\n" +
-                                    "                }", CodeGenerator.capitalize(info.pools[0]) + CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG,
+                                    "                }", CodeGenerator.capitalize(info.pools.get(0)) + CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG,
                             info.typeName, info.nameComponent));
 
 
@@ -269,7 +312,7 @@ public class ComponentExtensionsGenerator implements IComponentCodeGenerator {
                     .setStatic(true)
                     .setParameters("Entity entity")
                     .setBody(String.format("return entity.hasComponent(%1$s.%2$s);",
-                            CodeGenerator.capitalize(info.pools[0]) + CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG,
+                            CodeGenerator.capitalize(info.pools.get(0)) + CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG,
                             info.typeName));
 
         }
@@ -285,7 +328,7 @@ public class ComponentExtensionsGenerator implements IComponentCodeGenerator {
                     .setStatic(true)
                     .setParameters("Entity entity, " + memberNamesWithType(info.memberInfos))
                     .setBody(String.format(method,
-                            CodeGenerator.capitalize(info.pools[0]) + CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG,
+                            CodeGenerator.capitalize(info.pools.get(0)) + CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG,
                             info.typeName, memberAssignments(info.memberInfos)));
 
 
@@ -302,7 +345,7 @@ public class ComponentExtensionsGenerator implements IComponentCodeGenerator {
                     .setStatic(true)
                     .setParameters("Entity entity, " + memberNamesWithType(info.memberInfos))
                     .setBody(String.format(method,
-                            CodeGenerator.capitalize(info.pools[0]) + CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG,
+                            CodeGenerator.capitalize(info.pools.get(0)) + CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG,
                             info.typeName, memberAssignments(info.memberInfos)));
 
 
@@ -319,7 +362,7 @@ public class ComponentExtensionsGenerator implements IComponentCodeGenerator {
                     .setStatic(true)
                     .setParameters("Entity entity, ")
                     .setBody(String.format(method,
-                            CodeGenerator.capitalize(info.pools[0]) + CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG,
+                            CodeGenerator.capitalize(info.pools.get(0)) + CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG,
                             info.typeName));
 
 

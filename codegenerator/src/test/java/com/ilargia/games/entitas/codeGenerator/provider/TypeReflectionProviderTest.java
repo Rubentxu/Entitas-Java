@@ -7,6 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.util.List;
 
 public class TypeReflectionProviderTest {
 
@@ -16,19 +17,15 @@ public class TypeReflectionProviderTest {
     public void setUp() throws Exception {
         provider = new TypeReflectionProvider(null,null,"src/test/java/com/ilargia/games/entitas/components");
 
-
-
-
     }
 
     @Test
     public void componentSize() throws IOException {
-        ComponentInfo[] result = provider.componentInfos();
+        List<ComponentInfo> result = provider.componentInfos();
 
-        System.out.println(result[0]);
-        System.out.println(result[0].typeName);
+        System.out.println(result.get(0));
+        System.out.println(result.get(0).typeName);
         //assertEquals(3, IComponent.getComponentSize());
-
 
     }
 
