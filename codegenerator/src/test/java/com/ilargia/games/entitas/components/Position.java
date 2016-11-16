@@ -1,10 +1,12 @@
 package com.ilargia.games.entitas.components;
 
+import com.ilargia.games.entitas.codeGenerator.Component;
 import com.ilargia.games.entitas.interfaces.IComponent;
 
-/**
- * Created by rdcabrera on 16/12/2015.
- */
+
+@Component(
+        pools = {"Core"}
+)
 public class Position implements IComponent {
     public float x, y;
 

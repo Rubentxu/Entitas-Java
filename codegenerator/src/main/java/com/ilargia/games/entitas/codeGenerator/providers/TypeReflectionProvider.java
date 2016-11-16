@@ -2,9 +2,11 @@ package com.ilargia.games.entitas.codeGenerator.providers;
 
 
 import com.ilargia.games.entitas.codeGenerator.CodeGenerator;
+import com.ilargia.games.entitas.codeGenerator.Component;
 import com.ilargia.games.entitas.codeGenerator.interfaces.ICodeGeneratorDataProvider;
 import com.ilargia.games.entitas.codeGenerator.intermediate.ComponentInfo;
 import org.jboss.forge.roaster.Roaster;
+import org.jboss.forge.roaster.model.source.AnnotationSource;
 import org.jboss.forge.roaster.model.source.FieldSource;
 import org.jboss.forge.roaster.model.source.JavaClassSource;
 
@@ -79,15 +81,26 @@ public class TypeReflectionProvider implements ICodeGeneratorDataProvider {
         String name = component.getName();
         String fullName = component.getCanonicalName();
         List<FieldSource<JavaClassSource>> fields = component.getFields();
+        AnnotationSource<JavaClassSource> annotation = component.getAnnotation(Component.class);
 
+        List<String> poolNames = (annotation.toString().contains("pools"))
+                ?Arrays.asList(annotation.getStringArrayValue("pools"))
+                : null ;
+
+        List<String> customComponentName = (annotation.toString().contains("customComponentName"))
+                ?Arrays.asList(annotation.getStringArrayValue("customComponentName"))
+                : null ;
+
+        Boolean isSingleEntity = Boolean.getBoolean(annotation.getStringValue("isSingleEntity"));
+        String customPrefix = annotation.getStringValue("customPrefix");
 
         return new ComponentInfo(
                 fullName,
                 name,
                 fields,
-                null,
-                false,
-                null,
+                poolNames,
+                isSingleEntity,
+                customPrefix,
                 false,
                 false,
                 false,

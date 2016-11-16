@@ -30,7 +30,7 @@ public class ComponentInfo {
         this.memberInfos = memberInfos;
         this.pools = pools;
         this.isSingleEntity = isSingleEntity;
-        this.singleComponentPrefix = (singleComponentPrefix!=null && !singleComponentPrefix.isEmpty())?singleComponentPrefix: "is";
+        this.singleComponentPrefix = (singleComponentPrefix!=null && !singleComponentPrefix.isEmpty())?singleComponentPrefix: "";
         this.generateComponent = generateComponent;
         this.generateMethods = generateMethods;
         this.generateIndex = generateIndex;
@@ -59,19 +59,19 @@ public class ComponentInfo {
 
     @Override
     public String toString() {
-        return "ComponentInfo{" +
-                "nameComponent='" + nameComponent + '\'' +
-                ",\n fullTypeName='" + fullTypeName + '\'' +
-                ",\n memberInfos=" + memberInfos +
-                ",\n pools=" + pools +
-                ",\n isSingleEntity=" + isSingleEntity +
-                ",\n singleComponentPrefix='" + singleComponentPrefix + '\'' +
-                ",\n generateComponent=" + generateComponent +
-                ",\n generateMethods=" + generateMethods +
-                ",\n generateIndex=" + generateIndex +
-                ",\n hideInBlueprintInspector=" + hideInBlueprintInspector +
-                ",\n typeName='" + typeName + '\'' +
-                ",\n isSingletonComponent=" + isSingletonComponent +
-                '}';
+        return "ComponentInfo {" +
+                "\n    nameComponent='" + nameComponent + '\'' +
+                ",\n    fullTypeName='" + fullTypeName + '\'' +
+                ",\n    memberInfos=" + memberInfos +
+                ",\n    pools=" + pools +
+                ",\n    isSingleEntity=" + isSingleEntity +
+                ",\n    singleComponentPrefix='" + singleComponentPrefix + '\'' +
+                ",\n    generateComponent=" + generateComponent +
+                ",\n    generateMethods=" + generateMethods +
+                ",\n    generateIndex=" + generateIndex +
+                ",\n    hideInBlueprintInspector=" + hideInBlueprintInspector +
+                ",\n    typeName='" + typeName + '\'' +
+                ",\n    isSingletonComponent=" + isSingletonComponent +
+                "\n}";
     }
 }

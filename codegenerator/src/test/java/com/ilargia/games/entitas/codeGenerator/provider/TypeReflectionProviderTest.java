@@ -23,8 +23,9 @@ public class TypeReflectionProviderTest {
     public void componentSize() throws IOException {
         List<ComponentInfo> result = provider.componentInfos();
 
-        System.out.println(result.get(0));
-        System.out.println(result.get(0).typeName);
+        for (ComponentInfo info : result) {
+            System.out.println(info);
+        }
         //assertEquals(3, IComponent.getComponentSize());
 
     }
