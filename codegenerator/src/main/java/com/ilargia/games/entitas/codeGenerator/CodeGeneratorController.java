@@ -15,22 +15,12 @@ import java.util.ResourceBundle;
 
 public class CodeGeneratorController {
 
-
     @FXML private CheckBox componentIndicesGenerator;
     @FXML private CheckBox componentsGenerator;
     @FXML private CheckBox poolsGenerator;
     @FXML private TextField fieldComponentFolder;
     @FXML private TextField fieldGeneratedFolder;
     public Stage stage;
-
-<<<<<<< HEAD
-=======
-    @FXML
-    private void initialize() {
-
-
-    }
->>>>>>> 4cbd39aaf2fa63cff6b9da3fdb6911fc3660ab62
 
 
     @FXML
@@ -53,47 +43,5 @@ public class CodeGeneratorController {
         }
     }
 
-<<<<<<< HEAD
-=======
 
-    public CheckBox getComponentIndicesGenerator() {
-        return componentIndicesGenerator;
-    }
-
-    public void setComponentIndicesGenerator(CheckBox componentIndicesGenerator) {
-        this.componentIndicesGenerator = componentIndicesGenerator;
-    }
-
-    public CheckBox getComponentsGenerator() {
-        return componentsGenerator;
-    }
-
-    public void setComponentsGenerator(CheckBox componentsGenerator) {
-        this.componentsGenerator = componentsGenerator;
-    }
-
-    public CheckBox getPoolsGenerator() {
-        return poolsGenerator;
-    }
-
-    public void setPoolsGenerator(CheckBox poolsGenerator) {
-        this.poolsGenerator = poolsGenerator;
-    }
-
-    public TextField getFieldComponentFolder() {
-        return fieldComponentFolder;
-    }
-
-    public void setFieldComponentFolder(TextField fieldComponentFolder) {
-        this.fieldComponentFolder = fieldComponentFolder;
-    }
-
-    public TextField getFieldGeneratedFolder() {
-        return fieldGeneratedFolder;
-    }
-
-    public void setFieldGeneratedFolder(TextField fieldGeneratedFolder) {
-        this.fieldGeneratedFolder = fieldGeneratedFolder;
-    }
->>>>>>> 4cbd39aaf2fa63cff6b9da3fdb6911fc3660ab62
 }
