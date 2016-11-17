@@ -6,40 +6,42 @@ import com.badlogic.gdx.utils.ObjectSet;
 import com.ilargia.games.entitas.caching.EntitasCache;
 import com.ilargia.games.entitas.exceptions.*;
 import com.ilargia.games.entitas.interfaces.*;
-
 import java.util.Stack;
 
-public class Pool {
+public class Pool<E extends Entity> {
 
-    public PoolChanged OnEntityCreated;
-    public PoolChanged OnEntityWillBeDestroyed;
-    public PoolChanged OnEntityDestroyed;
+    private FactoryEntity<E> _factoryMethod;
+    public PoolChanged<E> OnEntityCreated;
+    public PoolChanged<E> OnEntityWillBeDestroyed;
+    public PoolChanged<E> OnEntityDestroyed;
     public PoolGroupChanged OnGroupCreated;
     public PoolGroupChanged OnGroupCleared;
-    public EntityChanged _cachedEntityChanged;
-    public ComponentReplaced _cachedComponentReplaced;
-    public EntityReleased _cachedEntityReleased;
+    public EntityChanged<E> _cachedEntityChanged;
+    public ComponentReplaced<E> _cachedComponentReplaced;
+    public EntityReleased<E> _cachedEntityReleased;
 
     public int _totalComponents;
-    protected ObjectMap<IMatcher, Group> _groups;
-    protected Array<Group>[] _groupsForIndex;
+    protected ObjectMap<IMatcher, Group<E>> _groups;
+    protected Array<Group<E>>[] _groupsForIndex;
     private int _creationIndex;
-    private ObjectSet<Entity> _entities;
-    private Stack<Entity> _reusableEntities;
-    private ObjectSet<Entity> _retainedEntities;
-    private Entity[] _entitiesCache;
+    private ObjectSet<E> _entities;
+    private Stack<E> _reusableEntities;
+    private ObjectSet<E> _retainedEntities;
+    private Array<E> _entitiesCache;
     private PoolMetaData _metaData;
     private Stack<IComponent>[] _componentPools;
     private ObjectMap<String, IEntityIndex> _entityIndices;
+    public Class<E> entityType;
 
 
-    public Pool(int totalComponents) {
-        this(totalComponents, 0, null);
+    public Pool(int totalComponents, FactoryEntity<E> factoryMethod) {
+        this(totalComponents, 0, null, factoryMethod);
     }
 
-    public Pool(int totalComponents, int startCreationIndex, PoolMetaData metaData) {
+    public Pool(int totalComponents, int startCreationIndex, PoolMetaData metaData, FactoryEntity<E> factoryMethod) {
         _totalComponents = totalComponents;
         _creationIndex = startCreationIndex;
+        _factoryMethod = factoryMethod;
 
         if (metaData != null) {
             _metaData = metaData;
@@ -62,14 +64,14 @@ public class Pool {
         _componentPools = new Stack[totalComponents];
         _entityIndices = new ObjectMap<>();
 
-        _cachedEntityChanged = (Entity e, int idx, IComponent c) -> {
+        _cachedEntityChanged = (E e, int idx, IComponent c) -> {
             updateGroupsComponentAddedOrRemoved(e, idx, c);
         };
-        _cachedComponentReplaced = (Entity e, int idx, IComponent pc, IComponent nc)
+        _cachedComponentReplaced = (E e, int idx, IComponent pc, IComponent nc)
                 -> {
             updateGroupsComponentReplaced(e, idx, pc, nc);
         };
-        _cachedEntityReleased = (Entity e) -> {
+        _cachedEntityReleased = (E e) -> {
             onEntityReleased(e);
         };
 
@@ -78,13 +80,14 @@ public class Pool {
         _entities = new ObjectSet<>();
         _groups = new ObjectMap<>();
 
+        entityType = (Class<E>) _factoryMethod.create(_totalComponents, _componentPools, _metaData).getClass();
+
     }
 
-
-    public Entity createEntity() {
-        Entity ent = _reusableEntities.size() > 0
+    public E createEntity() {
+        E ent = _reusableEntities.size() > 0
                 ? _reusableEntities.pop()
-                : new Entity(_totalComponents, _componentPools, _metaData);
+                : _factoryMethod.create(_totalComponents, _componentPools, _metaData);
         ent.setEnabled(true);
         ent.setCreationIndex(_creationIndex++);
         ent.retain(this);
@@ -103,7 +106,7 @@ public class Pool {
 
     }
 
-    public void destroyEntity(Entity entity) {
+    public void destroyEntity(E entity) {
         if (!_entities.remove(entity)) {
             throw new PoolDoesNotContainEntityException("'" + this + "' cannot destroy " + entity + "!",
                     "Did you call pool.DestroyEntity() on a wrong pool?");
@@ -133,7 +136,7 @@ public class Pool {
     }
 
     public void destroyAllEntities() {
-        for (Entity entity : getEntities()) {
+        for (E entity : getEntities()) {
             destroyEntity(entity);
         }
         _entities.clear();
@@ -144,36 +147,41 @@ public class Pool {
 
     }
 
-    public boolean hasEntity(Entity entity) {
+    public boolean hasEntity(E entity) {
         return _entities.contains(entity);
     }
 
-    public Entity[] getEntities() {
+    public E[] getEntities() {
         if (_entitiesCache == null) {
-            _entitiesCache = new Entity[_entities.size];
+            try {
+                _entitiesCache = new Array(true, _entities.size, entityType);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             int i = 0;
-            for (Entity e : _entities) {
-                _entitiesCache[i] = e;
+            for (E e : _entities) {
+                _entitiesCache.insert(i, e);
                 i++;
             }
 
         }
-        return _entitiesCache;
+        return _entitiesCache.items;
 
     }
 
-    public Group getGroup(IMatcher matcher) {
-        Group group = null;
+    public Group<E> getGroup(IMatcher matcher) {
+        Group<E> group = null;
         if (!(_groups.containsKey(matcher) ? (group = _groups.get(matcher)) == group : false)) {
-            group = new Group(matcher);
-            for (Entity entity : getEntities()) {
+
+            group = new Group(matcher, entityType);
+            for (E entity : getEntities()) {
                 group.handleEntitySilently(entity);
             }
             _groups.put(matcher, group);
 
             for (int index : matcher.getIndices()) {
                 if (_groupsForIndex[index] == null) {
-                    _groupsForIndex[index] = new Array<Group>();
+                    _groupsForIndex[index] = new Array<Group<E>>();
                 }
                 _groupsForIndex[index].add(group);
             }
@@ -187,7 +195,7 @@ public class Pool {
     }
 
     public void clearGroups() {
-        for (Group group : _groups.values()) {
+        for (Group<E> group : _groups.values()) {
             group.removeAllEventHandlers();
             for (Entity entity : group.getEntities()) {
                 entity.release(group);
@@ -263,8 +271,8 @@ public class Pool {
     }
 
 
-    public void updateGroupsComponentAddedOrRemoved(Entity entity, int index, IComponent component) throws EntityIndexException {
-        Array<Group> groups = _groupsForIndex[index];
+    public void updateGroupsComponentAddedOrRemoved(E entity, int index, IComponent component) throws EntityIndexException {
+        Array<Group<E>> groups = _groupsForIndex[index];
         if (groups != null) {
             Array<GroupChanged> events = EntitasCache.getGroupChangedList();
             for (int i = 0, groupsCount = groups.size; i < groupsCount; i++) {
@@ -281,8 +289,8 @@ public class Pool {
 
     }
 
-    protected void updateGroupsComponentReplaced(Entity entity, int index, IComponent previousComponent, IComponent newComponent) throws EntityIndexException {
-        Array<Group> groups = _groupsForIndex[index];
+    protected void updateGroupsComponentReplaced(E entity, int index, IComponent previousComponent, IComponent newComponent) throws EntityIndexException {
+        Array<Group<E>> groups = _groupsForIndex[index];
         if (groups != null) {
             for (Group g : groups) {
                 g.updateEntity(entity, index, previousComponent, newComponent);
@@ -291,7 +299,7 @@ public class Pool {
 
     }
 
-    protected void onEntityReleased(Entity entity) {
+    protected void onEntityReleased(E entity) {
         if (entity.isEnabled()) {
             throw new EntityIsNotDestroyedException("Cannot release entity.");
         }
@@ -320,4 +328,6 @@ public class Pool {
     public int getRetainedEntitiesCount() {
         return _retainedEntities.size;
     }
+
+
 }

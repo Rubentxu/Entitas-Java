@@ -11,23 +11,25 @@ import com.ilargia.games.entitas.interfaces.IMatcher;
 
 import java.util.Iterator;
 
-public class Group {
+public class Group<E extends Entity> {
 
-    private final ObjectSet<Entity> _entities = new ObjectSet<Entity>();
-    public GroupChanged OnEntityAdded;
-    public GroupChanged OnEntityRemoved;
-    public GroupUpdated OnEntityUpdated;
+    private final ObjectSet<E> _entities = new ObjectSet<E>();
+    public GroupChanged<E> OnEntityAdded;
+    public GroupChanged<E>  OnEntityRemoved;
+    public GroupUpdated<E>  OnEntityUpdated;
     private IMatcher _matcher;
-    private Array<Entity> _entitiesCache;
-    private Entity _singleEntityCache;
+    private Array<E> _entitiesCache;
+    private E _singleEntityCache;
     private String _toStringCache;
+    public Class<E> type;
 
 
-    public Group(IMatcher matcher) {
+    public Group(IMatcher matcher, Class<E> clazz) {
         _matcher = matcher;
+        type = clazz;
     }
 
-    public void handleEntitySilently(Entity entity) {
+    public void handleEntitySilently(E entity) {
         if (_matcher.matches(entity)) {
             addEntitySilently(entity);
         } else {
@@ -35,7 +37,7 @@ public class Group {
         }
     }
 
-    public void handleEntity(Entity entity, int index, IComponent component) throws EntityIndexException {
+    public void handleEntity(E entity, int index, IComponent component) throws EntityIndexException {
         if (_matcher.matches(entity)) {
             addEntity(entity, index, component);
         } else {
@@ -44,7 +46,7 @@ public class Group {
     }
 
 
-    public void updateEntity(Entity entity, int index, IComponent previousComponent, IComponent newComponent) throws EntityIndexException {
+    public void updateEntity(E entity, int index, IComponent previousComponent, IComponent newComponent) throws EntityIndexException {
         if (_entities.contains(entity)) {
             if (OnEntityRemoved != null) {
                 OnEntityRemoved.groupChanged(this, entity, index, previousComponent);
@@ -64,14 +66,14 @@ public class Group {
         OnEntityUpdated = null;
     }
 
-    public GroupChanged handleEntity(Entity entity) {
+    public GroupChanged handleEntity(E entity) {
         return _matcher.matches(entity)
                 ? (addEntitySilently(entity) ? OnEntityAdded : null)
                 : (removeEntitySilently(entity) ? OnEntityRemoved : null);
 
     }
 
-    private boolean addEntitySilently(Entity entity) {
+    private boolean addEntitySilently(E entity) {
         boolean added = _entities.add(entity);
         if (added) {
             _entitiesCache = null;
@@ -83,13 +85,13 @@ public class Group {
 
     }
 
-    private void addEntity(Entity entity, int index, IComponent component) {
+    private void addEntity(E entity, int index, IComponent component) {
         if (addEntitySilently(entity) && OnEntityAdded != null) {
             OnEntityAdded.groupChanged(this, entity, index, component);
         }
     }
 
-    private boolean removeEntitySilently(Entity entity) {
+    private boolean removeEntitySilently(E entity) {
         boolean removed = _entities.remove(entity);
         if (removed) {
             _entitiesCache = null;
@@ -100,7 +102,7 @@ public class Group {
         return removed;
     }
 
-    private void removeEntity(Entity entity, int index, IComponent component) {
+    private void removeEntity(E entity, int index, IComponent component) {
         boolean removed = _entities.remove(entity);
         if (removed) {
             _entitiesCache = null;
@@ -112,25 +114,25 @@ public class Group {
         }
     }
 
-    public boolean containsEntity(Entity entity) {
+    public boolean containsEntity(E entity) {
         return _entities.contains(entity);
     }
 
-    public Entity[] getEntities() {
+    public E[] getEntities() {
         if (_entitiesCache == null) {
-            _entitiesCache = new Array<Entity>(false, _entities.size);
-            for (Entity e : _entities) {
+            _entitiesCache = new Array<E>(false, _entities.size);
+            for (E e : _entities) {
                 _entitiesCache.add(e);
             }
         }
         return _entitiesCache.items;
     }
 
-    public Entity getSingleEntity() {
+    public E getSingleEntity() {
         if (_singleEntityCache == null) {
             int c = _entities.size;
             if (c == 1) {
-                Iterator<Entity> enumerator = _entities.iterator();
+                Iterator<E> enumerator = _entities.iterator();
                 _singleEntityCache = enumerator.next();
             } else if (c == 0) {
                 return null;

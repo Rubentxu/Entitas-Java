@@ -3,16 +3,17 @@ package com.ilargia.games.entitas;
 import com.badlogic.gdx.utils.ObjectSet;
 import com.ilargia.games.entitas.events.GroupEventType;
 import com.ilargia.games.entitas.exceptions.EntitasException;
+import com.ilargia.games.entitas.exceptions.EntityCollectorException;
 import com.ilargia.games.entitas.interfaces.GroupChanged;
 import com.ilargia.games.entitas.interfaces.IComponent;
 
-public class EntityCollector {
+public class EntityCollector<E extends Entity> {
 
-    public ObjectSet<Entity> _collectedEntities;
-    GroupChanged _addEntityCache;
+    public ObjectSet<E> _collectedEntities;
+    GroupChanged<E> _addEntityCache;
     String _toStringCache;
     StringBuilder _toStringBuilder;
-    private Group[] _groups;
+    private Group<E>[] _groups;
     private GroupEventType[] _eventTypes;
 
     public EntityCollector(Group group, GroupEventType eventType) {
@@ -20,7 +21,7 @@ public class EntityCollector {
 
     }
 
-    public EntityCollector(Group[] groups, GroupEventType[] eventTypes) throws EntityCollectorException {
+    public EntityCollector(Group<E>[] groups, GroupEventType[] eventTypes) throws EntityCollectorException {
         _groups = groups;
         _collectedEntities = new ObjectSet<>();
         _eventTypes = eventTypes;
@@ -32,7 +33,7 @@ public class EntityCollector {
             );
         }
 
-        _addEntityCache = (Group group, Entity entity, int index, IComponent component) -> {
+        _addEntityCache = (Group<E> group, E entity, int index, IComponent component) -> {
             boolean added = _collectedEntities.add(entity);
             if (added) {
                 entity.retain(this);
@@ -77,7 +78,7 @@ public class EntityCollector {
 
     }
 
-    void addEntity(Group group, Entity entity, int index, IComponent component) {
+    void addEntity(Group group, E entity, int index, IComponent component) {
         boolean added = _collectedEntities.add(entity);
         if (added) {
             entity.retain(this);
@@ -109,9 +110,5 @@ public class EntityCollector {
         return _toStringCache;
     }
 
-    public class EntityCollectorException extends EntitasException {
-        public EntityCollectorException(String message, String hint) {
-            super(message, hint);
-        }
-    }
+
 }

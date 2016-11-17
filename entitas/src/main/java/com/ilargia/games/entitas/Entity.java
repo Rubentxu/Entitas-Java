@@ -13,8 +13,6 @@ import com.ilargia.games.entitas.interfaces.ComponentReplaced;
 import com.ilargia.games.entitas.interfaces.EntityChanged;
 import com.ilargia.games.entitas.interfaces.EntityReleased;
 import com.ilargia.games.entitas.interfaces.IComponent;
-
-import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.Stack;
 
@@ -327,4 +325,8 @@ public class Entity {
         return _componentPools;
     }
 
+
+    public <T> void add() {
+
+    }
 }

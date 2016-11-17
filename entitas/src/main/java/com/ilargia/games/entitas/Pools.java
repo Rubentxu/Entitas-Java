@@ -1,12 +1,15 @@
 package com.ilargia.games.entitas;
 
 
+import com.ilargia.games.entitas.interfaces.FactoryEntity;
+
 public class Pools {
 
     static Pools _sharedInstance;
 
-    public static Pool createPool(String poolName, int totalComponents, String[] componentNames, Class[] componentTypes) {
-        Pool pool = new Pool(totalComponents, 0, new PoolMetaData(poolName, componentNames, componentTypes));
+    public static Pool createPool(String poolName, int totalComponents, String[] componentNames
+            , Class[] componentTypes, FactoryEntity factoryMethod ) {
+        Pool pool = new Pool(totalComponents, 0, new PoolMetaData(poolName, componentNames, componentTypes), factoryMethod);
 
         return pool;
     }

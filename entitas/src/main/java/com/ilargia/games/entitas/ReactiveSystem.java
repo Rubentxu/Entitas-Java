@@ -1,6 +1,7 @@
 package com.ilargia.games.entitas;
 
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.ObjectSet;
 import com.ilargia.games.entitas.events.GroupEventType;
 import com.ilargia.games.entitas.interfaces.*;
 import com.ilargia.games.entitas.matcher.TriggerOnEvent;
@@ -41,7 +42,7 @@ public class ReactiveSystem implements IExecuteSystem {
         _clearAfterExecute = ((IClearReactiveSystem) ((subSystem instanceof IClearReactiveSystem) ? subSystem : null)) != null;
 
         _collector = collector;
-        _buffer = new Array<Entity>();
+        _buffer = new Array();
     }
 
     static EntityCollector createEntityCollector(Pool pool, TriggerOnEvent[] triggers) {
@@ -74,29 +75,39 @@ public class ReactiveSystem implements IExecuteSystem {
     }
 
     public void execute() {
+
         if (_collector._collectedEntities.size != 0) {
             if (_ensureComponents != null) {
+
                 if (_excludeComponents != null) {
-                    for (Entity e : _collector._collectedEntities) {
+                    ObjectSet.ObjectSetIterator iterator = _collector._collectedEntities.iterator();
+                    while (iterator.hasNext()) {
+                        Entity e = (Entity) iterator.next();
                         if (_ensureComponents.matches(e) && !_excludeComponents.matches(e)) {
                             _buffer.add(e.retain(this));
                         }
                     }
                 } else {
-                    for (Entity e : _collector._collectedEntities) {
+                    ObjectSet.ObjectSetIterator iterator = _collector._collectedEntities.iterator();
+                    while (iterator.hasNext()) {
+                        Entity e = (Entity) iterator.next();
                         if (_ensureComponents.matches(e)) {
                             _buffer.add(e.retain(this));
                         }
                     }
                 }
             } else if (_excludeComponents != null) {
-                for (Entity e : _collector._collectedEntities) {
+                ObjectSet.ObjectSetIterator iterator = _collector._collectedEntities.iterator();
+                while (iterator.hasNext()) {
+                    Entity e = (Entity) iterator.next();
                     if (!_excludeComponents.matches(e)) {
                         _buffer.add(e.retain(this));
                     }
                 }
             } else {
-                for (Entity e : _collector._collectedEntities) {
+                ObjectSet.ObjectSetIterator iterator = _collector._collectedEntities.iterator();
+                while (iterator.hasNext()) {
+                    Entity e = (Entity) iterator.next();
                     _buffer.add(e.retain(this));
                 }
             }
