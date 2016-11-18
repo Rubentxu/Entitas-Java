@@ -1,10 +1,7 @@
 package com.ilargia.games.entitas.codeGenerator;
 
-import com.ilargia.games.entitas.Entity;
-import com.ilargia.games.entitas.Pool;
-import com.ilargia.games.entitas.components.Position;
 import com.ilargia.games.entitas.components.Movable;
-import com.ilargia.games.entitas.exceptions.EntitasException;
+import com.ilargia.games.entitas.components.Position;
 
 public class PruebasComponentIds {
 

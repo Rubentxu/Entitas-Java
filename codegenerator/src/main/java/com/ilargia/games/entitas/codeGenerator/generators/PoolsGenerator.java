@@ -3,19 +3,18 @@ package com.ilargia.games.entitas.codeGenerator.generators;
 
 import com.ilargia.games.entitas.codeGenerator.CodeGenerator;
 import com.ilargia.games.entitas.codeGenerator.interfaces.IPoolCodeGenerator;
-import com.ilargia.games.entitas.codeGenerator.intermediate.CodeGenFile;
 import org.jboss.forge.roaster.Roaster;
 import org.jboss.forge.roaster.model.source.JavaClassSource;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 
 public class PoolsGenerator implements IPoolCodeGenerator {
 
     @Override
-    public List<JavaClassSource> generate(List<String> poolNames, String pkgDestiny) {
+    public List<JavaClassSource> generate(Set<String> poolNames, String pkgDestiny) {
         List<JavaClassSource> result = new ArrayList<>();
         JavaClassSource javaClass = Roaster.parse(JavaClassSource.class, "public class Pools extends com.ilargia.games.entitas.Pools {}");
         javaClass.setPackage(pkgDestiny);
@@ -30,11 +29,11 @@ public class PoolsGenerator implements IPoolCodeGenerator {
 
     }
 
-    private void createPoolsMethod(JavaClassSource javaClass, List<String> poolNames) {
+    private void createPoolsMethod(JavaClassSource javaClass, Set<String> poolNames) {
         poolNames.forEach((poolName) -> {
-            String createMethodName = String.format("create%1$sPool", capitalize(poolName));
-            String body = String.format("return super.createPool(\"%1$s\", %2$s.totalComponents, %2$s.componentNames, %2$s.componentTypes);",
-                    capitalize(poolName), capitalize(poolName) + CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG);
+            String createMethodName = String.format("create%1$sPool", CodeGenerator.capitalize(poolName));
+            String body = String.format("return com.ilargia.games.entitas.Pools.createPool(\"%1$s\", %2$s.totalComponents, %2$s.componentNames(), %2$s.componentTypes());",
+                    CodeGenerator.capitalize(poolName), CodeGenerator.capitalize(poolName) + CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG);
             javaClass.addMethod()
                     .setPublic()
                     .setStatic(true)
@@ -46,7 +45,7 @@ public class PoolsGenerator implements IPoolCodeGenerator {
 
     }
 
-    private void createMethodAllPools(JavaClassSource javaClass, List<String> poolNames) {
+    private void createMethodAllPools(JavaClassSource javaClass, Set<String> poolNames) {
 
         String allPoolsList = poolNames.stream().reduce("", (acc, poolName) -> {
             return acc + poolName.toLowerCase() + ", ";
@@ -61,9 +60,9 @@ public class PoolsGenerator implements IPoolCodeGenerator {
 
     }
 
-    private void createMethodSetAllPools(JavaClassSource javaClass, List<String> poolNames) {
+    private void createMethodSetAllPools(JavaClassSource javaClass, Set<String> poolNames) {
         String setAllPools = poolNames.stream().reduce("\n", (acc, poolName) ->
-                acc + "    " + poolName.toLowerCase() + " = create" + capitalize(poolName) + "Pool();\n "
+                acc + "    " + poolName.toLowerCase() + " = create" + CodeGenerator.capitalize(poolName) + "Pool();\n "
         );
 
         javaClass.addMethod()
@@ -73,8 +72,8 @@ public class PoolsGenerator implements IPoolCodeGenerator {
                 .setBody(setAllPools);
     }
 
-    private void createPoolFields(JavaClassSource javaClass, List<String> poolNames) {
-       poolNames.forEach((poolName) -> {
+    private void createPoolFields(JavaClassSource javaClass, Set<String> poolNames) {
+        poolNames.forEach((poolName) -> {
             javaClass.addField()
                     .setName(poolName.toLowerCase())
                     .setType("Pool")
@@ -84,17 +83,5 @@ public class PoolsGenerator implements IPoolCodeGenerator {
 
     }
 
-    private String capitalize(final String string) {
-        char[] chars = string.toLowerCase().toCharArray();
-        boolean found = false;
-        for (int i = 0; i < chars.length; i++) {
-            if (!found && Character.isLetter(chars[i])) {
-                chars[i] = Character.toUpperCase(chars[i]);
-                found = true;
-            } else if (Character.isWhitespace(chars[i]) || chars[i] == '.' || chars[i] == '\'') { // You can add other chars here
-                found = false;
-            }
-        }
-        return String.valueOf(chars);
-    }
+
 }

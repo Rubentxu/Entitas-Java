@@ -7,6 +7,7 @@ public class ObjectPool<T> {
     private Factory<T> _factoryMethod;
     private Consumer<T> _resetMethod;
     private Stack<T> _pool;
+
     private ObjectPool() {
     }
 

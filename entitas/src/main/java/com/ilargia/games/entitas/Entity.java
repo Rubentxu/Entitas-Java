@@ -14,7 +14,6 @@ import com.ilargia.games.entitas.interfaces.EntityChanged;
 import com.ilargia.games.entitas.interfaces.EntityReleased;
 import com.ilargia.games.entitas.interfaces.IComponent;
 
-import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.Stack;
 
@@ -37,7 +36,7 @@ public class Entity {
     private PoolMetaData _poolMetaData;
 
 
-    public Entity(int totalComponents,Stack<IComponent>[] componentPools, PoolMetaData poolMetaData) {
+    public Entity(int totalComponents, Stack<IComponent>[] componentPools, PoolMetaData poolMetaData) {
         _components = new IComponent[totalComponents];
         _totalComponents = totalComponents;
         _componentPools = componentPools;
@@ -228,7 +227,7 @@ public class Entity {
         return componentPool;
     }
 
-    public <T extends IComponent> T createComponent(int index, Class<T> clazz)  {
+    public <T extends IComponent> T createComponent(int index, Class<T> clazz) {
         Stack<IComponent> componentPool = getComponentPool(index);
         try {
             return componentPool.size() > 0 ? (T) componentPool.pop() : (T) findConstructor(clazz).newInstance();

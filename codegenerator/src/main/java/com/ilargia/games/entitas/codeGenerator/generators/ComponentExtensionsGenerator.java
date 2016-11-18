@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 
 public class ComponentExtensionsGenerator implements IComponentCodeGenerator {
 
+
     @Override
     public List<JavaClassSource> generate(List<ComponentInfo> infos, String pkgDestiny) {
         Map<String, List<ComponentInfo>> mapPoolsComponents = CodeGenerator.generateMap(infos);
@@ -22,10 +23,8 @@ public class ComponentExtensionsGenerator implements IComponentCodeGenerator {
         List<JavaClassSource> result = new ArrayList<>();
         JavaClassSource entitas = Roaster.parse(JavaClassSource.class, "public class Entitas {}");
         entitas.setPackage(pkgDestiny);
-        JavaClassSource defaultMatcher = Roaster.parse(JavaClassSource.class, "public class Entitas {}");
-        entitas.setPackage(pkgDestiny);
+        entitas.addImport("com.ilargia.games.entitas.Entity");
         result.add(entitas);
-        result.add(defaultMatcher);
 
         for (ComponentInfo info : infos) {
             if (info.generateMethods) {
@@ -39,6 +38,82 @@ public class ComponentExtensionsGenerator implements IComponentCodeGenerator {
         System.out.println(Roaster.format(entitas.toString()));
 
         return result;
+    }
+
+
+    private static void addAddMethods(ComponentInfo info, JavaClassSource source) {
+        if (!info.isSingletonComponent) {
+            String method = "%2$s component = entity.createComponent(%1$s.%2$s, %2$s.class);\n %3$s\n entity.addComponent(%1$s.%2$s, component);\n ";
+            source.addMethod()
+                    .setName(String.format("add%1$s", info.typeName))
+                    .setReturnTypeVoid()
+                    .setPublic()
+                    .setStatic(true)
+                    .setParameters("Entity entity, " + memberNamesWithType(info.memberInfos))
+                    .setBody(String.format(method,
+                            CodeGenerator.capitalize(info.pools.get(0)) + CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG,
+                            info.typeName, memberAssignments(info.memberInfos)));
+
+
+        }
+    }
+
+    private static void addReplaceMethods(ComponentInfo info, JavaClassSource source) {
+        if (!info.isSingletonComponent) {
+            String method = "%2$s component = entity.createComponent(%1$s.%2$s, %2$s.class);\n %3$s\n entity.replaceComponent(%1$s.%2$s, component);\n ";
+            source.addMethod()
+                    .setName(String.format("replace%1$s", info.typeName))
+                    .setReturnTypeVoid()
+                    .setPublic()
+                    .setStatic(true)
+                    .setParameters("Entity entity, " + memberNamesWithType(info.memberInfos))
+                    .setBody(String.format(method,
+                            CodeGenerator.capitalize(info.pools.get(0)) + CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG,
+                            info.typeName, memberAssignments(info.memberInfos)));
+
+
+        }
+    }
+
+    private static void addRemoveMethods(ComponentInfo info, JavaClassSource source) {
+        if (!info.isSingletonComponent) {
+            String method = "entity.removeComponent(%1$s.%2$s);";
+            source.addMethod()
+                    .setName(String.format("remove%1$s", info.typeName))
+                    .setReturnTypeVoid()
+                    .setPublic()
+                    .setStatic(true)
+                    .setParameters("Entity entity, ")
+                    .setBody(String.format(method,
+                            CodeGenerator.capitalize(info.pools.get(0)) + CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG,
+                            info.typeName));
+
+
+        }
+    }
+
+    static String memberNamesWithType(List<FieldSource<JavaClassSource>> memberInfos) {
+        return memberInfos.stream()
+                .map(info -> info.getType() + " " + "_" + info.getName())
+                .collect(Collectors.joining(", "));
+
+    }
+
+    static String memberAssignments(List<FieldSource<JavaClassSource>> memberInfos) {
+        String format = "component.%1$s = %2$s;";
+        return memberInfos.stream().map(
+                info -> {
+                    String newArg = "_" + info.getName();
+                    return String.format(format, info.getName(), newArg);
+                }
+        ).collect(Collectors.joining("\n"));
+
+    }
+
+    public static String memberNames(List<FieldSource<JavaClassSource>> memberInfos) {
+        return memberInfos.stream()
+                .map(info -> "_" + info.getName())
+                .collect(Collectors.joining(", "));
     }
 
     private JavaClassSource generateComponentExtension(ComponentInfo info, JavaClassSource entitas) {
@@ -64,7 +139,6 @@ public class ComponentExtensionsGenerator implements IComponentCodeGenerator {
         return entitas;
     }
 
-
     private JavaClassSource generateMatchers(String poolName, List<ComponentInfo> componentInfos, String pkgDestiny) {
         JavaClassSource javaClass = Roaster.parse(JavaClassSource.class, String.format("public class %1$s {}",
                 CodeGenerator.capitalize(poolName) + "Matcher"));
@@ -73,7 +147,6 @@ public class ComponentExtensionsGenerator implements IComponentCodeGenerator {
         javaClass.addImport("com.ilargia.games.entitas.matcher.Matcher");
 
         for (ComponentInfo info : componentInfos) {
-            javaClass.addImport(info.fullTypeName);
             addMatcher(poolName, info, javaClass);
             addMatcherMethods(poolName, info, javaClass);
         }
@@ -194,7 +267,6 @@ public class ComponentExtensionsGenerator implements IComponentCodeGenerator {
         }
     }
 
-
     private void addPoolRemoveMethods(ComponentInfo info, JavaClassSource source) {
         if (!info.isSingletonComponent) {
             source.addMethod()
@@ -220,11 +292,11 @@ public class ComponentExtensionsGenerator implements IComponentCodeGenerator {
     }
 
     private void addMatcherMethods(String poolName, ComponentInfo info, JavaClassSource javaClass) {
-        String body =  "if (_matcher%2$s == null) {"+
-                        "   Matcher matcher = (Matcher)Matcher.allOf(%1$s.%2$s);"+
-                        "   matcher.componentNames = %1$s.componentNames;"+
-                        "   _matcher%2$s = matcher;"+
-                        "}"+
+        String body = "if (_matcher%2$s == null) {" +
+                "   Matcher matcher = (Matcher)Matcher.AllOf(%1$s.%2$s);" +
+                "   matcher.componentNames = %1$s.componentNames();" +
+                "   _matcher%2$s = matcher;" +
+                "}" +
                 "return _matcher%2$s;";
 
         javaClass.addMethod()
@@ -236,7 +308,6 @@ public class ComponentExtensionsGenerator implements IComponentCodeGenerator {
                         CodeGenerator.capitalize(info.typeName)));
 
     }
-
 
     private void addEntityMethods(ComponentInfo componentInfo, JavaClassSource source) {
         addGetMethods(componentInfo, source);
@@ -316,82 +387,6 @@ public class ComponentExtensionsGenerator implements IComponentCodeGenerator {
                             info.typeName));
 
         }
-    }
-
-    private static void addAddMethods(ComponentInfo info, JavaClassSource source) {
-        if (!info.isSingletonComponent) {
-            String method = "%2$s component = entity.createComponent(%1$s.%2$s, %2$s.class);\n %3$s\n entity.addComponent(%1$s.%2$s, component);\n ";
-            source.addMethod()
-                    .setName(String.format("add%1$s", info.typeName))
-                    .setReturnTypeVoid()
-                    .setPublic()
-                    .setStatic(true)
-                    .setParameters("Entity entity, " + memberNamesWithType(info.memberInfos))
-                    .setBody(String.format(method,
-                            CodeGenerator.capitalize(info.pools.get(0)) + CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG,
-                            info.typeName, memberAssignments(info.memberInfos)));
-
-
-        }
-    }
-
-    private static void addReplaceMethods(ComponentInfo info, JavaClassSource source) {
-        if (!info.isSingletonComponent) {
-            String method = "%2$s component = entity.createComponent(%1$s.%2$s, %2$s.class);\n %3$s\n entity.replaceComponent(%1$s.%2$s, component);\n ";
-            source.addMethod()
-                    .setName(String.format("replace%1$s", info.typeName))
-                    .setReturnTypeVoid()
-                    .setPublic()
-                    .setStatic(true)
-                    .setParameters("Entity entity, " + memberNamesWithType(info.memberInfos))
-                    .setBody(String.format(method,
-                            CodeGenerator.capitalize(info.pools.get(0)) + CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG,
-                            info.typeName, memberAssignments(info.memberInfos)));
-
-
-        }
-    }
-
-    private static void addRemoveMethods(ComponentInfo info, JavaClassSource source) {
-        if (!info.isSingletonComponent) {
-            String method = "entity.removeComponent(%1$s.%2$s);";
-            source.addMethod()
-                    .setName(String.format("remove%1$s", info.typeName))
-                    .setReturnTypeVoid()
-                    .setPublic()
-                    .setStatic(true)
-                    .setParameters("Entity entity, ")
-                    .setBody(String.format(method,
-                            CodeGenerator.capitalize(info.pools.get(0)) + CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG,
-                            info.typeName));
-
-
-        }
-    }
-
-    static String memberNamesWithType(List<FieldSource<JavaClassSource>> memberInfos) {
-        return memberInfos.stream()
-                .map(info -> info.getType() + " " + "_" + info.getName())
-                .collect(Collectors.joining(", "));
-
-    }
-
-    static String memberAssignments(List<FieldSource<JavaClassSource>> memberInfos) {
-        String format = "component.%1$s = %2$s;";
-        return memberInfos.stream().map(
-                info -> {
-                    String newArg = "_" + info.getName();
-                    return String.format(format, info.getName(), newArg);
-                }
-        ).collect(Collectors.joining("\n"));
-
-    }
-
-
-    public static String memberNames(List<FieldSource<JavaClassSource>> memberInfos) {
-        return memberInfos.stream()
-                .map(info -> "_" + info.getName())
-                .collect(Collectors.joining(", "));
     }
 
 
