@@ -1,1 +1,3 @@
-include 'entitas', "codegenerator"
+include 'entitas', "codegenerator", 'functional-tests'
+findProject(':functional-tests')?.name = 'functionalTests'
+

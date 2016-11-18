@@ -50,3 +50,15 @@ project(":codegenerator") {
     }
 
 }
+
+project(":functionalTests") {
+    dependencies {
+        compile project(":entitas")
+        compile "com.badlogicgames.gdx:gdx:$gdxVersion"
+        compile "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
+        compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+        testCompile group: 'junit', name: 'junit', version: '4.11'
+
+    }
+
+}

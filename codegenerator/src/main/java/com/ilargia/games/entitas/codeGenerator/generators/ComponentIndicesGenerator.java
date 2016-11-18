@@ -3,13 +3,12 @@ package com.ilargia.games.entitas.codeGenerator.generators;
 
 import com.ilargia.games.entitas.codeGenerator.CodeGenerator;
 import com.ilargia.games.entitas.codeGenerator.interfaces.IComponentCodeGenerator;
-import com.ilargia.games.entitas.codeGenerator.interfaces.IPoolCodeGenerator;
-import com.ilargia.games.entitas.codeGenerator.intermediate.CodeGenFile;
 import com.ilargia.games.entitas.codeGenerator.intermediate.ComponentInfo;
 import org.jboss.forge.roaster.Roaster;
 import org.jboss.forge.roaster.model.source.JavaClassSource;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class ComponentIndicesGenerator implements IComponentCodeGenerator {
@@ -25,7 +24,7 @@ public class ComponentIndicesGenerator implements IComponentCodeGenerator {
     }
 
     private JavaClassSource generateIndicesLookup(String poolName, List<ComponentInfo> componentInfos, String pkgDestiny) {
-        return  generateIndicesLookup(poolName, (ComponentInfo[]) componentInfos.toArray(new ComponentInfo[0]), pkgDestiny);
+        return generateIndicesLookup(poolName, (ComponentInfo[]) componentInfos.toArray(new ComponentInfo[0]), pkgDestiny);
     }
 
     private JavaClassSource generateIndicesLookup(String poolName, ComponentInfo[] componentInfos, String pkgDestiny) {
@@ -77,7 +76,7 @@ public class ComponentIndicesGenerator implements IComponentCodeGenerator {
         }
         StringBuilder codeFinal = new StringBuilder(code);
         if (code.endsWith(",\n")) {
-            codeFinal.replace(code.lastIndexOf(",\n"), code.lastIndexOf(",") + 1, " }; " );
+            codeFinal.replace(code.lastIndexOf(",\n"), code.lastIndexOf(",") + 1, " }; ");
         }
         javaClass.addMethod()
                 .setName("componentNames")
@@ -100,7 +99,7 @@ public class ComponentIndicesGenerator implements IComponentCodeGenerator {
         }
         StringBuilder codeFinal = new StringBuilder(code);
         if (code.endsWith(",\n")) {
-            codeFinal.replace(code.lastIndexOf(",\n"), code.lastIndexOf(",") + 1, " }; " );
+            codeFinal.replace(code.lastIndexOf(",\n"), code.lastIndexOf(",") + 1, " }; ");
         }
 
         javaClass.addMethod()

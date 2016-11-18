@@ -4,7 +4,6 @@ import com.ilargia.games.entitas.codeGenerator.CodeGenerator;
 import org.jboss.forge.roaster.model.source.FieldSource;
 import org.jboss.forge.roaster.model.source.JavaClassSource;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class ComponentInfo {
@@ -30,15 +29,15 @@ public class ComponentInfo {
         this.memberInfos = memberInfos;
         this.pools = pools;
         this.isSingleEntity = isSingleEntity;
-        this.singleComponentPrefix = (singleComponentPrefix!=null && !singleComponentPrefix.isEmpty())?singleComponentPrefix: "";
+        this.singleComponentPrefix = (singleComponentPrefix != null && !singleComponentPrefix.isEmpty()) ? singleComponentPrefix : "";
         this.generateComponent = generateComponent;
         this.generateMethods = generateMethods;
         this.generateIndex = generateIndex;
         this.hideInBlueprintInspector = hideInBlueprintInspector;
         this.typeName = capitalize(typeName);
         this.nameComponent = (typeName.contains(CodeGenerator.COMPONENT_SUFFIX))
-                                ? typeName.toLowerCase()
-                                :typeName.toLowerCase()+ CodeGenerator.COMPONENT_SUFFIX;
+                ? typeName.toLowerCase()
+                : typeName.toLowerCase() + CodeGenerator.COMPONENT_SUFFIX;
 
         isSingletonComponent = memberInfos == null || memberInfos.size() == 0;
     }
