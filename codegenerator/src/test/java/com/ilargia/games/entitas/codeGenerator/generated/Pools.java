@@ -1,4 +1,4 @@
-package com.ilargia.games.entitas.generated;
+package com.ilargia.games.entitas.codeGenerator.generated;
 
 import com.ilargia.games.entitas.Pool;
 import com.ilargia.games.entitas.interfaces.FactoryEntity;
@@ -15,18 +15,10 @@ import com.ilargia.games.entitas.PoolMetaData;
  */
 public class Pools extends com.ilargia.games.entitas.Pools<Entity> {
 
-	public Pool ejemplo;
 	public Pool core;
 
 	public Pools() {
-		ejemplo = createEjemploPool();
 		core = createCorePool();
-	}
-
-	public Pool<Entity> createEjemploPool() {
-		return createPool("Ejemplo", EjemploComponentIds.totalComponents,
-				EjemploComponentIds.componentNames(),
-				EjemploComponentIds.componentTypes(), factoryEntity());
 	}
 
 	public Pool<Entity> createCorePool() {
@@ -36,7 +28,7 @@ public class Pools extends com.ilargia.games.entitas.Pools<Entity> {
 	}
 
 	public Pool<Entity>[] allPools() {
-		return new Pool[]{ejemplo, core};
+		return new Pool[]{core};
 	}
 
 	public FactoryEntity<Entity> factoryEntity() {

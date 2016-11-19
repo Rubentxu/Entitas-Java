@@ -44,7 +44,7 @@ public class ComponentIndicesGenerator implements IComponentCodeGenerator {
             ComponentInfo info = componentInfos[i];
             if (info != null) {
                 javaClass.addField()
-                        .setName(CodeGenerator.capitalize(info.typeName))
+                        .setName(info.typeName)
                         .setType("int")
                         .setLiteralInitializer(i.toString())
                         .setPublic()

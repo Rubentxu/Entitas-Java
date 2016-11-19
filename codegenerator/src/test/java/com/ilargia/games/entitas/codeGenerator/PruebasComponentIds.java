@@ -1,8 +1,5 @@
 package com.ilargia.games.entitas.codeGenerator;
 
-import com.ilargia.games.entitas.components.Movable;
-import com.ilargia.games.entitas.components.Position;
-
 public class PruebasComponentIds {
 
     public static final int Position = 0;

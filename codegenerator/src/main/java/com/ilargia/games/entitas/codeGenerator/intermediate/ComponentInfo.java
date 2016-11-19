@@ -34,27 +34,14 @@ public class ComponentInfo {
         this.generateMethods = generateMethods;
         this.generateIndex = generateIndex;
         this.hideInBlueprintInspector = hideInBlueprintInspector;
-        this.typeName = capitalize(typeName);
+        this.typeName = typeName;
         this.nameComponent = (typeName.contains(CodeGenerator.COMPONENT_SUFFIX))
-                ? typeName.toLowerCase()
-                : typeName.toLowerCase() + CodeGenerator.COMPONENT_SUFFIX;
+                ? typeName
+                : typeName + CodeGenerator.COMPONENT_SUFFIX;
 
         isSingletonComponent = memberInfos == null || memberInfos.size() == 0;
     }
 
-    private String capitalize(final String String) {
-        char[] chars = String.toLowerCase().toCharArray();
-        boolean found = false;
-        for (int i = 0; i < chars.length; i++) {
-            if (!found && Character.isLetter(chars[i])) {
-                chars[i] = Character.toUpperCase(chars[i]);
-                found = true;
-            } else if (Character.isWhitespace(chars[i]) || chars[i] == '.' || chars[i] == '\'') { // You can add other chars here
-                found = false;
-            }
-        }
-        return String.valueOf(chars);
-    }
 
     @Override
     public String toString() {

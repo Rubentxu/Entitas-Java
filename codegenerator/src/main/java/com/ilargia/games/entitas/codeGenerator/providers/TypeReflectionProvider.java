@@ -94,7 +94,7 @@ public class TypeReflectionProvider implements ICodeGeneratorDataProvider {
                     ? Arrays.asList(annotation.getStringArrayValue("customComponentName"))
                     : null;
 
-            Boolean isSingleEntity = Boolean.getBoolean(annotation.getStringValue("isSingleEntity"));
+            Boolean isSingleEntity = Boolean.parseBoolean(annotation.getStringValue("isSingleEntity"));
             String customPrefix = annotation.getStringValue("customPrefix");
 
             _poolNames.addAll(poolNames);
