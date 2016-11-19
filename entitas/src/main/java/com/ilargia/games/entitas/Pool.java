@@ -4,6 +4,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectSet;
 import com.ilargia.games.entitas.caching.EntitasCache;
+import com.ilargia.games.entitas.events.GroupEventType;
 import com.ilargia.games.entitas.exceptions.*;
 import com.ilargia.games.entitas.interfaces.*;
 import java.util.Stack;
@@ -19,7 +20,6 @@ public class Pool<E extends Entity> {
     public EntityChanged<E> _cachedEntityChanged;
     public ComponentReplaced<E> _cachedComponentReplaced;
     public EntityReleased<E> _cachedEntityReleased;
-
     public int _totalComponents;
     protected ObjectMap<IMatcher, Group<E>> _groups;
     protected Array<Group<E>>[] _groupsForIndex;
@@ -323,6 +323,92 @@ public class Pool<E extends Entity> {
 
     public int getRetainedEntitiesCount() {
         return _retainedEntities.size;
+    }
+
+    public static Entity[] getEntities(Pool pool, IMatcher matcher) {
+        return pool.getGroup(matcher).getEntities();
+
+    }
+
+
+    public static ISystem createSystem(Pool pool, ISystem system, Pools pools) {
+        setPool(system, pool);
+        setPools(system, pools);
+        return system;
+    }
+
+
+
+    public static ISystem createSystem(Pool pool, IReactiveExecuteSystem system, Pools pools) {
+        setPool(system, pool);
+        setPools(system, pools);
+
+        IReactiveSystem reactiveSystem = (IReactiveSystem) ((system instanceof IReactiveSystem) ? system : null);
+        if (reactiveSystem != null) {
+            return new ReactiveSystem(pool, reactiveSystem);
+        }
+        IMultiReactiveSystem multiReactiveSystem = (IMultiReactiveSystem) ((system instanceof IMultiReactiveSystem) ? system : null);
+        if (multiReactiveSystem != null) {
+            return new ReactiveSystem(pool, multiReactiveSystem);
+        }
+        IEntityCollectorSystem entityCollectorSystem = (IEntityCollectorSystem) ((system instanceof IEntityCollectorSystem) ? system : null);
+        if (entityCollectorSystem != null) {
+            return new ReactiveSystem(entityCollectorSystem);
+        }
+
+        throw new EntitasException("Could not create ReactiveSystem for " + system + "!", "The system has to implement IReactiveSystem, " +
+                "IMultiReactiveSystem or IEntityCollectorSystem.");
+    }
+
+    public static ISystem createSystem(Pools pools, ISystem system) {
+        setPools(system, pools);
+        return system;
+    }
+
+
+    public static ISystem createSystem(Pools pools, IReactiveExecuteSystem system) {
+        setPools(system, pools);
+
+        IEntityCollectorSystem entityCollectorSystem = (IEntityCollectorSystem) ((system instanceof IEntityCollectorSystem) ? system : null);
+        if (entityCollectorSystem != null) {
+            return new ReactiveSystem(entityCollectorSystem);
+        }
+
+        throw new EntitasException("Could not create ReactiveSystem for " + system + "!", "Only IEntityCollectorSystem is supported for " +
+                "pools.createSystem(system).");
+    }
+
+
+    private static void setPool(ISystem system, Pool pool) {
+        ISetPool poolSystem = (ISetPool) ((system instanceof ISetPool) ? system : null);
+        if (poolSystem != null) {
+            poolSystem.setPool(pool);
+        }
+
+    }
+
+    public static void setPools(ISystem system, Pools pools) {
+        ISetPools poolsSystem = (ISetPools) ((system instanceof ISetPool) ? system : null);
+        if (poolsSystem != null) {
+            poolsSystem.setPools(pools);
+        }
+    }
+
+
+    public static EntityCollector createEntityCollector(Pool[] pools, IMatcher matcher) {
+        return createEntityCollector(pools, matcher, GroupEventType.OnEntityAdded);
+    }
+
+    public static EntityCollector createEntityCollector(Pool[] pools, IMatcher matcher, GroupEventType eventType) {
+        Group[] groups = new Group[pools.length];
+        GroupEventType[] eventTypes = new GroupEventType[pools.length];
+
+        for (int i = 0; i < pools.length; i++) {
+            groups[i] = pools[i].getGroup(matcher);
+            eventTypes[i] = eventType;
+        }
+
+        return new EntityCollector(groups, eventTypes);
     }
 
 
