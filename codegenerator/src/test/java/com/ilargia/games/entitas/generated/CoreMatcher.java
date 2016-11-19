@@ -12,18 +12,9 @@ import com.ilargia.games.entitas.matcher.Matcher;
  */
 public class CoreMatcher {
 
-	public static IMatcher _matcherViews;
 	public static IMatcher _matcherMovable;
+	public static IMatcher _matcherViews;
 	public static IMatcher _matcherPosition;
-
-	public static IMatcher Views() {
-		if (_matcherViews == null) {
-			Matcher matcher = (Matcher) Matcher.AllOf(CoreComponentIds.Views);
-			matcher.componentNames = CoreComponentIds.componentNames();
-			_matcherViews = matcher;
-		}
-		return _matcherViews;
-	}
 
 	public static IMatcher Movable() {
 		if (_matcherMovable == null) {
@@ -32,6 +23,15 @@ public class CoreMatcher {
 			_matcherMovable = matcher;
 		}
 		return _matcherMovable;
+	}
+
+	public static IMatcher Views() {
+		if (_matcherViews == null) {
+			Matcher matcher = (Matcher) Matcher.AllOf(CoreComponentIds.Views);
+			matcher.componentNames = CoreComponentIds.componentNames();
+			_matcherViews = matcher;
+		}
+		return _matcherViews;
 	}
 
 	public static IMatcher Position() {

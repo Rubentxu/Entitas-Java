@@ -4,24 +4,30 @@ import com.ilargia.games.entitas.codeGenerator.generators.ComponentExtensionsGen
 import com.ilargia.games.entitas.codeGenerator.generators.ComponentIndicesGenerator;
 import com.ilargia.games.entitas.codeGenerator.generators.PoolsGenerator;
 import com.ilargia.games.entitas.codeGenerator.interfaces.ICodeGenerator;
+import com.ilargia.games.entitas.codeGenerator.intermediate.CodeGenFile;
 import com.ilargia.games.entitas.codeGenerator.providers.TypeReflectionProvider;
 import javafx.application.Application;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 
-public class CodeGeneratorApp extends Application {
+public class CodeGeneratorApp extends Application implements Initializable {
 
     public Stage stage;
     @FXML
@@ -34,9 +40,16 @@ public class CodeGeneratorApp extends Application {
     private TextField fieldComponentFolder;
     @FXML
     private TextField fieldGeneratedFolder;
+    @FXML
+    private Button btnGenerate;
+    @FXML
+    ProgressIndicator progress;
+    @FXML
+    Label result;
 
     public static void main(String[] args) {
         launch(args);
+
     }
 
     @Override
@@ -44,13 +57,19 @@ public class CodeGeneratorApp extends Application {
         FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("EntitasGenerator.fxml"));
         Parent root = loader.load();
         primaryStage.setTitle("CodeGenerator");
-        primaryStage.setScene(new Scene(root, 560, 531));
+        primaryStage.setScene(new Scene(root, 560, 575));
         primaryStage.setResizable(false);
         primaryStage.show();
+
         stage = primaryStage;
 
     }
 
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        progress.setVisible(false);
+    }
 
     @FXML
     public void handleComponentsFolder(ActionEvent event) {
@@ -74,18 +93,45 @@ public class CodeGeneratorApp extends Application {
 
     @FXML
     public void handleGenerate(ActionEvent actionEvent) throws IOException {
-        List<ICodeGenerator> codeGenerators = new ArrayList<>();
+        result.setText("");
+        progress.setVisible(true);
 
-        if (componentsGenerator.isSelected())
-            codeGenerators.add(new ComponentExtensionsGenerator());
-        if (componentIndicesGenerator.isSelected())
-            codeGenerators.add(new ComponentIndicesGenerator());
-        if (poolsGenerator.isSelected())
-            codeGenerators.add(new PoolsGenerator());
+        // loads the items at another thread, asynchronously
+        Task loader = new Task<List<CodeGenFile>>() {
+            {
+                setOnSucceeded(workerStateEvent -> {
+                    progress.setVisible(false);
+                    result.setText("Success");
+                });
 
-        TypeReflectionProvider provider = new TypeReflectionProvider(fieldComponentFolder.getText());
-        CodeGenerator generator = new CodeGenerator();
-        generator.generate(provider, fieldGeneratedFolder.getText(), codeGenerators);
+                setOnFailed(workerStateEvent -> {
+                        result.setText("Failed");
+                        getException().printStackTrace();
+                });
+
+            }
+
+            @Override
+            protected List<CodeGenFile> call() throws Exception {
+                List<ICodeGenerator> codeGenerators = new ArrayList<>();
+
+                if (componentsGenerator.isSelected())
+                    codeGenerators.add(new ComponentExtensionsGenerator());
+                if (componentIndicesGenerator.isSelected())
+                    codeGenerators.add(new ComponentIndicesGenerator());
+                if (poolsGenerator.isSelected())
+                    codeGenerators.add(new PoolsGenerator());
+
+                TypeReflectionProvider provider = new TypeReflectionProvider(fieldComponentFolder.getText());
+                CodeGenerator generator = new CodeGenerator();
+                return generator.generate(provider, fieldGeneratedFolder.getText(), codeGenerators);
+            }
+        };
+
+        Thread loadingThread = new Thread(loader, "generated-loader");
+        loadingThread.setDaemon(true);
+        loadingThread.start();
+
 
     }
 }

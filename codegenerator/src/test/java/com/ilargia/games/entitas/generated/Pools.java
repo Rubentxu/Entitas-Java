@@ -1,6 +1,10 @@
 package com.ilargia.games.entitas.generated;
 
 import com.ilargia.games.entitas.Pool;
+import com.ilargia.games.entitas.interfaces.FactoryEntity;
+import java.util.Stack;
+import com.ilargia.games.entitas.interfaces.IComponent;
+import com.ilargia.games.entitas.PoolMetaData;
 
 /**
  * ---------------------------------------------------------------------------
@@ -9,31 +13,36 @@ import com.ilargia.games.entitas.Pool;
  * 
  * ---------------------------------------------------------------------------
  */
-public class Pools extends com.ilargia.games.entitas.Pools {
+public class Pools extends com.ilargia.games.entitas.Pools<Entity> {
 
 	public Pool ejemplo;
 	public Pool core;
 
-	public static Pool createEjemploPool() {
-		return com.ilargia.games.entitas.Pools.createPool("Ejemplo",
-				EjemploComponentIds.totalComponents,
+	public Pools() {
+		ejemplo = createEjemploPool();
+		core = createCorePool();
+	}
+
+	public Pool<Entity> createEjemploPool() {
+		return createPool("Ejemplo", EjemploComponentIds.totalComponents,
 				EjemploComponentIds.componentNames(),
-				EjemploComponentIds.componentTypes());
+				EjemploComponentIds.componentTypes(), factoryEntity());
 	}
 
-	public static Pool createCorePool() {
-		return com.ilargia.games.entitas.Pools.createPool("Core",
-				CoreComponentIds.totalComponents,
+	public Pool<Entity> createCorePool() {
+		return createPool("Core", CoreComponentIds.totalComponents,
 				CoreComponentIds.componentNames(),
-				CoreComponentIds.componentTypes());
+				CoreComponentIds.componentTypes(), factoryEntity());
 	}
 
-	public Pool[] allPools() {
+	public Pool<Entity>[] allPools() {
 		return new Pool[]{ejemplo, core};
 	}
 
-	public void setAllPools() {
-		ejemplo = createEjemploPool();
-		core = createCorePool();
+	public FactoryEntity<Entity> factoryEntity() {
+		return (int totalComponents, Stack<IComponent>[] componentPools,
+				PoolMetaData poolMetaData) -> {
+			return new Entity(totalComponents, componentPools, poolMetaData);
+		};
 	}
 }

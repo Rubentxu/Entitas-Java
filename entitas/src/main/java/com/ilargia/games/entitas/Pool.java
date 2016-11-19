@@ -34,10 +34,6 @@ public class Pool<E extends Entity> {
     public Class<E> entityType;
 
 
-    public Pool(int totalComponents, FactoryEntity<E> factoryMethod) {
-        this(totalComponents, 0, null, factoryMethod);
-    }
-
     public Pool(int totalComponents, int startCreationIndex, PoolMetaData metaData, FactoryEntity<E> factoryMethod) {
         _totalComponents = totalComponents;
         _creationIndex = startCreationIndex;

@@ -21,9 +21,19 @@ public class ComponentExtensionsGenerator implements IComponentCodeGenerator {
         Map<String, List<ComponentInfo>> mapPoolsComponents = CodeGenerator.generateMap(infos);
 
         List<JavaClassSource> result = new ArrayList<>();
-        JavaClassSource entitas = Roaster.parse(JavaClassSource.class, "public class Entitas {}");
+        JavaClassSource entitas = Roaster.parse(JavaClassSource.class, "public class Entity extends com.ilargia.games.entitas.Entity {}");
         entitas.setPackage(pkgDestiny);
-        entitas.addImport("com.ilargia.games.entitas.Entity");
+
+        entitas.addMethod()
+                .setName("Entity")
+                .setPublic()
+                .setConstructor(true)
+                .setParameters("int totalComponents,Stack<IComponent>[] componentPools, PoolMetaData poolMetaData")
+                .setBody("super(totalComponents, componentPools, poolMetaData);");
+        entitas.addImport("com.ilargia.games.entitas.PoolMetaData");
+        entitas.addImport("com.ilargia.games.entitas.interfaces.IComponent");
+        entitas.addImport("java.util.Stack");
+
         result.add(entitas);
 
         for (ComponentInfo info : infos) {
@@ -43,13 +53,12 @@ public class ComponentExtensionsGenerator implements IComponentCodeGenerator {
 
     private static void addAddMethods(ComponentInfo info, JavaClassSource source) {
         if (!info.isSingletonComponent) {
-            String method = "%2$s component = entity.createComponent(%1$s.%2$s, %2$s.class);\n %3$s\n entity.addComponent(%1$s.%2$s, component);\n ";
+            String method = "%2$s component = createComponent(%1$s.%2$s, %2$s.class);\n %3$s\n addComponent(%1$s.%2$s, component);\n ";
             source.addMethod()
                     .setName(String.format("add%1$s", info.typeName))
                     .setReturnTypeVoid()
                     .setPublic()
-                    .setStatic(true)
-                    .setParameters("Entity entity, " + memberNamesWithType(info.memberInfos))
+                    .setParameters(memberNamesWithType(info.memberInfos))
                     .setBody(String.format(method,
                             CodeGenerator.capitalize(info.pools.get(0)) + CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG,
                             info.typeName, memberAssignments(info.memberInfos)));
@@ -60,13 +69,12 @@ public class ComponentExtensionsGenerator implements IComponentCodeGenerator {
 
     private static void addReplaceMethods(ComponentInfo info, JavaClassSource source) {
         if (!info.isSingletonComponent) {
-            String method = "%2$s component = entity.createComponent(%1$s.%2$s, %2$s.class);\n %3$s\n entity.replaceComponent(%1$s.%2$s, component);\n ";
+            String method = "%2$s component = createComponent(%1$s.%2$s, %2$s.class);\n %3$s\n replaceComponent(%1$s.%2$s, component);\n ";
             source.addMethod()
                     .setName(String.format("replace%1$s", info.typeName))
                     .setReturnTypeVoid()
                     .setPublic()
-                    .setStatic(true)
-                    .setParameters("Entity entity, " + memberNamesWithType(info.memberInfos))
+                    .setParameters(memberNamesWithType(info.memberInfos))
                     .setBody(String.format(method,
                             CodeGenerator.capitalize(info.pools.get(0)) + CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG,
                             info.typeName, memberAssignments(info.memberInfos)));
@@ -77,13 +85,11 @@ public class ComponentExtensionsGenerator implements IComponentCodeGenerator {
 
     private static void addRemoveMethods(ComponentInfo info, JavaClassSource source) {
         if (!info.isSingletonComponent) {
-            String method = "entity.removeComponent(%1$s.%2$s);";
+            String method = "removeComponent(%1$s.%2$s);";
             source.addMethod()
                     .setName(String.format("remove%1$s", info.typeName))
                     .setReturnTypeVoid()
                     .setPublic()
-                    .setStatic(true)
-                    .setParameters("Entity entity, ")
                     .setBody(String.format(method,
                             CodeGenerator.capitalize(info.pools.get(0)) + CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG,
                             info.typeName));
@@ -122,20 +128,6 @@ public class ComponentExtensionsGenerator implements IComponentCodeGenerator {
         if (info.isSingleEntity) {
             addPoolMethods(info, entitas);
         }
-
-//        // Add default matcher
-//        addMatcher(info, true);
-//        if(info.generateComponent) {
-//            // Add custom matchers
-////            addMatcher(info, false);
-////            generateComponent(componentInfo)
-//
-//        }
-//
-//        boolean hasCustomPools = info.pools.size() > 1 || info.pools.get(0) != CodeGenerator.DEFAULT_POOL_NAME;
-//        if(hasCustomPools) {
-//            addMatcher(info, false);
-//        }
         return entitas;
     }
 
@@ -326,18 +318,14 @@ public class ComponentExtensionsGenerator implements IComponentCodeGenerator {
                     .setName(info.typeName.toLowerCase() + CodeGenerator.COMPONENT_SUFFIX)
                     .setType(info.typeName)
                     .setLiteralInitializer(String.format("new %1$s();", info.typeName))
-                    .setPublic()
-                    .setStatic(true)
-                    .setFinal(true);
+                    .setPublic();
 
         } else {
             source.addMethod()
                     .setName(String.format("get%1$s", info.typeName))
                     .setReturnType(info.typeName)
                     .setPublic()
-                    .setStatic(true)
-                    .setParameters("Entity entity")
-                    .setBody(String.format("return (%1$s)entity.getComponent(%2$s.%1$s);"
+                    .setBody(String.format("return (%1$s)getComponent(%2$s.%1$s);"
                             , info.typeName, CodeGenerator.capitalize(info.pools.get(0)) + CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG));
 
         }
@@ -351,10 +339,7 @@ public class ComponentExtensionsGenerator implements IComponentCodeGenerator {
                     .setName(String.format("%1$s%2$s", info.singleComponentPrefix, info.typeName))
                     .setReturnType("boolean")
                     .setPublic()
-                    .setStatic(true)
-                    .setFinal(true)
-                    .setParameters("Entity entity")
-                    .setBody(String.format("return entity.hasComponent(%1$s.%2$s);",
+                    .setBody(String.format("return hasComponent(%1$s.%2$s);",
                             CodeGenerator.capitalize(info.pools.get(0)) + CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG,
                             info.typeName));
 
@@ -362,14 +347,12 @@ public class ComponentExtensionsGenerator implements IComponentCodeGenerator {
                     .setName(String.format("set%1$s", info.typeName))
                     .setReturnTypeVoid()
                     .setPublic()
-                    .setStatic(true)
-                    .setFinal(true)
-                    .setParameters("Entity entity, boolean value")
-                    .setBody(String.format(" if(value != entity.hasComponent(%1$s.%2$s)) {\n" +
+                    .setParameters("boolean value")
+                    .setBody(String.format(" if(value != hasComponent(%1$s.%2$s)) {\n" +
                                     "                    if(value) {\n" +
-                                    "                        entity.addComponent(%1$s.%2$s, %3$s);\n" +
+                                    "                        addComponent(%1$s.%2$s, %3$s);\n" +
                                     "                    } else {\n" +
-                                    "                        entity.removeComponent(%1$s.%2$s);\n" +
+                                    "                        removeComponent(%1$s.%2$s);\n" +
                                     "                    }\n" +
                                     "                }", CodeGenerator.capitalize(info.pools.get(0)) + CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG,
                             info.typeName, info.nameComponent));
@@ -380,9 +363,7 @@ public class ComponentExtensionsGenerator implements IComponentCodeGenerator {
                     .setName(String.format("has%1$s", info.typeName))
                     .setReturnType("boolean")
                     .setPublic()
-                    .setStatic(true)
-                    .setParameters("Entity entity")
-                    .setBody(String.format("return entity.hasComponent(%1$s.%2$s);",
+                    .setBody(String.format("return hasComponent(%1$s.%2$s);",
                             CodeGenerator.capitalize(info.pools.get(0)) + CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG,
                             info.typeName));
 

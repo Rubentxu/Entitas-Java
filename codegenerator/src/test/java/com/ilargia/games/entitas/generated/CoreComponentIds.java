@@ -1,7 +1,7 @@
 package com.ilargia.games.entitas.generated;
 
-import com.ilargia.games.entitas.components.Views;
 import com.ilargia.games.entitas.components.Movable;
+import com.ilargia.games.entitas.components.Views;
 import com.ilargia.games.entitas.components.Position;
 
 /**
@@ -13,16 +13,16 @@ import com.ilargia.games.entitas.components.Position;
  */
 public class CoreComponentIds {
 
-	public static final int Views = 0;
-	public static final int Movable = 1;
+	public static final int Movable = 0;
+	public static final int Views = 1;
 	public static final int Position = 2;
 	public static final int totalComponents = 3;
 
 	public static String[] componentNames() {
-		return new String[]{"Views", "Movable", "Position"};
+		return new String[]{"Movable", "Views", "Position"};
 	}
 
 	public static Class[] componentTypes() {
-		return new Class[]{Views.class, Movable.class, Position.class};
+		return new Class[]{Movable.class, Views.class, Position.class};
 	}
 }

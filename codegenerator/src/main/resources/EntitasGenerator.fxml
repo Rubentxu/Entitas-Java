@@ -1,46 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.effect.*?>
+<?import java.lang.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressIndicator?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-            prefHeight="540.0" prefWidth="560.0" xmlns="http://javafx.com/javafx/8"
-            fx:controller="com.ilargia.games.entitas.codeGenerator.CodeGeneratorApp">
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="575.0" prefWidth="560.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ilargia.games.entitas.codeGenerator.CodeGeneratorApp">
     <children>
-        <ImageView fitHeight="258.0" fitWidth="560.0" layoutY="-6.0" opacity="0.8" pickOnBounds="true"
-                   preserveRatio="true" smooth="false">
+        <ImageView id="progress" disable="true" fitHeight="258.0" fitWidth="560.0" layoutY="-6.0" opacity="0.85" pickOnBounds="true" preserveRatio="true" smooth="false">
             <image>
-                <Image url="@img/EntitasJavaLOGO.png"/>
+                <Image url="@img/EntitasJavaLOGO.png" />
             </image>
         </ImageView>
-        <AnchorPane blendMode="MULTIPLY" layoutX="4.0" layoutY="251.0" prefHeight="136.0" prefWidth="552.0"
-                    style="-fx-background-color: #6e8fa8;">
+      <ProgressIndicator fx:id="progress" disable="true" layoutX="182.0" layoutY="16.0" prefHeight="179.0" prefWidth="197.0" rotate="180.0" AnchorPane.bottomAnchor="380.0" AnchorPane.leftAnchor="182.0" AnchorPane.rightAnchor="181.0" AnchorPane.topAnchor="16.0" />
+        <AnchorPane blendMode="MULTIPLY" layoutX="4.0" layoutY="251.0" prefHeight="136.0" prefWidth="552.0" style="-fx-background-color: #6e8fa8;">
             <children>
-                <CheckBox fx:id="componentIndicesGenerator" alignment="CENTER" layoutX="156.0" layoutY="91.0"
-                          mnemonicParsing="false" selected="true" text="ComponentIndicesGenerator" textFill="WHITE"/>
-                <CheckBox fx:id="componentsGenerator" alignment="CENTER" layoutX="156.0" layoutY="63.0"
-                          mnemonicParsing="false" selected="true" text="ComponentsGenerator" textAlignment="CENTER"
-                          textFill="WHITE"/>
-                <CheckBox fx:id="poolsGenerator" alignment="CENTER" layoutX="155.0" layoutY="34.0"
-                          mnemonicParsing="false" selected="true" text="PoolsGenerator" textFill="WHITE"
-                          wrapText="true"/>
+                <CheckBox fx:id="componentIndicesGenerator" alignment="CENTER" layoutX="156.0" layoutY="91.0" mnemonicParsing="false" selected="true" text="ComponentIndicesGenerator" textFill="WHITE" />
+                <CheckBox fx:id="componentsGenerator" alignment="CENTER" layoutX="156.0" layoutY="63.0" mnemonicParsing="false" selected="true" text="ComponentsGenerator" textAlignment="CENTER" textFill="WHITE" />
+                <CheckBox fx:id="poolsGenerator" alignment="CENTER" layoutX="155.0" layoutY="34.0" mnemonicParsing="false" selected="true" text="PoolsGenerator" textFill="WHITE" wrapText="true" />
+            <Label layoutX="177.0" layoutY="4.0" text="Code Generators" textAlignment="CENTER" textFill="WHITE" underline="true">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Label>
             </children>
         </AnchorPane>
-        <Label layoutX="188.0" layoutY="257.0" text="Code Generators" textAlignment="CENTER" textFill="WHITE"
-               underline="true">
+        <Label fx:id="result" layoutX="239.0" layoutY="531.0" prefHeight="26.0" prefWidth="104.0" textFill="#3574a1" underline="true">
             <font>
-                <Font name="System Bold" size="18.0"/>
+                <Font name="System Bold" size="18.0" />
             </font>
         </Label>
-        <TextField fx:id="fieldComponentFolder" layoutX="181.0" layoutY="407.0" prefHeight="25.0" prefWidth="361.0"/>
-        <Button layoutX="25.0" layoutY="407.0" onAction="#handleComponentsFolder" prefHeight="25.0" prefWidth="146.0"
-                text="Components Folder"/>
-        <Button layoutX="24.0" layoutY="446.0" onAction="#handleGeneratedFolder" prefHeight="25.0" prefWidth="146.0"
-                text="Generated Folder"/>
-        <TextField fx:id="fieldGeneratedFolder" layoutX="180.0" layoutY="446.0" prefHeight="25.0" prefWidth="361.0"/>
-        <Button id="btnGenerate" onAction="#handleGenerate" layoutX="237.0" layoutY="488.0" mnemonicParsing="false"
-                prefHeight="33.0" prefWidth="104.0" text="Generate" textAlignment="CENTER"/>
+        <TextField fx:id="fieldComponentFolder" layoutX="181.0" layoutY="407.0" prefHeight="25.0" prefWidth="361.0" />
+        <Button layoutX="25.0" layoutY="407.0" onAction="#handleComponentsFolder" prefHeight="25.0" prefWidth="146.0" text="Components Folder" />
+        <Button layoutX="24.0" layoutY="446.0" onAction="#handleGeneratedFolder" prefHeight="25.0" prefWidth="146.0" text="Generated Folder" />
+        <TextField fx:id="fieldGeneratedFolder" layoutX="180.0" layoutY="446.0" prefHeight="25.0" prefWidth="361.0" />
+        <Button fx:id="btnGenerate" layoutX="237.0" layoutY="488.0" mnemonicParsing="false" onAction="#handleGenerate" prefHeight="33.0" prefWidth="104.0" text="Generate" textAlignment="CENTER" />
     </children>
 </AnchorPane>
