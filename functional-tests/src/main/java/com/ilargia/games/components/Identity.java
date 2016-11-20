@@ -1,16 +1,18 @@
 package com.ilargia.games.components;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Shape2D;
 import com.ilargia.games.entitas.codeGenerator.Component;
 import com.ilargia.games.entitas.interfaces.IComponent;
 
 @Component(pools = {"Core"})
-public class View implements IComponent {
-    public Shape2D shape;
+public class Identity implements IComponent {
+    public enum ID { PLAYER1, PLAYER2, BALL };
 
-    public View(Shape2D shape) {
-        this.shape = shape;
+    public ID id;
+
+    public Identity(ID id) {
+        this.id = id;
     }
+
+
 }
