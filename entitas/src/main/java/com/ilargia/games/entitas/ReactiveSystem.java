@@ -16,11 +16,11 @@ public class ReactiveSystem implements IExecuteSystem {
     private Array<Entity> _buffer;
     private String _toStringCache;
 
-    public ReactiveSystem(Pool pool, IReactiveSystem subSystem) {
+    public ReactiveSystem(BasePool pool, IReactiveSystem subSystem) {
         this(subSystem, createEntityCollector(pool, new TriggerOnEvent[]{subSystem.getTrigger()}));
     }
 
-    public ReactiveSystem(Pool pool, IMultiReactiveSystem subSystem) {
+    public ReactiveSystem(BasePool pool, IMultiReactiveSystem subSystem) {
         this(subSystem, createEntityCollector(pool, subSystem.getTriggers()));
     }
 
@@ -45,7 +45,7 @@ public class ReactiveSystem implements IExecuteSystem {
         _buffer = new Array();
     }
 
-    static EntityCollector createEntityCollector(Pool pool, TriggerOnEvent[] triggers) {
+    static EntityCollector createEntityCollector(BasePool pool, TriggerOnEvent[] triggers) {
         int triggersLength = triggers.length;
         Group[] groups = new Group[triggersLength];
         GroupEventType[] eventTypes = new GroupEventType[triggersLength];

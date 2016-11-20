@@ -120,7 +120,7 @@ public class Group<E extends Entity> {
 
     public E[] getEntities() {
         if (_entitiesCache == null) {
-            _entitiesCache = new Array<E>(false, _entities.size);
+            _entitiesCache = new Array<E>(false, _entities.size, type);
             for (E e : _entities) {
                 _entitiesCache.add(e);
             }

@@ -35,7 +35,7 @@ public class ComponentExtensionsGenerator implements IComponentCodeGenerator {
         entityClass.addImport("com.ilargia.games.entitas.interfaces.IComponent");
         entityClass.addImport("java.util.Stack");
 
-        JavaClassSource poolClass = Roaster.parse(JavaClassSource.class, "public class Pool extends com.ilargia.games.entitas.Pool<Entity> {}");
+        JavaClassSource poolClass = Roaster.parse(JavaClassSource.class, "public class Pool extends com.ilargia.games.entitas.BasePool<Entity> {}");
         poolClass.setPackage(pkgDestiny);
 
         poolClass.addMethod()
@@ -145,8 +145,8 @@ public class ComponentExtensionsGenerator implements IComponentCodeGenerator {
                 .setName(String.format("get%1$sEntity", info.typeName))
                 .setReturnType("Entity")
                 .setPublic()
-                .setBody(String.format("return getGroup(%1$sMatcher.%2$s).getSingleEntity();"
-                        , CodeGenerator.capitalize(info.pools.get(0)), "_matcher"+info.typeName));
+                .setBody(String.format("return getGroup(%1$sMatcher.%2$s()).getSingleEntity();"
+                        , CodeGenerator.capitalize(info.pools.get(0)), info.typeName));
 
         if (!info.isSingletonComponent) {
             source.addMethod()
@@ -254,7 +254,7 @@ public class ComponentExtensionsGenerator implements IComponentCodeGenerator {
         javaClass.addField()
                 .setName("_matcher" + info.typeName)
                 .setType("IMatcher")
-                .setPublic()
+                .setPrivate()
                 .setStatic(true);
         return null;
     }
@@ -349,7 +349,6 @@ public class ComponentExtensionsGenerator implements IComponentCodeGenerator {
 
 
     public String memberNamesWithType(List<FieldSource<JavaClassSource>> memberInfos) {
-
         return memberInfos.stream()
                 .map(info -> info.getType() + " " + "_" + info.getName())
                 .collect(Collectors.joining(", "));

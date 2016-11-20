@@ -1,8 +1,9 @@
 package com.ilargia.games.core;
 
-import com.ilargia.games.components.Identity;
+import com.ilargia.games.components.Ball;
 import com.ilargia.games.components.Score;
 import com.ilargia.games.components.Bounds;
+import com.ilargia.games.components.Player;
 import com.ilargia.games.components.View;
 import com.ilargia.games.components.Motion;
 
@@ -15,19 +16,21 @@ import com.ilargia.games.components.Motion;
  */
 public class CoreComponentIds {
 
-	public static final int Identity = 0;
+	public static final int Ball = 0;
 	public static final int Score = 1;
 	public static final int Bounds = 2;
-	public static final int View = 3;
-	public static final int Motion = 4;
-	public static final int totalComponents = 5;
+	public static final int Player = 3;
+	public static final int View = 4;
+	public static final int Motion = 5;
+	public static final int totalComponents = 6;
 
 	public static String[] componentNames() {
-		return new String[]{"Identity", "Score", "Bounds", "View", "Motion"};
+		return new String[]{"Ball", "Score", "Bounds", "Player", "View",
+				"Motion"};
 	}
 
 	public static Class[] componentTypes() {
-		return new Class[]{Identity.class, Score.class, Bounds.class,
+		return new Class[]{Ball.class, Score.class, Bounds.class, Player.class,
 				View.class, Motion.class};
 	}
 }

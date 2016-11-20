@@ -15,20 +15,20 @@ public class PoolTest {
     @Rule
     public ExpectedException exception = ExpectedException.none();
 
-    private Pool pool;
+    private BasePool pool;
     private Entity entity;
 
 
     @Before
     public void setUp() throws Exception {
-        pool = new Pool(100);
+        pool = new BasePool(100);
         entity = pool.createEntity();
 
     }
 
     @Test
     public void OnEntityCreatedTest() {
-        pool.OnEntityCreated = ((Pool pool, Entity e) -> assertTrue(e.isEnabled()));
+        pool.OnEntityCreated = ((BasePool pool, Entity e) -> assertTrue(e.isEnabled()));
         entity = pool.createEntity();
     }
 
@@ -59,8 +59,8 @@ public class PoolTest {
 
     @Test
     public void OnEntityDestroyedTest() {
-        pool.OnEntityWillBeDestroyed = ((Pool pool, Entity e) -> assertTrue(e.isEnabled()));
-        pool.OnEntityDestroyed = ((Pool pool, Entity e) -> assertFalse(e.isEnabled()));
+        pool.OnEntityWillBeDestroyed = ((BasePool pool, Entity e) -> assertTrue(e.isEnabled()));
+        pool.OnEntityDestroyed = ((BasePool pool, Entity e) -> assertFalse(e.isEnabled()));
         pool.destroyAllEntities();
         assertEquals(0, pool.getCount());
 

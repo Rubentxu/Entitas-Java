@@ -6,9 +6,13 @@ import com.ilargia.games.entitas.interfaces.IComponent;
 
 @Component(pools = {"Core"})
 public class Bounds implements IComponent {
+    public enum Tag { BoundPlayer1, BoundPlayer2}
     public Rectangle rectangle;
+    public Tag tag;
 
-    public Bounds(float x, float y, float width, float height) {
+
+    public Bounds(float x, float y, float width, float height, Tag tag) {
         this.rectangle = new Rectangle(x, y, width, height);
+        this.tag = tag;
     }
 }

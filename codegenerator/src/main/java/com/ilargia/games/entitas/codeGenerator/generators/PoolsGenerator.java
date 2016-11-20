@@ -5,7 +5,6 @@ import com.ilargia.games.entitas.codeGenerator.CodeGenerator;
 import com.ilargia.games.entitas.codeGenerator.interfaces.IPoolCodeGenerator;
 import org.jboss.forge.roaster.Roaster;
 import org.jboss.forge.roaster.model.source.JavaClassSource;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -16,10 +15,8 @@ public class PoolsGenerator implements IPoolCodeGenerator {
     @Override
     public List<JavaClassSource> generate(Set<String> poolNames, String pkgDestiny) {
         List<JavaClassSource> result = new ArrayList<>();
-        JavaClassSource javaClass = Roaster.parse(JavaClassSource.class, "public class Pools extends com.ilargia.games.entitas.Pools<Entity> {}");
+        JavaClassSource javaClass = Roaster.parse(JavaClassSource.class, "public class Pools {}");
         javaClass.setPackage(pkgDestiny);
-        javaClass.addImport("com.ilargia.games.entitas.Pool");
-
         createMethodConstructor(javaClass, poolNames);
         createPoolsMethod(javaClass, poolNames);
         createMethodAllPools(javaClass, poolNames);
@@ -29,15 +26,16 @@ public class PoolsGenerator implements IPoolCodeGenerator {
 
     }
 
+
     private void createPoolsMethod(JavaClassSource javaClass, Set<String> poolNames) {
         poolNames.forEach((poolName) -> {
             String createMethodName = String.format("create%1$sPool", CodeGenerator.capitalize(poolName));
-            String body = String.format("return createPool(\"%1$s\", %2$s.totalComponents, %2$s.componentNames(), %2$s.componentTypes(), factoryEntity());",
+            String body = String.format("return new Pool(%2$s.totalComponents, 0, new PoolMetaData(\"%1$s\", %2$s.componentNames(), %2$s.componentTypes()), factoryEntity());",
                     CodeGenerator.capitalize(poolName), CodeGenerator.capitalize(poolName) + CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG);
             javaClass.addMethod()
                     .setPublic()
                     .setName(createMethodName)
-                    .setReturnType("Pool<Entity>")
+                    .setReturnType("Pool")
                     .setBody(body);
 
         });
@@ -53,7 +51,7 @@ public class PoolsGenerator implements IPoolCodeGenerator {
         javaClass.addMethod()
                 .setPublic()
                 .setName("allPools")
-                .setReturnType("Pool<Entity>[]")
+                .setReturnType("Pool[]")
                 .setBody(String.format("return new Pool[] { %1$s };", allPoolsList));
 
 

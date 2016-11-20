@@ -1,29 +1,25 @@
 package com.ilargia.games.systems;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
 import com.ilargia.games.components.Motion;
 import com.ilargia.games.components.View;
 import com.ilargia.games.core.CoreMatcher;
 import com.ilargia.games.core.Entity;
+import com.ilargia.games.core.Pool;
 import com.ilargia.games.entitas.Group;
-import com.ilargia.games.entitas.Pool;
+import com.ilargia.games.entitas.BasePool;
 import com.ilargia.games.entitas.interfaces.IExecuteSystem;
 import com.ilargia.games.entitas.interfaces.ISetPool;
 import com.ilargia.games.entitas.matcher.Matcher;
 
 
-public class MoveSystem implements IExecuteSystem, ISetPool {
+public class MoveSystem implements IExecuteSystem, ISetPool<Pool> {
     private Group<Entity> _group;
 
     @Override
     public void setPool(Pool pool) {
-        _group = pool.getGroup(Matcher.AllOf(CoreMatcher._matcherView, CoreMatcher._matcherMotion));
+        _group = pool.getGroup(Matcher.AllOf(CoreMatcher.View(), CoreMatcher.Motion()));
     }
 
     @Override

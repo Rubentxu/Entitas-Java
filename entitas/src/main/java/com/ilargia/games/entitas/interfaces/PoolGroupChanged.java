@@ -1,9 +1,9 @@
 package com.ilargia.games.entitas.interfaces;
 
 import com.ilargia.games.entitas.Group;
-import com.ilargia.games.entitas.Pool;
+import com.ilargia.games.entitas.BasePool;
 
 @FunctionalInterface
 public interface PoolGroupChanged {
-    void groupChanged(Pool pool, Group group);
+    void groupChanged(BasePool pool, Group group);
 }

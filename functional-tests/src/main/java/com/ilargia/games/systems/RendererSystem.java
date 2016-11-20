@@ -10,14 +10,15 @@ import com.badlogic.gdx.math.Rectangle;
 import com.ilargia.games.components.View;
 import com.ilargia.games.core.CoreMatcher;
 import com.ilargia.games.core.Entity;
+import com.ilargia.games.core.Pool;
 import com.ilargia.games.entitas.Group;
-import com.ilargia.games.entitas.Pool;
+import com.ilargia.games.entitas.BasePool;
 import com.ilargia.games.entitas.interfaces.IExecuteSystem;
 import com.ilargia.games.entitas.interfaces.ISetPool;
 import com.ilargia.games.entitas.matcher.Matcher;
 
 
-public class RendererSystem implements IExecuteSystem, ISetPool {
+public class RendererSystem implements IExecuteSystem, ISetPool<Pool> {
     private Group<Entity> _group;
     private ShapeRenderer sr;
     private OrthographicCamera cam;
@@ -29,7 +30,7 @@ public class RendererSystem implements IExecuteSystem, ISetPool {
 
     @Override
     public void setPool(Pool pool) {
-        _group = pool.getGroup(Matcher.AllOf(CoreMatcher._matcherView));
+        _group = pool.getGroup(Matcher.AllOf(CoreMatcher.View()));
     }
 
     @Override

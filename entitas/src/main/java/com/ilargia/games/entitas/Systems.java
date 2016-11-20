@@ -20,37 +20,23 @@ public class Systems implements IInitializeSystem, IExecuteSystem, ICleanupSyste
 
     public Systems add(ISystem system) {
         ReactiveSystem reactiveSystem = (ReactiveSystem) ((system instanceof ReactiveSystem) ? system : null);
-        IReactiveExecuteSystem tempVar = reactiveSystem.getSubsystem();
 
-        IInitializeSystem initializeSystem = reactiveSystem != null
-                ? (IInitializeSystem) ((tempVar instanceof IInitializeSystem) ? tempVar : null)
-                : (IInitializeSystem) ((system instanceof IInitializeSystem) ? system : null);
-
-        if (initializeSystem != null) {
-            _initializeSystems.add(initializeSystem);
+        if(system instanceof ReactiveSystem) {
+            addSystem(((ReactiveSystem) system).getSubsystem());
+        } else {
+            addSystem(system);
         }
 
-        IExecuteSystem executeSystem = (IExecuteSystem) ((system instanceof IExecuteSystem) ? system : null);
-        if (executeSystem != null) {
-            _executeSystems.add(executeSystem);
-        }
-
-        ICleanupSystem cleanupSystem = reactiveSystem != null
-                ? (ICleanupSystem) reactiveSystem.getSubsystem()
-                : (ICleanupSystem) system;
-
-        if (cleanupSystem != null) {
-            _cleanupSystems.add(cleanupSystem);
-        }
-
-        ITearDownSystem tearDownSystem = reactiveSystem != null
-                ? (ITearDownSystem) reactiveSystem.getSubsystem()
-                : (ITearDownSystem) system;
-
-        if (tearDownSystem != null) {
-            _tearDownSystems.add(tearDownSystem);
-        }
         return this;
+    }
+
+    private void addSystem(ISystem system) {
+
+        if(system instanceof IInitializeSystem) _initializeSystems.add((IInitializeSystem) system);
+        if(system instanceof IExecuteSystem) _executeSystems.add((IExecuteSystem) system);
+        if(system instanceof ICleanupSystem) _cleanupSystems.add((ICleanupSystem) system);
+        if(system instanceof ITearDownSystem) _tearDownSystems.add((ITearDownSystem) system);
+
     }
 
     public void initialize() {

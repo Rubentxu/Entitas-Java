@@ -3,10 +3,11 @@ package com.ilargia.games.core;
 import com.ilargia.games.entitas.PoolMetaData;
 import com.ilargia.games.entitas.interfaces.IComponent;
 import java.util.Stack;
-import com.ilargia.games.components.Identity;
+import com.ilargia.games.components.Ball;
 import com.ilargia.games.components.Score;
 import com.ilargia.games.components.Bounds;
 import com.badlogic.gdx.math.Rectangle;
+import com.ilargia.games.components.Player;
 import com.ilargia.games.components.View;
 import com.badlogic.gdx.math.Shape2D;
 import com.ilargia.games.components.Motion;
@@ -26,30 +27,28 @@ public class Entity extends com.ilargia.games.entitas.Entity {
 		super(totalComponents, componentPools, poolMetaData);
 	}
 
-	public Identity getIdentity() {
-		return (Identity) getComponent(CoreComponentIds.Identity);
+	public Ball getBall() {
+		return (Ball) getComponent(CoreComponentIds.Ball);
 	}
 
-	public boolean hasIdentity() {
-		return hasComponent(CoreComponentIds.Identity);
+	public boolean hasBall() {
+		return hasComponent(CoreComponentIds.Ball);
 	}
 
-	public void addIdentity(Identity.ID _id) {
-		Identity component = createComponent(CoreComponentIds.Identity,
-				Identity.class);
-		component.id = _id;
-		addComponent(CoreComponentIds.Identity, component);
+	public void addBall(boolean _resetBall) {
+		Ball component = createComponent(CoreComponentIds.Ball, Ball.class);
+		component.resetBall = _resetBall;
+		addComponent(CoreComponentIds.Ball, component);
 	}
 
-	public void replaceIdentity(Identity.ID _id) {
-		Identity component = createComponent(CoreComponentIds.Identity,
-				Identity.class);
-		component.id = _id;
-		replaceComponent(CoreComponentIds.Identity, component);
+	public void replaceBall(boolean _resetBall) {
+		Ball component = createComponent(CoreComponentIds.Ball, Ball.class);
+		component.resetBall = _resetBall;
+		replaceComponent(CoreComponentIds.Ball, component);
 	}
 
-	public void removeIdentity() {
-		removeComponent(CoreComponentIds.Identity);
+	public void removeBall() {
+		removeComponent(CoreComponentIds.Ball);
 	}
 
 	public Score getScore() {
@@ -84,22 +83,50 @@ public class Entity extends com.ilargia.games.entitas.Entity {
 		return hasComponent(CoreComponentIds.Bounds);
 	}
 
-	public void addBounds(Rectangle _rectangle) {
+	public void addBounds(Rectangle _rectangle, Bounds.Tag _tag) {
 		Bounds component = createComponent(CoreComponentIds.Bounds,
 				Bounds.class);
 		component.rectangle = _rectangle;
+		component.tag = _tag;
 		addComponent(CoreComponentIds.Bounds, component);
 	}
 
-	public void replaceBounds(Rectangle _rectangle) {
+	public void replaceBounds(Rectangle _rectangle, Bounds.Tag _tag) {
 		Bounds component = createComponent(CoreComponentIds.Bounds,
 				Bounds.class);
 		component.rectangle = _rectangle;
+		component.tag = _tag;
 		replaceComponent(CoreComponentIds.Bounds, component);
 	}
 
 	public void removeBounds() {
 		removeComponent(CoreComponentIds.Bounds);
+	}
+
+	public Player getPlayer() {
+		return (Player) getComponent(CoreComponentIds.Player);
+	}
+
+	public boolean hasPlayer() {
+		return hasComponent(CoreComponentIds.Player);
+	}
+
+	public void addPlayer(Player.ID _id) {
+		Player component = createComponent(CoreComponentIds.Player,
+				Player.class);
+		component.id = _id;
+		addComponent(CoreComponentIds.Player, component);
+	}
+
+	public void replacePlayer(Player.ID _id) {
+		Player component = createComponent(CoreComponentIds.Player,
+				Player.class);
+		component.id = _id;
+		replaceComponent(CoreComponentIds.Player, component);
+	}
+
+	public void removePlayer() {
+		removeComponent(CoreComponentIds.Player);
 	}
 
 	public View getView() {

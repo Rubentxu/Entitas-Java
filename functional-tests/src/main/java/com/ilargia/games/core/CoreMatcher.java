@@ -12,20 +12,20 @@ import com.ilargia.games.entitas.matcher.Matcher;
  */
 public class CoreMatcher {
 
-	public static IMatcher _matcherIdentity;
-	public static IMatcher _matcherScore;
-	public static IMatcher _matcherBounds;
-	public static IMatcher _matcherView;
-	public static IMatcher _matcherMotion;
+	private static IMatcher _matcherBall;
+	private static IMatcher _matcherScore;
+	private static IMatcher _matcherBounds;
+	private static IMatcher _matcherPlayer;
+	private static IMatcher _matcherView;
+	private static IMatcher _matcherMotion;
 
-	public static IMatcher Identity() {
-		if (_matcherIdentity == null) {
-			Matcher matcher = (Matcher) Matcher
-					.AllOf(CoreComponentIds.Identity);
+	public static IMatcher Ball() {
+		if (_matcherBall == null) {
+			Matcher matcher = (Matcher) Matcher.AllOf(CoreComponentIds.Ball);
 			matcher.componentNames = CoreComponentIds.componentNames();
-			_matcherIdentity = matcher;
+			_matcherBall = matcher;
 		}
-		return _matcherIdentity;
+		return _matcherBall;
 	}
 
 	public static IMatcher Score() {
@@ -44,6 +44,15 @@ public class CoreMatcher {
 			_matcherBounds = matcher;
 		}
 		return _matcherBounds;
+	}
+
+	public static IMatcher Player() {
+		if (_matcherPlayer == null) {
+			Matcher matcher = (Matcher) Matcher.AllOf(CoreComponentIds.Player);
+			matcher.componentNames = CoreComponentIds.componentNames();
+			_matcherPlayer = matcher;
+		}
+		return _matcherPlayer;
 	}
 
 	public static IMatcher View() {

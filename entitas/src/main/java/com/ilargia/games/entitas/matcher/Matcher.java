@@ -49,7 +49,7 @@ public class Matcher implements IAllOfMatcher, IAnyOfMatcher, INoneOfMatcher {
         ObjectSet<Integer> indicesSet = EntitasCache.getIntHashSet();
 
         indicesSet.addAll(indices);
-        Array<Integer> uniqueIndices = new Array(indicesSet.size);
+        Array<Integer> uniqueIndices = new Array(true, indicesSet.size, Integer.class);
         indicesSet.iterator().toArray(uniqueIndices);
         Arrays.sort(uniqueIndices.items);
 
@@ -223,8 +223,11 @@ public class Matcher implements IAllOfMatcher, IAnyOfMatcher, INoneOfMatcher {
             }
 
         }
+
+        Integer[] mergeIndices = distinctIndices(indicesList.toArray());
+
         EntitasCache.pushIntArray(indicesList);
-        return EntitasCache.getIntArray().items;
+        return mergeIndices;
 
     }
 

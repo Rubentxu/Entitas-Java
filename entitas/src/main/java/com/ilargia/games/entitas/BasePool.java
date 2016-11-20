@@ -9,12 +9,12 @@ import com.ilargia.games.entitas.exceptions.*;
 import com.ilargia.games.entitas.interfaces.*;
 import java.util.Stack;
 
-public class Pool<E extends Entity> {
+public class BasePool<E extends Entity> {
 
     private FactoryEntity<E> _factoryMethod;
-    public PoolChanged<E> OnEntityCreated;
-    public PoolChanged<E> OnEntityWillBeDestroyed;
-    public PoolChanged<E> OnEntityDestroyed;
+    public PoolChanged<BasePool, E> OnEntityCreated;
+    public PoolChanged<BasePool, E> OnEntityWillBeDestroyed;
+    public PoolChanged<BasePool, E> OnEntityDestroyed;
     public PoolGroupChanged OnGroupCreated;
     public PoolGroupChanged OnGroupCleared;
     public EntityChanged<E> _cachedEntityChanged;
@@ -34,7 +34,7 @@ public class Pool<E extends Entity> {
     public Class<E> entityType;
 
 
-    public Pool(int totalComponents, int startCreationIndex, PoolMetaData metaData, FactoryEntity<E> factoryMethod) {
+    public BasePool(int totalComponents, int startCreationIndex, PoolMetaData metaData, FactoryEntity<E> factoryMethod) {
         _totalComponents = totalComponents;
         _creationIndex = startCreationIndex;
         _factoryMethod = factoryMethod;
@@ -325,21 +325,18 @@ public class Pool<E extends Entity> {
         return _retainedEntities.size;
     }
 
-    public static Entity[] getEntities(Pool pool, IMatcher matcher) {
+    public static Entity[] getEntities(BasePool pool, IMatcher matcher) {
         return pool.getGroup(matcher).getEntities();
 
     }
 
-
-    public static ISystem createSystem(Pool pool, ISystem system, Pools pools) {
+    public static <P> ISystem createSystem(BasePool pool, ISystem system, P pools) {
         setPool(system, pool);
         setPools(system, pools);
         return system;
     }
 
-
-
-    public static ISystem createSystem(Pool pool, IReactiveExecuteSystem system, Pools pools) {
+    public static <P> ISystem createSystem(BasePool pool, IReactiveExecuteSystem system, P pools) {
         setPool(system, pool);
         setPools(system, pools);
 
@@ -360,14 +357,14 @@ public class Pool<E extends Entity> {
                 "IMultiReactiveSystem or IEntityCollectorSystem.");
     }
 
-    public static ISystem createSystem(Pools pools, ISystem system) {
-        setPools(system, pools);
+    public static <P> ISystem createSystem(P pool, ISystem system) {
+        setPool(system, pool);
         return system;
     }
 
 
-    public static ISystem createSystem(Pools pools, IReactiveExecuteSystem system) {
-        setPools(system, pools);
+    public static ISystem createSystem(BasePool pool, IReactiveExecuteSystem system) {
+        setPool(system, pool);
 
         IEntityCollectorSystem entityCollectorSystem = (IEntityCollectorSystem) ((system instanceof IEntityCollectorSystem) ? system : null);
         if (entityCollectorSystem != null) {
@@ -379,7 +376,7 @@ public class Pool<E extends Entity> {
     }
 
 
-    private static void setPool(ISystem system, Pool pool) {
+    private static <P> void setPool(ISystem system, P pool) {
         ISetPool poolSystem = (ISetPool) ((system instanceof ISetPool) ? system : null);
         if (poolSystem != null) {
             poolSystem.setPool(pool);
@@ -387,7 +384,7 @@ public class Pool<E extends Entity> {
 
     }
 
-    public static void setPools(ISystem system, Pools pools) {
+    public static <P> void setPools(ISystem system, P pools) {
         ISetPools poolsSystem = (ISetPools) ((system instanceof ISetPool) ? system : null);
         if (poolsSystem != null) {
             poolsSystem.setPools(pools);
@@ -395,11 +392,11 @@ public class Pool<E extends Entity> {
     }
 
 
-    public static EntityCollector createEntityCollector(Pool[] pools, IMatcher matcher) {
+    public static EntityCollector createEntityCollector(BasePool[] pools, IMatcher matcher) {
         return createEntityCollector(pools, matcher, GroupEventType.OnEntityAdded);
     }
 
-    public static EntityCollector createEntityCollector(Pool[] pools, IMatcher matcher, GroupEventType eventType) {
+    public static EntityCollector createEntityCollector(BasePool[] pools, IMatcher matcher, GroupEventType eventType) {
         Group[] groups = new Group[pools.length];
         GroupEventType[] eventTypes = new GroupEventType[pools.length];
 

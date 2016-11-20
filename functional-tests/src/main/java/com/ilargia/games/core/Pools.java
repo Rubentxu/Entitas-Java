@@ -1,6 +1,5 @@
 package com.ilargia.games.core;
 
-import com.ilargia.games.entitas.Pool;
 import com.ilargia.games.entitas.interfaces.FactoryEntity;
 import java.util.Stack;
 import com.ilargia.games.entitas.interfaces.IComponent;
@@ -13,7 +12,7 @@ import com.ilargia.games.entitas.PoolMetaData;
  * 
  * ---------------------------------------------------------------------------
  */
-public class Pools extends com.ilargia.games.entitas.Pools<Entity> {
+public class Pools {
 
 	public Pool core;
 
@@ -21,13 +20,13 @@ public class Pools extends com.ilargia.games.entitas.Pools<Entity> {
 		core = createCorePool();
 	}
 
-	public Pool<Entity> createCorePool() {
-		return createPool("Core", CoreComponentIds.totalComponents,
-				CoreComponentIds.componentNames(),
-				CoreComponentIds.componentTypes(), factoryEntity());
+	public Pool createCorePool() {
+		return new Pool(CoreComponentIds.totalComponents, 0, new PoolMetaData(
+				"Core", CoreComponentIds.componentNames(),
+				CoreComponentIds.componentTypes()), factoryEntity());
 	}
 
-	public Pool<Entity>[] allPools() {
+	public Pool[] allPools() {
 		return new Pool[]{core};
 	}
 
