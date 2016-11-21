@@ -11,4 +11,6 @@ public class Motion implements IComponent {
     public Motion(float x, float y) {
         this.velocity = new Vector2(x, y);
     }
+
+
 }

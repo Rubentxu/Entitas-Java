@@ -3,6 +3,7 @@ package com.ilargia.games.systems;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
+import com.ilargia.games.components.Ball;
 import com.ilargia.games.components.Motion;
 import com.ilargia.games.components.View;
 import com.ilargia.games.core.CoreMatcher;
@@ -13,8 +14,26 @@ import com.ilargia.games.entitas.interfaces.IExecuteSystem;
 import com.ilargia.games.entitas.interfaces.ISetPool;
 import com.ilargia.games.entitas.matcher.Matcher;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.function.Function;
+
 
 public class ContactSystem implements IExecuteSystem, ISetPool<Pool> {
+
+    public interface FactoryComponent {}
+
+    public interface FactoryMotion extends FactoryComponent{
+        Motion getMotion(float y, float x);
+    }
+
+    public interface FactoryBall extends FactoryComponent {
+        Ball getBall(boolean resetBall);
+    }
+
+
     public static int HEIGHT = Gdx.graphics.getHeight();
     private Group<Entity> _group;
     private Pool _pool;
@@ -22,6 +41,16 @@ public class ContactSystem implements IExecuteSystem, ISetPool<Pool> {
 
     @Override
     public void setPool(Pool pool) {
+        FactoryMotion func = Motion::new;
+        FactoryBall fun2 = Ball::new;
+        FactoryComponent[] factorias = new FactoryComponent[2];
+        factorias[0] =func;
+        factorias[1]=fun2;
+
+        FactoryMotion re= (FactoryMotion) factorias[0];
+        re.getMotion(2,2);
+
+
         _pool = pool;
         _group = pool.getGroup(Matcher.AllOf(CoreMatcher.View(), CoreMatcher.Motion()));
     }
