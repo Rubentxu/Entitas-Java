@@ -10,6 +10,8 @@ public class Bounds implements IComponent {
     public Rectangle rectangle;
     public Tag tag;
 
+    public Bounds() {
+    }
 
     public Bounds(float x, float y, float width, float height, Tag tag) {
         this.rectangle = new Rectangle(x, y, width, height);

@@ -15,7 +15,7 @@ public class TypeReflectionProviderTest {
 
     @Before
     public void setUp() throws Exception {
-        provider = new TypeReflectionProvider("src/test/java/com/ilargia/games/entitas/components");
+        provider = new TypeReflectionProvider("src/test/java/com/ilargia/games/entitas/codeGenerator/components");
 
     }
 

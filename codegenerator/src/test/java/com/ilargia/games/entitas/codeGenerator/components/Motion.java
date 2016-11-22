@@ -1,4 +1,4 @@
-package com.ilargia.games.entitas.codeGenerator.Components;
+package com.ilargia.games.entitas.codeGenerator.components;
 
 import com.badlogic.gdx.math.Vector2;
 import com.ilargia.games.entitas.codeGenerator.Component;
@@ -11,4 +11,6 @@ public class Motion implements IComponent {
     public Motion(float x, float y) {
         this.velocity = new Vector2(x, y);
     }
+
+
 }

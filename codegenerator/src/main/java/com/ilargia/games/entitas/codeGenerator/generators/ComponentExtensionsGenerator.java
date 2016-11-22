@@ -52,6 +52,7 @@ public class ComponentExtensionsGenerator implements IComponentCodeGenerator {
 
         for (ComponentInfo info : infos) {
             if (info.generateMethods) {
+                addImporEnums(info, entityClass);
                 addEntityMethods(info, entityClass);
                 if (info.isSingleEntity) {
                     addPoolMethods(info, poolClass);
@@ -65,6 +66,11 @@ public class ComponentExtensionsGenerator implements IComponentCodeGenerator {
         System.out.println(Roaster.format(entityClass.toString()));
 
         return result;
+    }
+
+    private void addImporEnums(ComponentInfo info, JavaClassSource entityClass) {
+        info.internalEnums.stream().forEach(e-> entityClass.addImport(e));
+
     }
 
 

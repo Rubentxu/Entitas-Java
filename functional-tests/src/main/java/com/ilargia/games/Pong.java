@@ -7,6 +7,8 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Rectangle;
+import com.ilargia.games.components.Bounds;
 import com.ilargia.games.core.Pool;
 import com.ilargia.games.core.Pools;
 import com.ilargia.games.entitas.Systems;
@@ -16,18 +18,21 @@ import com.ilargia.games.systems.*;
 public class Pong extends ApplicationAdapter {
     private Pools pools;
     private Systems systems;
+    public static final int SCREEN_WIDTH = 400;
+    public static final int SCREEN_HEIGHT = 280;
 
     public static void main (String[] arg) {
         LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
         config.title = "BASIC";
-        config.width = 800;
-        config.height = 480;
+        config.width = SCREEN_WIDTH;
+        config.height = SCREEN_HEIGHT;
         new LwjglApplication(new Pong(), config);
     }
 
     @Override
     public void create() {
         pools =  new Pools();
+        Pool core = pools.core;
         ShapeRenderer sr = new ShapeRenderer();
         OrthographicCamera cam = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
@@ -38,8 +43,11 @@ public class Pong extends ApplicationAdapter {
                 .add(Pool.createSystem(pools.core,new MoveSystem()))
                 .add(Pool.createSystem(pools.core,new RendererSystem(sr, cam)));
 
+        core.createEntity()
+                .addBounds(new Rectangle(SCREEN_WIDTH/4f, SCREEN_HEIGHT/2f, 30f,30f), Bounds.Tag.BoundPlayer1);
 
-
+        core.createEntity()
+                .addBall(false);
     }
 
     @Override

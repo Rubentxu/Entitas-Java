@@ -8,6 +8,7 @@ import org.jboss.forge.roaster.Roaster;
 import org.jboss.forge.roaster.model.source.AnnotationSource;
 import org.jboss.forge.roaster.model.source.FieldSource;
 import org.jboss.forge.roaster.model.source.JavaClassSource;
+import org.jboss.forge.roaster.model.source.MethodSource;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -83,6 +84,20 @@ public class TypeReflectionProvider implements ICodeGeneratorDataProvider {
         String name = component.getName();
         String fullName = component.getCanonicalName();
         List<FieldSource<JavaClassSource>> fields = component.getFields();
+        List<MethodSource<JavaClassSource>> contructores = component.getMethods().stream()
+                .filter(method -> method.isPublic())
+                .filter(method -> method.isConstructor())
+                .filter(method -> method.getParameters().size() > 0)
+                .collect(Collectors.toList());
+
+        List<String> enums = component.getNestedTypes().stream()
+                .filter(method -> method.isPublic())
+                .filter(method -> method.isEnum())
+                .map(method -> method.getCanonicalName())
+                .collect(Collectors.toList());
+
+
+
         AnnotationSource<JavaClassSource> annotation = component.getAnnotation(Component.class);
 
         if(annotation != null) {
@@ -109,7 +124,10 @@ public class TypeReflectionProvider implements ICodeGeneratorDataProvider {
                     true,
                     true,
                     false,
-                    false
+                    false,
+                    contructores,
+                    enums
+
             );
         }
         return null;

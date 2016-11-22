@@ -38,11 +38,11 @@ public class ComponentIndicesGeneratorTest {
         memberInfos.add(field2);
 
         componentInfos.add(new ComponentInfo("com.ilargia.games.entitas.components.Position", "Position", memberInfos, poolNames,
-                false, "", false, false, false, false));
+                false, "", false, false, false, false,null, null));
         componentInfos.add(new ComponentInfo("com.ilargia.games.entitas.components.Movable", "Movable", memberInfos, poolNames,
-                false, "", false, false, false, false));
+                false, "", false, false, false, false,null,null));
         componentInfos.add(new ComponentInfo("com.pruebas.Movable", "Movable", memberInfos, poolNames,
-                false, "", false, false, false, false));
+                false, "", false, false, false, false,null,null));
         List<JavaClassSource> result = generator.generate(componentInfos, "com.pruebas.entitas");
 
         assertEquals(2, result.size());
