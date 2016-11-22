@@ -6,7 +6,6 @@ import com.ilargia.games.entitas.codeGenerator.interfaces.IComponentCodeGenerato
 import com.ilargia.games.entitas.codeGenerator.intermediate.ComponentInfo;
 import org.jboss.forge.roaster.Roaster;
 import org.jboss.forge.roaster.model.source.FieldSource;
-import org.jboss.forge.roaster.model.source.Import;
 import org.jboss.forge.roaster.model.source.JavaClassSource;
 
 import java.util.ArrayList;
@@ -29,9 +28,9 @@ public class ComponentExtensionsGenerator implements IComponentCodeGenerator {
                 .setName("Entity")
                 .setPublic()
                 .setConstructor(true)
-                .setParameters("int totalComponents,Stack<IComponent>[] componentPools, PoolMetaData poolMetaData")
-                .setBody("super(totalComponents, componentPools, poolMetaData);");
-        entityClass.addImport("com.ilargia.games.entitas.PoolMetaData");
+                .setParameters("int totalComponents,Stack<IComponent>[] componentPools, EntityMetaData entityMetaData")
+                .setBody("super(totalComponents, componentPools, entityMetaData);");
+        entityClass.addImport("com.ilargia.games.entitas.EntityMetaData");
         entityClass.addImport("com.ilargia.games.entitas.interfaces.IComponent");
         entityClass.addImport("java.util.Stack");
 
@@ -42,9 +41,9 @@ public class ComponentExtensionsGenerator implements IComponentCodeGenerator {
                 .setName("Pool")
                 .setPublic()
                 .setConstructor(true)
-                .setParameters("int totalComponents, int startCreationIndex, PoolMetaData metaData, FactoryEntity<Entity> factoryMethod")
+                .setParameters("int totalComponents, int startCreationIndex, EntityMetaData metaData, FactoryEntity<Entity> factoryMethod")
                 .setBody("super(totalComponents, startCreationIndex, metaData, factoryMethod);");
-        poolClass.addImport("com.ilargia.games.entitas.PoolMetaData");
+        poolClass.addImport("com.ilargia.games.entitas.EntityMetaData");
         poolClass.addImport("com.ilargia.games.entitas.interfaces.FactoryEntity");
 
         result.add(entityClass);
@@ -76,7 +75,7 @@ public class ComponentExtensionsGenerator implements IComponentCodeGenerator {
 
     private void addAddMethods(ComponentInfo info, JavaClassSource source) {
         if (!info.isSingletonComponent) {
-            String method = "%2$s component = createComponent(%1$s.%2$s, %2$s.class);\n %3$s\n addComponent(%1$s.%2$s, component);\n ";
+            String method = "%2$s component = createComponent(%1$s.%2$s);\n %3$s\n addComponent(%1$s.%2$s, component);\n ";
             source.addMethod()
                     .setName(String.format("add%1$s", info.typeName))
                     .setReturnTypeVoid()
@@ -93,7 +92,7 @@ public class ComponentExtensionsGenerator implements IComponentCodeGenerator {
 
     private void addReplaceMethods(ComponentInfo info, JavaClassSource source) {
         if (!info.isSingletonComponent) {
-            String method = "%2$s component = createComponent(%1$s.%2$s, %2$s.class);\n %3$s\n replaceComponent(%1$s.%2$s, component);\n ";
+            String method = "%2$s component = createComponent(%1$s.%2$s);\n %3$s\n replaceComponent(%1$s.%2$s, component);\n ";
             source.addMethod()
                     .setName(String.format("replace%1$s", info.typeName))
                     .setReturnTypeVoid()

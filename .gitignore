@@ -2,7 +2,7 @@
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
-
+*config_generator.properties
 # Package Files #
 *.jar
 *.war

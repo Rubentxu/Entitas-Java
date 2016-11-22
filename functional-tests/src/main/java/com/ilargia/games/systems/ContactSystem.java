@@ -23,15 +23,7 @@ import java.util.function.Function;
 
 public class ContactSystem implements IExecuteSystem, ISetPool<Pool> {
 
-    public interface FactoryComponent {}
 
-    public interface FactoryMotion extends FactoryComponent{
-        Motion getMotion(float y, float x);
-    }
-
-    public interface FactoryBall extends FactoryComponent {
-        Ball getBall(boolean resetBall);
-    }
 
 
     public static int HEIGHT = Gdx.graphics.getHeight();
@@ -41,16 +33,6 @@ public class ContactSystem implements IExecuteSystem, ISetPool<Pool> {
 
     @Override
     public void setPool(Pool pool) {
-        FactoryMotion func = Motion::new;
-        FactoryBall fun2 = Ball::new;
-        FactoryComponent[] factorias = new FactoryComponent[2];
-        factorias[0] =func;
-        factorias[1]=fun2;
-
-        FactoryMotion re= (FactoryMotion) factorias[0];
-        re.getMotion(2,2);
-
-
         _pool = pool;
         _group = pool.getGroup(Matcher.AllOf(CoreMatcher.View(), CoreMatcher.Motion()));
     }

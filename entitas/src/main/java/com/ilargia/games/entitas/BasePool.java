@@ -28,13 +28,13 @@ public class BasePool<E extends Entity> {
     private Stack<E> _reusableEntities;
     private ObjectSet<E> _retainedEntities;
     private Array<E> _entitiesCache;
-    private PoolMetaData _metaData;
+    private EntityMetaData _metaData;
     private Stack<IComponent>[] _componentPools;
     private ObjectMap<String, IEntityIndex> _entityIndices;
     public Class<E> entityType;
 
 
-    public BasePool(int totalComponents, int startCreationIndex, PoolMetaData metaData, FactoryEntity<E> factoryMethod) {
+    public BasePool(int totalComponents, int startCreationIndex, EntityMetaData metaData, FactoryEntity<E> factoryMethod) {
         _totalComponents = totalComponents;
         _creationIndex = startCreationIndex;
         _factoryMethod = factoryMethod;
@@ -51,7 +51,7 @@ public class BasePool<E extends Entity> {
             for (int i = 0; i < componentNames.length; i++) {
                 componentNames[i] = prefix + i;
             }
-            _metaData = new PoolMetaData(
+            _metaData = new EntityMetaData(
                     "Unnamed Pool", componentNames, null
             );
         }
@@ -309,7 +309,7 @@ public class BasePool<E extends Entity> {
         return _componentPools;
     }
 
-    public PoolMetaData getMetaData() {
+    public EntityMetaData getMetaData() {
         return _metaData;
     }
 

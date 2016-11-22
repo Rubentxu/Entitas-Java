@@ -2,17 +2,14 @@ package com.ilargia.games.entitas;
 
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectSet;
-import com.badlogic.gdx.utils.reflect.ClassReflection;
-import com.badlogic.gdx.utils.reflect.Constructor;
-import com.badlogic.gdx.utils.reflect.ReflectionException;
 import com.ilargia.games.entitas.caching.EntitasCache;
 import com.ilargia.games.entitas.exceptions.EntityAlreadyHasComponentException;
 import com.ilargia.games.entitas.exceptions.EntityDoesNotHaveComponentException;
 import com.ilargia.games.entitas.exceptions.EntityIsNotEnabledException;
-import com.ilargia.games.entitas.interfaces.ComponentReplaced;
-import com.ilargia.games.entitas.interfaces.EntityChanged;
-import com.ilargia.games.entitas.interfaces.EntityReleased;
-import com.ilargia.games.entitas.interfaces.IComponent;
+import com.ilargia.games.entitas.interfaces.*;
+import sun.reflect.ReflectionFactory;
+
+import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Stack;
 
@@ -32,36 +29,34 @@ public class Entity {
     private Integer[] _componentIndicesCache;
     private String _toStringCache;
     private int _totalComponents;
-    private PoolMetaData _poolMetaData;
+    private EntityMetaData _entityMetaData;
 
-
-    public Entity(int totalComponents,Stack<IComponent>[] componentPools, PoolMetaData poolMetaData) {
+    public Entity(int totalComponents, Stack<IComponent>[] componentPools, EntityMetaData entityMetaData) {
         _components = new IComponent[totalComponents];
         _totalComponents = totalComponents;
         _componentPools = componentPools;
         _isEnabled = true;
         owners = new ObjectSet<>();
 
-        if (poolMetaData != null) {
-            _poolMetaData = poolMetaData;
+        if (entityMetaData != null) {
+            _entityMetaData = entityMetaData;
         } else {
 
             String[] componentNames = new String[totalComponents];
             for (Integer i = 0; i < componentNames.length; i++) {
                 componentNames[i] = i.toString();
             }
-            _poolMetaData = new PoolMetaData("No Pool", componentNames, null);
+            _entityMetaData = new EntityMetaData("No Pool", componentNames, null);
         }
-
     }
 
     public Entity addComponent(int index, IComponent component) {
         if (!_isEnabled) {
-            throw new EntityIsNotEnabledException("Cannot add component '" + _poolMetaData.componentNames[index] + "' to " + this + "!");
+            throw new EntityIsNotEnabledException("Cannot add component '" + _entityMetaData.componentNames[index] + "' to " + this + "!");
         }
 
         if (hasComponent(index)) {
-            throw new EntityAlreadyHasComponentException(index, "Cannot add component '" + _poolMetaData.componentNames[index] +
+            throw new EntityAlreadyHasComponentException(index, "Cannot add component '" + _entityMetaData.componentNames[index] +
                     "' to " + this + "!", "You should check if an entity already has the component " +
                     "before adding it or use entity.ReplaceComponent().");
         }
@@ -80,11 +75,11 @@ public class Entity {
     public Entity removeComponent(int index) {
         if (!_isEnabled) {
             throw new EntityIsNotEnabledException("Cannot remove component!" +
-                    _poolMetaData.componentNames[index] + "' from " + this + "!");
+                    _entityMetaData.componentNames[index] + "' from " + this + "!");
         }
 
         if (!hasComponent(index)) {
-            String errorMsg = "Cannot remove component " + _poolMetaData.componentNames[index] +
+            String errorMsg = "Cannot remove component " + _entityMetaData.componentNames[index] +
                     "' from " + this + "!";
             throw new EntityDoesNotHaveComponentException(errorMsg, index);
         }
@@ -96,7 +91,7 @@ public class Entity {
     public Entity replaceComponent(int index, IComponent component) {
         if (!_isEnabled) {
             throw new EntityIsNotEnabledException("Cannot replace component!" +
-                    _poolMetaData.componentNames[index] + "' on " + this + "!");
+                    _entityMetaData.componentNames[index] + "' on " + this + "!");
         }
 
         if (hasComponent(index)) {
@@ -137,7 +132,7 @@ public class Entity {
     public IComponent getComponent(int index) {
         if (!hasComponent(index)) {
             String errorMsg = "Cannot get component at index " +
-                    _poolMetaData.componentNames[index] + "' from " +
+                    _entityMetaData.componentNames[index] + "' from " +
                     this + "!";
             throw new EntityDoesNotHaveComponentException(errorMsg, index);
         }
@@ -226,29 +221,31 @@ public class Entity {
         return componentPool;
     }
 
-    public <T extends IComponent> T createComponent(int index, Class<T> clazz)  {
+    public <T extends IComponent> T createComponent(int index)  {
         Stack<IComponent> componentPool = getComponentPool(index);
         try {
-            return componentPool.size() > 0 ? (T) componentPool.pop() : (T) findConstructor(clazz).newInstance();
-        } catch (ReflectionException e) {
+            if(componentPool.size() > 0) {
+                return (T) componentPool.pop();
+            } else {
+                Class<T> clazz = _entityMetaData.componentTypes[index];
+                return  clazz.cast(getDefaultConstructor(clazz).newInstance());
+            }
+        } catch (Exception e) {
             return null;
         }
-
     }
 
-    private Constructor findConstructor(Class type) {
-        try {
-            return ClassReflection.getConstructor(type, (Class[]) null);
-        } catch (Exception ex1) {
-            try {
-                Constructor constructor = ClassReflection.getDeclaredConstructor(type);
-                constructor.setAccessible(true);
-                return constructor;
-            } catch (ReflectionException ex2) {
-                return null;
+    private Constructor getDefaultConstructor(Class<?> clazz) {
+        ReflectionFactory rf = ReflectionFactory.getReflectionFactory();
+        for (Constructor constructor : clazz.getConstructors()) {
+            if (constructor.getParameterCount() == 0) {
+                return rf.newConstructorForSerialization(clazz, constructor);
             }
         }
+        return null;
     }
+
+
 
     public void destroy() {
         removeAllComponents();

@@ -20,12 +20,9 @@ import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class CodeGeneratorApp extends Application implements Initializable {
 
@@ -46,6 +43,7 @@ public class CodeGeneratorApp extends Application implements Initializable {
     ProgressIndicator progress;
     @FXML
     Label result;
+    private Properties props;
 
     public static void main(String[] args) {
         launch(args);
@@ -69,6 +67,55 @@ public class CodeGeneratorApp extends Application implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         progress.setVisible(false);
+        try {
+            loadProperties();
+        } catch (Exception ex) {
+            props = new Properties();
+        }
+
+
+    }
+
+    private void loadProperties() throws Exception {
+        Properties prop = new Properties();
+        InputStream input = null;
+
+        try {
+            input = new FileInputStream("config_generator.properties");
+            prop.load(input);
+            fieldComponentFolder.setText(prop.getProperty("fieldComponentFolder"));
+            fieldGeneratedFolder.setText(prop.getProperty("fieldGeneratedFolder"));
+
+        }  finally {
+            if (input != null) {
+                try {
+                    input.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    private void saveProperties() {
+
+        OutputStream output = null;
+        try {
+            output = new FileOutputStream("config_generator.properties");
+            props.store(output, null);
+
+        } catch (IOException io) {
+            io.printStackTrace();
+        } finally {
+            if (output != null) {
+                try {
+                    output.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        }
     }
 
     @FXML
@@ -78,7 +125,10 @@ public class CodeGeneratorApp extends Application implements Initializable {
                 directoryChooser.showDialog(stage);
         if (selectedDirectory != null) {
             fieldComponentFolder.setText(selectedDirectory.getAbsolutePath());
+            if(props!=null)
+                props.setProperty("fieldComponentFolder", selectedDirectory.getAbsolutePath());
         }
+
     }
 
     @FXML
@@ -88,6 +138,8 @@ public class CodeGeneratorApp extends Application implements Initializable {
                 directoryChooser.showDialog(stage);
         if (selectedDirectory != null) {
             fieldGeneratedFolder.setText(selectedDirectory.getAbsolutePath());
+            if(props!=null)
+                props.setProperty("fieldGeneratedFolder", selectedDirectory.getAbsolutePath());
         }
     }
 
@@ -95,6 +147,9 @@ public class CodeGeneratorApp extends Application implements Initializable {
     public void handleGenerate(ActionEvent actionEvent) throws IOException {
         result.setText("");
         progress.setVisible(true);
+        result.setText("Generating...");
+
+        if(props!=null) saveProperties();
 
         // loads the items at another thread, asynchronously
         Task loader = new Task<List<CodeGenFile>>() {

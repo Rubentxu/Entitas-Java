@@ -1,6 +1,6 @@
 package com.ilargia.games.entitas.codeGenerator.generated;
 
-import com.ilargia.games.entitas.PoolMetaData;
+import com.ilargia.games.entitas.EntityMetaData;
 import com.ilargia.games.entitas.interfaces.FactoryEntity;
 import com.ilargia.games.entitas.exceptions.EntitasException;
 import com.ilargia.games.entitas.codeGenerator.components.Ball;
@@ -15,7 +15,7 @@ import com.ilargia.games.entitas.codeGenerator.components.Ball;
 public class Pool extends com.ilargia.games.entitas.BasePool<Entity> {
 
 	public Pool(int totalComponents, int startCreationIndex,
-			PoolMetaData metaData, FactoryEntity<Entity> factoryMethod) {
+			EntityMetaData metaData, FactoryEntity<Entity> factoryMethod) {
 		super(totalComponents, startCreationIndex, metaData, factoryMethod);
 	}
 

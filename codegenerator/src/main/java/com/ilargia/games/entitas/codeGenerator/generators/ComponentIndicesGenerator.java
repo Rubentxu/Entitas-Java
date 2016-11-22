@@ -6,6 +6,7 @@ import com.ilargia.games.entitas.codeGenerator.interfaces.IComponentCodeGenerato
 import com.ilargia.games.entitas.codeGenerator.intermediate.ComponentInfo;
 import org.jboss.forge.roaster.Roaster;
 import org.jboss.forge.roaster.model.source.JavaClassSource;
+import org.jboss.forge.roaster.model.source.JavaInterfaceSource;
 
 import java.util.List;
 import java.util.Map;
@@ -108,6 +109,29 @@ public class ComponentIndicesGenerator implements IComponentCodeGenerator {
                 .setPublic()
                 .setStatic(true)
                 .setBody(codeFinal.toString());
+
+    }
+
+    public void addComponentFactories(ComponentInfo[] componentInfos, JavaClassSource javaClass) {
+        String format = " %1$s.class,\n";
+        String code = "return new FactoryComponent[] {";
+        for (int i = 0; i < componentInfos.length; i++) {
+            ComponentInfo info = componentInfos[i];
+            JavaInterfaceSource interfaceSource = Roaster.parse(JavaInterfaceSource.class, String.format("public interface Factory%1$s extends FactoryComponent {}",
+                    info.typeName));
+            interfaceSource.addMethod()
+                    .setName(String.format("create%1$s",info.typeName))
+                    .setReturnType(info.typeName)
+                    .setPublic();
+
+            javaClass.addNestedType(interfaceSource.toString());
+
+
+
+        }
+
+
+
 
     }
 
