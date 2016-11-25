@@ -5,8 +5,10 @@ import com.ilargia.games.entitas.interfaces.IComponent;
 import java.util.Stack;
 import com.ilargia.games.components.Ball;
 import com.ilargia.games.components.Score;
+import com.ilargia.games.components.Bounds.Tag;
 import com.ilargia.games.components.Bounds;
 import com.badlogic.gdx.math.Rectangle;
+import com.ilargia.games.components.Player.ID;
 import com.ilargia.games.components.Player;
 import com.ilargia.games.components.View;
 import com.badlogic.gdx.math.Shape2D;
@@ -35,16 +37,22 @@ public class Entity extends com.ilargia.games.entitas.Entity {
 		return hasComponent(CoreComponentIds.Ball);
 	}
 
-	public void addBall(boolean _resetBall) {
-		Ball component = createComponent(CoreComponentIds.Ball);
-		component.resetBall = _resetBall;
+	public void addBall(boolean resetBall) {
+		Ball component = (Ball) recoverComponent(CoreComponentIds.Ball);
+		if (component == null) {
+			component = new Ball();
+		}
+		component.resetBall = resetBall;
 		addComponent(CoreComponentIds.Ball, component);
 	}
 
-	public void replaceBall(boolean _resetBall) {
-		Ball component = createComponent(CoreComponentIds.Ball);
-		component.resetBall = _resetBall;
-		replaceComponent(CoreComponentIds.Ball, component);
+	public void replaceBall(boolean resetBall) {
+		Ball component = (Ball) recoverComponent(CoreComponentIds.Ball);
+		if (component == null) {
+			component = new Ball();
+		}
+		component.resetBall = resetBall;
+		removeComponent(CoreComponentIds.Ball);
 	}
 
 	public void removeBall() {
@@ -59,15 +67,23 @@ public class Entity extends com.ilargia.games.entitas.Entity {
 		return hasComponent(CoreComponentIds.Score);
 	}
 
-	public void addScore(int _value) {
-		Score component = createComponent(CoreComponentIds.Score);
-		component.value = _value;
+	public void addScore(int value) {
+		Score component = (Score) recoverComponent(CoreComponentIds.Score);
+		if (component == null) {
+			component = new Score(value);
+		} else {
+			component.value = value;
+		}
 		addComponent(CoreComponentIds.Score, component);
 	}
 
-	public void replaceScore(int _value) {
-		Score component = createComponent(CoreComponentIds.Score);
-		component.value = _value;
+	public void replaceScore(int value) {
+		Score component = (Score) recoverComponent(CoreComponentIds.Score);
+		if (component == null) {
+			component = new Score(value);
+		} else {
+			component.value = value;
+		}
 		replaceComponent(CoreComponentIds.Score, component);
 	}
 
@@ -83,17 +99,26 @@ public class Entity extends com.ilargia.games.entitas.Entity {
 		return hasComponent(CoreComponentIds.Bounds);
 	}
 
-	public void addBounds(Rectangle _rectangle, Bounds.Tag _tag) {
-		Bounds component = createComponent(CoreComponentIds.Bounds);
-		component.rectangle = _rectangle;
-		component.tag = _tag;
+	public void addBounds(float x, float y, float width, float height, Tag _tag) {
+		Bounds component = (Bounds) recoverComponent(CoreComponentIds.Bounds);
+		if (component == null) {
+			component = new Bounds(x, y, width, height, _tag);
+		} else {
+			component.rectangle = new Rectangle(x, y, width, height);;
+			component.tag = _tag;
+		}
 		addComponent(CoreComponentIds.Bounds, component);
 	}
 
-	public void replaceBounds(Rectangle _rectangle, Bounds.Tag _tag) {
-		Bounds component = createComponent(CoreComponentIds.Bounds);
-		component.rectangle = _rectangle;
-		component.tag = _tag;
+	public void replaceBounds(float x, float y, float width, float height,
+			Tag _tag) {
+		Bounds component = (Bounds) recoverComponent(CoreComponentIds.Bounds);
+		if (component == null) {
+			component = new Bounds(x, y, width, height, _tag);
+		} else {
+			component.rectangle = new Rectangle(x, y, width, height);;
+			component.tag = _tag;
+		}
 		replaceComponent(CoreComponentIds.Bounds, component);
 	}
 
@@ -109,16 +134,22 @@ public class Entity extends com.ilargia.games.entitas.Entity {
 		return hasComponent(CoreComponentIds.Player);
 	}
 
-	public void addPlayer(Player.ID _id) {
-		Player component = createComponent(CoreComponentIds.Player);
-		component.id = _id;
+	public void addPlayer(ID id) {
+		Player component = (Player) recoverComponent(CoreComponentIds.Player);
+		if (component == null) {
+			component = new Player();
+		}
+		component.id = id;
 		addComponent(CoreComponentIds.Player, component);
 	}
 
-	public void replacePlayer(Player.ID _id) {
-		Player component = createComponent(CoreComponentIds.Player);
-		component.id = _id;
-		replaceComponent(CoreComponentIds.Player, component);
+	public void replacePlayer(ID id) {
+		Player component = (Player) recoverComponent(CoreComponentIds.Player);
+		if (component == null) {
+			component = new Player();
+		}
+		component.id = id;
+		removeComponent(CoreComponentIds.Player);
 	}
 
 	public void removePlayer() {
@@ -133,15 +164,23 @@ public class Entity extends com.ilargia.games.entitas.Entity {
 		return hasComponent(CoreComponentIds.View);
 	}
 
-	public void addView(Shape2D _shape) {
-		View component = createComponent(CoreComponentIds.View);
-		component.shape = _shape;
+	public void addView(Shape2D shape) {
+		View component = (View) recoverComponent(CoreComponentIds.View);
+		if (component == null) {
+			component = new View(shape);
+		} else {
+			component.shape = shape;
+		}
 		addComponent(CoreComponentIds.View, component);
 	}
 
-	public void replaceView(Shape2D _shape) {
-		View component = createComponent(CoreComponentIds.View);
-		component.shape = _shape;
+	public void replaceView(Shape2D shape) {
+		View component = (View) recoverComponent(CoreComponentIds.View);
+		if (component == null) {
+			component = new View(shape);
+		} else {
+			component.shape = shape;
+		}
 		replaceComponent(CoreComponentIds.View, component);
 	}
 
@@ -157,15 +196,23 @@ public class Entity extends com.ilargia.games.entitas.Entity {
 		return hasComponent(CoreComponentIds.Motion);
 	}
 
-	public void addMotion(Vector2 _velocity) {
-		Motion component = createComponent(CoreComponentIds.Motion);
-		component.velocity = _velocity;
+	public void addMotion(float x, float y) {
+		Motion component = (Motion) recoverComponent(CoreComponentIds.Motion);
+		if (component == null) {
+			component = new Motion(x, y);
+		} else {
+			component.velocity = new Vector2(x, y);
+		}
 		addComponent(CoreComponentIds.Motion, component);
 	}
 
-	public void replaceMotion(Vector2 _velocity) {
-		Motion component = createComponent(CoreComponentIds.Motion);
-		component.velocity = _velocity;
+	public void replaceMotion(float x, float y) {
+		Motion component = (Motion) recoverComponent(CoreComponentIds.Motion);
+		if (component == null) {
+			component = new Motion(x, y);
+		} else {
+			component.velocity = new Vector2(x, y);
+		}
 		replaceComponent(CoreComponentIds.Motion, component);
 	}
 

@@ -211,7 +211,7 @@ public class Entity {
         }
     }
 
-    public Stack<IComponent> getComponentPool(int index) {
+    private Stack<IComponent> getComponentPool(int index) {
         Stack<IComponent> componentPool = _componentPools[index];
         if (componentPool == null) {
             componentPool = new Stack<IComponent>();
@@ -220,6 +220,15 @@ public class Entity {
 
         return componentPool;
     }
+
+    public IComponent recoverComponent(int index) {
+        Stack<IComponent> componentPool = getComponentPool(index);
+        if (componentPool.size() > 0) {
+            return componentPool.pop();
+        }
+        return null;
+    }
+
 
     public <T extends IComponent> T createComponent(int index)  {
         Stack<IComponent> componentPool = getComponentPool(index);

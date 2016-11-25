@@ -11,7 +11,7 @@ import java.util.Stack;
 
 public class BasePool<E extends Entity> {
 
-    private FactoryEntity<E> _factoryMethod;
+    private FactoryEntity<E> _factoryEntiy;
     public PoolChanged<BasePool, E> OnEntityCreated;
     public PoolChanged<BasePool, E> OnEntityWillBeDestroyed;
     public PoolChanged<BasePool, E> OnEntityDestroyed;
@@ -37,7 +37,7 @@ public class BasePool<E extends Entity> {
     public BasePool(int totalComponents, int startCreationIndex, EntityMetaData metaData, FactoryEntity<E> factoryMethod) {
         _totalComponents = totalComponents;
         _creationIndex = startCreationIndex;
-        _factoryMethod = factoryMethod;
+        _factoryEntiy = factoryMethod;
 
         if (metaData != null) {
             _metaData = metaData;
@@ -76,14 +76,14 @@ public class BasePool<E extends Entity> {
         _entities = new ObjectSet<>();
         _groups = new ObjectMap<>();
 
-        entityType = (Class<E>) _factoryMethod.create(_totalComponents, _componentPools, _metaData).getClass();
+        entityType = (Class<E>) _factoryEntiy.create(_totalComponents, _componentPools, _metaData).getClass();
 
     }
 
     public E createEntity() {
         E ent = _reusableEntities.size() > 0
                 ? _reusableEntities.pop()
-                : _factoryMethod.create(_totalComponents, _componentPools, _metaData);
+                : _factoryEntiy.create(_totalComponents, _componentPools, _metaData);
         ent.setEnabled(true);
         ent.setCreationIndex(_creationIndex++);
         ent.retain(this);

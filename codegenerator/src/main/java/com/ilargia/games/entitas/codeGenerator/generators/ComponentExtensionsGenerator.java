@@ -5,8 +5,10 @@ import com.ilargia.games.entitas.codeGenerator.CodeGenerator;
 import com.ilargia.games.entitas.codeGenerator.interfaces.IComponentCodeGenerator;
 import com.ilargia.games.entitas.codeGenerator.intermediate.ComponentInfo;
 import org.jboss.forge.roaster.Roaster;
+import org.jboss.forge.roaster._shade.org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.jboss.forge.roaster.model.source.FieldSource;
 import org.jboss.forge.roaster.model.source.JavaClassSource;
+import org.jboss.forge.roaster.model.source.MethodSource;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,39 +70,62 @@ public class ComponentExtensionsGenerator implements IComponentCodeGenerator {
     }
 
     private void addImporEnums(ComponentInfo info, JavaClassSource entityClass) {
-        info.internalEnums.stream().forEach(e-> entityClass.addImport(e));
+        info.internalEnums.stream().forEach(e -> entityClass.addImport(e));
 
     }
 
 
     private void addAddMethods(ComponentInfo info, JavaClassSource source) {
         if (!info.isSingletonComponent) {
-            String method = "%2$s component = createComponent(%1$s.%2$s);\n %3$s\n addComponent(%1$s.%2$s, component);\n ";
+            String method = "";
+            if (info.constructores.size() > 0) {
+                method = String.format("%2$s component = (%2$s) recoverComponent(%1$s.%2$s);\n if(component == null) { " +
+                                "component = new %2$s(%4$s);\n } else {\n%3$s\n} addComponent(%1$s.%2$s, component);\n ",
+                        CodeGenerator.capitalize(info.pools.get(0)) + CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG,
+                        info.typeName, bodyFromConstructor(info.constructores.get(0)), memberNamesFromConstructor(info.constructores.get(0)));
+
+            } else {
+                method = String.format("%2$s component = (%2$s) recoverComponent(%1$s.%2$s);\n if(component == null) { " +
+                                "component = new %2$s();\n } \n%3$s\n addComponent(%1$s.%2$s, component);\n ",
+                        CodeGenerator.capitalize(info.pools.get(0)) + CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG,
+                        info.typeName, memberAssignments(info.memberInfos));
+            }
+
             source.addMethod()
                     .setName(String.format("add%1$s", info.typeName))
                     .setReturnTypeVoid()
                     .setPublic()
-                    .setParameters(memberNamesWithType(info.memberInfos))
-                    .setBody(String.format(method,
-                            CodeGenerator.capitalize(info.pools.get(0)) + CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG,
-                            info.typeName, memberAssignments(info.memberInfos)));
-
-
+                    .setParameters(info.constructores.size() > 0
+                            ? memberNamesWithTypeFromConstructor(info.constructores.get(0))
+                            : memberNamesWithType(info.memberInfos))
+                    .setBody(method);
 
         }
     }
 
     private void addReplaceMethods(ComponentInfo info, JavaClassSource source) {
         if (!info.isSingletonComponent) {
-            String method = "%2$s component = createComponent(%1$s.%2$s);\n %3$s\n replaceComponent(%1$s.%2$s, component);\n ";
+            String method;
+            if (info.constructores.size() > 0) {
+                method = String.format("%2$s component = (%2$s) recoverComponent(%1$s.%2$s);\n if(component == null) { " +
+                                "component = new %2$s(%4$s);\n } else {\n%3$s\n} replaceComponent(%1$s.%2$s, component);\n "
+                        , CodeGenerator.capitalize(info.pools.get(0)) + CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG,
+                        info.typeName, bodyFromConstructor(info.constructores.get(0)), memberNamesFromConstructor(info.constructores.get(0)));
+            } else {
+                method = String.format("%2$s component = (%2$s) recoverComponent(%1$s.%2$s);\n if(component == null) { " +
+                                "component = new %2$s();\n} %3$s\n removeComponent(%1$s.%2$s);\n ",
+                        CodeGenerator.capitalize(info.pools.get(0)) + CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG,
+                        info.typeName, memberAssignments(info.memberInfos));
+            }
+
             source.addMethod()
                     .setName(String.format("replace%1$s", info.typeName))
                     .setReturnTypeVoid()
                     .setPublic()
-                    .setParameters(memberNamesWithType(info.memberInfos))
-                    .setBody(String.format(method,
-                            CodeGenerator.capitalize(info.pools.get(0)) + CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG,
-                            info.typeName, memberAssignments(info.memberInfos)));
+                    .setParameters(info.constructores.size() > 0
+                            ? memberNamesWithTypeFromConstructor(info.constructores.get(0))
+                            : memberNamesWithType(info.memberInfos))
+                    .setBody(method);
 
 
         }
@@ -214,7 +239,7 @@ public class ComponentExtensionsGenerator implements IComponentCodeGenerator {
                                     "         entity.add%1$s(%2$s);\n" +
                                     "         return entity;"
                             , info.typeName, memberNames(info.memberInfos)));
-            if(source.getImport("EntitasException") == null) {
+            if (source.getImport("EntitasException") == null) {
                 source.addImport("com.ilargia.games.entitas.exceptions.EntitasException");
             }
             source.addImport(info.fullTypeName);
@@ -278,7 +303,7 @@ public class ComponentExtensionsGenerator implements IComponentCodeGenerator {
                 .setPublic()
                 .setStatic(true)
                 .setBody(String.format(body, CodeGenerator.capitalize(poolName) + CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG,
-                       info.typeName));
+                        info.typeName));
 
     }
 
@@ -353,17 +378,10 @@ public class ComponentExtensionsGenerator implements IComponentCodeGenerator {
     }
 
 
-    public String memberNamesWithType(List<FieldSource<JavaClassSource>> memberInfos) {
-        return memberInfos.stream()
-                .map(info -> info.getType() + " " + "_" + info.getName())
-                .collect(Collectors.joining(", "));
-
-    }
-
     public void addImportClass(List<FieldSource<JavaClassSource>> memberInfos, JavaClassSource source) {
-        for (FieldSource<JavaClassSource> info: memberInfos ){
-            if(info.getOrigin().getImport(info.getType().toString()) != null) {
-                if(source.getImport(info.getType().toString()) == null) {
+        for (FieldSource<JavaClassSource> info : memberInfos) {
+            if (info.getOrigin().getImport(info.getType().toString()) != null) {
+                if (source.getImport(info.getType().toString()) == null) {
                     source.addImport(info.getType());
                 }
             }
@@ -375,17 +393,51 @@ public class ComponentExtensionsGenerator implements IComponentCodeGenerator {
         String format = "component.%1$s = %2$s;";
         return memberInfos.stream().map(
                 info -> {
-                    String newArg = "_" + info.getName();
+                    String newArg = info.getName();
                     return String.format(format, info.getName(), newArg);
                 }
         ).collect(Collectors.joining("\n"));
 
     }
 
+
+    public String memberNamesWithType(List<FieldSource<JavaClassSource>> memberInfos) {
+        return memberInfos.stream()
+                .map(info -> info.getType() + " " + info.getName())
+                .collect(Collectors.joining(", "));
+
+    }
+
+
     public String memberNames(List<FieldSource<JavaClassSource>> memberInfos) {
         return memberInfos.stream()
-                .map(info -> "_" + info.getName())
+                .map(info -> info.getName())
                 .collect(Collectors.joining(", "));
+    }
+
+    public String memberNamesFromConstructor(MethodSource<JavaClassSource> constructor) {
+        return constructor.getParameters().stream()
+                .map(info -> info.getName())
+                .collect(Collectors.joining(", "));
+    }
+
+    public String memberNamesWithTypeFromConstructor(MethodSource<JavaClassSource> constructor) {
+        return constructor.getParameters().stream()
+                .map(info -> info.getType() + " " + info.getName())
+                .collect(Collectors.joining(", "));
+    }
+
+    public String bodyFromConstructor(MethodSource<JavaClassSource> constructor) {
+        return ((MethodDeclaration) constructor.getInternal()).getBody().statements()
+                .stream()
+                .map(line -> line.toString().replaceAll("this", "component").toString())
+                .reduce((t, u) -> {
+                    if (!u.toString().startsWith("component")) {
+                        u = "component." + u;
+                    }
+                    return t + ";\n " + u;
+                }).get().toString();
+        //return constructor.getBody().replaceAll("this","component");
     }
 
 }

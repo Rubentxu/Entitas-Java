@@ -31,7 +31,7 @@ public class Pool extends com.ilargia.games.entitas.BasePool<Entity> {
 		return getBallEntity() != null;
 	}
 
-	public Entity setBall(boolean _resetBall) {
+	public Entity setBall(boolean resetBall) {
 		if (hasBall()) {
 			throw new EntitasException(
 					"Could not set Ball!" + this
@@ -39,16 +39,16 @@ public class Pool extends com.ilargia.games.entitas.BasePool<Entity> {
 					"You should check if the pool already has a BallEntity before setting it or use pool.ReplaceBall().");
 		}
 		Entity entity = createEntity();
-		entity.addBall(_resetBall);
+		entity.addBall(resetBall);
 		return entity;
 	}
 
-	public Entity replaceBall(boolean _resetBall) {
+	public Entity replaceBall(boolean resetBall) {
 		Entity entity = getBallEntity();
 		if (entity == null) {
-			entity = setBall(_resetBall);
+			entity = setBall(resetBall);
 		} else {
-			entity.replaceBall(_resetBall);
+			entity.replaceBall(resetBall);
 		}
 		return entity;
 	}

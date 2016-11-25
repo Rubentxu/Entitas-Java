@@ -1,9 +1,9 @@
 package com.ilargia.games.core;
 
-import com.ilargia.games.entitas.EntityMetaData;
 import com.ilargia.games.entitas.interfaces.FactoryEntity;
 import java.util.Stack;
 import com.ilargia.games.entitas.interfaces.IComponent;
+import com.ilargia.games.entitas.EntityMetaData;
 
 /**
  * ---------------------------------------------------------------------------
@@ -21,9 +21,9 @@ public class Pools {
 	}
 
 	public Pool createCorePool() {
-		return new Pool(CoreComponentIds.totalComponents, 0, new EntityMetaData(
-				"Core", CoreComponentIds.componentNames(),
-				CoreComponentIds.componentTypes()), factoryEntity());
+		return new Pool(CoreComponentIds.totalComponents, 0,
+				new EntityMetaData("Core", CoreComponentIds.componentNames(),
+						CoreComponentIds.componentTypes()), factoryEntity());
 	}
 
 	public Pool[] allPools() {

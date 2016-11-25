@@ -12,20 +12,29 @@ import com.ilargia.games.entitas.matcher.Matcher;
  */
 public class CoreMatcher {
 
-	private static IMatcher _matcherPlayer;
-	private static IMatcher _matcherBounds;
-	private static IMatcher _matcherView;
 	private static IMatcher _matcherBall;
-	private static IMatcher _matcherMotion;
 	private static IMatcher _matcherScore;
+	private static IMatcher _matcherBounds;
+	private static IMatcher _matcherPlayer;
+	private static IMatcher _matcherView;
+	private static IMatcher _matcherMotion;
 
-	public static IMatcher Player() {
-		if (_matcherPlayer == null) {
-			Matcher matcher = (Matcher) Matcher.AllOf(CoreComponentIds.Player);
+	public static IMatcher Ball() {
+		if (_matcherBall == null) {
+			Matcher matcher = (Matcher) Matcher.AllOf(CoreComponentIds.Ball);
 			matcher.componentNames = CoreComponentIds.componentNames();
-			_matcherPlayer = matcher;
+			_matcherBall = matcher;
 		}
-		return _matcherPlayer;
+		return _matcherBall;
+	}
+
+	public static IMatcher Score() {
+		if (_matcherScore == null) {
+			Matcher matcher = (Matcher) Matcher.AllOf(CoreComponentIds.Score);
+			matcher.componentNames = CoreComponentIds.componentNames();
+			_matcherScore = matcher;
+		}
+		return _matcherScore;
 	}
 
 	public static IMatcher Bounds() {
@@ -37,6 +46,15 @@ public class CoreMatcher {
 		return _matcherBounds;
 	}
 
+	public static IMatcher Player() {
+		if (_matcherPlayer == null) {
+			Matcher matcher = (Matcher) Matcher.AllOf(CoreComponentIds.Player);
+			matcher.componentNames = CoreComponentIds.componentNames();
+			_matcherPlayer = matcher;
+		}
+		return _matcherPlayer;
+	}
+
 	public static IMatcher View() {
 		if (_matcherView == null) {
 			Matcher matcher = (Matcher) Matcher.AllOf(CoreComponentIds.View);
@@ -46,15 +64,6 @@ public class CoreMatcher {
 		return _matcherView;
 	}
 
-	public static IMatcher Ball() {
-		if (_matcherBall == null) {
-			Matcher matcher = (Matcher) Matcher.AllOf(CoreComponentIds.Ball);
-			matcher.componentNames = CoreComponentIds.componentNames();
-			_matcherBall = matcher;
-		}
-		return _matcherBall;
-	}
-
 	public static IMatcher Motion() {
 		if (_matcherMotion == null) {
 			Matcher matcher = (Matcher) Matcher.AllOf(CoreComponentIds.Motion);
@@ -62,14 +71,5 @@ public class CoreMatcher {
 			_matcherMotion = matcher;
 		}
 		return _matcherMotion;
-	}
-
-	public static IMatcher Score() {
-		if (_matcherScore == null) {
-			Matcher matcher = (Matcher) Matcher.AllOf(CoreComponentIds.Score);
-			matcher.componentNames = CoreComponentIds.componentNames();
-			_matcherScore = matcher;
-		}
-		return _matcherScore;
 	}
 }

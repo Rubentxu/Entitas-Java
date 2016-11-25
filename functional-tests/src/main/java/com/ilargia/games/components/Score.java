@@ -10,4 +10,8 @@ public class Score implements IComponent {
     public Score(int value) {
         this.value = value;
     }
+
+    public Score() {
+
+    }
 }
