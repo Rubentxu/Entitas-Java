@@ -48,9 +48,13 @@ The annotation @Component has the parameters to configure:
 Some of the classes that can generate children:
 
 > `[NamePool] ComponentIds`: You have the indexes of all components, their names and classes.
+
 > `[NamePool] Matcher`: It has all matador relation for each component.
+
 > `Entiy`: Inherits from Entity base and has help methods to manage the components of the entity.
+
 > `[PoPoName] Pool`: Inherited from BasePool and has help methods to manage components annotated with isSingleEntity = true.
+
 > `Pools`: Help methods to create the different pools and where to save the instance of all pools.
 
 
