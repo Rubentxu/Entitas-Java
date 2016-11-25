@@ -49,7 +49,7 @@ Some of the classes that can generate children:
 
 > `[NamePool] ComponentIds`: You have the indexes of all components, their names and classes.
 
-> `[NamePool] Matcher`: It has all matador relation for each component.
+> `[NamePool] Matcher`: It has all Matcher relation for each component.
 
 > `Entiy`: Inherits from Entity base and has help methods to manage the components of the entity.
 
