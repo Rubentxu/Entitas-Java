@@ -3,14 +3,16 @@
 
 ![EntitasJavaLogo ](https://raw.githubusercontent.com/Rubentxu/Entitas-Java/master/codegenerator/src/main/resources/img/EntitasJavaLOGO.png "Entitas-Java")
 
+
+[![Build Status](https://travis-ci.org/Rubentxu/Entitas-Java.svg?branch=master)](https://travis-ci.org/Rubentxu/Entitas-Java)
+
+
 ### Overview
 Entitas-Java is a port of [Entitas-CSharp] (https://github.com/sschmid/Entitas-CSharp).
 
-Entitas is a so-called Entity Component System Framework (ECS) (http://t-machine.org/index.php/2007/09/03/entity-systems-are-the-future-of-mmog-development-part 1 /)).
+Entitas is a so-called Entity Component System Framework [(ECS)] (http://t-machine.org/index.php/2007/09/03/entity-systems-are-the-future-of-mmog-development-part 1 /).
 
-It is super fast designed specifically for C # and Unity.
-
-This port implementation is under Java 8 and uses the power of tools, internal caching, and fast access to components.
+It is super fast designed specifically for C # and Unity. This port implementation is under Java 8 and uses the power of tools, internal caching, and fast access to components.
 
 Several design decisions have been made to work optimally in a garbage collector environment and facilitate the work to this.
 
@@ -51,8 +53,6 @@ Some of the classes that can generate children:
 > `[PoPoName] Pool`: Inherited from BasePool and has help methods to manage components annotated with isSingleEntity = true.
 > `Pools`: Help methods to create the different pools and where to save the instance of all pools.
 
-
-[![Build Status](https://travis-ci.org/Rubentxu/Entitas-Java.svg?branch=master)](https://travis-ci.org/Rubentxu/Entitas-Java)
 
 ```
 +------------------+
