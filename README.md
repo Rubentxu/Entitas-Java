@@ -53,7 +53,7 @@ Some of the classes that can generate children:
 
 > `Entiy`: Inherits from Entity base and has help methods to manage the components of the entity.
 
-> `[PoPoName] Pool`: Inherited from BasePool and has help methods to manage components annotated with isSingleEntity = true.
+> `[PoolName] Pool`: Inherited from BasePool and has help methods to manage components annotated with isSingleEntity = true.
 
 > `Pools`: Help methods to create the different pools and where to save the instance of all pools.
 
