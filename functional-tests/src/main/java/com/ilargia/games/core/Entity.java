@@ -37,26 +37,29 @@ public class Entity extends com.ilargia.games.entitas.Entity {
 		return hasComponent(CoreComponentIds.Ball);
 	}
 
-	public void addBall(boolean resetBall) {
+	public Entity addBall(boolean resetBall) {
 		Ball component = (Ball) recoverComponent(CoreComponentIds.Ball);
 		if (component == null) {
 			component = new Ball();
 		}
 		component.resetBall = resetBall;
 		addComponent(CoreComponentIds.Ball, component);
+		return this;
 	}
 
-	public void replaceBall(boolean resetBall) {
+	public Entity replaceBall(boolean resetBall) {
 		Ball component = (Ball) recoverComponent(CoreComponentIds.Ball);
 		if (component == null) {
 			component = new Ball();
 		}
 		component.resetBall = resetBall;
 		removeComponent(CoreComponentIds.Ball);
+		return this;
 	}
 
-	public void removeBall() {
+	public Entity removeBall() {
 		removeComponent(CoreComponentIds.Ball);
+		return this;
 	}
 
 	public Score getScore() {
@@ -67,7 +70,7 @@ public class Entity extends com.ilargia.games.entitas.Entity {
 		return hasComponent(CoreComponentIds.Score);
 	}
 
-	public void addScore(int value) {
+	public Entity addScore(int value) {
 		Score component = (Score) recoverComponent(CoreComponentIds.Score);
 		if (component == null) {
 			component = new Score(value);
@@ -75,9 +78,10 @@ public class Entity extends com.ilargia.games.entitas.Entity {
 			component.value = value;
 		}
 		addComponent(CoreComponentIds.Score, component);
+		return this;
 	}
 
-	public void replaceScore(int value) {
+	public Entity replaceScore(int value) {
 		Score component = (Score) recoverComponent(CoreComponentIds.Score);
 		if (component == null) {
 			component = new Score(value);
@@ -85,10 +89,12 @@ public class Entity extends com.ilargia.games.entitas.Entity {
 			component.value = value;
 		}
 		replaceComponent(CoreComponentIds.Score, component);
+		return this;
 	}
 
-	public void removeScore() {
+	public Entity removeScore() {
 		removeComponent(CoreComponentIds.Score);
+		return this;
 	}
 
 	public Bounds getBounds() {
@@ -99,7 +105,8 @@ public class Entity extends com.ilargia.games.entitas.Entity {
 		return hasComponent(CoreComponentIds.Bounds);
 	}
 
-	public void addBounds(float x, float y, float width, float height, Tag _tag) {
+	public Entity addBounds(float x, float y, float width, float height,
+			Tag _tag) {
 		Bounds component = (Bounds) recoverComponent(CoreComponentIds.Bounds);
 		if (component == null) {
 			component = new Bounds(x, y, width, height, _tag);
@@ -108,9 +115,10 @@ public class Entity extends com.ilargia.games.entitas.Entity {
 			component.tag = _tag;
 		}
 		addComponent(CoreComponentIds.Bounds, component);
+		return this;
 	}
 
-	public void replaceBounds(float x, float y, float width, float height,
+	public Entity replaceBounds(float x, float y, float width, float height,
 			Tag _tag) {
 		Bounds component = (Bounds) recoverComponent(CoreComponentIds.Bounds);
 		if (component == null) {
@@ -120,10 +128,12 @@ public class Entity extends com.ilargia.games.entitas.Entity {
 			component.tag = _tag;
 		}
 		replaceComponent(CoreComponentIds.Bounds, component);
+		return this;
 	}
 
-	public void removeBounds() {
+	public Entity removeBounds() {
 		removeComponent(CoreComponentIds.Bounds);
+		return this;
 	}
 
 	public Player getPlayer() {
@@ -134,26 +144,29 @@ public class Entity extends com.ilargia.games.entitas.Entity {
 		return hasComponent(CoreComponentIds.Player);
 	}
 
-	public void addPlayer(ID id) {
+	public Entity addPlayer(ID id) {
 		Player component = (Player) recoverComponent(CoreComponentIds.Player);
 		if (component == null) {
 			component = new Player();
 		}
 		component.id = id;
 		addComponent(CoreComponentIds.Player, component);
+		return this;
 	}
 
-	public void replacePlayer(ID id) {
+	public Entity replacePlayer(ID id) {
 		Player component = (Player) recoverComponent(CoreComponentIds.Player);
 		if (component == null) {
 			component = new Player();
 		}
 		component.id = id;
 		removeComponent(CoreComponentIds.Player);
+		return this;
 	}
 
-	public void removePlayer() {
+	public Entity removePlayer() {
 		removeComponent(CoreComponentIds.Player);
+		return this;
 	}
 
 	public View getView() {
@@ -164,7 +177,7 @@ public class Entity extends com.ilargia.games.entitas.Entity {
 		return hasComponent(CoreComponentIds.View);
 	}
 
-	public void addView(Shape2D shape) {
+	public Entity addView(Shape2D shape) {
 		View component = (View) recoverComponent(CoreComponentIds.View);
 		if (component == null) {
 			component = new View(shape);
@@ -172,9 +185,10 @@ public class Entity extends com.ilargia.games.entitas.Entity {
 			component.shape = shape;
 		}
 		addComponent(CoreComponentIds.View, component);
+		return this;
 	}
 
-	public void replaceView(Shape2D shape) {
+	public Entity replaceView(Shape2D shape) {
 		View component = (View) recoverComponent(CoreComponentIds.View);
 		if (component == null) {
 			component = new View(shape);
@@ -182,10 +196,12 @@ public class Entity extends com.ilargia.games.entitas.Entity {
 			component.shape = shape;
 		}
 		replaceComponent(CoreComponentIds.View, component);
+		return this;
 	}
 
-	public void removeView() {
+	public Entity removeView() {
 		removeComponent(CoreComponentIds.View);
+		return this;
 	}
 
 	public Motion getMotion() {
@@ -196,7 +212,7 @@ public class Entity extends com.ilargia.games.entitas.Entity {
 		return hasComponent(CoreComponentIds.Motion);
 	}
 
-	public void addMotion(float x, float y) {
+	public Entity addMotion(float x, float y) {
 		Motion component = (Motion) recoverComponent(CoreComponentIds.Motion);
 		if (component == null) {
 			component = new Motion(x, y);
@@ -204,9 +220,10 @@ public class Entity extends com.ilargia.games.entitas.Entity {
 			component.velocity = new Vector2(x, y);
 		}
 		addComponent(CoreComponentIds.Motion, component);
+		return this;
 	}
 
-	public void replaceMotion(float x, float y) {
+	public Entity replaceMotion(float x, float y) {
 		Motion component = (Motion) recoverComponent(CoreComponentIds.Motion);
 		if (component == null) {
 			component = new Motion(x, y);
@@ -214,9 +231,11 @@ public class Entity extends com.ilargia.games.entitas.Entity {
 			component.velocity = new Vector2(x, y);
 		}
 		replaceComponent(CoreComponentIds.Motion, component);
+		return this;
 	}
 
-	public void removeMotion() {
+	public Entity removeMotion() {
 		removeComponent(CoreComponentIds.Motion);
+		return this;
 	}
 }

@@ -41,7 +41,7 @@ public class ContactSystem implements IExecuteSystem, ISetPool<Pool> {
             Motion motion = e.getMotion();
             View view = e.getView();
 
-            if (ball.getView() != view) {
+            if (!(view.shape instanceof Circle)) {
                 if (collidesCircleRectangle(ballShape, (Rectangle) view.shape)
                         || ballMotion.velocity.y > (HEIGHT / 2) || ballMotion.velocity.y < (HEIGHT / 2)) {
                     if (motion.velocity.x > 0) ballMotion.velocity.x = pongSpeed * Gdx.graphics.getDeltaTime();

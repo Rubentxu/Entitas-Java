@@ -53,7 +53,8 @@ public class Pool extends com.ilargia.games.entitas.BasePool<Entity> {
 		return entity;
 	}
 
-	public void removeBall() {
+	public Pool removeBall() {
 		destroyEntity(getBallEntity());
+		return this;
 	}
 }

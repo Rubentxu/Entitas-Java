@@ -80,20 +80,20 @@ public class ComponentExtensionsGenerator implements IComponentCodeGenerator {
             String method = "";
             if (info.constructores.size() > 0) {
                 method = String.format("%2$s component = (%2$s) recoverComponent(%1$s.%2$s);\n if(component == null) { " +
-                                "component = new %2$s(%4$s);\n } else {\n%3$s\n} addComponent(%1$s.%2$s, component);\n ",
+                                "component = new %2$s(%4$s);\n } else {\n%3$s\n} addComponent(%1$s.%2$s, component);\n return this;",
                         CodeGenerator.capitalize(info.pools.get(0)) + CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG,
                         info.typeName, bodyFromConstructor(info.constructores.get(0)), memberNamesFromConstructor(info.constructores.get(0)));
 
             } else {
                 method = String.format("%2$s component = (%2$s) recoverComponent(%1$s.%2$s);\n if(component == null) { " +
-                                "component = new %2$s();\n } \n%3$s\n addComponent(%1$s.%2$s, component);\n ",
+                                "component = new %2$s();\n } \n%3$s\n addComponent(%1$s.%2$s, component);\n return this;",
                         CodeGenerator.capitalize(info.pools.get(0)) + CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG,
                         info.typeName, memberAssignments(info.memberInfos));
             }
 
             source.addMethod()
                     .setName(String.format("add%1$s", info.typeName))
-                    .setReturnTypeVoid()
+                    .setReturnType("Entity")
                     .setPublic()
                     .setParameters(info.constructores.size() > 0
                             ? memberNamesWithTypeFromConstructor(info.constructores.get(0))
@@ -108,19 +108,19 @@ public class ComponentExtensionsGenerator implements IComponentCodeGenerator {
             String method;
             if (info.constructores.size() > 0) {
                 method = String.format("%2$s component = (%2$s) recoverComponent(%1$s.%2$s);\n if(component == null) { " +
-                                "component = new %2$s(%4$s);\n } else {\n%3$s\n} replaceComponent(%1$s.%2$s, component);\n "
+                                "component = new %2$s(%4$s);\n } else {\n%3$s\n} replaceComponent(%1$s.%2$s, component);\n return this;"
                         , CodeGenerator.capitalize(info.pools.get(0)) + CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG,
                         info.typeName, bodyFromConstructor(info.constructores.get(0)), memberNamesFromConstructor(info.constructores.get(0)));
             } else {
                 method = String.format("%2$s component = (%2$s) recoverComponent(%1$s.%2$s);\n if(component == null) { " +
-                                "component = new %2$s();\n} %3$s\n removeComponent(%1$s.%2$s);\n ",
+                                "component = new %2$s();\n} %3$s\n removeComponent(%1$s.%2$s);\n return this;",
                         CodeGenerator.capitalize(info.pools.get(0)) + CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG,
                         info.typeName, memberAssignments(info.memberInfos));
             }
 
             source.addMethod()
                     .setName(String.format("replace%1$s", info.typeName))
-                    .setReturnTypeVoid()
+                    .setReturnType("Entity")
                     .setPublic()
                     .setParameters(info.constructores.size() > 0
                             ? memberNamesWithTypeFromConstructor(info.constructores.get(0))
@@ -133,10 +133,10 @@ public class ComponentExtensionsGenerator implements IComponentCodeGenerator {
 
     private void addRemoveMethods(ComponentInfo info, JavaClassSource source) {
         if (!info.isSingletonComponent) {
-            String method = "removeComponent(%1$s.%2$s);";
+            String method = "removeComponent(%1$s.%2$s);return this;";
             source.addMethod()
                     .setName(String.format("remove%1$s", info.typeName))
-                    .setReturnTypeVoid()
+                    .setReturnType("Entity")
                     .setPublic()
                     .setBody(String.format(method,
                             CodeGenerator.capitalize(info.pools.get(0)) + CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG,
@@ -200,7 +200,7 @@ public class ComponentExtensionsGenerator implements IComponentCodeGenerator {
 
             source.addMethod()
                     .setName(String.format("set%1$s", info.typeName))
-                    .setReturnTypeVoid()
+                    .setReturnType("Pool")
                     .setPublic()
                     .setParameters("boolean value")
                     .setBody(String.format(" Entity entity = get%1$sEntity();\n" +
@@ -271,9 +271,9 @@ public class ComponentExtensionsGenerator implements IComponentCodeGenerator {
         if (!info.isSingletonComponent) {
             source.addMethod()
                     .setName(String.format("remove%1$s", info.typeName))
-                    .setReturnTypeVoid()
+                    .setReturnType("Pool")
                     .setPublic()
-                    .setBody(String.format("destroyEntity(get%1$sEntity());"
+                    .setBody(String.format("destroyEntity(get%1$sEntity()); return this;"
                             , info.typeName, memberNames(info.memberInfos)));
 
         }
@@ -352,7 +352,7 @@ public class ComponentExtensionsGenerator implements IComponentCodeGenerator {
 
             source.addMethod()
                     .setName(String.format("set%1$s", info.typeName))
-                    .setReturnTypeVoid()
+                    .setReturnType("Entity")
                     .setPublic()
                     .setParameters("boolean value")
                     .setBody(String.format(" if(value != hasComponent(%1$s.%2$s)) {\n" +
@@ -361,7 +361,7 @@ public class ComponentExtensionsGenerator implements IComponentCodeGenerator {
                                     "                    } else {\n" +
                                     "                        removeComponent(%1$s.%2$s);\n" +
                                     "                    }\n" +
-                                    "                }", CodeGenerator.capitalize(info.pools.get(0)) + CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG,
+                                    "                }\n return this;", CodeGenerator.capitalize(info.pools.get(0)) + CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG,
                             info.typeName, info.nameComponent));
 
 
