@@ -5,10 +5,15 @@
 
 ### Overview
 Entitas-Java is a port of [Entitas-CSharp] (https://github.com/sschmid/Entitas-CSharp).
-Entitas is a so-called Entity Component System Framework (ECS) (http://t-machine.org/index.php/2007/09/03/entity-systems-are-the-future-of-mmog-development-part 1 /))
+
+Entitas is a so-called Entity Component System Framework (ECS) (http://t-machine.org/index.php/2007/09/03/entity-systems-are-the-future-of-mmog-development-part 1 /)).
+
 It is super fast designed specifically for C # and Unity.
+
 This port implementation is under Java 8 and uses the power of tools, internal caching, and fast access to components.
+
 Several design decisions have been made to work optimally in a garbage collector environment and facilitate the work to this.
+
 Entitas comes with a code generator that dramatically reduces the amount of code you have to write and makes it much easier to work with the framework.
 
 
@@ -22,10 +27,10 @@ It makes more of a sea code less prone to errors to ensure the best performance.
 I highly recommend its use!
 
 The Code Generator has several options, to compile different kinds of help, it is recommended to activate them all.
-The Component Folder input field is the source directory where the component classes are, which have to inherit from the Icomponent interface and be annotated with
-The annotation @Component.
-The Generated Folder input field is the target directory of the generated classes, it must be within the project under the src / main / java and src / test / java directories
-(Replicate the directories as part of the package).
+
+The Component Folder input field is the source directory where the component classes are, which have to inherit from the Icomponent interface and be annotated with the annotation @Component.
+
+The Generated Folder input field is the target directory of the generated classes, it must be within the project under the src /main/java and src/test/java directories (Replicate the directories as part of the package).
 
 The annotation @Component has the parameters to configure:
 
