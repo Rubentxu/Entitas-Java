@@ -1,5 +1,6 @@
 package com.ilargia.games.systems;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
 import com.ilargia.games.components.Motion;
@@ -30,10 +31,12 @@ public class MoveSystem implements IExecuteSystem, ISetPool<Pool> {
 
             if(view.shape instanceof Rectangle) {
                 Rectangle ret = (Rectangle) view.shape;
-                ret.setPosition(ret.x + motion.velocity.x, ret.y + motion.velocity.y);
+                ret.setPosition(ret.x + motion.velocity.x * Gdx.graphics.getDeltaTime(),
+                        ret.y + motion.velocity.y * Gdx.graphics.getDeltaTime());
             } else {
                 Circle circle = (Circle) view.shape;
-                circle.setPosition(circle.x + motion.velocity.x, circle.y + motion.velocity.y);
+                circle.setPosition(circle.x + motion.velocity.x * Gdx.graphics.getDeltaTime()
+                        , circle.y + motion.velocity.y * Gdx.graphics.getDeltaTime());
             }
         }
     }

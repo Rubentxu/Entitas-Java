@@ -4,10 +4,6 @@ import com.ilargia.games.entitas.EntityMetaData;
 import com.ilargia.games.entitas.interfaces.IComponent;
 import java.util.Stack;
 import com.ilargia.games.components.Ball;
-import com.ilargia.games.components.Score;
-import com.ilargia.games.components.Bounds.Tag;
-import com.ilargia.games.components.Bounds;
-import com.badlogic.gdx.math.Rectangle;
 import com.ilargia.games.components.Player.ID;
 import com.ilargia.games.components.Player;
 import com.ilargia.games.components.View;
@@ -62,80 +58,6 @@ public class Entity extends com.ilargia.games.entitas.Entity {
 		return this;
 	}
 
-	public Score getScore() {
-		return (Score) getComponent(CoreComponentIds.Score);
-	}
-
-	public boolean hasScore() {
-		return hasComponent(CoreComponentIds.Score);
-	}
-
-	public Entity addScore(int value) {
-		Score component = (Score) recoverComponent(CoreComponentIds.Score);
-		if (component == null) {
-			component = new Score(value);
-		} else {
-			component.value = value;
-		}
-		addComponent(CoreComponentIds.Score, component);
-		return this;
-	}
-
-	public Entity replaceScore(int value) {
-		Score component = (Score) recoverComponent(CoreComponentIds.Score);
-		if (component == null) {
-			component = new Score(value);
-		} else {
-			component.value = value;
-		}
-		replaceComponent(CoreComponentIds.Score, component);
-		return this;
-	}
-
-	public Entity removeScore() {
-		removeComponent(CoreComponentIds.Score);
-		return this;
-	}
-
-	public Bounds getBounds() {
-		return (Bounds) getComponent(CoreComponentIds.Bounds);
-	}
-
-	public boolean hasBounds() {
-		return hasComponent(CoreComponentIds.Bounds);
-	}
-
-	public Entity addBounds(float x, float y, float width, float height,
-			Tag _tag) {
-		Bounds component = (Bounds) recoverComponent(CoreComponentIds.Bounds);
-		if (component == null) {
-			component = new Bounds(x, y, width, height, _tag);
-		} else {
-			component.rectangle = new Rectangle(x, y, width, height);;
-			component.tag = _tag;
-		}
-		addComponent(CoreComponentIds.Bounds, component);
-		return this;
-	}
-
-	public Entity replaceBounds(float x, float y, float width, float height,
-			Tag _tag) {
-		Bounds component = (Bounds) recoverComponent(CoreComponentIds.Bounds);
-		if (component == null) {
-			component = new Bounds(x, y, width, height, _tag);
-		} else {
-			component.rectangle = new Rectangle(x, y, width, height);;
-			component.tag = _tag;
-		}
-		replaceComponent(CoreComponentIds.Bounds, component);
-		return this;
-	}
-
-	public Entity removeBounds() {
-		removeComponent(CoreComponentIds.Bounds);
-		return this;
-	}
-
 	public Player getPlayer() {
 		return (Player) getComponent(CoreComponentIds.Player);
 	}
@@ -144,22 +66,24 @@ public class Entity extends com.ilargia.games.entitas.Entity {
 		return hasComponent(CoreComponentIds.Player);
 	}
 
-	public Entity addPlayer(ID id) {
+	public Entity addPlayer(ID id, int score) {
 		Player component = (Player) recoverComponent(CoreComponentIds.Player);
 		if (component == null) {
 			component = new Player();
 		}
 		component.id = id;
+		component.score = score;
 		addComponent(CoreComponentIds.Player, component);
 		return this;
 	}
 
-	public Entity replacePlayer(ID id) {
+	public Entity replacePlayer(ID id, int score) {
 		Player component = (Player) recoverComponent(CoreComponentIds.Player);
 		if (component == null) {
 			component = new Player();
 		}
 		component.id = id;
+		component.score = score;
 		removeComponent(CoreComponentIds.Player);
 		return this;
 	}

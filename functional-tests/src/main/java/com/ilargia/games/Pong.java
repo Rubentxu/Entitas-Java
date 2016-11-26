@@ -9,7 +9,6 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
-import com.ilargia.games.components.Bounds;
 import com.ilargia.games.components.Player;
 import com.ilargia.games.core.Pool;
 import com.ilargia.games.core.Pools;
@@ -40,23 +39,25 @@ public class Pong extends ApplicationAdapter {
 
         systems = new Systems()
                 .add(Pool.createSystem(pools.core,new InputSystem()))
-                //.add(Pool.createSystem(pools.core,new ContactSystem()))
+                .add(Pool.createSystem(pools.core,new ContactSystem()))
                 .add(Pool.createSystem(pools.core,new BoundsSystem()))
                 .add(Pool.createSystem(pools.core,new MoveSystem()))
                 .add(Pool.createSystem(pools.core,new RendererSystem(sr, cam)));
 
-        core.createEntity()
-                .addBounds(SCREEN_WIDTH/4f, SCREEN_HEIGHT/2f, 30f,30f, Bounds.Tag.BoundPlayer1);
 
         core.createEntity()
                 .addBall(false)
-                .addView(new Circle(20,100,8))
-                .addMotion(1,1);
+                .addView(new Circle(0,0,8))
+                .addMotion(60F,300);
 
         core.createEntity()
-                .addPlayer(Player.ID.PLAYER1)
-                .addScore(2)
-                .addView(new Rectangle(10,100,20,20))
+                .addPlayer(Player.ID.PLAYER1, 0)
+                .addView(new Rectangle(-350,0,20,120))
+                .addMotion(0,0);
+
+        core.createEntity()
+                .addPlayer(Player.ID.PLAYER2, 0)
+                .addView(new Rectangle(350,0,20,120))
                 .addMotion(0,0);
     }
 

@@ -29,14 +29,16 @@ public class InputSystem implements IExecuteSystem, ISetPool<Pool> {
             Player player = e.getPlayer();
 
             if(player.id == Player.ID.PLAYER1) {
-                if(Gdx.input.isKeyPressed(Input.Keys.W)) { motion.velocity.y = playerSpeed * Gdx.graphics.getDeltaTime(); }
-                if(Gdx.input.isKeyPressed(Input.Keys.S)) { motion.velocity.y = -playerSpeed * Gdx.graphics.getDeltaTime(); }
+                motion.velocity.y = 0;
+                if(Gdx.input.isKeyPressed(Input.Keys.W)) { motion.velocity.y = playerSpeed;  }
+                if(Gdx.input.isKeyPressed(Input.Keys.S)) { motion.velocity.y = -playerSpeed;  }
 
             }
 
             if(player.id == Player.ID.PLAYER2) {
-                if(Gdx.input.isKeyPressed(Input.Keys.UP)) { motion.velocity.y = playerSpeed * Gdx.graphics.getDeltaTime(); }
-                if(Gdx.input.isKeyPressed(Input.Keys.DOWN)) { motion.velocity.y = -playerSpeed * Gdx.graphics.getDeltaTime(); }
+                motion.velocity.y = 0;
+                if(Gdx.input.isKeyPressed(Input.Keys.UP)) { motion.velocity.y = playerSpeed; }
+                if(Gdx.input.isKeyPressed(Input.Keys.DOWN)) { motion.velocity.y = -playerSpeed; }
 
             }
 
