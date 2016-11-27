@@ -4,6 +4,7 @@ import com.ilargia.games.entitas.EntityMetaData;
 import com.ilargia.games.entitas.interfaces.IComponent;
 import java.util.Stack;
 import com.ilargia.games.components.Ball;
+import com.ilargia.games.components.Score;
 import com.ilargia.games.components.Player.ID;
 import com.ilargia.games.components.Player;
 import com.ilargia.games.components.View;
@@ -55,6 +56,45 @@ public class Entity extends com.ilargia.games.entitas.Entity {
 
 	public Entity removeBall() {
 		removeComponent(CoreComponentIds.Ball);
+		return this;
+	}
+
+	public Score getScore() {
+		return (Score) getComponent(CoreComponentIds.Score);
+	}
+
+	public boolean hasScore() {
+		return hasComponent(CoreComponentIds.Score);
+	}
+
+	public Entity addScore(String text, int x, int y) {
+		Score component = (Score) recoverComponent(CoreComponentIds.Score);
+		if (component == null) {
+			component = new Score(text, x, y);
+		} else {
+			component.text = text;;
+			component.x = x;;
+			component.y = y;
+		}
+		addComponent(CoreComponentIds.Score, component);
+		return this;
+	}
+
+	public Entity replaceScore(String text, int x, int y) {
+		Score component = (Score) recoverComponent(CoreComponentIds.Score);
+		if (component == null) {
+			component = new Score(text, x, y);
+		} else {
+			component.text = text;;
+			component.x = x;;
+			component.y = y;
+		}
+		replaceComponent(CoreComponentIds.Score, component);
+		return this;
+	}
+
+	public Entity removeScore() {
+		removeComponent(CoreComponentIds.Score);
 		return this;
 	}
 

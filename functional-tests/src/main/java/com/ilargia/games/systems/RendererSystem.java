@@ -4,9 +4,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
+import com.ilargia.games.components.Score;
 import com.ilargia.games.components.View;
 import com.ilargia.games.core.CoreMatcher;
 import com.ilargia.games.core.Entity;
@@ -19,18 +22,24 @@ import com.ilargia.games.entitas.matcher.Matcher;
 
 
 public class RendererSystem implements IExecuteSystem, ISetPool<Pool> {
+    private final BitmapFont font;
     private Group<Entity> _group;
     private ShapeRenderer sr;
     private OrthographicCamera cam;
+    private Group<Entity> _groupScore;
+    private Batch batch;
 
-    public RendererSystem(ShapeRenderer sr, OrthographicCamera cam) {
+    public RendererSystem(ShapeRenderer sr, OrthographicCamera cam, Batch batch, BitmapFont font) {
         this.sr = sr;
         this.cam = cam;
+        this.batch = batch;
+        this.font =  font;
     }
 
     @Override
     public void setPool(Pool pool) {
         _group = pool.getGroup(Matcher.AllOf(CoreMatcher.View()));
+        _groupScore = pool.getGroup(Matcher.AllOf(CoreMatcher.Score()));
     }
 
     @Override
@@ -56,7 +65,15 @@ public class RendererSystem implements IExecuteSystem, ISetPool<Pool> {
             }
 
         }
+
         sr.end();
+
+        batch.begin();
+        for (Entity e : _groupScore.getEntities()) {
+            Score score = e.getScore();
+            font.draw(batch, "" + score.text, score.x, score.y);
+        }
+        batch.end();
     }
 
 }

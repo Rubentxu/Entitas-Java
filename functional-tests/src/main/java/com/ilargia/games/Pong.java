@@ -6,8 +6,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Circle;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.ilargia.games.components.Player;
 import com.ilargia.games.core.Pool;
@@ -35,6 +39,8 @@ public class Pong extends ApplicationAdapter {
         pools =  new Pools();
         Pool core = pools.core;
         ShapeRenderer sr = new ShapeRenderer();
+        Batch batch = new SpriteBatch();
+        BitmapFont font = new BitmapFont();
         OrthographicCamera cam = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
         systems = new Systems()
@@ -42,13 +48,13 @@ public class Pong extends ApplicationAdapter {
                 .add(Pool.createSystem(pools.core,new ContactSystem()))
                 .add(Pool.createSystem(pools.core,new BoundsSystem()))
                 .add(Pool.createSystem(pools.core,new MoveSystem()))
-                .add(Pool.createSystem(pools.core,new RendererSystem(sr, cam)));
+                .add(Pool.createSystem(pools.core,new RendererSystem(sr, cam, batch, font)));
 
 
         core.createEntity()
                 .addBall(false)
                 .addView(new Circle(0,0,8))
-                .addMotion(60F,300);
+                .addMotion(MathUtils.random(130,300),300);
 
         core.createEntity()
                 .addPlayer(Player.ID.PLAYER1, 0)
@@ -59,6 +65,9 @@ public class Pong extends ApplicationAdapter {
                 .addPlayer(Player.ID.PLAYER2, 0)
                 .addView(new Rectangle(350,0,20,120))
                 .addMotion(0,0);
+
+        core.createEntity()
+                .addScore("Prueba", 200, 400 );
     }
 
     @Override

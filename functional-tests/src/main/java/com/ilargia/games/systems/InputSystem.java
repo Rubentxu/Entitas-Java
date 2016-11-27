@@ -15,7 +15,7 @@ import com.ilargia.games.entitas.matcher.Matcher;
 
 public class InputSystem implements IExecuteSystem, ISetPool<Pool> {
     private Group<Entity> _group;
-    private int playerSpeed = 125;
+    private int playerSpeed = 200;
 
     @Override
     public void setPool(Pool pool) {
@@ -41,7 +41,6 @@ public class InputSystem implements IExecuteSystem, ISetPool<Pool> {
                 if(Gdx.input.isKeyPressed(Input.Keys.DOWN)) { motion.velocity.y = -playerSpeed; }
 
             }
-
 
         }
     }

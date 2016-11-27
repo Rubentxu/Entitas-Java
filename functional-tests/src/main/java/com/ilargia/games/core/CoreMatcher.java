@@ -13,6 +13,7 @@ import com.ilargia.games.entitas.matcher.Matcher;
 public class CoreMatcher {
 
 	private static IMatcher _matcherBall;
+	private static IMatcher _matcherScore;
 	private static IMatcher _matcherPlayer;
 	private static IMatcher _matcherView;
 	private static IMatcher _matcherMotion;
@@ -24,6 +25,15 @@ public class CoreMatcher {
 			_matcherBall = matcher;
 		}
 		return _matcherBall;
+	}
+
+	public static IMatcher Score() {
+		if (_matcherScore == null) {
+			Matcher matcher = (Matcher) Matcher.AllOf(CoreComponentIds.Score);
+			matcher.componentNames = CoreComponentIds.componentNames();
+			_matcherScore = matcher;
+		}
+		return _matcherScore;
 	}
 
 	public static IMatcher Player() {
