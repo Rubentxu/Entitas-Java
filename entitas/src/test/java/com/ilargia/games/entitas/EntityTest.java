@@ -2,7 +2,6 @@ package com.ilargia.games.entitas;
 
 import com.ilargia.games.entitas.caching.EntitasCache;
 import com.ilargia.games.entitas.components.Position;
-import com.ilargia.games.entitas.components.Views;
 import com.ilargia.games.entitas.exceptions.EntityAlreadyHasComponentException;
 import com.ilargia.games.entitas.exceptions.EntityDoesNotHaveComponentException;
 import com.ilargia.games.entitas.exceptions.EntityIsNotEnabledException;
@@ -159,7 +158,7 @@ public class EntityTest {
 
     @Test
     public void createComponent() throws InstantiationException, IllegalAccessException {
-        entity.createComponent(1, Position.class);
+        entity.createComponent(1);
 
     }
 

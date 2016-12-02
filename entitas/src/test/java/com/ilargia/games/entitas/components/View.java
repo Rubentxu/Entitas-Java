@@ -1,15 +1,14 @@
 package com.ilargia.games.entitas.components;
 
+import com.badlogic.gdx.math.Shape2D;
 import com.ilargia.games.entitas.codeGenerator.Component;
 import com.ilargia.games.entitas.interfaces.IComponent;
 
 @Component(pools = {"Core"})
-public class Position implements IComponent {
-    public float x, y;
+public class View implements IComponent {
+    public Shape2D shape;
 
-    public Position(float x, float y) {
-        this.x = x;
-        this.y = y;
+    public View(Shape2D shape) {
+        this.shape = shape;
     }
-
 }

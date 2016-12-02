@@ -21,7 +21,7 @@ public class PoolTest {
 
     @Before
     public void setUp() throws Exception {
-        pool = new BasePool(100);
+        pool = new BasePool(100,0,null, null);
         entity = pool.createEntity();
 
     }

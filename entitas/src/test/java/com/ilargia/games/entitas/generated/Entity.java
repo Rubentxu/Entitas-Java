@@ -1,15 +1,15 @@
-package com.ilargia.games.core;
+package com.ilargia.games.entitas.generated;
 
 import com.ilargia.games.entitas.EntityMetaData;
 import com.ilargia.games.entitas.interfaces.IComponent;
 import java.util.Stack;
-import com.ilargia.games.components.Ball;
-import com.ilargia.games.components.Score;
-import com.ilargia.games.components.Player.ID;
-import com.ilargia.games.components.Player;
-import com.ilargia.games.components.View;
+import com.ilargia.games.entitas.components.Interactive;
+import com.ilargia.games.entitas.components.Score;
+import com.ilargia.games.entitas.components.Position;
+import com.ilargia.games.entitas.components.Player;
+import com.ilargia.games.entitas.components.View;
 import com.badlogic.gdx.math.Shape2D;
-import com.ilargia.games.components.Motion;
+import com.ilargia.games.entitas.components.Motion;
 import com.badlogic.gdx.math.Vector2;
 
 /**
@@ -19,41 +19,26 @@ import com.badlogic.gdx.math.Vector2;
  */
 public class Entity extends com.ilargia.games.entitas.Entity {
 
+	public Interactive InteractiveComponent = new Interactive();
+	public Player PlayerComponent = new Player();
+
 	public Entity(int totalComponents, Stack<IComponent>[] componentPools,
 			EntityMetaData entityMetaData) {
 		super(totalComponents, componentPools, entityMetaData);
 	}
 
-	public Ball getBall() {
-		return (Ball) getComponent(CoreComponentIds.Ball);
+	public boolean Interactive() {
+		return hasComponent(CoreComponentIds.Interactive);
 	}
 
-	public boolean hasBall() {
-		return hasComponent(CoreComponentIds.Ball);
-	}
-
-	public Entity addBall(boolean resetBall) {
-		Ball component = (Ball) recoverComponent(CoreComponentIds.Ball);
-		if (component == null) {
-			component = new Ball();
+	public Entity setInteractive(boolean value) {
+		if (value != hasComponent(CoreComponentIds.Interactive)) {
+			if (value) {
+				addComponent(CoreComponentIds.Interactive, InteractiveComponent);
+			} else {
+				removeComponent(CoreComponentIds.Interactive);
+			}
 		}
-		component.resetBall = resetBall;
-		addComponent(CoreComponentIds.Ball, component);
-		return this;
-	}
-
-	public Entity replaceBall(boolean resetBall) {
-		Ball component = (Ball) recoverComponent(CoreComponentIds.Ball);
-		if (component == null) {
-			component = new Ball();
-		}
-		component.resetBall = resetBall;
-		removeComponent(CoreComponentIds.Ball);
-		return this;
-	}
-
-	public Entity removeBall() {
-		removeComponent(CoreComponentIds.Ball);
 		return this;
 	}
 
@@ -96,38 +81,55 @@ public class Entity extends com.ilargia.games.entitas.Entity {
 		return this;
 	}
 
-	public Player getPlayer() {
-		return (Player) getComponent(CoreComponentIds.Player);
+	public Position getPosition() {
+		return (Position) getComponent(CoreComponentIds.Position);
 	}
 
-	public boolean hasPlayer() {
+	public boolean hasPosition() {
+		return hasComponent(CoreComponentIds.Position);
+	}
+
+	public Entity addPosition(float x, float y) {
+		Position component = (Position) recoverComponent(CoreComponentIds.Position);
+		if (component == null) {
+			component = new Position(x, y);
+		} else {
+			component.x = x;;
+			component.y = y;
+		}
+		addComponent(CoreComponentIds.Position, component);
+		return this;
+	}
+
+	public Entity replacePosition(float x, float y) {
+		Position component = (Position) recoverComponent(CoreComponentIds.Position);
+		if (component == null) {
+			component = new Position(x, y);
+		} else {
+			component.x = x;;
+			component.y = y;
+		}
+		replaceComponent(CoreComponentIds.Position, component);
+		return this;
+	}
+
+	public Entity removePosition() {
+		removeComponent(CoreComponentIds.Position);
+		return this;
+	}
+
+	public boolean Player() {
 		return hasComponent(CoreComponentIds.Player);
 	}
 
-	public Entity addPlayer(ID id, int score) {
-		Player component = (Player) recoverComponent(CoreComponentIds.Player);
-		if (component == null) {
-			component = new Player();
+	public Entity setPlayer(boolean value) {
+		if (value != hasComponent(CoreComponentIds.Player)) {
+			if (value) {
+				addComponent(CoreComponentIds.Player, PlayerComponent);
+			} else {
+				removeComponent(CoreComponentIds.Player);
+			}
 		}
-		component.id = id;
-		component.score = score;
-		addComponent(CoreComponentIds.Player, component);
-		return this;
-	}
-
-	public Entity replacePlayer(ID id, int score) {
-		Player component = (Player) recoverComponent(CoreComponentIds.Player);
-		if (component == null) {
-			component = new Player();
-		}
-		component.id = id;
-		component.score = score;
-		removeComponent(CoreComponentIds.Player);
-		return this;
-	}
-
-	public Entity removePlayer() {
-		removeComponent(CoreComponentIds.Player);
 		return this;
 	}
 

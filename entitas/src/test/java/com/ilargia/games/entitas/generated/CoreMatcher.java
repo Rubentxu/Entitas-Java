@@ -1,4 +1,4 @@
-package com.ilargia.games.core;
+package com.ilargia.games.entitas.generated;
 
 import com.ilargia.games.entitas.interfaces.IMatcher;
 import com.ilargia.games.entitas.matcher.Matcher;
@@ -10,19 +10,21 @@ import com.ilargia.games.entitas.matcher.Matcher;
  */
 public class CoreMatcher {
 
-	private static IMatcher _matcherBall;
+	private static IMatcher _matcherInteractive;
 	private static IMatcher _matcherScore;
+	private static IMatcher _matcherPosition;
 	private static IMatcher _matcherPlayer;
 	private static IMatcher _matcherView;
 	private static IMatcher _matcherMotion;
 
-	public static IMatcher Ball() {
-		if (_matcherBall == null) {
-			Matcher matcher = (Matcher) Matcher.AllOf(CoreComponentIds.Ball);
+	public static IMatcher Interactive() {
+		if (_matcherInteractive == null) {
+			Matcher matcher = (Matcher) Matcher
+					.AllOf(CoreComponentIds.Interactive);
 			matcher.componentNames = CoreComponentIds.componentNames();
-			_matcherBall = matcher;
+			_matcherInteractive = matcher;
 		}
-		return _matcherBall;
+		return _matcherInteractive;
 	}
 
 	public static IMatcher Score() {
@@ -32,6 +34,16 @@ public class CoreMatcher {
 			_matcherScore = matcher;
 		}
 		return _matcherScore;
+	}
+
+	public static IMatcher Position() {
+		if (_matcherPosition == null) {
+			Matcher matcher = (Matcher) Matcher
+					.AllOf(CoreComponentIds.Position);
+			matcher.componentNames = CoreComponentIds.componentNames();
+			_matcherPosition = matcher;
+		}
+		return _matcherPosition;
 	}
 
 	public static IMatcher Player() {
