@@ -210,7 +210,7 @@ public class ComponentExtensionsGenerator implements IComponentCodeGenerator {
                             "             } else {\n" +
                             "                  destroyEntity(entity);\n" +
                             "             }\n" +
-                            "        }", info.typeName));
+                            "        }\n return this;", info.typeName));
 
 
         } else {

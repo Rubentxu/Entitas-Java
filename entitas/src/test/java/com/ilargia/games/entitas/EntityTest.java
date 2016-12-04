@@ -1,11 +1,14 @@
 package com.ilargia.games.entitas;
 
+import com.badlogic.gdx.math.Circle;
 import com.ilargia.games.entitas.caching.EntitasCache;
-import com.ilargia.games.entitas.components.Position;
+import com.ilargia.games.entitas.codeGenerator.Component;
+import com.ilargia.games.entitas.components.*;
 import com.ilargia.games.entitas.exceptions.EntityAlreadyHasComponentException;
 import com.ilargia.games.entitas.exceptions.EntityDoesNotHaveComponentException;
 import com.ilargia.games.entitas.exceptions.EntityIsNotEnabledException;
 import com.ilargia.games.entitas.interfaces.IComponent;
+import com.ilargia.games.entitas.utils.TestComponentIds;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -28,20 +31,15 @@ public class EntityTest {
     public void setUp() throws Exception {
         _componentPools = new Stack[10];
         EntitasCache cache = new EntitasCache();
-        entity = new Entity(10, _componentPools, null);
+        entity = new Entity(10, _componentPools, new EntityMetaData("Test", TestComponentIds.componentNames(),
+                TestComponentIds.componentTypes()));
         entity.setCreationIndex(0);
-        entity.addComponent(1, new Position(100, 100));
-        entity.addComponent(2, new Views());
+        entity.addComponent(TestComponentIds.Position, new Position(100, 100));
+        entity.addComponent(TestComponentIds.View, new View(new Circle()));
 
 
     }
 
-    //@Test
-    public void componentSize() {
-        //assertEquals(3, IComponent.getComponentSize());
-
-
-    }
 
     //@Test
     public void componentTypes() {
@@ -65,7 +63,7 @@ public class EntityTest {
 
     @Test
     public void EntityHasSomeComponent() {
-        assertEquals(true, entity.hasAnyComponent(1, 3));
+        assertEquals(true, entity.hasAnyComponent(TestComponentIds.Position, TestComponentIds.Player));
     }
 
     @Test
@@ -76,14 +74,14 @@ public class EntityTest {
 
     @Test(expected = EntityAlreadyHasComponentException.class)
     public void EntityAlreadyHasComponentException() {
-        entity.addComponent(1, new Position(100, 100));
+        entity.addComponent(TestComponentIds.Position, new Position(100, 100));
 
-    }
+   }
 
     @Test
     public void OnComponentAddedTest() {
-        entity.OnComponentAdded = ((Entity e, int index, IComponent c) -> assertEquals(3, index));
-        entity.addComponent(3, new Position(100, 100));
+        entity.OnComponentAdded = ((Entity e, int index, IComponent c) -> assertEquals(TestComponentIds.Motion, index));
+        entity.addComponent(TestComponentIds.Motion, new Motion(100, 100));
 
     }
 
@@ -91,16 +89,16 @@ public class EntityTest {
     @Test
     public void OnComponentReplacedTest() {
         entity.OnComponentReplaced = ((Entity e, int index, IComponent c, IComponent n)
-                -> assertEquals(33F, ((Position) n).getX(), 0.1f));
-        entity.replaceComponent(1, new Position(33, 100));
+                -> assertEquals(33F, ((Position) n).x, 0.1f));
+        entity.replaceComponent(TestComponentIds.Position, new Position(33, 100));
 
     }
 
     @Test
     public void OnComponentReplaced2Test() {
         entity.OnComponentReplaced = ((Entity e, int index, IComponent c, IComponent n)
-                -> assertEquals(100F, ((Position) n).getX(), 0.1f));
-        entity.replaceComponent(1, entity.getComponent(1));
+                -> assertEquals(100F, ((Position) n).x, 0.1f));
+        entity.replaceComponent(TestComponentIds.Position, entity.getComponent(TestComponentIds.Position));
 
     }
 
@@ -109,32 +107,38 @@ public class EntityTest {
     public void OnComponentRemovedTest() {
         entity.OnComponentRemoved = ((Entity e, int index, IComponent c)
                 -> assertFalse(e.hasComponent(index)));
-        entity.removeComponent(2);
+        entity.removeComponent(TestComponentIds.View);
 
     }
 
     @Test
     public void removeComponentTest() {
-        entity.removeComponent(1);
+        entity.removeComponent(TestComponentIds.Position);
         assertEquals(false, entity.hasComponent(1));
+    }
+
+    @Test(expected = EntityDoesNotHaveComponentException.class)
+    public void removeComponentExceptionTest() {
+        entity.removeComponent(TestComponentIds.Motion);
+
     }
 
     @Test
     public void replaceComponentTest() {
-        entity.replaceComponent(1, new Position(50F, 50F));
-        assertEquals(50F, ((Position) entity.getComponent(1)).getX(), 0.1F);
+        entity.replaceComponent(TestComponentIds.Position, new Position(50F, 50F));
+        assertEquals(50F, ((Position) entity.getComponent(TestComponentIds.Position)).x, 0.1F);
     }
 
     @Test
     public void replaceNotExistComponentTest() {
-        entity.replaceComponent(1, new Position(50F, 50F));
-        assertEquals(50F, ((Position) entity.getComponent(1)).getX(), 0.1F);
+        entity.replaceComponent(TestComponentIds.Motion, new Motion(50F, 50F));
+        assertEquals(50F, ((Motion) entity.getComponent(TestComponentIds.Motion)).velocity.x, 0.1F);
     }
 
     @Test
     public void falseReplaceComponentTest() {
-        entity.replaceComponent(1, new Position(50F, 50F));
-        assertNotEquals(100F, ((Position) entity.getComponent(1)).getX(), 0.1F);
+        entity.replaceComponent(TestComponentIds.Motion, new Motion(50F, 50F));
+        assertNotEquals(100F, ((Motion) entity.getComponent(TestComponentIds.Motion)).velocity.x, 0.1F);
     }
 
     @Test(expected = EntityDoesNotHaveComponentException.class)
@@ -158,33 +162,61 @@ public class EntityTest {
 
     @Test
     public void createComponent() throws InstantiationException, IllegalAccessException {
-        entity.createComponent(1);
+        Interactive component = entity.createComponent(TestComponentIds.Interactive);
+        assertNotNull(component);
+
+    }
+
+    @Test
+    public void createComponentFromPool() throws InstantiationException, IllegalAccessException {
+        Interactive component = entity.createComponent(TestComponentIds.Interactive);
+        entity.addComponent(TestComponentIds.Interactive, component);
+        entity.removeComponent(TestComponentIds.Interactive);
+        component = entity.createComponent(TestComponentIds.Interactive);
+        assertNotNull(component);
+
+    }
+
+    @Test
+    public void recoverComponent() throws InstantiationException, IllegalAccessException {
+        Interactive component = entity.createComponent(TestComponentIds.Interactive);
+        entity.addComponent(TestComponentIds.Interactive, component);
+        entity.removeComponent(TestComponentIds.Interactive);
+        component = (Interactive) entity.recoverComponent(TestComponentIds.Interactive);
+        assertNotNull(component);
+
+    }
+
+    @Test
+    public void recoverNullComponent() throws InstantiationException, IllegalAccessException {
+        Position component = (Position) entity.recoverComponent(TestComponentIds.Position);
+        assertNull(component);
 
     }
 
     @Test(expected = EntityIsNotEnabledException.class)
     public void notEnabled() {
         entity.setEnabled(false);
-        entity.addComponent(1, new Position(100, 100));
+        entity.addComponent(TestComponentIds.Position, new Position(100, 100));
 
     }
 
     @Test(expected = EntityIsNotEnabledException.class)
     public void notEnabled2() {
         entity.setEnabled(false);
-        entity.removeComponent(1);
+        entity.removeComponent(TestComponentIds.Position);
 
     }
 
     @Test(expected = EntityIsNotEnabledException.class)
     public void notEnabled3() {
         entity.setEnabled(false);
-        entity.replaceComponent(1, new Position(100, 100));
+        entity.replaceComponent(TestComponentIds.Position, new Position(100, 100));
 
     }
 
 
-    // @Test
+    @Test
     public void getIndices() {
         Integer[] indices = entity.getComponentIndices();
         assertTrue(entity.hasComponents(indices));

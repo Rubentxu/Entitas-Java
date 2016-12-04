@@ -227,7 +227,7 @@ public class BasePool<E extends Entity> {
 
     }
 
-    public void DeactivateAndRemoveEntityIndices() {
+    public void deactivateAndRemoveEntityIndices() {
         for (IEntityIndex entityIndex : _entityIndices.values()) {
             entityIndex.deactivate();
         }
@@ -247,7 +247,7 @@ public class BasePool<E extends Entity> {
     }
 
 
-    public void ClearComponentPools() {
+    public void clearComponentPools() {
         for (int i = 0; i < _componentPools.length; i++) {
             ClearComponentPool(i);
         }

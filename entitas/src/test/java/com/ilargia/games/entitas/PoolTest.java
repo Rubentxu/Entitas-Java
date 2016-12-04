@@ -1,12 +1,21 @@
 package com.ilargia.games.entitas;
 
+import com.ilargia.games.entitas.components.Position;
 import com.ilargia.games.entitas.exceptions.EntityIsNotDestroyedException;
 import com.ilargia.games.entitas.exceptions.PoolDoesNotContainEntityException;
+import com.ilargia.games.entitas.exceptions.PoolEntityIndexDoesAlreadyExistException;
 import com.ilargia.games.entitas.exceptions.PoolStillHasRetainedEntitiesException;
+import com.ilargia.games.entitas.interfaces.FactoryEntity;
+import com.ilargia.games.entitas.interfaces.IComponent;
+import com.ilargia.games.entitas.matcher.Matcher;
+import com.ilargia.games.entitas.utils.TestComponentIds;
+import com.ilargia.games.entitas.utils.TestMatcher;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+
+import java.util.Stack;
 
 import static org.junit.Assert.*;
 
@@ -19,9 +28,22 @@ public class PoolTest {
     private Entity entity;
 
 
+    public FactoryEntity<Entity> factoryEntity() {
+        return (int totalComponents, Stack<IComponent>[] componentPools,
+                EntityMetaData entityMetaData) -> {
+            return new Entity(totalComponents, componentPools, entityMetaData);
+        };
+    }
+
+    public BasePool createTestPool() {
+        return new BasePool(TestComponentIds.totalComponents, 0,
+                new EntityMetaData("Test", TestComponentIds.componentNames(),
+                        TestComponentIds.componentTypes()), factoryEntity());
+    }
+
     @Before
     public void setUp() throws Exception {
-        pool = new BasePool(100,0,null, null);
+        pool = createTestPool();
         entity = pool.createEntity();
 
     }
@@ -110,10 +132,52 @@ public class PoolTest {
         entity.release(pool);
     }
 
-    //@Test
+    @Test
     public void getGroupTest() {
-//        pool.getEntities(Matcher.AllOf(1, 2));
-//        pool.getGroup(Matcher.AllOf(1)).getEntities();
+        entity.addComponent(TestComponentIds.Position, new Position());
+        Group group = pool.getGroup(TestMatcher.Position());
+        assertEquals(1, group.getcount() );
+        group = pool.getGroup(TestMatcher.Position());
+        assertEquals(1, group.getcount() );
     }
+
+    @Test
+    public void getGroupEntitiesTest() {
+        entity.addComponent(TestComponentIds.Position, new Position());
+        Group group = pool.getGroup(TestMatcher.Position());
+        assertEquals(1, group.getEntities().length );
+    }
+
+    @Test
+    public void clearGroupsTest() {
+        entity.addComponent(TestComponentIds.Position, new Position());
+        Group group = pool.getGroup(TestMatcher.Position());
+        pool.clearGroups();
+
+    }
+
+    @Test
+    public void entityIndexTest() {
+        entity.addComponent(TestComponentIds.Position, new Position());
+        Group group = pool.getGroup(TestMatcher.Position());
+        PrimaryEntityIndex<String> index = new PrimaryEntityIndex<String>(group, (e, c) -> "positionEntities");
+        pool.addEntityIndex("positions", index);
+        index = (PrimaryEntityIndex<String>) pool.getEntityIndex("positions");
+        assertNotNull(index);
+        assertTrue(index.hasEntity("positionEntities"));
+
+    }
+
+    @Test(expected = PoolEntityIndexDoesAlreadyExistException.class)
+    public void duplicateEntityIndexTest() {
+        entity.addComponent(TestComponentIds.Position, new Position());
+        Group group = pool.getGroup(TestMatcher.Position());
+        PrimaryEntityIndex<String> index = new PrimaryEntityIndex<String>(group, (e, c) -> "positionEntities");
+        pool.addEntityIndex("duplicate", index);
+        pool.addEntityIndex("duplicate", index);
+
+    }
+
+
 
 }

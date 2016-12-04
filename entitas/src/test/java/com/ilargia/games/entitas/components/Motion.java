@@ -4,7 +4,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.ilargia.games.entitas.codeGenerator.Component;
 import com.ilargia.games.entitas.interfaces.IComponent;
 
-@Component(pools = {"Core"})
+@Component(pools = {"Test"})
 public class Motion implements IComponent {
     public Vector2 velocity;
 

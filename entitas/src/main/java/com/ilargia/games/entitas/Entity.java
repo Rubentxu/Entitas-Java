@@ -327,12 +327,6 @@ public class Entity {
         this._isEnabled = _isEnabled;
     }
 
-    public Stack<IComponent>[] getComponentPools() {
-        return _componentPools;
-    }
 
 
-    public <T> void add() {
-
-    }
 }
