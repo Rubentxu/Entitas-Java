@@ -11,18 +11,6 @@ import java.util.Stack;
 
 public class BasePool<E extends Entity> {
 
-    private FactoryEntity<E> _factoryEntiy;
-    public PoolChanged<BasePool, E> OnEntityCreated;
-    public PoolChanged<BasePool, E> OnEntityWillBeDestroyed;
-    public PoolChanged<BasePool, E> OnEntityDestroyed;
-    public PoolGroupChanged OnGroupCreated;
-    public PoolGroupChanged OnGroupCleared;
-    public EntityChanged<E> _cachedEntityChanged;
-    public ComponentReplaced<E> _cachedComponentReplaced;
-    public EntityReleased<E> _cachedEntityReleased;
-    public int _totalComponents;
-    protected ObjectMap<IMatcher, Group<E>> _groups;
-    protected Array<Group<E>>[] _groupsForIndex;
     private int _creationIndex;
     private ObjectSet<E> _entities;
     private Stack<E> _reusableEntities;
@@ -31,6 +19,18 @@ public class BasePool<E extends Entity> {
     private EntityMetaData _metaData;
     private Stack<IComponent>[] _componentPools;
     private ObjectMap<String, IEntityIndex> _entityIndices;
+    private EntityChanged<E> _cachedEntityChanged;
+    private ComponentReplaced<E> _cachedComponentReplaced;
+    private EntityReleased<E> _cachedEntityReleased;
+    private FactoryEntity<E> _factoryEntiy;
+    protected ObjectMap<IMatcher, Group<E>> _groups;
+    protected Array<Group<E>>[] _groupsForIndex;
+    public PoolChanged<BasePool, E> OnEntityCreated;
+    public PoolChanged<BasePool, E> OnEntityWillBeDestroyed;
+    public PoolChanged<BasePool, E> OnEntityDestroyed;
+    public PoolGroupChanged OnGroupCreated;
+    public PoolGroupChanged OnGroupCleared;
+    public int _totalComponents;
     public Class<E> entityType;
 
 
@@ -239,7 +239,7 @@ public class BasePool<E extends Entity> {
         _creationIndex = 0;
     }
 
-    public void ClearComponentPool(int index) {
+    public void clearComponentPool(int index) {
         Stack<IComponent> componentPool = _componentPools[index];
         if (componentPool != null) {
             componentPool.clear();
@@ -249,7 +249,7 @@ public class BasePool<E extends Entity> {
 
     public void clearComponentPools() {
         for (int i = 0; i < _componentPools.length; i++) {
-            ClearComponentPool(i);
+            clearComponentPool(i);
         }
     }
 
@@ -325,8 +325,8 @@ public class BasePool<E extends Entity> {
         return _retainedEntities.size;
     }
 
-    public static Entity[] getEntities(BasePool pool, IMatcher matcher) {
-        return pool.getGroup(matcher).getEntities();
+    public Entity[] getEntities(IMatcher matcher) {
+        return getGroup(matcher).getEntities();
 
     }
 

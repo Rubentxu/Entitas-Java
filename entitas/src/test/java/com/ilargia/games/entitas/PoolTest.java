@@ -1,10 +1,7 @@
 package com.ilargia.games.entitas;
 
 import com.ilargia.games.entitas.components.Position;
-import com.ilargia.games.entitas.exceptions.EntityIsNotDestroyedException;
-import com.ilargia.games.entitas.exceptions.PoolDoesNotContainEntityException;
-import com.ilargia.games.entitas.exceptions.PoolEntityIndexDoesAlreadyExistException;
-import com.ilargia.games.entitas.exceptions.PoolStillHasRetainedEntitiesException;
+import com.ilargia.games.entitas.exceptions.*;
 import com.ilargia.games.entitas.interfaces.FactoryEntity;
 import com.ilargia.games.entitas.interfaces.IComponent;
 import com.ilargia.games.entitas.matcher.Matcher;
@@ -179,5 +176,80 @@ public class PoolTest {
     }
 
 
+    @Test(expected = PoolEntityIndexDoesNotExistException.class)
+    public void deactivateAndRemoveEntityIndicesTest() {
+        entity.addComponent(TestComponentIds.Position, new Position());
+        Group group = pool.getGroup(TestMatcher.Position());
+        PrimaryEntityIndex<String> index = new PrimaryEntityIndex<String>(group, (e, c) -> "positionEntities");
+        pool.addEntityIndex("positions", index);
+
+        pool.deactivateAndRemoveEntityIndices();
+        index = (PrimaryEntityIndex<String>) pool.getEntityIndex("positions");
+
+
+    }
+
+    @Test
+    public void clearComponentPoolTest() {
+        Stack[] cpool = pool.getComponentPools();
+        cpool[0] = new Stack<IComponent>();
+        cpool[0].push(new Position());
+
+        assertEquals(1, cpool[0].size());
+        pool.clearComponentPool(0);
+
+        assertTrue(cpool[0].empty());
+
+    }
+
+    @Test
+    public void clearComponentPoolsTest() {
+        Stack[] cpool = pool.getComponentPools();
+        cpool[0] = new Stack<IComponent>();
+        cpool[0].push(new Position());
+
+        assertEquals(1, cpool[0].size());
+        pool.clearComponentPools();
+
+        assertTrue(cpool[0].empty());
+
+    }
+
+    @Test
+    public void resetTest() {
+        pool.OnEntityCreated = (pool, entity)-> {};
+        assertNotNull(pool.OnEntityCreated);
+        pool.reset();
+        assertNull(pool.OnEntityCreated);
+
+    }
+
+    @Test
+    public void updateGroupsComponentAddedOrRemovedTest() {
+        Position position = new Position();
+        Group group = pool.getGroup(TestMatcher.Position());
+        group.OnEntityAdded = ( g, e, idx, pc)-> assertEquals(TestComponentIds.Position,idx);
+
+        entity.addComponent(TestComponentIds.Position, position);
+        pool.updateGroupsComponentAddedOrRemoved(entity, TestComponentIds.Position, position);
+        pool.updateGroupsComponentAddedOrRemoved(entity, TestComponentIds.Position, position);
+        //pool.OnGroupCleared = (pool, group)->  assertNull(pool.OnEntityCreated);
+
+    }
+
+    @Test
+    public void updateGroupsComponentReplacedTest() {
+        Position position = new Position();
+        Position position2 = new Position();
+        Group group = pool.getGroup(TestMatcher.Position());
+        group.OnEntityUpdated = ( g, e, idx, pc, nc)-> {
+                System.out.println("OnEntityRemoved...........");
+                assertEquals(position2,nc);
+        };
+
+        entity.addComponent(TestComponentIds.Position, position);
+        pool.updateGroupsComponentReplaced(entity, TestComponentIds.Position, position, position2);
+
+    }
 
 }
