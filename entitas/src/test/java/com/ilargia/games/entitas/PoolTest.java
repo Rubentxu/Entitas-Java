@@ -252,4 +252,14 @@ public class PoolTest {
 
     }
 
+    @Test
+    public void createEntityCollectorTest() {
+        BasePool[]  pools =  new BasePool[] {pool};
+        EntityCollector collector = BasePool.createEntityCollector(pools, TestMatcher.Position());
+        assertNotNull(collector);
+
+    }
+
+
+
 }

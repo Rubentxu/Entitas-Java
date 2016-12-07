@@ -6,6 +6,6 @@ import com.ilargia.games.entitas.exceptions.EntityIndexException;
 
 @FunctionalInterface
 public interface GroupChanged<E extends Entity> {
-    void groupChanged(Group<E> group, E entity, int index, IComponent component) throws EntityIndexException;
+    void groupChanged(Group<E> group, E entity, int index, IComponent component);
 
 }

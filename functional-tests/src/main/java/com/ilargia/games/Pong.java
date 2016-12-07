@@ -44,11 +44,11 @@ public class Pong extends ApplicationAdapter {
         OrthographicCamera cam = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
         systems = new Systems()
-                .add(Pool.createSystem(pools.core,new InputSystem()))
-                .add(Pool.createSystem(pools.core,new ContactSystem()))
-                .add(Pool.createSystem(pools.core,new BoundsSystem()))
-                .add(Pool.createSystem(pools.core,new MoveSystem()))
-                .add(Pool.createSystem(pools.core,new RendererSystem(sr, cam, batch, font)));
+                .addSystem(core, new InputSystem())
+                .addSystem(core, new ContactSystem())
+                .addSystem(core, new BoundsSystem())
+                .addSystem(core, new MoveSystem())
+                .addSystem(core, new RendererSystem(sr, cam, batch, font));
 
 
         core.createEntity()

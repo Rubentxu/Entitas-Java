@@ -330,67 +330,6 @@ public class BasePool<E extends Entity> {
 
     }
 
-    public static <P> ISystem createSystem(BasePool pool, ISystem system, P pools) {
-        setPool(system, pool);
-        setPools(system, pools);
-        return system;
-    }
-
-    public static <P> ISystem createSystem(BasePool pool, IReactiveExecuteSystem system, P pools) {
-        setPool(system, pool);
-        setPools(system, pools);
-
-        IReactiveSystem reactiveSystem = (IReactiveSystem) ((system instanceof IReactiveSystem) ? system : null);
-        if (reactiveSystem != null) {
-            return new ReactiveSystem(pool, reactiveSystem);
-        }
-        IMultiReactiveSystem multiReactiveSystem = (IMultiReactiveSystem) ((system instanceof IMultiReactiveSystem) ? system : null);
-        if (multiReactiveSystem != null) {
-            return new ReactiveSystem(pool, multiReactiveSystem);
-        }
-        IEntityCollectorSystem entityCollectorSystem = (IEntityCollectorSystem) ((system instanceof IEntityCollectorSystem) ? system : null);
-        if (entityCollectorSystem != null) {
-            return new ReactiveSystem(entityCollectorSystem);
-        }
-
-        throw new EntitasException("Could not create ReactiveSystem for " + system + "!", "The system has to implement IReactiveSystem, " +
-                "IMultiReactiveSystem or IEntityCollectorSystem.");
-    }
-
-    public static <P> ISystem createSystem(P pool, ISystem system) {
-        setPool(system, pool);
-        return system;
-    }
-
-
-    public static ISystem createSystem(BasePool pool, IReactiveExecuteSystem system) {
-        setPool(system, pool);
-
-        IEntityCollectorSystem entityCollectorSystem = (IEntityCollectorSystem) ((system instanceof IEntityCollectorSystem) ? system : null);
-        if (entityCollectorSystem != null) {
-            return new ReactiveSystem(entityCollectorSystem);
-        }
-
-        throw new EntitasException("Could not create ReactiveSystem for " + system + "!", "Only IEntityCollectorSystem is supported for " +
-                "pools.createSystem(system).");
-    }
-
-
-    private static <P> void setPool(ISystem system, P pool) {
-        ISetPool poolSystem = (ISetPool) ((system instanceof ISetPool) ? system : null);
-        if (poolSystem != null) {
-            poolSystem.setPool(pool);
-        }
-
-    }
-
-    public static <P> void setPools(ISystem system, P pools) {
-        ISetPools poolsSystem = (ISetPools) ((system instanceof ISetPool) ? system : null);
-        if (poolsSystem != null) {
-            poolsSystem.setPools(pools);
-        }
-    }
-
 
     public static EntityCollector createEntityCollector(BasePool[] pools, IMatcher matcher) {
         return createEntityCollector(pools, matcher, GroupEventType.OnEntityAdded);

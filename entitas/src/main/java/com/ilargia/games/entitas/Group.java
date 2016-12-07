@@ -13,7 +13,7 @@ import java.util.Iterator;
 
 public class Group<E extends Entity> {
 
-    private final ObjectSet<E> _entities = new ObjectSet<E>();
+    private final ObjectSet<E> _entities;
     public GroupChanged<E> OnEntityAdded;
     public GroupChanged<E>  OnEntityRemoved;
     public GroupUpdated<E>  OnEntityUpdated;
@@ -25,24 +25,9 @@ public class Group<E extends Entity> {
 
 
     public Group(IMatcher matcher, Class<E> clazz) {
+        _entities = new ObjectSet<E>();
         _matcher = matcher;
         type = clazz;
-    }
-
-    public void handleEntitySilently(E entity) {
-        if (_matcher.matches(entity)) {
-            addEntitySilently(entity);
-        } else {
-            removeEntitySilently(entity);
-        }
-    }
-
-    public void handleEntity(E entity, int index, IComponent component) throws EntityIndexException {
-        if (_matcher.matches(entity)) {
-            addEntity(entity, index, component);
-        } else {
-            removeEntity(entity, index, component);
-        }
     }
 
 
@@ -66,6 +51,14 @@ public class Group<E extends Entity> {
         OnEntityUpdated = null;
     }
 
+    public void handleEntitySilently(E entity) {
+        if (_matcher.matches(entity)) {
+            addEntitySilently(entity);
+        } else {
+            removeEntitySilently(entity);
+        }
+    }
+
     public GroupChanged handleEntity(E entity) {
         return _matcher.matches(entity)
                 ? (addEntitySilently(entity) ? OnEntityAdded : null)
@@ -80,15 +73,8 @@ public class Group<E extends Entity> {
             _singleEntityCache = null;
             entity.retain(this);
         }
-
         return added;
 
-    }
-
-    private void addEntity(E entity, int index, IComponent component) {
-        if (addEntitySilently(entity) && OnEntityAdded != null) {
-            OnEntityAdded.groupChanged(this, entity, index, component);
-        }
     }
 
     private boolean removeEntitySilently(E entity) {
@@ -102,17 +88,6 @@ public class Group<E extends Entity> {
         return removed;
     }
 
-    private void removeEntity(E entity, int index, IComponent component) {
-        boolean removed = _entities.remove(entity);
-        if (removed) {
-            _entitiesCache = null;
-            _singleEntityCache = null;
-            if (OnEntityRemoved != null) {
-                OnEntityRemoved.groupChanged(this, entity, index, component);
-            }
-            entity.release(this);
-        }
-    }
 
     public boolean containsEntity(E entity) {
         return _entities.contains(entity);
