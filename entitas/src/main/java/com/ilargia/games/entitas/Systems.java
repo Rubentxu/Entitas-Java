@@ -22,6 +22,7 @@ public class Systems implements IInitializeSystem, IExecuteSystem, ICleanupSyste
     private Systems add(ISystem system) {
         if(system instanceof ReactiveSystem) {
             addSystem(((ReactiveSystem) system).getSubsystem());
+            addSystem(system);
         } else {
             addSystem(system);
         }
@@ -30,7 +31,6 @@ public class Systems implements IInitializeSystem, IExecuteSystem, ICleanupSyste
     }
 
     private void addSystem(ISystem system) {
-
         if(system instanceof IInitializeSystem) _initializeSystems.add((IInitializeSystem) system);
         if(system instanceof IExecuteSystem) _executeSystems.add((IExecuteSystem) system);
         if(system instanceof ICleanupSystem) _cleanupSystems.add((ICleanupSystem) system);

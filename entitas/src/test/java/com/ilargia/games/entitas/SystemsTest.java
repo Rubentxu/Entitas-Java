@@ -66,12 +66,12 @@ public class SystemsTest {
 
     }
 
-    private class TestReactive implements IReactiveSystem, IEntityCollectorSystem{
+    public class TestReactive implements IReactiveSystem, IEntityCollectorSystem{
         public boolean flagExecute = false;
 
         @Override
         public TriggerOnEvent getTrigger() {
-            return ((Matcher)Matcher.AllOf(TestMatcher.Position())).OnEntityAdded();
+            return TestMatcher.Position().OnEntityAdded();
         }
 
         @Override
@@ -114,17 +114,38 @@ public class SystemsTest {
 
     }
 
-    //@Test
+    @Test
     public void addReactiveSystemTest() {
         TestReactive reactiveSystem = new TestReactive();
-        systems.addSystem(pool, reactiveSystem);
 
+        systems.addSystem(pool, reactiveSystem);
+        systems.activateReactiveSystems();
         pool.createEntity().
                 addComponent(TestComponentIds.Position, new Position(100, 100));
+
+        systems.execute();
 
         assertTrue(reactiveSystem.flagExecute);
 
     }
+
+    @Test
+    public void addReactiveSystem2Test() {
+        TestReactive reactiveSystem = new TestReactive();
+        Object poolsTest = new Object();
+
+        systems.addSystem(pool, reactiveSystem, poolsTest);
+        systems.deactivateReactiveSystems();
+        pool.createEntity().
+                addComponent(TestComponentIds.Position, new Position(100, 100));
+
+        systems.execute();
+
+
+        assertTrue(reactiveSystem.flagExecute);
+
+    }
+
 
     @Test
     public void systemMethodsTest() {

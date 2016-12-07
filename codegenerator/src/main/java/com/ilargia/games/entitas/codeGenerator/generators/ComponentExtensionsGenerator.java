@@ -151,7 +151,7 @@ public class ComponentExtensionsGenerator implements IComponentCodeGenerator {
         JavaClassSource javaClass = Roaster.parse(JavaClassSource.class, String.format("public class %1$s {}",
                 CodeGenerator.capitalize(poolName) + "Matcher"));
         javaClass.setPackage(pkgDestiny);
-        javaClass.addImport("com.ilargia.games.entitas.interfaces.IMatcher");
+        //javaClass.addImport("com.ilargia.games.entitas.interfaces.IMatcher");
         javaClass.addImport("com.ilargia.games.entitas.matcher.Matcher");
 
         for (ComponentInfo info : componentInfos) {
@@ -284,7 +284,7 @@ public class ComponentExtensionsGenerator implements IComponentCodeGenerator {
     private JavaClassSource addMatcher(String poolName, ComponentInfo info, JavaClassSource javaClass) {
         javaClass.addField()
                 .setName("_matcher" + info.typeName)
-                .setType("IMatcher")
+                .setType("Matcher")
                 .setPrivate()
                 .setStatic(true);
         return null;
@@ -300,7 +300,7 @@ public class ComponentExtensionsGenerator implements IComponentCodeGenerator {
 
         javaClass.addMethod()
                 .setName(info.typeName)
-                .setReturnType("IMatcher")
+                .setReturnType("Matcher")
                 .setPublic()
                 .setStatic(true)
                 .setBody(String.format(body, CodeGenerator.capitalize(poolName) + CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG,

@@ -1,6 +1,5 @@
 package com.ilargia.games.entitas.utils;
 
-import com.ilargia.games.entitas.interfaces.IMatcher;
 import com.ilargia.games.entitas.matcher.Matcher;
 
 /**
@@ -10,10 +9,10 @@ import com.ilargia.games.entitas.matcher.Matcher;
  */
 public class Test2Matcher {
 
-	private static IMatcher _matcherInteractive;
-	private static IMatcher _matcherPlayer;
+	private static Matcher _matcherInteractive;
+	private static Matcher _matcherPlayer;
 
-	public static IMatcher Interactive() {
+	public static Matcher Interactive() {
 		if (_matcherInteractive == null) {
 			Matcher matcher = (Matcher) Matcher
 					.AllOf(Test2ComponentIds.Interactive);
@@ -23,7 +22,7 @@ public class Test2Matcher {
 		return _matcherInteractive;
 	}
 
-	public static IMatcher Player() {
+	public static Matcher Player() {
 		if (_matcherPlayer == null) {
 			Matcher matcher = (Matcher) Matcher.AllOf(Test2ComponentIds.Player);
 			matcher.componentNames = Test2ComponentIds.componentNames();
