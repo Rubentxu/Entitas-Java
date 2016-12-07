@@ -47,9 +47,8 @@ public class ComponentExtensionGeneratorTest {
 
         List<JavaClassSource> result = generator.generate(componentInfos, "com.pruebas.entitas");
 
-        assertEquals(2, result.size());
+        assertEquals(4, result.size());
 
     }
-
 
 }

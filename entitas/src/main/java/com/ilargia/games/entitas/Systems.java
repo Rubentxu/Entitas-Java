@@ -20,8 +20,6 @@ public class Systems implements IInitializeSystem, IExecuteSystem, ICleanupSyste
 
 
     private Systems add(ISystem system) {
-        ReactiveSystem reactiveSystem = (ReactiveSystem) ((system instanceof ReactiveSystem) ? system : null);
-
         if(system instanceof ReactiveSystem) {
             addSystem(((ReactiveSystem) system).getSubsystem());
         } else {
@@ -138,7 +136,7 @@ public class Systems implements IInitializeSystem, IExecuteSystem, ICleanupSyste
                 "IMultiReactiveSystem or IEntityCollectorSystem.");
     }
 
-    public <P> Systems addSystem(P pool, ISystem system) {
+    public Systems addSystem(BasePool pool, ISystem system) {
         setPool(system, pool);
         add(system);
         return this;
@@ -167,7 +165,7 @@ public class Systems implements IInitializeSystem, IExecuteSystem, ICleanupSyste
     }
 
     public <P> void setPools(ISystem system, P pools) {
-        ISetPools poolsSystem = (ISetPools) ((system instanceof ISetPool) ? system : null);
+        ISetPools poolsSystem = (ISetPools) ((system instanceof ISetPools) ? system : null);
         if (poolsSystem != null) {
             poolsSystem.setPools(pools);
         }

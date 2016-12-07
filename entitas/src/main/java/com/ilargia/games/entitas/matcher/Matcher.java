@@ -4,6 +4,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectSet;
 import com.ilargia.games.entitas.Entity;
 import com.ilargia.games.entitas.caching.EntitasCache;
+import com.ilargia.games.entitas.events.GroupEventType;
 import com.ilargia.games.entitas.exceptions.MatcherException;
 import com.ilargia.games.entitas.interfaces.IAllOfMatcher;
 import com.ilargia.games.entitas.interfaces.IAnyOfMatcher;
@@ -250,6 +251,22 @@ public class Matcher implements IAllOfMatcher, IAnyOfMatcher, INoneOfMatcher {
         }
         return true;
 
+    }
+
+    public TriggerOnEvent OnEntityAdded() {
+        return new TriggerOnEvent(this, GroupEventType.OnEntityAdded);
+    }
+
+    /// Convenience method to create a new TriggerOnEvent.
+    /// Commonly used in IReactiveSystem and IMultiReactiveSystem.
+    public TriggerOnEvent OnEntityRemoved() {
+        return new TriggerOnEvent(this, GroupEventType.OnEntityRemoved);
+    }
+
+    /// Convenience method to create a new TriggerOnEvent.
+    /// Commonly used in IReactiveSystem and IMultiReactiveSystem.
+    public TriggerOnEvent OnEntityAddedOrRemoved() {
+        return new TriggerOnEvent(this, GroupEventType.OnEntityAddedOrRemoved);
     }
 
     @Override

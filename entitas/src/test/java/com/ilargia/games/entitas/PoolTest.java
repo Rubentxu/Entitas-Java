@@ -25,14 +25,14 @@ public class PoolTest {
     private Entity entity;
 
 
-    public FactoryEntity<Entity> factoryEntity() {
+    public static FactoryEntity<Entity> factoryEntity() {
         return (int totalComponents, Stack<IComponent>[] componentPools,
                 EntityMetaData entityMetaData) -> {
             return new Entity(totalComponents, componentPools, entityMetaData);
         };
     }
 
-    public BasePool createTestPool() {
+    public static BasePool createTestPool() {
         return new BasePool(TestComponentIds.totalComponents, 0,
                 new EntityMetaData("Test", TestComponentIds.componentNames(),
                         TestComponentIds.componentTypes()), factoryEntity());
