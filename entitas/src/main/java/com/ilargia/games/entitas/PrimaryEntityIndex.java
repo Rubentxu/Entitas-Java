@@ -8,7 +8,7 @@ public class PrimaryEntityIndex<T> extends AbstractEntityIndex<T> {
 
     private ObjectMap<T, Entity> _index;
 
-    protected PrimaryEntityIndex(Group group, Func<Entity, IComponent, T> getKey) throws EntityIndexException {
+    public PrimaryEntityIndex(Group group, Func<Entity, IComponent, T> getKey) throws EntityIndexException {
         super(group, getKey);
         _index = new ObjectMap<T, Entity>();
         activate();

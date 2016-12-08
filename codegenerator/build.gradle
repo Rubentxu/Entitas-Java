@@ -7,6 +7,12 @@ targetCompatibility = 1.8
 
 project.ext.mainClassName = "com.ilargia.games.entitas.codeGenerator.CodeGeneratorApp"
 
+jar {
+    manifest {
+        attributes 'Main-Class': 'com.ilargia.games.entitas.codeGenerator.CodeGeneratorApp'
+    }
+}
+
 
 task(codeGenerator, dependsOn: 'classes', type: JavaExec) {
     main = 'com.ilargia.games.entitas.codeGenerator.CodeGeneratorApp'
@@ -18,22 +24,21 @@ task(codeGenerator, dependsOn: 'classes', type: JavaExec) {
 
 }
 
-task dist(type: Jar) {
-    from files(sourceSets.main.output.classesDir)
-    from files(sourceSets.main.output.resourcesDir)
-    from { configurations.compile.collect { zipTree(it) } }
-//    from files(project.assetsDir);
 
+task fatJar(type: Jar) {
     manifest {
-        attributes 'Main-Class': project.mainClassName
+        attributes 'Implementation-Title': 'Gradle Jar CodeGenerator',
+                'Implementation-Version': 0.1,
+                'Main-Class': 'com.ilargia.games.entitas.codeGenerator.CodeGeneratorApp'
     }
+    baseName = project.name + '-v0.1'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
 }
-dist.dependsOn classes
-
 
 public static void main(String[] args) {
     String dirComponents = args[0];
     String dirDestino = args[1];
-    System.out.println(String.format("Buscando componentes en path %s codigo gnerado en path %s", dirComponents, dirDestino));
+    System.out.println(String.format("Buscando componentes en path %s codigo generado en path %s", dirComponents, dirDestino));
     CodeGenerator generator = new CodeGenerator(args[0], args[1]);
 }

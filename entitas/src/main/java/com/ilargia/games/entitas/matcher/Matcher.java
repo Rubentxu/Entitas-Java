@@ -257,14 +257,10 @@ public class Matcher implements IAllOfMatcher, IAnyOfMatcher, INoneOfMatcher {
         return new TriggerOnEvent(this, GroupEventType.OnEntityAdded);
     }
 
-    /// Convenience method to create a new TriggerOnEvent.
-    /// Commonly used in IReactiveSystem and IMultiReactiveSystem.
     public TriggerOnEvent OnEntityRemoved() {
         return new TriggerOnEvent(this, GroupEventType.OnEntityRemoved);
     }
 
-    /// Convenience method to create a new TriggerOnEvent.
-    /// Commonly used in IReactiveSystem and IMultiReactiveSystem.
     public TriggerOnEvent OnEntityAddedOrRemoved() {
         return new TriggerOnEvent(this, GroupEventType.OnEntityAddedOrRemoved);
     }

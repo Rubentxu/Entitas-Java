@@ -10,7 +10,7 @@ public class EntityIndex<T> extends AbstractEntityIndex<T> {
 
     private ObjectMap<T, ObjectSet<Entity>> _index;
 
-    protected EntityIndex(Group group, Func<Entity, IComponent, T> key) throws EntityIndexException {
+    public EntityIndex(Group group, Func<Entity, IComponent, T> key) throws EntityIndexException {
         super(group, key);
         _index = new ObjectMap<T, ObjectSet<Entity>>();
         activate();
