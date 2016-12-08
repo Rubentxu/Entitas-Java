@@ -71,7 +71,7 @@ public class RendererSystem implements IExecuteSystem, ISetPool<Pool> {
         batch.begin();
         for (Entity e : _groupScore.getEntities()) {
             Score score = e.getScore();
-            font.draw(batch, "" + score.text, score.x, score.y);
+            font.draw(batch, score.text+ " "+ score.points, score.x, score.y);
         }
         batch.end();
     }

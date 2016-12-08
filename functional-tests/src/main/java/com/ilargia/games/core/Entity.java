@@ -72,7 +72,8 @@ public class Entity extends com.ilargia.games.entitas.Entity {
 		} else {
 			component.text = text;;
 			component.x = x;;
-			component.y = y;
+			component.y = y;;
+			component.points = 0;
 		}
 		addComponent(CoreComponentIds.Score, component);
 		return this;
@@ -85,7 +86,8 @@ public class Entity extends com.ilargia.games.entitas.Entity {
 		} else {
 			component.text = text;;
 			component.x = x;;
-			component.y = y;
+			component.y = y;;
+			component.points = 0;
 		}
 		replaceComponent(CoreComponentIds.Score, component);
 		return this;
@@ -104,24 +106,22 @@ public class Entity extends com.ilargia.games.entitas.Entity {
 		return hasComponent(CoreComponentIds.Player);
 	}
 
-	public Entity addPlayer(ID id, int score) {
+	public Entity addPlayer(ID id) {
 		Player component = (Player) recoverComponent(CoreComponentIds.Player);
 		if (component == null) {
 			component = new Player();
 		}
 		component.id = id;
-		component.score = score;
 		addComponent(CoreComponentIds.Player, component);
 		return this;
 	}
 
-	public Entity replacePlayer(ID id, int score) {
+	public Entity replacePlayer(ID id) {
 		Player component = (Player) recoverComponent(CoreComponentIds.Player);
 		if (component == null) {
 			component = new Player();
 		}
 		component.id = id;
-		component.score = score;
 		removeComponent(CoreComponentIds.Player);
 		return this;
 	}

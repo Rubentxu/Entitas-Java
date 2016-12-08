@@ -25,6 +25,9 @@ public class Pong extends ApplicationAdapter {
     private Systems systems;
     public static final int SCREEN_WIDTH = 800;
     public static final int SCREEN_HEIGHT = 480;
+    public static final int PLAYER_WIDTH = 20;
+    public static final int PLAYER_HEIGHT = 120;
+    public static float PLAYER_SPEED = 300;
 
     public static void main (String[] arg) {
         LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
@@ -54,20 +57,20 @@ public class Pong extends ApplicationAdapter {
         core.createEntity()
                 .addBall(false)
                 .addView(new Circle(0,0,8))
-                .addMotion(MathUtils.random(130,300),300);
+                .addMotion(MathUtils.clamp(1,230,300),300);
 
         core.createEntity()
-                .addPlayer(Player.ID.PLAYER1, 0)
-                .addView(new Rectangle(-350,0,20,120))
+                .addPlayer(Player.ID.PLAYER1)
+                .addScore("Player 1: ", 180, 470 )
+                .addView(new Rectangle(-350,0,PLAYER_WIDTH,PLAYER_HEIGHT))
                 .addMotion(0,0);
 
         core.createEntity()
-                .addPlayer(Player.ID.PLAYER2, 0)
-                .addView(new Rectangle(350,0,20,120))
+                .addPlayer(Player.ID.PLAYER2)
+                .addScore("Player 2: ", 480, 470 )
+                .addView(new Rectangle(350,0,PLAYER_WIDTH,PLAYER_HEIGHT))
                 .addMotion(0,0);
 
-        core.createEntity()
-                .addScore("Prueba", 200, 400 );
     }
 
     @Override

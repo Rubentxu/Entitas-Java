@@ -2,6 +2,7 @@ package com.ilargia.games.systems;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Circle;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.ilargia.games.components.*;
 import com.ilargia.games.core.CoreMatcher;
@@ -21,7 +22,7 @@ public class BoundsSystem implements IExecuteSystem, ISetPool<Pool> {
     @Override
     public void setPool(Pool pool) {
         _pool = pool;
-        _groupPlayer = pool.getGroup(Matcher.AllOf(CoreMatcher.Player()));
+        _groupPlayer = pool.getGroup(Matcher.AllOf(CoreMatcher.Player(), CoreMatcher.Score()));
 
     }
 
@@ -29,17 +30,27 @@ public class BoundsSystem implements IExecuteSystem, ISetPool<Pool> {
     public void execute() {
         Entity ball =  _pool.getBallEntity();
         Circle ballShape = (Circle) ball.getView().shape;
+        Motion motion = ball.getMotion();
 
         for (Entity e : _groupPlayer.getEntities()) {
             Player player = e.getPlayer();
+            Score score = e.getScore();
 
-            if (ballShape.x + ballShape.radius <= -(WIDTH/2) && player.id == Player.ID.PLAYER1)
-                player.score+=10;
-            if (ballShape.x - ballShape.radius >= (WIDTH/2) && player.id == Player.ID.PLAYER2)
-                player.score+=10;
+            if (ballShape.x + ballShape.radius <= -(WIDTH/2) && player.id == Player.ID.PLAYER2)
+                restart(ballShape, motion, score);
+
+            if (ballShape.x - ballShape.radius >= (WIDTH/2) && player.id == Player.ID.PLAYER1)
+                restart(ballShape, motion, score);
 
         }
 
+    }
+
+    private void restart(Circle ballShape, Motion ballMotion, Score score) {
+        score.points+=10;
+        ballShape.setPosition(0,0);
+        ballMotion.velocity.set(MathUtils.clamp(1,230,300),300);
+        ballMotion.velocity.x*= -1;
     }
 
 }

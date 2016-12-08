@@ -1,6 +1,5 @@
 package com.ilargia.games.core;
 
-import com.ilargia.games.entitas.interfaces.IMatcher;
 import com.ilargia.games.entitas.matcher.Matcher;
 
 /**
@@ -10,13 +9,13 @@ import com.ilargia.games.entitas.matcher.Matcher;
  */
 public class CoreMatcher {
 
-	private static IMatcher _matcherBall;
-	private static IMatcher _matcherScore;
-	private static IMatcher _matcherPlayer;
-	private static IMatcher _matcherView;
-	private static IMatcher _matcherMotion;
+	private static Matcher _matcherBall;
+	private static Matcher _matcherScore;
+	private static Matcher _matcherPlayer;
+	private static Matcher _matcherView;
+	private static Matcher _matcherMotion;
 
-	public static IMatcher Ball() {
+	public static Matcher Ball() {
 		if (_matcherBall == null) {
 			Matcher matcher = (Matcher) Matcher.AllOf(CoreComponentIds.Ball);
 			matcher.componentNames = CoreComponentIds.componentNames();
@@ -25,7 +24,7 @@ public class CoreMatcher {
 		return _matcherBall;
 	}
 
-	public static IMatcher Score() {
+	public static Matcher Score() {
 		if (_matcherScore == null) {
 			Matcher matcher = (Matcher) Matcher.AllOf(CoreComponentIds.Score);
 			matcher.componentNames = CoreComponentIds.componentNames();
@@ -34,7 +33,7 @@ public class CoreMatcher {
 		return _matcherScore;
 	}
 
-	public static IMatcher Player() {
+	public static Matcher Player() {
 		if (_matcherPlayer == null) {
 			Matcher matcher = (Matcher) Matcher.AllOf(CoreComponentIds.Player);
 			matcher.componentNames = CoreComponentIds.componentNames();
@@ -43,7 +42,7 @@ public class CoreMatcher {
 		return _matcherPlayer;
 	}
 
-	public static IMatcher View() {
+	public static Matcher View() {
 		if (_matcherView == null) {
 			Matcher matcher = (Matcher) Matcher.AllOf(CoreComponentIds.View);
 			matcher.componentNames = CoreComponentIds.componentNames();
@@ -52,7 +51,7 @@ public class CoreMatcher {
 		return _matcherView;
 	}
 
-	public static IMatcher Motion() {
+	public static Matcher Motion() {
 		if (_matcherMotion == null) {
 			Matcher matcher = (Matcher) Matcher.AllOf(CoreComponentIds.Motion);
 			matcher.componentNames = CoreComponentIds.componentNames();

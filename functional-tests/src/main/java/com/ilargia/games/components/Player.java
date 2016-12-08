@@ -9,8 +9,6 @@ public class Player implements IComponent {
     public enum ID { PLAYER1, PLAYER2 };
 
     public ID id;
-    public int score;
-
 
 
 }
