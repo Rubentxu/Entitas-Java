@@ -1,5 +1,7 @@
 apply plugin: 'java'
 
+archivesBaseName = 'Entitas-Java'
+
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 

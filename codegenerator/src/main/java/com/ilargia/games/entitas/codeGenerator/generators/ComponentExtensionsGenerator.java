@@ -344,7 +344,7 @@ public class ComponentExtensionsGenerator implements IComponentCodeGenerator {
 
         if (info.isSingletonComponent) {
             source.addMethod()
-                    .setName(String.format("%1$s%2$s", info.singleComponentPrefix, info.typeName))
+                    .setName(String.format("is%1$s", info.typeName))
                     .setReturnType("boolean")
                     .setPublic()
                     .setBody(String.format("return hasComponent(%1$s.%2$s);",

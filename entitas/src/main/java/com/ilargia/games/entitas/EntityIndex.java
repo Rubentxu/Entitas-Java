@@ -6,13 +6,13 @@ import com.badlogic.gdx.utils.ObjectSet;
 import com.ilargia.games.entitas.exceptions.EntityIndexException;
 import com.ilargia.games.entitas.interfaces.IComponent;
 
-public class EntityIndex<T> extends AbstractEntityIndex<T> {
+public class EntityIndex<K, E extends Entity> extends AbstractEntityIndex<K, E> {
 
-    private ObjectMap<T, ObjectSet<Entity>> _index;
+    private ObjectMap<K, ObjectSet<E>> _index;
 
-    public EntityIndex(Group group, Func<Entity, IComponent, T> key) throws EntityIndexException {
+    public EntityIndex(Group group, Func<E, IComponent, K> key)  {
         super(group, key);
-        _index = new ObjectMap<T, ObjectSet<Entity>>();
+        _index = new ObjectMap<K, ObjectSet<E>>();
         activate();
     }
 
@@ -22,10 +22,10 @@ public class EntityIndex<T> extends AbstractEntityIndex<T> {
         indexEntities(_group);
     }
 
-    public ObjectSet<Entity> getEntities(T key) {
-        ObjectSet<Entity> entities = null;
+    public  ObjectSet<E> getEntities(K key) {
+        ObjectSet<E> entities = null;
         if (!_index.containsKey(key)) {
-            entities = new ObjectSet<Entity>();
+            entities = new ObjectSet<E>();
             _index.put(key, entities);
         } else {
             entities = _index.get(key);
@@ -35,20 +35,20 @@ public class EntityIndex<T> extends AbstractEntityIndex<T> {
 
 
     @Override
-    protected void addEntity(Entity entity, IComponent component) throws EntityIndexException {
+    protected void addEntity(E entity, IComponent component)  {
         getEntities(_key.getKey(entity, component)).add(entity);
         entity.retain(this);
     }
 
     @Override
-    protected void removeEntity(Entity entity, IComponent component) {
+    protected void removeEntity(E entity, IComponent component) {
         getEntities(_key.getKey(entity, component)).remove(entity);
         entity.release(this);
     }
 
     @Override
     protected void clear() {
-        for (ObjectSet<Entity> entities : _index.values()) {
+        for (ObjectSet<E> entities : _index.values()) {
             for (Entity entity : entities) {
                 entity.release(this);
             }

@@ -157,9 +157,9 @@ public class PoolTest {
     public void entityIndexTest() {
         entity.addComponent(TestComponentIds.Position, new Position());
         Group group = pool.getGroup(TestMatcher.Position());
-        PrimaryEntityIndex<String> index = new PrimaryEntityIndex<String>(group, (e, c) -> "positionEntities");
+        PrimaryEntityIndex<String,Entity> index = new PrimaryEntityIndex<>(group, (e, c) -> "positionEntities");
         pool.addEntityIndex("positions", index);
-        index = (PrimaryEntityIndex<String>) pool.getEntityIndex("positions");
+        index = (PrimaryEntityIndex<String,Entity>) pool.getEntityIndex("positions");
         assertNotNull(index);
         assertTrue(index.hasEntity("positionEntities"));
 
@@ -169,7 +169,7 @@ public class PoolTest {
     public void duplicateEntityIndexTest() {
         entity.addComponent(TestComponentIds.Position, new Position());
         Group group = pool.getGroup(TestMatcher.Position());
-        PrimaryEntityIndex<String> index = new PrimaryEntityIndex<String>(group, (e, c) -> "positionEntities");
+        PrimaryEntityIndex<String,Entity> index = new PrimaryEntityIndex<>(group, (e, c) -> "positionEntities");
         pool.addEntityIndex("duplicate", index);
         pool.addEntityIndex("duplicate", index);
 
@@ -180,11 +180,11 @@ public class PoolTest {
     public void deactivateAndRemoveEntityIndicesTest() {
         entity.addComponent(TestComponentIds.Position, new Position());
         Group group = pool.getGroup(TestMatcher.Position());
-        PrimaryEntityIndex<String> index = new PrimaryEntityIndex<String>(group, (e, c) -> "positionEntities");
+        PrimaryEntityIndex<String,Entity> index = new PrimaryEntityIndex<>(group, (e, c) -> "positionEntities");
         pool.addEntityIndex("positions", index);
 
         pool.deactivateAndRemoveEntityIndices();
-        index = (PrimaryEntityIndex<String>) pool.getEntityIndex("positions");
+        index = (PrimaryEntityIndex<String,Entity>) pool.getEntityIndex("positions");
 
 
     }
