@@ -2,12 +2,15 @@ package com.ilargia.games.entitas.codeGenerator.generators;
 
 
 import com.ilargia.games.entitas.codeGenerator.CodeGenerator;
+import com.ilargia.games.entitas.codeGenerator.Component;
 import com.ilargia.games.entitas.codeGenerator.interfaces.IComponentCodeGenerator;
 import com.ilargia.games.entitas.codeGenerator.intermediate.ComponentInfo;
 import org.jboss.forge.roaster.Roaster;
 import org.jboss.forge.roaster.model.source.JavaClassSource;
 import org.jboss.forge.roaster.model.source.JavaInterfaceSource;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -18,6 +21,7 @@ public class ComponentIndicesGenerator implements IComponentCodeGenerator {
     public List<JavaClassSource> generate(List<ComponentInfo> componentInfos, String pkgDestiny) {
         Map<String, List<ComponentInfo>> mapPoolsComponents = CodeGenerator.generateMap(componentInfos);
 
+
         return (List) mapPoolsComponents.keySet().stream()
                 .map(poolName -> generateIndicesLookup(poolName, mapPoolsComponents.get(poolName), pkgDestiny)
                 ).collect(Collectors.toList());
@@ -25,10 +29,6 @@ public class ComponentIndicesGenerator implements IComponentCodeGenerator {
     }
 
     private JavaClassSource generateIndicesLookup(String poolName, List<ComponentInfo> componentInfos, String pkgDestiny) {
-        return generateIndicesLookup(poolName, (ComponentInfo[]) componentInfos.toArray(new ComponentInfo[0]), pkgDestiny);
-    }
-
-    private JavaClassSource generateIndicesLookup(String poolName, ComponentInfo[] componentInfos, String pkgDestiny) {
         JavaClassSource javaClass = Roaster.parse(JavaClassSource.class, String.format("public class %1$s {}",
                 CodeGenerator.capitalize(poolName) + CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG));
         javaClass.setPackage(pkgDestiny);
@@ -37,17 +37,20 @@ public class ComponentIndicesGenerator implements IComponentCodeGenerator {
         addComponentTypes(componentInfos, javaClass);
         System.out.println(javaClass);
         return javaClass;
-
     }
 
-    public JavaClassSource addIndices(ComponentInfo[] componentInfos, JavaClassSource javaClass) {
-        for (Integer i = 0; i < componentInfos.length; i++) {
-            ComponentInfo info = componentInfos[i];
+
+    public JavaClassSource addIndices(List<ComponentInfo> componentInfos, JavaClassSource javaClass) {
+        if (componentInfos.get(0).index != null) componentInfos.sort((ComponentInfo o, ComponentInfo o2) -> {
+            return o.index.compareTo(o2.index);
+        });
+
+        for (ComponentInfo info : componentInfos) {
             if (info != null) {
                 javaClass.addField()
                         .setName(info.typeName)
                         .setType("int")
-                        .setLiteralInitializer(i.toString())
+                        .setLiteralInitializer(info.index.toString())
                         .setPublic()
                         .setStatic(true)
                         .setFinal(true);
@@ -56,7 +59,7 @@ public class ComponentIndicesGenerator implements IComponentCodeGenerator {
         javaClass.addField()
                 .setName("totalComponents")
                 .setType("int")
-                .setLiteralInitializer(Integer.toString(componentInfos.length))
+                .setLiteralInitializer(Integer.toString(componentInfos.size()))
                 .setPublic()
                 .setStatic(true)
                 .setFinal(true);
@@ -66,21 +69,30 @@ public class ComponentIndicesGenerator implements IComponentCodeGenerator {
 
     }
 
-    public void addComponentNames(ComponentInfo[] componentInfos, JavaClassSource javaClass) {
+    public void addComponentNames(List<ComponentInfo> componentInfos, JavaClassSource javaClass) {
         String format = " \"%1$s\",\n";
         String code = " return new String[] {";
-        for (int i = 0; i < componentInfos.length; i++) {
-            ComponentInfo info = componentInfos[i];
-            if (info != null) {
-                code += String.format(format, info.typeName);
-            }
+
+        List<ComponentInfo> totalInfos = new ArrayList<>(Collections.nCopies(componentInfos.get(0).totalComponents, null));
+        for (ComponentInfo info : componentInfos) {
+            totalInfos.add(info.index, info);
         }
+        for (int i = 0; i < totalInfos.size(); i++) {
+            ComponentInfo info = totalInfos.get(i);
+            if (info != null && info.index == i) {
+                code += String.format(format, info.typeName);
+            } else {
+                code += String.format(" %1$s,\n", null);
+            }
+
+        }
+
+
         StringBuilder codeFinal = new StringBuilder(code);
         if (code.endsWith(",\n")) {
             codeFinal.replace(code.lastIndexOf(",\n"), code.lastIndexOf(",") + 1, " }; ");
         }
-        javaClass.addMethod()
-                .setName("componentNames")
+        javaClass.addMethod().setName("componentNames")
                 .setReturnType("String[]")
                 .setPublic()
                 .setStatic(true)
@@ -88,15 +100,22 @@ public class ComponentIndicesGenerator implements IComponentCodeGenerator {
 
     }
 
-    public void addComponentTypes(ComponentInfo[] componentInfos, JavaClassSource javaClass) {
-        String format = " %1$s.class,\n";
+    public void addComponentTypes(List<ComponentInfo> componentInfos, JavaClassSource javaClass) {
+        String format = " %1$s%2$s,\n";
         String code = "return new Class[] {";
-        for (int i = 0; i < componentInfos.length; i++) {
-            ComponentInfo info = componentInfos[i];
-            if (info != null) {
-                code += String.format(format, info.typeName);
+        List<ComponentInfo> totalInfos = new ArrayList<>(Collections.nCopies(componentInfos.get(0).totalComponents, null));
+        for (ComponentInfo info : componentInfos) {
+            totalInfos.add(info.index, info);
+        }
+        for (int i = 0; i <totalInfos.size(); i++) {
+            ComponentInfo info = totalInfos.get(i);
+            if (info != null && info.index == i) {
+                code += String.format(format, info.typeName,".class");
+                javaClass.addImport(info.fullTypeName);
+            }else {
+                code += String.format(format, null,"");
             }
-            javaClass.addImport(info.fullTypeName);
+
         }
         StringBuilder codeFinal = new StringBuilder(code);
         if (code.endsWith(",\n")) {
@@ -120,17 +139,14 @@ public class ComponentIndicesGenerator implements IComponentCodeGenerator {
             JavaInterfaceSource interfaceSource = Roaster.parse(JavaInterfaceSource.class, String.format("public interface Factory%1$s extends FactoryComponent {}",
                     info.typeName));
             interfaceSource.addMethod()
-                    .setName(String.format("create%1$s",info.typeName))
+                    .setName(String.format("create%1$s", info.typeName))
                     .setReturnType(info.typeName)
                     .setPublic();
 
             javaClass.addNestedType(interfaceSource.toString());
 
 
-
         }
-
-
 
 
     }

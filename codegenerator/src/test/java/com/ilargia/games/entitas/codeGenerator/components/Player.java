@@ -3,7 +3,7 @@ package com.ilargia.games.entitas.codeGenerator.components;
 import com.ilargia.games.entitas.codeGenerator.Component;
 import com.ilargia.games.entitas.interfaces.IComponent;
 
-@Component(pools = {"Core"})
+@Component(pools = {"Core","Otro"})
 public class Player implements IComponent {
     public enum ID { PLAYER1, PLAYER2 };
 

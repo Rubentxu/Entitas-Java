@@ -5,6 +5,8 @@ apply plugin: 'java'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
+
+
 project.ext.mainClassName = "com.ilargia.games.entitas.codeGenerator.CodeGeneratorApp"
 
 jar {
@@ -25,13 +27,13 @@ task(codeGenerator, dependsOn: 'classes', type: JavaExec) {
 }
 
 
-task fatJar(type: Jar) {
+task CodeGenerator(type: Jar) {
     manifest {
         attributes 'Implementation-Title': 'Gradle Jar CodeGenerator',
-                'Implementation-Version': 0.1,
+                'Implementation-Version': version,
                 'Main-Class': 'com.ilargia.games.entitas.codeGenerator.CodeGeneratorApp'
     }
-    baseName = project.name + '-v0.1'
+    baseName = 'CodeGenerator'
     from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
     with jar
 }

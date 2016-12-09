@@ -7,7 +7,7 @@ import org.jboss.forge.roaster.model.source.MethodSource;
 
 import java.util.List;
 
-public class ComponentInfo {
+public class ComponentInfo  {
 
     public String nameComponent;
     public String fullTypeName;
@@ -23,6 +23,8 @@ public class ComponentInfo {
     public boolean hideInBlueprintInspector;
     public String typeName;
     public boolean isSingletonComponent;
+    public Integer index;
+    public Integer totalComponents;
 
     public ComponentInfo(String fullTypeName, String typeName, List<FieldSource<JavaClassSource>> memberInfos, List<String> pools,
                          boolean isSingleEntity, String singleComponentPrefix,
@@ -46,6 +48,8 @@ public class ComponentInfo {
         isSingletonComponent = memberInfos == null || memberInfos.size() == 0;
         this.constructores = constructores;
         this.internalEnums = enums;
+        this.index = null;
+        this.totalComponents = 0;
     }
 
 
@@ -66,4 +70,6 @@ public class ComponentInfo {
                 ",\n    isSingletonComponent=" + isSingletonComponent +
                 "\n}";
     }
+
+
 }

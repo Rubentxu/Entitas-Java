@@ -31,6 +31,6 @@ public class CoreComponentIds {
 
 	public static Class[] componentTypes() {
 		return new Class[]{Ball.class, Score.class, Bounds.class, Player.class,
-				View.class, Motion.class};
+				View.class, Motion.class, null };
 	}
 }

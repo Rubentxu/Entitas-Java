@@ -43,7 +43,10 @@ public class CodeGenerator {
     public static Map<String, List<ComponentInfo>> generateMap(List<ComponentInfo> componentInfos) {
         Map<String, List<ComponentInfo>> poolsComponents = new HashMap<>();
 
+        int index =0;
         for (ComponentInfo info : componentInfos) {
+            info.index=index++;
+            info.totalComponents = componentInfos.size();
             for (String poolName : info.pools) {
                 if (!poolsComponents.containsKey(poolName)) {
                     poolsComponents.put(poolName, new ArrayList<>());

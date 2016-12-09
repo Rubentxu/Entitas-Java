@@ -4,13 +4,13 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 
-task fatJar(type: Jar) {
+task Pong(type: Jar) {
     manifest {
         attributes 'Implementation-Title': 'Gradle Jar Pong',
-                'Implementation-Version': 0.1,
+                'Implementation-Version': version,
                 'Main-Class': 'com.ilargia.games.Pong'
     }
-    baseName = project.name + '-all'
+    baseName = 'Pong'
     from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
     with jar
 }
