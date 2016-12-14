@@ -3,6 +3,7 @@ package com.ilargia.games.entitas;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectSet;
 import com.ilargia.games.entitas.caching.EntitasCache;
+import com.ilargia.games.entitas.events.EventBus;
 import com.ilargia.games.entitas.exceptions.EntityAlreadyHasComponentException;
 import com.ilargia.games.entitas.exceptions.EntityDoesNotHaveComponentException;
 import com.ilargia.games.entitas.exceptions.EntityIsNotEnabledException;
@@ -15,10 +16,6 @@ import java.util.Stack;
 
 public class Entity {
 
-    public EntityChanged OnComponentAdded;
-    public EntityChanged OnComponentRemoved;
-    public ComponentReplaced OnComponentReplaced;
-    public EntityReleased OnEntityReleased;
     public ObjectSet<Object> owners;
     public int _retainCount;
     private int _creationIndex;
@@ -30,13 +27,15 @@ public class Entity {
     private String _toStringCache;
     private int _totalComponents;
     private EntityMetaData _entityMetaData;
+    private EventBus _eventBus;
 
-    public Entity(int totalComponents, Stack<IComponent>[] componentPools, EntityMetaData entityMetaData) {
+    public Entity(int totalComponents, Stack<IComponent>[] componentPools, EntityMetaData entityMetaData, EventBus eventBus) {
         _components = new IComponent[totalComponents];
         _totalComponents = totalComponents;
         _componentPools = componentPools;
         _isEnabled = true;
         owners = new ObjectSet<>();
+        _eventBus = eventBus;
 
         if (entityMetaData != null) {
             _entityMetaData = entityMetaData;
@@ -65,9 +64,7 @@ public class Entity {
         _componentsCache = null;
         _componentIndicesCache = null;
         _toStringCache = null;
-        if (OnComponentAdded != null) {
-            OnComponentAdded.entityChanged(this, index, component);
-        }
+        _eventBus.notifyComponentAdded(this, index, component);
         return this;
 
     }
@@ -110,21 +107,15 @@ public class Entity {
             _components[index] = replacement;
             _componentsCache = null;
             if (replacement != null) {
-                if (OnComponentReplaced != null) {
-                    OnComponentReplaced.componentReplaced(this, index, previousComponent, replacement);
-                }
+               _eventBus.notifyComponentReplaced(this, index, previousComponent, replacement);
             } else {
                 _componentIndicesCache = null;
-                if (OnComponentRemoved != null) {
-                    OnComponentRemoved.entityChanged(this, index, previousComponent);
-                }
+                _eventBus.notifyComponentRemoved(this, index, previousComponent);
             }
             getComponentPool(index).push(previousComponent);
 
         } else {
-            if (OnComponentReplaced != null) {
-                OnComponentReplaced.componentReplaced(this, index, previousComponent, replacement);
-            }
+            _eventBus.notifyComponentReplaced(this, index, previousComponent, replacement);
         }
 
     }
@@ -258,9 +249,6 @@ public class Entity {
 
     public void destroy() {
         removeAllComponents();
-        OnComponentAdded = null;
-        OnComponentReplaced = null;
-        OnComponentRemoved = null;
         _isEnabled = false;
     }
 
@@ -301,14 +289,8 @@ public class Entity {
 
         if (_retainCount == 0) {
             _toStringCache = null;
-            if (OnEntityReleased != null) {
-                OnEntityReleased.entityReleased(this);
-            }
+            _eventBus.notifyEntityReleased(this);
         }
-    }
-
-    void removeAllOnEntityReleasedHandlers() {
-        OnEntityReleased = null;
     }
 
     public int getCreationIndex() {

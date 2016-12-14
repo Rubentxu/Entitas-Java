@@ -15,6 +15,7 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import java.util.Stack;
+import java.util.function.Consumer;
 
 import static org.junit.Assert.*;
 
@@ -43,9 +44,9 @@ public class PoolTest {
     @Before
     public void setUp() throws Exception {
         pool = createTestPool();
-        pool.addListener(((PoolChanged<BasePool,Entity>) (p,e) -> {}));
+        PoolChanged poolChanged= (PoolChanged) pool.addListener(((PoolChanged<BasePool,Entity>) (p, e) -> {}));
 
-        Array<PoolChanged<BasePool, Entity>> list = pool.listeners();
+        pool.notifyListeners((listener) ->((PoolChanged)listener).poolChanged(pool, entity));
         entity = pool.createEntity();
 
     }

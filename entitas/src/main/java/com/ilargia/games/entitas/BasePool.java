@@ -4,14 +4,14 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectSet;
 import com.ilargia.games.entitas.caching.EntitasCache;
-import com.ilargia.games.entitas.events.Event;
+import com.ilargia.games.entitas.events.EventBus;
 import com.ilargia.games.entitas.events.GroupEventType;
 import com.ilargia.games.entitas.exceptions.*;
 import com.ilargia.games.entitas.interfaces.*;
 
 import java.util.Stack;
 
-public class BasePool<E extends Entity> extends Event<PoolChanged<BasePool, E>> {
+public abstract class BasePool<E extends Entity, P extends BasePool> {
 
     private int _creationIndex;
     private ObjectSet<E> _entities;
@@ -21,25 +21,20 @@ public class BasePool<E extends Entity> extends Event<PoolChanged<BasePool, E>> 
     private EntityMetaData _metaData;
     private Stack<IComponent>[] _componentPools;
     private ObjectMap<String, IEntityIndex> _entityIndices;
-    private EntityChanged<E> _cachedEntityChanged;
-    private ComponentReplaced<E> _cachedComponentReplaced;
-    private EntityReleased<E> _cachedEntityReleased;
     private FactoryEntity<E> _factoryEntiy;
     protected ObjectMap<IMatcher, Group<E>> _groups;
     protected Array<Group<E>>[] _groupsForIndex;
-    public PoolChanged<BasePool, E> OnEntityCreated;
-    public PoolChanged<BasePool, E> OnEntityWillBeDestroyed;
-    public PoolChanged<BasePool, E> OnEntityDestroyed;
-    public PoolGroupChanged OnGroupCreated;
-    public PoolGroupChanged OnGroupCleared;
     public int _totalComponents;
     public Class<E> entityType;
+    private EventBus<E, P> _eventBus;
 
 
-    public BasePool(int totalComponents, int startCreationIndex, EntityMetaData metaData, FactoryEntity<E> factoryMethod) {
+    public BasePool(int totalComponents, int startCreationIndex, EntityMetaData metaData,
+                    EventBus<E, P> eventBus, FactoryEntity<E> factoryMethod) {
         _totalComponents = totalComponents;
         _creationIndex = startCreationIndex;
         _factoryEntiy = factoryMethod;
+        _eventBus = eventBus;
 
         if (metaData != null) {
             _metaData = metaData;
@@ -62,21 +57,22 @@ public class BasePool<E extends Entity> extends Event<PoolChanged<BasePool, E>> 
         _componentPools = new Stack[totalComponents];
         _entityIndices = new ObjectMap<>();
 
-        _cachedEntityChanged = (E e, int idx, IComponent c) -> {
-            updateGroupsComponentAddedOrRemoved(e, idx, c);
-        };
-        _cachedComponentReplaced = (E e, int idx, IComponent pc, IComponent nc)
-                -> {
-            updateGroupsComponentReplaced(e, idx, pc, nc);
-        };
-        _cachedEntityReleased = (E e) -> {
-            onEntityReleased(e);
-        };
-
         _reusableEntities = new Stack<>();
         _retainedEntities = new ObjectSet<>();
         _entities = new ObjectSet<>();
         _groups = new ObjectMap<>();
+
+        EntityChanged<E> _cachedEntityChanged =  (E e, int idx, IComponent c) -> {
+            updateGroupsComponentAddedOrRemoved(e, idx, c, _groupsForIndex);
+        };
+        _eventBus.OnComponentAdded.addListener(_cachedEntityChanged);
+        _eventBus.OnComponentRemoved.addListener(_cachedEntityChanged);
+        _eventBus.OnComponentReplaced.addListener((ComponentReplaced<E>)(E e, int idx, IComponent pc, IComponent nc) -> {
+            updateGroupsComponentReplaced(e, idx, pc, nc, _groupsForIndex);
+        });
+        _eventBus.OnEntityReleased.addListener((EntityReleased<E>) (E e) -> {
+            onEntityReleased(e, _retainedEntities, _reusableEntities);
+        });
 
         entityType = (Class<E>) _factoryEntiy.create(_totalComponents, _componentPools, _metaData).getClass();
 
@@ -91,15 +87,8 @@ public class BasePool<E extends Entity> extends Event<PoolChanged<BasePool, E>> 
         ent.retain(this);
         _entities.add(ent);
         _entitiesCache = null;
+        _eventBus.notifyEntityCreated((P) this, ent);
 
-        ent.OnComponentAdded = _cachedEntityChanged;
-        ent.OnComponentRemoved = _cachedEntityChanged;
-        ent.OnComponentReplaced = _cachedComponentReplaced;
-        ent.OnEntityReleased = _cachedEntityReleased;
-
-        if (OnEntityCreated != null) {
-            OnEntityCreated.poolChanged(this, ent);
-        }
         return ent;
 
     }
@@ -110,22 +99,15 @@ public class BasePool<E extends Entity> extends Event<PoolChanged<BasePool, E>> 
                     "Did you call pool.DestroyEntity() on a wrong pool?");
         }
         _entitiesCache = null;
-
-        if (OnEntityWillBeDestroyed != null) {
-            OnEntityWillBeDestroyed.poolChanged(this, entity);
-        }
+        _eventBus.notifyEntityWillBeDestroyed((P) this, entity);
 
         entity.destroy();
 
-        if (OnEntityDestroyed != null) {
-            OnEntityDestroyed.poolChanged(this, entity);
-        }
+        _eventBus.notifyEntityDestroyed((P) this, entity);
 
         if (entity.getRetainCount() == 1) {
-            entity.OnEntityReleased = null;
             _reusableEntities.push(entity);
             entity.release(this);
-            entity.removeAllOnEntityReleasedHandlers();
         } else {
             _retainedEntities.add(entity);
             entity.release(this);
@@ -183,10 +165,8 @@ public class BasePool<E extends Entity> extends Event<PoolChanged<BasePool, E>> 
                 }
                 _groupsForIndex[index].add(group);
             }
+            _eventBus.notifyGroupCreated((P) this, group);
 
-            if (OnGroupCreated != null) {
-                OnGroupCreated.groupChanged(this, group);
-            }
         }
         return group;
 
@@ -198,10 +178,7 @@ public class BasePool<E extends Entity> extends Event<PoolChanged<BasePool, E>> 
             for (Entity entity : group.getEntities()) {
                 entity.release(group);
             }
-
-            if (OnGroupCleared != null) {
-                OnGroupCleared.groupChanged(this, group);
-            }
+            _eventBus.notifyGroupCleared((P) this, group);
         }
         _groups.clear();
 
@@ -259,18 +236,13 @@ public class BasePool<E extends Entity> extends Event<PoolChanged<BasePool, E>> 
         clearGroups();
         destroyAllEntities();
         resetCreationIndex();
-
-        OnEntityCreated = null;
-        OnEntityWillBeDestroyed = null;
-        OnEntityDestroyed = null;
-        OnGroupCreated = null;
-        OnGroupCleared = null;
+        _eventBus.clearEventsPool();
 
     }
 
 
-    public void updateGroupsComponentAddedOrRemoved(E entity, int index, IComponent component) throws EntityIndexException {
-        Array<Group<E>> groups = _groupsForIndex[index];
+    public void updateGroupsComponentAddedOrRemoved(E entity, int index, IComponent component, Array<Group<E>>[] groupsForIndex) {
+        Array<Group<E>> groups = groupsForIndex[index];
         if (groups != null) {
             Array<GroupChanged> events = EntitasCache.getGroupChangedList();
             for (int i = 0, groupsCount = groups.size; i < groupsCount; i++) {
@@ -287,8 +259,9 @@ public class BasePool<E extends Entity> extends Event<PoolChanged<BasePool, E>> 
 
     }
 
-    protected void updateGroupsComponentReplaced(E entity, int index, IComponent previousComponent, IComponent newComponent) throws EntityIndexException {
-        Array<Group<E>> groups = _groupsForIndex[index];
+    protected void updateGroupsComponentReplaced(E entity, int index, IComponent previousComponent,
+                                                        IComponent newComponent, Array<Group<E>>[] groupsForIndex) {
+        Array<Group<E>> groups = groupsForIndex[index];
         if (groups != null) {
             for (Group g : groups) {
                 g.updateEntity(entity, index, previousComponent, newComponent);
@@ -297,13 +270,12 @@ public class BasePool<E extends Entity> extends Event<PoolChanged<BasePool, E>> 
 
     }
 
-    protected void onEntityReleased(E entity) {
+    protected void onEntityReleased(E entity, ObjectSet<E> retainedEntities,  Stack<E> reusableEntities) {
         if (entity.isEnabled()) {
             throw new EntityIsNotDestroyedException("Cannot release entity.");
         }
-        entity.removeAllOnEntityReleasedHandlers();
-        _retainedEntities.remove(entity);
-        _reusableEntities.push(entity);
+        retainedEntities.remove(entity);
+        reusableEntities.push(entity);
     }
 
 

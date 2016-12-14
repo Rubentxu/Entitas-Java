@@ -1,39 +1,30 @@
 package com.ilargia.games.entitas.events;
 
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.ObjectMap;
+import com.ilargia.games.entitas.BasePool;
+import com.ilargia.games.entitas.Entity;
 
 public class Event<T> {
-    private ObjectMap<String, T> namedListeners = new ObjectMap();
-    private Array<T> anonymousListeners = new Array<T>();
+    private Array<T> listeners = new Array<T>();
 
-    public void addListener(String methodName, T namedEventHandlerMethod) {
-        if (!namedListeners.containsKey(methodName))
-            namedListeners.put(methodName, namedEventHandlerMethod);
+    public boolean removeListener(T eventHandler) {
+        return listeners.removeValue(eventHandler, true);
     }
 
-
-    public void removeListener(String methodName) {
-        if (namedListeners.containsKey(methodName))
-            namedListeners.remove(methodName);
+    public T addListener(T eventHandler) {
+        listeners.add(eventHandler);
+        return eventHandler;
     }
-
-
-    public void addListener(T unnamedEventHandlerMethod) {
-        anonymousListeners.add(unnamedEventHandlerMethod);
-    }
-
 
     public Array<T> listeners() {
-        Array<T> allListeners = new Array();
-        allListeners.addAll(namedListeners.values().toArray());
-        allListeners.addAll(anonymousListeners);
-        return allListeners;
+        return listeners;
     }
 
-    public void clear() {
-        namedListeners.clear();
-        anonymousListeners.clear();
+    public <P extends BasePool> void clear() {
+        listeners.clear();
     }
 
+    public <E extends Entity> void poolChanged(BasePool pool, E entity) {
+
+    }
 }
