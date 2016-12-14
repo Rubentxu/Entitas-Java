@@ -4,12 +4,14 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectSet;
 import com.ilargia.games.entitas.caching.EntitasCache;
+import com.ilargia.games.entitas.events.Event;
 import com.ilargia.games.entitas.events.GroupEventType;
 import com.ilargia.games.entitas.exceptions.*;
 import com.ilargia.games.entitas.interfaces.*;
+
 import java.util.Stack;
 
-public class BasePool<E extends Entity> {
+public class BasePool<E extends Entity> extends Event<PoolChanged<BasePool, E>> {
 
     private int _creationIndex;
     private ObjectSet<E> _entities;

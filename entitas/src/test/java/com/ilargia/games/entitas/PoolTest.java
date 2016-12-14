@@ -1,9 +1,11 @@
 package com.ilargia.games.entitas;
 
+import com.badlogic.gdx.utils.Array;
 import com.ilargia.games.entitas.components.Position;
 import com.ilargia.games.entitas.exceptions.*;
 import com.ilargia.games.entitas.interfaces.FactoryEntity;
 import com.ilargia.games.entitas.interfaces.IComponent;
+import com.ilargia.games.entitas.interfaces.PoolChanged;
 import com.ilargia.games.entitas.matcher.Matcher;
 import com.ilargia.games.entitas.utils.TestComponentIds;
 import com.ilargia.games.entitas.utils.TestMatcher;
@@ -41,6 +43,9 @@ public class PoolTest {
     @Before
     public void setUp() throws Exception {
         pool = createTestPool();
+        pool.addListener(((PoolChanged<BasePool,Entity>) (p,e) -> {}));
+
+        Array<PoolChanged<BasePool, Entity>> list = pool.listeners();
         entity = pool.createEntity();
 
     }

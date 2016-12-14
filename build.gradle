@@ -35,6 +35,7 @@ allprojects {
 project(":entitas") {
     dependencies {
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
+        compile group: 'net.engio', name: 'mbassador', version: '1.3.0'
         testCompile group: 'junit', name: 'junit', version: '4.11'
         testCompile project(":codegenerator")
 
