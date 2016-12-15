@@ -9,29 +9,11 @@ import com.ilargia.games.entitas.matcher.Matcher;
  */
 public class CoreMatcher {
 
-	private static Matcher _matcherBall;
-	private static Matcher _matcherScore;
 	private static Matcher _matcherPlayer;
 	private static Matcher _matcherView;
+	private static Matcher _matcherBall;
 	private static Matcher _matcherMotion;
-
-	public static Matcher Ball() {
-		if (_matcherBall == null) {
-			Matcher matcher = (Matcher) Matcher.AllOf(CoreComponentIds.Ball);
-			matcher.componentNames = CoreComponentIds.componentNames();
-			_matcherBall = matcher;
-		}
-		return _matcherBall;
-	}
-
-	public static Matcher Score() {
-		if (_matcherScore == null) {
-			Matcher matcher = (Matcher) Matcher.AllOf(CoreComponentIds.Score);
-			matcher.componentNames = CoreComponentIds.componentNames();
-			_matcherScore = matcher;
-		}
-		return _matcherScore;
-	}
+	private static Matcher _matcherScore;
 
 	public static Matcher Player() {
 		if (_matcherPlayer == null) {
@@ -51,6 +33,15 @@ public class CoreMatcher {
 		return _matcherView;
 	}
 
+	public static Matcher Ball() {
+		if (_matcherBall == null) {
+			Matcher matcher = (Matcher) Matcher.AllOf(CoreComponentIds.Ball);
+			matcher.componentNames = CoreComponentIds.componentNames();
+			_matcherBall = matcher;
+		}
+		return _matcherBall;
+	}
+
 	public static Matcher Motion() {
 		if (_matcherMotion == null) {
 			Matcher matcher = (Matcher) Matcher.AllOf(CoreComponentIds.Motion);
@@ -58,5 +49,14 @@ public class CoreMatcher {
 			_matcherMotion = matcher;
 		}
 		return _matcherMotion;
+	}
+
+	public static Matcher Score() {
+		if (_matcherScore == null) {
+			Matcher matcher = (Matcher) Matcher.AllOf(CoreComponentIds.Score);
+			matcher.componentNames = CoreComponentIds.componentNames();
+			_matcherScore = matcher;
+		}
+		return _matcherScore;
 	}
 }

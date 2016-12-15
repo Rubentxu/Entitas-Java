@@ -26,11 +26,11 @@ public class BasePool<E extends Entity, P extends BasePool> {
     protected Array<Group<E>>[] _groupsForIndex;
     public int _totalComponents;
     public Class<E> entityType;
-    private EventBus<E, P> _eventBus;
+    private EventBus<E> _eventBus;
 
 
     public BasePool(int totalComponents, int startCreationIndex, EntityMetaData metaData,
-                    EventBus<E, P> eventBus, FactoryEntity<E> factoryMethod) {
+                    EventBus<E> eventBus, FactoryEntity<E> factoryMethod) {
         _totalComponents = totalComponents;
         _creationIndex = startCreationIndex;
         _factoryEntiy = factoryMethod;

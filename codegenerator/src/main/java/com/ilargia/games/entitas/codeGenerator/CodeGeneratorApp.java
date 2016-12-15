@@ -2,7 +2,7 @@ package com.ilargia.games.entitas.codeGenerator;
 
 import com.ilargia.games.entitas.codeGenerator.generators.ComponentExtensionsGenerator;
 import com.ilargia.games.entitas.codeGenerator.generators.ComponentIndicesGenerator;
-import com.ilargia.games.entitas.codeGenerator.generators.PoolsGenerator;
+import com.ilargia.games.entitas.codeGenerator.generators.ContextGenerator;
 import com.ilargia.games.entitas.codeGenerator.interfaces.ICodeGenerator;
 import com.ilargia.games.entitas.codeGenerator.intermediate.CodeGenFile;
 import com.ilargia.games.entitas.codeGenerator.providers.TypeReflectionProvider;
@@ -15,8 +15,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 
@@ -175,7 +173,7 @@ public class CodeGeneratorApp extends Application implements Initializable {
                 if (componentIndicesGenerator.isSelected())
                     codeGenerators.add(new ComponentIndicesGenerator());
                 if (poolsGenerator.isSelected())
-                    codeGenerators.add(new PoolsGenerator());
+                    codeGenerators.add(new ContextGenerator());
 
                 TypeReflectionProvider provider = new TypeReflectionProvider(fieldComponentFolder.getText());
                 CodeGenerator generator = new CodeGenerator();

@@ -73,10 +73,11 @@ public class ComponentIndicesGenerator implements IComponentCodeGenerator {
         String format = " \"%1$s\",\n";
         String code = " return new String[] {";
 
-        List<ComponentInfo> totalInfos = new ArrayList<>(Collections.nCopies(componentInfos.get(0).totalComponents, null));
+        ArrayList<ComponentInfo> totalInfos = new ArrayList<>(Collections.nCopies(componentInfos.get(0).totalComponents, null));
         for (ComponentInfo info : componentInfos) {
             totalInfos.add(info.index, info);
         }
+        totalInfos.subList(componentInfos.get(0).totalComponents, totalInfos.size()).clear();
         for (int i = 0; i < totalInfos.size(); i++) {
             ComponentInfo info = totalInfos.get(i);
             if (info != null && info.index == i) {
@@ -103,10 +104,11 @@ public class ComponentIndicesGenerator implements IComponentCodeGenerator {
     public void addComponentTypes(List<ComponentInfo> componentInfos, JavaClassSource javaClass) {
         String format = " %1$s%2$s,\n";
         String code = "return new Class[] {";
-        List<ComponentInfo> totalInfos = new ArrayList<>(Collections.nCopies(componentInfos.get(0).totalComponents, null));
+        ArrayList<ComponentInfo> totalInfos = new ArrayList<>(Collections.nCopies(componentInfos.get(0).totalComponents, null));
         for (ComponentInfo info : componentInfos) {
             totalInfos.add(info.index, info);
         }
+        totalInfos.subList(componentInfos.get(0).totalComponents, totalInfos.size()).clear();
         for (int i = 0; i <totalInfos.size(); i++) {
             ComponentInfo info = totalInfos.get(i);
             if (info != null && info.index == i) {

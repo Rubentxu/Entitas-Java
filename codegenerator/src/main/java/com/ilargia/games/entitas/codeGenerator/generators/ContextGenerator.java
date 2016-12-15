@@ -10,12 +10,12 @@ import java.util.List;
 import java.util.Set;
 
 
-public class PoolsGenerator implements IPoolCodeGenerator {
+public class ContextGenerator implements IPoolCodeGenerator {
 
     @Override
     public List<JavaClassSource> generate(Set<String> poolNames, String pkgDestiny) {
         List<JavaClassSource> result = new ArrayList<>();
-        JavaClassSource javaClass = Roaster.parse(JavaClassSource.class, "public class Pools {}");
+        JavaClassSource javaClass = Roaster.parse(JavaClassSource.class, "public class Context {}");
         javaClass.setPackage(pkgDestiny);
         createMethodConstructor(javaClass, poolNames);
         createPoolsMethod(javaClass, poolNames);
@@ -30,7 +30,7 @@ public class PoolsGenerator implements IPoolCodeGenerator {
     private void createPoolsMethod(JavaClassSource javaClass, Set<String> poolNames) {
         poolNames.forEach((poolName) -> {
             String createMethodName = String.format("create%1$sPool", CodeGenerator.capitalize(poolName));
-            String body = String.format("return new Pool(%2$s.totalComponents, 0, new EntityMetaData(\"%1$s\", %2$s.componentNames(), %2$s.componentTypes()), factoryEntity());",
+            String body = String.format("return new Pool(%2$s.totalComponents, 0, new EntityMetaData(\"%1$s\", %2$s.componentNames(), %2$s.componentTypes()), factoryEntity(), bus);",
                     CodeGenerator.capitalize(poolName), CodeGenerator.capitalize(poolName) + CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG);
             javaClass.addMethod()
                     .setPublic()
@@ -61,11 +61,12 @@ public class PoolsGenerator implements IPoolCodeGenerator {
         String setAllPools = poolNames.stream().reduce("\n", (acc, poolName) ->
                 acc + "    " + poolName.toLowerCase() + " = create" + CodeGenerator.capitalize(poolName) + "Pool();\n "
         );
+        String eventBus ="bus = new EventBus<>();\n";
 
         javaClass.addMethod()
                 .setConstructor(true)
                 .setPublic()
-                .setBody(setAllPools);
+                .setBody(eventBus + setAllPools);
     }
 
     private void createPoolFields(JavaClassSource javaClass, Set<String> poolNames) {
@@ -73,13 +74,14 @@ public class PoolsGenerator implements IPoolCodeGenerator {
         javaClass.addImport("java.util.Stack");
         javaClass.addImport("com.ilargia.games.entitas.interfaces.IComponent");
         javaClass.addImport("com.ilargia.games.entitas.EntityMetaData");
+        javaClass.addImport("com.ilargia.games.entitas.events.EventBus");
 
         javaClass.addMethod()
                 .setName("factoryEntity")
                 .setReturnType("FactoryEntity<Entity>")
                 .setPublic()
                 .setBody("  return (int totalComponents, Stack<IComponent>[] componentPools, EntityMetaData entityMetaData) -> { \n" +
-                        "                   return new Entity(totalComponents, componentPools, entityMetaData);\n" +
+                        "                   return new Entity(totalComponents, componentPools, entityMetaData, bus);\n" +
                         "        };");
 
         poolNames.forEach((poolName) -> {
@@ -89,6 +91,11 @@ public class PoolsGenerator implements IPoolCodeGenerator {
                     .setPublic();
 
         });
+
+        javaClass.addField()
+                .setName("bus")
+                .setType("EventBus<Entity>")
+                .setPublic();
 
     }
 

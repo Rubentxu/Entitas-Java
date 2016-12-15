@@ -5,13 +5,13 @@ import com.ilargia.games.entitas.Entity;
 import com.ilargia.games.entitas.Group;
 import com.ilargia.games.entitas.interfaces.*;
 
-public class EventBus<E extends Entity, P extends BasePool> {
+public class EventBus<E extends Entity> {
 
-    public Event<PoolChanged<P, E>> OnEntityCreated;
-    public Event<PoolChanged<P, E>> OnEntityWillBeDestroyed;
-    public Event<PoolChanged<P, E>> OnEntityDestroyed;
-    public Event<PoolGroupChanged<P>> OnGroupCreated;
-    public Event<PoolGroupChanged<P>> OnGroupCleared;
+    public Event<PoolChanged<BasePool, E>> OnEntityCreated;
+    public Event<PoolChanged<BasePool, E>> OnEntityWillBeDestroyed;
+    public Event<PoolChanged<BasePool, E>> OnEntityDestroyed;
+    public Event<PoolGroupChanged<BasePool>> OnGroupCreated;
+    public Event<PoolGroupChanged<BasePool>> OnGroupCleared;
 
     public Event<EntityChanged> OnComponentAdded;
     public Event<EntityChanged> OnComponentRemoved;
@@ -30,32 +30,32 @@ public class EventBus<E extends Entity, P extends BasePool> {
         OnEntityReleased = new Event<>();
     }
 
-    public void notifyEntityCreated(P pool, E entity) {
-        for (PoolChanged<P, E> listener : OnEntityCreated.listeners()) {
+    public <P extends BasePool> void notifyEntityCreated(P pool, E entity) {
+        for (PoolChanged<BasePool, E> listener : OnEntityCreated.listeners()) {
             listener.poolChanged(pool, entity);
         }
     }
 
-    public void notifyEntityWillBeDestroyed(P pool, E entity) {
-        for (PoolChanged<P, E> listener : OnEntityWillBeDestroyed.listeners()) {
+    public <P extends BasePool> void notifyEntityWillBeDestroyed(P pool, E entity) {
+        for (PoolChanged<BasePool, E> listener : OnEntityWillBeDestroyed.listeners()) {
             listener.poolChanged(pool, entity);
         }
     }
 
-    public void notifyEntityDestroyed(P pool, E entity) {
-        for (PoolChanged<P, E> listener : OnEntityDestroyed.listeners()) {
+    public <P extends BasePool> void notifyEntityDestroyed(P pool, E entity) {
+        for (PoolChanged<BasePool, E> listener : OnEntityDestroyed.listeners()) {
             listener.poolChanged(pool, entity);
         }
     }
 
-    public void notifyGroupCreated(P pool, Group group) {
-        for (PoolGroupChanged<P> listener : OnGroupCreated.listeners()) {
+    public <P extends BasePool> void notifyGroupCreated(P pool, Group group) {
+        for (PoolGroupChanged<BasePool> listener : OnGroupCreated.listeners()) {
             listener.groupChanged(pool, group);
         }
     }
 
-    public void notifyGroupCleared(P pool, Group group) {
-        for (PoolGroupChanged<P> listener : OnGroupCleared.listeners()) {
+    public <P extends BasePool> void notifyGroupCleared(P pool, Group group) {
+        for (PoolGroupChanged<BasePool> listener : OnGroupCleared.listeners()) {
             listener.groupChanged(pool, group);
         }
     }

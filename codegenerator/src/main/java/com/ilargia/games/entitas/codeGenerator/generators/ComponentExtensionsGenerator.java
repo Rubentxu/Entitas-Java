@@ -30,23 +30,25 @@ public class ComponentExtensionsGenerator implements IComponentCodeGenerator {
                 .setName("Entity")
                 .setPublic()
                 .setConstructor(true)
-                .setParameters("int totalComponents,Stack<IComponent>[] componentPools, EntityMetaData entityMetaData")
-                .setBody("super(totalComponents, componentPools, entityMetaData);");
+                .setParameters("int totalComponents,Stack<IComponent>[] componentPools, EntityMetaData entityMetaData, EventBus<Entity> bus")
+                .setBody("super(totalComponents, componentPools, entityMetaData, bus);");
         entityClass.addImport("com.ilargia.games.entitas.EntityMetaData");
         entityClass.addImport("com.ilargia.games.entitas.interfaces.IComponent");
         entityClass.addImport("java.util.Stack");
+        entityClass.addImport("com.ilargia.games.entitas.events.EventBus");
 
-        JavaClassSource poolClass = Roaster.parse(JavaClassSource.class, "public class Pool extends com.ilargia.games.entitas.BasePool<Entity> {}");
+        JavaClassSource poolClass = Roaster.parse(JavaClassSource.class, "public class Pool extends com.ilargia.games.entitas.BasePool<Entity,Pool> {}");
         poolClass.setPackage(pkgDestiny);
 
         poolClass.addMethod()
                 .setName("Pool")
                 .setPublic()
                 .setConstructor(true)
-                .setParameters("int totalComponents, int startCreationIndex, EntityMetaData metaData, FactoryEntity<Entity> factoryMethod")
-                .setBody("super(totalComponents, startCreationIndex, metaData, factoryMethod);");
+                .setParameters("int totalComponents, int startCreationIndex, EntityMetaData metaData, FactoryEntity<Entity> factoryMethod, EventBus<Entity> bus")
+                .setBody("super(totalComponents, startCreationIndex, metaData, bus, factoryMethod);");
         poolClass.addImport("com.ilargia.games.entitas.EntityMetaData");
         poolClass.addImport("com.ilargia.games.entitas.interfaces.FactoryEntity");
+        poolClass.addImport("com.ilargia.games.entitas.events.EventBus");
 
         result.add(entityClass);
         result.add(poolClass);

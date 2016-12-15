@@ -14,14 +14,14 @@ import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.ilargia.games.components.Player;
+import com.ilargia.games.core.Context;
 import com.ilargia.games.core.Pool;
-import com.ilargia.games.core.Pools;
 import com.ilargia.games.entitas.Systems;
 import com.ilargia.games.systems.*;
 
 
 public class Pong extends ApplicationAdapter {
-    private Pools pools;
+    private Context context;
     private Systems systems;
     public static final int SCREEN_WIDTH = 800;
     public static final int SCREEN_HEIGHT = 480;
@@ -39,8 +39,8 @@ public class Pong extends ApplicationAdapter {
 
     @Override
     public void create() {
-        pools =  new Pools();
-        Pool core = pools.core;
+        context =  new Context();
+        Pool core = context.core;
         ShapeRenderer sr = new ShapeRenderer();
         Batch batch = new SpriteBatch();
         BitmapFont font = new BitmapFont();

@@ -1,7 +1,7 @@
 package com.ilargia.games.entitas.utils;
 
-import com.ilargia.games.entitas.components.Interactive;
 import com.ilargia.games.entitas.components.Player;
+import com.ilargia.games.entitas.components.Interactive;
 
 /**
  * ---------------------------------------------------------------------------
@@ -10,15 +10,16 @@ import com.ilargia.games.entitas.components.Player;
  */
 public class Test2ComponentIds {
 
-	public static final int Interactive = 0;
-	public static final int Player = 1;
+	public static final int Player = 0;
+	public static final int Interactive = 2;
 	public static final int totalComponents = 2;
 
 	public static String[] componentNames() {
-		return new String[]{"Interactive", "Player"};
+		return new String[]{"Player", null, "Interactive", null, null, null};
 	}
 
 	public static Class[] componentTypes() {
-		return new Class[]{Interactive.class, Player.class};
+		return new Class[]{Player.class, null, Interactive.class, null, null,
+				null};
 	}
 }

@@ -5,20 +5,19 @@ import org.jboss.forge.roaster.model.source.JavaClassSource;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class PoolsGeneratorTest {
+public class ContextGeneratorTest {
 
     static final public int totalComponents = 0;
-    private PoolsGenerator generator;
+    private ContextGenerator generator;
     private Set<String> poolNames;
 
     @Before
     public void setUp() throws Exception {
-        generator = new PoolsGenerator();
+        generator = new ContextGenerator();
         poolNames = new HashSet<>();
         poolNames.add("pruebas");
         poolNames.add("test");
