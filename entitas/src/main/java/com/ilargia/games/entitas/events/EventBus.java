@@ -18,6 +18,18 @@ public class EventBus<E extends Entity, P extends BasePool> {
     public Event<ComponentReplaced> OnComponentReplaced;
     public Event<EntityReleased> OnEntityReleased;
 
+    public EventBus() {
+        OnEntityCreated = new Event<>();
+        OnEntityWillBeDestroyed = new Event<>();
+        OnEntityDestroyed = new Event<>();
+        OnGroupCreated = new Event<>();
+        OnGroupCleared = new Event<>();
+        OnComponentAdded = new Event<>();
+        OnComponentRemoved = new Event<>();
+        OnComponentReplaced = new Event<>();
+        OnEntityReleased = new Event<>();
+    }
+
     public void notifyEntityCreated(P pool, E entity) {
         for (PoolChanged<P, E> listener : OnEntityCreated.listeners()) {
             listener.poolChanged(pool, entity);

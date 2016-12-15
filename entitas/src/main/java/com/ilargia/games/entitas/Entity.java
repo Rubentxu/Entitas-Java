@@ -255,8 +255,7 @@ public class Entity {
     @Override
     public String toString() {
         if (_toStringCache == null) {
-            StringBuilder sb = (new StringBuilder()).append("Entity_").append(_creationIndex).append("(").
-                    append(getRetainCount()).append(")").append("(");
+            StringBuilder sb = (new StringBuilder()).append("Entity_").append(_creationIndex);
 //
 //            final String SEPARATOR = ", ";
 //            IComponent[] components = getComponents();
@@ -268,7 +267,6 @@ public class Entity {
 //                }
 //            }
 
-            sb.append(")");
             _toStringCache = sb.toString();
         }
         return _toStringCache;

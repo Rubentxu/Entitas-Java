@@ -3,6 +3,7 @@ package com.ilargia.games.entitas;
 import com.badlogic.gdx.math.Circle;
 import com.ilargia.games.entitas.components.Position;
 import com.ilargia.games.entitas.components.View;
+import com.ilargia.games.entitas.events.EventBus;
 import com.ilargia.games.entitas.interfaces.GroupChanged;
 import com.ilargia.games.entitas.utils.TestComponentIds;
 import com.ilargia.games.entitas.utils.TestMatcher;
@@ -20,12 +21,15 @@ public class GroupTest {
     private Group group;
     private Entity entity;
     private Group group2;
+    private EventBus<Entity, BasePool> bus;
+
 
 
     @Before
     public void setUp() throws Exception {
+        bus = new EventBus<>();
         entity = new Entity(10, new Stack[10], new EntityMetaData("Test", TestComponentIds.componentNames(),
-                TestComponentIds.componentTypes()));
+                TestComponentIds.componentTypes()), bus);
         entity.setCreationIndex(0);
         entity.addComponent(TestComponentIds.Position, new Position(100, 100));
         entity.addComponent(TestComponentIds.View, new View(new Circle()));

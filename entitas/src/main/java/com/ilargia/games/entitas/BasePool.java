@@ -11,7 +11,7 @@ import com.ilargia.games.entitas.interfaces.*;
 
 import java.util.Stack;
 
-public abstract class BasePool<E extends Entity, P extends BasePool> {
+public class BasePool<E extends Entity, P extends BasePool> {
 
     private int _creationIndex;
     private ObjectSet<E> _entities;
@@ -105,14 +105,10 @@ public abstract class BasePool<E extends Entity, P extends BasePool> {
 
         _eventBus.notifyEntityDestroyed((P) this, entity);
 
-        if (entity.getRetainCount() == 1) {
-            _reusableEntities.push(entity);
-            entity.release(this);
-        } else {
+        if (entity.getRetainCount() != 1) {
             _retainedEntities.add(entity);
-            entity.release(this);
         }
-
+        entity.release(this);
     }
 
     public void destroyAllEntities() {

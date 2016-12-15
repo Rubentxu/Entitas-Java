@@ -2,6 +2,7 @@ package com.ilargia.games.entitas;
 
 import com.badlogic.gdx.utils.Array;
 import com.ilargia.games.entitas.components.Position;
+import com.ilargia.games.entitas.events.EventBus;
 import com.ilargia.games.entitas.exceptions.*;
 import com.ilargia.games.entitas.interfaces.FactoryEntity;
 import com.ilargia.games.entitas.interfaces.IComponent;
@@ -26,34 +27,33 @@ public class PoolTest {
 
     private BasePool pool;
     private Entity entity;
+    private static EventBus<Entity, BasePool> bus;
 
 
     public static FactoryEntity<Entity> factoryEntity() {
         return (int totalComponents, Stack<IComponent>[] componentPools,
                 EntityMetaData entityMetaData) -> {
-            return new Entity(totalComponents, componentPools, entityMetaData);
+            return new Entity(totalComponents, componentPools, entityMetaData, bus);
         };
     }
 
     public static BasePool createTestPool() {
         return new BasePool(TestComponentIds.totalComponents, 0,
                 new EntityMetaData("Test", TestComponentIds.componentNames(),
-                        TestComponentIds.componentTypes()), factoryEntity());
+                        TestComponentIds.componentTypes()), bus, factoryEntity());
     }
 
     @Before
     public void setUp() throws Exception {
+        bus = new EventBus<>();
         pool = createTestPool();
-        PoolChanged poolChanged= (PoolChanged) pool.addListener(((PoolChanged<BasePool,Entity>) (p, e) -> {}));
-
-        pool.notifyListeners((listener) ->((PoolChanged)listener).poolChanged(pool, entity));
         entity = pool.createEntity();
 
     }
 
     @Test
     public void OnEntityCreatedTest() {
-        pool.OnEntityCreated = ((BasePool pool, Entity e) -> assertTrue(e.isEnabled()));
+        bus.OnEntityCreated.addListener((BasePool pool, Entity e) -> assertTrue(e.isEnabled()));
         entity = pool.createEntity();
     }
 
@@ -84,8 +84,8 @@ public class PoolTest {
 
     @Test
     public void OnEntityDestroyedTest() {
-        pool.OnEntityWillBeDestroyed = ((BasePool pool, Entity e) -> assertTrue(e.isEnabled()));
-        pool.OnEntityDestroyed = ((BasePool pool, Entity e) -> assertFalse(e.isEnabled()));
+        bus.OnEntityWillBeDestroyed.addListener((BasePool pool, Entity e) -> assertTrue(e.isEnabled()));
+        bus.OnEntityDestroyed.addListener((BasePool pool, Entity e) -> assertFalse(e.isEnabled()));
         pool.destroyAllEntities();
         assertEquals(0, pool.getCount());
 
@@ -94,6 +94,7 @@ public class PoolTest {
     @Test
     public void getReusableEntitiesCountTest() {
         Entity entity2 = pool.createEntity();
+        assertEquals(0, pool.getReusableEntitiesCount());
         pool.destroyEntity(entity2);
         assertEquals(1, pool.getReusableEntitiesCount());
 
@@ -101,8 +102,11 @@ public class PoolTest {
 
     @Test
     public void getRetainedEntitiesCountTest() {
+        Entity entity2 = pool.createEntity();
         entity.retain(new Object());
         pool.destroyEntity(entity);
+        assertEquals(1, pool.getRetainedEntitiesCount());
+        pool.destroyEntity(entity2);
         assertEquals(1, pool.getRetainedEntitiesCount());
 
     }
@@ -117,7 +121,7 @@ public class PoolTest {
 
     @Test(expected = PoolDoesNotContainEntityException.class)
     public void PoolDoesNotContainEntityExceptionTest() {
-        Entity entity2 = new Entity(100, null, null);
+        Entity entity2 = new Entity(100, null, null, null);
         pool.destroyEntity(entity2);
 
     }
@@ -223,10 +227,10 @@ public class PoolTest {
 
     @Test
     public void resetTest() {
-        pool.OnEntityCreated = (pool, entity)-> {};
-        assertNotNull(pool.OnEntityCreated);
+        bus.OnEntityCreated.addListener((pool, entity)-> {});
+        assertEquals(1, bus.OnEntityCreated.listeners().size);
         pool.reset();
-        assertNull(pool.OnEntityCreated);
+        assertEquals(0, bus.OnEntityCreated.listeners().size);
 
     }
 
@@ -237,8 +241,8 @@ public class PoolTest {
         group.OnEntityAdded = ( g, e, idx, pc)-> assertEquals(TestComponentIds.Position,idx);
 
         entity.addComponent(TestComponentIds.Position, position);
-        pool.updateGroupsComponentAddedOrRemoved(entity, TestComponentIds.Position, position);
-        pool.updateGroupsComponentAddedOrRemoved(entity, TestComponentIds.Position, position);
+        pool.updateGroupsComponentAddedOrRemoved(entity, TestComponentIds.Position, position, pool._groupsForIndex);
+        pool.updateGroupsComponentAddedOrRemoved(entity, TestComponentIds.Position, position, pool._groupsForIndex);
         //pool.OnGroupCleared = (pool, group)->  assertNull(pool.OnEntityCreated);
 
     }
@@ -254,7 +258,7 @@ public class PoolTest {
         };
 
         entity.addComponent(TestComponentIds.Position, position);
-        pool.updateGroupsComponentReplaced(entity, TestComponentIds.Position, position, position2);
+        pool.updateGroupsComponentReplaced(entity, TestComponentIds.Position, position, position2,pool._groupsForIndex);
 
     }
 

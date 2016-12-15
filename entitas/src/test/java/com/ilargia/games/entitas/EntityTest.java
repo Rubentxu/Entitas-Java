@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.Circle;
 import com.ilargia.games.entitas.caching.EntitasCache;
 import com.ilargia.games.entitas.codeGenerator.Component;
 import com.ilargia.games.entitas.components.*;
+import com.ilargia.games.entitas.events.EventBus;
 import com.ilargia.games.entitas.exceptions.EntityAlreadyHasComponentException;
 import com.ilargia.games.entitas.exceptions.EntityDoesNotHaveComponentException;
 import com.ilargia.games.entitas.exceptions.EntityIsNotEnabledException;
@@ -25,14 +26,16 @@ public class EntityTest {
 
     private Entity entity;
     private Stack<IComponent>[] _componentPools;
+    private EventBus<Entity, BasePool> bus;
 
 
     @Before
     public void setUp() throws Exception {
         _componentPools = new Stack[10];
+        bus = new EventBus<>();
         EntitasCache cache = new EntitasCache();
         entity = new Entity(10, _componentPools, new EntityMetaData("Test", TestComponentIds.componentNames(),
-                TestComponentIds.componentTypes()));
+                TestComponentIds.componentTypes()), bus);
         entity.setCreationIndex(0);
         entity.addComponent(TestComponentIds.Position, new Position(100, 100));
         entity.addComponent(TestComponentIds.View, new View(new Circle()));
@@ -80,7 +83,7 @@ public class EntityTest {
 
     @Test
     public void OnComponentAddedTest() {
-        entity.OnComponentAdded = ((Entity e, int index, IComponent c) -> assertEquals(TestComponentIds.Motion, index));
+        bus.OnComponentAdded.addListener((Entity e, int index, IComponent c) -> assertEquals(TestComponentIds.Motion, index));
         entity.addComponent(TestComponentIds.Motion, new Motion(100, 100));
 
     }
@@ -88,7 +91,7 @@ public class EntityTest {
 
     @Test
     public void OnComponentReplacedTest() {
-        entity.OnComponentReplaced = ((Entity e, int index, IComponent c, IComponent n)
+        bus.OnComponentReplaced.addListener((Entity e, int index, IComponent c, IComponent n)
                 -> assertEquals(33F, ((Position) n).x, 0.1f));
         entity.replaceComponent(TestComponentIds.Position, new Position(33, 100));
 
@@ -96,7 +99,7 @@ public class EntityTest {
 
     @Test
     public void OnComponentReplaced2Test() {
-        entity.OnComponentReplaced = ((Entity e, int index, IComponent c, IComponent n)
+        bus.OnComponentReplaced.addListener((Entity e, int index, IComponent c, IComponent n)
                 -> assertEquals(100F, ((Position) n).x, 0.1f));
         entity.replaceComponent(TestComponentIds.Position, entity.getComponent(TestComponentIds.Position));
 
@@ -105,7 +108,7 @@ public class EntityTest {
 
     @Test
     public void OnComponentRemovedTest() {
-        entity.OnComponentRemoved = ((Entity e, int index, IComponent c)
+        bus.OnComponentRemoved.addListener((Entity e, int index, IComponent c)
                 -> assertFalse(e.hasComponent(index)));
         entity.removeComponent(TestComponentIds.View);
 
@@ -256,7 +259,7 @@ public class EntityTest {
     @Test
     public void releaseTest() {
         Object owner = new Object();
-        entity.OnEntityReleased = ((Entity e) -> assertEquals(0, e.getRetainCount()));
+        bus.OnEntityReleased.addListener((Entity e) -> assertEquals(0, e.getRetainCount()));
         entity.retain(owner);
         entity.release(owner);
 
