@@ -66,3 +66,13 @@ project(":functionalTests") {
     }
 
 }
+
+project(":entitas-libgdx") {
+    dependencies {
+        compile project(":entitas")
+        compile "com.badlogicgames.gdx:gdx:$gdxVersion"
+        testCompile group: 'junit', name: 'junit', version: '4.11'
+
+    }
+
+}
