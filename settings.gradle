@@ -1,4 +1,4 @@
-include 'entitas', "codegenerator", 'functional-tests, entitas-libgdx'
+include 'entitas', 'codegenerator', 'functional-tests', 'entitas-libgdx'
 findProject(':functional-tests')?.name = 'functionalTests'
 
 
