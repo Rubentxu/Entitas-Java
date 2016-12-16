@@ -6,16 +6,16 @@ import com.ilargia.games.entitas.interfaces.*;
 
 public class Systems implements IInitializeSystem, IExecuteSystem, ICleanupSystem, ITearDownSystem {
 
-    protected Array<IInitializeSystem> _initializeSystems;
-    protected Array<IExecuteSystem> _executeSystems;
-    protected Array<ICleanupSystem> _cleanupSystems;
-    protected Array<ITearDownSystem> _tearDownSystems;
+    private Array<IInitializeSystem> _initializeSystems;
+    private Array<IExecuteSystem> _executeSystems;
+    private Array<ICleanupSystem> _cleanupSystems;
+    private Array<ITearDownSystem> _tearDownSystems;
 
     public Systems() {
-        _initializeSystems = new Array<IInitializeSystem>();
-        _executeSystems = new Array<IExecuteSystem>();
-        _cleanupSystems = new Array();
-        _tearDownSystems = new Array();
+        _initializeSystems = new Array<>();
+        _executeSystems = new Array<>();
+        _cleanupSystems = new Array<>();
+        _tearDownSystems = new Array<>();
     }
 
 
@@ -44,9 +44,9 @@ public class Systems implements IInitializeSystem, IExecuteSystem, ICleanupSyste
         }
     }
 
-    public void execute() {
+    public void execute(float deltaTime) {
         for (IExecuteSystem eSystem : _executeSystems) {
-            eSystem.execute();
+            eSystem.execute(deltaTime);
         }
     }
 
@@ -169,6 +169,14 @@ public class Systems implements IInitializeSystem, IExecuteSystem, ICleanupSyste
         if (poolsSystem != null) {
             poolsSystem.setPools(pools);
         }
+    }
+
+    public void clearSystems() {
+        _initializeSystems.clear();
+        _executeSystems.clear();
+        _cleanupSystems.clear();
+        _tearDownSystems.clear();
+
     }
 
 

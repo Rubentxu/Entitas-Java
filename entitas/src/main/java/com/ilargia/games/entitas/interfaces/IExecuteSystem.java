@@ -1,5 +1,5 @@
 package com.ilargia.games.entitas.interfaces;
 
 public interface IExecuteSystem extends ISystem {
-    void execute();
+    void execute(float deltaTime);
 }
