@@ -2,11 +2,12 @@ package com.ilargia.games.egdx;
 
 
 import com.ilargia.games.egdx.interfaces.Engine;
+import com.ilargia.games.egdx.interfaces.Game;
 import com.ilargia.games.egdx.interfaces.GameState;
 
 import java.util.Stack;
 
-public class EGGame implements com.ilargia.games.egdx.interfaces.Game {
+public class EGGame implements Game {
 
     private Stack<GameState> _states;
     private Engine _engine;
