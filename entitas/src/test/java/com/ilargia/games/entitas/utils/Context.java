@@ -18,9 +18,9 @@ public class Context {
 	public EventBus<Entity> bus;
 
 	public Context() {
+		bus = new EventBus<>();
 		test = createTestPool();
 		test2 = createTest2Pool();
-		bus = new EventBus<>();
 	}
 
 	public Pool createTestPool() {

@@ -74,7 +74,7 @@ public class ReactiveSystem implements IExecuteSystem {
         _collector.clearCollectedEntities();
     }
 
-    public void execute() {
+    public void execute(float deltatime) {
 
         if (_collector._collectedEntities.size != 0) {
             if (_ensureComponents != null) {

@@ -27,7 +27,7 @@ public class BoundsSystem implements IExecuteSystem, ISetPool<Pool> {
     }
 
     @Override
-    public void execute() {
+    public void execute(float deltatime) {
         Entity ball =  _pool.getBallEntity();
         Circle ballShape = (Circle) ball.getView().shape;
         Motion motion = ball.getMotion();

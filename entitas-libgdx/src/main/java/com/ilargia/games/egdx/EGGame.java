@@ -1,52 +1,64 @@
 package com.ilargia.games.egdx;
 
 
+import com.badlogic.gdx.Gdx;
 import com.ilargia.games.egdx.interfaces.Engine;
 import com.ilargia.games.egdx.interfaces.Game;
 import com.ilargia.games.egdx.interfaces.GameState;
-
-import java.util.Stack;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 
 public class EGGame implements Game {
 
-    private Stack<GameState> _states;
+    private ObjectArrayList<GameState> _states;
     private Engine _engine;
     private int thisTime = 0;
     private int lastTime = 0;
 
     public EGGame(Engine engine) {
         this._engine = engine;
+        this._states = new ObjectArrayList<>();
     }
 
     @Override
     public void init(String[] args) {
         _engine.configure(args);
-        _engine.initSystems();
+        _engine.init();
     }
 
     @Override
-    public int runGame() {
-        return 0;
+    public void runGame() {
+        _engine.update(Gdx.graphics.getDeltaTime());
     }
 
     @Override
     public void dispose() {
+        _states.clear();
+        _states = null;
+        _engine = null;
 
     }
 
     @Override
     public void pushState(GameState state) {
-
+        state.loadResources(_engine);
+        state.init(_engine);
+        state.onResume(_engine);
+        _states.push(state);
     }
 
     @Override
     public GameState popState() {
-        return null;
+        GameState state = _states.pop();
+        state.onPause(_engine);
+        state.unloadResources(_engine);
+        return state;
     }
 
     @Override
-    public void changeState(GameState state) {
-
+    public GameState changeState(GameState state) {
+        GameState oldState = popState();
+        pushState(state);
+        return oldState;
     }
 
     @Override
@@ -61,6 +73,6 @@ public class EGGame implements Game {
 
     @Override
     public void clear() {
-
+        _states.clear();
     }
 }

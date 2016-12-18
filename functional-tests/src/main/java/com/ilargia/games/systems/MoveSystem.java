@@ -24,7 +24,7 @@ public class MoveSystem implements IExecuteSystem, ISetPool<Pool> {
     }
 
     @Override
-    public void execute() {
+    public void execute(float deltatime) {
         for (Entity e : _group.getEntities()) {
             Motion motion = e.getMotion();
             View view = e.getView();

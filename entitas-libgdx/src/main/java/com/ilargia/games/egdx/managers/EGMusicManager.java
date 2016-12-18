@@ -7,7 +7,7 @@ import com.ilargia.games.egdx.interfaces.managers.MusicManager;
 
 public class EGMusicManager implements MusicManager<Class<Music>, Music> {
 
-    private final AssetManager assetManager;
+    private AssetManager assetManager;
     EGPreferencesManager preferencesManager;
     private Music currentMusicPlaying;
 
@@ -18,7 +18,7 @@ public class EGMusicManager implements MusicManager<Class<Music>, Music> {
 
     @Override
     public void playMusic(String name) {
-        if (!preferencesManager.music) {
+        if (!preferencesManager.MUSIC) {
             stopMusic();
             return;
         }
@@ -31,7 +31,7 @@ public class EGMusicManager implements MusicManager<Class<Music>, Music> {
         if (currentMusicPlaying != null) {
             currentMusicPlaying.play();
             currentMusicPlaying.setLooping(true);
-            currentMusicPlaying.setVolume(preferencesManager.volMusic);
+            currentMusicPlaying.setVolume(preferencesManager.VOL_MUSIC);
         }
     }
 
@@ -46,7 +46,7 @@ public class EGMusicManager implements MusicManager<Class<Music>, Music> {
     }
 
     @Override
-    public <A> void loadAsset(String fileName, Class<Music> id, A[] args) {
+    public <A> void loadAsset(String fileName, Class<Music> id, A... args) {
         assetManager.load(fileName, id, null);
     }
 
@@ -60,8 +60,5 @@ public class EGMusicManager implements MusicManager<Class<Music>, Music> {
         return (Music) assetManager.get(name, id);
     }
 
-    @Override
-    public void dispose() {
 
-    }
 }

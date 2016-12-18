@@ -4,14 +4,14 @@ import com.ilargia.games.entitas.EntityMetaData;
 import com.ilargia.games.entitas.interfaces.IComponent;
 import java.util.Stack;
 import com.ilargia.games.entitas.events.EventBus;
+import com.ilargia.games.entitas.components.Interactive;
+import com.ilargia.games.entitas.components.Score;
+import com.ilargia.games.entitas.components.Position;
 import com.ilargia.games.entitas.components.Player;
 import com.ilargia.games.entitas.components.View;
 import com.badlogic.gdx.math.Shape2D;
-import com.ilargia.games.entitas.components.Interactive;
-import com.ilargia.games.entitas.components.Position;
 import com.ilargia.games.entitas.components.Motion;
 import com.badlogic.gdx.math.Vector2;
-import com.ilargia.games.entitas.components.Score;
 
 /**
  * ---------------------------------------------------------------------------
@@ -20,12 +20,103 @@ import com.ilargia.games.entitas.components.Score;
  */
 public class Entity extends com.ilargia.games.entitas.Entity {
 
-	public Player PlayerComponent = new Player();
 	public Interactive InteractiveComponent = new Interactive();
+	public Player PlayerComponent = new Player();
 
 	public Entity(int totalComponents, Stack<IComponent>[] componentPools,
 			EntityMetaData entityMetaData, EventBus<Entity> bus) {
 		super(totalComponents, componentPools, entityMetaData, bus);
+	}
+
+	public boolean isInteractive() {
+		return hasComponent(TestComponentIds.Interactive);
+	}
+
+	public Entity setInteractive(boolean value) {
+		if (value != hasComponent(TestComponentIds.Interactive)) {
+			if (value) {
+				addComponent(TestComponentIds.Interactive, InteractiveComponent);
+			} else {
+				removeComponent(TestComponentIds.Interactive);
+			}
+		}
+		return this;
+	}
+
+	public Score getScore() {
+		return (Score) getComponent(TestComponentIds.Score);
+	}
+
+	public boolean hasScore() {
+		return hasComponent(TestComponentIds.Score);
+	}
+
+	public Entity addScore(String text, int x, int y) {
+		Score component = (Score) recoverComponent(TestComponentIds.Score);
+		if (component == null) {
+			component = new Score(text, x, y);
+		} else {
+			component.text = text;;
+			component.x = x;;
+			component.y = y;
+		}
+		addComponent(TestComponentIds.Score, component);
+		return this;
+	}
+
+	public Entity replaceScore(String text, int x, int y) {
+		Score component = (Score) recoverComponent(TestComponentIds.Score);
+		if (component == null) {
+			component = new Score(text, x, y);
+		} else {
+			component.text = text;;
+			component.x = x;;
+			component.y = y;
+		}
+		replaceComponent(TestComponentIds.Score, component);
+		return this;
+	}
+
+	public Entity removeScore() {
+		removeComponent(TestComponentIds.Score);
+		return this;
+	}
+
+	public Position getPosition() {
+		return (Position) getComponent(TestComponentIds.Position);
+	}
+
+	public boolean hasPosition() {
+		return hasComponent(TestComponentIds.Position);
+	}
+
+	public Entity addPosition(float x, float y) {
+		Position component = (Position) recoverComponent(TestComponentIds.Position);
+		if (component == null) {
+			component = new Position(x, y);
+		} else {
+			component.x = x;;
+			component.y = y;
+		}
+		addComponent(TestComponentIds.Position, component);
+		return this;
+	}
+
+	public Entity replacePosition(float x, float y) {
+		Position component = (Position) recoverComponent(TestComponentIds.Position);
+		if (component == null) {
+			component = new Position(x, y);
+		} else {
+			component.x = x;;
+			component.y = y;
+		}
+		replaceComponent(TestComponentIds.Position, component);
+		return this;
+	}
+
+	public Entity removePosition() {
+		removeComponent(TestComponentIds.Position);
+		return this;
 	}
 
 	public boolean isPlayer() {
@@ -78,58 +169,6 @@ public class Entity extends com.ilargia.games.entitas.Entity {
 		return this;
 	}
 
-	public boolean isInteractive() {
-		return hasComponent(TestComponentIds.Interactive);
-	}
-
-	public Entity setInteractive(boolean value) {
-		if (value != hasComponent(TestComponentIds.Interactive)) {
-			if (value) {
-				addComponent(TestComponentIds.Interactive, InteractiveComponent);
-			} else {
-				removeComponent(TestComponentIds.Interactive);
-			}
-		}
-		return this;
-	}
-
-	public Position getPosition() {
-		return (Position) getComponent(TestComponentIds.Position);
-	}
-
-	public boolean hasPosition() {
-		return hasComponent(TestComponentIds.Position);
-	}
-
-	public Entity addPosition(float x, float y) {
-		Position component = (Position) recoverComponent(TestComponentIds.Position);
-		if (component == null) {
-			component = new Position(x, y);
-		} else {
-			component.x = x;;
-			component.y = y;
-		}
-		addComponent(TestComponentIds.Position, component);
-		return this;
-	}
-
-	public Entity replacePosition(float x, float y) {
-		Position component = (Position) recoverComponent(TestComponentIds.Position);
-		if (component == null) {
-			component = new Position(x, y);
-		} else {
-			component.x = x;;
-			component.y = y;
-		}
-		replaceComponent(TestComponentIds.Position, component);
-		return this;
-	}
-
-	public Entity removePosition() {
-		removeComponent(TestComponentIds.Position);
-		return this;
-	}
-
 	public Motion getMotion() {
 		return (Motion) getComponent(TestComponentIds.Motion);
 	}
@@ -162,45 +201,6 @@ public class Entity extends com.ilargia.games.entitas.Entity {
 
 	public Entity removeMotion() {
 		removeComponent(TestComponentIds.Motion);
-		return this;
-	}
-
-	public Score getScore() {
-		return (Score) getComponent(TestComponentIds.Score);
-	}
-
-	public boolean hasScore() {
-		return hasComponent(TestComponentIds.Score);
-	}
-
-	public Entity addScore(String text, int x, int y) {
-		Score component = (Score) recoverComponent(TestComponentIds.Score);
-		if (component == null) {
-			component = new Score(text, x, y);
-		} else {
-			component.text = text;;
-			component.x = x;;
-			component.y = y;
-		}
-		addComponent(TestComponentIds.Score, component);
-		return this;
-	}
-
-	public Entity replaceScore(String text, int x, int y) {
-		Score component = (Score) recoverComponent(TestComponentIds.Score);
-		if (component == null) {
-			component = new Score(text, x, y);
-		} else {
-			component.text = text;;
-			component.x = x;;
-			component.y = y;
-		}
-		replaceComponent(TestComponentIds.Score, component);
-		return this;
-	}
-
-	public Entity removeScore() {
-		removeComponent(TestComponentIds.Score);
 		return this;
 	}
 }

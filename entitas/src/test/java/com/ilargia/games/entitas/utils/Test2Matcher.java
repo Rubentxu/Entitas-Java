@@ -9,17 +9,8 @@ import com.ilargia.games.entitas.matcher.Matcher;
  */
 public class Test2Matcher {
 
-	private static Matcher _matcherPlayer;
 	private static Matcher _matcherInteractive;
-
-	public static Matcher Player() {
-		if (_matcherPlayer == null) {
-			Matcher matcher = (Matcher) Matcher.AllOf(Test2ComponentIds.Player);
-			matcher.componentNames = Test2ComponentIds.componentNames();
-			_matcherPlayer = matcher;
-		}
-		return _matcherPlayer;
-	}
+	private static Matcher _matcherPlayer;
 
 	public static Matcher Interactive() {
 		if (_matcherInteractive == null) {
@@ -29,5 +20,14 @@ public class Test2Matcher {
 			_matcherInteractive = matcher;
 		}
 		return _matcherInteractive;
+	}
+
+	public static Matcher Player() {
+		if (_matcherPlayer == null) {
+			Matcher matcher = (Matcher) Matcher.AllOf(Test2ComponentIds.Player);
+			matcher.componentNames = Test2ComponentIds.componentNames();
+			_matcherPlayer = matcher;
+		}
+		return _matcherPlayer;
 	}
 }

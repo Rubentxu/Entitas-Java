@@ -9,7 +9,4 @@ public interface AssetManager<K,V> {
 
     public V getAsset(String name, K id);
 
-    public void dispose ();
-
-
 }

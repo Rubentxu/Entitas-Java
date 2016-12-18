@@ -4,7 +4,7 @@ public interface Engine {
 
     public void configure(String [] args);
 
-    public void initSystems();
+    public void init();
 
     public void processInput();
 

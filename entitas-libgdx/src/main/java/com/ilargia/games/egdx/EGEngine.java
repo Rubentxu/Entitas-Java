@@ -1,17 +1,18 @@
 package com.ilargia.games.egdx;
 
 
-import com.badlogic.gdx.utils.ObjectMap;
 import com.ilargia.games.egdx.interfaces.Engine;
 import com.ilargia.games.egdx.interfaces.Manager;
 import com.ilargia.games.entitas.Systems;
+import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 
-public class EGEngine implements Engine{
+public abstract class EGEngine implements Engine {
 
-    private ObjectMap<Class<? extends Manager>, Manager> _managers;
+    public Object2ObjectMap<Class<? extends Manager>, Manager> _managers;
+    public Systems _systems;
     private int _errorState;
     private boolean _hasShutdown;
-    private Systems _systems;
+
 
     public EGEngine(Systems systems, Manager... managers) {
         _systems = systems;
@@ -26,16 +27,6 @@ public class EGEngine implements Engine{
     }
 
 
-
-    @Override
-    public void configure(String[] args) {
-
-    }
-
-    @Override
-    public void initSystems() {
-
-    }
 
     @Override
     public void processInput() {
@@ -57,8 +48,8 @@ public class EGEngine implements Engine{
         _errorState = errorCode;
         _hasShutdown = true;
         disposeSystems();
-        for (ObjectMap.Entry<Class<? extends Manager>, Manager> manager : _managers) {
-            manager.value.dispose();
+        for (Manager manager: _managers.values()) {
+            manager.dispose();
         }
         _managers.clear();
         _managers = null;

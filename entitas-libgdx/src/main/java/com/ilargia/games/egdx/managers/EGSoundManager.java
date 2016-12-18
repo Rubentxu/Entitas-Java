@@ -2,14 +2,12 @@ package com.ilargia.games.egdx.managers;
 
 
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
-import com.ilargia.games.egdx.interfaces.managers.MusicManager;
 import com.ilargia.games.egdx.interfaces.managers.SoundManager;
 
 public class EGSoundManager implements SoundManager<Class<Sound>, Sound> {
 
-    private final AssetManager assetManager;
+    private AssetManager assetManager;
     private EGPreferencesManager preferencesManager;
     private Sound soundToPlay;
 
@@ -20,17 +18,17 @@ public class EGSoundManager implements SoundManager<Class<Sound>, Sound> {
 
     @Override
     public void playSound(String name) {
-        if (!preferencesManager.sound) {
+        if (!preferencesManager.SOUND) {
             return;
         }
         soundToPlay = getAsset(name, Sound.class);
         if (soundToPlay != null) {
-            soundToPlay.play(preferencesManager.volSound);
+            soundToPlay.play(preferencesManager.VOL_SOUND);
         }
     }
 
     @Override
-    public <A> void loadAsset(String fileName, Class<Sound> id, A[] args) {
+    public <A> void loadAsset(String fileName, Class<Sound> id, A... args) {
         assetManager.get(fileName, id);
     }
 
@@ -44,10 +42,6 @@ public class EGSoundManager implements SoundManager<Class<Sound>, Sound> {
         return (Sound) assetManager.get(name, id);
     }
 
-    @Override
-    public void dispose() {
-
-    }
 
 
 }

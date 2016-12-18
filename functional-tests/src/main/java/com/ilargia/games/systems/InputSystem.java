@@ -26,7 +26,7 @@ public class InputSystem implements IExecuteSystem, ISetPool<Pool> {
     }
 
     @Override
-    public void execute() {
+    public void execute(float deltatime) {
         for (Entity e : _group.getEntities()) {
             Motion motion = e.getMotion();
             Player player = e.getPlayer();

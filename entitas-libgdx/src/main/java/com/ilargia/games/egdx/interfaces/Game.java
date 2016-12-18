@@ -5,7 +5,7 @@ public interface Game {
 
     public void init(String [] args);
 
-    public int runGame();
+    public void runGame();
 
     public void dispose();
 
@@ -13,7 +13,7 @@ public interface Game {
 
     public GameState popState();
 
-    public void changeState(GameState state);
+    public GameState changeState(GameState state);
 
     public boolean isRunning();
 

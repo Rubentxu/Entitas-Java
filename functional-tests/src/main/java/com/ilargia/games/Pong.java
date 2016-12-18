@@ -16,13 +16,17 @@ import com.badlogic.gdx.math.Rectangle;
 import com.ilargia.games.components.Player;
 import com.ilargia.games.core.Context;
 import com.ilargia.games.core.Pool;
+import com.ilargia.games.egdx.EGEngine;
+import com.ilargia.games.egdx.EGGame;
+import com.ilargia.games.egdx.interfaces.Engine;
+import com.ilargia.games.egdx.interfaces.GameState;
 import com.ilargia.games.entitas.Systems;
 import com.ilargia.games.systems.*;
 
 
 public class Pong extends ApplicationAdapter {
-    private Context context;
-    private Systems systems;
+    EGGame game;
+
     public static final int SCREEN_WIDTH = 800;
     public static final int SCREEN_HEIGHT = 480;
     public static final int PLAYER_WIDTH = 20;
@@ -39,43 +43,17 @@ public class Pong extends ApplicationAdapter {
 
     @Override
     public void create() {
-        context =  new Context();
-        Pool core = context.core;
-        ShapeRenderer sr = new ShapeRenderer();
-        Batch batch = new SpriteBatch();
-        BitmapFont font = new BitmapFont();
-        OrthographicCamera cam = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-
-        systems = new Systems()
-                .addSystem(core, new InputSystem())
-                .addSystem(core, new ContactSystem())
-                .addSystem(core, new BoundsSystem())
-                .addSystem(core, new MoveSystem())
-                .addSystem(core, new RendererSystem(sr, cam, batch, font));
-
-
-        core.createEntity()
-                .addBall(false)
-                .addView(new Circle(0,0,8))
-                .addMotion(MathUtils.clamp(1,230,300),300);
-
-        core.createEntity()
-                .addPlayer(Player.ID.PLAYER1)
-                .addScore("Player 1: ", 180, 470 )
-                .addView(new Rectangle(-350,0,PLAYER_WIDTH,PLAYER_HEIGHT))
-                .addMotion(0,0);
-
-        core.createEntity()
-                .addPlayer(Player.ID.PLAYER2)
-                .addScore("Player 2: ", 480, 470 )
-                .addView(new Rectangle(350,0,PLAYER_WIDTH,PLAYER_HEIGHT))
-                .addMotion(0,0);
+        PongEngine engine = new PongEngine(new Systems());
+        game = new EGGame(engine);
+        PongState state = new PongState();
+        game.init(null);
+        game.pushState(state);
 
     }
 
     @Override
     public void render() {
-        systems.execute();
+        game.runGame();
     }
 
     @Override

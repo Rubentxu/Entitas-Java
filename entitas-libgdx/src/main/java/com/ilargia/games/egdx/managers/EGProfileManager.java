@@ -9,11 +9,17 @@ import com.ilargia.games.egdx.interfaces.managers.ProfileManager;
 
 public class EGProfileManager<P> implements ProfileManager<P> {
 
+    private EGPreferencesManager preferencesManager;
     private P profile;
+
+    public EGProfileManager(P profile, EGPreferencesManager preferencesManager) {
+        this.profile = profile;
+        this.preferencesManager = preferencesManager;
+    }
 
     @Override
     public P retrieveProfile() {
-        FileHandle profileDataFile = Gdx.files.local("Env.PROFILE_DATA_FILE");
+        FileHandle profileDataFile = Gdx.files.local(preferencesManager.PROFILE_DATA_FILE);
         Json json = new Json();
 
         if (profileDataFile.exists()) {
@@ -26,12 +32,12 @@ public class EGProfileManager<P> implements ProfileManager<P> {
                 profile = (P) json.fromJson(profile.getClass(), profileAsText);
 
             } catch (Exception e) {
-                FileHandle initProfileDataFile = Gdx.files.internal("Env.INIT_PROFILE_DATA_FILE");
+                FileHandle initProfileDataFile = Gdx.files.internal(preferencesManager.INIT_PROFILE_DATA_FILE);
                 profile = (P) json.fromJson(profile.getClass(), initProfileDataFile.readString().trim());
                 persist(profile);
             }
         } else {
-            FileHandle initProfileDataFile = Gdx.files.internal("Env.INIT_PROFILE_DATA_FILE");
+            FileHandle initProfileDataFile = Gdx.files.internal(preferencesManager.INIT_PROFILE_DATA_FILE);
             profile = (P) json.fromJson(profile.getClass(), initProfileDataFile.readString().trim());
             persist(profile);
         }
@@ -41,7 +47,7 @@ public class EGProfileManager<P> implements ProfileManager<P> {
 
     @Override
     public void persist(P profile) {
-        FileHandle profileDataFile = Gdx.files.local("Env.PROFILE_DATA_FILE");
+        FileHandle profileDataFile = Gdx.files.local(preferencesManager.PROFILE_DATA_FILE);
         Json json = new Json();
         String profileAsText = json.toJson(profile);
 
@@ -51,7 +57,7 @@ public class EGProfileManager<P> implements ProfileManager<P> {
 
     @Override
     public void resetToDefaultProfile() {
-        FileHandle profileDataFile = Gdx.files.local("Env.PROFILE_DATA_FILE");
+        FileHandle profileDataFile = Gdx.files.local(preferencesManager.PROFILE_DATA_FILE);
         if (profileDataFile.exists()) profileDataFile.delete();
     }
 
