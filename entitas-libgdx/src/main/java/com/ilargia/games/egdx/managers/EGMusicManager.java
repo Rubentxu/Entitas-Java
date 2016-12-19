@@ -61,4 +61,8 @@ public class EGMusicManager implements MusicManager<Class<Music>, Music> {
     }
 
 
+    @Override
+    public void dispose() {
+
+    }
 }

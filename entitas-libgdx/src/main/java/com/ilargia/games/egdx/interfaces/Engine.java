@@ -1,5 +1,7 @@
 package com.ilargia.games.egdx.interfaces;
 
+import com.ilargia.games.egdx.interfaces.managers.Manager;
+
 public interface Engine {
 
     public void configure(String [] args);

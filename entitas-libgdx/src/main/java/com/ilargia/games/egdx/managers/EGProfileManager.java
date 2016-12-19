@@ -67,4 +67,8 @@ public class EGProfileManager<P> implements ProfileManager<P> {
         return profile;
     }
 
+    @Override
+    public void dispose() {
+
+    }
 }

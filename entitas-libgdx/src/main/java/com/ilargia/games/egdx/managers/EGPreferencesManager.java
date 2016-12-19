@@ -68,6 +68,11 @@ public class EGPreferencesManager implements PreferencesManager {
         load();
     }
 
+    @Override
+    public void dispose() {
+
+    }
+
     private class Constants {
 
         public static final String PREFS_NAME = "pref.game.name";

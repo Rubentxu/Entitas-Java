@@ -1,7 +1,7 @@
 package com.ilargia.games.egdx.interfaces.managers;
 
 
-public interface ProfileManager<P> {
+public interface ProfileManager<P> extends Manager {
 
     public P retrieveProfile();
 

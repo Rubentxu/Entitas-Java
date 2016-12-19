@@ -43,5 +43,8 @@ public class EGSoundManager implements SoundManager<Class<Sound>, Sound> {
     }
 
 
+    @Override
+    public void dispose() {
 
+    }
 }

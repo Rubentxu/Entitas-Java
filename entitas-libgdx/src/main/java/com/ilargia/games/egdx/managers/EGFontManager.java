@@ -27,4 +27,8 @@ public class EGFontManager implements TextureManager<Class<Texture>,Texture> {
         return assetManager.get(name, id);
     }
 
+    @Override
+    public void dispose() {
+
+    }
 }

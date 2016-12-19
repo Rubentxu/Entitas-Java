@@ -2,7 +2,7 @@ package com.ilargia.games.egdx;
 
 
 import com.ilargia.games.egdx.interfaces.Engine;
-import com.ilargia.games.egdx.interfaces.Manager;
+import com.ilargia.games.egdx.interfaces.managers.Manager;
 import com.ilargia.games.entitas.Systems;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 

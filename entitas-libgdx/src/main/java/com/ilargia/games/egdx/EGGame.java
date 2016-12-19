@@ -2,21 +2,27 @@ package com.ilargia.games.egdx;
 
 
 import com.badlogic.gdx.Gdx;
+import com.ilargia.games.egdx.events.GameStateEvent;
 import com.ilargia.games.egdx.interfaces.Engine;
+import com.ilargia.games.egdx.interfaces.EventBus;
 import com.ilargia.games.egdx.interfaces.Game;
 import com.ilargia.games.egdx.interfaces.GameState;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import net.engio.mbassy.bus.MBassador;
+import net.engio.mbassy.listener.Handler;
 
-public class EGGame implements Game {
+public abstract class EGGame implements Game {
 
     private ObjectArrayList<GameState> _states;
     private Engine _engine;
     private int thisTime = 0;
     private int lastTime = 0;
+    public static EventBus ebus;
 
     public EGGame(Engine engine) {
         this._engine = engine;
         this._states = new ObjectArrayList<>();
+        this.ebus = new EGEventBus(new MBassador());
     }
 
     @Override
@@ -75,4 +81,8 @@ public class EGGame implements Game {
     public void clear() {
         _states.clear();
     }
+
+    @Handler
+    public abstract void handle(GameStateEvent gmEvent);
+
 }
