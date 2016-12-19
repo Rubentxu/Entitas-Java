@@ -1,20 +1,12 @@
-import jdk.nashorn.internal.codegen.CodeGenerator
-
 apply plugin: 'java'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
-
-
-project.ext.mainClassName = "com.ilargia.games.entitas.codeGenerator.CodeGeneratorApp"
-
-jar {
-    manifest {
-        attributes 'Main-Class': 'com.ilargia.games.entitas.codeGenerator.CodeGeneratorApp'
-    }
+configurations {
+    provided
+    compile.extendsFrom provided
 }
-
 
 task(codeGenerator, dependsOn: 'classes', type: JavaExec) {
     main = 'com.ilargia.games.entitas.codeGenerator.CodeGeneratorApp'
@@ -26,21 +18,24 @@ task(codeGenerator, dependsOn: 'classes', type: JavaExec) {
 
 }
 
-
-task CodeGenerator(type: Jar) {
+jar {
+    baseName = 'CodeGenerator'
     manifest {
-        attributes 'Implementation-Title': 'Gradle Jar CodeGenerator',
+        attributes 'Implementation-Title': 'CodeGenerator fatJar',
                 'Implementation-Version': version,
                 'Main-Class': 'com.ilargia.games.entitas.codeGenerator.CodeGeneratorApp'
     }
-    baseName = 'CodeGenerator'
-    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
-    with jar
+    dependsOn configurations.runtime
+    from {
+        (configurations.compile).collect {
+            it.isDirectory() ? it : zipTree(it)
+        }
+    }
 }
 
-public static void main(String[] args) {
-    String dirComponents = args[0];
-    String dirDestino = args[1];
-    System.out.println(String.format("Buscando componentes en path %s codigo generado en path %s", dirComponents, dirDestino));
-    CodeGenerator generator = new CodeGenerator(args[0], args[1]);
+dependencies {
+    compile group: 'org.jboss.forge.roaster', name: 'roaster-api', version: '2.19.1.Final'
+    compile group: 'org.jboss.forge.roaster', name: 'roaster-jdt', version: '2.19.1.Final'
+    testCompile project(":entitas")
+    testCompile group: 'junit', name: 'junit', version: '4.11'
 }

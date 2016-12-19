@@ -4,13 +4,34 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 
-task Pong(type: Jar) {
+configurations {
+    provided
+    compile.extendsFrom provided
+}
+
+jar {
+    baseName = 'Pong'
     manifest {
-        attributes 'Implementation-Title': 'Gradle Jar Pong',
+        attributes 'Implementation-Title': 'Pong fatJar',
                 'Implementation-Version': version,
                 'Main-Class': 'com.ilargia.games.Pong'
     }
-    baseName = 'Pong'
-    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
-    with jar
+    dependsOn configurations.runtime
+    from {
+        (configurations.compile - configurations.provided).collect {
+            it.isDirectory() ? it : zipTree(it)
+        }
+    }
+}
+
+
+dependencies {
+    compile project(":entitas")
+    provided project(":codegenerator")
+    compile project(":entitas-libgdx")
+    compile "com.badlogicgames.gdx:gdx:$gdxVersion"
+    compile "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
+    compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+
 }

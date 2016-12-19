@@ -30,51 +30,26 @@ allprojects {
     }
 
 }
+//
+//class MyDownload extends DefaultTask {
+//    @Input
+//    String sourceUrl
+//
+//    @OutputFile
+//    File target
+//
+//    @TaskAction
+//    void download() {
+//        ant.get(src: sourceUrl, dest: target)
+//    }
+//}
+//
+//task downloadSomething(type: MyDownload) {
+//    sourceUrl = 'https://github.com/Rubentxu/Entitas-Java/releases/download/Entitas-0.1.0/Entitas-Java-0.1.0.jar'
+//    target = file('build/entitas-java.jar')
+//}
+//
+//jar.dependsOn downloadSomething
 
 
-project(":entitas") {
-    dependencies {
-        compile "com.badlogicgames.gdx:gdx:$gdxVersion"
-        compile group: 'net.engio', name: 'mbassador', version: '1.3.0'
-        testCompile group: 'junit', name: 'junit', version: '4.11'
-        testCompile project(":codegenerator")
 
-    }
-
-}
-
-
-project(":codegenerator") {
-    dependencies {
-        compile group: 'org.jboss.forge.roaster', name: 'roaster-api', version: '2.19.1.Final'
-        compile group: 'org.jboss.forge.roaster', name: 'roaster-jdt', version: '2.19.1.Final'
-        testCompile project(":entitas")
-        testCompile group: 'junit', name: 'junit', version: '4.11'
-    }
-
-}
-
-project(":functionalTests") {
-    dependencies {
-        compile project(":entitas")
-        compile project(":codegenerator")
-        compile project(":entitas-libgdx")
-        compile "com.badlogicgames.gdx:gdx:$gdxVersion"
-        compile "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
-        compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
-        testCompile group: 'junit', name: 'junit', version: '4.11'
-
-    }
-
-}
-
-project(":entitas-libgdx") {
-    dependencies {
-        compile project(":entitas")
-        compile "com.badlogicgames.gdx:gdx:$gdxVersion"
-        compile group: 'it.unimi.dsi', name: 'fastutil', version: '7.0.13'
-        testCompile group: 'junit', name: 'junit', version: '4.11'
-
-    }
-
-}
