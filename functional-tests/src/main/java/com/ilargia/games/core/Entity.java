@@ -4,14 +4,17 @@ import com.ilargia.games.entitas.EntityMetaData;
 import com.ilargia.games.entitas.interfaces.IComponent;
 import java.util.Stack;
 import com.ilargia.games.entitas.events.EventBus;
-import com.ilargia.games.components.Player.ID;
-import com.ilargia.games.components.Player;
-import com.ilargia.games.components.View;
-import com.badlogic.gdx.math.Shape2D;
 import com.ilargia.games.components.Ball;
+import com.ilargia.games.components.Delay;
 import com.ilargia.games.components.Motion;
 import com.badlogic.gdx.math.Vector2;
+import com.ilargia.games.components.Player.ID;
+import com.ilargia.games.components.Player;
 import com.ilargia.games.components.Score;
+import com.ilargia.games.components.TextureView;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.ilargia.games.components.View;
+import com.badlogic.gdx.math.Shape2D;
 
 /**
  * ---------------------------------------------------------------------------
@@ -23,74 +26,6 @@ public class Entity extends com.ilargia.games.entitas.Entity {
 	public Entity(int totalComponents, Stack<IComponent>[] componentPools,
 			EntityMetaData entityMetaData, EventBus<Entity> bus) {
 		super(totalComponents, componentPools, entityMetaData, bus);
-	}
-
-	public Player getPlayer() {
-		return (Player) getComponent(CoreComponentIds.Player);
-	}
-
-	public boolean hasPlayer() {
-		return hasComponent(CoreComponentIds.Player);
-	}
-
-	public Entity addPlayer(ID id) {
-		Player component = (Player) recoverComponent(CoreComponentIds.Player);
-		if (component == null) {
-			component = new Player();
-		}
-		component.id = id;
-		addComponent(CoreComponentIds.Player, component);
-		return this;
-	}
-
-	public Entity replacePlayer(ID id) {
-		Player component = (Player) recoverComponent(CoreComponentIds.Player);
-		if (component == null) {
-			component = new Player();
-		}
-		component.id = id;
-		removeComponent(CoreComponentIds.Player);
-		return this;
-	}
-
-	public Entity removePlayer() {
-		removeComponent(CoreComponentIds.Player);
-		return this;
-	}
-
-	public View getView() {
-		return (View) getComponent(CoreComponentIds.View);
-	}
-
-	public boolean hasView() {
-		return hasComponent(CoreComponentIds.View);
-	}
-
-	public Entity addView(Shape2D shape) {
-		View component = (View) recoverComponent(CoreComponentIds.View);
-		if (component == null) {
-			component = new View(shape);
-		} else {
-			component.shape = shape;
-		}
-		addComponent(CoreComponentIds.View, component);
-		return this;
-	}
-
-	public Entity replaceView(Shape2D shape) {
-		View component = (View) recoverComponent(CoreComponentIds.View);
-		if (component == null) {
-			component = new View(shape);
-		} else {
-			component.shape = shape;
-		}
-		replaceComponent(CoreComponentIds.View, component);
-		return this;
-	}
-
-	public Entity removeView() {
-		removeComponent(CoreComponentIds.View);
-		return this;
 	}
 
 	public Ball getBall() {
@@ -126,6 +61,27 @@ public class Entity extends com.ilargia.games.entitas.Entity {
 		return this;
 	}
 
+	public Delay getDelay() {
+		return (Delay) getComponent(CoreComponentIds.Delay);
+	}
+
+	public boolean hasDelay() {
+		return hasComponent(CoreComponentIds.Delay);
+	}
+
+	public Entity addDelay(float duration) {
+		Delay component  = new Delay(duration);
+		addComponent(CoreComponentIds.Delay, component);
+		return this;
+	}
+
+
+
+	public Entity removeDelay() {
+		removeComponent(CoreComponentIds.Delay);
+		return this;
+	}
+
 	public Motion getMotion() {
 		return (Motion) getComponent(CoreComponentIds.Motion);
 	}
@@ -158,6 +114,39 @@ public class Entity extends com.ilargia.games.entitas.Entity {
 
 	public Entity removeMotion() {
 		removeComponent(CoreComponentIds.Motion);
+		return this;
+	}
+
+	public Player getPlayer() {
+		return (Player) getComponent(CoreComponentIds.Player);
+	}
+
+	public boolean hasPlayer() {
+		return hasComponent(CoreComponentIds.Player);
+	}
+
+	public Entity addPlayer(ID id) {
+		Player component = (Player) recoverComponent(CoreComponentIds.Player);
+		if (component == null) {
+			component = new Player();
+		}
+		component.id = id;
+		addComponent(CoreComponentIds.Player, component);
+		return this;
+	}
+
+	public Entity replacePlayer(ID id) {
+		Player component = (Player) recoverComponent(CoreComponentIds.Player);
+		if (component == null) {
+			component = new Player();
+		}
+		component.id = id;
+		removeComponent(CoreComponentIds.Player);
+		return this;
+	}
+
+	public Entity removePlayer() {
+		removeComponent(CoreComponentIds.Player);
 		return this;
 	}
 
@@ -199,6 +188,62 @@ public class Entity extends com.ilargia.games.entitas.Entity {
 
 	public Entity removeScore() {
 		removeComponent(CoreComponentIds.Score);
+		return this;
+	}
+
+	public TextureView getTextureView() {
+		return (TextureView) getComponent(CoreComponentIds.TextureView);
+	}
+
+	public boolean hasTextureView() {
+		return hasComponent(CoreComponentIds.TextureView);
+	}
+
+	public Entity addTextureView(String name, TextureRegion textureRegion,
+			Vector2 position, float rotation, float height, float width) {
+		TextureView component = new TextureView(name, textureRegion, position,
+					rotation, height, width);
+		addComponent(CoreComponentIds.TextureView, component);
+		return this;
+	}
+
+	public Entity removeTextureView() {
+		removeComponent(CoreComponentIds.TextureView);
+		return this;
+	}
+
+	public View getView() {
+		return (View) getComponent(CoreComponentIds.View);
+	}
+
+	public boolean hasView() {
+		return hasComponent(CoreComponentIds.View);
+	}
+
+	public Entity addView(Shape2D shape) {
+		View component = (View) recoverComponent(CoreComponentIds.View);
+		if (component == null) {
+			component = new View(shape);
+		} else {
+			component.shape = shape;
+		}
+		addComponent(CoreComponentIds.View, component);
+		return this;
+	}
+
+	public Entity replaceView(Shape2D shape) {
+		View component = (View) recoverComponent(CoreComponentIds.View);
+		if (component == null) {
+			component = new View(shape);
+		} else {
+			component.shape = shape;
+		}
+		replaceComponent(CoreComponentIds.View, component);
+		return this;
+	}
+
+	public Entity removeView() {
+		removeComponent(CoreComponentIds.View);
 		return this;
 	}
 }

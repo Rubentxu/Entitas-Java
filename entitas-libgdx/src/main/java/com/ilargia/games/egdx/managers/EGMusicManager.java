@@ -47,7 +47,8 @@ public class EGMusicManager implements MusicManager<Class<Music>, Music> {
 
     @Override
     public <A> void loadAsset(String fileName, Class<Music> id, A... args) {
-        assetManager.load(fileName, id, null);
+        if (!assetManager.isLoaded(fileName))
+            assetManager.load(fileName, id, null);
     }
 
     @Override

@@ -24,7 +24,5 @@ public class Event<T> {
         listeners.clear();
     }
 
-    public <E extends Entity> void poolChanged(BasePool pool, E entity) {
 
-    }
 }

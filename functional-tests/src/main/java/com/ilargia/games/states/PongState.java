@@ -1,8 +1,10 @@
-package com.ilargia.games;
+package com.ilargia.games.states;
 
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
+import com.ilargia.games.Pong;
+import com.ilargia.games.PongEngine;
 import com.ilargia.games.components.Player;
 import com.ilargia.games.core.Context;
 import com.ilargia.games.egdx.interfaces.Engine;
@@ -28,7 +30,7 @@ public class PongState implements GameState<PongEngine> {
         context.core.createEntity()
                 .addPlayer(Player.ID.PLAYER1)
                 .addScore("Player 1: ", 180, 470 )
-                .addView(new Rectangle(-350,0,Pong.PLAYER_WIDTH,Pong.PLAYER_HEIGHT))
+                .addView(new Rectangle(-350,0, Pong.PLAYER_WIDTH,Pong.PLAYER_HEIGHT))
                 .addMotion(0,0);
 
         context.core.createEntity()
@@ -56,6 +58,7 @@ public class PongState implements GameState<PongEngine> {
 
     @Override
     public void unloadResources(PongEngine engine) {
-
+        engine.context.core.destroyAllEntities();
+        engine._systems.clearSystems();
     }
 }

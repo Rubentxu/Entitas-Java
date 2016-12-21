@@ -2,7 +2,7 @@ package com.ilargia.games.egdx;
 
 
 import com.badlogic.gdx.Gdx;
-import com.ilargia.games.egdx.events.GameStateEvent;
+import com.ilargia.games.egdx.events.game.GameEvent;
 import com.ilargia.games.egdx.interfaces.Engine;
 import com.ilargia.games.egdx.interfaces.EventBus;
 import com.ilargia.games.egdx.interfaces.Game;
@@ -83,6 +83,6 @@ public abstract class EGGame implements Game {
     }
 
     @Handler
-    public abstract void handle(GameStateEvent gmEvent);
+    public abstract void handle(GameEvent gmEvent);
 
 }

@@ -14,7 +14,8 @@ public class EGTextureManager implements TextureManager<Class<Texture>,Texture> 
 
     @Override
     public <A> void loadAsset(String fileName, Class<Texture> id, A[] args) {
-        assetManager.get(fileName, id);
+        if (!assetManager.isLoaded(fileName))
+            assetManager.get(fileName, id);
     }
 
     @Override

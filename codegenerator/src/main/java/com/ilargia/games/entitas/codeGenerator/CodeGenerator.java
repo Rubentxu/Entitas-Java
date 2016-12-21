@@ -42,7 +42,7 @@ public class CodeGenerator {
 
     public static Map<String, List<ComponentInfo>> generateMap(List<ComponentInfo> componentInfos) {
         Map<String, List<ComponentInfo>> poolsComponents = new HashMap<>();
-
+        componentInfos.sort((c1, c2)-> c1.typeName.compareTo(c2.typeName));
         int index =0;
         for (ComponentInfo info : componentInfos) {
             info.index=index++;
