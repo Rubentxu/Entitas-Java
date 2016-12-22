@@ -1,9 +1,11 @@
 package com.ilargia.games.egdx.interfaces.managers;
 
 
-public interface FontManager<K,V> extends AssetManager<K,V> {
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 
-    public V getFont(String name);
+public interface FontManager {
+
+    public BitmapFont getFont(String name);
 
 
 }

@@ -12,7 +12,7 @@ import com.ilargia.games.components.Player.ID;
 import com.ilargia.games.components.Player;
 import com.ilargia.games.components.Score;
 import com.ilargia.games.components.TextureView;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.Texture;
 import com.ilargia.games.components.View;
 import com.badlogic.gdx.math.Shape2D;
 
@@ -70,11 +70,10 @@ public class Entity extends com.ilargia.games.entitas.Entity {
 	}
 
 	public Entity addDelay(float duration) {
-		Delay component  = new Delay(duration);
+		Delay component = new Delay(duration);
 		addComponent(CoreComponentIds.Delay, component);
 		return this;
 	}
-
 
 
 	public Entity removeDelay() {
@@ -199,13 +198,14 @@ public class Entity extends com.ilargia.games.entitas.Entity {
 		return hasComponent(CoreComponentIds.TextureView);
 	}
 
-	public Entity addTextureView(String name, TextureRegion textureRegion,
+	public Entity addTextureView(String name, Texture textureRegion,
 			Vector2 position, float rotation, float height, float width) {
-		TextureView component = new TextureView(name, textureRegion, position,
+		TextureView component  = new TextureView(name, textureRegion, position,
 					rotation, height, width);
 		addComponent(CoreComponentIds.TextureView, component);
 		return this;
 	}
+
 
 	public Entity removeTextureView() {
 		removeComponent(CoreComponentIds.TextureView);

@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
 import com.ilargia.games.components.Score;
+import com.ilargia.games.components.TextureView;
 import com.ilargia.games.components.View;
 import com.ilargia.games.core.CoreMatcher;
 import com.ilargia.games.core.Entity;
@@ -28,6 +29,7 @@ public class RendererSystem implements IExecuteSystem, ISetPool<Pool> {
     private OrthographicCamera cam;
     private Group<Entity> _groupScore;
     private Batch batch;
+    private Group<Entity> _groupTextureView;
 
     public RendererSystem(ShapeRenderer sr, OrthographicCamera cam, Batch batch, BitmapFont font) {
         this.sr = sr;
@@ -38,8 +40,9 @@ public class RendererSystem implements IExecuteSystem, ISetPool<Pool> {
 
     @Override
     public void setPool(Pool pool) {
-        _group = pool.getGroup(Matcher.AllOf(CoreMatcher.View()));
-        _groupScore = pool.getGroup(Matcher.AllOf(CoreMatcher.Score()));
+        _group = pool.getGroup(CoreMatcher.View());
+        _groupScore = pool.getGroup(CoreMatcher.Score());
+        _groupTextureView = pool.getGroup(CoreMatcher.TextureView());
     }
 
     @Override
@@ -72,6 +75,10 @@ public class RendererSystem implements IExecuteSystem, ISetPool<Pool> {
         for (Entity e : _groupScore.getEntities()) {
             Score score = e.getScore();
             font.draw(batch, score.text+ " "+ score.points, score.x, score.y);
+        }
+        for (Entity e : _groupTextureView.getEntities()) {
+            TextureView view = e.getTextureView();
+            batch.draw(view.texture, view.position.x, view.position.y);
         }
         batch.end();
     }

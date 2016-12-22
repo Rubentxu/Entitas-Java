@@ -5,9 +5,10 @@ import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import com.ilargia.games.egdx.managers.EGTextureManager;
+import com.ilargia.games.egdx.managers.EGAssetsManager;
+import com.ilargia.games.egdx.managers.EGPreferencesManager;
 import com.ilargia.games.entitas.Systems;
-import com.ilargia.games.states.PongState;
+import com.ilargia.games.states.SplashState;
 import com.ilargia.games.util.TestFileHandleResolver;
 
 
@@ -33,11 +34,11 @@ public class Pong implements ApplicationListener {
     @Override
     public void create() {
         AssetManager assetsManager = new AssetManager(new TestFileHandleResolver());
-        PongEngine engine = new PongEngine(new Systems(), new EGTextureManager(assetsManager));
+        EGPreferencesManager preferencesManager =  new EGPreferencesManager();
+        PongEngine engine = new PongEngine(new Systems(), new EGAssetsManager(assetsManager, preferencesManager));
         game = new PongGame(engine);
-        PongState state = new PongState();
         game.init(null);
-        game.pushState(state);
+        game.pushState(new SplashState());
 
     }
 

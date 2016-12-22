@@ -1,9 +1,12 @@
 package com.ilargia.games.egdx.interfaces.managers;
 
 
-public interface SoundManager<K,V> extends AssetManager<K,V> {
+import com.badlogic.gdx.audio.Sound;
+
+public interface SoundManager {
 
     public void playSound(String name);
 
+    public Sound getSount(String fileName);
 
 }

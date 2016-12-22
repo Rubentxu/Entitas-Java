@@ -4,6 +4,7 @@ package com.ilargia.games.egdx;
 import com.ilargia.games.egdx.interfaces.Engine;
 import com.ilargia.games.egdx.interfaces.managers.Manager;
 import com.ilargia.games.entitas.Systems;
+import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 
 public abstract class EGEngine implements Engine {
@@ -16,6 +17,7 @@ public abstract class EGEngine implements Engine {
 
     public EGEngine(Systems systems, Manager... managers) {
         _systems = systems;
+        if(managers.length > 0) _managers = new Object2ObjectArrayMap();
         for (Manager manager : managers) {
             _managers.put(manager.getClass(), manager);
         }
