@@ -26,7 +26,7 @@ public class EntityTest {
 
     private Entity entity;
     private Stack<IComponent>[] _componentPools;
-    private EventBus<Entity, BasePool> bus;
+    private EventBus<Entity> bus;
 
 
     @Before
@@ -221,16 +221,16 @@ public class EntityTest {
 
     @Test
     public void getIndices() {
-        Integer[] indices = entity.getComponentIndices();
+        int[] indices = entity.getComponentIndices();
         assertTrue(entity.hasComponents(indices));
 
     }
 
     @Test
     public void falseHasComponentsTest() {
-        Integer[] indices = entity.getComponentIndices();
+        int[] indices = entity.getComponentIndices();
         indices[0] = 3;
-        assertFalse(entity.hasComponents((Integer[]) indices));
+        assertFalse(entity.hasComponents((int[]) indices));
 
     }
 

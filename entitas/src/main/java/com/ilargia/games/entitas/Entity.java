@@ -8,6 +8,9 @@ import com.ilargia.games.entitas.exceptions.EntityAlreadyHasComponentException;
 import com.ilargia.games.entitas.exceptions.EntityDoesNotHaveComponentException;
 import com.ilargia.games.entitas.exceptions.EntityIsNotEnabledException;
 import com.ilargia.games.entitas.interfaces.*;
+import it.unimi.dsi.fastutil.ints.Int2IntArrayMap;
+import it.unimi.dsi.fastutil.ints.IntArrayList;
+import it.unimi.dsi.fastutil.ints.IntArraySet;
 import sun.reflect.ReflectionFactory;
 
 import java.lang.reflect.Constructor;
@@ -23,7 +26,7 @@ public class Entity {
     private IComponent[] _components;
     private Stack<IComponent>[] _componentPools;
     private IComponent[] _componentsCache;
-    private Integer[] _componentIndicesCache;
+    private int[] _componentIndicesCache;
     private String _toStringCache;
     private int _totalComponents;
     private EntityMetaData _entityMetaData;
@@ -42,8 +45,8 @@ public class Entity {
         } else {
 
             String[] componentNames = new String[totalComponents];
-            for (Integer i = 0; i < componentNames.length; i++) {
-                componentNames[i] = i.toString();
+            for (int i = 0; i < componentNames.length; i++) {
+                componentNames[i] = String.valueOf(i);
             }
             _entityMetaData = new EntityMetaData("No Pool", componentNames, null);
         }
@@ -150,15 +153,15 @@ public class Entity {
     }
 
 
-    public Integer[] getComponentIndices() {
+    public int[] getComponentIndices() {
         if (_componentIndicesCache == null) {
-            Array<Integer> indices = EntitasCache.getIntArray();
+            IntArrayList indices = EntitasCache.getIntArray();
             for (int i = 0; i < _components.length; i++) {
                 if (_components[i] != null) {
                     indices.add(i);
                 }
             }
-            _componentIndicesCache = indices.toArray();
+            _componentIndicesCache = indices.toIntArray();
             EntitasCache.pushIntArray(indices);
         }
         return _componentIndicesCache;
@@ -173,7 +176,7 @@ public class Entity {
         }
     }
 
-    public boolean hasComponents(Integer... indices) {
+    public boolean hasComponents(int... indices) {
         for (int index : indices) {
             if (_components[index] == null) {
                 return false;
@@ -183,7 +186,7 @@ public class Entity {
 
     }
 
-    public boolean hasAnyComponent(Integer... indices) {
+    public boolean hasAnyComponent(int... indices) {
         for (int i = 0; i < indices.length; i++) {
             if (_components[indices[i]] != null) {
                 return true;

@@ -4,7 +4,7 @@ import com.ilargia.games.entitas.Entity;
 
 public interface IMatcher {
 
-    Integer[] getIndices();
+    int[] getIndices();
 
     boolean matches(Entity entity);
 

@@ -2,10 +2,10 @@ package com.ilargia.games.entitas.interfaces;
 
 public interface ICompoundMatcher extends IMatcher {
 
-    Integer[] getAllOfIndices();
+    int[] getAllOfIndices();
 
-    Integer[] getAnyOfIndices();
+    int[] getAnyOfIndices();
 
-    Integer[] getNoneOfIndices();
+    int[] getNoneOfIndices();
 
 }

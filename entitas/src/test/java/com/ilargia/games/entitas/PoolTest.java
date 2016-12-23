@@ -23,7 +23,7 @@ public class PoolTest {
 
     private BasePool pool;
     private Entity entity;
-    private static EventBus<Entity, BasePool> bus;
+    private static EventBus<Entity> bus;
 
 
     public static FactoryEntity<Entity> factoryEntity() {

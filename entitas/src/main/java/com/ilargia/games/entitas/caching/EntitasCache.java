@@ -5,6 +5,9 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectSet;
 import com.ilargia.games.entitas.interfaces.events.GroupChanged;
 import com.ilargia.games.entitas.interfaces.IComponent;
+import it.unimi.dsi.fastutil.ints.Int2IntArrayMap;
+import it.unimi.dsi.fastutil.ints.IntArrayList;
+import it.unimi.dsi.fastutil.ints.IntArraySet;
 
 import java.util.ArrayList;
 
@@ -13,11 +16,11 @@ public class EntitasCache {
     private static ObjectPool<ArrayList<IComponent>> componentArray = new ObjectPool<ArrayList<IComponent>>(() -> {
         return new ArrayList<IComponent>();
     }, null);
-    private static ObjectPool<Array<Integer>> integerArray = new ObjectPool<Array<Integer>>(() -> {
-        return new Array<Integer>(true, 16, Integer.class);
+    private static ObjectPool<IntArrayList> integerArray = new ObjectPool<IntArrayList>(() -> {
+        return new IntArrayList(20);
     }, null);
-    private static ObjectPool<ObjectSet<Integer>> integerSet = new ObjectPool<ObjectSet<Integer>>(() -> {
-        return new ObjectSet<Integer>();
+    private static ObjectPool<IntArraySet> integerSet = new ObjectPool<IntArraySet>(() -> {
+        return new IntArraySet();
     }, null);
     private static ObjectPool<Array<GroupChanged>> groupChangedArray = new ObjectPool<Array<GroupChanged>>(() -> {
         return new Array<GroupChanged>(true, 16, GroupChanged.class);
@@ -33,20 +36,20 @@ public class EntitasCache {
         componentArray.push(list);
     }
 
-    public static Array<Integer> getIntArray() {
+    public static IntArrayList getIntArray() {
         return integerArray.get();
     }
 
-    public static void pushIntArray(Array<Integer> list) {
+    public static void pushIntArray(IntArrayList list) {
         list.clear();
         integerArray.push(list);
     }
 
-    public static ObjectSet<Integer> getIntHashSet() {
+    public static IntArraySet getIntHashSet() {
         return integerSet.get();
     }
 
-    public static void pushIntHashSet(ObjectSet<Integer> hashSet) {
+    public static void pushIntHashSet(IntArraySet hashSet) {
         hashSet.clear();
         integerSet.push(hashSet);
     }

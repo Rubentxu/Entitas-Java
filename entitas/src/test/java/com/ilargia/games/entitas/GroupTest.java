@@ -21,7 +21,7 @@ public class GroupTest {
     private Group group;
     private Entity entity;
     private Group group2;
-    private EventBus<Entity, BasePool> bus;
+    private EventBus<Entity> bus;
 
 
 

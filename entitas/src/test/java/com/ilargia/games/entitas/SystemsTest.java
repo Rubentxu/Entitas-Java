@@ -44,7 +44,7 @@ public class SystemsTest {
         }
 
         @Override
-        public void execute() {
+        public void execute(float deltaTime) {
             flagExecute = true;
         }
 
@@ -63,6 +63,7 @@ public class SystemsTest {
         public void tearDown() {
             flagTearDown = true;
         }
+
 
     }
 
@@ -123,7 +124,7 @@ public class SystemsTest {
         pool.createEntity().
                 addComponent(TestComponentIds.Position, new Position(100, 100));
 
-        systems.execute();
+        systems.execute(1);
 
         assertTrue(reactiveSystem.flagExecute);
 
@@ -139,7 +140,7 @@ public class SystemsTest {
         pool.createEntity().
                 addComponent(TestComponentIds.Position, new Position(100, 100));
 
-        systems.execute();
+        systems.execute(1);
 
 
         assertTrue(reactiveSystem.flagExecute);
@@ -151,7 +152,7 @@ public class SystemsTest {
     public void systemMethodsTest() {
         systems.addSystem(pool, moveSystem);
         systems.initialize();
-        systems.execute();
+        systems.execute(1);
         systems.cleanup();
         systems.tearDown();
 

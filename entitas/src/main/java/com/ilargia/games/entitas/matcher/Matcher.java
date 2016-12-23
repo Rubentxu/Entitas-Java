@@ -10,6 +10,10 @@ import com.ilargia.games.entitas.interfaces.IAllOfMatcher;
 import com.ilargia.games.entitas.interfaces.IAnyOfMatcher;
 import com.ilargia.games.entitas.interfaces.IMatcher;
 import com.ilargia.games.entitas.interfaces.INoneOfMatcher;
+import it.unimi.dsi.fastutil.ints.IntArrayList;
+import it.unimi.dsi.fastutil.ints.IntArraySet;
+import it.unimi.dsi.fastutil.ints.IntArrays;
+import it.unimi.dsi.fastutil.ints.IntCollection;
 
 import java.util.Arrays;
 
@@ -17,10 +21,10 @@ import java.util.Arrays;
 public class Matcher implements IAllOfMatcher, IAnyOfMatcher, INoneOfMatcher {
 
     public String[] componentNames;
-    private Integer[] _indices;
-    private Integer[] _allOfIndices;
-    private Integer[] _anyOfIndices;
-    private Integer[] _noneOfIndices;
+    private int[] _indices;
+    private int[] _allOfIndices;
+    private int[] _anyOfIndices;
+    private int[] _noneOfIndices;
     private int _hash;
     private boolean _isHashCached;
     private String _toStringCache;
@@ -46,20 +50,20 @@ public class Matcher implements IAllOfMatcher, IAnyOfMatcher, INoneOfMatcher {
         }
     }
 
-    private static Integer[] distinctIndices(Integer... indices) {
-        ObjectSet<Integer> indicesSet = EntitasCache.getIntHashSet();
-
-        indicesSet.addAll(indices);
-        Array<Integer> uniqueIndices = new Array(true, indicesSet.size, Integer.class);
-        indicesSet.iterator().toArray(uniqueIndices);
-        Arrays.sort(uniqueIndices.items);
+    private static int[] distinctIndices(int... indices) {
+        IntArraySet indicesSet = EntitasCache.getIntHashSet();
+        IntArrays.mergeSort(indices);
+        for (int indice : indices) {
+            indicesSet.add(indice);
+        }
+        int[] uniqueIndices = indicesSet.toIntArray();
 
         EntitasCache.pushIntHashSet(indicesSet);
-        return uniqueIndices.items;
+        return uniqueIndices;
 
     }
 
-    private static boolean equalIndices(Integer[] i1, Integer[] i2) {
+    private static boolean equalIndices(int[] i1, int[] i2) {
         if ((i1 == null) != (i2 == null)) {
             return false;
         }
@@ -79,7 +83,7 @@ public class Matcher implements IAllOfMatcher, IAnyOfMatcher, INoneOfMatcher {
 
     }
 
-    private static int applyHash(int hash, Integer[] indices, int i1, int i2) {
+    private static int applyHash(int hash, int[] indices, int i1, int i2) {
         if (indices != null) {
             for (int i = 0, indicesLength = indices.length; i < indicesLength; i++) {
                 hash ^= indices[i] * i1;
@@ -89,7 +93,7 @@ public class Matcher implements IAllOfMatcher, IAnyOfMatcher, INoneOfMatcher {
         return hash;
     }
 
-    public static IAllOfMatcher AllOf(Integer... indices) {
+    public static IAllOfMatcher AllOf(int... indices) {
         Matcher matcher = new Matcher();
         matcher._allOfIndices = distinctIndices(indices);
         return matcher;
@@ -101,7 +105,7 @@ public class Matcher implements IAllOfMatcher, IAnyOfMatcher, INoneOfMatcher {
         return allOfMatcher;
     }
 
-    public static IAnyOfMatcher AnyOf(Integer... indices) {
+    public static IAnyOfMatcher AnyOf(int... indices) {
         Matcher matcher = new Matcher();
         matcher._anyOfIndices = distinctIndices(indices);
         return matcher;
@@ -114,7 +118,7 @@ public class Matcher implements IAllOfMatcher, IAnyOfMatcher, INoneOfMatcher {
 
     }
 
-    private static void appendIndices(StringBuilder sb, String prefix, Integer[] indexArray, String[] componentNames) {
+    private static void appendIndices(StringBuilder sb, String prefix, int[] indexArray, String[] componentNames) {
         final String SEPARATOR = ", ";
         sb.append(prefix);
         sb.append("(");
@@ -134,8 +138,8 @@ public class Matcher implements IAllOfMatcher, IAnyOfMatcher, INoneOfMatcher {
         sb.append(")");
     }
 
-    static Integer[] mergeIndices(IMatcher... matchers) {
-        Integer[] indices = new Integer[matchers.length];
+    static int[] mergeIndices(IMatcher... matchers) {
+        int[] indices = new int[matchers.length];
         for (int i = 0; i < matchers.length; i++) {
             IMatcher matcher = matchers[i];
             if (matcher.getIndices().length != 1) {
@@ -147,8 +151,8 @@ public class Matcher implements IAllOfMatcher, IAnyOfMatcher, INoneOfMatcher {
         return indices;
     }
 
-    private static Integer[] MergeIndices(IMatcher... matchers) {
-        Integer[] indices = new Integer[matchers.length];
+    private static int[] MergeIndices(IMatcher... matchers) {
+        int[] indices = new int[matchers.length];
         for (int i = 0; i < matchers.length; i++) {
             IMatcher matcher = matchers[i];
             if (matcher.getIndices().length != 1) {
@@ -159,26 +163,26 @@ public class Matcher implements IAllOfMatcher, IAnyOfMatcher, INoneOfMatcher {
         return indices;
     }
 
-    public Integer[] getAllOfIndices() {
+    public int[] getAllOfIndices() {
         return _allOfIndices;
     }
 
-    public Integer[] getAnyOfIndices() {
+    public int[] getAnyOfIndices() {
         return _anyOfIndices;
     }
 
-    public Integer[] getIndices() {
+    public int[] getIndices() {
         if (_indices == null) {
             _indices = mergeIndices();
         }
         return _indices;
     }
 
-    public Integer[] getNoneOfIndices() {
+    public int[] getNoneOfIndices() {
         return _noneOfIndices;
     }
 
-    public IAnyOfMatcher anyOf(Integer... indices) {
+    public IAnyOfMatcher anyOf(int... indices) {
         _anyOfIndices = distinctIndices(indices);
         _indices = null;
         return this;
@@ -188,7 +192,7 @@ public class Matcher implements IAllOfMatcher, IAnyOfMatcher, INoneOfMatcher {
         return ((IAllOfMatcher) this).anyOf(MergeIndices(matchers));
     }
 
-    public INoneOfMatcher noneOf(Integer... indices) {
+    public INoneOfMatcher noneOf(int... indices) {
         _noneOfIndices = distinctIndices(indices);
         _indices = null;
         return this;
@@ -205,8 +209,8 @@ public class Matcher implements IAllOfMatcher, IAnyOfMatcher, INoneOfMatcher {
         return matchesAllOf && matchesAnyOf && matchesNoneOf;
     }
 
-    private Integer[] mergeIndices() {
-        Array<Integer> indicesList = EntitasCache.getIntArray();
+    private int[] mergeIndices() {
+        IntArrayList indicesList = EntitasCache.getIntArray();
 
         if (_allOfIndices != null) {
             for (int it : _allOfIndices) {
@@ -225,7 +229,7 @@ public class Matcher implements IAllOfMatcher, IAnyOfMatcher, INoneOfMatcher {
 
         }
 
-        Integer[] mergeIndices = distinctIndices(indicesList.toArray());
+        int[] mergeIndices = distinctIndices(indicesList.toIntArray());
 
         EntitasCache.pushIntArray(indicesList);
         return mergeIndices;
