@@ -1,13 +1,10 @@
 package com.ilargia.games.entitas;
 
-import com.badlogic.gdx.utils.Array;
 import com.ilargia.games.entitas.components.Position;
 import com.ilargia.games.entitas.events.EventBus;
 import com.ilargia.games.entitas.exceptions.*;
 import com.ilargia.games.entitas.interfaces.FactoryEntity;
 import com.ilargia.games.entitas.interfaces.IComponent;
-import com.ilargia.games.entitas.interfaces.PoolChanged;
-import com.ilargia.games.entitas.matcher.Matcher;
 import com.ilargia.games.entitas.utils.TestComponentIds;
 import com.ilargia.games.entitas.utils.TestMatcher;
 import org.junit.Before;
@@ -16,7 +13,6 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import java.util.Stack;
-import java.util.function.Consumer;
 
 import static org.junit.Assert.*;
 

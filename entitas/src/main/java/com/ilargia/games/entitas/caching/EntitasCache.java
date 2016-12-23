@@ -3,7 +3,7 @@ package com.ilargia.games.entitas.caching;
 
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectSet;
-import com.ilargia.games.entitas.interfaces.GroupChanged;
+import com.ilargia.games.entitas.interfaces.events.GroupChanged;
 import com.ilargia.games.entitas.interfaces.IComponent;
 
 import java.util.ArrayList;

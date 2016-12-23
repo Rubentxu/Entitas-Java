@@ -4,7 +4,7 @@ import com.badlogic.gdx.math.Circle;
 import com.ilargia.games.entitas.components.Position;
 import com.ilargia.games.entitas.components.View;
 import com.ilargia.games.entitas.events.EventBus;
-import com.ilargia.games.entitas.interfaces.GroupChanged;
+import com.ilargia.games.entitas.interfaces.events.GroupChanged;
 import com.ilargia.games.entitas.utils.TestComponentIds;
 import com.ilargia.games.entitas.utils.TestMatcher;
 import org.junit.Before;

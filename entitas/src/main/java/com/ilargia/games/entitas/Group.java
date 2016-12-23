@@ -4,8 +4,8 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectSet;
 import com.ilargia.games.entitas.exceptions.EntityIndexException;
 import com.ilargia.games.entitas.exceptions.GroupSingleEntityException;
-import com.ilargia.games.entitas.interfaces.GroupChanged;
-import com.ilargia.games.entitas.interfaces.GroupUpdated;
+import com.ilargia.games.entitas.interfaces.events.GroupChanged;
+import com.ilargia.games.entitas.interfaces.events.GroupUpdated;
 import com.ilargia.games.entitas.interfaces.IComponent;
 import com.ilargia.games.entitas.interfaces.IMatcher;
 

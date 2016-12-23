@@ -8,6 +8,10 @@ import com.ilargia.games.entitas.events.EventBus;
 import com.ilargia.games.entitas.events.GroupEventType;
 import com.ilargia.games.entitas.exceptions.*;
 import com.ilargia.games.entitas.interfaces.*;
+import com.ilargia.games.entitas.interfaces.events.ComponentReplaced;
+import com.ilargia.games.entitas.interfaces.events.EntityChanged;
+import com.ilargia.games.entitas.interfaces.events.EntityReleased;
+import com.ilargia.games.entitas.interfaces.events.GroupChanged;
 
 import java.util.Stack;
 

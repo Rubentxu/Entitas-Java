@@ -82,7 +82,6 @@ public abstract class EGGame implements Game {
         _states.clear();
     }
 
-    @Handler
-    public abstract void handle(GameEvent gmEvent);
+
 
 }

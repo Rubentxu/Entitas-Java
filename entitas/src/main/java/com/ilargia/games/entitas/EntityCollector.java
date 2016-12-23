@@ -2,9 +2,8 @@ package com.ilargia.games.entitas;
 
 import com.badlogic.gdx.utils.ObjectSet;
 import com.ilargia.games.entitas.events.GroupEventType;
-import com.ilargia.games.entitas.exceptions.EntitasException;
 import com.ilargia.games.entitas.exceptions.EntityCollectorException;
-import com.ilargia.games.entitas.interfaces.GroupChanged;
+import com.ilargia.games.entitas.interfaces.events.GroupChanged;
 import com.ilargia.games.entitas.interfaces.IComponent;
 
 public class EntityCollector<E extends Entity> {

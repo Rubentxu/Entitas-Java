@@ -11,11 +11,12 @@ public class PongGame extends EGGame {
 
     public PongGame(PongEngine engine) {
         super(engine);
+        ebus.subscribe (this);
     }
 
-    @Override
+
     @Handler
-    public void handle(GameEvent gmEvent) {
+    public void handleNextState(GameEvent gmEvent) {
         if(gmEvent.equals(GameEvent.NEXT_STATE)) {
             changeState(new PongState());
         }

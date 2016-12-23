@@ -1,6 +1,6 @@
 package com.ilargia.games.entitas;
 
-import com.ilargia.games.entitas.interfaces.GroupChanged;
+import com.ilargia.games.entitas.interfaces.events.GroupChanged;
 import com.ilargia.games.entitas.interfaces.IComponent;
 import com.ilargia.games.entitas.interfaces.IEntityIndex;
 
