@@ -6,6 +6,7 @@ import com.ilargia.games.entitas.interfaces.IComponent;
 import com.ilargia.games.entitas.interfaces.IMatcher;
 import com.ilargia.games.entitas.interfaces.events.GroupChanged;
 import com.ilargia.games.entitas.interfaces.events.GroupUpdated;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 
 import java.util.Iterator;
