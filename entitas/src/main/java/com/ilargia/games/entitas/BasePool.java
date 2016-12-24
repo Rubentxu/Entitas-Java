@@ -152,10 +152,10 @@ public class BasePool<E extends Entity, P extends BasePool> {
 
     public E[] getEntities() {
         if (_entitiesCache == null) {
-            _entitiesCache = (E[]) new Entity [_entities.size()];
+            _entitiesCache = (E[]) new Entity[_entities.size()];
             _entities.toArray(_entitiesCache);
         }
-        return  _entitiesCache;
+        return _entitiesCache;
 
     }
 

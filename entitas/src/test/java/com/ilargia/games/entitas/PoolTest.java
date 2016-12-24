@@ -139,16 +139,16 @@ public class PoolTest {
     public void getGroupTest() {
         entity.addComponent(TestComponentIds.Position, new Position());
         Group group = pool.getGroup(TestMatcher.Position());
-        assertEquals(1, group.getcount() );
+        assertEquals(1, group.getcount());
         group = pool.getGroup(TestMatcher.Position());
-        assertEquals(1, group.getcount() );
+        assertEquals(1, group.getcount());
     }
 
     @Test
     public void getGroupEntitiesTest() {
         entity.addComponent(TestComponentIds.Position, new Position());
         Group group = pool.getGroup(TestMatcher.Position());
-        assertEquals(1, group.getEntities().length );
+        assertEquals(1, group.getEntities().length);
     }
 
     @Test
@@ -163,9 +163,9 @@ public class PoolTest {
     public void entityIndexTest() {
         entity.addComponent(TestComponentIds.Position, new Position());
         Group group = pool.getGroup(TestMatcher.Position());
-        PrimaryEntityIndex<String,Entity> index = new PrimaryEntityIndex<>(group, (e, c) -> "positionEntities");
+        PrimaryEntityIndex<String, Entity> index = new PrimaryEntityIndex<>(group, (e, c) -> "positionEntities");
         pool.addEntityIndex("positions", index);
-        index = (PrimaryEntityIndex<String,Entity>) pool.getEntityIndex("positions");
+        index = (PrimaryEntityIndex<String, Entity>) pool.getEntityIndex("positions");
         assertNotNull(index);
         assertTrue(index.hasEntity("positionEntities"));
 
@@ -175,7 +175,7 @@ public class PoolTest {
     public void duplicateEntityIndexTest() {
         entity.addComponent(TestComponentIds.Position, new Position());
         Group group = pool.getGroup(TestMatcher.Position());
-        PrimaryEntityIndex<String,Entity> index = new PrimaryEntityIndex<>(group, (e, c) -> "positionEntities");
+        PrimaryEntityIndex<String, Entity> index = new PrimaryEntityIndex<>(group, (e, c) -> "positionEntities");
         pool.addEntityIndex("duplicate", index);
         pool.addEntityIndex("duplicate", index);
 
@@ -186,11 +186,11 @@ public class PoolTest {
     public void deactivateAndRemoveEntityIndicesTest() {
         entity.addComponent(TestComponentIds.Position, new Position());
         Group group = pool.getGroup(TestMatcher.Position());
-        PrimaryEntityIndex<String,Entity> index = new PrimaryEntityIndex<>(group, (e, c) -> "positionEntities");
+        PrimaryEntityIndex<String, Entity> index = new PrimaryEntityIndex<>(group, (e, c) -> "positionEntities");
         pool.addEntityIndex("positions", index);
 
         pool.deactivateAndRemoveEntityIndices();
-        index = (PrimaryEntityIndex<String,Entity>) pool.getEntityIndex("positions");
+        index = (PrimaryEntityIndex<String, Entity>) pool.getEntityIndex("positions");
 
 
     }
@@ -223,7 +223,8 @@ public class PoolTest {
 
     @Test
     public void resetTest() {
-        bus.OnEntityCreated.addListener((pool, entity)-> {});
+        bus.OnEntityCreated.addListener((pool, entity) -> {
+        });
         assertEquals(1, bus.OnEntityCreated.listeners().size());
         pool.reset();
         assertEquals(0, bus.OnEntityCreated.listeners().size());
@@ -234,7 +235,7 @@ public class PoolTest {
     public void updateGroupsComponentAddedOrRemovedTest() {
         Position position = new Position();
         Group group = pool.getGroup(TestMatcher.Position());
-        group.OnEntityAdded = ( g, e, idx, pc)-> assertEquals(TestComponentIds.Position,idx);
+        group.OnEntityAdded = (g, e, idx, pc) -> assertEquals(TestComponentIds.Position, idx);
 
         entity.addComponent(TestComponentIds.Position, position);
         pool.updateGroupsComponentAddedOrRemoved(entity, TestComponentIds.Position, position, pool._groupsForIndex);
@@ -248,24 +249,23 @@ public class PoolTest {
         Position position = new Position();
         Position position2 = new Position();
         Group group = pool.getGroup(TestMatcher.Position());
-        group.OnEntityUpdated = ( g, e, idx, pc, nc)-> {
-                System.out.println("OnEntityRemoved...........");
-                assertEquals(position2,nc);
+        group.OnEntityUpdated = (g, e, idx, pc, nc) -> {
+            System.out.println("OnEntityRemoved...........");
+            assertEquals(position2, nc);
         };
 
         entity.addComponent(TestComponentIds.Position, position);
-        pool.updateGroupsComponentReplaced(entity, TestComponentIds.Position, position, position2,pool._groupsForIndex);
+        pool.updateGroupsComponentReplaced(entity, TestComponentIds.Position, position, position2, pool._groupsForIndex);
 
     }
 
     @Test
     public void createEntityCollectorTest() {
-        BasePool[]  pools =  new BasePool[] {pool};
+        BasePool[] pools = new BasePool[]{pool};
         EntityCollector collector = BasePool.createEntityCollector(pools, TestMatcher.Position());
         assertNotNull(collector);
 
     }
-
 
 
 }

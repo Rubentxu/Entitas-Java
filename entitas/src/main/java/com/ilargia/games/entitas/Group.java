@@ -6,7 +6,6 @@ import com.ilargia.games.entitas.interfaces.IComponent;
 import com.ilargia.games.entitas.interfaces.IMatcher;
 import com.ilargia.games.entitas.interfaces.events.GroupChanged;
 import com.ilargia.games.entitas.interfaces.events.GroupUpdated;
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 
 import java.util.Iterator;
@@ -95,11 +94,18 @@ public class Group<E extends Entity> {
 
     public E[] getEntities() {
         if (_entitiesCache == null) {
-            _entitiesCache = (E[]) new Entity [_entities.size()];
-            _entities.toArray(_entitiesCache);
+            _entitiesCache = (E[]) java.lang.reflect.Array.newInstance(type, _entities.size());
+            int i = 0;
+            for (E entity : _entities) {
+                _entitiesCache[i] = entity;
+                i++;
+            }
+
         }
         return _entitiesCache;
+
     }
+
 
     public E getSingleEntity() {
         if (_singleEntityCache == null) {

@@ -38,6 +38,81 @@ public class SystemsTest {
                         TestComponentIds.componentTypes()), bus, factoryEntity());
     }
 
+    @Before
+    public void setUp() throws Exception {
+        bus = new EventBus<>();
+        systems = new Systems();
+        pool = createTestPool();
+        moveSystem = new MoveSystem();
+        moveSystem.flagExecute = false;
+        moveSystem.flagInitialize = false;
+        moveSystem.flagCleanup = false;
+        moveSystem.flagTearDown = false;
+
+    }
+
+    @Test
+    public void addSystemTest() {
+        systems.addSystem(pool, moveSystem);
+        assertNotNull(moveSystem._group);
+
+    }
+
+    @Test
+    public void addSystem2Test() {
+        Object poolsTest = new Object();
+        systems.addSystem(pool, moveSystem, poolsTest);
+        assertEquals(poolsTest, moveSystem.pools);
+
+    }
+
+    @Test
+    public void addReactiveSystemTest() {
+        TestReactive reactiveSystem = new TestReactive();
+
+        systems.addSystem(pool, reactiveSystem);
+        systems.activateReactiveSystems();
+        pool.createEntity().
+                addComponent(TestComponentIds.Position, new Position(100, 100));
+
+        systems.execute(1);
+
+        assertTrue(reactiveSystem.flagExecute);
+
+    }
+
+    @Test
+    public void addReactiveSystem2Test() {
+        TestReactive reactiveSystem = new TestReactive();
+        Object poolsTest = new Object();
+
+        systems.addSystem(pool, reactiveSystem, poolsTest);
+        systems.deactivateReactiveSystems();
+        pool.createEntity().
+                addComponent(TestComponentIds.Position, new Position(100, 100));
+
+        systems.execute(1);
+
+
+        assertTrue(reactiveSystem.flagExecute);
+
+    }
+
+    @Test
+    public void systemMethodsTest() {
+        systems.addSystem(pool, moveSystem);
+        systems.initialize();
+        systems.execute(1);
+        systems.cleanup();
+        systems.tearDown();
+
+        assertTrue(moveSystem.flagExecute);
+        assertTrue(moveSystem.flagInitialize);
+        assertTrue(moveSystem.flagCleanup);
+        assertTrue(moveSystem.flagTearDown);
+
+    }
+
     public class MoveSystem implements IExecuteSystem, IInitializeSystem, ICleanupSystem, ITearDownSystem, ISetPool<BasePool>, ISetPools<Object> {
         public Group<Entity> _group;
         public boolean flagExecute = false;
@@ -97,84 +172,6 @@ public class SystemsTest {
         public EntityCollector getEntityCollector() {
             return new EntityCollector(pool.getGroup(Matcher.AllOf(TestMatcher.Position())), GroupEventType.OnEntityAdded);
         }
-    }
-
-
-    @Before
-    public void setUp() throws Exception {
-        bus = new EventBus<>();
-        systems = new Systems();
-        pool = createTestPool();
-        moveSystem = new MoveSystem();
-        moveSystem.flagExecute = false;
-        moveSystem.flagInitialize = false;
-        moveSystem.flagCleanup = false;
-        moveSystem.flagTearDown = false;
-
-    }
-
-    @Test
-    public void addSystemTest() {
-        systems.addSystem(pool, moveSystem);
-        assertNotNull(moveSystem._group);
-
-    }
-
-
-    @Test
-    public void addSystem2Test() {
-        Object poolsTest = new Object();
-        systems.addSystem(pool, moveSystem, poolsTest);
-        assertEquals(poolsTest, moveSystem.pools);
-
-    }
-
-    @Test
-    public void addReactiveSystemTest() {
-        TestReactive reactiveSystem = new TestReactive();
-
-        systems.addSystem(pool, reactiveSystem);
-        systems.activateReactiveSystems();
-        pool.createEntity().
-                addComponent(TestComponentIds.Position, new Position(100, 100));
-
-        systems.execute(1);
-
-        assertTrue(reactiveSystem.flagExecute);
-
-    }
-
-    @Test
-    public void addReactiveSystem2Test() {
-        TestReactive reactiveSystem = new TestReactive();
-        Object poolsTest = new Object();
-
-        systems.addSystem(pool, reactiveSystem, poolsTest);
-        systems.deactivateReactiveSystems();
-        pool.createEntity().
-                addComponent(TestComponentIds.Position, new Position(100, 100));
-
-        systems.execute(1);
-
-
-        assertTrue(reactiveSystem.flagExecute);
-
-    }
-
-
-    @Test
-    public void systemMethodsTest() {
-        systems.addSystem(pool, moveSystem);
-        systems.initialize();
-        systems.execute(1);
-        systems.cleanup();
-        systems.tearDown();
-
-        assertTrue(moveSystem.flagExecute);
-        assertTrue(moveSystem.flagInitialize);
-        assertTrue(moveSystem.flagCleanup);
-        assertTrue(moveSystem.flagTearDown);
-
     }
 
 
