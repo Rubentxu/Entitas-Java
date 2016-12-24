@@ -1,8 +1,8 @@
 package com.ilargia.games.entitas;
 
-import com.ilargia.games.entitas.interfaces.events.GroupChanged;
 import com.ilargia.games.entitas.interfaces.IComponent;
 import com.ilargia.games.entitas.interfaces.IEntityIndex;
+import com.ilargia.games.entitas.interfaces.events.GroupChanged;
 
 public abstract class AbstractEntityIndex<K, E extends Entity> implements IEntityIndex {
 

@@ -1,17 +1,14 @@
 package com.ilargia.games.entitas;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.math.Circle;
-import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.utils.Array;
 import com.ilargia.games.entitas.components.Position;
-import com.ilargia.games.entitas.components.View;
+import com.ilargia.games.entitas.events.EventBus;
 import com.ilargia.games.entitas.events.GroupEventType;
 import com.ilargia.games.entitas.interfaces.*;
 import com.ilargia.games.entitas.matcher.Matcher;
 import com.ilargia.games.entitas.matcher.TriggerOnEvent;
 import com.ilargia.games.entitas.utils.TestComponentIds;
 import com.ilargia.games.entitas.utils.TestMatcher;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -24,6 +21,22 @@ public class SystemsTest {
     private BasePool pool;
     private Systems systems;
     private MoveSystem moveSystem;
+
+    private EventBus<Entity> bus;
+
+
+    public FactoryEntity<Entity> factoryEntity() {
+        return (int totalComponents, Stack<IComponent>[] componentPools,
+                EntityMetaData entityMetaData) -> {
+            return new Entity(totalComponents, componentPools, entityMetaData, bus);
+        };
+    }
+
+    public BasePool createTestPool() {
+        return new BasePool(TestComponentIds.totalComponents, 0,
+                new EntityMetaData("Test", TestComponentIds.componentNames(),
+                        TestComponentIds.componentTypes()), bus, factoryEntity());
+    }
 
     public class MoveSystem implements IExecuteSystem, IInitializeSystem, ICleanupSystem, ITearDownSystem, ISetPool<BasePool>, ISetPools<Object> {
         public Group<Entity> _group;
@@ -67,7 +80,7 @@ public class SystemsTest {
 
     }
 
-    public class TestReactive implements IReactiveSystem, IEntityCollectorSystem{
+    public class TestReactive implements IReactiveSystem, IEntityCollectorSystem {
         public boolean flagExecute = false;
 
         @Override
@@ -76,7 +89,7 @@ public class SystemsTest {
         }
 
         @Override
-        public void execute(Array entities) {
+        public void execute(ObjectArrayList entities) {
             flagExecute = true;
         }
 
@@ -89,8 +102,9 @@ public class SystemsTest {
 
     @Before
     public void setUp() throws Exception {
-       systems = new Systems();
-        pool = PoolTest.createTestPool();
+        bus = new EventBus<>();
+        systems = new Systems();
+        pool = createTestPool();
         moveSystem = new MoveSystem();
         moveSystem.flagExecute = false;
         moveSystem.flagInitialize = false;
@@ -162,8 +176,6 @@ public class SystemsTest {
         assertTrue(moveSystem.flagTearDown);
 
     }
-
-
 
 
 }

@@ -1,7 +1,5 @@
 package com.ilargia.games.entitas.matcher;
 
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.ObjectSet;
 import com.ilargia.games.entitas.Entity;
 import com.ilargia.games.entitas.caching.EntitasCache;
 import com.ilargia.games.entitas.events.GroupEventType;
@@ -13,9 +11,6 @@ import com.ilargia.games.entitas.interfaces.INoneOfMatcher;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntArraySet;
 import it.unimi.dsi.fastutil.ints.IntArrays;
-import it.unimi.dsi.fastutil.ints.IntCollection;
-
-import java.util.Arrays;
 
 
 public class Matcher implements IAllOfMatcher, IAnyOfMatcher, INoneOfMatcher {

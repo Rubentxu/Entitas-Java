@@ -23,17 +23,17 @@ public class PoolTest {
 
     private BasePool pool;
     private Entity entity;
-    private static EventBus<Entity> bus;
+    private EventBus<Entity> bus;
 
 
-    public static FactoryEntity<Entity> factoryEntity() {
+    public FactoryEntity<Entity> factoryEntity() {
         return (int totalComponents, Stack<IComponent>[] componentPools,
                 EntityMetaData entityMetaData) -> {
             return new Entity(totalComponents, componentPools, entityMetaData, bus);
         };
     }
 
-    public static BasePool createTestPool() {
+    public BasePool createTestPool() {
         return new BasePool(TestComponentIds.totalComponents, 0,
                 new EntityMetaData("Test", TestComponentIds.componentNames(),
                         TestComponentIds.componentTypes()), bus, factoryEntity());
@@ -224,9 +224,9 @@ public class PoolTest {
     @Test
     public void resetTest() {
         bus.OnEntityCreated.addListener((pool, entity)-> {});
-        assertEquals(1, bus.OnEntityCreated.listeners().size);
+        assertEquals(1, bus.OnEntityCreated.listeners().size());
         pool.reset();
-        assertEquals(0, bus.OnEntityCreated.listeners().size);
+        assertEquals(0, bus.OnEntityCreated.listeners().size());
 
     }
 

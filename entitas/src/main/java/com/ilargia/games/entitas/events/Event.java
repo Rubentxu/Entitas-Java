@@ -1,14 +1,13 @@
 package com.ilargia.games.entitas.events;
 
-import com.badlogic.gdx.utils.Array;
 import com.ilargia.games.entitas.BasePool;
-import com.ilargia.games.entitas.Entity;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 
 public class Event<T> {
-    private Array<T> listeners = new Array<T>();
+    private ObjectArrayList<T> listeners = new ObjectArrayList<T>();
 
     public boolean removeListener(T eventHandler) {
-        return listeners.removeValue(eventHandler, true);
+        return listeners.remove(eventHandler);
     }
 
     public T addListener(T eventHandler) {
@@ -16,7 +15,7 @@ public class Event<T> {
         return eventHandler;
     }
 
-    public Array<T> listeners() {
+    public ObjectArrayList<T> listeners() {
         return listeners;
     }
 

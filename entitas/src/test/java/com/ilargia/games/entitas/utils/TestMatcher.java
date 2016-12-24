@@ -10,11 +10,11 @@ import com.ilargia.games.entitas.matcher.Matcher;
 public class TestMatcher {
 
 	private static Matcher _matcherInteractive;
-	private static Matcher _matcherScore;
-	private static Matcher _matcherPosition;
-	private static Matcher _matcherPlayer;
-	private static Matcher _matcherView;
 	private static Matcher _matcherMotion;
+	private static Matcher _matcherPlayer;
+	private static Matcher _matcherPosition;
+	private static Matcher _matcherScore;
+	private static Matcher _matcherView;
 
 	public static Matcher Interactive() {
 		if (_matcherInteractive == null) {
@@ -26,13 +26,22 @@ public class TestMatcher {
 		return _matcherInteractive;
 	}
 
-	public static Matcher Score() {
-		if (_matcherScore == null) {
-			Matcher matcher = (Matcher) Matcher.AllOf(TestComponentIds.Score);
+	public static Matcher Motion() {
+		if (_matcherMotion == null) {
+			Matcher matcher = (Matcher) Matcher.AllOf(TestComponentIds.Motion);
 			matcher.componentNames = TestComponentIds.componentNames();
-			_matcherScore = matcher;
+			_matcherMotion = matcher;
 		}
-		return _matcherScore;
+		return _matcherMotion;
+	}
+
+	public static Matcher Player() {
+		if (_matcherPlayer == null) {
+			Matcher matcher = (Matcher) Matcher.AllOf(TestComponentIds.Player);
+			matcher.componentNames = TestComponentIds.componentNames();
+			_matcherPlayer = matcher;
+		}
+		return _matcherPlayer;
 	}
 
 	public static Matcher Position() {
@@ -45,13 +54,13 @@ public class TestMatcher {
 		return _matcherPosition;
 	}
 
-	public static Matcher Player() {
-		if (_matcherPlayer == null) {
-			Matcher matcher = (Matcher) Matcher.AllOf(TestComponentIds.Player);
+	public static Matcher Score() {
+		if (_matcherScore == null) {
+			Matcher matcher = (Matcher) Matcher.AllOf(TestComponentIds.Score);
 			matcher.componentNames = TestComponentIds.componentNames();
-			_matcherPlayer = matcher;
+			_matcherScore = matcher;
 		}
-		return _matcherPlayer;
+		return _matcherScore;
 	}
 
 	public static Matcher View() {
@@ -61,14 +70,5 @@ public class TestMatcher {
 			_matcherView = matcher;
 		}
 		return _matcherView;
-	}
-
-	public static Matcher Motion() {
-		if (_matcherMotion == null) {
-			Matcher matcher = (Matcher) Matcher.AllOf(TestComponentIds.Motion);
-			matcher.componentNames = TestComponentIds.componentNames();
-			_matcherMotion = matcher;
-		}
-		return _matcherMotion;
 	}
 }

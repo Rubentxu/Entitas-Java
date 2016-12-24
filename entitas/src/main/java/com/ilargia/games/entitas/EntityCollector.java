@@ -1,14 +1,14 @@
 package com.ilargia.games.entitas;
 
-import com.badlogic.gdx.utils.ObjectSet;
 import com.ilargia.games.entitas.events.GroupEventType;
 import com.ilargia.games.entitas.exceptions.EntityCollectorException;
-import com.ilargia.games.entitas.interfaces.events.GroupChanged;
 import com.ilargia.games.entitas.interfaces.IComponent;
+import com.ilargia.games.entitas.interfaces.events.GroupChanged;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 
 public class EntityCollector<E extends Entity> {
 
-    public ObjectSet<E> _collectedEntities;
+    public ObjectOpenHashSet<E> _collectedEntities;
     GroupChanged<E> _addEntityCache;
     String _toStringCache;
     StringBuilder _toStringBuilder;
@@ -22,7 +22,7 @@ public class EntityCollector<E extends Entity> {
 
     public EntityCollector(Group<E>[] groups, GroupEventType[] eventTypes) throws EntityCollectorException {
         _groups = groups;
-        _collectedEntities = new ObjectSet<>();
+        _collectedEntities = new ObjectOpenHashSet<>();
         _eventTypes = eventTypes;
 
         if (groups.length != eventTypes.length) {

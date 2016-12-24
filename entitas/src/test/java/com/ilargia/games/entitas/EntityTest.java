@@ -1,9 +1,10 @@
 package com.ilargia.games.entitas;
 
-import com.badlogic.gdx.math.Circle;
 import com.ilargia.games.entitas.caching.EntitasCache;
-import com.ilargia.games.entitas.codeGenerator.Component;
-import com.ilargia.games.entitas.components.*;
+import com.ilargia.games.entitas.components.Interactive;
+import com.ilargia.games.entitas.components.Motion;
+import com.ilargia.games.entitas.components.Position;
+import com.ilargia.games.entitas.components.View;
 import com.ilargia.games.entitas.events.EventBus;
 import com.ilargia.games.entitas.exceptions.EntityAlreadyHasComponentException;
 import com.ilargia.games.entitas.exceptions.EntityDoesNotHaveComponentException;
@@ -38,7 +39,7 @@ public class EntityTest {
                 TestComponentIds.componentTypes()), bus);
         entity.setCreationIndex(0);
         entity.addComponent(TestComponentIds.Position, new Position(100, 100));
-        entity.addComponent(TestComponentIds.View, new View(new Circle()));
+        entity.addComponent(TestComponentIds.View, new View(1));
 
 
     }
@@ -54,13 +55,13 @@ public class EntityTest {
 
     @Test
     public void EntityHashComponent() {
-        assertEquals(true, entity.hasComponent(2));
+        assertEquals(true, entity.hasComponent(TestComponentIds.Position));
 
     }
 
     @Test
     public void EntityDoesNotHaveComponent() {
-        assertEquals(false, entity.hasComponent(3));
+        assertEquals(false, entity.hasComponent(TestComponentIds.Score));
 
     }
 
@@ -71,7 +72,7 @@ public class EntityTest {
 
     @Test
     public void EntityDoesNotHaveAnyComponent() {
-        assertEquals(false, entity.hasAnyComponent(3));
+        assertEquals(false, entity.hasAnyComponent(TestComponentIds.Score));
 
     }
 
@@ -79,7 +80,7 @@ public class EntityTest {
     public void EntityAlreadyHasComponentException() {
         entity.addComponent(TestComponentIds.Position, new Position(100, 100));
 
-   }
+    }
 
     @Test
     public void OnComponentAddedTest() {
@@ -135,18 +136,18 @@ public class EntityTest {
     @Test
     public void replaceNotExistComponentTest() {
         entity.replaceComponent(TestComponentIds.Motion, new Motion(50F, 50F));
-        assertEquals(50F, ((Motion) entity.getComponent(TestComponentIds.Motion)).velocity.x, 0.1F);
+        assertEquals(50F, ((Motion) entity.getComponent(TestComponentIds.Motion)).x, 0.1F);
     }
 
     @Test
     public void falseReplaceComponentTest() {
         entity.replaceComponent(TestComponentIds.Motion, new Motion(50F, 50F));
-        assertNotEquals(100F, ((Motion) entity.getComponent(TestComponentIds.Motion)).velocity.x, 0.1F);
+        assertNotEquals(100F, ((Motion) entity.getComponent(TestComponentIds.Motion)).x, 0.1F);
     }
 
     @Test(expected = EntityDoesNotHaveComponentException.class)
     public void EntityDoesNotHaveComponentException() {
-        entity.getComponent(3);
+        entity.getComponent(TestComponentIds.Score);
 
     }
 
@@ -229,7 +230,7 @@ public class EntityTest {
     @Test
     public void falseHasComponentsTest() {
         int[] indices = entity.getComponentIndices();
-        indices[0] = 3;
+        indices[0] = TestComponentIds.Score;
         assertFalse(entity.hasComponents((int[]) indices));
 
     }

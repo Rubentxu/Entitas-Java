@@ -1,31 +1,31 @@
 package com.ilargia.games.entitas;
 
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.ObjectSet;
 import com.ilargia.games.entitas.exceptions.EntityIndexException;
 import com.ilargia.games.entitas.exceptions.GroupSingleEntityException;
-import com.ilargia.games.entitas.interfaces.events.GroupChanged;
-import com.ilargia.games.entitas.interfaces.events.GroupUpdated;
 import com.ilargia.games.entitas.interfaces.IComponent;
 import com.ilargia.games.entitas.interfaces.IMatcher;
+import com.ilargia.games.entitas.interfaces.events.GroupChanged;
+import com.ilargia.games.entitas.interfaces.events.GroupUpdated;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 
 import java.util.Iterator;
 
 public class Group<E extends Entity> {
 
-    private final ObjectSet<E> _entities;
+    private final ObjectOpenHashSet<E> _entities;
     public GroupChanged<E> OnEntityAdded;
-    public GroupChanged<E>  OnEntityRemoved;
-    public GroupUpdated<E>  OnEntityUpdated;
+    public GroupChanged<E> OnEntityRemoved;
+    public GroupUpdated<E> OnEntityUpdated;
+    public Class<E> type;
     private IMatcher _matcher;
-    private Array<E> _entitiesCache;
+    private E[] _entitiesCache;
     private E _singleEntityCache;
     private String _toStringCache;
-    public Class<E> type;
 
 
     public Group(IMatcher matcher, Class<E> clazz) {
-        _entities = new ObjectSet<E>();
+        _entities = new ObjectOpenHashSet<E>();
         _matcher = matcher;
         type = clazz;
     }
@@ -95,17 +95,15 @@ public class Group<E extends Entity> {
 
     public E[] getEntities() {
         if (_entitiesCache == null) {
-            _entitiesCache = new Array<E>(false, _entities.size, type);
-            for (E e : _entities) {
-                _entitiesCache.add(e);
-            }
+            _entitiesCache = (E[]) new Entity [_entities.size()];
+            _entities.toArray(_entitiesCache);
         }
-        return _entitiesCache.items;
+        return _entitiesCache;
     }
 
     public E getSingleEntity() {
         if (_singleEntityCache == null) {
-            int c = _entities.size;
+            int c = _entities.size();
             if (c == 1) {
                 Iterator<E> enumerator = _entities.iterator();
                 _singleEntityCache = enumerator.next();
@@ -120,7 +118,7 @@ public class Group<E extends Entity> {
 
 
     public int getcount() {
-        return _entities.size;
+        return _entities.size();
     }
 
     public IMatcher getmatcher() {

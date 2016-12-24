@@ -1,26 +1,26 @@
 package com.ilargia.games.entitas;
 
-import com.badlogic.gdx.utils.Array;
 import com.ilargia.games.entitas.exceptions.EntitasException;
 import com.ilargia.games.entitas.interfaces.*;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 
 public class Systems implements IInitializeSystem, IExecuteSystem, ICleanupSystem, ITearDownSystem {
 
-    private Array<IInitializeSystem> _initializeSystems;
-    private Array<IExecuteSystem> _executeSystems;
-    private Array<ICleanupSystem> _cleanupSystems;
-    private Array<ITearDownSystem> _tearDownSystems;
+    private ObjectArrayList<IInitializeSystem> _initializeSystems;
+    private ObjectArrayList<IExecuteSystem> _executeSystems;
+    private ObjectArrayList<ICleanupSystem> _cleanupSystems;
+    private ObjectArrayList<ITearDownSystem> _tearDownSystems;
 
     public Systems() {
-        _initializeSystems = new Array<>();
-        _executeSystems = new Array<>();
-        _cleanupSystems = new Array<>();
-        _tearDownSystems = new Array<>();
+        _initializeSystems = new ObjectArrayList<>();
+        _executeSystems = new ObjectArrayList<>();
+        _cleanupSystems = new ObjectArrayList<>();
+        _tearDownSystems = new ObjectArrayList<>();
     }
 
 
     private Systems add(ISystem system) {
-        if(system instanceof ReactiveSystem) {
+        if (system instanceof ReactiveSystem) {
             addSystem(((ReactiveSystem) system).getSubsystem());
             addSystem(system);
         } else {
@@ -31,10 +31,10 @@ public class Systems implements IInitializeSystem, IExecuteSystem, ICleanupSyste
     }
 
     private void addSystem(ISystem system) {
-        if(system instanceof IInitializeSystem) _initializeSystems.add((IInitializeSystem) system);
-        if(system instanceof IExecuteSystem) _executeSystems.add((IExecuteSystem) system);
-        if(system instanceof ICleanupSystem) _cleanupSystems.add((ICleanupSystem) system);
-        if(system instanceof ITearDownSystem) _tearDownSystems.add((ITearDownSystem) system);
+        if (system instanceof IInitializeSystem) _initializeSystems.add((IInitializeSystem) system);
+        if (system instanceof IExecuteSystem) _executeSystems.add((IExecuteSystem) system);
+        if (system instanceof ICleanupSystem) _cleanupSystems.add((ICleanupSystem) system);
+        if (system instanceof ITearDownSystem) _tearDownSystems.add((ITearDownSystem) system);
 
     }
 
@@ -63,7 +63,7 @@ public class Systems implements IInitializeSystem, IExecuteSystem, ICleanupSyste
     }
 
     public void activateReactiveSystems() {
-        for (int i = 0; i < _executeSystems.size; i++) {
+        for (int i = 0; i < _executeSystems.size(); i++) {
             ReactiveSystem reactiveSystem = (ReactiveSystem) ((_executeSystems.get(i) instanceof ReactiveSystem) ? _executeSystems.get(i) : null);
             if (reactiveSystem != null) {
                 reactiveSystem.activate();
@@ -77,7 +77,7 @@ public class Systems implements IInitializeSystem, IExecuteSystem, ICleanupSyste
     }
 
     public void deactivateReactiveSystems() {
-        for (int i = 0; i < _executeSystems.size; i++) {
+        for (int i = 0; i < _executeSystems.size(); i++) {
             ReactiveSystem reactiveSystem = (ReactiveSystem) ((_executeSystems.get(i) instanceof ReactiveSystem) ? _executeSystems.get(i) : null);
             if (reactiveSystem != null) {
                 reactiveSystem.deactivate();
@@ -91,7 +91,7 @@ public class Systems implements IInitializeSystem, IExecuteSystem, ICleanupSyste
     }
 
     public void clearReactiveSystems() {
-        for (int i = 0; i < _executeSystems.size; i++) {
+        for (int i = 0; i < _executeSystems.size(); i++) {
             ReactiveSystem reactiveSystem = (ReactiveSystem) ((_executeSystems.get(i) instanceof ReactiveSystem) ? _executeSystems.get(i) : null);
             if (reactiveSystem != null) {
                 reactiveSystem.clear();

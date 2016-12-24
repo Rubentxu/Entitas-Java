@@ -1,25 +1,23 @@
 package com.ilargia.games.entitas;
 
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.ObjectSet;
+
 import com.ilargia.games.entitas.caching.EntitasCache;
 import com.ilargia.games.entitas.events.EventBus;
 import com.ilargia.games.entitas.exceptions.EntityAlreadyHasComponentException;
 import com.ilargia.games.entitas.exceptions.EntityDoesNotHaveComponentException;
 import com.ilargia.games.entitas.exceptions.EntityIsNotEnabledException;
-import com.ilargia.games.entitas.interfaces.*;
-import it.unimi.dsi.fastutil.ints.Int2IntArrayMap;
+import com.ilargia.games.entitas.interfaces.IComponent;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
-import it.unimi.dsi.fastutil.ints.IntArraySet;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import sun.reflect.ReflectionFactory;
 
 import java.lang.reflect.Constructor;
-import java.util.ArrayList;
 import java.util.Stack;
 
 public class Entity {
 
-    public ObjectSet<Object> owners;
+    public ObjectOpenHashSet<Object> owners;
     public int _retainCount;
     private int _creationIndex;
     private boolean _isEnabled;
@@ -37,7 +35,7 @@ public class Entity {
         _totalComponents = totalComponents;
         _componentPools = componentPools;
         _isEnabled = true;
-        owners = new ObjectSet<>();
+        owners = new ObjectOpenHashSet<>();
         _eventBus = eventBus;
 
         if (entityMetaData != null) {
@@ -110,7 +108,7 @@ public class Entity {
             _components[index] = replacement;
             _componentsCache = null;
             if (replacement != null) {
-               _eventBus.notifyComponentReplaced(this, index, previousComponent, replacement);
+                _eventBus.notifyComponentReplaced(this, index, previousComponent, replacement);
             } else {
                 _componentIndicesCache = null;
                 _eventBus.notifyComponentRemoved(this, index, previousComponent);
@@ -136,7 +134,7 @@ public class Entity {
 
     public IComponent[] getComponents() {
         if (_componentsCache == null) {
-            ArrayList<IComponent> componentsCache = EntitasCache.getIComponentList();
+            ObjectArrayList<IComponent> componentsCache = EntitasCache.getIComponentList();
 
             for (int i = 0; i < _components.length; i++) {
                 IComponent component = _components[i];
@@ -224,14 +222,14 @@ public class Entity {
     }
 
 
-    public <T extends IComponent> T createComponent(int index)  {
+    public <T extends IComponent> T createComponent(int index) {
         Stack<IComponent> componentPool = getComponentPool(index);
         try {
-            if(componentPool.size() > 0) {
+            if (componentPool.size() > 0) {
                 return (T) componentPool.pop();
             } else {
                 Class<T> clazz = _entityMetaData.componentTypes[index];
-                return  clazz.cast(getDefaultConstructor(clazz).newInstance());
+                return clazz.cast(getDefaultConstructor(clazz).newInstance());
             }
         } catch (Exception e) {
             return null;
@@ -247,7 +245,6 @@ public class Entity {
         }
         return null;
     }
-
 
 
     public void destroy() {
@@ -309,7 +306,6 @@ public class Entity {
     public void setEnabled(boolean _isEnabled) {
         this._isEnabled = _isEnabled;
     }
-
 
 
 }

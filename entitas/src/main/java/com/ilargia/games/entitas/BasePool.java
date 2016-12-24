@@ -1,35 +1,38 @@
 package com.ilargia.games.entitas;
 
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.ObjectMap;
-import com.badlogic.gdx.utils.ObjectSet;
 import com.ilargia.games.entitas.caching.EntitasCache;
 import com.ilargia.games.entitas.events.EventBus;
 import com.ilargia.games.entitas.events.GroupEventType;
 import com.ilargia.games.entitas.exceptions.*;
-import com.ilargia.games.entitas.interfaces.*;
+import com.ilargia.games.entitas.interfaces.FactoryEntity;
+import com.ilargia.games.entitas.interfaces.IComponent;
+import com.ilargia.games.entitas.interfaces.IEntityIndex;
+import com.ilargia.games.entitas.interfaces.IMatcher;
 import com.ilargia.games.entitas.interfaces.events.ComponentReplaced;
 import com.ilargia.games.entitas.interfaces.events.EntityChanged;
 import com.ilargia.games.entitas.interfaces.events.EntityReleased;
 import com.ilargia.games.entitas.interfaces.events.GroupChanged;
+import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 
 import java.util.Stack;
 
 public class BasePool<E extends Entity, P extends BasePool> {
 
-    private int _creationIndex;
-    private ObjectSet<E> _entities;
-    private Stack<E> _reusableEntities;
-    private ObjectSet<E> _retainedEntities;
-    private Array<E> _entitiesCache;
-    private EntityMetaData _metaData;
-    private Stack<IComponent>[] _componentPools;
-    private ObjectMap<String, IEntityIndex> _entityIndices;
-    private FactoryEntity<E> _factoryEntiy;
-    protected ObjectMap<IMatcher, Group<E>> _groups;
-    protected Array<Group<E>>[] _groupsForIndex;
     public int _totalComponents;
     public Class<E> entityType;
+    protected Object2ObjectArrayMap<IMatcher, Group<E>> _groups;
+    protected ObjectArrayList<Group<E>>[] _groupsForIndex;
+    private int _creationIndex;
+    private ObjectOpenHashSet<E> _entities;
+    private Stack<E> _reusableEntities;
+    private ObjectOpenHashSet<E> _retainedEntities;
+    private E[] _entitiesCache;
+    private EntityMetaData _metaData;
+    private Stack<IComponent>[] _componentPools;
+    private Object2ObjectArrayMap<String, IEntityIndex> _entityIndices;
+    private FactoryEntity<E> _factoryEntiy;
     private EventBus<E> _eventBus;
 
 
@@ -57,21 +60,21 @@ public class BasePool<E extends Entity, P extends BasePool> {
             );
         }
 
-        _groupsForIndex = new Array[totalComponents];
+        _groupsForIndex = new ObjectArrayList[totalComponents];
         _componentPools = new Stack[totalComponents];
-        _entityIndices = new ObjectMap<>();
+        _entityIndices = new Object2ObjectArrayMap<>();
 
         _reusableEntities = new Stack<>();
-        _retainedEntities = new ObjectSet<>();
-        _entities = new ObjectSet<>();
-        _groups = new ObjectMap<>();
+        _retainedEntities = new ObjectOpenHashSet<>();
+        _entities = new ObjectOpenHashSet<>();
+        _groups = new Object2ObjectArrayMap<>();
 
-        EntityChanged<E> _cachedEntityChanged =  (E e, int idx, IComponent c) -> {
+        EntityChanged<E> _cachedEntityChanged = (E e, int idx, IComponent c) -> {
             updateGroupsComponentAddedOrRemoved(e, idx, c, _groupsForIndex);
         };
         _eventBus.OnComponentAdded.addListener(_cachedEntityChanged);
         _eventBus.OnComponentRemoved.addListener(_cachedEntityChanged);
-        _eventBus.OnComponentReplaced.addListener((ComponentReplaced<E>)(E e, int idx, IComponent pc, IComponent nc) -> {
+        _eventBus.OnComponentReplaced.addListener((ComponentReplaced<E>) (E e, int idx, IComponent pc, IComponent nc) -> {
             updateGroupsComponentReplaced(e, idx, pc, nc, _groupsForIndex);
         });
         _eventBus.OnEntityReleased.addListener((EntityReleased<E>) (E e) -> {
@@ -80,6 +83,22 @@ public class BasePool<E extends Entity, P extends BasePool> {
 
         entityType = (Class<E>) _factoryEntiy.create(_totalComponents, _componentPools, _metaData).getClass();
 
+    }
+
+    public static EntityCollector createEntityCollector(BasePool[] pools, IMatcher matcher) {
+        return createEntityCollector(pools, matcher, GroupEventType.OnEntityAdded);
+    }
+
+    public static EntityCollector createEntityCollector(BasePool[] pools, IMatcher matcher, GroupEventType eventType) {
+        Group[] groups = new Group[pools.length];
+        GroupEventType[] eventTypes = new GroupEventType[pools.length];
+
+        for (int i = 0; i < pools.length; i++) {
+            groups[i] = pools[i].getGroup(matcher);
+            eventTypes[i] = eventType;
+        }
+
+        return new EntityCollector(groups, eventTypes);
     }
 
     public E createEntity() {
@@ -121,7 +140,7 @@ public class BasePool<E extends Entity, P extends BasePool> {
         }
         _entities.clear();
 
-        if (_retainedEntities.size != 0) {
+        if (_retainedEntities.size() != 0) {
             throw new PoolStillHasRetainedEntitiesException(this);
         }
 
@@ -133,19 +152,10 @@ public class BasePool<E extends Entity, P extends BasePool> {
 
     public E[] getEntities() {
         if (_entitiesCache == null) {
-            try {
-                _entitiesCache = new Array(true, _entities.size, entityType);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            int i = 0;
-            for (E e : _entities) {
-                _entitiesCache.insert(i, e);
-                i++;
-            }
-
+            _entitiesCache = (E[]) new Entity [_entities.size()];
+            _entities.toArray(_entitiesCache);
         }
-        return _entitiesCache.items;
+        return  _entitiesCache;
 
     }
 
@@ -161,7 +171,7 @@ public class BasePool<E extends Entity, P extends BasePool> {
 
             for (int index : matcher.getIndices()) {
                 if (_groupsForIndex[index] == null) {
-                    _groupsForIndex[index] = new Array<Group<E>>();
+                    _groupsForIndex[index] = new ObjectArrayList<Group<E>>();
                 }
                 _groupsForIndex[index].add(group);
             }
@@ -213,7 +223,6 @@ public class BasePool<E extends Entity, P extends BasePool> {
         _entityIndices.clear();
     }
 
-
     public void resetCreationIndex() {
         _creationIndex = 0;
     }
@@ -224,7 +233,6 @@ public class BasePool<E extends Entity, P extends BasePool> {
             componentPool.clear();
         }
     }
-
 
     public void clearComponentPools() {
         for (int i = 0; i < _componentPools.length; i++) {
@@ -240,15 +248,14 @@ public class BasePool<E extends Entity, P extends BasePool> {
 
     }
 
-
-    public void updateGroupsComponentAddedOrRemoved(E entity, int index, IComponent component, Array<Group<E>>[] groupsForIndex) {
-        Array<Group<E>> groups = groupsForIndex[index];
+    public void updateGroupsComponentAddedOrRemoved(E entity, int index, IComponent component, ObjectArrayList<Group<E>>[] groupsForIndex) {
+        ObjectArrayList<Group<E>> groups = groupsForIndex[index];
         if (groups != null) {
-            Array<GroupChanged> events = EntitasCache.getGroupChangedList();
-            for (int i = 0, groupsCount = groups.size; i < groupsCount; i++) {
+            ObjectArrayList<GroupChanged> events = EntitasCache.getGroupChangedList();
+            for (int i = 0, groupsCount = groups.size(); i < groupsCount; i++) {
                 events.add(groups.get(i).handleEntity(entity));
             }
-            for (int i = 0; i < events.size; i++) {
+            for (int i = 0; i < events.size(); i++) {
                 GroupChanged groupChangedEvent = events.get(i);
                 if (groupChangedEvent != null) {
                     groupChangedEvent.groupChanged(groups.get(i), entity, index, component);
@@ -260,8 +267,8 @@ public class BasePool<E extends Entity, P extends BasePool> {
     }
 
     protected void updateGroupsComponentReplaced(E entity, int index, IComponent previousComponent,
-                                                        IComponent newComponent, Array<Group<E>>[] groupsForIndex) {
-        Array<Group<E>> groups = groupsForIndex[index];
+                                                 IComponent newComponent, ObjectArrayList<Group<E>>[] groupsForIndex) {
+        ObjectArrayList<Group<E>> groups = groupsForIndex[index];
         if (groups != null) {
             for (Group g : groups) {
                 g.updateEntity(entity, index, previousComponent, newComponent);
@@ -270,14 +277,13 @@ public class BasePool<E extends Entity, P extends BasePool> {
 
     }
 
-    protected void onEntityReleased(E entity, ObjectSet<E> retainedEntities,  Stack<E> reusableEntities) {
+    protected void onEntityReleased(E entity, ObjectOpenHashSet<E> retainedEntities, Stack<E> reusableEntities) {
         if (entity.isEnabled()) {
             throw new EntityIsNotDestroyedException("Cannot release entity.");
         }
         retainedEntities.remove(entity);
         reusableEntities.push(entity);
     }
-
 
     public Stack<IComponent>[] getComponentPools() {
         return _componentPools;
@@ -288,7 +294,7 @@ public class BasePool<E extends Entity, P extends BasePool> {
     }
 
     public int getCount() {
-        return _entities.size;
+        return _entities.size();
     }
 
     public int getReusableEntitiesCount() {
@@ -296,29 +302,12 @@ public class BasePool<E extends Entity, P extends BasePool> {
     }
 
     public int getRetainedEntitiesCount() {
-        return _retainedEntities.size;
+        return _retainedEntities.size();
     }
 
     public Entity[] getEntities(IMatcher matcher) {
         return getGroup(matcher).getEntities();
 
-    }
-
-
-    public static EntityCollector createEntityCollector(BasePool[] pools, IMatcher matcher) {
-        return createEntityCollector(pools, matcher, GroupEventType.OnEntityAdded);
-    }
-
-    public static EntityCollector createEntityCollector(BasePool[] pools, IMatcher matcher, GroupEventType eventType) {
-        Group[] groups = new Group[pools.length];
-        GroupEventType[] eventTypes = new GroupEventType[pools.length];
-
-        for (int i = 0; i < pools.length; i++) {
-            groups[i] = pools[i].getGroup(matcher);
-            eventTypes[i] = eventType;
-        }
-
-        return new EntityCollector(groups, eventTypes);
     }
 
 

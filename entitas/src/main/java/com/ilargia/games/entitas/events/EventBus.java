@@ -3,7 +3,7 @@ package com.ilargia.games.entitas.events;
 import com.ilargia.games.entitas.BasePool;
 import com.ilargia.games.entitas.Entity;
 import com.ilargia.games.entitas.Group;
-import com.ilargia.games.entitas.interfaces.*;
+import com.ilargia.games.entitas.interfaces.IComponent;
 import com.ilargia.games.entitas.interfaces.events.*;
 
 public class EventBus<E extends Entity> {

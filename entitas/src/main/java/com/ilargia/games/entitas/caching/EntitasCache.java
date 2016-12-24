@@ -1,20 +1,16 @@
 package com.ilargia.games.entitas.caching;
 
 
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.ObjectSet;
-import com.ilargia.games.entitas.interfaces.events.GroupChanged;
 import com.ilargia.games.entitas.interfaces.IComponent;
-import it.unimi.dsi.fastutil.ints.Int2IntArrayMap;
+import com.ilargia.games.entitas.interfaces.events.GroupChanged;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntArraySet;
-
-import java.util.ArrayList;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 
 public class EntitasCache {
 
-    private static ObjectPool<ArrayList<IComponent>> componentArray = new ObjectPool<ArrayList<IComponent>>(() -> {
-        return new ArrayList<IComponent>();
+    private static ObjectPool<ObjectArrayList<IComponent>> componentArray = new ObjectPool<ObjectArrayList<IComponent>>(() -> {
+        return new ObjectArrayList<IComponent>();
     }, null);
     private static ObjectPool<IntArrayList> integerArray = new ObjectPool<IntArrayList>(() -> {
         return new IntArrayList(20);
@@ -22,16 +18,16 @@ public class EntitasCache {
     private static ObjectPool<IntArraySet> integerSet = new ObjectPool<IntArraySet>(() -> {
         return new IntArraySet();
     }, null);
-    private static ObjectPool<Array<GroupChanged>> groupChangedArray = new ObjectPool<Array<GroupChanged>>(() -> {
-        return new Array<GroupChanged>(true, 16, GroupChanged.class);
+    private static ObjectPool<ObjectArrayList<GroupChanged>> groupChangedArray = new ObjectPool<ObjectArrayList<GroupChanged>>(() -> {
+        return new ObjectArrayList<GroupChanged>(16);
     }, null);
 
 
-    public static ArrayList<IComponent> getIComponentList() {
+    public static ObjectArrayList<IComponent> getIComponentList() {
         return componentArray.get();
     }
 
-    public static void pushIComponentList(ArrayList<IComponent> list) {
+    public static void pushIComponentList(ObjectArrayList<IComponent> list) {
         list.clear();
         componentArray.push(list);
     }
@@ -54,12 +50,12 @@ public class EntitasCache {
         integerSet.push(hashSet);
     }
 
-    public static Array<GroupChanged> getGroupChangedList() {
+    public static ObjectArrayList<GroupChanged> getGroupChangedList() {
         return groupChangedArray.get();
 
     }
 
-    public static void pushGroupChangedList(Array<GroupChanged> list) {
+    public static void pushGroupChangedList(ObjectArrayList<GroupChanged> list) {
         list.clear();
         groupChangedArray.push(list);
     }

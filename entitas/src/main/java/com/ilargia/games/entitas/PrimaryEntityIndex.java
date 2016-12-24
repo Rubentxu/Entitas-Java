@@ -1,16 +1,16 @@
 package com.ilargia.games.entitas;
 
-import com.badlogic.gdx.utils.ObjectMap;
 import com.ilargia.games.entitas.exceptions.EntityIndexException;
 import com.ilargia.games.entitas.interfaces.IComponent;
+import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 
 public class PrimaryEntityIndex<K, E extends Entity> extends AbstractEntityIndex<K, E> {
 
-    private ObjectMap<K, E> _index;
+    private Object2ObjectArrayMap<K, E> _index;
 
     public PrimaryEntityIndex(Group group, Func<E, IComponent, K> getKey) {
         super(group, getKey);
-        _index = new ObjectMap<K, E>();
+        _index = new Object2ObjectArrayMap<K, E>();
         activate();
     }
 
@@ -37,7 +37,7 @@ public class PrimaryEntityIndex<K, E extends Entity> extends AbstractEntityIndex
 
     public E tryGetEntity(K key) {
         E entity = null;
-        _index.get(key, entity);
+        _index.get(key);
         return entity;
     }
 

@@ -1,19 +1,18 @@
 package com.ilargia.games.entitas;
 
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.ObjectSet;
 import com.ilargia.games.entitas.events.GroupEventType;
 import com.ilargia.games.entitas.interfaces.*;
 import com.ilargia.games.entitas.matcher.TriggerOnEvent;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 
 public class ReactiveSystem implements IExecuteSystem {
 
     private IReactiveExecuteSystem _subsystem;
-    private EntityCollector _collector;
+    private EntityCollector<Entity> _collector;
     private IMatcher _ensureComponents;
     private IMatcher _excludeComponents;
     private boolean _clearAfterExecute;
-    private Array<Entity> _buffer;
+    private ObjectArrayList<Entity> _buffer;
     private String _toStringCache;
 
     public ReactiveSystem(BasePool pool, IReactiveSystem subSystem) {
@@ -42,7 +41,7 @@ public class ReactiveSystem implements IExecuteSystem {
         _clearAfterExecute = ((IClearReactiveSystem) ((subSystem instanceof IClearReactiveSystem) ? subSystem : null)) != null;
 
         _collector = collector;
-        _buffer = new Array();
+        _buffer = new ObjectArrayList();
     }
 
     static EntityCollector createEntityCollector(BasePool pool, TriggerOnEvent[] triggers) {
@@ -76,46 +75,39 @@ public class ReactiveSystem implements IExecuteSystem {
 
     public void execute(float deltatime) {
 
-        if (_collector._collectedEntities.size != 0) {
+        if (_collector._collectedEntities.size() != 0) {
             if (_ensureComponents != null) {
 
                 if (_excludeComponents != null) {
-                    ObjectSet.ObjectSetIterator iterator = _collector._collectedEntities.iterator();
-                    while (iterator.hasNext()) {
-                        Entity e = (Entity) iterator.next();
+                    for (Entity e : _collector._collectedEntities) {
                         if (_ensureComponents.matches(e) && !_excludeComponents.matches(e)) {
                             _buffer.add(e.retain(this));
                         }
                     }
+
                 } else {
-                    ObjectSet.ObjectSetIterator iterator = _collector._collectedEntities.iterator();
-                    while (iterator.hasNext()) {
-                        Entity e = (Entity) iterator.next();
+                    for (Entity e : _collector._collectedEntities) {
                         if (_ensureComponents.matches(e)) {
                             _buffer.add(e.retain(this));
                         }
                     }
                 }
             } else if (_excludeComponents != null) {
-                ObjectSet.ObjectSetIterator iterator = _collector._collectedEntities.iterator();
-                while (iterator.hasNext()) {
-                    Entity e = (Entity) iterator.next();
+                for (Entity e : _collector._collectedEntities) {
                     if (!_excludeComponents.matches(e)) {
                         _buffer.add(e.retain(this));
                     }
                 }
             } else {
-                ObjectSet.ObjectSetIterator iterator = _collector._collectedEntities.iterator();
-                while (iterator.hasNext()) {
-                    Entity e = (Entity) iterator.next();
+                for (Entity e : _collector._collectedEntities) {
                     _buffer.add(e.retain(this));
                 }
             }
 
             _collector.clearCollectedEntities();
-            if (_buffer.size != 0) {
+            if (_buffer.size() != 0) {
                 _subsystem.execute(_buffer);
-                for (int i = 0, bufferCount = _buffer.size; i < bufferCount; i++) {
+                for (int i = 0, bufferCount = _buffer.size(); i < bufferCount; i++) {
                     _buffer.get(i).release(this);
                 }
                 _buffer.clear();

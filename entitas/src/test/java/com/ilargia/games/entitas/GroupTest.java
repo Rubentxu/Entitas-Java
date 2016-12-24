@@ -1,6 +1,5 @@
 package com.ilargia.games.entitas;
 
-import com.badlogic.gdx.math.Circle;
 import com.ilargia.games.entitas.components.Position;
 import com.ilargia.games.entitas.components.View;
 import com.ilargia.games.entitas.events.EventBus;
@@ -12,9 +11,7 @@ import org.junit.Test;
 
 import java.util.Stack;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 
 public class GroupTest {
 
@@ -24,7 +21,6 @@ public class GroupTest {
     private EventBus<Entity> bus;
 
 
-
     @Before
     public void setUp() throws Exception {
         bus = new EventBus<>();
@@ -32,7 +28,7 @@ public class GroupTest {
                 TestComponentIds.componentTypes()), bus);
         entity.setCreationIndex(0);
         entity.addComponent(TestComponentIds.Position, new Position(100, 100));
-        entity.addComponent(TestComponentIds.View, new View(new Circle()));
+        entity.addComponent(TestComponentIds.View, new View(1));
 
         group = new Group(TestMatcher.Position(), Entity.class);
         group2 = new Group(TestMatcher.Interactive(), Entity.class);
@@ -61,14 +57,14 @@ public class GroupTest {
     @Test
     public void handleEntitySilentlyTest() {
         group.handleEntitySilently(entity);
-        assertEquals(1,group.getEntities().length );
+        assertEquals(1, group.getEntities().length);
 
     }
 
     @Test
     public void handleEntitySilentlyOnEntityRemovedTest() {
         group.handleEntitySilently(entity);
-        assertEquals(1,group.getEntities().length );
+        assertEquals(1, group.getEntities().length);
 
         entity.removeComponent(TestComponentIds.Position);
         group.handleEntitySilently(entity);
@@ -82,7 +78,7 @@ public class GroupTest {
         assertNull(group.getSingleEntity());
         group.handleEntitySilently(entity);
 
-        assertEquals(entity, group.getSingleEntity() );
+        assertEquals(entity, group.getSingleEntity());
 
     }
 

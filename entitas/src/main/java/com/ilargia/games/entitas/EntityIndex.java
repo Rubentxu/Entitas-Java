@@ -1,18 +1,18 @@
 package com.ilargia.games.entitas;
 
 
-import com.badlogic.gdx.utils.ObjectMap;
-import com.badlogic.gdx.utils.ObjectSet;
 import com.ilargia.games.entitas.exceptions.EntityIndexException;
 import com.ilargia.games.entitas.interfaces.IComponent;
+import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 
 public class EntityIndex<K, E extends Entity> extends AbstractEntityIndex<K, E> {
 
-    private ObjectMap<K, ObjectSet<E>> _index;
+    private Object2ObjectArrayMap<K, ObjectOpenHashSet<E>> _index;
 
-    public EntityIndex(Group group, Func<E, IComponent, K> key)  {
+    public EntityIndex(Group group, Func<E, IComponent, K> key) {
         super(group, key);
-        _index = new ObjectMap<K, ObjectSet<E>>();
+        _index = new Object2ObjectArrayMap();
         activate();
     }
 
@@ -22,10 +22,10 @@ public class EntityIndex<K, E extends Entity> extends AbstractEntityIndex<K, E> 
         indexEntities(_group);
     }
 
-    public  ObjectSet<E> getEntities(K key) {
-        ObjectSet<E> entities = null;
+    public ObjectOpenHashSet<E> getEntities(K key) {
+        ObjectOpenHashSet<E> entities = null;
         if (!_index.containsKey(key)) {
-            entities = new ObjectSet<E>();
+            entities = new ObjectOpenHashSet<E>();
             _index.put(key, entities);
         } else {
             entities = _index.get(key);
@@ -35,7 +35,7 @@ public class EntityIndex<K, E extends Entity> extends AbstractEntityIndex<K, E> 
 
 
     @Override
-    protected void addEntity(E entity, IComponent component)  {
+    protected void addEntity(E entity, IComponent component) {
         getEntities(_key.getKey(entity, component)).add(entity);
         entity.retain(this);
     }
@@ -48,7 +48,7 @@ public class EntityIndex<K, E extends Entity> extends AbstractEntityIndex<K, E> 
 
     @Override
     protected void clear() {
-        for (ObjectSet<E> entities : _index.values()) {
+        for (ObjectOpenHashSet<E> entities : _index.values()) {
             for (Entity entity : entities) {
                 entity.release(this);
             }
