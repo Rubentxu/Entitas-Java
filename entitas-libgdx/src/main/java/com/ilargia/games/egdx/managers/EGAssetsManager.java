@@ -5,10 +5,11 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.ilargia.games.egdx.interfaces.managers.*;
 
-public class EGAssetsManager implements AssetManager<Class<?>>, TextureManager, FontManager, MusicManager, SoundManager {
-
+public class EGAssetsManager implements AssetManager<Class<?>>, TextureManager<Texture>, FontManager<BitmapFont>,
+        MusicManager<Music>, SoundManager<Sound> {
 
     private com.badlogic.gdx.assets.AssetManager assetManager;
     private EGPreferencesManager preferencesManager;

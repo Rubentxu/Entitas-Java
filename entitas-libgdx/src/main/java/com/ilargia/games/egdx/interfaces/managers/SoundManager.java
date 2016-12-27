@@ -1,9 +1,7 @@
 package com.ilargia.games.egdx.interfaces.managers;
 
 
-import com.badlogic.gdx.audio.Sound;
-
-public interface SoundManager {
+public interface SoundManager<Sound> {
 
     public void playSound(String name);
 

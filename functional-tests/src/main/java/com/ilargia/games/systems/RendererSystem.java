@@ -77,8 +77,14 @@ public class RendererSystem implements IExecuteSystem, ISetPool<Pool> {
             font.draw(batch, score.text+ " "+ score.points, score.x, score.y);
         }
         for (Entity e : _groupTextureView.getEntities()) {
-            TextureView view = e.getTextureView();
-            batch.draw(view.texture, view.position.x, view.position.y);
+            TextureView textureView = e.getTextureView();
+            float originX = textureView.width * 0.5f;
+            float originY = textureView.height * 0.5f;
+
+            batch.draw(textureView.texture, textureView.position.x , textureView.position.y ,
+                    0, 0, textureView.width, textureView.height, 1, 1, textureView.rotation);
+
+
         }
         batch.end();
     }

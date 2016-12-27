@@ -14,11 +14,11 @@ public class EGEventBus implements EventBus {
 
     @Override
     public<E> void post(E event) {
-        ebus.post(event);
+        ebus.post(event).now();
     }
 
     @Override
     public <L> void subscribe(L listener) {
-        ebus.subscribe (listener);
+        ebus.subscribe(listener);
     }
 }

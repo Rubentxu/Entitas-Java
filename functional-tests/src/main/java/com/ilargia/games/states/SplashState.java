@@ -1,6 +1,7 @@
 package com.ilargia.games.states;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.ilargia.games.Pong;
 import com.ilargia.games.PongEngine;
@@ -30,9 +31,11 @@ public class SplashState implements GameState<PongEngine> {
                 .addSystem(context.core, new DelaySystem())
                 .addSystem(context.core, new RendererSystem(engine.sr, engine.cam, engine.batch, engine.font));
 
+        Texture texture = assetsManager.getTexture(splash);
+
         context.core.createEntity()
-                .addTextureView("Pong", assetsManager.getTexture(splash), new Vector2(),
-                       0, Pong.SCREEN_WIDTH, Pong.SCREEN_HEIGHT )
+                .addTextureView("Pong", new TextureRegion(texture, 0, 0, texture.getWidth(), texture.getHeight()), new Vector2(),
+                       0, Pong.SCREEN_HEIGHT, Pong.SCREEN_WIDTH )
                 .addDelay(3);
     }
 

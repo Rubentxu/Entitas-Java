@@ -1,10 +1,7 @@
 package com.ilargia.games.egdx.interfaces.managers;
 
 
-import com.badlogic.gdx.assets.*;
-import com.badlogic.gdx.audio.Music;
-
-public interface MusicManager {
+public interface MusicManager<Music> {
 
     public void playMusic(String name);
 
