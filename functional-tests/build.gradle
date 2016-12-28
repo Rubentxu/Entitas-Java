@@ -27,7 +27,6 @@ jar {
 
 dependencies {
     compile project(":entitas")
-    provided project(":codegenerator")
     compile project(":entitas-libgdx")
     compile "com.badlogicgames.gdx:gdx:$gdxVersion"
     compile "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"

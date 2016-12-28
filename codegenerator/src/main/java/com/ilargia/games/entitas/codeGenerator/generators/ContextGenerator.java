@@ -5,6 +5,7 @@ import com.ilargia.games.entitas.codeGenerator.CodeGenerator;
 import com.ilargia.games.entitas.codeGenerator.interfaces.IPoolCodeGenerator;
 import org.jboss.forge.roaster.Roaster;
 import org.jboss.forge.roaster.model.source.JavaClassSource;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -61,7 +62,7 @@ public class ContextGenerator implements IPoolCodeGenerator {
         String setAllPools = poolNames.stream().reduce("\n", (acc, poolName) ->
                 acc + "    " + poolName.toLowerCase() + " = create" + CodeGenerator.capitalize(poolName) + "Pool();\n "
         );
-        String eventBus ="bus = new EventBus<>();\n";
+        String eventBus = "bus = new EventBus<>();\n";
 
         javaClass.addMethod()
                 .setConstructor(true)

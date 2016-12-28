@@ -1,7 +1,6 @@
 package com.ilargia.games.entitas.codeGenerator.providers;
 
 
-import com.ilargia.games.entitas.codeGenerator.Component;
 import com.ilargia.games.entitas.codeGenerator.interfaces.ICodeGeneratorDataProvider;
 import com.ilargia.games.entitas.codeGenerator.intermediate.ComponentInfo;
 import org.jboss.forge.roaster.Roaster;
@@ -62,7 +61,7 @@ public class TypeReflectionProvider implements ICodeGeneratorDataProvider {
                     }).filter((source) -> source != null)
                     .filter((source) -> source.getInterfaces().toString().matches(".*\\bIComponent\\b.*"))
                     .map((source) -> createComponentInfo(source))
-                    .filter(info-> info != null)
+                    .filter(info -> info != null)
                     .collect(Collectors.toList()));
         }
         return _componentInfos;
@@ -97,10 +96,9 @@ public class TypeReflectionProvider implements ICodeGeneratorDataProvider {
                 .collect(Collectors.toList());
 
 
+        AnnotationSource<JavaClassSource> annotation = component.getAnnotation("Component");
 
-        AnnotationSource<JavaClassSource> annotation = component.getAnnotation(Component.class);
-
-        if(annotation != null) {
+        if (annotation != null) {
             List<String> poolNames = (annotation.toString().contains("pools"))
                     ? Arrays.asList(annotation.getStringArrayValue("pools"))
                     : null;

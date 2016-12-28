@@ -42,10 +42,10 @@ public class CodeGenerator {
 
     public static Map<String, List<ComponentInfo>> generateMap(List<ComponentInfo> componentInfos) {
         Map<String, List<ComponentInfo>> poolsComponents = new HashMap<>();
-        componentInfos.sort((c1, c2)-> c1.typeName.compareTo(c2.typeName));
-        int index =0;
+        componentInfos.sort((c1, c2) -> c1.typeName.compareTo(c2.typeName));
+        int index = 0;
         for (ComponentInfo info : componentInfos) {
-            info.index=index++;
+            info.index = index++;
             info.totalComponents = componentInfos.size();
             for (String poolName : info.pools) {
                 if (!poolsComponents.containsKey(poolName)) {
@@ -61,16 +61,15 @@ public class CodeGenerator {
     }
 
 
-
     public List<CodeGenFile> generate(ICodeGeneratorDataProvider provider, String destinyDirectory, List<ICodeGenerator> codeGenerators) {
 
         int index = destinyDirectory.lastIndexOf("main/java/");
-        if(index==-1) {
+        if (index == -1) {
             index = destinyDirectory.lastIndexOf("test/java/");
         }
-        index+=10;
+        index += 10;
 
-        String sourcePackage = destinyDirectory.substring(index).replaceAll("/",".");
+        String sourcePackage = destinyDirectory.substring(index).replaceAll("/", ".");
 
         ArrayList<CodeGenFile> generatedFiles = new ArrayList<CodeGenFile>();
         List<ComponentInfo> componentInfos = provider.componentInfos();

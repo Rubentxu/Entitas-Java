@@ -20,11 +20,18 @@ import javafx.stage.Stage;
 
 import java.io.*;
 import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
+import java.util.ResourceBundle;
 
 public class CodeGeneratorApp extends Application implements Initializable {
 
     public Stage stage;
+    @FXML
+    ProgressIndicator progress;
+    @FXML
+    Label result;
     @FXML
     private CheckBox componentIndicesGenerator;
     @FXML
@@ -37,10 +44,6 @@ public class CodeGeneratorApp extends Application implements Initializable {
     private TextField fieldGeneratedFolder;
     @FXML
     private Button btnGenerate;
-    @FXML
-    ProgressIndicator progress;
-    @FXML
-    Label result;
     private Properties props;
 
     public static void main(String[] args) {
@@ -84,7 +87,7 @@ public class CodeGeneratorApp extends Application implements Initializable {
             fieldComponentFolder.setText(prop.getProperty("fieldComponentFolder"));
             fieldGeneratedFolder.setText(prop.getProperty("fieldGeneratedFolder"));
 
-        }  finally {
+        } finally {
             if (input != null) {
                 try {
                     input.close();
@@ -123,7 +126,7 @@ public class CodeGeneratorApp extends Application implements Initializable {
                 directoryChooser.showDialog(stage);
         if (selectedDirectory != null) {
             fieldComponentFolder.setText(selectedDirectory.getAbsolutePath());
-            if(props!=null)
+            if (props != null)
                 props.setProperty("fieldComponentFolder", selectedDirectory.getAbsolutePath());
         }
 
@@ -136,7 +139,7 @@ public class CodeGeneratorApp extends Application implements Initializable {
                 directoryChooser.showDialog(stage);
         if (selectedDirectory != null) {
             fieldGeneratedFolder.setText(selectedDirectory.getAbsolutePath());
-            if(props!=null)
+            if (props != null)
                 props.setProperty("fieldGeneratedFolder", selectedDirectory.getAbsolutePath());
         }
     }
@@ -147,7 +150,7 @@ public class CodeGeneratorApp extends Application implements Initializable {
         progress.setVisible(true);
         result.setText("Generating...");
 
-        if(props!=null) saveProperties();
+        if (props != null) saveProperties();
 
         // loads the items at another thread, asynchronously
         Task loader = new Task<List<CodeGenFile>>() {
@@ -158,8 +161,8 @@ public class CodeGeneratorApp extends Application implements Initializable {
                 });
 
                 setOnFailed(workerStateEvent -> {
-                        result.setText("Failed");
-                        getException().printStackTrace();
+                    result.setText("Failed");
+                    getException().printStackTrace();
                 });
 
             }

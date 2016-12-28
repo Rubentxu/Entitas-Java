@@ -72,7 +72,7 @@ public class ComponentExtensionsGenerator implements IComponentCodeGenerator {
     }
 
     private void addImporEnums(ComponentInfo info, JavaClassSource entityClass) {
-        if(info.internalEnums != null)
+        if (info.internalEnums != null)
             info.internalEnums.stream().forEach(e -> entityClass.addImport(e));
 
     }
@@ -81,7 +81,7 @@ public class ComponentExtensionsGenerator implements IComponentCodeGenerator {
     private void addAddMethods(ComponentInfo info, JavaClassSource source) {
         if (!info.isSingletonComponent) {
             String method = "";
-            if (info.constructores !=null && info.constructores.size() > 0) {
+            if (info.constructores != null && info.constructores.size() > 0) {
                 method = String.format("%2$s component = (%2$s) recoverComponent(%1$s.%2$s);\n if(component == null) { " +
                                 "component = new %2$s(%4$s);\n } else {\n%3$s\n} addComponent(%1$s.%2$s, component);\n return this;",
                         CodeGenerator.capitalize(info.pools.get(0)) + CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG,
@@ -98,7 +98,7 @@ public class ComponentExtensionsGenerator implements IComponentCodeGenerator {
                     .setName(String.format("add%1$s", info.typeName))
                     .setReturnType("Entity")
                     .setPublic()
-                    .setParameters(info.constructores !=null && info.constructores.size() > 0
+                    .setParameters(info.constructores != null && info.constructores.size() > 0
                             ? memberNamesWithTypeFromConstructor(info.constructores.get(0))
                             : memberNamesWithType(info.memberInfos))
                     .setBody(method);
@@ -109,7 +109,7 @@ public class ComponentExtensionsGenerator implements IComponentCodeGenerator {
     private void addReplaceMethods(ComponentInfo info, JavaClassSource source) {
         if (!info.isSingletonComponent) {
             String method;
-            if (info.constructores !=null && info.constructores.size() > 0) {
+            if (info.constructores != null && info.constructores.size() > 0) {
                 method = String.format("%2$s component = (%2$s) recoverComponent(%1$s.%2$s);\n if(component == null) { " +
                                 "component = new %2$s(%4$s);\n } else {\n%3$s\n} replaceComponent(%1$s.%2$s, component);\n return this;"
                         , CodeGenerator.capitalize(info.pools.get(0)) + CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG,
@@ -125,7 +125,7 @@ public class ComponentExtensionsGenerator implements IComponentCodeGenerator {
                     .setName(String.format("replace%1$s", info.typeName))
                     .setReturnType("Entity")
                     .setPublic()
-                    .setParameters(info.constructores !=null && info.constructores.size() > 0
+                    .setParameters(info.constructores != null && info.constructores.size() > 0
                             ? memberNamesWithTypeFromConstructor(info.constructores.get(0))
                             : memberNamesWithType(info.memberInfos))
                     .setBody(method);
