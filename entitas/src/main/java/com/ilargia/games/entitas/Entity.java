@@ -10,7 +10,7 @@ import com.ilargia.games.entitas.interfaces.IComponent;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
-import sun.reflect.ReflectionFactory;
+
 
 import java.lang.reflect.Constructor;
 import java.util.Stack;
@@ -46,7 +46,7 @@ public class Entity {
             for (int i = 0; i < componentNames.length; i++) {
                 componentNames[i] = String.valueOf(i);
             }
-            _entityMetaData = new EntityMetaData("No Pool", componentNames, null);
+            _entityMetaData = new EntityMetaData("No SplashPool", componentNames, null);
         }
     }
 
@@ -237,12 +237,12 @@ public class Entity {
     }
 
     private Constructor getDefaultConstructor(Class<?> clazz) {
-        ReflectionFactory rf = ReflectionFactory.getReflectionFactory();
-        for (Constructor constructor : clazz.getConstructors()) {
-            if (constructor.getParameterCount() == 0) {
-                return rf.newConstructorForSerialization(clazz, constructor);
-            }
-        }
+//        ReflectionFactory rf = ReflectionFactory.getReflectionFactory();
+//        for (Constructor constructor : clazz.getConstructors()) {
+//            if (constructor.getParameterCount() == 0) {
+//                return rf.newConstructorForSerialization(clazz, constructor);
+//            }
+//        }
         return null;
     }
 

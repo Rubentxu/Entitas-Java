@@ -24,27 +24,27 @@ public class ComponentExtensionsGenerator implements IComponentCodeGenerator {
 
         List<JavaClassSource> result = new ArrayList<>();
 
-        JavaClassSource entityClass = Roaster.parse(JavaClassSource.class, "public class Entity extends com.ilargia.games.entitas.Entity {}");
+        JavaClassSource entityClass = Roaster.parse(JavaClassSource.class, "public class SplashEntity extends com.ilargia.games.entitas.SplashEntity {}");
         entityClass.setPackage(pkgDestiny);
         entityClass.addMethod()
-                .setName("Entity")
+                .setName("SplashEntity")
                 .setPublic()
                 .setConstructor(true)
-                .setParameters("int totalComponents,Stack<IComponent>[] componentPools, EntityMetaData entityMetaData, EventBus<Entity> bus")
+                .setParameters("int totalComponents,Stack<IComponent>[] componentPools, EntityMetaData entityMetaData, EventBus<SplashEntity> bus")
                 .setBody("super(totalComponents, componentPools, entityMetaData, bus);");
         entityClass.addImport("com.ilargia.games.entitas.EntityMetaData");
         entityClass.addImport("com.ilargia.games.entitas.interfaces.IComponent");
         entityClass.addImport("java.util.Stack");
         entityClass.addImport("com.ilargia.games.entitas.events.EventBus");
 
-        JavaClassSource poolClass = Roaster.parse(JavaClassSource.class, "public class Pool extends com.ilargia.games.entitas.BasePool<Entity,Pool> {}");
+        JavaClassSource poolClass = Roaster.parse(JavaClassSource.class, "public class SplashPool extends com.ilargia.games.entitas.BasePool<SplashEntity,SplashPool> {}");
         poolClass.setPackage(pkgDestiny);
 
         poolClass.addMethod()
-                .setName("Pool")
+                .setName("SplashPool")
                 .setPublic()
                 .setConstructor(true)
-                .setParameters("int totalComponents, int startCreationIndex, EntityMetaData metaData, FactoryEntity<Entity> factoryMethod, EventBus<Entity> bus")
+                .setParameters("int totalComponents, int startCreationIndex, EntityMetaData metaData, FactoryEntity<SplashEntity> factoryMethod, EventBus<SplashEntity> bus")
                 .setBody("super(totalComponents, startCreationIndex, metaData, bus, factoryMethod);");
         poolClass.addImport("com.ilargia.games.entitas.EntityMetaData");
         poolClass.addImport("com.ilargia.games.entitas.interfaces.FactoryEntity");
@@ -96,7 +96,7 @@ public class ComponentExtensionsGenerator implements IComponentCodeGenerator {
 
             source.addMethod()
                     .setName(String.format("add%1$s", info.typeName))
-                    .setReturnType("Entity")
+                    .setReturnType("SplashEntity")
                     .setPublic()
                     .setParameters(info.constructores != null && info.constructores.size() > 0
                             ? memberNamesWithTypeFromConstructor(info.constructores.get(0))
@@ -123,7 +123,7 @@ public class ComponentExtensionsGenerator implements IComponentCodeGenerator {
 
             source.addMethod()
                     .setName(String.format("replace%1$s", info.typeName))
-                    .setReturnType("Entity")
+                    .setReturnType("SplashEntity")
                     .setPublic()
                     .setParameters(info.constructores != null && info.constructores.size() > 0
                             ? memberNamesWithTypeFromConstructor(info.constructores.get(0))
@@ -139,7 +139,7 @@ public class ComponentExtensionsGenerator implements IComponentCodeGenerator {
             String method = "removeComponent(%1$s.%2$s);return this;";
             source.addMethod()
                     .setName(String.format("remove%1$s", info.typeName))
-                    .setReturnType("Entity")
+                    .setReturnType("SplashEntity")
                     .setPublic()
                     .setBody(String.format(method,
                             CodeGenerator.capitalize(info.pools.get(0)) + CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG,
@@ -176,7 +176,7 @@ public class ComponentExtensionsGenerator implements IComponentCodeGenerator {
     private void addPoolGetMethods(ComponentInfo info, JavaClassSource source) {
         source.addMethod()
                 .setName(String.format("get%1$sEntity", info.typeName))
-                .setReturnType("Entity")
+                .setReturnType("SplashEntity")
                 .setPublic()
                 .setBody(String.format("return getGroup(%1$sMatcher.%2$s()).getSingleEntity();"
                         , CodeGenerator.capitalize(info.pools.get(0)), info.typeName));
@@ -203,10 +203,10 @@ public class ComponentExtensionsGenerator implements IComponentCodeGenerator {
 
             source.addMethod()
                     .setName(String.format("set%1$s", info.typeName))
-                    .setReturnType("Pool")
+                    .setReturnType("SplashPool")
                     .setPublic()
                     .setParameters("boolean value")
-                    .setBody(String.format(" Entity entity = get%1$sEntity();\n" +
+                    .setBody(String.format(" SplashEntity entity = get%1$sEntity();\n" +
                             "        if(value != (entity != null)) {\n" +
                             "             if(value) {\n" +
                             "                  entity.set%1$s(true);\n" +
@@ -231,14 +231,14 @@ public class ComponentExtensionsGenerator implements IComponentCodeGenerator {
         if (!info.isSingletonComponent) {
             source.addMethod()
                     .setName(String.format("set%1$s", info.typeName))
-                    .setReturnType("Entity")
+                    .setReturnType("SplashEntity")
                     .setPublic()
                     .setParameters(memberNamesWithType(info.memberInfos))
                     .setBody(String.format("if(has%1$s()) {\n" +
                                     "            throw new EntitasException(\"Could not set %1$s!\" + this + \" already has an entity with %1$s!\", " +
                                     "\"You should check if the pool already has a %1$sEntity before setting it or use pool.Replace%1$s().\");" +
                                     "         }\n" +
-                                    "         Entity entity = createEntity();\n" +
+                                    "         SplashEntity entity = createEntity();\n" +
                                     "         entity.add%1$s(%2$s);\n" +
                                     "         return entity;"
                             , info.typeName, memberNames(info.memberInfos)));
@@ -254,10 +254,10 @@ public class ComponentExtensionsGenerator implements IComponentCodeGenerator {
         if (!info.isSingletonComponent) {
             source.addMethod()
                     .setName(String.format("replace%1$s", info.typeName))
-                    .setReturnType("Entity")
+                    .setReturnType("SplashEntity")
                     .setPublic()
                     .setParameters(memberNamesWithType(info.memberInfos))
-                    .setBody(String.format("Entity entity = get%1$sEntity();" +
+                    .setBody(String.format("SplashEntity entity = get%1$sEntity();" +
                                     "         if(entity == null) {" +
                                     "            entity = set%1$s(%2$s);" +
                                     "         } else { " +
@@ -274,7 +274,7 @@ public class ComponentExtensionsGenerator implements IComponentCodeGenerator {
         if (!info.isSingletonComponent) {
             source.addMethod()
                     .setName(String.format("remove%1$s", info.typeName))
-                    .setReturnType("Pool")
+                    .setReturnType("SplashPool")
                     .setPublic()
                     .setBody(String.format("destroyEntity(get%1$sEntity()); return this;"
                             , info.typeName, memberNames(info.memberInfos)));
@@ -355,7 +355,7 @@ public class ComponentExtensionsGenerator implements IComponentCodeGenerator {
 
             source.addMethod()
                     .setName(String.format("set%1$s", info.typeName))
-                    .setReturnType("Entity")
+                    .setReturnType("SplashEntity")
                     .setPublic()
                     .setParameters("boolean value")
                     .setBody(String.format(" if(value != hasComponent(%1$s.%2$s)) {\n" +

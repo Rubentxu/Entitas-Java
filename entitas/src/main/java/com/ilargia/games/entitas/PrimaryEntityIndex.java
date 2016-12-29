@@ -27,7 +27,7 @@ public class PrimaryEntityIndex<K, E extends Entity> extends AbstractEntityIndex
     public E getEntity(K key) {
         E entity = tryGetEntity(key);
         if (entity == null) {
-            throw new EntityIndexException("Entity for key '" + key + "' doesn't exist!",
+            throw new EntityIndexException("SplashEntity for key '" + key + "' doesn't exist!",
                     "You should check if an entity with that key exists before getting it."
             );
         }
@@ -46,7 +46,7 @@ public class PrimaryEntityIndex<K, E extends Entity> extends AbstractEntityIndex
     protected void addEntity(E entity, IComponent component) {
         K key = _key.getKey(entity, component);
         if (_index.containsKey(key)) {
-            throw new EntityIndexException("Entity for key '" + key + "' already exists!",
+            throw new EntityIndexException("SplashEntity for key '" + key + "' already exists!",
                     "Only one entity for a primary key is allowed.");
         }
         _index.put(key, entity);
