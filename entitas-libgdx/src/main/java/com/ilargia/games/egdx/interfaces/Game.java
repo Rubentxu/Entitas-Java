@@ -5,7 +5,7 @@ public interface Game {
 
     public void init(String [] args);
 
-    public void runGame();
+    public void update(float deltaTime);
 
     public void dispose();
 

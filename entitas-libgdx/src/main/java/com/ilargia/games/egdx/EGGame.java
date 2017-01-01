@@ -19,10 +19,10 @@ public abstract class EGGame implements Game {
     private int lastTime = 0;
     public static EventBus ebus;
 
-    public EGGame(Engine engine) {
+    public EGGame(Engine engine, EventBus bus) {
         this._engine = engine;
         this._states = new ObjectArrayList<>();
-        this.ebus = new EGEventBus(new MBassador());
+        this.ebus = bus;
     }
 
     @Override
@@ -32,8 +32,10 @@ public abstract class EGGame implements Game {
     }
 
     @Override
-    public void runGame() {
-        _engine.update(Gdx.graphics.getDeltaTime());
+    public void update(float deltaTime) {
+        _engine.processInput();
+        _engine.update(deltaTime);
+        _engine.render();
     }
 
     @Override

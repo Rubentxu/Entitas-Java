@@ -28,21 +28,9 @@ public abstract class EGEngine implements Engine {
         _systems.clearSystems();
     }
 
-
-
-    @Override
-    public void processInput() {
-
-    }
-
     @Override
     public void update(float deltaTime) {
         _systems.execute(deltaTime);
-    }
-
-    @Override
-    public void render() {
-
     }
 
     @Override
