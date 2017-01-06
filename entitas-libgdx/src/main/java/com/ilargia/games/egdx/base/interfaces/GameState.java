@@ -14,6 +14,6 @@ public interface GameState {
 
     public void onPause();
 
-    public void unloadResources();
+    public void dispose();
 
 }

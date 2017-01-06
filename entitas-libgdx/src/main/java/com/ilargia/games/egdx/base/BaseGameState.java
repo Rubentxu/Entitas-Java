@@ -12,8 +12,11 @@ public abstract class BaseGameState implements GameState {
 
     @Override
     public void init() {
+        initialize();
         systems.initialize();
     }
+
+    public abstract void initialize();
 
     @Override
     public void update(float deltaTime) {
@@ -25,5 +28,13 @@ public abstract class BaseGameState implements GameState {
         systems.render();
         systems.cleanup();
     }
+
+    @Override
+    public void dispose() {
+        systems.tearDown();
+        unloadResources();
+    }
+
+    public abstract void unloadResources();
 
 }
