@@ -8,7 +8,7 @@ public interface Engine {
 
     public <M extends Manager> M getManager(Class<M> clazz);
 
-    public <M extends Manager> Engine addManager( M manager);
+    public <M extends Manager> Engine addManager(M manager);
 
 
 }

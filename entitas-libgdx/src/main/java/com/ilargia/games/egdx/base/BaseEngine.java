@@ -11,14 +11,14 @@ public class BaseEngine implements Engine {
     public Object2ObjectMap<Class<? extends Manager>, Manager> _managers;
 
     public BaseEngine() {
-       _managers = new Object2ObjectArrayMap();
+        _managers = new Object2ObjectArrayMap();
 
     }
 
 
     @Override
     public void dispose() {
-        for (Manager manager: _managers.values()) {
+        for (Manager manager : _managers.values()) {
             manager.dispose();
         }
         _managers.clear();

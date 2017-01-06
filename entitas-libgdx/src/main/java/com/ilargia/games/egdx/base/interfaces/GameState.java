@@ -1,12 +1,14 @@
 package com.ilargia.games.egdx.base.interfaces;
 
-public interface GameState<E extends Engine> {
-
-    public void setEngine(E engine);
+public interface GameState {
 
     public void loadResources();
 
     public void init();
+
+    public void update(float deltaTime);
+
+    public void render();
 
     public void onResume();
 

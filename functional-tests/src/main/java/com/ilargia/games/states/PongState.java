@@ -7,28 +7,21 @@ import com.ilargia.games.Pong;
 import com.ilargia.games.PongEngine;
 import com.ilargia.games.components.Player;
 import com.ilargia.games.core.Context;
+import com.ilargia.games.egdx.base.BaseGameState;
 import com.ilargia.games.egdx.base.interfaces.GameState;
 import com.ilargia.games.entitas.Systems;
 import com.ilargia.games.systems.*;
 
 
-public class PongState implements GameState<PongEngine> {
+public class PongState extends BaseGameState {
 
-    private final Systems systems;
-    private PongEngine engine;
-    private Context context;
+    private final PongEngine engine;
+    private final Context context;
 
-
-    public PongState(Systems systems) {
-        context = new Context();
-        this.systems = systems;
-    }
-
-    @Override
-    public void setEngine(PongEngine engine) {
+    public PongState(PongEngine engine) {
         this.engine = engine;
+        context = new Context();
     }
-
 
     @Override
 

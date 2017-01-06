@@ -6,27 +6,23 @@ import com.badlogic.gdx.math.Vector2;
 import com.ilargia.games.Pong;
 import com.ilargia.games.PongEngine;
 import com.ilargia.games.core.Context;
+import com.ilargia.games.egdx.base.BaseGameState;
 import com.ilargia.games.egdx.base.interfaces.GameState;
 import com.ilargia.games.egdx.managers.EGAssetsManager;
 import com.ilargia.games.entitas.Systems;
 import com.ilargia.games.systems.*;
 
 
-public class SplashState implements GameState<PongEngine> {
+public class SplashState extends BaseGameState {
     private String splash = "assets/textures/pong.jpg";
     private EGAssetsManager assetsManager;
     private PongEngine engine;
-    private Systems systems;
+
     private Context context;
 
-    public SplashState(Systems systems) {
-        this.systems = systems;
-        context = new Context();
-    }
-
-    @Override
-    public void setEngine(PongEngine engine) {
+    public SplashState(PongEngine engine) {
         this.engine = engine;
+        context = new Context();
     }
 
     @Override
@@ -59,6 +55,7 @@ public class SplashState implements GameState<PongEngine> {
     public void onPause() {
 
     }
+
 
     @Override
     public void unloadResources() {

@@ -18,11 +18,12 @@ import com.ilargia.games.core.Pool;
 import com.ilargia.games.entitas.Group;
 import com.ilargia.games.entitas.BasePool;
 import com.ilargia.games.entitas.interfaces.IExecuteSystem;
+import com.ilargia.games.entitas.interfaces.IRenderSystem;
 import com.ilargia.games.entitas.interfaces.ISetPool;
 import com.ilargia.games.entitas.matcher.Matcher;
 
 
-public class RendererSystem implements IExecuteSystem, ISetPool<Pool> {
+public class RendererSystem implements IRenderSystem, ISetPool<Pool> {
     private final BitmapFont font;
     private Group<Entity> _group;
     private ShapeRenderer sr;
@@ -46,7 +47,7 @@ public class RendererSystem implements IExecuteSystem, ISetPool<Pool> {
     }
 
     @Override
-    public void execute(float deltatime) {
+    public void render() {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 

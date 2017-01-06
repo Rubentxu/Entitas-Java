@@ -40,9 +40,9 @@ public class Pong implements ApplicationListener {
         EGPreferencesManager preferencesManager =  new EGPreferencesManager();
         PongEngine engine = new PongEngine();
         engine.addManager( new EGAssetsManager(assetsManager, preferencesManager));
-        game = new PongGame(engine, new Systems(), new EGEventBus(new MBassador()));
+        game = new PongGame(engine, new EGEventBus(new MBassador()));
         game.init();
-        game.pushState(new SplashState(game._systems));
+        game.pushState(new SplashState(engine));
 
     }
 

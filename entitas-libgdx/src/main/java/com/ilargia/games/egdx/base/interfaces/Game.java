@@ -1,7 +1,7 @@
 package com.ilargia.games.egdx.base.interfaces;
 
 
-public interface Game<E extends Engine> {
+public interface Game {
 
     public void init();
 
@@ -9,11 +9,13 @@ public interface Game<E extends Engine> {
 
     public void dispose();
 
-    public void pushState(GameState<E> state);
+    public void pushState(GameState state);
 
-    public GameState<E> popState();
+    public GameState popState();
 
-    public GameState<E> changeState(GameState<E> state);
+    public GameState changeState(GameState state);
+
+    public void changeState(GameState state, StateTransition transition);
 
     public boolean isRunning();
 

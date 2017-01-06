@@ -13,7 +13,7 @@ public class EGEventBus implements EventBus {
     }
 
     @Override
-    public<E> void post(E event) {
+    public <E> void post(E event) {
         ebus.post(event).now();
     }
 
