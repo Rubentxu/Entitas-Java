@@ -33,7 +33,7 @@ public abstract class RenderTransition extends BaseTransition{
         oldState.render();
         currFbo.end();
         oldState.onPause();
-        oldState.unloadResources();
+        oldState.dispose();
 
         nextFbo.begin();
         newState.update(0);
@@ -45,7 +45,7 @@ public abstract class RenderTransition extends BaseTransition{
     }
 
     @Override
-    public void unloadResources() {
+    public void dispose() {
         currFbo.dispose();
         nextFbo.dispose();
         currFbo = null;

@@ -56,6 +56,11 @@ public class PongState extends BaseGameState {
     }
 
     @Override
+    public void initialize() {
+
+    }
+
+    @Override
     public void onResume() {
 
     }
@@ -70,4 +75,6 @@ public class PongState extends BaseGameState {
         context.core.destroyAllEntities();
         systems.clearSystems();
     }
+
+
 }

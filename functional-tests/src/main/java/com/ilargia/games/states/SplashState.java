@@ -34,7 +34,7 @@ public class SplashState extends BaseGameState {
     }
 
     @Override
-    public void init() {
+    public void initialize() {
         systems.addSystem(context.core, new DelaySystem())
                 .addSystem(context.core, new RendererSystem(engine.sr, engine.cam, engine.batch, engine.font));
 
@@ -42,7 +42,7 @@ public class SplashState extends BaseGameState {
 
         context.core.createEntity()
                 .addTextureView("Pong", new TextureRegion(texture, 0, 0, texture.getWidth(), texture.getHeight()), new Vector2(),
-                       0, Pong.SCREEN_HEIGHT, Pong.SCREEN_WIDTH )
+                        0, Pong.SCREEN_HEIGHT, Pong.SCREEN_WIDTH )
                 .addDelay(3);
     }
 
