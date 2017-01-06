@@ -11,8 +11,6 @@ import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 
-
-import java.lang.reflect.Constructor;
 import java.util.Stack;
 
 public class Entity {
@@ -229,23 +227,12 @@ public class Entity {
                 return (T) componentPool.pop();
             } else {
                 Class<T> clazz = _entityMetaData.componentTypes[index];
-                return clazz.cast(getDefaultConstructor(clazz).newInstance());
+                return clazz.cast(clazz.getConstructor((Class[]) null).newInstance());
             }
         } catch (Exception e) {
             return null;
         }
     }
-
-    private Constructor getDefaultConstructor(Class<?> clazz) {
-//        ReflectionFactory rf = ReflectionFactory.getReflectionFactory();
-//        for (Constructor constructor : clazz.getConstructors()) {
-//            if (constructor.getParameterCount() == 0) {
-//                return rf.newConstructorForSerialization(clazz, constructor);
-//            }
-//        }
-        return null;
-    }
-
 
     public void destroy() {
         removeAllComponents();
