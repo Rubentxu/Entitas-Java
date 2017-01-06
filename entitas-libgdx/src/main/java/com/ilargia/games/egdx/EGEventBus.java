@@ -1,7 +1,7 @@
 package com.ilargia.games.egdx;
 
 
-import com.ilargia.games.egdx.interfaces.EventBus;
+import com.ilargia.games.egdx.base.interfaces.EventBus;
 import net.engio.mbassy.bus.MBassador;
 
 public class EGEventBus implements EventBus {

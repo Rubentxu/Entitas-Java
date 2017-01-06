@@ -4,17 +4,19 @@ import com.ilargia.games.entitas.exceptions.EntitasException;
 import com.ilargia.games.entitas.interfaces.*;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 
-public class Systems implements IInitializeSystem, IExecuteSystem, ICleanupSystem, ITearDownSystem {
+public class Systems implements IInitializeSystem, IExecuteSystem, ICleanupSystem, IRenderSystem, ITearDownSystem {
 
     private ObjectArrayList<IInitializeSystem> _initializeSystems;
     private ObjectArrayList<IExecuteSystem> _executeSystems;
     private ObjectArrayList<ICleanupSystem> _cleanupSystems;
+    private ObjectArrayList<IRenderSystem> _renderSystems;
     private ObjectArrayList<ITearDownSystem> _tearDownSystems;
 
     public Systems() {
         _initializeSystems = new ObjectArrayList<>();
         _executeSystems = new ObjectArrayList<>();
         _cleanupSystems = new ObjectArrayList<>();
+        _renderSystems = new ObjectArrayList<>();
         _tearDownSystems = new ObjectArrayList<>();
     }
 
@@ -34,6 +36,7 @@ public class Systems implements IInitializeSystem, IExecuteSystem, ICleanupSyste
         if (system instanceof IInitializeSystem) _initializeSystems.add((IInitializeSystem) system);
         if (system instanceof IExecuteSystem) _executeSystems.add((IExecuteSystem) system);
         if (system instanceof ICleanupSystem) _cleanupSystems.add((ICleanupSystem) system);
+        if (system instanceof IRenderSystem) _renderSystems.add((IRenderSystem) system);
         if (system instanceof ITearDownSystem) _tearDownSystems.add((ITearDownSystem) system);
 
     }
@@ -53,6 +56,12 @@ public class Systems implements IInitializeSystem, IExecuteSystem, ICleanupSyste
     public void cleanup() {
         for (ICleanupSystem clSystem : _cleanupSystems) {
             clSystem.cleanup();
+        }
+    }
+
+    public void render() {
+        for (IRenderSystem renderSystem : _renderSystems) {
+            renderSystem.render();
         }
     }
 
@@ -175,6 +184,7 @@ public class Systems implements IInitializeSystem, IExecuteSystem, ICleanupSyste
         _initializeSystems.clear();
         _executeSystems.clear();
         _cleanupSystems.clear();
+        _renderSystems.clear();
         _tearDownSystems.clear();
 
     }

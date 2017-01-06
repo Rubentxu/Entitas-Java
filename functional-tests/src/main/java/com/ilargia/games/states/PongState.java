@@ -7,21 +7,37 @@ import com.ilargia.games.Pong;
 import com.ilargia.games.PongEngine;
 import com.ilargia.games.components.Player;
 import com.ilargia.games.core.Context;
-import com.ilargia.games.egdx.interfaces.Engine;
-import com.ilargia.games.egdx.interfaces.GameState;
+import com.ilargia.games.egdx.base.interfaces.GameState;
+import com.ilargia.games.entitas.Systems;
 import com.ilargia.games.systems.*;
 
 
 public class PongState implements GameState<PongEngine> {
 
+    private final Systems systems;
+    private PongEngine engine;
+    private Context context;
+
+
+    public PongState(Systems systems) {
+        context = new Context();
+        this.systems = systems;
+    }
+
     @Override
-    public void loadResources(PongEngine engine) {
+    public void setEngine(PongEngine engine) {
+        this.engine = engine;
+    }
+
+
+    @Override
+
+    public void loadResources() {
 
     }
 
     @Override
-    public void init(PongEngine engine) {
-        Context context = engine.context;
+    public void init() {
         context.core.createEntity()
                 .addBall(false)
                 .addView(new Circle(0,0,8))
@@ -39,7 +55,7 @@ public class PongState implements GameState<PongEngine> {
                 .addView(new Rectangle(350,0,Pong.PLAYER_WIDTH,Pong.PLAYER_HEIGHT))
                 .addMotion(0,0);
 
-        engine._systems.addSystem(context.core, new InputSystem())
+        systems.addSystem(context.core, new InputSystem())
                 .addSystem(context.core, new ContactSystem())
                 .addSystem(context.core, new BoundsSystem())
                 .addSystem(context.core, new MoveSystem())
@@ -47,18 +63,18 @@ public class PongState implements GameState<PongEngine> {
     }
 
     @Override
-    public void onResume(PongEngine engine) {
+    public void onResume() {
 
     }
 
     @Override
-    public void onPause(PongEngine engine) {
+    public void onPause() {
 
     }
 
     @Override
-    public void unloadResources(PongEngine engine) {
-        engine.context.core.destroyAllEntities();
-        engine._systems.clearSystems();
+    public void unloadResources() {
+        context.core.destroyAllEntities();
+        systems.clearSystems();
     }
 }

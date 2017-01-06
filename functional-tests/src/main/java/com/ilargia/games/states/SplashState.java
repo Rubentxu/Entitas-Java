@@ -6,18 +6,31 @@ import com.badlogic.gdx.math.Vector2;
 import com.ilargia.games.Pong;
 import com.ilargia.games.PongEngine;
 import com.ilargia.games.core.Context;
-import com.ilargia.games.egdx.interfaces.GameState;
+import com.ilargia.games.egdx.base.interfaces.GameState;
 import com.ilargia.games.egdx.managers.EGAssetsManager;
+import com.ilargia.games.entitas.Systems;
 import com.ilargia.games.systems.*;
 
 
 public class SplashState implements GameState<PongEngine> {
     private String splash = "assets/textures/pong.jpg";
     private EGAssetsManager assetsManager;
+    private PongEngine engine;
+    private Systems systems;
+    private Context context;
 
+    public SplashState(Systems systems) {
+        this.systems = systems;
+        context = new Context();
+    }
 
     @Override
-    public void loadResources(PongEngine engine) {
+    public void setEngine(PongEngine engine) {
+        this.engine = engine;
+    }
+
+    @Override
+    public void loadResources() {
         assetsManager = engine.getManager(EGAssetsManager.class);
         assetsManager.loadAsset(splash,Texture.class);
         assetsManager.finishLoading();
@@ -25,10 +38,8 @@ public class SplashState implements GameState<PongEngine> {
     }
 
     @Override
-    public void init(PongEngine engine) {
-        Context context = engine.context;
-        engine._systems
-                .addSystem(context.core, new DelaySystem())
+    public void init() {
+        systems.addSystem(context.core, new DelaySystem())
                 .addSystem(context.core, new RendererSystem(engine.sr, engine.cam, engine.batch, engine.font));
 
         Texture texture = assetsManager.getTexture(splash);
@@ -40,19 +51,19 @@ public class SplashState implements GameState<PongEngine> {
     }
 
     @Override
-    public void onResume(PongEngine engine) {
+    public void onResume() {
 
     }
 
     @Override
-    public void onPause(PongEngine engine) {
+    public void onPause() {
 
     }
 
     @Override
-    public void unloadResources(PongEngine engine) {
+    public void unloadResources() {
         assetsManager.unloadAsset(splash);
-        engine.context.core.destroyAllEntities();
-        engine._systems.clearSystems();
+        context.core.destroyAllEntities();
+        systems.clearSystems();
     }
 }

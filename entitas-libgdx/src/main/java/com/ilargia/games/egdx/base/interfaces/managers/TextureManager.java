@@ -1,4 +1,4 @@
-package com.ilargia.games.egdx.interfaces.managers;
+package com.ilargia.games.egdx.base.interfaces.managers;
 
 
 public interface TextureManager<Texture> {

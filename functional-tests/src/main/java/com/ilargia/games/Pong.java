@@ -2,14 +2,17 @@ package com.ilargia.games;
 
 
 import com.badlogic.gdx.ApplicationListener;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+import com.ilargia.games.egdx.EGEventBus;
 import com.ilargia.games.egdx.managers.EGAssetsManager;
 import com.ilargia.games.egdx.managers.EGPreferencesManager;
 import com.ilargia.games.entitas.Systems;
 import com.ilargia.games.states.SplashState;
 import com.ilargia.games.util.TestFileHandleResolver;
+import net.engio.mbassy.bus.MBassador;
 
 
 public class Pong implements ApplicationListener {
@@ -35,10 +38,11 @@ public class Pong implements ApplicationListener {
     public void create() {
         AssetManager assetsManager = new AssetManager(new TestFileHandleResolver());
         EGPreferencesManager preferencesManager =  new EGPreferencesManager();
-        PongEngine engine = new PongEngine(new Systems(), new EGAssetsManager(assetsManager, preferencesManager));
-        game = new PongGame(engine);
-        game.init(null);
-        game.pushState(new SplashState());
+        PongEngine engine = new PongEngine();
+        engine.addManager( new EGAssetsManager(assetsManager, preferencesManager));
+        game = new PongGame(engine, new Systems(), new EGEventBus(new MBassador()));
+        game.init();
+        game.pushState(new SplashState(game._systems));
 
     }
 
@@ -49,7 +53,7 @@ public class Pong implements ApplicationListener {
 
     @Override
     public void render() {
-        game.runGame();
+        game.update(Gdx.graphics.getDeltaTime());
     }
 
     @Override
