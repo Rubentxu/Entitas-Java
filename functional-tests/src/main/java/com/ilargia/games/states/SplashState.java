@@ -28,7 +28,7 @@ public class SplashState extends BaseGameState {
     @Override
     public void loadResources() {
         assetsManager = engine.getManager(EGAssetsManager.class);
-        assetsManager.loadAsset(splash,Texture.class);
+        assetsManager.loadTexture(splash);
         assetsManager.finishLoading();
 
     }
@@ -59,7 +59,7 @@ public class SplashState extends BaseGameState {
 
     @Override
     public void unloadResources() {
-        assetsManager.unloadAsset(splash);
+        assetsManager.unloadTexture(splash);
         context.core.destroyAllEntities();
         systems.clearSystems();
     }
