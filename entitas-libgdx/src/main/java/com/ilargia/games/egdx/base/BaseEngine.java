@@ -15,7 +15,6 @@ public class BaseEngine implements Engine {
 
     }
 
-
     @Override
     public void dispose() {
         for (Manager manager : _managers.values()) {
@@ -25,7 +24,6 @@ public class BaseEngine implements Engine {
         _managers = null;
 
     }
-
 
     @Override
     public <M extends Manager> M getManager(Class<M> clazz) {
