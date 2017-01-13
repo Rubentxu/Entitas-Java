@@ -24,6 +24,7 @@ public class EGPreferencesManager implements PreferencesManager {
     public float VOL_SOUND = 0.5f;
     public float VOL_MUSIC = 0.5f;
     public boolean TOUCH_PAD_ENABLED = true;
+
     // Profile
     public String PROFILE_DATA_FILE = "data/profile.game";
     public String INIT_PROFILE_DATA_FILE = "data/initProfile.game";
