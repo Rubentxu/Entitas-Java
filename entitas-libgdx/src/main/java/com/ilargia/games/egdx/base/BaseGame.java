@@ -4,7 +4,7 @@ package com.ilargia.games.egdx.base;
 import com.ilargia.games.egdx.base.interfaces.*;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 
-public abstract class BaseGame<E extends Engine> implements Game {
+public abstract class BaseGame<E extends Engine> implements Game<E> {
 
     public static EventBus ebus;
     protected ObjectArrayList<GameState> _states;
@@ -63,6 +63,11 @@ public abstract class BaseGame<E extends Engine> implements Game {
     @Override
     public void clear() {
         _states.clear();
+    }
+
+    @Override
+    public E getEngine() {
+        return _engine;
     }
 
 

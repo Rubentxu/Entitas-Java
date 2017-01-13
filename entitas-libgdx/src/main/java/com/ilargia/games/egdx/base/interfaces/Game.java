@@ -1,7 +1,7 @@
 package com.ilargia.games.egdx.base.interfaces;
 
 
-public interface Game {
+public interface Game<E> {
 
     public void init();
 
@@ -22,5 +22,7 @@ public interface Game {
     public int getErrorState();
 
     public void clear();
+
+    public E getEngine();
 
 }
