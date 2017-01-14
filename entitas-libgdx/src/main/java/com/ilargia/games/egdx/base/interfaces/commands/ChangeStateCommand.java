@@ -5,6 +5,6 @@ import com.ilargia.games.egdx.base.interfaces.Game;
 import com.ilargia.games.egdx.base.interfaces.events.GameEvent;
 
 @FunctionalInterface
-public interface ChangeStateCommand<E extends Engine> extends GameEvent {
-    public void change(final String nameState, Game<E> game);
+public interface ChangeStateCommand<G extends Game> extends GameEvent {
+    public void change(final String nameState, G game);
 }

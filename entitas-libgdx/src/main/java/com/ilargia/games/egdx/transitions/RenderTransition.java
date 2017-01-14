@@ -3,20 +3,22 @@ package com.ilargia.games.egdx.transitions;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.ilargia.games.egdx.EGEngine;
 import com.ilargia.games.egdx.base.BaseTransition;
 
 
 public abstract class RenderTransition extends BaseTransition{
-    protected final EGEngine engine;
+
+    protected final Batch batch;
     private FrameBuffer currFbo;
     private FrameBuffer nextFbo;
     Texture current, next;
 
-    public RenderTransition(float duration, EGEngine engine) {
+    public RenderTransition(float duration, Batch batch) {
         super(duration);
-        this.engine = engine;
+        this.batch = batch;
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.ilargia.games.egdx.transitions;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.utils.Array;
 import com.ilargia.games.egdx.EGEngine;
@@ -16,8 +17,8 @@ public class SliceTransition extends RenderTransition {
     private Array<Integer> sliceIndex = new Array<Integer>();
 
 
-    public SliceTransition(float duration, int direction, int numSlices, Interpolation easing, EGEngine engine) {
-        super(duration, engine);
+    public SliceTransition(float duration, int direction, int numSlices, Interpolation easing, Batch batch) {
+        super(duration, batch);
         this.duration = duration;
         this.direction = direction;
         this.easing = easing;
@@ -37,8 +38,8 @@ public class SliceTransition extends RenderTransition {
         int sliceWidth = (int) (w / sliceIndex.size);
         Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        engine.batch.begin();
-        engine.batch.draw(current, 0, 0, 0, 0, w, h, 1, 1, 0, 0, 0, current.getWidth(), current.getHeight(),
+        batch.begin();
+        batch.draw(current, 0, 0, 0, 0, w, h, 1, 1, 0, 0, 0, current.getWidth(), current.getHeight(),
                 false, true);
         if (easing != null) alpha = easing.apply(alpha);
         for (int i = 0; i < sliceIndex.size; i++) {
@@ -61,10 +62,10 @@ public class SliceTransition extends RenderTransition {
                     }
                     break;
             }
-            engine.batch.draw(next, x, y, 0, 0, sliceWidth, h, 1, 1, 0, i * sliceWidth, 0, sliceWidth,
+            batch.draw(next, x, y, 0, 0, sliceWidth, h, 1, 1, 0, i * sliceWidth, 0, sliceWidth,
                     next.getHeight(), false, true);
         }
-        engine.batch.end();
+        batch.end();
     }
 
     @Override
