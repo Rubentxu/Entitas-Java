@@ -8,8 +8,6 @@ import com.ilargia.games.PongEngine;
 import com.ilargia.games.components.Player;
 import com.ilargia.games.core.Context;
 import com.ilargia.games.egdx.base.BaseGameState;
-import com.ilargia.games.egdx.base.interfaces.GameState;
-import com.ilargia.games.entitas.Systems;
 import com.ilargia.games.systems.*;
 
 
@@ -33,20 +31,20 @@ public class PongState extends BaseGameState {
     public void init() {
         context.core.createEntity()
                 .addBall(false)
-                .addView(new Circle(0,0,8))
-                .addMotion(MathUtils.clamp(1,230,300),300);
+                .addView(new Circle(0, 0, 8))
+                .addMotion(MathUtils.clamp(1, 230, 300), 300);
 
         context.core.createEntity()
                 .addPlayer(Player.ID.PLAYER1)
-                .addScore("Player 1: ", 180, 470 )
-                .addView(new Rectangle(-350,0, Pong.PLAYER_WIDTH,Pong.PLAYER_HEIGHT))
-                .addMotion(0,0);
+                .addScore("Player 1: ", 180, 470)
+                .addView(new Rectangle(-350, 0, Pong.PLAYER_WIDTH, Pong.PLAYER_HEIGHT))
+                .addMotion(0, 0);
 
         context.core.createEntity()
                 .addPlayer(Player.ID.PLAYER2)
-                .addScore("Player 2: ", 480, 470 )
-                .addView(new Rectangle(350,0,Pong.PLAYER_WIDTH,Pong.PLAYER_HEIGHT))
-                .addMotion(0,0);
+                .addScore("Player 2: ", 480, 470)
+                .addView(new Rectangle(350, 0, Pong.PLAYER_WIDTH, Pong.PLAYER_HEIGHT))
+                .addMotion(0, 0);
 
         systems.addSystem(context.core, new InputSystem())
                 .addSystem(context.core, new ContactSystem())

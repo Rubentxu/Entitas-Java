@@ -7,10 +7,9 @@ import com.ilargia.games.Pong;
 import com.ilargia.games.PongEngine;
 import com.ilargia.games.core.Context;
 import com.ilargia.games.egdx.base.BaseGameState;
-import com.ilargia.games.egdx.base.interfaces.GameState;
 import com.ilargia.games.egdx.managers.EGAssetsManager;
-import com.ilargia.games.entitas.Systems;
-import com.ilargia.games.systems.*;
+import com.ilargia.games.systems.DelaySystem;
+import com.ilargia.games.systems.RendererSystem;
 
 
 public class SplashState extends BaseGameState {
@@ -42,7 +41,7 @@ public class SplashState extends BaseGameState {
 
         context.core.createEntity()
                 .addTextureView("Pong", new TextureRegion(texture, 0, 0, texture.getWidth(), texture.getHeight()), new Vector2(),
-                        0, Pong.SCREEN_HEIGHT, Pong.SCREEN_WIDTH )
+                        0, Pong.SCREEN_HEIGHT, Pong.SCREEN_WIDTH)
                 .addDelay(3);
     }
 

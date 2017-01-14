@@ -16,11 +16,8 @@ import com.ilargia.games.core.CoreMatcher;
 import com.ilargia.games.core.Entity;
 import com.ilargia.games.core.Pool;
 import com.ilargia.games.entitas.Group;
-import com.ilargia.games.entitas.BasePool;
-import com.ilargia.games.entitas.interfaces.IExecuteSystem;
 import com.ilargia.games.entitas.interfaces.IRenderSystem;
 import com.ilargia.games.entitas.interfaces.ISetPool;
-import com.ilargia.games.entitas.matcher.Matcher;
 
 
 public class RendererSystem implements IRenderSystem, ISetPool<Pool> {
@@ -36,7 +33,7 @@ public class RendererSystem implements IRenderSystem, ISetPool<Pool> {
         this.sr = sr;
         this.cam = cam;
         this.batch = batch;
-        this.font =  font;
+        this.font = font;
     }
 
     @Override
@@ -60,7 +57,7 @@ public class RendererSystem implements IRenderSystem, ISetPool<Pool> {
         for (Entity e : _group.getEntities()) {
             View view = e.getView();
 
-            if(view.shape instanceof Rectangle) {
+            if (view.shape instanceof Rectangle) {
                 Rectangle ret = (Rectangle) view.shape;
                 sr.rect(ret.x, ret.y, ret.width, ret.height);
             } else {
@@ -75,14 +72,14 @@ public class RendererSystem implements IRenderSystem, ISetPool<Pool> {
         batch.begin();
         for (Entity e : _groupScore.getEntities()) {
             Score score = e.getScore();
-            font.draw(batch, score.text+ " "+ score.points, score.x, score.y);
+            font.draw(batch, score.text + " " + score.points, score.x, score.y);
         }
         for (Entity e : _groupTextureView.getEntities()) {
             TextureView textureView = e.getTextureView();
             float originX = textureView.width * 0.5f;
             float originY = textureView.height * 0.5f;
 
-            batch.draw(textureView.texture, textureView.position.x , textureView.position.y ,
+            batch.draw(textureView.texture, textureView.position.x, textureView.position.y,
                     0, 0, textureView.width, textureView.height, 1, 1, textureView.rotation);
 
 

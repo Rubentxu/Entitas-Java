@@ -18,7 +18,7 @@ import com.ilargia.games.entitas.matcher.Matcher;
 
 public class InputSystem implements IExecuteSystem, ISetPool<Pool> {
     private Group<Entity> _group;
-    
+
 
     @Override
     public void setPool(Pool pool) {
@@ -32,17 +32,25 @@ public class InputSystem implements IExecuteSystem, ISetPool<Pool> {
             Player player = e.getPlayer();
             View view = e.getView();
 
-            if(player.id == Player.ID.PLAYER1) {
+            if (player.id == Player.ID.PLAYER1) {
                 motion.velocity.y = 0;
-                if(movesUp(Input.Keys.W, (Rectangle) view.shape)) { motion.velocity.y = Pong.PLAYER_SPEED;  }
-                if(movesDown(Input.Keys.S, (Rectangle) view.shape)) { motion.velocity.y = -Pong.PLAYER_SPEED;  }
+                if (movesUp(Input.Keys.W, (Rectangle) view.shape)) {
+                    motion.velocity.y = Pong.PLAYER_SPEED;
+                }
+                if (movesDown(Input.Keys.S, (Rectangle) view.shape)) {
+                    motion.velocity.y = -Pong.PLAYER_SPEED;
+                }
 
             }
 
-            if(player.id == Player.ID.PLAYER2) {
+            if (player.id == Player.ID.PLAYER2) {
                 motion.velocity.y = 0;
-                if(movesUp(Input.Keys.UP, (Rectangle) view.shape)) { motion.velocity.y = Pong.PLAYER_SPEED; }
-                if(movesDown(Input.Keys.DOWN, (Rectangle) view.shape)) { motion.velocity.y = -Pong.PLAYER_SPEED; }
+                if (movesUp(Input.Keys.UP, (Rectangle) view.shape)) {
+                    motion.velocity.y = Pong.PLAYER_SPEED;
+                }
+                if (movesDown(Input.Keys.DOWN, (Rectangle) view.shape)) {
+                    motion.velocity.y = -Pong.PLAYER_SPEED;
+                }
 
             }
 
@@ -50,11 +58,11 @@ public class InputSystem implements IExecuteSystem, ISetPool<Pool> {
     }
 
     private boolean movesUp(int key, Rectangle body) {
-        return Gdx.input.isKeyPressed(key) && (body.y < Pong.SCREEN_HEIGHT/2 - Pong.PLAYER_HEIGHT);
+        return Gdx.input.isKeyPressed(key) && (body.y < Pong.SCREEN_HEIGHT / 2 - Pong.PLAYER_HEIGHT);
     }
 
     private boolean movesDown(int key, Rectangle body) {
-        return Gdx.input.isKeyPressed(key) && (body.y > -(Pong.SCREEN_HEIGHT/2 ));
+        return Gdx.input.isKeyPressed(key) && (body.y > -(Pong.SCREEN_HEIGHT / 2));
     }
 
 }
