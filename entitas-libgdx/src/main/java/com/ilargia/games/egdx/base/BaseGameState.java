@@ -32,9 +32,6 @@ public abstract class BaseGameState implements GameState {
     @Override
     public void dispose() {
         systems.tearDown();
-        unloadResources();
     }
-
-    public abstract void unloadResources();
 
 }

@@ -47,11 +47,26 @@ public abstract class RenderTransition extends BaseTransition{
     }
 
     @Override
+    public void onResume() {
+
+    }
+
+    @Override
+    public void onPause() {
+
+    }
+
+    @Override
     public void dispose() {
         currFbo.dispose();
         nextFbo.dispose();
         currFbo = null;
         nextFbo = null;
+
+    }
+
+    @Override
+    public void unloadResources() {
 
     }
 }

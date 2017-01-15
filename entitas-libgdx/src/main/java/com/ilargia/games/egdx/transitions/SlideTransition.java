@@ -65,15 +65,5 @@ public class SlideTransition extends RenderTransition {
         batch.end();
     }
 
-    @Override
-    public void onResume() {
-
-    }
-
-    @Override
-    public void onPause() {
-
-    }
-
 
 }

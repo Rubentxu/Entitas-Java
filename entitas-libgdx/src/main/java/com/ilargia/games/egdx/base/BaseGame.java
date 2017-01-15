@@ -42,6 +42,7 @@ public abstract class BaseGame<E extends Engine> implements Game<E> {
     public GameState popState() {
         GameState state = _states.pop();
         state.onPause();
+        state.unloadResources();
         state.dispose();
         return state;
     }
