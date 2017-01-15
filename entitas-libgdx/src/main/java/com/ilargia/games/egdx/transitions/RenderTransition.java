@@ -4,12 +4,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
-import com.ilargia.games.egdx.EGEngine;
 import com.ilargia.games.egdx.base.BaseTransition;
 
 
-public abstract class RenderTransition extends BaseTransition{
+public abstract class RenderTransition extends BaseTransition {
 
     protected final Batch batch;
     private FrameBuffer currFbo;
@@ -58,15 +58,17 @@ public abstract class RenderTransition extends BaseTransition{
 
     @Override
     public void dispose() {
-        currFbo.dispose();
-        nextFbo.dispose();
         currFbo = null;
         nextFbo = null;
-
+        current = null;
+        next = null;
     }
 
     @Override
     public void unloadResources() {
-
+        currFbo.dispose();
+        nextFbo.dispose();
+        current.dispose();
+        next.dispose();
     }
 }

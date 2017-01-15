@@ -25,6 +25,7 @@ public class FadeTransition extends RenderTransition {
         batch.setColor(1, 1, 1, alpha);
         batch.draw(next, 0, 0, 0, 0, w, h, 1, 1, 0, 0, 0, next.getWidth(), next.getHeight(), false, true);
         batch.end();
+
     }
 
 
