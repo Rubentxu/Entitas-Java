@@ -36,6 +36,7 @@ public abstract class BaseTransition implements StateTransition {
 
     @Override
     public void states(Game game, GameState oldState, GameState newState) {
+        timeTransition = 0;
         this.game = game;
         this.oldState = oldState;
         this.newState = newState;
