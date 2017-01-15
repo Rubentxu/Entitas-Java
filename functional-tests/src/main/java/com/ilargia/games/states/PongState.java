@@ -22,13 +22,12 @@ public class PongState extends BaseGameState {
     }
 
     @Override
-
     public void loadResources() {
 
     }
 
     @Override
-    public void init() {
+    public void initialize() {
         context.core.createEntity()
                 .addBall(false)
                 .addView(new Circle(0, 0, 8))
@@ -51,11 +50,6 @@ public class PongState extends BaseGameState {
                 .addSystem(context.core, new BoundsSystem())
                 .addSystem(context.core, new MoveSystem())
                 .addSystem(context.core, new RendererSystem(engine.sr, engine.cam, engine.batch, engine.font));
-    }
-
-    @Override
-    public void initialize() {
-
     }
 
     @Override

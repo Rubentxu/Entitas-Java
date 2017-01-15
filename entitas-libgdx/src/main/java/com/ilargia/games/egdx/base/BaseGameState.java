@@ -35,6 +35,4 @@ public abstract class BaseGameState implements GameState {
         unloadResources();
     }
 
-    public abstract void unloadResources();
-
 }

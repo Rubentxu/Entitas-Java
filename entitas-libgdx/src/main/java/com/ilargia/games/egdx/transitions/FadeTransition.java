@@ -27,15 +27,6 @@ public class FadeTransition extends RenderTransition {
         batch.end();
     }
 
-    @Override
-    public void onResume() {
-
-    }
-
-    @Override
-    public void onPause() {
-
-    }
 
 
 }
