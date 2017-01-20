@@ -13,12 +13,14 @@ public class Systems implements IInitializeSystem, IExecuteSystem, ICleanupSyste
     private List<IInitializeSystem> _initializeSystems;
     private List<IExecuteSystem> _executeSystems;
     private List<ICleanupSystem> _cleanupSystems;
+    private List<IRenderSystem> _renderSystems;
     private List<ITearDownSystem> _tearDownSystems;
 
     public Systems() {
         _initializeSystems = Collections.createList();
         _executeSystems = Collections.createList();
         _cleanupSystems = Collections.createList();
+        _renderSystems = Collections.createList();
         _tearDownSystems = Collections.createList();
     }
 
@@ -38,6 +40,7 @@ public class Systems implements IInitializeSystem, IExecuteSystem, ICleanupSyste
         if (system instanceof IInitializeSystem) _initializeSystems.add((IInitializeSystem) system);
         if (system instanceof IExecuteSystem) _executeSystems.add((IExecuteSystem) system);
         if (system instanceof ICleanupSystem) _cleanupSystems.add((ICleanupSystem) system);
+        if (system instanceof IRenderSystem) _renderSystems.add((IRenderSystem) system);
         if (system instanceof ITearDownSystem) _tearDownSystems.add((ITearDownSystem) system);
 
     }
@@ -57,6 +60,12 @@ public class Systems implements IInitializeSystem, IExecuteSystem, ICleanupSyste
     public void cleanup() {
         for (ICleanupSystem clSystem : _cleanupSystems) {
             clSystem.cleanup();
+        }
+    }
+
+    public void render() {
+        for (IRenderSystem renderSystem : _renderSystems) {
+            renderSystem.render();
         }
     }
 
@@ -179,6 +188,7 @@ public class Systems implements IInitializeSystem, IExecuteSystem, ICleanupSyste
         _initializeSystems.clear();
         _executeSystems.clear();
         _cleanupSystems.clear();
+        _renderSystems.clear();
         _tearDownSystems.clear();
 
     }

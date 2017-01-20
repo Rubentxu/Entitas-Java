@@ -3,8 +3,9 @@ package com.ilargia.games.systems;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Rectangle;
-import com.ilargia.games.components.*;
+import com.ilargia.games.components.Motion;
+import com.ilargia.games.components.Player;
+import com.ilargia.games.components.Score;
 import com.ilargia.games.core.CoreMatcher;
 import com.ilargia.games.core.Entity;
 import com.ilargia.games.core.Pool;
@@ -28,7 +29,7 @@ public class BoundsSystem implements IExecuteSystem, ISetPool<Pool> {
 
     @Override
     public void execute(float deltatime) {
-        Entity ball =  _pool.getBallEntity();
+        Entity ball = _pool.getBallEntity();
         Circle ballShape = (Circle) ball.getView().shape;
         Motion motion = ball.getMotion();
 
@@ -36,10 +37,10 @@ public class BoundsSystem implements IExecuteSystem, ISetPool<Pool> {
             Player player = e.getPlayer();
             Score score = e.getScore();
 
-            if (ballShape.x + ballShape.radius <= -(WIDTH/2) && player.id == Player.ID.PLAYER2)
+            if (ballShape.x + ballShape.radius <= -(WIDTH / 2) && player.id == Player.ID.PLAYER2)
                 restart(ballShape, motion, score);
 
-            if (ballShape.x - ballShape.radius >= (WIDTH/2) && player.id == Player.ID.PLAYER1)
+            if (ballShape.x - ballShape.radius >= (WIDTH / 2) && player.id == Player.ID.PLAYER1)
                 restart(ballShape, motion, score);
 
         }
@@ -47,10 +48,10 @@ public class BoundsSystem implements IExecuteSystem, ISetPool<Pool> {
     }
 
     private void restart(Circle ballShape, Motion ballMotion, Score score) {
-        score.points+=10;
-        ballShape.setPosition(0,0);
-        ballMotion.velocity.set(MathUtils.clamp(1,230,300),300);
-        ballMotion.velocity.x*= -1;
+        score.points += 10;
+        ballShape.setPosition(0, 0);
+        ballMotion.velocity.set(MathUtils.clamp(1, 230, 300), 300);
+        ballMotion.velocity.x *= -1;
     }
 
 }

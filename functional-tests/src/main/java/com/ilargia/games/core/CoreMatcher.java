@@ -9,75 +9,75 @@ import com.ilargia.games.entitas.matcher.Matcher;
  */
 public class CoreMatcher {
 
-	private static Matcher _matcherBall;
-	private static Matcher _matcherDelay;
-	private static Matcher _matcherMotion;
-	private static Matcher _matcherPlayer;
-	private static Matcher _matcherScore;
-	private static Matcher _matcherTextureView;
-	private static Matcher _matcherView;
+    private static Matcher _matcherBall;
+    private static Matcher _matcherDelay;
+    private static Matcher _matcherMotion;
+    private static Matcher _matcherPlayer;
+    private static Matcher _matcherScore;
+    private static Matcher _matcherTextureView;
+    private static Matcher _matcherView;
 
-	public static Matcher Ball() {
-		if (_matcherBall == null) {
-			Matcher matcher = (Matcher) Matcher.AllOf(CoreComponentIds.Ball);
-			matcher.componentNames = CoreComponentIds.componentNames();
-			_matcherBall = matcher;
-		}
-		return _matcherBall;
-	}
+    public static Matcher Ball() {
+        if (_matcherBall == null) {
+            Matcher matcher = (Matcher) Matcher.AllOf(CoreComponentIds.Ball);
+            matcher.componentNames = CoreComponentIds.componentNames();
+            _matcherBall = matcher;
+        }
+        return _matcherBall;
+    }
 
-	public static Matcher Delay() {
-		if (_matcherDelay == null) {
-			Matcher matcher = (Matcher) Matcher.AllOf(CoreComponentIds.Delay);
-			matcher.componentNames = CoreComponentIds.componentNames();
-			_matcherDelay = matcher;
-		}
-		return _matcherDelay;
-	}
+    public static Matcher Delay() {
+        if (_matcherDelay == null) {
+            Matcher matcher = (Matcher) Matcher.AllOf(CoreComponentIds.Delay);
+            matcher.componentNames = CoreComponentIds.componentNames();
+            _matcherDelay = matcher;
+        }
+        return _matcherDelay;
+    }
 
-	public static Matcher Motion() {
-		if (_matcherMotion == null) {
-			Matcher matcher = (Matcher) Matcher.AllOf(CoreComponentIds.Motion);
-			matcher.componentNames = CoreComponentIds.componentNames();
-			_matcherMotion = matcher;
-		}
-		return _matcherMotion;
-	}
+    public static Matcher Motion() {
+        if (_matcherMotion == null) {
+            Matcher matcher = (Matcher) Matcher.AllOf(CoreComponentIds.Motion);
+            matcher.componentNames = CoreComponentIds.componentNames();
+            _matcherMotion = matcher;
+        }
+        return _matcherMotion;
+    }
 
-	public static Matcher Player() {
-		if (_matcherPlayer == null) {
-			Matcher matcher = (Matcher) Matcher.AllOf(CoreComponentIds.Player);
-			matcher.componentNames = CoreComponentIds.componentNames();
-			_matcherPlayer = matcher;
-		}
-		return _matcherPlayer;
-	}
+    public static Matcher Player() {
+        if (_matcherPlayer == null) {
+            Matcher matcher = (Matcher) Matcher.AllOf(CoreComponentIds.Player);
+            matcher.componentNames = CoreComponentIds.componentNames();
+            _matcherPlayer = matcher;
+        }
+        return _matcherPlayer;
+    }
 
-	public static Matcher Score() {
-		if (_matcherScore == null) {
-			Matcher matcher = (Matcher) Matcher.AllOf(CoreComponentIds.Score);
-			matcher.componentNames = CoreComponentIds.componentNames();
-			_matcherScore = matcher;
-		}
-		return _matcherScore;
-	}
+    public static Matcher Score() {
+        if (_matcherScore == null) {
+            Matcher matcher = (Matcher) Matcher.AllOf(CoreComponentIds.Score);
+            matcher.componentNames = CoreComponentIds.componentNames();
+            _matcherScore = matcher;
+        }
+        return _matcherScore;
+    }
 
-	public static Matcher TextureView() {
-		if (_matcherTextureView == null) {
-			Matcher matcher = (Matcher) Matcher
-					.AllOf(CoreComponentIds.TextureView);
-			matcher.componentNames = CoreComponentIds.componentNames();
-			_matcherTextureView = matcher;
-		}
-		return _matcherTextureView;
-	}
+    public static Matcher TextureView() {
+        if (_matcherTextureView == null) {
+            Matcher matcher = (Matcher) Matcher
+                    .AllOf(CoreComponentIds.TextureView);
+            matcher.componentNames = CoreComponentIds.componentNames();
+            _matcherTextureView = matcher;
+        }
+        return _matcherTextureView;
+    }
 
-	public static Matcher View() {
-		if (_matcherView == null) {
-			Matcher matcher = (Matcher) Matcher.AllOf(CoreComponentIds.View);
-			matcher.componentNames = CoreComponentIds.componentNames();
-			_matcherView = matcher;
-		}
-		return _matcherView;
-	}
+    public static Matcher View() {
+        if (_matcherView == null) {
+            Matcher matcher = (Matcher) Matcher.AllOf(CoreComponentIds.View);
+            matcher.componentNames = CoreComponentIds.componentNames();
+            _matcherView = matcher;
+        }
+        return _matcherView;
+    }
 }

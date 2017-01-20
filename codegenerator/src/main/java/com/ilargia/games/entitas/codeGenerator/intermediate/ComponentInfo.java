@@ -7,7 +7,7 @@ import org.jboss.forge.roaster.model.source.MethodSource;
 
 import java.util.List;
 
-public class ComponentInfo  {
+public class ComponentInfo {
 
     public String nameComponent;
     public String fullTypeName;

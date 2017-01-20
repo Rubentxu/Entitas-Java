@@ -1,4 +1,4 @@
-package com.ilargia.games.egdx.interfaces;
+package com.ilargia.games.egdx.base.interfaces;
 
 
 import com.ilargia.games.entitas.BasePool;

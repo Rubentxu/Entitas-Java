@@ -9,10 +9,10 @@ import com.ilargia.games.entitas.interfaces.IComponent;
 public class TextureView implements IComponent {
     public final String name;
     public final TextureRegion texture;
-    public Vector2 position;
-    public float rotation = 0;
     public final int height;
     public final int width;
+    public Vector2 position;
+    public float rotation = 0;
 
 
     public TextureView(String name, TextureRegion texture, Vector2 position, float rotation, int height, int width) {

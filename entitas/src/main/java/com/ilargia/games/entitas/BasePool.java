@@ -57,7 +57,7 @@ public class BasePool<E extends Entity, P extends BasePool> {
                 componentNames[i] = prefix + i;
             }
             _metaData = new EntityMetaData(
-                    "Unnamed Pool", componentNames, null
+                    "Unnamed SplashPool", componentNames, null
             );
         }
 

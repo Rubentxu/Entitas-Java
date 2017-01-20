@@ -1,10 +1,10 @@
 package com.ilargia.games.core;
 
+import com.ilargia.games.components.Ball;
 import com.ilargia.games.entitas.EntityMetaData;
-import com.ilargia.games.entitas.interfaces.FactoryEntity;
 import com.ilargia.games.entitas.events.EventBus;
 import com.ilargia.games.entitas.exceptions.EntitasException;
-import com.ilargia.games.components.Ball;
+import com.ilargia.games.entitas.interfaces.FactoryEntity;
 
 /**
  * ---------------------------------------------------------------------------
@@ -13,48 +13,48 @@ import com.ilargia.games.components.Ball;
  */
 public class Pool extends com.ilargia.games.entitas.BasePool<Entity, Pool> {
 
-	public Pool(int totalComponents, int startCreationIndex,
-			EntityMetaData metaData, FactoryEntity<Entity> factoryMethod,
-			EventBus<Entity> bus) {
-		super(totalComponents, startCreationIndex, metaData, bus, factoryMethod);
-	}
+    public Pool(int totalComponents, int startCreationIndex,
+                EntityMetaData metaData, FactoryEntity<Entity> factoryMethod,
+                EventBus<Entity> bus) {
+        super(totalComponents, startCreationIndex, metaData, bus, factoryMethod);
+    }
 
-	public Entity getBallEntity() {
-		return getGroup(CoreMatcher.Ball()).getSingleEntity();
-	}
+    public Entity getBallEntity() {
+        return getGroup(CoreMatcher.Ball()).getSingleEntity();
+    }
 
-	public Ball getBall() {
-		return getBallEntity().getBall();
-	}
+    public Ball getBall() {
+        return getBallEntity().getBall();
+    }
 
-	public boolean hasBall() {
-		return getBallEntity() != null;
-	}
+    public boolean hasBall() {
+        return getBallEntity() != null;
+    }
 
-	public Entity setBall(boolean resetBall) {
-		if (hasBall()) {
-			throw new EntitasException(
-					"Could not set Ball!" + this
-							+ " already has an entity with Ball!",
-					"You should check if the pool already has a BallEntity before setting it or use pool.ReplaceBall().");
-		}
-		Entity entity = createEntity();
-		entity.addBall(resetBall);
-		return entity;
-	}
+    public Entity setBall(boolean resetBall) {
+        if (hasBall()) {
+            throw new EntitasException(
+                    "Could not set Ball!" + this
+                            + " already has an entity with Ball!",
+                    "You should check if the pool already has a BallEntity before setting it or use pool.ReplaceBall().");
+        }
+        Entity entity = createEntity();
+        entity.addBall(resetBall);
+        return entity;
+    }
 
-	public Entity replaceBall(boolean resetBall) {
-		Entity entity = getBallEntity();
-		if (entity == null) {
-			entity = setBall(resetBall);
-		} else {
-			entity.replaceBall(resetBall);
-		}
-		return entity;
-	}
+    public Entity replaceBall(boolean resetBall) {
+        Entity entity = getBallEntity();
+        if (entity == null) {
+            entity = setBall(resetBall);
+        } else {
+            entity.replaceBall(resetBall);
+        }
+        return entity;
+    }
 
-	public Pool removeBall() {
-		destroyEntity(getBallEntity());
-		return this;
-	}
+    public Pool removeBall() {
+        destroyEntity(getBallEntity());
+        return this;
+    }
 }

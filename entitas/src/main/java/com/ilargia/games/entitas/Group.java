@@ -115,6 +115,7 @@ public class Group<E extends Entity> {
                 Iterator<E> enumerator = _entities.iterator();
                 _singleEntityCache = enumerator.next();
             } else if (c == 0) {
+
                 return null;
             } else {
                 throw new GroupSingleEntityException(this);

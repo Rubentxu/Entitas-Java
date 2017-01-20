@@ -5,6 +5,7 @@ import com.ilargia.games.entitas.codeGenerator.CodeGenerator;
 import com.ilargia.games.entitas.codeGenerator.interfaces.IPoolCodeGenerator;
 import org.jboss.forge.roaster.Roaster;
 import org.jboss.forge.roaster.model.source.JavaClassSource;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -15,7 +16,7 @@ public class ContextGenerator implements IPoolCodeGenerator {
     @Override
     public List<JavaClassSource> generate(Set<String> poolNames, String pkgDestiny) {
         List<JavaClassSource> result = new ArrayList<>();
-        JavaClassSource javaClass = Roaster.parse(JavaClassSource.class, "public class Context {}");
+        JavaClassSource javaClass = Roaster.parse(JavaClassSource.class, "public class SplashContext {}");
         javaClass.setPackage(pkgDestiny);
         createMethodConstructor(javaClass, poolNames);
         createPoolsMethod(javaClass, poolNames);
@@ -30,12 +31,12 @@ public class ContextGenerator implements IPoolCodeGenerator {
     private void createPoolsMethod(JavaClassSource javaClass, Set<String> poolNames) {
         poolNames.forEach((poolName) -> {
             String createMethodName = String.format("create%1$sPool", CodeGenerator.capitalize(poolName));
-            String body = String.format("return new Pool(%2$s.totalComponents, 0, new EntityMetaData(\"%1$s\", %2$s.componentNames(), %2$s.componentTypes()), factoryEntity(), bus);",
+            String body = String.format("return new SplashPool(%2$s.totalComponents, 0, new EntityMetaData(\"%1$s\", %2$s.componentNames(), %2$s.componentTypes()), factoryEntity(), bus);",
                     CodeGenerator.capitalize(poolName), CodeGenerator.capitalize(poolName) + CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG);
             javaClass.addMethod()
                     .setPublic()
                     .setName(createMethodName)
-                    .setReturnType("Pool")
+                    .setReturnType("SplashPool")
                     .setBody(body);
 
         });
@@ -51,17 +52,17 @@ public class ContextGenerator implements IPoolCodeGenerator {
         javaClass.addMethod()
                 .setPublic()
                 .setName("allPools")
-                .setReturnType("Pool[]")
-                .setBody(String.format("return new Pool[] { %1$s };", allPoolsList));
+                .setReturnType("SplashPool[]")
+                .setBody(String.format("return new SplashPool[] { %1$s };", allPoolsList));
 
 
     }
 
     private void createMethodConstructor(JavaClassSource javaClass, Set<String> poolNames) {
         String setAllPools = poolNames.stream().reduce("\n", (acc, poolName) ->
-                acc + "    " + poolName.toLowerCase() + " = create" + CodeGenerator.capitalize(poolName) + "Pool();\n "
+                acc + "    " + poolName.toLowerCase() + " = create" + CodeGenerator.capitalize(poolName) + "SplashPool();\n "
         );
-        String eventBus ="bus = new EventBus<>();\n";
+        String eventBus = "bus = new EventBus<>();\n";
 
         javaClass.addMethod()
                 .setConstructor(true)
@@ -78,23 +79,23 @@ public class ContextGenerator implements IPoolCodeGenerator {
 
         javaClass.addMethod()
                 .setName("factoryEntity")
-                .setReturnType("FactoryEntity<Entity>")
+                .setReturnType("FactoryEntity<SplashEntity>")
                 .setPublic()
                 .setBody("  return (int totalComponents, Stack<IComponent>[] componentPools, EntityMetaData entityMetaData) -> { \n" +
-                        "                   return new Entity(totalComponents, componentPools, entityMetaData, bus);\n" +
+                        "                   return new SplashEntity(totalComponents, componentPools, entityMetaData, bus);\n" +
                         "        };");
 
         poolNames.forEach((poolName) -> {
             javaClass.addField()
                     .setName(poolName.toLowerCase())
-                    .setType("Pool")
+                    .setType("SplashPool")
                     .setPublic();
 
         });
 
         javaClass.addField()
                 .setName("bus")
-                .setType("EventBus<Entity>")
+                .setType("EventBus<SplashEntity>")
                 .setPublic();
 
     }

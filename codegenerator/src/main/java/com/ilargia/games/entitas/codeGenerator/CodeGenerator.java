@@ -11,10 +11,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class CodeGenerator {
 
@@ -42,10 +39,10 @@ public class CodeGenerator {
 
     public static Map<String, List<ComponentInfo>> generateMap(List<ComponentInfo> componentInfos) {
         Map<String, List<ComponentInfo>> poolsComponents = new HashMap<>();
-        componentInfos.sort((c1, c2)-> c1.typeName.compareTo(c2.typeName));
-        int index =0;
+        componentInfos.sort((c1, c2) -> c1.typeName.compareTo(c2.typeName));
+        int index = 0;
         for (ComponentInfo info : componentInfos) {
-            info.index=index++;
+            info.index = index++;
             info.totalComponents = componentInfos.size();
             for (String poolName : info.pools) {
                 if (!poolsComponents.containsKey(poolName)) {
@@ -61,38 +58,42 @@ public class CodeGenerator {
     }
 
 
-
     public List<CodeGenFile> generate(ICodeGeneratorDataProvider provider, String destinyDirectory, List<ICodeGenerator> codeGenerators) {
 
-        int index = destinyDirectory.lastIndexOf("main/java/");
-        if(index==-1) {
-            index = destinyDirectory.lastIndexOf("test/java/");
-        }
-        index+=10;
-
-        String sourcePackage = destinyDirectory.substring(index).replaceAll("/",".");
+        List<String> scrDir = new ArrayList<String>() {{
+            add("main/java");
+            add("test/java");
+            add("main\\java");
+            add("test\\java");
+            add("src");
+        }};
+        Optional<String> sourcePackage = scrDir.stream().filter((base) -> destinyDirectory.lastIndexOf(base) != -1)
+                .map((base) -> destinyDirectory.substring(destinyDirectory.lastIndexOf(base) + base.length()+1))
+                .map((base) -> base.replaceAll("/", ".").replaceAll("\\\\", "." ) )
+                .findFirst();
 
         ArrayList<CodeGenFile> generatedFiles = new ArrayList<CodeGenFile>();
         List<ComponentInfo> componentInfos = provider.componentInfos();
         List<JavaClassSource> files = new ArrayList<>();
 
+        if (sourcePackage.isPresent()) {
+            for (ICodeGenerator generator : codeGenerators) {
+                if (generator instanceof IPoolCodeGenerator) {
+                    files.addAll(((IPoolCodeGenerator) generator).generate(provider.poolNames(), sourcePackage.get()));
 
-        for (ICodeGenerator generator : codeGenerators) {
-            if (generator instanceof IPoolCodeGenerator) {
-                files.addAll(((IPoolCodeGenerator) generator).generate(provider.poolNames(), sourcePackage));
+                }
 
+                if (generator instanceof IComponentCodeGenerator) {
+                    files.addAll(((IComponentCodeGenerator) generator).generate(componentInfos, sourcePackage.get()));
+
+                }
+
+                if (generator instanceof IBlueprintsCodeGenerator) {
+                    files.addAll(((IBlueprintsCodeGenerator) generator).generate(provider.blueprintNames(), sourcePackage.get()));
+
+                }
+                writeFiles(destinyDirectory, files);
             }
-
-            if (generator instanceof IComponentCodeGenerator) {
-                files.addAll(((IComponentCodeGenerator) generator).generate(componentInfos, sourcePackage));
-
-            }
-
-            if (generator instanceof IBlueprintsCodeGenerator) {
-                files.addAll(((IBlueprintsCodeGenerator) generator).generate(provider.blueprintNames(), sourcePackage));
-
-            }
-            writeFiles(destinyDirectory, files);
         }
         return generatedFiles;
 

@@ -2,7 +2,6 @@ package com.ilargia.games.entitas.codeGenerator.generators;
 
 
 import com.ilargia.games.entitas.codeGenerator.CodeGenerator;
-import com.ilargia.games.entitas.codeGenerator.Component;
 import com.ilargia.games.entitas.codeGenerator.interfaces.IComponentCodeGenerator;
 import com.ilargia.games.entitas.codeGenerator.intermediate.ComponentInfo;
 import org.jboss.forge.roaster.Roaster;
@@ -109,13 +108,13 @@ public class ComponentIndicesGenerator implements IComponentCodeGenerator {
             totalInfos.add(info.index, info);
         }
         totalInfos.subList(componentInfos.get(0).totalComponents, totalInfos.size()).clear();
-        for (int i = 0; i <totalInfos.size(); i++) {
+        for (int i = 0; i < totalInfos.size(); i++) {
             ComponentInfo info = totalInfos.get(i);
             if (info != null && info.index == i) {
-                code += String.format(format, info.typeName,".class");
+                code += String.format(format, info.typeName, ".class");
                 javaClass.addImport(info.fullTypeName);
-            }else {
-                code += String.format(format, null,"");
+            } else {
+                code += String.format(format, null, "");
             }
 
         }

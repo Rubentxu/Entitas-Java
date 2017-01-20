@@ -1,7 +1,7 @@
 package com.ilargia.games.egdx;
 
 
-import com.ilargia.games.egdx.interfaces.EventBus;
+import com.ilargia.games.egdx.base.interfaces.EventBus;
 import net.engio.mbassy.bus.MBassador;
 
 public class EGEventBus implements EventBus {
@@ -13,7 +13,7 @@ public class EGEventBus implements EventBus {
     }
 
     @Override
-    public<E> void post(E event) {
+    public <E> void post(E event) {
         ebus.post(event).now();
     }
 

@@ -1,10 +1,11 @@
 package com.ilargia.games.core;
 
-import com.ilargia.games.entitas.interfaces.FactoryEntity;
-import java.util.Stack;
-import com.ilargia.games.entitas.interfaces.IComponent;
 import com.ilargia.games.entitas.EntityMetaData;
 import com.ilargia.games.entitas.events.EventBus;
+import com.ilargia.games.entitas.interfaces.FactoryEntity;
+import com.ilargia.games.entitas.interfaces.IComponent;
+
+import java.util.Stack;
 
 /**
  * ---------------------------------------------------------------------------
@@ -13,30 +14,30 @@ import com.ilargia.games.entitas.events.EventBus;
  */
 public class Context {
 
-	public Pool core;
-	public EventBus<Entity> bus;
+    public Pool core;
+    public EventBus<Entity> bus;
 
-	public Context() {
-		bus = new EventBus<>();
-		core = createCorePool();
-	}
+    public Context() {
+        bus = new EventBus<>();
+        core = createCorePool();
+    }
 
-	public Pool createCorePool() {
-		return new Pool(CoreComponentIds.totalComponents, 0,
-				new EntityMetaData("Core", CoreComponentIds.componentNames(),
-						CoreComponentIds.componentTypes()), factoryEntity(),
-				bus);
-	}
+    public Pool createCorePool() {
+        return new Pool(CoreComponentIds.totalComponents, 0,
+                new EntityMetaData("Core", CoreComponentIds.componentNames(),
+                        CoreComponentIds.componentTypes()), factoryEntity(),
+                bus);
+    }
 
-	public Pool[] allPools() {
-		return new Pool[]{core};
-	}
+    public Pool[] allPools() {
+        return new Pool[]{core};
+    }
 
-	public FactoryEntity<Entity> factoryEntity() {
-		return (int totalComponents, Stack<IComponent>[] componentPools,
-				EntityMetaData entityMetaData) -> {
-			return new Entity(totalComponents, componentPools, entityMetaData,
-					bus);
-		};
-	}
+    public FactoryEntity<Entity> factoryEntity() {
+        return (int totalComponents, Stack<IComponent>[] componentPools,
+                EntityMetaData entityMetaData) -> {
+            return new Entity(totalComponents, componentPools, entityMetaData,
+                    bus);
+        };
+    }
 }

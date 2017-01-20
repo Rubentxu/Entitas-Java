@@ -4,11 +4,10 @@ package com.ilargia.games.egdx.managers;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.math.MathUtils;
-import com.ilargia.games.egdx.interfaces.managers.PreferencesManager;
+import com.ilargia.games.egdx.base.interfaces.managers.PreferencesManager;
 
 public class EGPreferencesManager implements PreferencesManager {
 
-    private Preferences preferences;
     public String APP_NAME = "";
     public String LOG = "";
     public float WORLD_HEIGHT = 16.875f; // 1080 / 64 =16.875 px
@@ -25,9 +24,11 @@ public class EGPreferencesManager implements PreferencesManager {
     public float VOL_SOUND = 0.5f;
     public float VOL_MUSIC = 0.5f;
     public boolean TOUCH_PAD_ENABLED = true;
+
     // Profile
     public String PROFILE_DATA_FILE = "data/profile.game";
     public String INIT_PROFILE_DATA_FILE = "data/initProfile.game";
+    private Preferences preferences;
 
     public EGPreferencesManager() {
         preferences = Gdx.app.getPreferences("PREFS_NAME");
@@ -86,7 +87,7 @@ public class EGPreferencesManager implements PreferencesManager {
         public static final String PREF_INIT_PROFILE_DATA_FILE = "pref.profile.init.file";
         public static final String PREF_WORLD_HEIGHT = "pref.world.heigh";
         public static final String PREF_WORLD_WIDTH = "pref.world.width";
-        public static final String PREF_VIRTUAL_HEIGHT =  "pref.world.virtual.heigh";
+        public static final String PREF_VIRTUAL_HEIGHT = "pref.world.virtual.heigh";
         public static final String PREF_VIRTUAL_WIDTH = "pref.world.virtual.width";
         // Box2D config
         public static final String PREF_RUNNING_FRAME_DURATION = "pref.running.frame.duration";

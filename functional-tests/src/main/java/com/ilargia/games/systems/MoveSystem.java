@@ -9,7 +9,6 @@ import com.ilargia.games.core.CoreMatcher;
 import com.ilargia.games.core.Entity;
 import com.ilargia.games.core.Pool;
 import com.ilargia.games.entitas.Group;
-import com.ilargia.games.entitas.BasePool;
 import com.ilargia.games.entitas.interfaces.IExecuteSystem;
 import com.ilargia.games.entitas.interfaces.ISetPool;
 import com.ilargia.games.entitas.matcher.Matcher;
@@ -29,7 +28,7 @@ public class MoveSystem implements IExecuteSystem, ISetPool<Pool> {
             Motion motion = e.getMotion();
             View view = e.getView();
 
-            if(view.shape instanceof Rectangle) {
+            if (view.shape instanceof Rectangle) {
                 Rectangle ret = (Rectangle) view.shape;
                 ret.setPosition(ret.x + motion.velocity.x * Gdx.graphics.getDeltaTime(),
                         ret.y + motion.velocity.y * Gdx.graphics.getDeltaTime());

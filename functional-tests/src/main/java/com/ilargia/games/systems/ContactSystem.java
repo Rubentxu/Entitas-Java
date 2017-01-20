@@ -1,12 +1,9 @@
 package com.ilargia.games.systems;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
 import com.ilargia.games.Pong;
 import com.ilargia.games.components.Motion;
-import com.ilargia.games.components.Player;
 import com.ilargia.games.components.View;
 import com.ilargia.games.core.CoreMatcher;
 import com.ilargia.games.core.Entity;
@@ -19,9 +16,9 @@ import com.ilargia.games.entitas.matcher.Matcher;
 
 public class ContactSystem implements IExecuteSystem, ISetPool<Pool> {
 
+    int pongSpeed = 300;
     private Group<Entity> _group;
     private Pool _pool;
-    int pongSpeed = 300;
     private Rectangle temp;
 
     @Override
@@ -37,16 +34,16 @@ public class ContactSystem implements IExecuteSystem, ISetPool<Pool> {
         Circle ballShape = (Circle) ball.getView().shape;
         Motion ballMotion = ball.getMotion();
 
-        if (ballShape.y - ballShape.radius <= -( Pong.SCREEN_HEIGHT / 2)) {
+        if (ballShape.y - ballShape.radius <= -(Pong.SCREEN_HEIGHT / 2)) {
             ballShape.setY(-(Pong.SCREEN_HEIGHT / 2) + ballShape.radius);
-            ballMotion.velocity.y = - (ballMotion.velocity.y +10);
-            ballMotion.velocity.x = ballMotion.velocity.x +10;
+            ballMotion.velocity.y = -(ballMotion.velocity.y + 10);
+            ballMotion.velocity.x = ballMotion.velocity.x + 10;
         }
 
-        if (ballShape.y + ballShape.radius >= ( Pong.SCREEN_HEIGHT / 2)){
-            ballShape.setY(( Pong.SCREEN_HEIGHT / 2) - ballShape.radius);
-            ballMotion.velocity.y = - (ballMotion.velocity.y +10);
-            ballMotion.velocity.x = ballMotion.velocity.x +10;
+        if (ballShape.y + ballShape.radius >= (Pong.SCREEN_HEIGHT / 2)) {
+            ballShape.setY((Pong.SCREEN_HEIGHT / 2) - ballShape.radius);
+            ballMotion.velocity.y = -(ballMotion.velocity.y + 10);
+            ballMotion.velocity.x = ballMotion.velocity.x + 10;
         }
 
 
@@ -58,13 +55,13 @@ public class ContactSystem implements IExecuteSystem, ISetPool<Pool> {
     }
 
     public void circleRectCollision(Circle circle, Rectangle rectangle, Motion ballMotion) {
-        temp.set(circle.x- circle.radius, circle.y + circle.radius, circle.radius*2, circle.radius*2);
+        temp.set(circle.x - circle.radius, circle.y + circle.radius, circle.radius * 2, circle.radius * 2);
 
-        if(temp.overlaps(rectangle)) {
-            if(ballMotion.velocity.x <= 0) circle.setX(rectangle.x + rectangle.width + circle.radius);
-            if(ballMotion.velocity.x >= 0) circle.setX(rectangle.x - rectangle.width + circle.radius);
-            ballMotion.velocity.x = (float) - (ballMotion.velocity.x *1.05);
-            ballMotion.velocity.y = (float) (ballMotion.velocity.y *1.05);
+        if (temp.overlaps(rectangle)) {
+            if (ballMotion.velocity.x <= 0) circle.setX(rectangle.x + rectangle.width + circle.radius);
+            if (ballMotion.velocity.x >= 0) circle.setX(rectangle.x - rectangle.width + circle.radius);
+            ballMotion.velocity.x = (float) -(ballMotion.velocity.x * 1.05);
+            ballMotion.velocity.y = (float) (ballMotion.velocity.y * 1.05);
 
         }
 

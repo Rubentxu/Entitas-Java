@@ -1,11 +1,11 @@
-package com.ilargia.games.egdx.interfaces;
+package com.ilargia.games.egdx.base.interfaces;
 
 
-public interface Game {
+public interface Game<E> {
 
-    public void init(String [] args);
+    public void init();
 
-    public void runGame();
+    public void update(float deltaTime);
 
     public void dispose();
 
@@ -15,10 +15,14 @@ public interface Game {
 
     public GameState changeState(GameState state);
 
+    public void changeState(GameState state, StateTransition transition);
+
     public boolean isRunning();
 
     public int getErrorState();
 
     public void clear();
+
+    public E getEngine();
 
 }
