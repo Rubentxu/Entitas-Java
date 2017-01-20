@@ -31,23 +31,23 @@ public class EntityTest {
     private Stack<IComponent>[] _componentPools;
     private EventBus<Entity> bus;
 
-
     private void createCollections() {
         new Collections(new CollectionsFactory() {
             @Override
-            public List createList() {
+            public List createList(Class<?> clazz) {
                 return new ArrayList();
             }
 
             @Override
-            public Set createSet() {
+            public Set createSet(Class<?> clazz) {
                 return new HashSet();
             }
 
             @Override
-            public Map createMap() {
+            public Map createMap(Class<?> keyClazz, Class<?> valueClazz) {
                 return new HashMap();
             }
+
         });
     }
 
@@ -55,22 +55,6 @@ public class EntityTest {
     public void setUp() throws Exception {
         createCollections();
         _componentPools = new Stack[10];
-        new Collections(new CollectionsFactory() {
-            @Override
-            public List createList() {
-                return new ArrayList();
-            }
-
-            @Override
-            public Set createSet() {
-                return new HashSet();
-            }
-
-            @Override
-            public Map createMap() {
-                return new HashMap();
-            }
-        });
         bus = new EventBus<>();
         EntitasCache cache = new EntitasCache();
         entity = new Entity(10, _componentPools, new EntityMetaData("Test", TestComponentIds.componentNames(),

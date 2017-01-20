@@ -26,19 +26,20 @@ public class GroupTest {
     private void createCollections() {
         new Collections(new CollectionsFactory() {
             @Override
-            public List createList() {
+            public List createList(Class<?> clazz) {
                 return new ArrayList();
             }
 
             @Override
-            public Set createSet() {
+            public Set createSet(Class<?> clazz) {
                 return new HashSet();
             }
 
             @Override
-            public Map createMap() {
+            public Map createMap(Class<?> keyClazz, Class<?> valueClazz) {
                 return new HashMap();
             }
+
         });
     }
 
@@ -55,22 +56,7 @@ public class GroupTest {
 
         group = new Group(TestMatcher.Position(), Entity.class);
         group2 = new Group(TestMatcher.Interactive(), Entity.class);
-        new Collections(new CollectionsFactory() {
-            @Override
-            public List createList() {
-                return new ArrayList();
-            }
 
-            @Override
-            public Set createSet() {
-                return new HashSet();
-            }
-
-            @Override
-            public Map createMap() {
-                return new HashMap();
-            }
-        });
     }
 
     @Test
