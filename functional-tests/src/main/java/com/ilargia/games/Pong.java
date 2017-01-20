@@ -9,9 +9,19 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.ilargia.games.egdx.EGEventBus;
 import com.ilargia.games.egdx.managers.EGAssetsManager;
 import com.ilargia.games.egdx.managers.EGPreferencesManager;
+import com.ilargia.games.entitas.factories.Collections;
+import com.ilargia.games.entitas.factories.CollectionsFactory;
 import com.ilargia.games.states.SplashState;
 import com.ilargia.games.util.TestFileHandleResolver;
+import it.unimi.dsi.fastutil.ints.IntArrayList;
+import it.unimi.dsi.fastutil.ints.IntArraySet;
+import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.engio.mbassy.bus.MBassador;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 
 public class Pong implements ApplicationListener {
@@ -37,6 +47,30 @@ public class Pong implements ApplicationListener {
         EGPreferencesManager preferencesManager = new EGPreferencesManager();
         PongEngine engine = new PongEngine();
         engine.addManager(new EGAssetsManager(assetsManager, preferencesManager));
+        new Collections(new CollectionsFactory() {
+            @Override
+            public List createList(Class<?> clazz) {
+               if(clazz.equals(Integer.class))
+                    return new IntArrayList();
+               else
+                   return new ObjectArrayList();
+            }
+
+            @Override
+            public Set createSet(Class<?> clazz) {
+                if(clazz.equals(Integer.class))
+                    return new IntArraySet();
+                else
+                    return new ObjectOpenHashSet();
+            }
+
+            @Override
+            public Map createMap(Class<?> keyClazz, Class<?> valueClazz) {
+                 return new Object2ObjectArrayMap();
+
+            }
+
+        });
         game = new PongGame(engine, new EGEventBus(new MBassador()));
         game.init();
         game.pushState(new SplashState(engine));

@@ -10,16 +10,16 @@ import java.util.Set;
 public class EntitasCache {
 
     private static ObjectPool<List<IComponent>> componentArray = new ObjectPool<List<IComponent>>(() -> {
-        return Collections.createList();
+        return Collections.createList(IComponent.class);
     }, null);
     private static ObjectPool<List> integerArray = new ObjectPool<List>(() -> {
-        return Collections.createList();
+        return Collections.createList(Integer.class);
     }, null);
     private static ObjectPool<Set> integerSet = new ObjectPool<Set>(() -> {
-        return Collections.createSet();
+        return Collections.createSet(Integer.class);
     }, null);
     private static ObjectPool<List<GroupChanged>> groupChangedArray = new ObjectPool<List<GroupChanged>>(() -> {
-        return Collections.createList();
+        return Collections.createList(GroupChanged.class);
     }, null);
 
 

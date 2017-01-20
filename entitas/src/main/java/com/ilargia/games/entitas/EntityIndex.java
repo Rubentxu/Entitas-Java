@@ -13,7 +13,7 @@ public class EntityIndex<K, E extends Entity> extends AbstractEntityIndex<K, E> 
 
     public EntityIndex(Group group, Func<E, IComponent, K> key) {
         super(group, key);
-        _index = Collections.createMap(); //Object2ObjectArrayMap
+        _index = Collections.createMap(Object.class, Entity.class); //Object2ObjectArrayMap
         activate();
     }
 
@@ -26,7 +26,7 @@ public class EntityIndex<K, E extends Entity> extends AbstractEntityIndex<K, E> 
     public Set<E> getEntities(K key) {
         Set<E> entities = null;
         if (!_index.containsKey(key)) {
-            entities = Collections.createSet();
+            entities = Collections.createSet(Entity.class);
             _index.put(key, entities);
         } else {
             entities = _index.get(key);

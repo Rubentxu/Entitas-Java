@@ -6,10 +6,10 @@ import java.util.Set;
 
 public interface CollectionsFactory {
 
-    List createList();
+    List createList(Class<?> clazz);
 
-    Set createSet();
+    Set createSet(Class<?> clazz);
 
-    Map createMap();
+    Map createMap(Class<?> keyClazz, Class<?> valueClazz);
 
 }

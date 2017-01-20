@@ -23,7 +23,7 @@ public class EntityCollector<E extends Entity> {
 
     public EntityCollector(Group<E>[] groups, GroupEventType[] eventTypes) throws EntityCollectorException {
         _groups = groups;
-        _collectedEntities = Collections.createSet();
+        _collectedEntities = Collections.createSet(Entity.class);
         _eventTypes = eventTypes;
 
         if (groups.length != eventTypes.length) {

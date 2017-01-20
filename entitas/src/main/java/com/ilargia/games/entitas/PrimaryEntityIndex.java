@@ -3,7 +3,6 @@ package com.ilargia.games.entitas;
 import com.ilargia.games.entitas.exceptions.EntityIndexException;
 import com.ilargia.games.entitas.factories.Collections;
 import com.ilargia.games.entitas.interfaces.IComponent;
-
 import java.util.Map;
 
 public class PrimaryEntityIndex<K, E extends Entity> extends AbstractEntityIndex<K, E> {
@@ -12,7 +11,7 @@ public class PrimaryEntityIndex<K, E extends Entity> extends AbstractEntityIndex
 
     public PrimaryEntityIndex(Group group, Func<E, IComponent, K> getKey) {
         super(group, getKey);
-        _index = Collections.createMap();
+        _index = Collections.createMap(Object.class, Object.class);
         activate();
     }
 

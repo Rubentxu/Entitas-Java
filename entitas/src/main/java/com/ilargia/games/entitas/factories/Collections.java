@@ -12,15 +12,15 @@ public class Collections {
         _factory = factory;
     }
 
-    public static List createList() {
-        return _factory.createList();
+    public static List createList(Class<?> clazz) {
+        return _factory.createList(clazz);
     }
 
-    public static Set createSet() {
-        return _factory.createSet();
+    public static Set createSet(Class<?> clazz) {
+        return _factory.createSet(clazz);
     }
 
-    public static Map createMap() {
-        return _factory.createMap();
+    public static Map createMap(Class<?> keyClazz, Class<?> valueClazz) {
+        return _factory.createMap(keyClazz, valueClazz);
     }
 }

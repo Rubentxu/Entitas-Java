@@ -20,8 +20,9 @@ public class SplashState extends BaseGameState {
     private Context context;
 
     public SplashState(PongEngine engine) {
-        this.engine = engine;
         context = new Context();
+        this.engine = engine;
+
     }
 
     @Override

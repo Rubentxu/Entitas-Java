@@ -2,9 +2,9 @@ package com.ilargia.games.entitas;
 
 import com.ilargia.games.entitas.events.GroupEventType;
 import com.ilargia.games.entitas.factories.Collections;
-import com.ilargia.games.entitas.factories.CollectionsFactory;
 import com.ilargia.games.entitas.interfaces.*;
 import com.ilargia.games.entitas.matcher.TriggerOnEvent;
+
 import java.util.List;
 
 public class ReactiveSystem implements IExecuteSystem {
@@ -43,7 +43,7 @@ public class ReactiveSystem implements IExecuteSystem {
         _clearAfterExecute = ((IClearReactiveSystem) ((subSystem instanceof IClearReactiveSystem) ? subSystem : null)) != null;
 
         _collector = collector;
-        _buffer = Collections.createList();
+        _buffer = Collections.createList(Entity.class);
 
     }
 

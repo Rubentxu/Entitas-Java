@@ -8,7 +8,6 @@ import com.ilargia.games.entitas.exceptions.EntityDoesNotHaveComponentException;
 import com.ilargia.games.entitas.exceptions.EntityIsNotEnabledException;
 import com.ilargia.games.entitas.factories.Collections;
 import com.ilargia.games.entitas.interfaces.IComponent;
-import java.lang.reflect.Constructor;
 import java.util.List;
 import java.util.Set;
 import java.util.Stack;
@@ -33,7 +32,7 @@ public class Entity {
         _totalComponents = totalComponents;
         _componentPools = componentPools;
         _isEnabled = true;
-        owners = Collections.createSet();
+        owners = Collections.createSet(Object.class);
         _eventBus = eventBus;
 
         if (entityMetaData != null) {

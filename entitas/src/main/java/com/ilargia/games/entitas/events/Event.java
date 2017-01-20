@@ -9,7 +9,7 @@ public class Event<T> {
     private List<T> listeners;//ObjectArrayList
 
     public Event() {
-        this.listeners = Collections.createList();
+        this.listeners = Collections.createList(Object.class);
     }
 
     public boolean removeListener(T eventHandler) {

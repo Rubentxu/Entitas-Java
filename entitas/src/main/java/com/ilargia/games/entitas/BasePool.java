@@ -63,12 +63,12 @@ public class BasePool<E extends Entity, P extends BasePool> {
 
         _groupsForIndex = new List[_totalComponents];
         _componentPools = new Stack[totalComponents];
-        _entityIndices = Collections.createMap();
+        _entityIndices = Collections.createMap(String.class, IEntityIndex.class);
 
         _reusableEntities = new Stack<>();
-        _retainedEntities = Collections.createSet();
-        _entities = Collections.createSet();
-        _groups = Collections.createMap();
+        _retainedEntities = Collections.createSet(Entity.class);
+        _entities = Collections.createSet(Entity.class);
+        _groups = Collections.createMap(IMatcher.class, Group.class);
 
         EntityChanged<E> _cachedEntityChanged = (E e, int idx, IComponent c) -> {
             updateGroupsComponentAddedOrRemoved(e, idx, c, _groupsForIndex);
@@ -172,7 +172,7 @@ public class BasePool<E extends Entity, P extends BasePool> {
 
             for (int index : matcher.getIndices()) {
                 if (_groupsForIndex[index] == null) {
-                    _groupsForIndex[index] = Collections.createList();
+                    _groupsForIndex[index] = Collections.createList(Group.class);
                 }
                 _groupsForIndex[index].add(group);
             }

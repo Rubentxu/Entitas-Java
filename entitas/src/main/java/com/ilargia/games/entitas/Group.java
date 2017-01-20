@@ -7,7 +7,6 @@ import com.ilargia.games.entitas.interfaces.IComponent;
 import com.ilargia.games.entitas.interfaces.IMatcher;
 import com.ilargia.games.entitas.interfaces.events.GroupChanged;
 import com.ilargia.games.entitas.interfaces.events.GroupUpdated;
-
 import java.util.Iterator;
 import java.util.Set;
 
@@ -25,7 +24,7 @@ public class Group<E extends Entity> {
 
 
     public Group(IMatcher matcher, Class<E> clazz) {
-        _entities = Collections.createSet();
+        _entities = Collections.createSet(Entity.class);
         _matcher = matcher;
         type = clazz;
     }

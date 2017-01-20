@@ -2,26 +2,24 @@ package com.ilargia.games.entitas;
 
 import com.ilargia.games.entitas.exceptions.EntitasException;
 import com.ilargia.games.entitas.factories.Collections;
-import com.ilargia.games.entitas.factories.CollectionsFactory;
 import com.ilargia.games.entitas.interfaces.*;
-
 import java.util.List;
 
 
 public class Systems implements IInitializeSystem, IExecuteSystem, ICleanupSystem, ITearDownSystem {
 
-    private List<IInitializeSystem> _initializeSystems;
+    private List<IInitializeSystem> _initializeSystems; // ObjectArrayList
     private List<IExecuteSystem> _executeSystems;
     private List<ICleanupSystem> _cleanupSystems;
     private List<IRenderSystem> _renderSystems;
     private List<ITearDownSystem> _tearDownSystems;
 
     public Systems() {
-        _initializeSystems = Collections.createList();
-        _executeSystems = Collections.createList();
-        _cleanupSystems = Collections.createList();
-        _renderSystems = Collections.createList();
-        _tearDownSystems = Collections.createList();
+        _initializeSystems = Collections.createList(ISystem.class);
+        _executeSystems = Collections.createList(ISystem.class);
+        _cleanupSystems = Collections.createList(ISystem.class);
+        _renderSystems = Collections.createList(ISystem.class);
+        _tearDownSystems = Collections.createList(ISystem.class);
     }
 
 
