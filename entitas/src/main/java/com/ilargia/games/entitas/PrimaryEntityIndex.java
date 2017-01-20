@@ -1,16 +1,18 @@
 package com.ilargia.games.entitas;
 
 import com.ilargia.games.entitas.exceptions.EntityIndexException;
+import com.ilargia.games.entitas.factories.Collections;
 import com.ilargia.games.entitas.interfaces.IComponent;
-import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
+
+import java.util.Map;
 
 public class PrimaryEntityIndex<K, E extends Entity> extends AbstractEntityIndex<K, E> {
 
-    private Object2ObjectArrayMap<K, E> _index;
+    private Map<K, E> _index; //Object2ObjectArrayMap
 
     public PrimaryEntityIndex(Group group, Func<E, IComponent, K> getKey) {
         super(group, getKey);
-        _index = new Object2ObjectArrayMap<K, E>();
+        _index = Collections.createMap();
         activate();
     }
 

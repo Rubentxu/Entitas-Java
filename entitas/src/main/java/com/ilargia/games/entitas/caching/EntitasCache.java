@@ -1,61 +1,61 @@
 package com.ilargia.games.entitas.caching;
 
 
+import com.ilargia.games.entitas.factories.Collections;
 import com.ilargia.games.entitas.interfaces.IComponent;
 import com.ilargia.games.entitas.interfaces.events.GroupChanged;
-import it.unimi.dsi.fastutil.ints.IntArrayList;
-import it.unimi.dsi.fastutil.ints.IntArraySet;
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import java.util.List;
+import java.util.Set;
 
 public class EntitasCache {
 
-    private static ObjectPool<ObjectArrayList<IComponent>> componentArray = new ObjectPool<ObjectArrayList<IComponent>>(() -> {
-        return new ObjectArrayList<IComponent>();
+    private static ObjectPool<List<IComponent>> componentArray = new ObjectPool<List<IComponent>>(() -> {
+        return Collections.createList();
     }, null);
-    private static ObjectPool<IntArrayList> integerArray = new ObjectPool<IntArrayList>(() -> {
-        return new IntArrayList(20);
+    private static ObjectPool<List> integerArray = new ObjectPool<List>(() -> {
+        return Collections.createList();
     }, null);
-    private static ObjectPool<IntArraySet> integerSet = new ObjectPool<IntArraySet>(() -> {
-        return new IntArraySet();
+    private static ObjectPool<Set> integerSet = new ObjectPool<Set>(() -> {
+        return Collections.createSet();
     }, null);
-    private static ObjectPool<ObjectArrayList<GroupChanged>> groupChangedArray = new ObjectPool<ObjectArrayList<GroupChanged>>(() -> {
-        return new ObjectArrayList<GroupChanged>(16);
+    private static ObjectPool<List<GroupChanged>> groupChangedArray = new ObjectPool<List<GroupChanged>>(() -> {
+        return Collections.createList();
     }, null);
 
 
-    public static ObjectArrayList<IComponent> getIComponentList() {
+    public static List<IComponent> getIComponentList() {
         return componentArray.get();
     }
 
-    public static void pushIComponentList(ObjectArrayList<IComponent> list) {
+    public static void pushIComponentList(List<IComponent> list) {
         list.clear();
         componentArray.push(list);
     }
 
-    public static IntArrayList getIntArray() {
+    public static List<Integer> getIntArray() {
         return integerArray.get();
     }
 
-    public static void pushIntArray(IntArrayList list) {
+    public static void pushIntArray(List list) {
         list.clear();
         integerArray.push(list);
     }
 
-    public static IntArraySet getIntHashSet() {
+    public static Set<Integer> getIntHashSet() {
         return integerSet.get();
     }
 
-    public static void pushIntHashSet(IntArraySet hashSet) {
+    public static void pushIntHashSet(Set hashSet) {
         hashSet.clear();
         integerSet.push(hashSet);
     }
 
-    public static ObjectArrayList<GroupChanged> getGroupChangedList() {
+    public static List<GroupChanged> getGroupChangedList() {
         return groupChangedArray.get();
 
     }
 
-    public static void pushGroupChangedList(ObjectArrayList<GroupChanged> list) {
+    public static void pushGroupChangedList(List<GroupChanged> list) {
         list.clear();
         groupChangedArray.push(list);
     }

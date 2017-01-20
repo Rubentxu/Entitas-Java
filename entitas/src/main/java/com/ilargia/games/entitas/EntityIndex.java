@@ -2,17 +2,18 @@ package com.ilargia.games.entitas;
 
 
 import com.ilargia.games.entitas.exceptions.EntityIndexException;
+import com.ilargia.games.entitas.factories.Collections;
 import com.ilargia.games.entitas.interfaces.IComponent;
-import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
-import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
+import java.util.Map;
+import java.util.Set;
 
 public class EntityIndex<K, E extends Entity> extends AbstractEntityIndex<K, E> {
 
-    private Object2ObjectArrayMap<K, ObjectOpenHashSet<E>> _index;
+    private Map<K, Set<E>> _index; // Object2ObjectArrayMap<ObjectOpenHashSet
 
     public EntityIndex(Group group, Func<E, IComponent, K> key) {
         super(group, key);
-        _index = new Object2ObjectArrayMap();
+        _index = Collections.createMap(); //Object2ObjectArrayMap
         activate();
     }
 
@@ -22,10 +23,10 @@ public class EntityIndex<K, E extends Entity> extends AbstractEntityIndex<K, E> 
         indexEntities(_group);
     }
 
-    public ObjectOpenHashSet<E> getEntities(K key) {
-        ObjectOpenHashSet<E> entities = null;
+    public Set<E> getEntities(K key) {
+        Set<E> entities = null;
         if (!_index.containsKey(key)) {
-            entities = new ObjectOpenHashSet<E>();
+            entities = Collections.createSet();
             _index.put(key, entities);
         } else {
             entities = _index.get(key);
@@ -48,7 +49,7 @@ public class EntityIndex<K, E extends Entity> extends AbstractEntityIndex<K, E> 
 
     @Override
     protected void clear() {
-        for (ObjectOpenHashSet<E> entities : _index.values()) {
+        for (Set<E> entities : _index.values()) {
             for (Entity entity : entities) {
                 entity.release(this);
             }

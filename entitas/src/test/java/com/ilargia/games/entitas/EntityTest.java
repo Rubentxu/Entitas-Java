@@ -9,6 +9,8 @@ import com.ilargia.games.entitas.events.EventBus;
 import com.ilargia.games.entitas.exceptions.EntityAlreadyHasComponentException;
 import com.ilargia.games.entitas.exceptions.EntityDoesNotHaveComponentException;
 import com.ilargia.games.entitas.exceptions.EntityIsNotEnabledException;
+import com.ilargia.games.entitas.factories.Collections;
+import com.ilargia.games.entitas.factories.CollectionsFactory;
 import com.ilargia.games.entitas.interfaces.IComponent;
 import com.ilargia.games.entitas.utils.TestComponentIds;
 import org.junit.Before;
@@ -16,7 +18,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import java.util.Stack;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
@@ -30,9 +32,45 @@ public class EntityTest {
     private EventBus<Entity> bus;
 
 
+    private void createCollections() {
+        new Collections(new CollectionsFactory() {
+            @Override
+            public List createList() {
+                return new ArrayList();
+            }
+
+            @Override
+            public Set createSet() {
+                return new HashSet();
+            }
+
+            @Override
+            public Map createMap() {
+                return new HashMap();
+            }
+        });
+    }
+
     @Before
     public void setUp() throws Exception {
+        createCollections();
         _componentPools = new Stack[10];
+        new Collections(new CollectionsFactory() {
+            @Override
+            public List createList() {
+                return new ArrayList();
+            }
+
+            @Override
+            public Set createSet() {
+                return new HashSet();
+            }
+
+            @Override
+            public Map createMap() {
+                return new HashMap();
+            }
+        });
         bus = new EventBus<>();
         EntitasCache cache = new EntitasCache();
         entity = new Entity(10, _componentPools, new EntityMetaData("Test", TestComponentIds.componentNames(),

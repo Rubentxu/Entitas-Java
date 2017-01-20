@@ -3,13 +3,15 @@ package com.ilargia.games.entitas;
 import com.ilargia.games.entitas.components.Position;
 import com.ilargia.games.entitas.components.View;
 import com.ilargia.games.entitas.events.EventBus;
+import com.ilargia.games.entitas.factories.Collections;
+import com.ilargia.games.entitas.factories.CollectionsFactory;
 import com.ilargia.games.entitas.interfaces.events.GroupChanged;
 import com.ilargia.games.entitas.utils.TestComponentIds;
 import com.ilargia.games.entitas.utils.TestMatcher;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Stack;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
@@ -21,8 +23,29 @@ public class GroupTest {
     private EventBus<Entity> bus;
 
 
+    private void createCollections() {
+        new Collections(new CollectionsFactory() {
+            @Override
+            public List createList() {
+                return new ArrayList();
+            }
+
+            @Override
+            public Set createSet() {
+                return new HashSet();
+            }
+
+            @Override
+            public Map createMap() {
+                return new HashMap();
+            }
+        });
+    }
+
+
     @Before
     public void setUp() throws Exception {
+        createCollections();
         bus = new EventBus<>();
         entity = new Entity(10, new Stack[10], new EntityMetaData("Test", TestComponentIds.componentNames(),
                 TestComponentIds.componentTypes()), bus);
@@ -32,6 +55,22 @@ public class GroupTest {
 
         group = new Group(TestMatcher.Position(), Entity.class);
         group2 = new Group(TestMatcher.Interactive(), Entity.class);
+        new Collections(new CollectionsFactory() {
+            @Override
+            public List createList() {
+                return new ArrayList();
+            }
+
+            @Override
+            public Set createSet() {
+                return new HashSet();
+            }
+
+            @Override
+            public Map createMap() {
+                return new HashMap();
+            }
+        });
     }
 
     @Test

@@ -3,16 +3,17 @@ package com.ilargia.games.entitas;
 import com.ilargia.games.entitas.components.Position;
 import com.ilargia.games.entitas.events.EventBus;
 import com.ilargia.games.entitas.events.GroupEventType;
+import com.ilargia.games.entitas.factories.Collections;
+import com.ilargia.games.entitas.factories.CollectionsFactory;
 import com.ilargia.games.entitas.interfaces.*;
 import com.ilargia.games.entitas.matcher.Matcher;
 import com.ilargia.games.entitas.matcher.TriggerOnEvent;
 import com.ilargia.games.entitas.utils.TestComponentIds;
 import com.ilargia.games.entitas.utils.TestMatcher;
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Stack;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
@@ -38,8 +39,28 @@ public class SystemsTest {
                         TestComponentIds.componentTypes()), bus, factoryEntity());
     }
 
+    private void createCollections() {
+        new Collections(new CollectionsFactory() {
+            @Override
+            public List createList() {
+                return new ArrayList();
+            }
+
+            @Override
+            public Set createSet() {
+                return new HashSet();
+            }
+
+            @Override
+            public Map createMap() {
+                return new HashMap();
+            }
+        });
+    }
+
     @Before
     public void setUp() throws Exception {
+        createCollections();
         bus = new EventBus<>();
         systems = new Systems();
         pool = createTestPool();
@@ -164,7 +185,7 @@ public class SystemsTest {
         }
 
         @Override
-        public void execute(ObjectArrayList entities) {
+        public void execute(List entities) {
             flagExecute = true;
         }
 

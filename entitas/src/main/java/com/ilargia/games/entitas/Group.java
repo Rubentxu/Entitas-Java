@@ -2,18 +2,18 @@ package com.ilargia.games.entitas;
 
 import com.ilargia.games.entitas.exceptions.EntityIndexException;
 import com.ilargia.games.entitas.exceptions.GroupSingleEntityException;
+import com.ilargia.games.entitas.factories.Collections;
 import com.ilargia.games.entitas.interfaces.IComponent;
 import com.ilargia.games.entitas.interfaces.IMatcher;
 import com.ilargia.games.entitas.interfaces.events.GroupChanged;
 import com.ilargia.games.entitas.interfaces.events.GroupUpdated;
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 
 import java.util.Iterator;
+import java.util.Set;
 
 public class Group<E extends Entity> {
 
-    private final ObjectOpenHashSet<E> _entities;
+    private final Set<E> _entities; // ObjectOpenHashSet
     public GroupChanged<E> OnEntityAdded;
     public GroupChanged<E> OnEntityRemoved;
     public GroupUpdated<E> OnEntityUpdated;
@@ -25,7 +25,7 @@ public class Group<E extends Entity> {
 
 
     public Group(IMatcher matcher, Class<E> clazz) {
-        _entities = new ObjectOpenHashSet<E>();
+        _entities = Collections.createSet();
         _matcher = matcher;
         type = clazz;
     }

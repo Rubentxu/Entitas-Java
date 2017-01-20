@@ -1,8 +1,8 @@
 package com.ilargia.games.entitas.interfaces;
 
 import com.ilargia.games.entitas.Entity;
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import java.util.List;
 
 public interface IReactiveExecuteSystem<E extends Entity> extends ISystem {
-    void execute(ObjectArrayList<Entity> entities);
+    void execute(List<Entity> entities);
 }

@@ -1,10 +1,16 @@
 package com.ilargia.games.entitas.events;
 
 import com.ilargia.games.entitas.BasePool;
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import com.ilargia.games.entitas.factories.Collections;
+import java.util.List;
 
 public class Event<T> {
-    private ObjectArrayList<T> listeners = new ObjectArrayList<T>();
+
+    private List<T> listeners;//ObjectArrayList
+
+    public Event() {
+        this.listeners = Collections.createList();
+    }
 
     public boolean removeListener(T eventHandler) {
         return listeners.remove(eventHandler);
@@ -15,7 +21,7 @@ public class Event<T> {
         return eventHandler;
     }
 
-    public ObjectArrayList<T> listeners() {
+    public List<T> listeners() {
         return listeners;
     }
 

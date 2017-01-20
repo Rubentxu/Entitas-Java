@@ -6,18 +6,17 @@ import com.ilargia.games.entitas.events.EventBus;
 import com.ilargia.games.entitas.exceptions.EntityAlreadyHasComponentException;
 import com.ilargia.games.entitas.exceptions.EntityDoesNotHaveComponentException;
 import com.ilargia.games.entitas.exceptions.EntityIsNotEnabledException;
+import com.ilargia.games.entitas.factories.Collections;
 import com.ilargia.games.entitas.interfaces.IComponent;
-import it.unimi.dsi.fastutil.ints.IntArrayList;
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import sun.reflect.ReflectionFactory;
-
 import java.lang.reflect.Constructor;
+import java.util.List;
+import java.util.Set;
 import java.util.Stack;
 
 public class Entity {
 
-    public ObjectOpenHashSet<Object> owners;
+    public Set<Object> owners; //ObjectOpenHashSet
     public int _retainCount;
     private int _creationIndex;
     private boolean _isEnabled;
@@ -35,7 +34,7 @@ public class Entity {
         _totalComponents = totalComponents;
         _componentPools = componentPools;
         _isEnabled = true;
-        owners = new ObjectOpenHashSet<>();
+        owners = Collections.createSet();
         _eventBus = eventBus;
 
         if (entityMetaData != null) {
@@ -134,7 +133,7 @@ public class Entity {
 
     public IComponent[] getComponents() {
         if (_componentsCache == null) {
-            ObjectArrayList<IComponent> componentsCache = EntitasCache.getIComponentList();
+            List<IComponent> componentsCache = EntitasCache.getIComponentList();
 
             for (int i = 0; i < _components.length; i++) {
                 IComponent component = _components[i];
@@ -153,13 +152,17 @@ public class Entity {
 
     public int[] getComponentIndices() {
         if (_componentIndicesCache == null) {
-            IntArrayList indices = EntitasCache.getIntArray();
+            List<Integer> indices = EntitasCache.getIntArray();
             for (int i = 0; i < _components.length; i++) {
                 if (_components[i] != null) {
                     indices.add(i);
                 }
             }
-            _componentIndicesCache = indices.toIntArray();
+            _componentIndicesCache =  new int[indices.size()];
+            for (int i = 0; i < indices.size(); i++) {
+                _componentIndicesCache[i] = indices.get(i);
+
+            }
             EntitasCache.pushIntArray(indices);
         }
         return _componentIndicesCache;

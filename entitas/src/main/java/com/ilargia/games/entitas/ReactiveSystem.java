@@ -1,9 +1,11 @@
 package com.ilargia.games.entitas;
 
 import com.ilargia.games.entitas.events.GroupEventType;
+import com.ilargia.games.entitas.factories.Collections;
+import com.ilargia.games.entitas.factories.CollectionsFactory;
 import com.ilargia.games.entitas.interfaces.*;
 import com.ilargia.games.entitas.matcher.TriggerOnEvent;
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import java.util.List;
 
 public class ReactiveSystem implements IExecuteSystem {
 
@@ -12,7 +14,7 @@ public class ReactiveSystem implements IExecuteSystem {
     private IMatcher _ensureComponents;
     private IMatcher _excludeComponents;
     private boolean _clearAfterExecute;
-    private ObjectArrayList<Entity> _buffer;
+    private List<Entity> _buffer;//ObjectArrayList
     private String _toStringCache;
 
     public ReactiveSystem(BasePool pool, IReactiveSystem subSystem) {
@@ -41,7 +43,8 @@ public class ReactiveSystem implements IExecuteSystem {
         _clearAfterExecute = ((IClearReactiveSystem) ((subSystem instanceof IClearReactiveSystem) ? subSystem : null)) != null;
 
         _collector = collector;
-        _buffer = new ObjectArrayList();
+        _buffer = Collections.createList();
+
     }
 
     static EntityCollector createEntityCollector(BasePool pool, TriggerOnEvent[] triggers) {

@@ -8,9 +8,10 @@ import com.ilargia.games.entitas.interfaces.IAllOfMatcher;
 import com.ilargia.games.entitas.interfaces.IAnyOfMatcher;
 import com.ilargia.games.entitas.interfaces.IMatcher;
 import com.ilargia.games.entitas.interfaces.INoneOfMatcher;
-import it.unimi.dsi.fastutil.ints.IntArrayList;
-import it.unimi.dsi.fastutil.ints.IntArraySet;
-import it.unimi.dsi.fastutil.ints.IntArrays;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
 
 
 public class Matcher implements IAllOfMatcher, IAnyOfMatcher, INoneOfMatcher {
@@ -46,13 +47,17 @@ public class Matcher implements IAllOfMatcher, IAnyOfMatcher, INoneOfMatcher {
     }
 
     private static int[] distinctIndices(int... indices) {
-        IntArraySet indicesSet = EntitasCache.getIntHashSet();
-        IntArrays.mergeSort(indices);
+        Set<Integer> indicesSet = EntitasCache.getIntHashSet(); // IntArraySet
+        Arrays.sort(indices); // IntArrays
         for (int indice : indices) {
             indicesSet.add(indice);
         }
-        int[] uniqueIndices = indicesSet.toIntArray();
-
+        int[] uniqueIndices = new int[indicesSet.size()];
+        int i = 0;
+        for (Integer ind : indicesSet) {
+            uniqueIndices[i] = ind;
+            i++;
+        }
         EntitasCache.pushIntHashSet(indicesSet);
         return uniqueIndices;
 
@@ -205,7 +210,7 @@ public class Matcher implements IAllOfMatcher, IAnyOfMatcher, INoneOfMatcher {
     }
 
     private int[] mergeIndices() {
-        IntArrayList indicesList = EntitasCache.getIntArray();
+        List<Integer> indicesList = EntitasCache.getIntArray();
 
         if (_allOfIndices != null) {
             for (int it : _allOfIndices) {
@@ -223,8 +228,12 @@ public class Matcher implements IAllOfMatcher, IAnyOfMatcher, INoneOfMatcher {
             }
 
         }
+        int temp[] =  new int[indicesList.size()];
+        for (int i = 0; i < indicesList.size(); i++) {
+            temp[i] = indicesList.get(i);
+        }
 
-        int[] mergeIndices = distinctIndices(indicesList.toIntArray());
+        int[] mergeIndices = distinctIndices(temp);
 
         EntitasCache.pushIntArray(indicesList);
         return mergeIndices;

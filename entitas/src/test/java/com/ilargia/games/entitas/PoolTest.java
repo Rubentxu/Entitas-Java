@@ -3,6 +3,8 @@ package com.ilargia.games.entitas;
 import com.ilargia.games.entitas.components.Position;
 import com.ilargia.games.entitas.events.EventBus;
 import com.ilargia.games.entitas.exceptions.*;
+import com.ilargia.games.entitas.factories.Collections;
+import com.ilargia.games.entitas.factories.CollectionsFactory;
 import com.ilargia.games.entitas.interfaces.FactoryEntity;
 import com.ilargia.games.entitas.interfaces.IComponent;
 import com.ilargia.games.entitas.utils.TestComponentIds;
@@ -12,7 +14,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import java.util.Stack;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
@@ -39,11 +41,33 @@ public class PoolTest {
                         TestComponentIds.componentTypes()), bus, factoryEntity());
     }
 
+
+    private void createCollections() {
+        new Collections(new CollectionsFactory() {
+            @Override
+            public List createList() {
+                return new ArrayList();
+            }
+
+            @Override
+            public Set createSet() {
+                return new HashSet();
+            }
+
+            @Override
+            public Map createMap() {
+                return new HashMap();
+            }
+        });
+    }
+
     @Before
     public void setUp() throws Exception {
+        createCollections();
         bus = new EventBus<>();
         pool = createTestPool();
         entity = pool.createEntity();
+
 
     }
 
