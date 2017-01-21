@@ -1,25 +1,22 @@
 package com.ilargia.games.entitas;
 
-import com.ilargia.games.entitas.caching.EntitasCache;
 import com.ilargia.games.entitas.events.EventBus;
-import com.ilargia.games.entitas.events.GroupEventType;
+import com.ilargia.games.entitas.events.GroupEvent;
 import com.ilargia.games.entitas.exceptions.*;
 import com.ilargia.games.entitas.factories.Collections;
 import com.ilargia.games.entitas.interfaces.FactoryEntity;
 import com.ilargia.games.entitas.interfaces.IComponent;
-import com.ilargia.games.entitas.interfaces.IEntityIndex;
-import com.ilargia.games.entitas.interfaces.IMatcher;
+import com.ilargia.games.entitas.index.IEntityIndex;
+import com.ilargia.games.entitas.matcher.IMatcher;
 import com.ilargia.games.entitas.interfaces.events.ComponentReplaced;
 import com.ilargia.games.entitas.interfaces.events.EntityChanged;
 import com.ilargia.games.entitas.interfaces.events.EntityReleased;
-import com.ilargia.games.entitas.interfaces.events.GroupChanged;
-
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 
-public class BasePool<E extends Entity, P extends BasePool> {
+public class BaseContext<E extends Entity, P extends BaseContext> {
 
     public int _totalComponents;
     public Class<E> entityType;
@@ -30,25 +27,25 @@ public class BasePool<E extends Entity, P extends BasePool> {
     private Stack<E> _reusableEntities;
     private Set<E> _retainedEntities; //ObjectOpenHashSet
     private E[] _entitiesCache;
-    private EntityMetaData _metaData;
-    private Stack<IComponent>[] _componentPools;
     private Map<String, IEntityIndex> _entityIndices; // Map
     private FactoryEntity<E> _factoryEntiy;
+    private ContextInfo _contextInfo;
+    private Stack<IComponent>[] _componentContexts;
     private EventBus<E> _eventBus;
 
 
-    public BasePool(int totalComponents, int startCreationIndex, EntityMetaData metaData,
-                    EventBus<E> eventBus, FactoryEntity<E> factoryMethod) {
+    public BaseContext(int totalComponents, int startCreationIndex, ContextInfo metaData,
+                       EventBus<E> eventBus, FactoryEntity<E> factoryMethod) {
         _totalComponents = totalComponents;
         _creationIndex = startCreationIndex;
         _factoryEntiy = factoryMethod;
         _eventBus = eventBus;
 
         if (metaData != null) {
-            _metaData = metaData;
+            _contextInfo = metaData;
 
             if (metaData.componentNames.length != totalComponents) {
-                throw new PoolMetaDataException(this, metaData);
+                throw new ContextInfoException(this, metaData);
             }
         } else {
             String[] componentNames = new String[totalComponents];
@@ -56,13 +53,13 @@ public class BasePool<E extends Entity, P extends BasePool> {
             for (int i = 0; i < componentNames.length; i++) {
                 componentNames[i] = prefix + i;
             }
-            _metaData = new EntityMetaData(
+            _contextInfo = new ContextInfo(
                     "Unnamed SplashPool", componentNames, null
             );
         }
 
         _groupsForIndex = new List[_totalComponents];
-        _componentPools = new Stack[totalComponents];
+        _componentContexts = new Stack[totalComponents];
         _entityIndices = Collections.createMap(String.class, IEntityIndex.class);
 
         _reusableEntities = new Stack<>();
@@ -82,30 +79,30 @@ public class BasePool<E extends Entity, P extends BasePool> {
             onEntityReleased(e, _retainedEntities, _reusableEntities);
         });
 
-        entityType = (Class<E>) _factoryEntiy.create(_totalComponents, _componentPools, _metaData).getClass();
+        entityType = (Class<E>) _factoryEntiy.create(_totalComponents, _componentContexts, _contextInfo).getClass();
 
     }
 
-    public static EntityCollector createEntityCollector(BasePool[] pools, IMatcher matcher) {
-        return createEntityCollector(pools, matcher, GroupEventType.OnEntityAdded);
+    public Collector createEntityCollector(BaseContext[] contexts, IMatcher matcher) {
+        return createEntityCollector(contexts, matcher, GroupEvent.Added);
     }
 
-    public static EntityCollector createEntityCollector(BasePool[] pools, IMatcher matcher, GroupEventType eventType) {
-        Group[] groups = new Group[pools.length];
-        GroupEventType[] eventTypes = new GroupEventType[pools.length];
+    public Collector createEntityCollector(BaseContext[] contexts, IMatcher matcher, GroupEvent eventType) {
+        Group[] groups = new Group[contexts.length];
+        GroupEvent[] eventTypes = new GroupEvent[contexts.length];
 
-        for (int i = 0; i < pools.length; i++) {
-            groups[i] = pools[i].getGroup(matcher);
+        for (int i = 0; i < contexts.length; i++) {
+            groups[i] = contexts[i].getGroup(matcher);
             eventTypes[i] = eventType;
         }
 
-        return new EntityCollector(groups, eventTypes);
+        return new Collector(groups, eventTypes, _eventBus);
     }
 
     public E createEntity() {
         E ent = _reusableEntities.size() > 0
                 ? _reusableEntities.pop()
-                : _factoryEntiy.create(_totalComponents, _componentPools, _metaData);
+                : _factoryEntiy.create(_totalComponents, _componentContexts, _contextInfo);
         ent.setEnabled(true);
         ent.setCreationIndex(_creationIndex++);
         ent.retain(this);
@@ -119,7 +116,7 @@ public class BasePool<E extends Entity, P extends BasePool> {
 
     public void destroyEntity(E entity) {
         if (!_entities.remove(entity)) {
-            throw new PoolDoesNotContainEntityException("'" + this + "' cannot destroy " + entity + "!",
+            throw new ContextDoesNotContainEntityException("'" + this + "' cannot destroy " + entity + "!",
                     "Did you call pool.DestroyEntity() on a wrong pool?");
         }
         _entitiesCache = null;
@@ -129,10 +126,15 @@ public class BasePool<E extends Entity, P extends BasePool> {
 
         _eventBus.notifyEntityDestroyed((P) this, entity);
 
-        if (entity.getRetainCount() != 1) {
+        if (entity.getRetainCount() == 1) {
+            _reusableEntities.push(entity);
+            entity.release(this);
+
+        } else {
             _retainedEntities.add(entity);
+            entity.release(this);
         }
-        entity.release(this);
+
     }
 
     public void destroyAllEntities() {
@@ -142,7 +144,7 @@ public class BasePool<E extends Entity, P extends BasePool> {
         _entities.clear();
 
         if (_retainedEntities.size() != 0) {
-            throw new PoolStillHasRetainedEntitiesException(this);
+            throw new ContextStillHasRetainedEntitiesException(this);
         }
 
     }
@@ -164,7 +166,7 @@ public class BasePool<E extends Entity, P extends BasePool> {
         Group<E> group = null;
         if (!(_groups.containsKey(matcher) ? (group = _groups.get(matcher)) == group : false)) {
 
-            group = new Group(matcher, entityType);
+            group = new Group(matcher, entityType,_eventBus);
             for (E entity : getEntities()) {
                 group.handleEntitySilently(entity);
             }
@@ -200,7 +202,7 @@ public class BasePool<E extends Entity, P extends BasePool> {
 
     public void addEntityIndex(String name, IEntityIndex entityIndex) {
         if (_entityIndices.containsKey(name)) {
-            throw new PoolEntityIndexDoesAlreadyExistException(this, name);
+            throw new ContextEntityIndexDoesAlreadyExistException(this, name);
         }
         _entityIndices.put(name, entityIndex);
 
@@ -209,7 +211,7 @@ public class BasePool<E extends Entity, P extends BasePool> {
     public IEntityIndex getEntityIndex(String name) {
         IEntityIndex entityIndex;
         if (!_entityIndices.containsKey(name)) {
-            throw new PoolEntityIndexDoesNotExistException(this, name);
+            throw new ContextEntityIndexDoesNotExistException(this, name);
         } else {
             entityIndex = _entityIndices.get(name);
         }
@@ -229,14 +231,14 @@ public class BasePool<E extends Entity, P extends BasePool> {
     }
 
     public void clearComponentPool(int index) {
-        Stack<IComponent> componentPool = _componentPools[index];
+        Stack<IComponent> componentPool = _componentContexts[index];
         if (componentPool != null) {
             componentPool.clear();
         }
     }
 
     public void clearComponentPools() {
-        for (int i = 0; i < _componentPools.length; i++) {
+        for (int i = 0; i < _componentContexts.length; i++) {
             clearComponentPool(i);
         }
     }
@@ -252,17 +254,9 @@ public class BasePool<E extends Entity, P extends BasePool> {
     public void updateGroupsComponentAddedOrRemoved(E entity, int index, IComponent component, List<Group<E>>[] groupsForIndex) {
         List<Group<E>> groups = groupsForIndex[index];
         if (groups != null) {
-            List<GroupChanged> events = EntitasCache.getGroupChangedList();
             for (int i = 0, groupsCount = groups.size(); i < groupsCount; i++) {
-                events.add(groups.get(i).handleEntity(entity));
+                groups.get(i).handleEntity(entity, index, component);
             }
-            for (int i = 0; i < events.size(); i++) {
-                GroupChanged groupChangedEvent = events.get(i);
-                if (groupChangedEvent != null) {
-                    groupChangedEvent.groupChanged(groups.get(i), entity, index, component);
-                }
-            }
-            EntitasCache.pushGroupChangedList(events);
         }
 
     }
@@ -287,11 +281,11 @@ public class BasePool<E extends Entity, P extends BasePool> {
     }
 
     public Stack<IComponent>[] getComponentPools() {
-        return _componentPools;
+        return _componentContexts;
     }
 
-    public EntityMetaData getMetaData() {
-        return _metaData;
+    public ContextInfo getMetaData() {
+        return _contextInfo;
     }
 
     public int getCount() {

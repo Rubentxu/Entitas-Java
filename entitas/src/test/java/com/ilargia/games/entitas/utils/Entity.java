@@ -1,6 +1,6 @@
 package com.ilargia.games.entitas.utils;
 
-import com.ilargia.games.entitas.EntityMetaData;
+import com.ilargia.games.entitas.ContextInfo;
 import com.ilargia.games.entitas.interfaces.IComponent;
 import java.util.Stack;
 import com.ilargia.games.entitas.events.EventBus;
@@ -22,8 +22,8 @@ public class Entity extends com.ilargia.games.entitas.Entity {
 	public Player PlayerComponent = new Player();
 
 	public Entity(int totalComponents, Stack<IComponent>[] componentPools,
-			EntityMetaData entityMetaData, EventBus<Entity> bus) {
-		super(totalComponents, componentPools, entityMetaData, bus);
+                  ContextInfo contextInfo, EventBus<Entity> bus) {
+		super(totalComponents, componentPools, contextInfo, bus);
 	}
 
 	public boolean isInteractive() {

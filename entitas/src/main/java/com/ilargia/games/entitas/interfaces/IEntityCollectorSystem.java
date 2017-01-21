@@ -1,9 +1,9 @@
 package com.ilargia.games.entitas.interfaces;
 
-import com.ilargia.games.entitas.EntityCollector;
+import com.ilargia.games.entitas.Collector;
 
 public interface IEntityCollectorSystem extends IReactiveExecuteSystem {
 
-    EntityCollector getEntityCollector();
+    Collector getEntityCollector();
 
 }

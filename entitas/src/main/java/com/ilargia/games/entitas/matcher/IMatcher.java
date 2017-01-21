@@ -1,4 +1,4 @@
-package com.ilargia.games.entitas.interfaces;
+package com.ilargia.games.entitas.matcher;
 
 import com.ilargia.games.entitas.Entity;
 

@@ -48,7 +48,7 @@ public class GroupTest {
     public void setUp() throws Exception {
         createCollections();
         bus = new EventBus<>();
-        entity = new Entity(10, new Stack[10], new EntityMetaData("Test", TestComponentIds.componentNames(),
+        entity = new Entity(10, new Stack[10], new ContextInfo("Test", TestComponentIds.componentNames(),
                 TestComponentIds.componentTypes()), bus);
         entity.setCreationIndex(0);
         entity.addComponent(TestComponentIds.Position, new Position(100, 100));

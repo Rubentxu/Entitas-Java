@@ -1,11 +1,14 @@
-package com.ilargia.games.entitas;
+package com.ilargia.games.entitas.index;
 
+import com.ilargia.games.entitas.Entity;
+import com.ilargia.games.entitas.Group;
+import com.ilargia.games.entitas.events.EventBus;
 import com.ilargia.games.entitas.interfaces.IComponent;
-import com.ilargia.games.entitas.interfaces.IEntityIndex;
 import com.ilargia.games.entitas.interfaces.events.GroupChanged;
 
 public abstract class AbstractEntityIndex<K, E extends Entity> implements IEntityIndex {
 
+    private EventBus<E> _eventBus;
     protected Group<E> _group;
     protected Func<E, IComponent, K> _key;
     protected GroupChanged<E> onEntityAdded = (Group<E> group, E entity, int index, IComponent component) -> {
@@ -15,23 +18,24 @@ public abstract class AbstractEntityIndex<K, E extends Entity> implements IEntit
         removeEntity(entity, component);
     };
 
-    protected AbstractEntityIndex(Group<E> group, Func<E, IComponent, K> key) {
+    protected AbstractEntityIndex(Group<E> group, Func<E, IComponent, K> key, EventBus<E> eventBus) {
         _group = group;
         _key = key;
+        _eventBus = eventBus;
 
     }
 
     @Override
     public void activate() {
-        _group.OnEntityAdded = onEntityAdded;
-        _group.OnEntityRemoved = onEntityRemoved;
+        _eventBus.OnEntityAdded(_group).addListener(onEntityAdded);
+        _eventBus.OnEntityRemoved(_group).addListener(onEntityRemoved);
 
     }
 
     @Override
     public void deactivate() {
-        _group.OnEntityAdded = null;
-        _group.OnEntityRemoved = null;
+        _eventBus.OnEntityAdded(_group).removeListener(onEntityAdded);
+        _eventBus.OnEntityRemoved(_group).removeListener(onEntityRemoved);
         clear();
 
     }

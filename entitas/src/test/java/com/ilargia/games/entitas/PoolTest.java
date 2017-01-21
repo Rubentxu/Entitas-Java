@@ -5,6 +5,7 @@ import com.ilargia.games.entitas.events.EventBus;
 import com.ilargia.games.entitas.exceptions.*;
 import com.ilargia.games.entitas.factories.Collections;
 import com.ilargia.games.entitas.factories.CollectionsFactory;
+import com.ilargia.games.entitas.index.PrimaryEntityIndex;
 import com.ilargia.games.entitas.interfaces.FactoryEntity;
 import com.ilargia.games.entitas.interfaces.IComponent;
 import com.ilargia.games.entitas.utils.TestComponentIds;
@@ -23,21 +24,21 @@ public class PoolTest {
     @Rule
     public ExpectedException exception = ExpectedException.none();
 
-    private BasePool pool;
+    private BaseContext pool;
     private Entity entity;
     private EventBus<Entity> bus;
 
 
     public FactoryEntity<Entity> factoryEntity() {
         return (int totalComponents, Stack<IComponent>[] componentPools,
-                EntityMetaData entityMetaData) -> {
-            return new Entity(totalComponents, componentPools, entityMetaData, bus);
+                ContextInfo contextInfo) -> {
+            return new Entity(totalComponents, componentPools, contextInfo, bus);
         };
     }
 
-    public BasePool createTestPool() {
-        return new BasePool(TestComponentIds.totalComponents, 0,
-                new EntityMetaData("Test", TestComponentIds.componentNames(),
+    public BaseContext createTestPool() {
+        return new BaseContext(TestComponentIds.totalComponents, 0,
+                new ContextInfo("Test", TestComponentIds.componentNames(),
                         TestComponentIds.componentTypes()), bus, factoryEntity());
     }
 
@@ -74,7 +75,7 @@ public class PoolTest {
 
     @Test
     public void OnEntityCreatedTest() {
-        bus.OnEntityCreated.addListener((BasePool pool, Entity e) -> assertTrue(e.isEnabled()));
+        bus.OnEntityCreated.addListener((BaseContext pool, Entity e) -> assertTrue(e.isEnabled()));
         entity = pool.createEntity();
     }
 
@@ -105,8 +106,8 @@ public class PoolTest {
 
     @Test
     public void OnEntityDestroyedTest() {
-        bus.OnEntityWillBeDestroyed.addListener((BasePool pool, Entity e) -> assertTrue(e.isEnabled()));
-        bus.OnEntityDestroyed.addListener((BasePool pool, Entity e) -> assertFalse(e.isEnabled()));
+        bus.OnEntityWillBeDestroyed.addListener((BaseContext pool, Entity e) -> assertTrue(e.isEnabled()));
+        bus.OnEntityDestroyed.addListener((BaseContext pool, Entity e) -> assertFalse(e.isEnabled()));
         pool.destroyAllEntities();
         assertEquals(0, pool.getCount());
 
@@ -132,7 +133,7 @@ public class PoolTest {
 
     }
 
-    @Test(expected = PoolStillHasRetainedEntitiesException.class)
+    @Test(expected = ContextStillHasRetainedEntitiesException.class)
     public void PoolStillHasRetainedEntitiesExceptionTest() {
         entity.retain(new Object());
         pool.destroyAllEntities();
@@ -140,7 +141,7 @@ public class PoolTest {
 
     }
 
-    @Test(expected = PoolDoesNotContainEntityException.class)
+    @Test(expected = ContextDoesNotContainEntityException.class)
     public void PoolDoesNotContainEntityExceptionTest() {
         Entity entity2 = new Entity(100, null, null, null);
         pool.destroyEntity(entity2);
@@ -196,7 +197,7 @@ public class PoolTest {
 
     }
 
-    @Test(expected = PoolEntityIndexDoesAlreadyExistException.class)
+    @Test(expected = ContextEntityIndexDoesAlreadyExistException.class)
     public void duplicateEntityIndexTest() {
         entity.addComponent(TestComponentIds.Position, new Position());
         Group group = pool.getGroup(TestMatcher.Position());
@@ -207,7 +208,7 @@ public class PoolTest {
     }
 
 
-    @Test(expected = PoolEntityIndexDoesNotExistException.class)
+    @Test(expected = ContextEntityIndexDoesNotExistException.class)
     public void deactivateAndRemoveEntityIndicesTest() {
         entity.addComponent(TestComponentIds.Position, new Position());
         Group group = pool.getGroup(TestMatcher.Position());
@@ -275,7 +276,7 @@ public class PoolTest {
         Position position2 = new Position();
         Group group = pool.getGroup(TestMatcher.Position());
         group.OnEntityUpdated = (g, e, idx, pc, nc) -> {
-            System.out.println("OnEntityRemoved...........");
+            System.out.println("Removed...........");
             assertEquals(position2, nc);
         };
 
@@ -286,8 +287,8 @@ public class PoolTest {
 
     @Test
     public void createEntityCollectorTest() {
-        BasePool[] pools = new BasePool[]{pool};
-        EntityCollector collector = BasePool.createEntityCollector(pools, TestMatcher.Position());
+        BaseContext[] pools = new BaseContext[]{pool};
+        Collector collector = BaseContext.createEntityCollector(pools, TestMatcher.Position());
         assertNotNull(collector);
 
     }

@@ -1,14 +1,14 @@
 package com.ilargia.games.entitas;
 
 
-public class EntityMetaData {
+public class ContextInfo {
 
-    public String poolName;
+    public String contextName;
     public String[] componentNames;
     public Class[] componentTypes;
 
-    public EntityMetaData(String poolName, String[] componentNames, Class[] componentTypes) {
-        this.poolName = poolName;
+    public ContextInfo(String contextName, String[] componentNames, Class[] componentTypes) {
+        this.contextName = contextName;
         this.componentNames = componentNames;
         this.componentTypes = componentTypes;
 

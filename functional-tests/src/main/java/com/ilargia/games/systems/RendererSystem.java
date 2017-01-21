@@ -16,11 +16,11 @@ import com.ilargia.games.core.CoreMatcher;
 import com.ilargia.games.core.Entity;
 import com.ilargia.games.core.Pool;
 import com.ilargia.games.entitas.Group;
-import com.ilargia.games.entitas.interfaces.IRenderSystem;
 import com.ilargia.games.entitas.interfaces.ISetPool;
+import com.ilargia.games.entitas.interfaces.ISystem;
 
 
-public class RendererSystem implements IRenderSystem, ISetPool<Pool> {
+public class RendererSystem implements ISystem.IRenderSystem, ISetPool<Pool> {
     private final BitmapFont font;
     private Group<Entity> _group;
     private ShapeRenderer sr;

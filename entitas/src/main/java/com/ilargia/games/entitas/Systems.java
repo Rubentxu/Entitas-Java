@@ -1,46 +1,38 @@
 package com.ilargia.games.entitas;
 
-import com.ilargia.games.entitas.exceptions.EntitasException;
+import com.ilargia.games.entitas.events.EventBus;
 import com.ilargia.games.entitas.factories.Collections;
 import com.ilargia.games.entitas.interfaces.*;
 import java.util.List;
 
 
-public class Systems implements IInitializeSystem, IExecuteSystem, ICleanupSystem, ITearDownSystem {
+public class Systems implements ISystem.IInitializeSystem, ISystem.IExecuteSystem, ISystem.ICleanupSystem, ISystem.ITearDownSystem {
 
+    private final EventBus _eventBus;
     private List<IInitializeSystem> _initializeSystems; // ObjectArrayList
     private List<IExecuteSystem> _executeSystems;
     private List<ICleanupSystem> _cleanupSystems;
     private List<IRenderSystem> _renderSystems;
     private List<ITearDownSystem> _tearDownSystems;
 
-    public Systems() {
+    public Systems(EventBus eventBus) {
         _initializeSystems = Collections.createList(ISystem.class);
         _executeSystems = Collections.createList(ISystem.class);
         _cleanupSystems = Collections.createList(ISystem.class);
         _renderSystems = Collections.createList(ISystem.class);
         _tearDownSystems = Collections.createList(ISystem.class);
+        _eventBus = eventBus;
     }
 
-
-    private Systems add(ISystem system) {
-        if (system instanceof ReactiveSystem) {
-            addSystem(((ReactiveSystem) system).getSubsystem());
-            addSystem(system);
-        } else {
-            addSystem(system);
+    public Systems addSystem(ISystem system) {
+        if(system != null) {
+            if (system instanceof IInitializeSystem) _initializeSystems.add((IInitializeSystem) system);
+            if (system instanceof IExecuteSystem) _executeSystems.add((IExecuteSystem) system);
+            if (system instanceof ICleanupSystem) _cleanupSystems.add((ICleanupSystem) system);
+            if (system instanceof IRenderSystem) _renderSystems.add((IRenderSystem) system);
+            if (system instanceof ITearDownSystem) _tearDownSystems.add((ITearDownSystem) system);
         }
-
         return this;
-    }
-
-    private void addSystem(ISystem system) {
-        if (system instanceof IInitializeSystem) _initializeSystems.add((IInitializeSystem) system);
-        if (system instanceof IExecuteSystem) _executeSystems.add((IExecuteSystem) system);
-        if (system instanceof ICleanupSystem) _cleanupSystems.add((ICleanupSystem) system);
-        if (system instanceof IRenderSystem) _renderSystems.add((IRenderSystem) system);
-        if (system instanceof ITearDownSystem) _tearDownSystems.add((ITearDownSystem) system);
-
     }
 
     public void initialize() {
@@ -112,73 +104,6 @@ public class Systems implements IInitializeSystem, IExecuteSystem, ICleanupSyste
             if (nestedSystems != null) {
                 nestedSystems.clearReactiveSystems();
             }
-        }
-    }
-
-
-    public <P> Systems addSystem(BasePool pool, ISystem system, P pools) {
-        setPool(system, pool);
-        setPools(system, pools);
-        add(system);
-        return this;
-    }
-
-    public <P> Systems addSystem(BasePool pool, IReactiveExecuteSystem system, P pools) {
-        setPool(system, pool);
-        setPools(system, pools);
-
-        IReactiveSystem reactiveSystem = (IReactiveSystem) ((system instanceof IReactiveSystem) ? system : null);
-        if (reactiveSystem != null) {
-            add(new ReactiveSystem(pool, reactiveSystem));
-            return this;
-        }
-        IMultiReactiveSystem multiReactiveSystem = (IMultiReactiveSystem) ((system instanceof IMultiReactiveSystem) ? system : null);
-        if (multiReactiveSystem != null) {
-            add(new ReactiveSystem(pool, multiReactiveSystem));
-            return this;
-        }
-        IEntityCollectorSystem entityCollectorSystem = (IEntityCollectorSystem) ((system instanceof IEntityCollectorSystem) ? system : null);
-        if (entityCollectorSystem != null) {
-            add(new ReactiveSystem(entityCollectorSystem));
-            return this;
-        }
-
-        throw new EntitasException("Could not create ReactiveSystem for " + system + "!", "The system has to implement IReactiveSystem, " +
-                "IMultiReactiveSystem or IEntityCollectorSystem.");
-    }
-
-    public Systems addSystem(BasePool pool, ISystem system) {
-        setPool(system, pool);
-        add(system);
-        return this;
-    }
-
-
-    public Systems addSystem(BasePool pool, IReactiveExecuteSystem system) {
-        setPool(system, pool);
-
-        IEntityCollectorSystem entityCollectorSystem = (IEntityCollectorSystem) ((system instanceof IEntityCollectorSystem) ? system : null);
-        if (entityCollectorSystem != null) {
-            add(new ReactiveSystem(entityCollectorSystem));
-            return this;
-        }
-        throw new EntitasException("Could not create ReactiveSystem for " + system + "!", "Only IEntityCollectorSystem is supported for " +
-                "pools.createSystem(system).");
-    }
-
-
-    private <P> void setPool(ISystem system, P pool) {
-        ISetPool poolSystem = (ISetPool) ((system instanceof ISetPool) ? system : null);
-        if (poolSystem != null) {
-            poolSystem.setPool(pool);
-        }
-
-    }
-
-    public <P> void setPools(ISystem system, P pools) {
-        ISetPools poolsSystem = (ISetPools) ((system instanceof ISetPools) ? system : null);
-        if (poolsSystem != null) {
-            poolsSystem.setPools(pools);
         }
     }
 

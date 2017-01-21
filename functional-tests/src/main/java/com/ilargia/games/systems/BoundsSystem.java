@@ -10,12 +10,12 @@ import com.ilargia.games.core.CoreMatcher;
 import com.ilargia.games.core.Entity;
 import com.ilargia.games.core.Pool;
 import com.ilargia.games.entitas.Group;
-import com.ilargia.games.entitas.interfaces.IExecuteSystem;
 import com.ilargia.games.entitas.interfaces.ISetPool;
+import com.ilargia.games.entitas.interfaces.ISystem;
 import com.ilargia.games.entitas.matcher.Matcher;
 
 
-public class BoundsSystem implements IExecuteSystem, ISetPool<Pool> {
+public class BoundsSystem implements ISystem.IExecuteSystem, ISetPool<Pool> {
     public static int WIDTH = Gdx.graphics.getWidth();
     private Group<Entity> _groupPlayer;
     private Pool _pool;

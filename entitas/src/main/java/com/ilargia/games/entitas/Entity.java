@@ -24,10 +24,10 @@ public class Entity {
     private int[] _componentIndicesCache;
     private String _toStringCache;
     private int _totalComponents;
-    private EntityMetaData _entityMetaData;
+    private ContextInfo _contextInfo;
     private EventBus _eventBus;
 
-    public Entity(int totalComponents, Stack<IComponent>[] componentPools, EntityMetaData entityMetaData, EventBus eventBus) {
+    public Entity(int totalComponents, Stack<IComponent>[] componentPools, ContextInfo contextInfo, EventBus eventBus) {
         _components = new IComponent[totalComponents];
         _totalComponents = totalComponents;
         _componentPools = componentPools;
@@ -35,25 +35,25 @@ public class Entity {
         owners = Collections.createSet(Object.class);
         _eventBus = eventBus;
 
-        if (entityMetaData != null) {
-            _entityMetaData = entityMetaData;
+        if (contextInfo != null) {
+            _contextInfo = contextInfo;
         } else {
 
             String[] componentNames = new String[totalComponents];
             for (int i = 0; i < componentNames.length; i++) {
                 componentNames[i] = String.valueOf(i);
             }
-            _entityMetaData = new EntityMetaData("No Pool", componentNames, null);
+            _contextInfo = new ContextInfo("No Pool", componentNames, null);
         }
     }
 
     public Entity addComponent(int index, IComponent component) {
         if (!_isEnabled) {
-            throw new EntityIsNotEnabledException("Cannot add component '" + _entityMetaData.componentNames[index] + "' to " + this + "!");
+            throw new EntityIsNotEnabledException("Cannot add component '" + _contextInfo.componentNames[index] + "' to " + this + "!");
         }
 
         if (hasComponent(index)) {
-            throw new EntityAlreadyHasComponentException(index, "Cannot add component '" + _entityMetaData.componentNames[index] +
+            throw new EntityAlreadyHasComponentException(index, "Cannot add component '" + _contextInfo.componentNames[index] +
                     "' to " + this + "!", "You should check if an entity already has the component " +
                     "before adding it or use entity.ReplaceComponent().");
         }
@@ -70,11 +70,11 @@ public class Entity {
     public Entity removeComponent(int index) {
         if (!_isEnabled) {
             throw new EntityIsNotEnabledException("Cannot remove component!" +
-                    _entityMetaData.componentNames[index] + "' from " + this + "!");
+                    _contextInfo.componentNames[index] + "' from " + this + "!");
         }
 
         if (!hasComponent(index)) {
-            String errorMsg = "Cannot remove component " + _entityMetaData.componentNames[index] +
+            String errorMsg = "Cannot remove component " + _contextInfo.componentNames[index] +
                     "' from " + this + "!";
             throw new EntityDoesNotHaveComponentException(errorMsg, index);
         }
@@ -86,7 +86,7 @@ public class Entity {
     public Entity replaceComponent(int index, IComponent component) {
         if (!_isEnabled) {
             throw new EntityIsNotEnabledException("Cannot replace component!" +
-                    _entityMetaData.componentNames[index] + "' on " + this + "!");
+                    _contextInfo.componentNames[index] + "' on " + this + "!");
         }
 
         if (hasComponent(index)) {
@@ -121,7 +121,7 @@ public class Entity {
     public IComponent getComponent(int index) {
         if (!hasComponent(index)) {
             String errorMsg = "Cannot get component at index " +
-                    _entityMetaData.componentNames[index] + "' from " +
+                    _contextInfo.componentNames[index] + "' from " +
                     this + "!";
             throw new EntityDoesNotHaveComponentException(errorMsg, index);
         }
@@ -229,7 +229,7 @@ public class Entity {
             if (componentPool.size() > 0) {
                 return (T) componentPool.pop();
             } else {
-                Class<T> clazz = _entityMetaData.componentTypes[index];
+                Class<T> clazz = _contextInfo.componentTypes[index];
                 return clazz.cast(clazz.getConstructor((Class[]) null).newInstance());
             }
         } catch (Exception e) {

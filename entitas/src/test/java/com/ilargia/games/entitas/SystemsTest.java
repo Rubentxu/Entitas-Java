@@ -2,7 +2,7 @@ package com.ilargia.games.entitas;
 
 import com.ilargia.games.entitas.components.Position;
 import com.ilargia.games.entitas.events.EventBus;
-import com.ilargia.games.entitas.events.GroupEventType;
+import com.ilargia.games.entitas.events.GroupEvent;
 import com.ilargia.games.entitas.factories.Collections;
 import com.ilargia.games.entitas.factories.CollectionsFactory;
 import com.ilargia.games.entitas.interfaces.*;
@@ -19,7 +19,7 @@ import static org.junit.Assert.*;
 
 public class SystemsTest {
 
-    private BasePool pool;
+    private BaseContext pool;
     private Systems systems;
     private MoveSystem moveSystem;
 
@@ -28,14 +28,14 @@ public class SystemsTest {
 
     public FactoryEntity<Entity> factoryEntity() {
         return (int totalComponents, Stack<IComponent>[] componentPools,
-                EntityMetaData entityMetaData) -> {
-            return new Entity(totalComponents, componentPools, entityMetaData, bus);
+                ContextInfo contextInfo) -> {
+            return new Entity(totalComponents, componentPools, contextInfo, bus);
         };
     }
 
-    public BasePool createTestPool() {
-        return new BasePool(TestComponentIds.totalComponents, 0,
-                new EntityMetaData("Test", TestComponentIds.componentNames(),
+    public BaseContext createTestPool() {
+        return new BaseContext(TestComponentIds.totalComponents, 0,
+                new ContextInfo("Test", TestComponentIds.componentNames(),
                         TestComponentIds.componentTypes()), bus, factoryEntity());
     }
 
@@ -135,7 +135,7 @@ public class SystemsTest {
 
     }
 
-    public class MoveSystem implements IExecuteSystem, IInitializeSystem, ICleanupSystem, ITearDownSystem, ISetPool<BasePool>, ISetPools<Object> {
+    public class MoveSystem implements ISystem.IExecuteSystem, ISystem.IInitializeSystem, ISystem.ICleanupSystem, ISystem.ITearDownSystem, ISetPool<BaseContext>, ISetPools<Object> {
         public Group<Entity> _group;
         public boolean flagExecute = false;
         public boolean flagInitialize = false;
@@ -144,7 +144,7 @@ public class SystemsTest {
         public Object pools;
 
         @Override
-        public void setPool(BasePool pool) {
+        public void setPool(BaseContext pool) {
             _group = pool.getGroup(Matcher.AllOf(TestMatcher.View()));
         }
 
@@ -191,8 +191,8 @@ public class SystemsTest {
         }
 
         @Override
-        public EntityCollector getEntityCollector() {
-            return new EntityCollector(pool.getGroup(Matcher.AllOf(TestMatcher.Position())), GroupEventType.OnEntityAdded);
+        public Collector getEntityCollector() {
+            return new Collector(pool.getGroup(Matcher.AllOf(TestMatcher.Position())), GroupEvent.Added);
         }
     }
 

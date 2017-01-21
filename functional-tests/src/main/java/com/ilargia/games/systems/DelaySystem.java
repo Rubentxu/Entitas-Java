@@ -7,11 +7,11 @@ import com.ilargia.games.core.Entity;
 import com.ilargia.games.core.Pool;
 import com.ilargia.games.egdx.base.interfaces.commands.ChangeStateCommand;
 import com.ilargia.games.entitas.Group;
-import com.ilargia.games.entitas.interfaces.IExecuteSystem;
 import com.ilargia.games.entitas.interfaces.ISetPool;
+import com.ilargia.games.entitas.interfaces.ISystem;
 
 
-public class DelaySystem implements IExecuteSystem, ISetPool<Pool> {
+public class DelaySystem implements ISystem.IExecuteSystem, ISetPool<Pool> {
 
     private Group<Entity> _group;
 

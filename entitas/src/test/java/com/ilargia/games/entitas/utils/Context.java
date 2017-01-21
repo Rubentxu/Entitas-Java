@@ -1,13 +1,11 @@
 package com.ilargia.games.entitas.utils;
 
-import com.ilargia.games.entitas.factories.Collections;
-import com.ilargia.games.entitas.factories.CollectionsFactory;
+import com.ilargia.games.entitas.ContextInfo;
 import com.ilargia.games.entitas.interfaces.FactoryEntity;
 
 import java.util.*;
 
 import com.ilargia.games.entitas.interfaces.IComponent;
-import com.ilargia.games.entitas.EntityMetaData;
 import com.ilargia.games.entitas.events.EventBus;
 
 /**
@@ -30,14 +28,14 @@ public class Context {
 
 	public Pool createTestPool() {
 		return new Pool(TestComponentIds.totalComponents, 0,
-				new EntityMetaData("Test", TestComponentIds.componentNames(),
+				new ContextInfo("Test", TestComponentIds.componentNames(),
 						TestComponentIds.componentTypes()), factoryEntity(),
 				bus);
 	}
 
 	public Pool createTest2Pool() {
 		return new Pool(Test2ComponentIds.totalComponents, 0,
-				new EntityMetaData("Test2", Test2ComponentIds.componentNames(),
+				new ContextInfo("Test2", Test2ComponentIds.componentNames(),
 						Test2ComponentIds.componentTypes()), factoryEntity(),
 				bus);
 	}
@@ -48,8 +46,8 @@ public class Context {
 
 	public FactoryEntity<Entity> factoryEntity() {
 		return (int totalComponents, Stack<IComponent>[] componentPools,
-				EntityMetaData entityMetaData) -> {
-			return new Entity(totalComponents, componentPools, entityMetaData,
+				ContextInfo contextInfo) -> {
+			return new Entity(totalComponents, componentPools, contextInfo,
 					bus);
 		};
 	}

@@ -1,11 +1,11 @@
 package com.ilargia.games.entitas.events;
 
-public enum GroupEventType {
-    OnEntityAdded,
-    OnEntityRemoved,
-    OnEntityAddedOrRemoved;
+public enum GroupEvent {
+    Added,
+    Removed,
+    AddedOrRemoved;
 
-    public static GroupEventType forValue(int value) {
+    public static GroupEvent forValue(int value) {
         return values()[value];
     }
 

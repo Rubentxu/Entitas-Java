@@ -2,12 +2,8 @@ package com.ilargia.games.entitas.matcher;
 
 import com.ilargia.games.entitas.Entity;
 import com.ilargia.games.entitas.caching.EntitasCache;
-import com.ilargia.games.entitas.events.GroupEventType;
+import com.ilargia.games.entitas.events.GroupEvent;
 import com.ilargia.games.entitas.exceptions.MatcherException;
-import com.ilargia.games.entitas.interfaces.IAllOfMatcher;
-import com.ilargia.games.entitas.interfaces.IAnyOfMatcher;
-import com.ilargia.games.entitas.interfaces.IMatcher;
-import com.ilargia.games.entitas.interfaces.INoneOfMatcher;
 
 import java.util.Arrays;
 import java.util.List;
@@ -262,15 +258,15 @@ public class Matcher implements IAllOfMatcher, IAnyOfMatcher, INoneOfMatcher {
     }
 
     public TriggerOnEvent OnEntityAdded() {
-        return new TriggerOnEvent(this, GroupEventType.OnEntityAdded);
+        return new TriggerOnEvent(this, GroupEvent.Added);
     }
 
     public TriggerOnEvent OnEntityRemoved() {
-        return new TriggerOnEvent(this, GroupEventType.OnEntityRemoved);
+        return new TriggerOnEvent(this, GroupEvent.Removed);
     }
 
     public TriggerOnEvent OnEntityAddedOrRemoved() {
-        return new TriggerOnEvent(this, GroupEventType.OnEntityAddedOrRemoved);
+        return new TriggerOnEvent(this, GroupEvent.AddedOrRemoved);
     }
 
     @Override

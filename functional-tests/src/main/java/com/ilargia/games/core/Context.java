@@ -1,6 +1,6 @@
 package com.ilargia.games.core;
 
-import com.ilargia.games.entitas.EntityMetaData;
+import com.ilargia.games.entitas.ContextInfo;
 import com.ilargia.games.entitas.events.EventBus;
 import com.ilargia.games.entitas.interfaces.FactoryEntity;
 import com.ilargia.games.entitas.interfaces.IComponent;
@@ -24,7 +24,7 @@ public class Context {
 
     public Pool createCorePool() {
         return new Pool(CoreComponentIds.totalComponents, 0,
-                new EntityMetaData("Core", CoreComponentIds.componentNames(),
+                new ContextInfo("Core", CoreComponentIds.componentNames(),
                         CoreComponentIds.componentTypes()), factoryEntity(),
                 bus);
     }
@@ -35,8 +35,8 @@ public class Context {
 
     public FactoryEntity<Entity> factoryEntity() {
         return (int totalComponents, Stack<IComponent>[] componentPools,
-                EntityMetaData entityMetaData) -> {
-            return new Entity(totalComponents, componentPools, entityMetaData,
+                ContextInfo contextInfo) -> {
+            return new Entity(totalComponents, componentPools, contextInfo,
                     bus);
         };
     }

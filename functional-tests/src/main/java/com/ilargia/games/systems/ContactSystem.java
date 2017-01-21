@@ -9,12 +9,12 @@ import com.ilargia.games.core.CoreMatcher;
 import com.ilargia.games.core.Entity;
 import com.ilargia.games.core.Pool;
 import com.ilargia.games.entitas.Group;
-import com.ilargia.games.entitas.interfaces.IExecuteSystem;
 import com.ilargia.games.entitas.interfaces.ISetPool;
+import com.ilargia.games.entitas.interfaces.ISystem;
 import com.ilargia.games.entitas.matcher.Matcher;
 
 
-public class ContactSystem implements IExecuteSystem, ISetPool<Pool> {
+public class ContactSystem implements ISystem.IExecuteSystem, ISetPool<Pool> {
 
     int pongSpeed = 300;
     private Group<Entity> _group;

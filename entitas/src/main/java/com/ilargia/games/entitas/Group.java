@@ -1,21 +1,18 @@
 package com.ilargia.games.entitas;
 
+import com.ilargia.games.entitas.events.EventBus;
 import com.ilargia.games.entitas.exceptions.EntityIndexException;
 import com.ilargia.games.entitas.exceptions.GroupSingleEntityException;
 import com.ilargia.games.entitas.factories.Collections;
 import com.ilargia.games.entitas.interfaces.IComponent;
-import com.ilargia.games.entitas.interfaces.IMatcher;
-import com.ilargia.games.entitas.interfaces.events.GroupChanged;
-import com.ilargia.games.entitas.interfaces.events.GroupUpdated;
+import com.ilargia.games.entitas.matcher.IMatcher;
 import java.util.Iterator;
 import java.util.Set;
 
 public class Group<E extends Entity> {
 
     private final Set<E> _entities; // ObjectOpenHashSet
-    public GroupChanged<E> OnEntityAdded;
-    public GroupChanged<E> OnEntityRemoved;
-    public GroupUpdated<E> OnEntityUpdated;
+    private final EventBus _eventBus;
     public Class<E> type;
     private IMatcher _matcher;
     private E[] _entitiesCache;
@@ -23,31 +20,27 @@ public class Group<E extends Entity> {
     private String _toStringCache;
 
 
-    public Group(IMatcher matcher, Class<E> clazz) {
+    public Group(IMatcher matcher, Class<E> clazz, EventBus eventBus) {
         _entities = Collections.createSet(Entity.class);
         _matcher = matcher;
         type = clazz;
+        _eventBus = eventBus;
+
     }
 
 
     public void updateEntity(E entity, int index, IComponent previousComponent, IComponent newComponent) throws EntityIndexException {
         if (_entities.contains(entity)) {
-            if (OnEntityRemoved != null) {
-                OnEntityRemoved.groupChanged(this, entity, index, previousComponent);
-            }
-            if (OnEntityAdded != null) {
-                OnEntityAdded.groupChanged(this, entity, index, previousComponent);
-            }
-            if (OnEntityUpdated != null) {
-                OnEntityUpdated.groupUpdated(this, entity, index, previousComponent, newComponent);
-            }
+            _eventBus.notifyOnEntityRemoved(this, entity, index, previousComponent);
+            _eventBus.notifyOnEntityAdded(this, entity, index, previousComponent);
+            _eventBus.notifyOnEntityUpdated(this, entity, index, previousComponent, newComponent);
         }
     }
 
     public void removeAllEventHandlers() {
-        OnEntityAdded = null;
-        OnEntityRemoved = null;
-        OnEntityUpdated = null;
+        _eventBus.OnEntityAdded(this).clear();
+        _eventBus.OnEntityRemoved(this).clear();
+        _eventBus.OnEntityUpdated(this).clear();
     }
 
     public void handleEntitySilently(E entity) {
@@ -58,10 +51,12 @@ public class Group<E extends Entity> {
         }
     }
 
-    public GroupChanged handleEntity(E entity) {
-        return _matcher.matches(entity)
-                ? (addEntitySilently(entity) ? OnEntityAdded : null)
-                : (removeEntitySilently(entity) ? OnEntityRemoved : null);
+    public void handleEntity(E entity, int index, IComponent component) {
+        if(_matcher.matches(entity)) {
+            addEntity(entity, index, component);
+        } else {
+            removeEntity(entity, index, component);
+        }
 
     }
 
@@ -76,6 +71,13 @@ public class Group<E extends Entity> {
 
     }
 
+    void addEntity(E entity, int index, IComponent component) {
+        if(addEntitySilently(entity)) {
+            _eventBus.notifyOnEntityAdded(this, entity, index, component);
+        }
+
+    }
+
     private boolean removeEntitySilently(E entity) {
         boolean removed = _entities.remove(entity);
         if (removed) {
@@ -85,6 +87,17 @@ public class Group<E extends Entity> {
         }
 
         return removed;
+    }
+
+    void removeEntity(Entity entity, int index, IComponent component) {
+        boolean removed = _entities.remove(entity);
+        if(removed) {
+            _entitiesCache = null;
+            _singleEntityCache = null;
+            _eventBus.notifyOnEntityRemoved(this, entity, index, component);
+            entity.release(this);
+        }
+
     }
 
 
@@ -114,7 +127,6 @@ public class Group<E extends Entity> {
                 Iterator<E> enumerator = _entities.iterator();
                 _singleEntityCache = enumerator.next();
             } else if (c == 0) {
-
                 return null;
             } else {
                 throw new GroupSingleEntityException(this);
@@ -128,7 +140,7 @@ public class Group<E extends Entity> {
         return _entities.size();
     }
 
-    public IMatcher getmatcher() {
+    public IMatcher getMatcher() {
         return _matcher;
     }
 

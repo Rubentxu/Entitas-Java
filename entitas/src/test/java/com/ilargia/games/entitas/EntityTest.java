@@ -57,7 +57,7 @@ public class EntityTest {
         _componentPools = new Stack[10];
         bus = new EventBus<>();
         EntitasCache cache = new EntitasCache();
-        entity = new Entity(10, _componentPools, new EntityMetaData("Test", TestComponentIds.componentNames(),
+        entity = new Entity(10, _componentPools, new ContextInfo("Test", TestComponentIds.componentNames(),
                 TestComponentIds.componentTypes()), bus);
         entity.setCreationIndex(0);
         entity.addComponent(TestComponentIds.Position, new Position(100, 100));

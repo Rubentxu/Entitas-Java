@@ -1,43 +1,44 @@
 package com.ilargia.games.entitas;
 
-import com.ilargia.games.entitas.events.GroupEventType;
+import com.ilargia.games.entitas.events.EventBus;
+import com.ilargia.games.entitas.events.GroupEvent;
 import com.ilargia.games.entitas.exceptions.EntityCollectorException;
 import com.ilargia.games.entitas.factories.Collections;
 import com.ilargia.games.entitas.interfaces.IComponent;
 import com.ilargia.games.entitas.interfaces.events.GroupChanged;
 import java.util.Set;
 
-public class EntityCollector<E extends Entity> {
+public class Collector<E extends Entity> {
 
+    private final EventBus<E> _eventBus;
     public Set<E> _collectedEntities; //ObjectOpenHashSet
+    private Group<E>[] _groups;
+    private GroupEvent[] _groupEvents;
     GroupChanged<E> _addEntityCache;
     String _toStringCache;
     StringBuilder _toStringBuilder;
-    private Group<E>[] _groups;
-    private GroupEventType[] _eventTypes;
 
-    public EntityCollector(Group group, GroupEventType eventType) {
-        this(new Group[]{group}, new GroupEventType[]{eventType});
+
+    public Collector(Group group, GroupEvent eventType, EventBus<E> eventBus) {
+        this(new Group[]{group}, new GroupEvent[]{eventType}, eventBus);
 
     }
 
-    public EntityCollector(Group<E>[] groups, GroupEventType[] eventTypes) throws EntityCollectorException {
+    public Collector(Group<E>[] groups, GroupEvent[] groupEvents, EventBus<E> eventBus) {
         _groups = groups;
         _collectedEntities = Collections.createSet(Entity.class);
-        _eventTypes = eventTypes;
+        _groupEvents = groupEvents;
+        _eventBus = eventBus;
 
-        if (groups.length != eventTypes.length) {
+        if (groups.length != groupEvents.length) {
             throw new EntityCollectorException("Unbalanced count with groups (" + groups.length +
-                    ") and event types (" + eventTypes.length + ").",
+                    ") and event types (" + groupEvents.length + ").",
                     "Group and event type count must be equal."
             );
         }
 
         _addEntityCache = (Group<E> group, E entity, int index, IComponent component) -> {
-            boolean added = _collectedEntities.add(entity);
-            if (added) {
-                entity.retain(this);
-            }
+            addEntity(group, entity, index, component);
         };
         activate();
     }
@@ -45,17 +46,16 @@ public class EntityCollector<E extends Entity> {
     public void activate() {
         for (int i = 0; i < _groups.length; i++) {
             Group group = _groups[i];
-            GroupEventType eventType = _eventTypes[i];
-            if (eventType == GroupEventType.OnEntityAdded) {
+            GroupEvent groupEvent = _groupEvents[i];
+            if (groupEvent == GroupEvent.Added) {
+                _eventBus.OnEntityAdded(group).addListener(_addEntityCache);
 
-                group.OnEntityAdded = _addEntityCache;
+            } else if (groupEvent == GroupEvent.Removed) {
+                _eventBus.OnEntityRemoved(group).addListener(_addEntityCache);
 
-            } else if (eventType == GroupEventType.OnEntityRemoved) {
-                group.OnEntityRemoved = _addEntityCache;
-
-            } else if (eventType == GroupEventType.OnEntityAddedOrRemoved) {
-                group.OnEntityAdded = _addEntityCache;
-                group.OnEntityRemoved = _addEntityCache;
+            } else if (groupEvent == GroupEvent.AddedOrRemoved) {
+                _eventBus.OnEntityAdded(group).addListener(_addEntityCache);
+                _eventBus.OnEntityRemoved(group).addListener(_addEntityCache);
 
             }
         }
@@ -64,7 +64,8 @@ public class EntityCollector<E extends Entity> {
     public void deactivate() {
         for (int i = 0; i < _groups.length; i++) {
             Group group = _groups[i];
-            group.OnEntityAdded = _addEntityCache;
+            _eventBus.OnEntityAdded(group).removeListener(_addEntityCache);
+            _eventBus.OnEntityRemoved(group).removeListener(_addEntityCache);
 
         }
         clearCollectedEntities();
