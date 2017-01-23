@@ -1,6 +1,7 @@
 package com.ilargia.games.entitas.matcher;
 
 
+import com.ilargia.games.entitas.api.matcher.IMatcher;
 import com.ilargia.games.entitas.events.GroupEvent;
 
 public final class TriggerOnEvent {

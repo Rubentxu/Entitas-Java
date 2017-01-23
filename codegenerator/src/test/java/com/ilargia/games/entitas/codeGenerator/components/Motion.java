@@ -2,7 +2,7 @@ package com.ilargia.games.entitas.codeGenerator.components;
 
 import com.badlogic.gdx.math.Vector2;
 import com.ilargia.games.entitas.codeGenerator.Component;
-import com.ilargia.games.entitas.interfaces.IComponent;
+import com.ilargia.games.entitas.api.IComponent;
 
 @Component(pools = {"Core"})
 public class Motion implements IComponent {

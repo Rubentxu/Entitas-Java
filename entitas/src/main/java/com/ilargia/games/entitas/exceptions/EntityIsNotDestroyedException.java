@@ -1,5 +1,7 @@
 package com.ilargia.games.entitas.exceptions;
 
+import com.ilargia.games.entitas.api.EntitasException;
+
 public class EntityIsNotDestroyedException extends EntitasException {
 
     public EntityIsNotDestroyedException(String message) {

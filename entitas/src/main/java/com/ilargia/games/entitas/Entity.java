@@ -1,13 +1,14 @@
 package com.ilargia.games.entitas;
 
 
+import com.ilargia.games.entitas.api.ContextInfo;
 import com.ilargia.games.entitas.caching.EntitasCache;
 import com.ilargia.games.entitas.events.EventBus;
 import com.ilargia.games.entitas.exceptions.EntityAlreadyHasComponentException;
 import com.ilargia.games.entitas.exceptions.EntityDoesNotHaveComponentException;
 import com.ilargia.games.entitas.exceptions.EntityIsNotEnabledException;
 import com.ilargia.games.entitas.factories.Collections;
-import com.ilargia.games.entitas.interfaces.IComponent;
+import com.ilargia.games.entitas.api.IComponent;
 import java.util.List;
 import java.util.Set;
 import java.util.Stack;

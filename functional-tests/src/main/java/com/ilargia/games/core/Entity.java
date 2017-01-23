@@ -5,9 +5,9 @@ import com.badlogic.gdx.math.Shape2D;
 import com.badlogic.gdx.math.Vector2;
 import com.ilargia.games.components.*;
 import com.ilargia.games.components.Player.ID;
-import com.ilargia.games.entitas.ContextInfo;
+import com.ilargia.games.entitas.api.ContextInfo;
 import com.ilargia.games.entitas.events.EventBus;
-import com.ilargia.games.entitas.interfaces.IComponent;
+import com.ilargia.games.entitas.api.IComponent;
 
 import java.util.Stack;
 

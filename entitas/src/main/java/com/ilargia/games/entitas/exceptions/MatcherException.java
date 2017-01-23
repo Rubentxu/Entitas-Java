@@ -1,6 +1,6 @@
 package com.ilargia.games.entitas.exceptions;
 
-import com.ilargia.games.entitas.matcher.IMatcher;
+import com.ilargia.games.entitas.api.matcher.IMatcher;
 
 
 public class MatcherException extends RuntimeException {

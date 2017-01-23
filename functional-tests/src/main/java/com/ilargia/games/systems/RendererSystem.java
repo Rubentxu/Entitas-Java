@@ -16,8 +16,7 @@ import com.ilargia.games.core.CoreMatcher;
 import com.ilargia.games.core.Entity;
 import com.ilargia.games.core.Pool;
 import com.ilargia.games.entitas.Group;
-import com.ilargia.games.entitas.interfaces.ISetPool;
-import com.ilargia.games.entitas.interfaces.ISystem;
+import com.ilargia.games.entitas.api.system.ISystem;
 
 
 public class RendererSystem implements ISystem.IRenderSystem, ISetPool<Pool> {

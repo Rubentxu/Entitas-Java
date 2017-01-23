@@ -1,5 +1,9 @@
 package com.ilargia.games.entitas;
 
+import com.ilargia.games.entitas.api.ContextInfo;
+import com.ilargia.games.entitas.api.FactoryEntity;
+import com.ilargia.games.entitas.api.IComponent;
+import com.ilargia.games.entitas.api.system.*;
 import com.ilargia.games.entitas.components.Position;
 import com.ilargia.games.entitas.events.EventBus;
 import com.ilargia.games.entitas.events.GroupEvent;
@@ -135,7 +139,7 @@ public class SystemsTest {
 
     }
 
-    public class MoveSystem implements ISystem.IExecuteSystem, ISystem.IInitializeSystem, ISystem.ICleanupSystem, ISystem.ITearDownSystem, ISetPool<BaseContext>, ISetPools<Object> {
+    public class MoveSystem implements IExecuteSystem, IInitializeSystem, ICleanupSystem, ITearDownSystem, ISetPool<BaseContext>, ISetPools<Object> {
         public Group<Entity> _group;
         public boolean flagExecute = false;
         public boolean flagInitialize = false;

@@ -6,8 +6,7 @@ import com.ilargia.games.entitas.Group;
 import com.ilargia.games.entitas.events.EventBus;
 import com.ilargia.games.entitas.exceptions.EntityIndexException;
 import com.ilargia.games.entitas.factories.Collections;
-import com.ilargia.games.entitas.index.AbstractEntityIndex;
-import com.ilargia.games.entitas.interfaces.IComponent;
+import com.ilargia.games.entitas.api.IComponent;
 import java.util.Map;
 import java.util.Set;
 

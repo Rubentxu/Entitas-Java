@@ -4,8 +4,8 @@ import com.ilargia.games.entitas.events.EventBus;
 import com.ilargia.games.entitas.exceptions.EntityIndexException;
 import com.ilargia.games.entitas.exceptions.GroupSingleEntityException;
 import com.ilargia.games.entitas.factories.Collections;
-import com.ilargia.games.entitas.interfaces.IComponent;
-import com.ilargia.games.entitas.matcher.IMatcher;
+import com.ilargia.games.entitas.api.IComponent;
+import com.ilargia.games.entitas.api.matcher.IMatcher;
 import java.util.Iterator;
 import java.util.Set;
 

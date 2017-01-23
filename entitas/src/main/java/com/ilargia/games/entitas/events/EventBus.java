@@ -1,29 +1,28 @@
 package com.ilargia.games.entitas.events;
 
-import com.ilargia.games.entitas.BaseContext;
-import com.ilargia.games.entitas.Entity;
-import com.ilargia.games.entitas.Group;
-import com.ilargia.games.entitas.factories.Collections;
-import com.ilargia.games.entitas.interfaces.IComponent;
-import com.ilargia.games.entitas.interfaces.events.*;
-import java.util.Map;
+import com.ilargia.games.entitas.api.IComponent;
+import com.ilargia.games.entitas.api.IContext;
+import com.ilargia.games.entitas.api.IEntity;
+import com.ilargia.games.entitas.api.IGroup;
+import com.ilargia.games.entitas.api.events.*;
 
-public class EventBus<E extends Entity> {
+public class EventBus<TEntity extends IEntity> {
 
-    public Event<ContextChanged<BaseContext, E>> OnEntityCreated;
-    public Event<ContextChanged<BaseContext, E>> OnEntityWillBeDestroyed;
-    public Event<ContextChanged<BaseContext, E>> OnEntityDestroyed;
-    public Event<ContextGroupChanged<BaseContext>> OnGroupCreated;
-    public Event<ContextGroupChanged<BaseContext>> OnGroupCleared;
+    public Event<ContextEntityChanged> OnEntityCreated;
+    public Event<ContextEntityChanged> OnEntityWillBeDestroyed;
+    public Event<ContextEntityChanged> OnEntityDestroyed;
+    public Event<ContextGroupChanged> OnGroupCreated;
+    public Event<ContextGroupChanged> OnGroupCleared;
 
-    public Event<EntityChanged> OnComponentAdded;
-    public Event<EntityChanged> OnComponentRemoved;
-    public Event<ComponentReplaced> OnComponentReplaced;
+    public Event<EntityComponentChanged> OnComponentAdded;
+    public Event<EntityComponentChanged> OnComponentRemoved;
+    public Event<EntityComponentReplaced> OnComponentReplaced;
     public Event<EntityReleased> OnEntityReleased;
 
-    private Map<Group, Event<GroupChanged<E>>> OnEntityAdded;
-    private Map<Group, Event<GroupChanged<E>>> OnEntityRemoved;
-    private Map<Group, Event<GroupUpdated<E>>> OnEntityUpdated;
+    private Event<GroupChanged<TEntity>> OnEntityAdded;
+    private Event<GroupChanged<TEntity>> OnEntityRemoved;
+    private Event<GroupUpdated<TEntity>> OnEntityUpdated;
+
 
     public EventBus() {
         OnEntityCreated = new Event<>();
@@ -35,114 +34,81 @@ public class EventBus<E extends Entity> {
         OnComponentRemoved = new Event<>();
         OnComponentReplaced = new Event<>();
         OnEntityReleased = new Event<>();
-        OnEntityAdded = Collections.createMap(Group.class, GroupChanged.class);
-        OnEntityRemoved = Collections.createMap(Group.class, GroupChanged.class);
-        OnEntityUpdated = Collections.createMap(Group.class, GroupChanged.class);
+        OnEntityAdded = new Event<>();
+        OnEntityRemoved = new Event<>();
+        OnEntityUpdated = new Event<>();
 
     }
 
-    public <P extends BaseContext> void notifyEntityCreated(P pool, E entity) {
-        for (ContextChanged<BaseContext, E> listener : OnEntityCreated.listeners()) {
-            listener.poolChanged(pool, entity);
+    public void notifyEntityCreated(IContext context, IEntity entity) {
+        for (ContextEntityChanged listener : OnEntityCreated.listeners()) {
+            listener.changed(context, entity);
         }
     }
 
-    public <P extends BaseContext> void notifyEntityWillBeDestroyed(P pool, E entity) {
-        for (ContextChanged<BaseContext, E> listener : OnEntityWillBeDestroyed.listeners()) {
-            listener.poolChanged(pool, entity);
+    public void notifyEntityWillBeDestroyed(IContext context, IEntity entity) {
+        for (ContextEntityChanged listener : OnEntityWillBeDestroyed.listeners()) {
+            listener.changed(context, entity);
         }
     }
 
-    public <P extends BaseContext> void notifyEntityDestroyed(P pool, E entity) {
-        for (ContextChanged<BaseContext, E> listener : OnEntityDestroyed.listeners()) {
-            listener.poolChanged(pool, entity);
+    public void notifyEntityDestroyed(IContext context, IEntity entity) {
+        for (ContextEntityChanged listener : OnEntityDestroyed.listeners()) {
+            listener.changed(context, entity);
         }
     }
 
-    public <P extends BaseContext> void notifyGroupCreated(P pool, Group group) {
-        for (ContextGroupChanged<BaseContext> listener : OnGroupCreated.listeners()) {
-            listener.groupChanged(pool, group);
+    public void notifyGroupCreated(IContext context, IGroup group) {
+        for (ContextGroupChanged listener : OnGroupCreated.listeners()) {
+            listener.changed(context, group);
         }
     }
 
-    public <P extends BaseContext> void notifyGroupCleared(P pool, Group group) {
-        for (ContextGroupChanged<BaseContext> listener : OnGroupCleared.listeners()) {
-            listener.groupChanged(pool, group);
+    public void notifyGroupCleared(IContext context, IGroup group) {
+        for (ContextGroupChanged listener : OnGroupCleared.listeners()) {
+            listener.changed(context, group);
         }
     }
 
-    public void notifyComponentAdded(E entity, int index, IComponent component) {
-        for (EntityChanged listener : OnComponentAdded.listeners()) {
-            listener.entityChanged(entity, index, component);
+    public void notifyComponentAdded(IEntity entity, int index, IComponent component) {
+        for (EntityComponentChanged listener : OnComponentAdded.listeners()) {
+            listener.changed(entity, index, component);
         }
     }
 
-    public void notifyComponentRemoved(E entity, int index, IComponent component) {
-        for (EntityChanged listener : OnComponentRemoved.listeners()) {
-            listener.entityChanged(entity, index, component);
+    public void notifyComponentRemoved(IEntity entity, int index, IComponent component) {
+        for (EntityComponentChanged listener : OnComponentRemoved.listeners()) {
+            listener.changed(entity, index, component);
         }
     }
 
-    public void notifyComponentReplaced(E entity, int index, IComponent previousComponent, IComponent newComponent) {
-        for (ComponentReplaced listener : OnComponentReplaced.listeners()) {
-            listener.componentReplaced(entity, index, previousComponent, newComponent);
+    public void notifyComponentReplaced(IEntity entity, int index, IComponent previousComponent, IComponent newComponent) {
+        for (EntityComponentReplaced listener : OnComponentReplaced.listeners()) {
+            listener.replaced(entity, index, previousComponent, newComponent);
         }
     }
 
-    public void notifyEntityReleased(E entity) {
+    public void notifyEntityReleased(IEntity entity) {
         for (EntityReleased listener : OnEntityReleased.listeners()) {
-            listener.entityReleased(entity);
+            listener.released(entity);
         }
     }
 
-    public Event<GroupChanged<E>> OnEntityAdded(Group<E> group) {
-        Event<GroupChanged<E>> event = OnEntityAdded.get(group);
-        if (event == null) {
-            event = new Event<>();
-        }
-        return event;
-    }
-
-    public void notifyOnEntityAdded(Group<E> group, E entity, int index, IComponent component) {
-        Event<GroupChanged<E>> events = OnEntityAdded.get(group);
-        if (events != null) {
-            for (GroupChanged<E> listener : OnEntityAdded.get(group).listeners()) {
-                listener.groupChanged(group, entity, index, component);
-            }
+    public void notifyOnEntityAdded(IGroup<TEntity> group, TEntity entity, int index, IComponent component) {
+        for (GroupChanged<TEntity> listener : OnEntityAdded.listeners()) {
+            listener.changed(group, entity, index, component);
         }
     }
 
-    public Event<GroupChanged<E>> OnEntityRemoved(Group<E> group) {
-        Event<GroupChanged<E>> event = OnEntityRemoved.get(group);
-        if (event == null) {
-            event = new Event<>();
-        }
-        return event;
-    }
-
-    public void notifyOnEntityRemoved(Group<E> group, E entity, int index, IComponent component) {
-        Event<GroupChanged<E>> events = OnEntityRemoved.get(group);
-        if (events != null) {
-            for (GroupChanged<E> listener : OnEntityRemoved.get(group).listeners()) {
-                listener.groupChanged(group, entity, index, component);
-            }
+    public void notifyOnEntityRemoved(IGroup<TEntity> group, TEntity entity, int index, IComponent component) {
+        for (GroupChanged<TEntity> listener : OnEntityRemoved.listeners()) {
+            listener.changed(group, entity, index, component);
         }
     }
 
-    public  Event<GroupUpdated<E>> OnEntityUpdated(Group<E> group) {
-        Event<GroupUpdated<E>> event = OnEntityUpdated.get(group);
-        if (event == null) {
-            event = new Event<>();
-        }
-        return event;
-    }
-
-    public void notifyOnEntityUpdated(Group<E> group, E entity, int index, IComponent component, IComponent newComponent) {
-        Event<GroupUpdated<E>> events = OnEntityUpdated.get(group);
-        if (events != null) {
-            for (GroupUpdated<E> listener : OnEntityUpdated.get(group).listeners()) {
-                listener.groupUpdated(group, entity, index, component, newComponent);
-            }
+    public void notifyOnEntityUpdated(IGroup<TEntity> group, TEntity entity, int index, IComponent component, IComponent newComponent) {
+        for (GroupUpdated<TEntity> listener : OnEntityUpdated.listeners()) {
+            listener.updated(group, entity, index, component, newComponent);
         }
     }
 
@@ -158,7 +124,6 @@ public class EventBus<E extends Entity> {
         OnEntityUpdated.clear();
 
     }
-
 
 
 }

@@ -1,16 +1,17 @@
 package com.ilargia.games.entitas;
 
+import com.ilargia.games.entitas.api.ContextInfo;
 import com.ilargia.games.entitas.events.EventBus;
 import com.ilargia.games.entitas.events.GroupEvent;
 import com.ilargia.games.entitas.exceptions.*;
 import com.ilargia.games.entitas.factories.Collections;
-import com.ilargia.games.entitas.interfaces.FactoryEntity;
-import com.ilargia.games.entitas.interfaces.IComponent;
+import com.ilargia.games.entitas.api.FactoryEntity;
+import com.ilargia.games.entitas.api.IComponent;
 import com.ilargia.games.entitas.index.IEntityIndex;
-import com.ilargia.games.entitas.matcher.IMatcher;
-import com.ilargia.games.entitas.interfaces.events.ComponentReplaced;
-import com.ilargia.games.entitas.interfaces.events.EntityChanged;
-import com.ilargia.games.entitas.interfaces.events.EntityReleased;
+import com.ilargia.games.entitas.api.matcher.IMatcher;
+import com.ilargia.games.entitas.api.events.EntityComponentReplaced;
+import com.ilargia.games.entitas.api.events.EntityComponentChanged;
+import com.ilargia.games.entitas.api.events.EntityReleased;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -67,12 +68,12 @@ public class BaseContext<E extends Entity, P extends BaseContext> {
         _entities = Collections.createSet(Entity.class);
         _groups = Collections.createMap(IMatcher.class, Group.class);
 
-        EntityChanged<E> _cachedEntityChanged = (E e, int idx, IComponent c) -> {
+        EntityComponentChanged<E> _cachedEntityChanged = (E e, int idx, IComponent c) -> {
             updateGroupsComponentAddedOrRemoved(e, idx, c, _groupsForIndex);
         };
         _eventBus.OnComponentAdded.addListener(_cachedEntityChanged);
         _eventBus.OnComponentRemoved.addListener(_cachedEntityChanged);
-        _eventBus.OnComponentReplaced.addListener((ComponentReplaced<E>) (E e, int idx, IComponent pc, IComponent nc) -> {
+        _eventBus.OnComponentReplaced.addListener((EntityComponentReplaced<E>) (E e, int idx, IComponent pc, IComponent nc) -> {
             updateGroupsComponentReplaced(e, idx, pc, nc, _groupsForIndex);
         });
         _eventBus.OnEntityReleased.addListener((EntityReleased<E>) (E e) -> {

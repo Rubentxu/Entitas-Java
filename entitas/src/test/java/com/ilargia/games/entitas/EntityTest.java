@@ -1,5 +1,6 @@
 package com.ilargia.games.entitas;
 
+import com.ilargia.games.entitas.api.ContextInfo;
 import com.ilargia.games.entitas.caching.EntitasCache;
 import com.ilargia.games.entitas.components.Interactive;
 import com.ilargia.games.entitas.components.Motion;
@@ -11,7 +12,7 @@ import com.ilargia.games.entitas.exceptions.EntityDoesNotHaveComponentException;
 import com.ilargia.games.entitas.exceptions.EntityIsNotEnabledException;
 import com.ilargia.games.entitas.factories.Collections;
 import com.ilargia.games.entitas.factories.CollectionsFactory;
-import com.ilargia.games.entitas.interfaces.IComponent;
+import com.ilargia.games.entitas.api.IComponent;
 import com.ilargia.games.entitas.utils.TestComponentIds;
 import org.junit.Before;
 import org.junit.Rule;

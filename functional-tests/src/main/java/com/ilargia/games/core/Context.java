@@ -1,9 +1,9 @@
 package com.ilargia.games.core;
 
-import com.ilargia.games.entitas.ContextInfo;
+import com.ilargia.games.entitas.api.ContextInfo;
 import com.ilargia.games.entitas.events.EventBus;
-import com.ilargia.games.entitas.interfaces.FactoryEntity;
-import com.ilargia.games.entitas.interfaces.IComponent;
+import com.ilargia.games.entitas.api.FactoryEntity;
+import com.ilargia.games.entitas.api.IComponent;
 
 import java.util.Stack;
 

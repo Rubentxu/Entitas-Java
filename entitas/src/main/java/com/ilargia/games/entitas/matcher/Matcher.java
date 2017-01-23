@@ -1,6 +1,10 @@
 package com.ilargia.games.entitas.matcher;
 
 import com.ilargia.games.entitas.Entity;
+import com.ilargia.games.entitas.api.matcher.IAllOfMatcher;
+import com.ilargia.games.entitas.api.matcher.IAnyOfMatcher;
+import com.ilargia.games.entitas.api.matcher.IMatcher;
+import com.ilargia.games.entitas.api.matcher.INoneOfMatcher;
 import com.ilargia.games.entitas.caching.EntitasCache;
 import com.ilargia.games.entitas.events.GroupEvent;
 import com.ilargia.games.entitas.exceptions.MatcherException;

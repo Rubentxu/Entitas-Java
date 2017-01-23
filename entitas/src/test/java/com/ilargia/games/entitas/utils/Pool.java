@@ -1,8 +1,8 @@
 package com.ilargia.games.entitas.utils;
 
 import com.ilargia.games.entitas.BaseContext;
-import com.ilargia.games.entitas.ContextInfo;
-import com.ilargia.games.entitas.interfaces.FactoryEntity;
+import com.ilargia.games.entitas.api.ContextInfo;
+import com.ilargia.games.entitas.api.FactoryEntity;
 import com.ilargia.games.entitas.events.EventBus;
 
 /**

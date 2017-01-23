@@ -2,10 +2,10 @@ package com.ilargia.games.core;
 
 import com.ilargia.games.components.Ball;
 import com.ilargia.games.entitas.BaseContext;
-import com.ilargia.games.entitas.ContextInfo;
+import com.ilargia.games.entitas.api.ContextInfo;
 import com.ilargia.games.entitas.events.EventBus;
-import com.ilargia.games.entitas.exceptions.EntitasException;
-import com.ilargia.games.entitas.interfaces.FactoryEntity;
+import com.ilargia.games.entitas.api.EntitasException;
+import com.ilargia.games.entitas.api.FactoryEntity;
 
 /**
  * ---------------------------------------------------------------------------

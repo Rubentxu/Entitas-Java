@@ -1,4 +1,4 @@
-package com.ilargia.games.entitas;
+package com.ilargia.games.entitas.api;
 
 
 public class ContextInfo {

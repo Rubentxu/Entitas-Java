@@ -3,8 +3,8 @@ package com.ilargia.games.entitas.index;
 import com.ilargia.games.entitas.Entity;
 import com.ilargia.games.entitas.Group;
 import com.ilargia.games.entitas.events.EventBus;
-import com.ilargia.games.entitas.interfaces.IComponent;
-import com.ilargia.games.entitas.interfaces.events.GroupChanged;
+import com.ilargia.games.entitas.api.IComponent;
+import com.ilargia.games.entitas.api.events.GroupChanged;
 
 public abstract class AbstractEntityIndex<K, E extends Entity> implements IEntityIndex {
 

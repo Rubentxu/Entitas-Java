@@ -4,8 +4,8 @@ import com.ilargia.games.entitas.events.EventBus;
 import com.ilargia.games.entitas.events.GroupEvent;
 import com.ilargia.games.entitas.exceptions.EntityCollectorException;
 import com.ilargia.games.entitas.factories.Collections;
-import com.ilargia.games.entitas.interfaces.IComponent;
-import com.ilargia.games.entitas.interfaces.events.GroupChanged;
+import com.ilargia.games.entitas.api.IComponent;
+import com.ilargia.games.entitas.api.events.GroupChanged;
 import java.util.Set;
 
 public class Collector<E extends Entity> {

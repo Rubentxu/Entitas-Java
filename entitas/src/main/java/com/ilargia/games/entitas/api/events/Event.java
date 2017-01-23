@@ -1,4 +1,4 @@
-package com.ilargia.games.entitas.events;
+package com.ilargia.games.entitas.api.events;
 
 import com.ilargia.games.entitas.BaseContext;
 import com.ilargia.games.entitas.factories.Collections;

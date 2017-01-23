@@ -1,14 +1,14 @@
 package com.ilargia.games.entitas;
 
+import com.ilargia.games.entitas.api.system.IExecuteSystem;
 import com.ilargia.games.entitas.events.EventBus;
 import com.ilargia.games.entitas.events.GroupEvent;
 import com.ilargia.games.entitas.factories.Collections;
-import com.ilargia.games.entitas.interfaces.*;
 import com.ilargia.games.entitas.matcher.TriggerOnEvent;
 
 import java.util.List;
 
-public abstract class ReactiveSystem implements ISystem.IExecuteSystem {
+public abstract class ReactiveSystem implements IExecuteSystem {
 
     private Collector<Entity> _collector;
     private List<Entity> _buffer;//ObjectArrayList

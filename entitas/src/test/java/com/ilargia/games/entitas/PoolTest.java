@@ -1,13 +1,14 @@
 package com.ilargia.games.entitas;
 
+import com.ilargia.games.entitas.api.ContextInfo;
 import com.ilargia.games.entitas.components.Position;
 import com.ilargia.games.entitas.events.EventBus;
 import com.ilargia.games.entitas.exceptions.*;
 import com.ilargia.games.entitas.factories.Collections;
 import com.ilargia.games.entitas.factories.CollectionsFactory;
 import com.ilargia.games.entitas.index.PrimaryEntityIndex;
-import com.ilargia.games.entitas.interfaces.FactoryEntity;
-import com.ilargia.games.entitas.interfaces.IComponent;
+import com.ilargia.games.entitas.api.FactoryEntity;
+import com.ilargia.games.entitas.api.IComponent;
 import com.ilargia.games.entitas.utils.TestComponentIds;
 import com.ilargia.games.entitas.utils.TestMatcher;
 import org.junit.Before;

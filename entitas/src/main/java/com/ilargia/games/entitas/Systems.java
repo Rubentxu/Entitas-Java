@@ -1,12 +1,13 @@
 package com.ilargia.games.entitas;
 
+import com.ilargia.games.entitas.api.system.*;
 import com.ilargia.games.entitas.events.EventBus;
 import com.ilargia.games.entitas.factories.Collections;
-import com.ilargia.games.entitas.interfaces.*;
+
 import java.util.List;
 
 
-public class Systems implements ISystem.IInitializeSystem, ISystem.IExecuteSystem, ISystem.ICleanupSystem, ISystem.ITearDownSystem {
+public class Systems implements IInitializeSystem, IExecuteSystem, ICleanupSystem, ITearDownSystem {
 
     private final EventBus _eventBus;
     private List<IInitializeSystem> _initializeSystems; // ObjectArrayList
