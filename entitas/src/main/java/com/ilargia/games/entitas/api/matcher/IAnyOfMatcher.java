@@ -1,9 +1,11 @@
 package com.ilargia.games.entitas.api.matcher;
 
-public interface IAnyOfMatcher extends ICompoundMatcher {
+import com.ilargia.games.entitas.api.IEntity;
 
-    INoneOfMatcher noneOf(int... indices);
+public interface IAnyOfMatcher<TEntity extends IEntity> extends INoneOfMatcher<TEntity> {
 
-    INoneOfMatcher noneOf(IMatcher... matchers);
+    INoneOfMatcher<TEntity> noneOf(int... indices);
+
+    INoneOfMatcher<TEntity> noneOf(IMatcher<TEntity>... matchers);
 
 }

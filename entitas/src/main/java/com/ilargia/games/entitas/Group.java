@@ -1,5 +1,6 @@
 package com.ilargia.games.entitas;
 
+import com.ilargia.games.entitas.api.IEntity;
 import com.ilargia.games.entitas.events.EventBus;
 import com.ilargia.games.entitas.exceptions.EntityIndexException;
 import com.ilargia.games.entitas.exceptions.GroupSingleEntityException;
@@ -9,7 +10,7 @@ import com.ilargia.games.entitas.api.matcher.IMatcher;
 import java.util.Iterator;
 import java.util.Set;
 
-public class Group<E extends Entity> {
+public class Group<E extends IEntity> {
 
     private final Set<E> _entities; // ObjectOpenHashSet
     private final EventBus _eventBus;

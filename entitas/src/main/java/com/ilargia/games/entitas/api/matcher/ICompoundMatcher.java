@@ -1,6 +1,8 @@
 package com.ilargia.games.entitas.api.matcher;
 
-public interface ICompoundMatcher extends IMatcher {
+import com.ilargia.games.entitas.api.IEntity;
+
+public interface ICompoundMatcher<TEntity extends IEntity> extends IMatcher<TEntity> {
 
     int[] getAllOfIndices();
 

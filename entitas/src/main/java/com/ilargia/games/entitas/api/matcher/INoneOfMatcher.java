@@ -1,4 +1,6 @@
 package com.ilargia.games.entitas.api.matcher;
 
-public interface INoneOfMatcher extends ICompoundMatcher {
+import com.ilargia.games.entitas.api.IEntity;
+
+public interface INoneOfMatcher<TEntity extends IEntity> extends ICompoundMatcher<TEntity> {
 }

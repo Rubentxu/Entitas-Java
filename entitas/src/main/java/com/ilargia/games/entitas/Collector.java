@@ -1,5 +1,6 @@
 package com.ilargia.games.entitas;
 
+import com.ilargia.games.entitas.api.IEntity;
 import com.ilargia.games.entitas.events.EventBus;
 import com.ilargia.games.entitas.events.GroupEvent;
 import com.ilargia.games.entitas.exceptions.EntityCollectorException;
@@ -8,23 +9,23 @@ import com.ilargia.games.entitas.api.IComponent;
 import com.ilargia.games.entitas.api.events.GroupChanged;
 import java.util.Set;
 
-public class Collector<E extends Entity> {
+public class Collector<TEntity extends IEntity> {
 
-    private final EventBus<E> _eventBus;
-    public Set<E> _collectedEntities; //ObjectOpenHashSet
-    private Group<E>[] _groups;
+    private final EventBus<TEntity> _eventBus;
+    public Set<TEntity> _collectedEntities; //ObjectOpenHashSet
+    private Group<TEntity>[] _groups;
     private GroupEvent[] _groupEvents;
-    GroupChanged<E> _addEntityCache;
+    GroupChanged<TEntity> _addEntityCache;
     String _toStringCache;
     StringBuilder _toStringBuilder;
 
 
-    public Collector(Group group, GroupEvent eventType, EventBus<E> eventBus) {
+    public Collector(Group group, GroupEvent eventType, EventBus<TEntity> eventBus) {
         this(new Group[]{group}, new GroupEvent[]{eventType}, eventBus);
 
     }
 
-    public Collector(Group<E>[] groups, GroupEvent[] groupEvents, EventBus<E> eventBus) {
+    public Collector(Group<TEntity>[] groups, GroupEvent[] groupEvents, EventBus<TEntity> eventBus) {
         _groups = groups;
         _collectedEntities = Collections.createSet(Entity.class);
         _groupEvents = groupEvents;
@@ -37,7 +38,7 @@ public class Collector<E extends Entity> {
             );
         }
 
-        _addEntityCache = (Group<E> group, E entity, int index, IComponent component) -> {
+        _addEntityCache = (Group<TEntity> group, TEntity entity, int index, IComponent component) -> {
             addEntity(group, entity, index, component);
         };
         activate();
@@ -79,7 +80,7 @@ public class Collector<E extends Entity> {
 
     }
 
-    void addEntity(Group group, E entity, int index, IComponent component) {
+    void addEntity(Group group, TEntity entity, int index, IComponent component) {
         boolean added = _collectedEntities.add(entity);
         if (added) {
             entity.retain(this);

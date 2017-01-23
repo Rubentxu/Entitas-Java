@@ -1,6 +1,7 @@
 package com.ilargia.games.entitas.matcher;
 
 import com.ilargia.games.entitas.Entity;
+import com.ilargia.games.entitas.api.IEntity;
 import com.ilargia.games.entitas.api.matcher.IAllOfMatcher;
 import com.ilargia.games.entitas.api.matcher.IAnyOfMatcher;
 import com.ilargia.games.entitas.api.matcher.IMatcher;
@@ -14,9 +15,9 @@ import java.util.List;
 import java.util.Set;
 
 
-public class Matcher implements IAllOfMatcher, IAnyOfMatcher, INoneOfMatcher {
+public class Matcher<TEntity extends IEntity> implements IAllOfMatcher<TEntity>, IAnyOfMatcher, INoneOfMatcher {
 
-    public String[] componentNames;
+    public String[] _componentNames;
     private int[] _indices;
     private int[] _allOfIndices;
     private int[] _anyOfIndices;
@@ -25,26 +26,96 @@ public class Matcher implements IAllOfMatcher, IAnyOfMatcher, INoneOfMatcher {
     private boolean _isHashCached;
     private String _toStringCache;
 
+
     private Matcher() {
     }
 
-    private static String[] getComponentNames(IMatcher[] matchers) {
-        for (int i = 0; i < matchers.length; i++) {
-            Matcher matcher = (Matcher) ((matchers[i] instanceof Matcher) ? matchers[i] : null);
-            if (matcher != null && matcher.componentNames != null) {
-                return matcher.componentNames;
-            }
+    public int[] getIndices() {
+        if (_indices == null) {
+            _indices = mergeIndices(_allOfIndices, _anyOfIndices, _noneOfIndices);
         }
-
-        return null;
+        return _indices;
     }
 
-    private static void setComponentNames(Matcher matcher, IMatcher[] matchers) {
-        String[] componentNames = getComponentNames(matchers);
-        if (componentNames != null) {
-            matcher.componentNames = componentNames;
-        }
+    public int[] getAllOfIndices() {
+        return _allOfIndices;
     }
+
+    public int[] getAnyOfIndices() {
+        return _anyOfIndices;
+    }
+
+    public int[] getNoneOfIndices() {
+        return _noneOfIndices;
+    }
+
+    private String[] getComponentNames() {
+        return _componentNames;
+    }
+
+    private void setComponentNames(String[] componentNames) {
+        this._componentNames = componentNames;
+    }
+
+
+    @Override
+    public IAnyOfMatcher<TEntity> anyOf(int... indices) {
+        _anyOfIndices = distinctIndices(indices);
+        _indices = null;
+        return this;
+    }
+
+    @Override
+    public IAnyOfMatcher<TEntity> anyOf(IMatcher<TEntity>... matchers) {
+        return ((IAllOfMatcher<TEntity>) this).anyOf(mergeIndices(matchers));
+    }
+
+    public INoneOfMatcher<TEntity> NoneOf(params int[] indices) {
+        _noneOfIndices = distinctIndices(indices);
+        _indices = null;
+        return this;
+    }
+
+    @Override
+    public boolean matches(IEntity entity) {
+        boolean matchesAllOf = _allOfIndices == null || entity.hasComponents(_allOfIndices);
+        boolean matchesAnyOf = _anyOfIndices == null || entity.hasAnyComponent(_anyOfIndices);
+        boolean matchesNoneOf = _noneOfIndices == null || !entity.hasAnyComponent(_noneOfIndices);
+        return matchesAllOf && matchesAnyOf && matchesNoneOf;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     private static int[] distinctIndices(int... indices) {
         Set<Integer> indicesSet = EntitasCache.getIntHashSet(); // IntArraySet
@@ -163,34 +234,10 @@ public class Matcher implements IAllOfMatcher, IAnyOfMatcher, INoneOfMatcher {
         return indices;
     }
 
-    public int[] getAllOfIndices() {
-        return _allOfIndices;
-    }
 
-    public int[] getAnyOfIndices() {
-        return _anyOfIndices;
-    }
 
-    public int[] getIndices() {
-        if (_indices == null) {
-            _indices = mergeIndices();
-        }
-        return _indices;
-    }
 
-    public int[] getNoneOfIndices() {
-        return _noneOfIndices;
-    }
 
-    public IAnyOfMatcher anyOf(int... indices) {
-        _anyOfIndices = distinctIndices(indices);
-        _indices = null;
-        return this;
-    }
-
-    public IAnyOfMatcher anyOf(IMatcher... matchers) {
-        return ((IAllOfMatcher) this).anyOf(MergeIndices(matchers));
-    }
 
     public INoneOfMatcher noneOf(int... indices) {
         _noneOfIndices = distinctIndices(indices);
@@ -307,5 +354,8 @@ public class Matcher implements IAllOfMatcher, IAnyOfMatcher, INoneOfMatcher {
 
         return _toStringCache;
     }
+
+
+
 
 }

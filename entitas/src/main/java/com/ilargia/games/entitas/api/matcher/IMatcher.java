@@ -7,6 +7,6 @@ public interface IMatcher<TEntity extends IEntity> {
 
     int[] getIndices();
 
-    boolean matches(Entity entity);
+    boolean matches(TEntity entity);
 
 }

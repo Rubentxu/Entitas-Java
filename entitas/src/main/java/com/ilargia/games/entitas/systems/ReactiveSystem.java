@@ -1,6 +1,13 @@
-package com.ilargia.games.entitas;
+package com.ilargia.games.entitas.systems;
 
+import com.ilargia.games.entitas.BaseContext;
+import com.ilargia.games.entitas.Collector;
+import com.ilargia.games.entitas.Entity;
+import com.ilargia.games.entitas.Group;
+import com.ilargia.games.entitas.api.IContext;
+import com.ilargia.games.entitas.api.IEntity;
 import com.ilargia.games.entitas.api.system.IExecuteSystem;
+import com.ilargia.games.entitas.api.system.IReactiveSystem;
 import com.ilargia.games.entitas.events.EventBus;
 import com.ilargia.games.entitas.events.GroupEvent;
 import com.ilargia.games.entitas.factories.Collections;
@@ -8,41 +15,27 @@ import com.ilargia.games.entitas.matcher.TriggerOnEvent;
 
 import java.util.List;
 
-public abstract class ReactiveSystem implements IExecuteSystem {
+public abstract class ReactiveSystem<TEntity extends IEntity> implements IReactiveSystem {
 
-    private Collector<Entity> _collector;
-    private List<Entity> _buffer;//ObjectArrayList
+    private Collector<TEntity> _collector;
+    private List<TEntity> _buffer;
     private String _toStringCache;
 
-    protected ReactiveSystem(BaseContext context) {
-        _collector = GetTrigger(context);
+    protected ReactiveSystem(IContext<TEntity> context) {
+        _collector = getTrigger(context);
         _buffer = Collections.createList(Entity.class);
     }
 
-    protected ReactiveSystem(Collector collector) {
+    protected ReactiveSystem(Collector<TEntity> collector) {
         _collector = collector;
         _buffer = Collections.createList(Entity.class);
     }
 
-    protected abstract Collector GetTrigger(BaseContext context);
+    protected abstract Collector<TEntity> getTrigger(IContext<TEntity> context);
 
-    protected abstract boolean Filter(Entity entity);
+    protected abstract boolean filter(TEntity entity);
 
-    protected abstract void Execute(List<Entity> entities);
-
-
-    static Collector createEntityCollector(BaseContext contexts, TriggerOnEvent[] triggers, EventBus eventBus) {
-        int triggersLength = triggers.length;
-        Group[] groups = new Group[triggersLength];
-        GroupEvent[] eventTypes = new GroupEvent[triggersLength];
-        for (int i = 0; i < triggersLength; i++) {
-            TriggerOnEvent trigger = triggers[i];
-            groups[i] = contexts.getGroup(trigger.trigger);
-            eventTypes[i] = trigger.eventType;
-        }
-
-        return new Collector(groups, eventTypes, eventBus);
-    }
+    protected abstract void execute(List<TEntity> entities);
 
     public void activate() {
         _collector.activate();
@@ -57,10 +50,9 @@ public abstract class ReactiveSystem implements IExecuteSystem {
     }
 
     public void execute(float deltatime) {
-
         if (_collector._collectedEntities.size() != 0) {
-            for(Entity e : _collector._collectedEntities) {
-                if(Filter(e)) {
+            for(TEntity e : _collector._collectedEntities) {
+                if(filter(e)) {
                     e.retain(this);
                     _buffer.add(e);
                 }
@@ -68,7 +60,7 @@ public abstract class ReactiveSystem implements IExecuteSystem {
             _collector.clearCollectedEntities();
 
             if(_buffer.size() != 0) {
-                Execute(_buffer);
+                execute(_buffer);
                 for (int i = 0; i < _buffer.size(); i++) {
                     _buffer.get(i).release(this);
                 }
@@ -85,4 +77,5 @@ public abstract class ReactiveSystem implements IExecuteSystem {
 
         return _toStringCache;
     }
+
 }

@@ -12,6 +12,7 @@ import com.ilargia.games.entitas.factories.CollectionsFactory;
 import com.ilargia.games.entitas.interfaces.*;
 import com.ilargia.games.entitas.matcher.Matcher;
 import com.ilargia.games.entitas.matcher.TriggerOnEvent;
+import com.ilargia.games.entitas.systems.Systems;
 import com.ilargia.games.entitas.utils.TestComponentIds;
 import com.ilargia.games.entitas.utils.TestMatcher;
 import org.junit.Before;

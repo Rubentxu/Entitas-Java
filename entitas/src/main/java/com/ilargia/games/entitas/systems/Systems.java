@@ -1,4 +1,4 @@
-package com.ilargia.games.entitas;
+package com.ilargia.games.entitas.systems;
 
 import com.ilargia.games.entitas.api.system.*;
 import com.ilargia.games.entitas.events.EventBus;
@@ -9,28 +9,25 @@ import java.util.List;
 
 public class Systems implements IInitializeSystem, IExecuteSystem, ICleanupSystem, ITearDownSystem {
 
-    private final EventBus _eventBus;
+
     private List<IInitializeSystem> _initializeSystems; // ObjectArrayList
     private List<IExecuteSystem> _executeSystems;
     private List<ICleanupSystem> _cleanupSystems;
-    private List<IRenderSystem> _renderSystems;
     private List<ITearDownSystem> _tearDownSystems;
 
-    public Systems(EventBus eventBus) {
+    public Systems() {
         _initializeSystems = Collections.createList(ISystem.class);
         _executeSystems = Collections.createList(ISystem.class);
         _cleanupSystems = Collections.createList(ISystem.class);
-        _renderSystems = Collections.createList(ISystem.class);
         _tearDownSystems = Collections.createList(ISystem.class);
-        _eventBus = eventBus;
+
     }
 
-    public Systems addSystem(ISystem system) {
+    public Systems add(ISystem system) {
         if(system != null) {
             if (system instanceof IInitializeSystem) _initializeSystems.add((IInitializeSystem) system);
             if (system instanceof IExecuteSystem) _executeSystems.add((IExecuteSystem) system);
             if (system instanceof ICleanupSystem) _cleanupSystems.add((ICleanupSystem) system);
-            if (system instanceof IRenderSystem) _renderSystems.add((IRenderSystem) system);
             if (system instanceof ITearDownSystem) _tearDownSystems.add((ITearDownSystem) system);
         }
         return this;
@@ -51,12 +48,6 @@ public class Systems implements IInitializeSystem, IExecuteSystem, ICleanupSyste
     public void cleanup() {
         for (ICleanupSystem clSystem : _cleanupSystems) {
             clSystem.cleanup();
-        }
-    }
-
-    public void render() {
-        for (IRenderSystem renderSystem : _renderSystems) {
-            renderSystem.render();
         }
     }
 
@@ -112,7 +103,6 @@ public class Systems implements IInitializeSystem, IExecuteSystem, ICleanupSyste
         _initializeSystems.clear();
         _executeSystems.clear();
         _cleanupSystems.clear();
-        _renderSystems.clear();
         _tearDownSystems.clear();
 
     }

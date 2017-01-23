@@ -1,7 +1,7 @@
 package com.ilargia.games.egdx.base;
 
 import com.ilargia.games.egdx.base.interfaces.GameState;
-import com.ilargia.games.entitas.Systems;
+import com.ilargia.games.entitas.systems.Systems;
 
 public abstract class BaseGameState implements GameState {
     protected final Systems systems;
