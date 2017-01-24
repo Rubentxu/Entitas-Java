@@ -1,6 +1,5 @@
 package com.ilargia.games.entitas.api.events;
 
-import com.ilargia.games.entitas.Group;
 import com.ilargia.games.entitas.api.IComponent;
 import com.ilargia.games.entitas.api.IEntity;
 import com.ilargia.games.entitas.api.IGroup;

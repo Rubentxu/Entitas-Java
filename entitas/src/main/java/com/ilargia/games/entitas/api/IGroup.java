@@ -5,13 +5,14 @@ import com.ilargia.games.entitas.api.matcher.IMatcher;
 
 public interface IGroup<TEntity extends IEntity> {
 
-    int count();
+    int getCount();
 
     void removeAllEventHandlers();
 
-    IMatcher<TEntity> matcher();
+    IMatcher<TEntity> getMatcher();
 
     void handleEntitySilently(TEntity entity);
+
     void handleEntity(TEntity entity, int index, IComponent component);
 
     GroupChanged<TEntity> handleEntity(TEntity entity);
@@ -21,6 +22,7 @@ public interface IGroup<TEntity extends IEntity> {
     boolean containsEntity(TEntity entity);
 
     TEntity[] getEntities();
+
     TEntity getSingleEntity();
 
 }

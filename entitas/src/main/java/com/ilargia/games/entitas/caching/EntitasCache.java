@@ -1,9 +1,10 @@
 package com.ilargia.games.entitas.caching;
 
 
-import com.ilargia.games.entitas.factories.Collections;
 import com.ilargia.games.entitas.api.IComponent;
 import com.ilargia.games.entitas.api.events.GroupChanged;
+import com.ilargia.games.entitas.factories.Collections;
+
 import java.util.List;
 import java.util.Set;
 

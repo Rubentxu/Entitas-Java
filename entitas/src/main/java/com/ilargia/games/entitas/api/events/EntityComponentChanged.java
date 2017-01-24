@@ -5,7 +5,7 @@ import com.ilargia.games.entitas.api.IComponent;
 import com.ilargia.games.entitas.api.IEntity;
 
 @FunctionalInterface
-public interface EntityComponentChanged {
-    void changed(final IEntity entity, final int index, final IComponent component);
+public interface EntityComponentChanged<TEntity extends IEntity> {
+    void changed(final TEntity entity, final int index, final IComponent component);
 
 }

@@ -2,21 +2,20 @@ package com.ilargia.games.entitas;
 
 
 import com.ilargia.games.entitas.api.ContextInfo;
+import com.ilargia.games.entitas.api.IComponent;
+import com.ilargia.games.entitas.api.IEntity;
 import com.ilargia.games.entitas.caching.EntitasCache;
 import com.ilargia.games.entitas.events.EventBus;
-import com.ilargia.games.entitas.exceptions.EntityAlreadyHasComponentException;
-import com.ilargia.games.entitas.exceptions.EntityDoesNotHaveComponentException;
-import com.ilargia.games.entitas.exceptions.EntityIsNotEnabledException;
+import com.ilargia.games.entitas.exceptions.*;
 import com.ilargia.games.entitas.factories.Collections;
-import com.ilargia.games.entitas.api.IComponent;
+
 import java.util.List;
 import java.util.Set;
 import java.util.Stack;
 
-public class Entity {
+public class Entity implements IEntity {
 
-    public Set<Object> owners; //ObjectOpenHashSet
-    public int _retainCount;
+    private Set<Object> owners; //ObjectOpenHashSet
     private int _creationIndex;
     private boolean _isEnabled;
     private IComponent[] _components;
@@ -27,6 +26,7 @@ public class Entity {
     private int _totalComponents;
     private ContextInfo _contextInfo;
     private EventBus _eventBus;
+    private StringBuilder _toStringBuilder;
 
     public Entity(int totalComponents, Stack<IComponent>[] componentPools, ContextInfo contextInfo, EventBus eventBus) {
         _components = new IComponent[totalComponents];
@@ -48,7 +48,55 @@ public class Entity {
         }
     }
 
-    public Entity addComponent(int index, IComponent component) {
+    @Override
+    public int getTotalComponents() {
+        return _totalComponents;
+    }
+
+    @Override
+    public int getCreationIndex() {
+        return _creationIndex;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return _isEnabled;
+    }
+
+    @Override
+    public Stack<IComponent>[] componentPools() {
+        return new Stack[0];
+    }
+
+    @Override
+    public ContextInfo contextInfo() {
+        return _contextInfo;
+    }
+
+    @Override
+    public void initialize(int creationIndex, int totalComponents, Stack<IComponent>[] componentPools, ContextInfo contextInfo) {
+        reactivate(creationIndex);
+
+        _totalComponents = totalComponents;
+        _components = new IComponent[totalComponents];
+        _componentPools = componentPools;
+
+        if(contextInfo != null) {
+            _contextInfo = contextInfo;
+        } else {
+            _contextInfo = createDefaultContextInfo();
+        }
+
+    }
+
+    @Override
+    public void reactivate(int creationIndex) {
+        _creationIndex = creationIndex;
+        _isEnabled = true;
+    }
+
+    @Override
+    public void addComponent(int index, IComponent component) {
         if (!_isEnabled) {
             throw new EntityIsNotEnabledException("Cannot add component '" + _contextInfo.componentNames[index] + "' to " + this + "!");
         }
@@ -64,11 +112,11 @@ public class Entity {
         _componentIndicesCache = null;
         _toStringCache = null;
         _eventBus.notifyComponentAdded(this, index, component);
-        return this;
 
     }
 
-    public Entity removeComponent(int index) {
+    @Override
+    public void removeComponent(int index) {
         if (!_isEnabled) {
             throw new EntityIsNotEnabledException("Cannot remove component!" +
                     _contextInfo.componentNames[index] + "' from " + this + "!");
@@ -81,10 +129,10 @@ public class Entity {
         }
         replaceComponentInternal(index, null);
 
-        return this;
     }
 
-    public Entity replaceComponent(int index, IComponent component) {
+    @Override
+    public void replaceComponent(int index, IComponent component) {
         if (!_isEnabled) {
             throw new EntityIsNotEnabledException("Cannot replace component!" +
                     _contextInfo.componentNames[index] + "' on " + this + "!");
@@ -95,7 +143,7 @@ public class Entity {
         } else if (component != null) {
             addComponent(index, component);
         }
-        return this;
+
     }
 
     private void replaceComponentInternal(int index, IComponent replacement) {
@@ -119,6 +167,7 @@ public class Entity {
 
     }
 
+    @Override
     public IComponent getComponent(int index) {
         if (!hasComponent(index)) {
             String errorMsg = "Cannot get component at index " +
@@ -130,6 +179,7 @@ public class Entity {
 
     }
 
+    @Override
     public IComponent[] getComponents() {
         if (_componentsCache == null) {
             List<IComponent> componentsCache = EntitasCache.getIComponentList();
@@ -148,7 +198,7 @@ public class Entity {
 
     }
 
-
+    @Override
     public int[] getComponentIndices() {
         if (_componentIndicesCache == null) {
             List<Integer> indices = EntitasCache.getIntArray();
@@ -157,7 +207,7 @@ public class Entity {
                     indices.add(i);
                 }
             }
-            _componentIndicesCache =  new int[indices.size()];
+            _componentIndicesCache = new int[indices.size()];
             for (int i = 0; i < indices.size(); i++) {
                 _componentIndicesCache[i] = indices.get(i);
 
@@ -168,6 +218,7 @@ public class Entity {
 
     }
 
+    @Override
     public boolean hasComponent(int index) {
         try {
             return _components[index] != null;
@@ -176,6 +227,7 @@ public class Entity {
         }
     }
 
+    @Override
     public boolean hasComponents(int... indices) {
         for (int index : indices) {
             if (_components[index] == null) {
@@ -186,6 +238,7 @@ public class Entity {
 
     }
 
+    @Override
     public boolean hasAnyComponent(int... indices) {
         for (int i = 0; i < indices.length; i++) {
             if (_components[indices[i]] != null) {
@@ -196,6 +249,7 @@ public class Entity {
 
     }
 
+    @Override
     public void removeAllComponents() {
         _toStringCache = null;
         for (int i = 0; i < _components.length; i++) {
@@ -205,14 +259,91 @@ public class Entity {
         }
     }
 
-    private Stack<IComponent> getComponentPool(int index) {
+    @Override
+    public Stack<IComponent> getComponentPool(int index) {
         Stack<IComponent> componentPool = _componentPools[index];
         if (componentPool == null) {
-            componentPool = new Stack<IComponent>();
+            componentPool = new Stack<>();
             _componentPools[index] = componentPool;
         }
 
         return componentPool;
+    }
+
+    @Override
+    public IComponent createComponent(int index, Class clazz) {
+        Stack<IComponent> componentPool = getComponentPool(index);
+        try {
+            if (componentPool.size() > 0) {
+                return componentPool.pop();
+            } else {
+                return (IComponent) clazz.cast(clazz.getConstructor((Class[]) null).newInstance());
+            }
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    @Override
+    public IComponent createComponent(int index) {
+        Stack<IComponent> componentPool = getComponentPool(index);
+        try {
+            if (componentPool.size() > 0) {
+                return componentPool.pop();
+            } else {
+                Class<?> clazz = _contextInfo.componentTypes[index];
+                return (IComponent) clazz.cast(clazz.getConstructor((Class[]) null).newInstance());
+            }
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    @Override
+    public Set<Object> owners() {
+        return owners;
+    }
+
+    @Override
+    public int retainCount() {
+        return owners.size();
+    }
+
+    @Override
+    public void retain(Object owner) {
+        if(!owners.add(owner)) {
+            throw new EntityIsAlreadyRetainedByOwnerException(owner);
+        }
+        _toStringCache = null;
+
+    }
+
+    @Override
+    public void release(Object owner) {
+        if(!owners.remove(owner)) {
+            throw new EntityIsNotRetainedByOwnerException(owner);
+        }
+
+        if(owners.size() == 0) {
+            _toStringCache = null;
+            _eventBus.notifyEntityReleased(this);
+        }
+
+    }
+
+    @Override
+    public void destroy() {
+        removeAllComponents();
+        _isEnabled = false;
+    }
+
+    ContextInfo createDefaultContextInfo() {
+        String[] componentNames = new String[_totalComponents];
+        for(int i = 0; i < componentNames.length; i++) {
+            componentNames[i] = String.valueOf(i);
+        }
+
+        return new ContextInfo("No Context", componentNames, null);
     }
 
     public IComponent recoverComponent(int index) {
@@ -223,79 +354,65 @@ public class Entity {
         return null;
     }
 
-
-    public <T extends IComponent> T createComponent(int index) {
-        Stack<IComponent> componentPool = getComponentPool(index);
-        try {
-            if (componentPool.size() > 0) {
-                return (T) componentPool.pop();
-            } else {
-                Class<T> clazz = _contextInfo.componentTypes[index];
-                return clazz.cast(clazz.getConstructor((Class[]) null).newInstance());
-            }
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
-    public void destroy() {
-        removeAllComponents();
-        _isEnabled = false;
+    @Override
+    public void removeAllOnEntityReleasedHandlers() {
+            // OnEntityReleased = null;
     }
 
     @Override
     public String toString() {
-        if (_toStringCache == null) {
-            StringBuilder sb = (new StringBuilder()).append("Entity_").append(_creationIndex);
-//
-//            final String SEPARATOR = ", ";
-//            IComponent[] components = getComponents();
-//            int lastSeparator = components.length - 1;
-//            for (int i = 0, componentsLength = components.length; i < componentsLength; i++) {
-//                sb.append(components[i].getClass().getName());
-//                if (i < lastSeparator) {
-//                    sb.append(SEPARATOR);
-//                }
-//            }
+        if(_toStringCache == null) {
+            if(_toStringBuilder == null) {
+                _toStringBuilder = new StringBuilder();
+            }
 
-            _toStringCache = sb.toString();
+            _toStringBuilder
+                    .append("Entity_")
+                    .append(_creationIndex)
+                    .append("(*")
+                    .append(retainCount())
+                    .append(")")
+                    .append("(");
+
+                String separator = ", ";
+            IComponent[] components = getComponents();
+            int lastSeparator = components.length - 1;
+            for(int i = 0; i < components.length; i++) {
+                IComponent component = components[i];
+                Object type = component.getClass();
+//                implementsToString = type.getMethod("ToString")
+//                        .DeclaringType == type;
+//                _toStringBuilder.append(
+//                        implementsToString
+//                                ? component.ToString()
+//                                : type.Name.RemoveComponentSuffix()
+//                );
+
+                if(i < lastSeparator) {
+                    _toStringBuilder.append(separator);
+                }
+            }
+
+            _toStringBuilder.append(")");
+            _toStringCache = _toStringBuilder.toString();
         }
+
         return _toStringCache;
     }
 
-    public int getRetainCount() {
-        return _retainCount;
-    }
-
-    public Entity retain(Object owner) {
-        _retainCount += 1;
-        _toStringCache = null;
-        return this;
-    }
-
-    public void release(Object owner) {
-        _retainCount -= 1;
-
-        if (_retainCount == 0) {
-            _toStringCache = null;
-            _eventBus.notifyEntityReleased(this);
-        }
-    }
-
-    public int getCreationIndex() {
+    @Override
+    public int hashCode(){
         return _creationIndex;
     }
 
-    public void setCreationIndex(int _creationIndex) {
-        this._creationIndex = _creationIndex;
-    }
+    @Override
+    public boolean equals(Object o){
+        if(o == null)    return false;
+        if(!(o instanceof Entity)) return false;
 
-    public boolean isEnabled() {
-        return _isEnabled;
-    }
-
-    public void setEnabled(boolean _isEnabled) {
-        this._isEnabled = _isEnabled;
+        IEntity other = (IEntity) o;
+        if(this._creationIndex != other.getCreationIndex())      return false;
+        return true;
     }
 
 

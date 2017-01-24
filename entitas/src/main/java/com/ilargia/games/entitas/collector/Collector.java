@@ -1,31 +1,37 @@
-package com.ilargia.games.entitas;
+package com.ilargia.games.entitas.collector;
 
+import com.ilargia.games.entitas.Entity;
+import com.ilargia.games.entitas.api.IComponent;
 import com.ilargia.games.entitas.api.IEntity;
+import com.ilargia.games.entitas.api.IGroup;
+import com.ilargia.games.entitas.api.events.GroupChanged;
 import com.ilargia.games.entitas.events.EventBus;
 import com.ilargia.games.entitas.events.GroupEvent;
 import com.ilargia.games.entitas.exceptions.EntityCollectorException;
 import com.ilargia.games.entitas.factories.Collections;
-import com.ilargia.games.entitas.api.IComponent;
-import com.ilargia.games.entitas.api.events.GroupChanged;
+import com.ilargia.games.entitas.group.Group;
+
 import java.util.Set;
+
+import static com.ilargia.games.entitas.events.GroupEvent.*;
 
 public class Collector<TEntity extends IEntity> {
 
     private final EventBus<TEntity> _eventBus;
     public Set<TEntity> _collectedEntities; //ObjectOpenHashSet
-    private Group<TEntity>[] _groups;
+    private IGroup<TEntity>[] _groups;
     private GroupEvent[] _groupEvents;
     GroupChanged<TEntity> _addEntityCache;
     String _toStringCache;
     StringBuilder _toStringBuilder;
 
 
-    public Collector(Group group, GroupEvent eventType, EventBus<TEntity> eventBus) {
-        this(new Group[]{group}, new GroupEvent[]{eventType}, eventBus);
+    public Collector(IGroup<TEntity> group, GroupEvent eventType, EventBus<TEntity> eventBus) {
+        this(new IGroup[]{group}, new GroupEvent[]{eventType}, eventBus);
 
     }
 
-    public Collector(Group<TEntity>[] groups, GroupEvent[] groupEvents, EventBus<TEntity> eventBus) {
+    public Collector(IGroup<TEntity>[] groups, GroupEvent[] groupEvents, EventBus<TEntity> eventBus) {
         _groups = groups;
         _collectedEntities = Collections.createSet(Entity.class);
         _groupEvents = groupEvents;
@@ -38,7 +44,7 @@ public class Collector<TEntity extends IEntity> {
             );
         }
 
-        _addEntityCache = (Group<TEntity> group, TEntity entity, int index, IComponent component) -> {
+        _addEntityCache = (IGroup<TEntity> group, TEntity entity, int index, IComponent component) -> {
             addEntity(group, entity, index, component);
         };
         activate();
@@ -46,41 +52,43 @@ public class Collector<TEntity extends IEntity> {
 
     public void activate() {
         for (int i = 0; i < _groups.length; i++) {
-            Group group = _groups[i];
+            IGroup group = _groups[i];
             GroupEvent groupEvent = _groupEvents[i];
-            if (groupEvent == GroupEvent.Added) {
-                _eventBus.OnEntityAdded(group).addListener(_addEntityCache);
-
-            } else if (groupEvent == GroupEvent.Removed) {
-                _eventBus.OnEntityRemoved(group).addListener(_addEntityCache);
-
-            } else if (groupEvent == GroupEvent.AddedOrRemoved) {
-                _eventBus.OnEntityAdded(group).addListener(_addEntityCache);
-                _eventBus.OnEntityRemoved(group).addListener(_addEntityCache);
-
+            switch (groupEvent) {
+                case Added:
+                    _eventBus.OnEntityAdded.addListener(group,_addEntityCache);
+                    break;
+                case Removed:
+                    _eventBus.OnEntityRemoved.addListener(group,_addEntityCache);
+                    break;
+                case AddedOrRemoved:
+                    _eventBus.OnEntityAdded.addListener(group,_addEntityCache);
+                    _eventBus.OnEntityRemoved .addListener(group,_addEntityCache);
+                    break;
             }
+
         }
     }
 
     public void deactivate() {
         for (int i = 0; i < _groups.length; i++) {
-            Group group = _groups[i];
-            _eventBus.OnEntityAdded(group).removeListener(_addEntityCache);
-            _eventBus.OnEntityRemoved(group).removeListener(_addEntityCache);
+            IGroup group = _groups[i];
+            _eventBus.OnEntityAdded.removeListener(group);
+            _eventBus.OnEntityRemoved.removeListener(group);
 
         }
         clearCollectedEntities();
     }
 
     public void clearCollectedEntities() {
-        for (Entity entity : _collectedEntities) {
+        for (IEntity entity : _collectedEntities) {
             entity.release(this);
         }
         _collectedEntities.clear();
 
     }
 
-    void addEntity(Group group, TEntity entity, int index, IComponent component) {
+    void addEntity(IGroup group, TEntity entity, int index, IComponent component) {
         boolean added = _collectedEntities.add(entity);
         if (added) {
             entity.retain(this);

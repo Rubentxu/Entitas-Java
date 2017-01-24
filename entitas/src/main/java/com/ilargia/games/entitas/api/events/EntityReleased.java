@@ -3,6 +3,6 @@ package com.ilargia.games.entitas.api.events;
 import com.ilargia.games.entitas.api.IEntity;
 
 @FunctionalInterface
-public interface EntityReleased {
-    void released(final IEntity entity);
+public interface EntityReleased<TEntity extends IEntity> {
+    void released(final TEntity entity);
 }

@@ -1,7 +1,6 @@
 package com.ilargia.games.entitas.systems;
 
 import com.ilargia.games.entitas.api.system.*;
-import com.ilargia.games.entitas.events.EventBus;
 import com.ilargia.games.entitas.factories.Collections;
 
 import java.util.List;
@@ -24,7 +23,7 @@ public class Systems implements IInitializeSystem, IExecuteSystem, ICleanupSyste
     }
 
     public Systems add(ISystem system) {
-        if(system != null) {
+        if (system != null) {
             if (system instanceof IInitializeSystem) _initializeSystems.add((IInitializeSystem) system);
             if (system instanceof IExecuteSystem) _executeSystems.add((IExecuteSystem) system);
             if (system instanceof ICleanupSystem) _cleanupSystems.add((ICleanupSystem) system);

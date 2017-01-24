@@ -8,7 +8,7 @@ import com.ilargia.games.components.View;
 import com.ilargia.games.core.CoreMatcher;
 import com.ilargia.games.core.Entity;
 import com.ilargia.games.core.Pool;
-import com.ilargia.games.entitas.Group;
+import com.ilargia.games.entitas.group.Group;
 import com.ilargia.games.entitas.api.system.IExecuteSystem;
 import com.ilargia.games.entitas.matcher.Matcher;
 

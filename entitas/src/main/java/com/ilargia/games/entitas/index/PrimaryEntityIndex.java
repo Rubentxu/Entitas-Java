@@ -1,18 +1,19 @@
 package com.ilargia.games.entitas.index;
 
-import com.ilargia.games.entitas.Entity;
-import com.ilargia.games.entitas.Group;
+import com.ilargia.games.entitas.api.IComponent;
+import com.ilargia.games.entitas.api.IEntity;
+import com.ilargia.games.entitas.api.IGroup;
 import com.ilargia.games.entitas.events.EventBus;
 import com.ilargia.games.entitas.exceptions.EntityIndexException;
 import com.ilargia.games.entitas.factories.Collections;
-import com.ilargia.games.entitas.api.IComponent;
+
 import java.util.Map;
 
-public class PrimaryEntityIndex<K, E extends Entity> extends AbstractEntityIndex<K, E> {
+public class PrimaryEntityIndex<TEntity extends IEntity, TKey> extends AbstractEntityIndex<TEntity, TKey> {
 
-    private Map<K, E> _index; //Object2ObjectArrayMap
+    private Map<TKey, TEntity> _index; //Object2ObjectArrayMap
 
-    public PrimaryEntityIndex(Group group, Func<E, IComponent, K> getKey, EventBus<E> eventBus) {
+    public PrimaryEntityIndex(IGroup group, Func<TEntity, IComponent, TKey> getKey, EventBus<TEntity> eventBus) {
         super(group, getKey, eventBus);
         _index = Collections.createMap(Object.class, Object.class);
         activate();
@@ -24,12 +25,12 @@ public class PrimaryEntityIndex<K, E extends Entity> extends AbstractEntityIndex
         indexEntities(_group);
     }
 
-    public boolean hasEntity(K key) {
+    public boolean hasEntity(TKey key) {
         return _index.containsKey(key);
     }
 
-    public E getEntity(K key) {
-        E entity = tryGetEntity(key);
+    public TEntity getEntity(TKey key) {
+        TEntity entity = tryGetEntity(key);
         if (entity == null) {
             throw new EntityIndexException("SplashEntity for key '" + key + "' doesn't exist!",
                     "You should check if an entity with that key exists before getting it."
@@ -39,16 +40,16 @@ public class PrimaryEntityIndex<K, E extends Entity> extends AbstractEntityIndex
         return entity;
     }
 
-    public E tryGetEntity(K key) {
-        E entity = null;
+    public TEntity tryGetEntity(TKey key) {
+        TEntity entity = null;
         _index.get(key);
         return entity;
     }
 
 
     @Override
-    protected void addEntity(E entity, IComponent component) {
-        K key = _key.getKey(entity, component);
+    protected void addEntity(TEntity entity, IComponent component) {
+        TKey key = _key.getKey(entity, component);
         if (_index.containsKey(key)) {
             throw new EntityIndexException("SplashEntity for key '" + key + "' already exists!",
                     "Only one entity for a primary key is allowed.");
@@ -60,14 +61,14 @@ public class PrimaryEntityIndex<K, E extends Entity> extends AbstractEntityIndex
 
 
     @Override
-    protected void removeEntity(E entity, IComponent component) {
+    protected void removeEntity(TEntity entity, IComponent component) {
         _index.remove(_key.getKey(entity, component));
         entity.release(this);
     }
 
     @Override
     protected void clear() {
-        for (E entity : _index.values()) {
+        for (TEntity entity : _index.values()) {
             entity.release(this);
         }
         _index.clear();

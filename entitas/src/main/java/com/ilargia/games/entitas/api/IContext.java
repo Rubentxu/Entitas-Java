@@ -2,7 +2,6 @@ package com.ilargia.games.entitas.api;
 
 
 import com.ilargia.games.entitas.api.matcher.IMatcher;
-import com.ilargia.games.entitas.index.IEntityIndex;
 
 import java.util.Stack;
 

@@ -1,7 +1,7 @@
 package com.ilargia.games.entitas.exceptions;
 
 
-import com.ilargia.games.entitas.Group;
+import com.ilargia.games.entitas.group.Group;
 import com.ilargia.games.entitas.api.EntitasException;
 
 public class GroupSingleEntityException extends EntitasException {

@@ -7,6 +7,7 @@ import com.ilargia.games.entitas.events.EventBus;
 import com.ilargia.games.entitas.factories.Collections;
 import com.ilargia.games.entitas.factories.CollectionsFactory;
 import com.ilargia.games.entitas.api.events.GroupChanged;
+import com.ilargia.games.entitas.group.Group;
 import com.ilargia.games.entitas.utils.TestComponentIds;
 import com.ilargia.games.entitas.utils.TestMatcher;
 import org.junit.Before;

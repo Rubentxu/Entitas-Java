@@ -1,11 +1,13 @@
 package com.ilargia.games.entitas;
 
 import com.ilargia.games.entitas.api.ContextInfo;
+import com.ilargia.games.entitas.collector.Collector;
 import com.ilargia.games.entitas.components.Position;
 import com.ilargia.games.entitas.events.EventBus;
 import com.ilargia.games.entitas.exceptions.*;
 import com.ilargia.games.entitas.factories.Collections;
 import com.ilargia.games.entitas.factories.CollectionsFactory;
+import com.ilargia.games.entitas.group.Group;
 import com.ilargia.games.entitas.index.PrimaryEntityIndex;
 import com.ilargia.games.entitas.api.FactoryEntity;
 import com.ilargia.games.entitas.api.IComponent;
@@ -25,7 +27,7 @@ public class PoolTest {
     @Rule
     public ExpectedException exception = ExpectedException.none();
 
-    private BaseContext pool;
+    private Context pool;
     private Entity entity;
     private EventBus<Entity> bus;
 
@@ -37,8 +39,8 @@ public class PoolTest {
         };
     }
 
-    public BaseContext createTestPool() {
-        return new BaseContext(TestComponentIds.totalComponents, 0,
+    public Context createTestPool() {
+        return new Context(TestComponentIds.totalComponents, 0,
                 new ContextInfo("Test", TestComponentIds.componentNames(),
                         TestComponentIds.componentTypes()), bus, factoryEntity());
     }
@@ -76,7 +78,7 @@ public class PoolTest {
 
     @Test
     public void OnEntityCreatedTest() {
-        bus.OnEntityCreated.addListener((BaseContext pool, Entity e) -> assertTrue(e.isEnabled()));
+        bus.OnEntityCreated.addListener((Context pool, Entity e) -> assertTrue(e.isEnabled()));
         entity = pool.createEntity();
     }
 
@@ -107,8 +109,8 @@ public class PoolTest {
 
     @Test
     public void OnEntityDestroyedTest() {
-        bus.OnEntityWillBeDestroyed.addListener((BaseContext pool, Entity e) -> assertTrue(e.isEnabled()));
-        bus.OnEntityDestroyed.addListener((BaseContext pool, Entity e) -> assertFalse(e.isEnabled()));
+        bus.OnEntityWillBeDestroyed.addListener((Context pool, Entity e) -> assertTrue(e.isEnabled()));
+        bus.OnEntityDestroyed.addListener((Context pool, Entity e) -> assertFalse(e.isEnabled()));
         pool.destroyAllEntities();
         assertEquals(0, pool.getCount());
 
@@ -288,8 +290,8 @@ public class PoolTest {
 
     @Test
     public void createEntityCollectorTest() {
-        BaseContext[] pools = new BaseContext[]{pool};
-        Collector collector = BaseContext.createEntityCollector(pools, TestMatcher.Position());
+        Context[] pools = new Context[]{pool};
+        Collector collector = Context.createEntityCollector(pools, TestMatcher.Position());
         assertNotNull(collector);
 
     }

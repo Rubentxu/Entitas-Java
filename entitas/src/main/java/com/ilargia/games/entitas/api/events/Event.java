@@ -1,6 +1,6 @@
 package com.ilargia.games.entitas.api.events;
 
-import com.ilargia.games.entitas.BaseContext;
+import com.ilargia.games.entitas.Context;
 import com.ilargia.games.entitas.factories.Collections;
 
 import java.util.Set;
@@ -26,7 +26,7 @@ public class Event<T> {
         return listeners;
     }
 
-    public <P extends BaseContext> void clear() {
+    public <P extends Context> void clear() {
         listeners.clear();
     }
 

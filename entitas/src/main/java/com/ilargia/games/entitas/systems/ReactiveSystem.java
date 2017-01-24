@@ -1,17 +1,11 @@
 package com.ilargia.games.entitas.systems;
 
-import com.ilargia.games.entitas.BaseContext;
-import com.ilargia.games.entitas.Collector;
+import com.ilargia.games.entitas.collector.Collector;
 import com.ilargia.games.entitas.Entity;
-import com.ilargia.games.entitas.Group;
 import com.ilargia.games.entitas.api.IContext;
 import com.ilargia.games.entitas.api.IEntity;
-import com.ilargia.games.entitas.api.system.IExecuteSystem;
 import com.ilargia.games.entitas.api.system.IReactiveSystem;
-import com.ilargia.games.entitas.events.EventBus;
-import com.ilargia.games.entitas.events.GroupEvent;
 import com.ilargia.games.entitas.factories.Collections;
-import com.ilargia.games.entitas.matcher.TriggerOnEvent;
 
 import java.util.List;
 
@@ -51,15 +45,15 @@ public abstract class ReactiveSystem<TEntity extends IEntity> implements IReacti
 
     public void execute(float deltatime) {
         if (_collector._collectedEntities.size() != 0) {
-            for(TEntity e : _collector._collectedEntities) {
-                if(filter(e)) {
+            for (TEntity e : _collector._collectedEntities) {
+                if (filter(e)) {
                     e.retain(this);
                     _buffer.add(e);
                 }
             }
             _collector.clearCollectedEntities();
 
-            if(_buffer.size() != 0) {
+            if (_buffer.size() != 0) {
                 execute(_buffer);
                 for (int i = 0; i < _buffer.size(); i++) {
                     _buffer.get(i).release(this);

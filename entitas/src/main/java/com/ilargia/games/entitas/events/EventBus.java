@@ -5,6 +5,7 @@ import com.ilargia.games.entitas.api.IContext;
 import com.ilargia.games.entitas.api.IEntity;
 import com.ilargia.games.entitas.api.IGroup;
 import com.ilargia.games.entitas.api.events.*;
+import com.ilargia.games.entitas.group.Group;
 
 public class EventBus<TEntity extends IEntity> {
 
@@ -19,9 +20,9 @@ public class EventBus<TEntity extends IEntity> {
     public Event<EntityComponentReplaced> OnComponentReplaced;
     public Event<EntityReleased> OnEntityReleased;
 
-    private Event<GroupChanged<TEntity>> OnEntityAdded;
-    private Event<GroupChanged<TEntity>> OnEntityRemoved;
-    private Event<GroupUpdated<TEntity>> OnEntityUpdated;
+    public EventMap<IGroup<TEntity>,GroupChanged<TEntity>> OnEntityAdded;
+    public EventMap<IGroup<TEntity>,GroupChanged<TEntity>> OnEntityRemoved;
+    public EventMap<IGroup<TEntity>,GroupUpdated<TEntity>> OnEntityUpdated;
 
 
     public EventBus() {
@@ -34,9 +35,9 @@ public class EventBus<TEntity extends IEntity> {
         OnComponentRemoved = new Event<>();
         OnComponentReplaced = new Event<>();
         OnEntityReleased = new Event<>();
-        OnEntityAdded = new Event<>();
-        OnEntityRemoved = new Event<>();
-        OnEntityUpdated = new Event<>();
+        OnEntityAdded = new EventMap<>();
+        OnEntityRemoved = new EventMap<>();
+        OnEntityUpdated = new EventMap<>();
 
     }
 

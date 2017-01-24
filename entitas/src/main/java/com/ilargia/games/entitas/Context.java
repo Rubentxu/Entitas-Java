@@ -1,42 +1,43 @@
 package com.ilargia.games.entitas;
 
-import com.ilargia.games.entitas.api.ContextInfo;
+import com.ilargia.games.entitas.api.*;
+import com.ilargia.games.entitas.api.events.EntityComponentChanged;
+import com.ilargia.games.entitas.api.events.EntityComponentReplaced;
+import com.ilargia.games.entitas.api.events.EntityReleased;
+import com.ilargia.games.entitas.api.matcher.IMatcher;
+import com.ilargia.games.entitas.collector.Collector;
 import com.ilargia.games.entitas.events.EventBus;
 import com.ilargia.games.entitas.events.GroupEvent;
 import com.ilargia.games.entitas.exceptions.*;
 import com.ilargia.games.entitas.factories.Collections;
-import com.ilargia.games.entitas.api.FactoryEntity;
-import com.ilargia.games.entitas.api.IComponent;
-import com.ilargia.games.entitas.index.IEntityIndex;
-import com.ilargia.games.entitas.api.matcher.IMatcher;
-import com.ilargia.games.entitas.api.events.EntityComponentReplaced;
-import com.ilargia.games.entitas.api.events.EntityComponentChanged;
-import com.ilargia.games.entitas.api.events.EntityReleased;
+import com.ilargia.games.entitas.group.Group;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 
-public class BaseContext<E extends Entity, P extends BaseContext> {
+public class Context<TEntity extends IEntity> implements IContext<TEntity> {
 
     public int _totalComponents;
-    public Class<E> entityType;
-    protected Map<IMatcher, Group<E>> _groups; //Object2ObjectArrayMap
-    protected List<Group<E>>[] _groupsForIndex; // ObjectArrayList
+    public Class<TEntity> entityType;
+    protected Map<IMatcher, Group<TEntity>> _groups; //Object2ObjectArrayMap
+    protected List<Group<TEntity>>[] _groupsForIndex; // ObjectArrayList
     private int _creationIndex;
-    private Set<E> _entities; //ObjectOpenHashSet
-    private Stack<E> _reusableEntities;
-    private Set<E> _retainedEntities; //ObjectOpenHashSet
-    private E[] _entitiesCache;
+    private Set<TEntity> _entities; //ObjectOpenHashSet
+    private Stack<TEntity> _reusableEntities;
+    private Set<TEntity> _retainedEntities; //ObjectOpenHashSet
+    private TEntity[] _entitiesCache;
     private Map<String, IEntityIndex> _entityIndices; // Map
-    private FactoryEntity<E> _factoryEntiy;
+    private FactoryEntity<TEntity> _factoryEntiy;
     private ContextInfo _contextInfo;
     private Stack<IComponent>[] _componentContexts;
-    private EventBus<E> _eventBus;
+    private EventBus<TEntity> _eventBus;
+    private Stack<IComponent>[] _componentPools;
 
 
-    public BaseContext(int totalComponents, int startCreationIndex, ContextInfo metaData,
-                       EventBus<E> eventBus, FactoryEntity<E> factoryMethod) {
+    public Context(int totalComponents, int startCreationIndex, ContextInfo metaData,
+                   EventBus<TEntity> eventBus, FactoryEntity<TEntity> factoryMethod) {
         _totalComponents = totalComponents;
         _creationIndex = startCreationIndex;
         _factoryEntiy = factoryMethod;
@@ -68,27 +69,27 @@ public class BaseContext<E extends Entity, P extends BaseContext> {
         _entities = Collections.createSet(Entity.class);
         _groups = Collections.createMap(IMatcher.class, Group.class);
 
-        EntityComponentChanged<E> _cachedEntityChanged = (E e, int idx, IComponent c) -> {
+        EntityComponentChanged<TEntity> _cachedEntityChanged = (TEntity e, int idx, IComponent c) -> {
             updateGroupsComponentAddedOrRemoved(e, idx, c, _groupsForIndex);
         };
         _eventBus.OnComponentAdded.addListener(_cachedEntityChanged);
         _eventBus.OnComponentRemoved.addListener(_cachedEntityChanged);
-        _eventBus.OnComponentReplaced.addListener((EntityComponentReplaced<E>) (E e, int idx, IComponent pc, IComponent nc) -> {
+        _eventBus.OnComponentReplaced.addListener((EntityComponentReplaced<TEntity>) (TEntity e, int idx, IComponent pc, IComponent nc) -> {
             updateGroupsComponentReplaced(e, idx, pc, nc, _groupsForIndex);
         });
-        _eventBus.OnEntityReleased.addListener((EntityReleased<E>) (E e) -> {
+        _eventBus.OnEntityReleased.addListener((EntityReleased<TEntity>) (TEntity e) -> {
             onEntityReleased(e, _retainedEntities, _reusableEntities);
         });
 
-        entityType = (Class<E>) _factoryEntiy.create(_totalComponents, _componentContexts, _contextInfo).getClass();
+        entityType = (Class<TEntity>) _factoryEntiy.create(_totalComponents, _componentContexts, _contextInfo).getClass();
 
     }
 
-    public Collector createEntityCollector(BaseContext[] contexts, IMatcher matcher) {
+    public Collector createEntityCollector(Context[] contexts, IMatcher matcher) {
         return createEntityCollector(contexts, matcher, GroupEvent.Added);
     }
 
-    public Collector createEntityCollector(BaseContext[] contexts, IMatcher matcher, GroupEvent eventType) {
+    public Collector createEntityCollector(Context[] contexts, IMatcher matcher, GroupEvent eventType) {
         Group[] groups = new Group[contexts.length];
         GroupEvent[] eventTypes = new GroupEvent[contexts.length];
 
@@ -100,36 +101,45 @@ public class BaseContext<E extends Entity, P extends BaseContext> {
         return new Collector(groups, eventTypes, _eventBus);
     }
 
-    public E createEntity() {
-        E ent = _reusableEntities.size() > 0
-                ? _reusableEntities.pop()
-                : _factoryEntiy.create(_totalComponents, _componentContexts, _contextInfo);
-        ent.setEnabled(true);
-        ent.setCreationIndex(_creationIndex++);
-        ent.retain(this);
+    public TEntity createEntity() {
+        TEntity ent;
+        if(_reusableEntities.size() > 0) {
+            ent = _reusableEntities.pop();
+            ent.reactivate(_creationIndex++);
+        } else {
+            ent = _factoryEntiy.create(_totalComponents, _componentContexts, _contextInfo);
+            ent.initialize(_creationIndex++, _totalComponents, _componentPools, _contextInfo);
+        }
+
         _entities.add(ent);
+        ent.retain(this);
         _entitiesCache = null;
-        _eventBus.notifyEntityCreated((P) this, ent);
+//        entity.OnComponentAdded += _cachedEntityChanged;
+//        entity.OnComponentRemoved += _cachedEntityChanged;
+//        entity.OnComponentReplaced += _cachedComponentReplaced;
+//        entity.OnEntityReleased += _cachedEntityReleased;
+        _eventBus.notifyEntityCreated( this, ent);
 
         return ent;
 
     }
 
-    public void destroyEntity(E entity) {
+    public void destroyEntity(TEntity entity) {
         if (!_entities.remove(entity)) {
             throw new ContextDoesNotContainEntityException("'" + this + "' cannot destroy " + entity + "!",
                     "Did you call pool.DestroyEntity() on a wrong pool?");
         }
         _entitiesCache = null;
-        _eventBus.notifyEntityWillBeDestroyed((P) this, entity);
+        _eventBus.notifyEntityWillBeDestroyed(this, entity);
 
         entity.destroy();
 
-        _eventBus.notifyEntityDestroyed((P) this, entity);
+        _eventBus.notifyEntityDestroyed( this, entity);
 
-        if (entity.getRetainCount() == 1) {
+        if (entity.retainCount() == 1) {
             _reusableEntities.push(entity);
             entity.release(this);
+            entity.removeAllOnEntityReleasedHandlers();
 
         } else {
             _retainedEntities.add(entity);
@@ -139,7 +149,7 @@ public class BaseContext<E extends Entity, P extends BaseContext> {
     }
 
     public void destroyAllEntities() {
-        for (E entity : getEntities()) {
+        for (TEntity entity : getEntities()) {
             destroyEntity(entity);
         }
         _entities.clear();
@@ -150,25 +160,30 @@ public class BaseContext<E extends Entity, P extends BaseContext> {
 
     }
 
-    public boolean hasEntity(E entity) {
+    public boolean hasEntity(TEntity entity) {
         return _entities.contains(entity);
     }
 
-    public E[] getEntities() {
+    public TEntity[] getEntities() {
         if (_entitiesCache == null) {
-            _entitiesCache = (E[]) new Entity[_entities.size()];
+            _entitiesCache = (TEntity[]) new Entity[_entities.size()];
             _entities.toArray(_entitiesCache);
         }
         return _entitiesCache;
 
     }
 
-    public Group<E> getGroup(IMatcher matcher) {
-        Group<E> group = null;
+    @Override
+    public int getTotalComponents() {
+        return _totalComponents;
+    }
+
+    public Group<TEntity> getGroup(IMatcher matcher) {
+        Group<TEntity> group = null;
         if (!(_groups.containsKey(matcher) ? (group = _groups.get(matcher)) == group : false)) {
 
-            group = new Group(matcher, entityType,_eventBus);
-            for (E entity : getEntities()) {
+            group = new Group(matcher, entityType, _eventBus);
+            for (TEntity entity : getEntities()) {
                 group.handleEntitySilently(entity);
             }
             _groups.put(matcher, group);
@@ -179,7 +194,7 @@ public class BaseContext<E extends Entity, P extends BaseContext> {
                 }
                 _groupsForIndex[index].add(group);
             }
-            _eventBus.notifyGroupCreated((P) this, group);
+            _eventBus.notifyGroupCreated( this, group);
 
         }
         return group;
@@ -187,12 +202,12 @@ public class BaseContext<E extends Entity, P extends BaseContext> {
     }
 
     public void clearGroups() {
-        for (Group<E> group : _groups.values()) {
+        for (Group<TEntity> group : _groups.values()) {
             group.removeAllEventHandlers();
-            for (Entity entity : group.getEntities()) {
+            for (IEntity entity : group.getEntities()) {
                 entity.release(group);
             }
-            _eventBus.notifyGroupCleared((P) this, group);
+            _eventBus.notifyGroupCleared( this, group);
         }
         _groups.clear();
 
@@ -252,8 +267,8 @@ public class BaseContext<E extends Entity, P extends BaseContext> {
 
     }
 
-    public void updateGroupsComponentAddedOrRemoved(E entity, int index, IComponent component, List<Group<E>>[] groupsForIndex) {
-        List<Group<E>> groups = groupsForIndex[index];
+    public void updateGroupsComponentAddedOrRemoved(TEntity entity, int index, IComponent component, List<Group<TEntity>>[] groupsForIndex) {
+        List<Group<TEntity>> groups = groupsForIndex[index];
         if (groups != null) {
             for (int i = 0, groupsCount = groups.size(); i < groupsCount; i++) {
                 groups.get(i).handleEntity(entity, index, component);
@@ -262,9 +277,9 @@ public class BaseContext<E extends Entity, P extends BaseContext> {
 
     }
 
-    protected void updateGroupsComponentReplaced(E entity, int index, IComponent previousComponent,
-                                                 IComponent newComponent, List<Group<E>>[] groupsForIndex) {
-        List<Group<E>> groups = groupsForIndex[index];
+    protected void updateGroupsComponentReplaced(TEntity entity, int index, IComponent previousComponent,
+                                                 IComponent newComponent, List<Group<TEntity>>[] groupsForIndex) {
+        List<Group<TEntity>> groups = groupsForIndex[index];
         if (groups != null) {
             for (Group g : groups) {
                 g.updateEntity(entity, index, previousComponent, newComponent);
@@ -273,7 +288,7 @@ public class BaseContext<E extends Entity, P extends BaseContext> {
 
     }
 
-    protected void onEntityReleased(E entity, Set<E> retainedEntities, Stack<E> reusableEntities) {
+    protected void onEntityReleased(TEntity entity, Set<TEntity> retainedEntities, Stack<TEntity> reusableEntities) {
         if (entity.isEnabled()) {
             throw new EntityIsNotDestroyedException("Cannot release entity.");
         }
@@ -283,6 +298,11 @@ public class BaseContext<E extends Entity, P extends BaseContext> {
 
     public Stack<IComponent>[] getComponentPools() {
         return _componentContexts;
+    }
+
+    @Override
+    public ContextInfo getContextInfo() {
+        return null;
     }
 
     public ContextInfo getMetaData() {
@@ -301,7 +321,7 @@ public class BaseContext<E extends Entity, P extends BaseContext> {
         return _retainedEntities.size();
     }
 
-    public Entity[] getEntities(IMatcher matcher) {
+    public IEntity[] getEntities(IMatcher matcher) {
         return getGroup(matcher).getEntities();
 
     }

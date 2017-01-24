@@ -28,90 +28,6 @@ public class Matcher<TEntity extends IEntity> implements IAllOfMatcher<TEntity>,
     private Matcher() {
     }
 
-    public int[] getIndices() {
-        if (_indices == null) {
-            _indices = mergeIndices(_allOfIndices, _anyOfIndices, _noneOfIndices);
-        }
-        return _indices;
-    }
-
-    public int[] getAllOfIndices() {
-        return _allOfIndices;
-    }
-
-    public int[] getAnyOfIndices() {
-        return _anyOfIndices;
-    }
-
-    public int[] getNoneOfIndices() {
-        return _noneOfIndices;
-    }
-
-    private String[] getComponentNames() {
-        return _componentNames;
-    }
-
-    private void setComponentNames(String[] componentNames) {
-        this._componentNames = componentNames;
-    }
-
-
-    @Override
-    public IAnyOfMatcher<TEntity> anyOf(int... indices) {
-        _anyOfIndices = distinctIndices(indices);
-        _indices = null;
-        return this;
-    }
-
-    @Override
-    public IAnyOfMatcher<TEntity> anyOf(IMatcher<TEntity>... matchers) {
-        return ((IAllOfMatcher<TEntity>) this).anyOf(mergeIndices(matchers));
-    }
-
-    @Override
-    public INoneOfMatcher<TEntity> noneOf(int... indices) {
-        _noneOfIndices = distinctIndices(indices);
-        _indices = null;
-        return this;
-    }
-
-    @Override
-    public INoneOfMatcher<TEntity> noneOf(IMatcher... matchers) {
-        return noneOf(mergeIndices(matchers));
-    }
-
-
-    @Override
-    public boolean matches(IEntity entity) {
-        boolean matchesAllOf = _allOfIndices == null || entity.hasComponents(_allOfIndices);
-        boolean matchesAnyOf = _anyOfIndices == null || entity.hasAnyComponent(_anyOfIndices);
-        boolean matchesNoneOf = _noneOfIndices == null || !entity.hasAnyComponent(_noneOfIndices);
-        return matchesAllOf && matchesAnyOf && matchesNoneOf;
-    }
-    // End Matcher
-
-    // Begin MatcherEquals
-    @Override
-    public boolean equals(Object obj) {
-
-        if (obj == null || obj.getClass() != this.getClass() || obj.hashCode() != hashCode()) {
-            return false;
-        }
-
-        Matcher matcher = (Matcher) obj;
-        if (!equalIndices(matcher.getAllOfIndices(), _allOfIndices)) {
-            return false;
-        }
-        if (!equalIndices(matcher.getAnyOfIndices(), _anyOfIndices)) {
-            return false;
-        }
-        if (!equalIndices(matcher.getNoneOfIndices(), _noneOfIndices)) {
-            return false;
-        }
-        return true;
-
-    }
-
     private static boolean equalIndices(int[] i1, int[] i2) {
         if ((i1 == null) != (i2 == null)) {
             return false;
@@ -132,19 +48,6 @@ public class Matcher<TEntity extends IEntity> implements IAllOfMatcher<TEntity>,
 
     }
 
-    @Override
-    public int hashCode() {
-        if (!_isHashCached) {
-            int hash = this.getClass().hashCode();
-            hash = applyHash(hash, _allOfIndices, 3, 53);
-            hash = applyHash(hash, _anyOfIndices, 307, 367);
-            hash = applyHash(hash, _noneOfIndices, 647, 683);
-            _hash = hash;
-            _isHashCached = true;
-        }
-        return _hash;
-    }
-
     private static int applyHash(int hash, int[] indices, int i1, int i2) {
         if (indices != null) {
             for (int i = 0, indicesLength = indices.length; i < indicesLength; i++) {
@@ -154,7 +57,6 @@ public class Matcher<TEntity extends IEntity> implements IAllOfMatcher<TEntity>,
         }
         return hash;
     }
-    // End MatcherEquals
 
     // Begin MatcherStatic
     public static <TEntity extends IEntity> IAllOfMatcher<TEntity> AllOf(int... indices) {
@@ -181,7 +83,6 @@ public class Matcher<TEntity extends IEntity> implements IAllOfMatcher<TEntity>,
         return anyOfMatcher;
 
     }
-
 
     private static int[] mergeIndices(int[] allOfIndices, int[] anyOfIndices, int[] noneOfIndices) {
         List<Integer> indicesList = EntitasCache.getIntArray();
@@ -263,8 +164,7 @@ public class Matcher<TEntity extends IEntity> implements IAllOfMatcher<TEntity>,
         return uniqueIndices;
 
     }
-    // End MatcherStatic
-
+    // End Matcher
 
     // Begin MatcherToString
     private static void appendIndices(StringBuilder sb, String prefix, int[] indexArray, String[] componentNames) {
@@ -287,6 +187,101 @@ public class Matcher<TEntity extends IEntity> implements IAllOfMatcher<TEntity>,
         sb.append(")");
     }
 
+    public int[] getIndices() {
+        if (_indices == null) {
+            _indices = mergeIndices(_allOfIndices, _anyOfIndices, _noneOfIndices);
+        }
+        return _indices;
+    }
+
+    public int[] getAllOfIndices() {
+        return _allOfIndices;
+    }
+
+    public int[] getAnyOfIndices() {
+        return _anyOfIndices;
+    }
+    // End MatcherEquals
+
+    public int[] getNoneOfIndices() {
+        return _noneOfIndices;
+    }
+
+    private String[] getComponentNames() {
+        return _componentNames;
+    }
+
+    private void setComponentNames(String[] componentNames) {
+        this._componentNames = componentNames;
+    }
+
+    @Override
+    public IAnyOfMatcher<TEntity> anyOf(int... indices) {
+        _anyOfIndices = distinctIndices(indices);
+        _indices = null;
+        return this;
+    }
+
+    @Override
+    public IAnyOfMatcher<TEntity> anyOf(IMatcher<TEntity>... matchers) {
+        return ((IAllOfMatcher<TEntity>) this).anyOf(mergeIndices(matchers));
+    }
+
+    @Override
+    public INoneOfMatcher<TEntity> noneOf(int... indices) {
+        _noneOfIndices = distinctIndices(indices);
+        _indices = null;
+        return this;
+    }
+
+    @Override
+    public INoneOfMatcher<TEntity> noneOf(IMatcher... matchers) {
+        return noneOf(mergeIndices(matchers));
+    }
+
+    @Override
+    public boolean matches(IEntity entity) {
+        boolean matchesAllOf = _allOfIndices == null || entity.hasComponents(_allOfIndices);
+        boolean matchesAnyOf = _anyOfIndices == null || entity.hasAnyComponent(_anyOfIndices);
+        boolean matchesNoneOf = _noneOfIndices == null || !entity.hasAnyComponent(_noneOfIndices);
+        return matchesAllOf && matchesAnyOf && matchesNoneOf;
+    }
+
+    // Begin MatcherEquals
+    @Override
+    public boolean equals(Object obj) {
+
+        if (obj == null || obj.getClass() != this.getClass() || obj.hashCode() != hashCode()) {
+            return false;
+        }
+
+        Matcher matcher = (Matcher) obj;
+        if (!equalIndices(matcher.getAllOfIndices(), _allOfIndices)) {
+            return false;
+        }
+        if (!equalIndices(matcher.getAnyOfIndices(), _anyOfIndices)) {
+            return false;
+        }
+        if (!equalIndices(matcher.getNoneOfIndices(), _noneOfIndices)) {
+            return false;
+        }
+        return true;
+
+    }
+    // End MatcherStatic
+
+    @Override
+    public int hashCode() {
+        if (!_isHashCached) {
+            int hash = this.getClass().hashCode();
+            hash = applyHash(hash, _allOfIndices, 3, 53);
+            hash = applyHash(hash, _anyOfIndices, 307, 367);
+            hash = applyHash(hash, _noneOfIndices, 647, 683);
+            _hash = hash;
+            _isHashCached = true;
+        }
+        return _hash;
+    }
 
     @Override
     public String toString() {
