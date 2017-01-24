@@ -10,10 +10,10 @@ import java.util.List;
 public class Systems implements IInitializeSystem, IExecuteSystem, ICleanupSystem, ITearDownSystem {
 
 
-    private List<IInitializeSystem> _initializeSystems; // ObjectArrayList
-    private List<IExecuteSystem> _executeSystems;
-    private List<ICleanupSystem> _cleanupSystems;
-    private List<ITearDownSystem> _tearDownSystems;
+    protected List<IInitializeSystem> _initializeSystems; // ObjectArrayList
+    protected List<IExecuteSystem> _executeSystems;
+    protected List<ICleanupSystem> _cleanupSystems;
+    protected List<ITearDownSystem> _tearDownSystems;
 
     public Systems() {
         _initializeSystems = Collections.createList(ISystem.class);

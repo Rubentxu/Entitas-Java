@@ -17,9 +17,9 @@ import java.util.List;
 
 public abstract class ReactiveSystem<TEntity extends IEntity> implements IReactiveSystem {
 
-    private Collector<TEntity> _collector;
-    private List<TEntity> _buffer;
-    private String _toStringCache;
+    protected Collector<TEntity> _collector;
+    protected List<TEntity> _buffer;
+    protected String _toStringCache;
 
     protected ReactiveSystem(IContext<TEntity> context) {
         _collector = getTrigger(context);

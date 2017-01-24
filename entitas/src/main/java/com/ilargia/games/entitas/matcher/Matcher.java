@@ -1,13 +1,11 @@
 package com.ilargia.games.entitas.matcher;
 
-import com.ilargia.games.entitas.Entity;
 import com.ilargia.games.entitas.api.IEntity;
 import com.ilargia.games.entitas.api.matcher.IAllOfMatcher;
 import com.ilargia.games.entitas.api.matcher.IAnyOfMatcher;
 import com.ilargia.games.entitas.api.matcher.IMatcher;
 import com.ilargia.games.entitas.api.matcher.INoneOfMatcher;
 import com.ilargia.games.entitas.caching.EntitasCache;
-import com.ilargia.games.entitas.events.GroupEvent;
 import com.ilargia.games.entitas.exceptions.MatcherException;
 
 import java.util.Arrays;
@@ -15,7 +13,7 @@ import java.util.List;
 import java.util.Set;
 
 
-public class Matcher<TEntity extends IEntity> implements IAllOfMatcher<TEntity>, IAnyOfMatcher, INoneOfMatcher {
+public class Matcher<TEntity extends IEntity> implements IAllOfMatcher<TEntity>, IAnyOfMatcher<TEntity>, INoneOfMatcher<TEntity> {
 
     public String[] _componentNames;
     private int[] _indices;
@@ -70,11 +68,18 @@ public class Matcher<TEntity extends IEntity> implements IAllOfMatcher<TEntity>,
         return ((IAllOfMatcher<TEntity>) this).anyOf(mergeIndices(matchers));
     }
 
-    public INoneOfMatcher<TEntity> NoneOf(params int[] indices) {
+    @Override
+    public INoneOfMatcher<TEntity> noneOf(int... indices) {
         _noneOfIndices = distinctIndices(indices);
         _indices = null;
         return this;
     }
+
+    @Override
+    public INoneOfMatcher<TEntity> noneOf(IMatcher... matchers) {
+        return noneOf(mergeIndices(matchers));
+    }
+
 
     @Override
     public boolean matches(IEntity entity) {
@@ -83,54 +88,27 @@ public class Matcher<TEntity extends IEntity> implements IAllOfMatcher<TEntity>,
         boolean matchesNoneOf = _noneOfIndices == null || !entity.hasAnyComponent(_noneOfIndices);
         return matchesAllOf && matchesAnyOf && matchesNoneOf;
     }
+    // End Matcher
 
+    // Begin MatcherEquals
+    @Override
+    public boolean equals(Object obj) {
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    private static int[] distinctIndices(int... indices) {
-        Set<Integer> indicesSet = EntitasCache.getIntHashSet(); // IntArraySet
-        Arrays.sort(indices); // IntArrays
-        for (int indice : indices) {
-            indicesSet.add(indice);
+        if (obj == null || obj.getClass() != this.getClass() || obj.hashCode() != hashCode()) {
+            return false;
         }
-        int[] uniqueIndices = new int[indicesSet.size()];
-        int i = 0;
-        for (Integer ind : indicesSet) {
-            uniqueIndices[i] = ind;
-            i++;
+
+        Matcher matcher = (Matcher) obj;
+        if (!equalIndices(matcher.getAllOfIndices(), _allOfIndices)) {
+            return false;
         }
-        EntitasCache.pushIntHashSet(indicesSet);
-        return uniqueIndices;
+        if (!equalIndices(matcher.getAnyOfIndices(), _anyOfIndices)) {
+            return false;
+        }
+        if (!equalIndices(matcher.getNoneOfIndices(), _noneOfIndices)) {
+            return false;
+        }
+        return true;
 
     }
 
@@ -154,6 +132,19 @@ public class Matcher<TEntity extends IEntity> implements IAllOfMatcher<TEntity>,
 
     }
 
+    @Override
+    public int hashCode() {
+        if (!_isHashCached) {
+            int hash = this.getClass().hashCode();
+            hash = applyHash(hash, _allOfIndices, 3, 53);
+            hash = applyHash(hash, _anyOfIndices, 307, 367);
+            hash = applyHash(hash, _noneOfIndices, 647, 683);
+            _hash = hash;
+            _isHashCached = true;
+        }
+        return _hash;
+    }
+
     private static int applyHash(int hash, int[] indices, int i1, int i2) {
         if (indices != null) {
             for (int i = 0, indicesLength = indices.length; i < indicesLength; i++) {
@@ -163,32 +154,119 @@ public class Matcher<TEntity extends IEntity> implements IAllOfMatcher<TEntity>,
         }
         return hash;
     }
+    // End MatcherEquals
 
-    public static IAllOfMatcher AllOf(int... indices) {
-        Matcher matcher = new Matcher();
+    // Begin MatcherStatic
+    public static <TEntity extends IEntity> IAllOfMatcher<TEntity> AllOf(int... indices) {
+        Matcher matcher = new Matcher<TEntity>();
         matcher._allOfIndices = distinctIndices(indices);
         return matcher;
     }
 
-    public static IAllOfMatcher AllOf(IMatcher... matchers) {
-        Matcher allOfMatcher = (Matcher) AllOf(MergeIndices(matchers));
+    public static <TEntity extends IEntity> IAllOfMatcher<TEntity> AllOf(IMatcher... matchers) {
+        Matcher allOfMatcher = (Matcher<TEntity>) AllOf(mergeIndices(matchers));
         setComponentNames(allOfMatcher, matchers);
         return allOfMatcher;
     }
 
-    public static IAnyOfMatcher AnyOf(int... indices) {
-        Matcher matcher = new Matcher();
+    public static <TEntity extends IEntity> IAnyOfMatcher<TEntity> AnyOf(int... indices) {
+        Matcher<TEntity> matcher = new Matcher<TEntity>();
         matcher._anyOfIndices = distinctIndices(indices);
         return matcher;
     }
 
-    public static IAnyOfMatcher AnyOf(IMatcher... matchers) {
-        Matcher anyOfMatcher = (Matcher) Matcher.AnyOf(MergeIndices(matchers));
+    public static <TEntity extends IEntity> IAnyOfMatcher<TEntity> AnyOf(IMatcher<TEntity>... matchers) {
+        Matcher anyOfMatcher = (Matcher<TEntity>) Matcher.AnyOf(mergeIndices(matchers));
         setComponentNames(anyOfMatcher, matchers);
         return anyOfMatcher;
 
     }
 
+
+    private static int[] mergeIndices(int[] allOfIndices, int[] anyOfIndices, int[] noneOfIndices) {
+        List<Integer> indicesList = EntitasCache.getIntArray();
+
+        if (allOfIndices != null) {
+            for (int it : allOfIndices) {
+                indicesList.add(it);
+            }
+        }
+        if (anyOfIndices != null) {
+            for (int it : anyOfIndices) {
+                indicesList.add(it);
+            }
+        }
+        if (noneOfIndices != null) {
+            for (int it : noneOfIndices) {
+                indicesList.add(it);
+            }
+
+        }
+        int temp[] = new int[indicesList.size()];
+        for (int i = 0; i < indicesList.size(); i++) {
+            temp[i] = indicesList.get(i);
+        }
+
+        int[] mergeIndices = distinctIndices(temp);
+
+        EntitasCache.pushIntArray(indicesList);
+        return mergeIndices;
+
+    }
+
+    static int[] mergeIndices(IMatcher... matchers) {
+        int[] indices = new int[matchers.length];
+        for (int i = 0; i < matchers.length; i++) {
+            IMatcher matcher = matchers[i];
+            if (matcher.getIndices().length != 1) {
+                throw new MatcherException(matcher);
+            }
+            indices[i] = matcher.getIndices()[0];
+        }
+
+        return indices;
+    }
+
+    static <TEntity extends IEntity> String[] getComponentNames(IMatcher<TEntity>[] matchers) {
+        for (int i = 0; i < matchers.length; i++) {
+            Matcher matcher = (Matcher) matchers[i];
+            if (matcher != null && matcher.getComponentNames() != null) {
+                return matcher.getComponentNames();
+            }
+        }
+
+        return null;
+    }
+
+    static <TEntity extends IEntity> void setComponentNames(Matcher<TEntity> matcher, IMatcher<TEntity>[] matchers) {
+        String[] componentNames = getComponentNames(matchers);
+        if (componentNames != null) {
+            matcher.setComponentNames(componentNames);
+        }
+
+    }
+
+    static int[] distinctIndices(int... indices) {
+        Set<Integer> indicesSet = EntitasCache.getIntHashSet(); // IntArraySet
+        // IntArrays
+        for (int indice : indices) {
+            indicesSet.add(indice);
+        }
+        int[] uniqueIndices = new int[indicesSet.size()];
+        int i = 0;
+        for (Integer ind : indicesSet) {
+            uniqueIndices[i] = ind;
+            i++;
+        }
+        Arrays.sort(uniqueIndices);
+        EntitasCache.pushIntHashSet(indicesSet);
+        return uniqueIndices;
+
+    }
+    // End MatcherStatic
+
+
+    // Begin MatcherToString
     private static void appendIndices(StringBuilder sb, String prefix, int[] indexArray, String[] componentNames) {
         final String SEPARATOR = ", ";
         sb.append(prefix);
@@ -209,153 +287,28 @@ public class Matcher<TEntity extends IEntity> implements IAllOfMatcher<TEntity>,
         sb.append(")");
     }
 
-    static int[] mergeIndices(IMatcher... matchers) {
-        int[] indices = new int[matchers.length];
-        for (int i = 0; i < matchers.length; i++) {
-            IMatcher matcher = matchers[i];
-            if (matcher.getIndices().length != 1) {
-                throw new MatcherException(matcher);
-            }
-            indices[i] = matcher.getIndices()[0];
-        }
-
-        return indices;
-    }
-
-    private static int[] MergeIndices(IMatcher... matchers) {
-        int[] indices = new int[matchers.length];
-        for (int i = 0; i < matchers.length; i++) {
-            IMatcher matcher = matchers[i];
-            if (matcher.getIndices().length != 1) {
-                throw new MatcherException(matcher);
-            }
-            indices[i] = matcher.getIndices()[0];
-        }
-        return indices;
-    }
-
-
-
-
-
-
-    public INoneOfMatcher noneOf(int... indices) {
-        _noneOfIndices = distinctIndices(indices);
-        _indices = null;
-        return this;
-    }
-
-    public INoneOfMatcher noneOf(IMatcher... matchers) {
-        return noneOf(MergeIndices(matchers));
-    }
-
-    public boolean matches(Entity entity) {
-        boolean matchesAllOf = _allOfIndices == null || entity.hasComponents(_allOfIndices);
-        boolean matchesAnyOf = _anyOfIndices == null || entity.hasAnyComponent(_anyOfIndices);
-        boolean matchesNoneOf = _noneOfIndices == null || !entity.hasAnyComponent(_noneOfIndices);
-        return matchesAllOf && matchesAnyOf && matchesNoneOf;
-    }
-
-    private int[] mergeIndices() {
-        List<Integer> indicesList = EntitasCache.getIntArray();
-
-        if (_allOfIndices != null) {
-            for (int it : _allOfIndices) {
-                indicesList.add(it);
-            }
-        }
-        if (_anyOfIndices != null) {
-            for (int it : _anyOfIndices) {
-                indicesList.add(it);
-            }
-        }
-        if (_noneOfIndices != null) {
-            for (int it : _noneOfIndices) {
-                indicesList.add(it);
-            }
-
-        }
-        int temp[] =  new int[indicesList.size()];
-        for (int i = 0; i < indicesList.size(); i++) {
-            temp[i] = indicesList.get(i);
-        }
-
-        int[] mergeIndices = distinctIndices(temp);
-
-        EntitasCache.pushIntArray(indicesList);
-        return mergeIndices;
-
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-
-        if (obj == null || obj.getClass() != this.getClass() || obj.hashCode() != hashCode()) {
-            return false;
-        }
-
-        Matcher matcher = (Matcher) obj;
-        if (!equalIndices(matcher.getAllOfIndices(), _allOfIndices)) {
-            return false;
-        }
-        if (!equalIndices(matcher.getAnyOfIndices(), _anyOfIndices)) {
-            return false;
-        }
-        if (!equalIndices(matcher.getNoneOfIndices(), _noneOfIndices)) {
-            return false;
-        }
-        return true;
-
-    }
-
-    public TriggerOnEvent OnEntityAdded() {
-        return new TriggerOnEvent(this, GroupEvent.Added);
-    }
-
-    public TriggerOnEvent OnEntityRemoved() {
-        return new TriggerOnEvent(this, GroupEvent.Removed);
-    }
-
-    public TriggerOnEvent OnEntityAddedOrRemoved() {
-        return new TriggerOnEvent(this, GroupEvent.AddedOrRemoved);
-    }
-
-    @Override
-    public int hashCode() {
-        if (!_isHashCached) {
-            int hash = this.getClass().hashCode();
-            hash = applyHash(hash, _allOfIndices, 3, 53);
-            hash = applyHash(hash, _anyOfIndices, 307, 367);
-            hash = applyHash(hash, _noneOfIndices, 647, 683);
-            _hash = hash;
-            _isHashCached = true;
-        }
-        return _hash;
-    }
 
     @Override
     public String toString() {
         if (_toStringCache == null) {
             StringBuilder sb = new StringBuilder();
             if (_allOfIndices != null) {
-                appendIndices(sb, "AllOf", _allOfIndices, componentNames);
+                appendIndices(sb, "AllOf", _allOfIndices, getComponentNames());
             }
             if (_anyOfIndices != null) {
                 if (_allOfIndices != null) {
                     sb.append(".");
                 }
-                appendIndices(sb, "AnyOf", _anyOfIndices, componentNames);
+                appendIndices(sb, "AnyOf", _anyOfIndices, getComponentNames());
             }
             if (_noneOfIndices != null) {
-                appendIndices(sb, ".NoneOf", _noneOfIndices, componentNames);
+                appendIndices(sb, ".NoneOf", _noneOfIndices, getComponentNames());
             }
             _toStringCache = sb.toString();
         }
 
         return _toStringCache;
     }
-
-
 
 
 }
