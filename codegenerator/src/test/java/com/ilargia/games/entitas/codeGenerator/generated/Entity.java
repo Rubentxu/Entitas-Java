@@ -3,7 +3,7 @@ package com.ilargia.games.entitas.codeGenerator.generated;
 import com.ilargia.games.entitas.api.ContextInfo;
 import com.ilargia.games.entitas.api.IComponent;
 import java.util.Stack;
-import com.ilargia.games.entitas.events.EventBus;
+
 import com.ilargia.games.entitas.codeGenerator.components.Ball;
 import com.ilargia.games.entitas.codeGenerator.components.Score;
 import com.ilargia.games.entitas.codeGenerator.components.Bounds.Tag;

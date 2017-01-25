@@ -3,7 +3,6 @@ package com.ilargia.games.core;
 import com.ilargia.games.components.Ball;
 import com.ilargia.games.entitas.Context;
 import com.ilargia.games.entitas.api.ContextInfo;
-import com.ilargia.games.entitas.events.EventBus;
 import com.ilargia.games.entitas.api.EntitasException;
 import com.ilargia.games.entitas.api.FactoryEntity;
 

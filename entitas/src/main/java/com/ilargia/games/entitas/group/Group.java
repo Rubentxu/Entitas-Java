@@ -1,13 +1,13 @@
 package com.ilargia.games.entitas.group;
 
-import com.ilargia.games.entitas.collector.Collector;
 import com.ilargia.games.entitas.Entity;
 import com.ilargia.games.entitas.api.IComponent;
 import com.ilargia.games.entitas.api.IEntity;
 import com.ilargia.games.entitas.api.IGroup;
+import com.ilargia.games.entitas.api.events.Event;
 import com.ilargia.games.entitas.api.events.GroupChanged;
 import com.ilargia.games.entitas.api.matcher.IMatcher;
-import com.ilargia.games.entitas.events.EventBus;
+import com.ilargia.games.entitas.collector.Collector;
 import com.ilargia.games.entitas.events.GroupEvent;
 import com.ilargia.games.entitas.exceptions.GroupSingleEntityException;
 import com.ilargia.games.entitas.factories.Collections;
@@ -22,7 +22,6 @@ public class Group<TEntity extends IEntity> implements IGroup<TEntity> {
     private TEntity[] _entitiesCache;
     private TEntity _singleEntityCache;
     private String _toStringCache;
-    private EventBus<TEntity> _eventBus;
     public Class<TEntity> type;
 
 
@@ -37,11 +36,10 @@ public class Group<TEntity extends IEntity> implements IGroup<TEntity> {
     }
 
 
-    public Group(IMatcher<TEntity> matcher, Class<TEntity> clazz, EventBus eventBus) {
+    public Group(IMatcher<TEntity> matcher, Class<TEntity> clazz) {
         _entities = Collections.createSet(Entity.class);
         _matcher = matcher;
         type = clazz;
-        _eventBus = eventBus;
 
     }
 
@@ -64,23 +62,23 @@ public class Group<TEntity extends IEntity> implements IGroup<TEntity> {
 
     public void updateEntity(TEntity entity, int index, IComponent previousComponent, IComponent newComponent) {
         if (_entities.contains(entity)) {
-            _eventBus.notifyOnEntityRemoved(this, entity, index, previousComponent);
-            _eventBus.notifyOnEntityAdded(this, entity, index, previousComponent);
-            _eventBus.notifyOnEntityUpdated(this, entity, index, previousComponent, newComponent);
+            notifyOnEntityRemoved(this, entity, index, previousComponent);
+            notifyOnEntityAdded(this, entity, index, previousComponent);
+            notifyOnEntityUpdated(this, entity, index, previousComponent, newComponent);
         }
     }
 
     public void removeAllEventHandlers() {
-        _eventBus.OnEntityAdded.clear();
-        _eventBus.OnEntityRemoved.clear();
-        _eventBus.OnEntityUpdated.clear();
+        OnEntityAdded.clear();
+        OnEntityRemoved.clear();
+        OnEntityUpdated.clear();
     }
 
     @Override
-    public GroupChanged<TEntity> handleEntity(TEntity entity) {
+    public Event<GroupChanged> handleEntity(TEntity entity) {
         return (_matcher.matches(entity))
-                ? (addEntitySilently(entity)) ? (GroupChanged<TEntity>) _eventBus.OnEntityAdded.getEventHandler(this) : null
-                : (removeEntitySilently(entity)) ? (GroupChanged<TEntity>) _eventBus.OnEntityRemoved.getEventHandler(this) : null;
+                ? (addEntitySilently(entity)) ? OnEntityAdded : null
+                : (removeEntitySilently(entity)) ? OnEntityRemoved : null;
 
     }
 
@@ -97,7 +95,7 @@ public class Group<TEntity extends IEntity> implements IGroup<TEntity> {
 
     void addEntity(TEntity entity, int index, IComponent component) {
         if (addEntitySilently(entity)) {
-            _eventBus.notifyOnEntityAdded(this, entity, index, component);
+            notifyOnEntityAdded(this, entity, index, component);
         }
 
     }
@@ -118,7 +116,7 @@ public class Group<TEntity extends IEntity> implements IGroup<TEntity> {
         if (removed) {
             _entitiesCache = null;
             _singleEntityCache = null;
-            _eventBus.notifyOnEntityRemoved(this, entity, index, component);
+            notifyOnEntityRemoved(this, entity, index, component);
             entity.release(this);
         }
 
@@ -165,8 +163,8 @@ public class Group<TEntity extends IEntity> implements IGroup<TEntity> {
         return _toStringCache;
     }
 
-    public static <TE extends IEntity> Collector<TE> createCollector(IGroup<TE> group,GroupEvent groupEvent, EventBus<TE> eventBus) {
-        return new Collector<TE>(group, groupEvent, eventBus);
+    public static <TE extends IEntity> Collector<TE> createCollector(IGroup<TE> group, GroupEvent groupEvent) {
+        return new Collector<TE>(group, groupEvent);
     }
 
 }

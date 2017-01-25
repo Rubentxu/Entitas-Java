@@ -2,7 +2,6 @@ package com.ilargia.games.entitas.codeGenerator.generated;
 
 import com.ilargia.games.entitas.api.ContextInfo;
 import com.ilargia.games.entitas.api.FactoryEntity;
-import com.ilargia.games.entitas.events.EventBus;
 import com.ilargia.games.entitas.api.EntitasException;
 import com.ilargia.games.entitas.codeGenerator.components.Ball;
 

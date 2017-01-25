@@ -3,7 +3,6 @@ package com.ilargia.games.entitas.utils;
 import com.ilargia.games.entitas.Context;
 import com.ilargia.games.entitas.api.ContextInfo;
 import com.ilargia.games.entitas.api.FactoryEntity;
-import com.ilargia.games.entitas.events.EventBus;
 
 /**
  * ---------------------------------------------------------------------------

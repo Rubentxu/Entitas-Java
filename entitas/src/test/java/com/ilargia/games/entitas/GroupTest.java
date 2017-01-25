@@ -3,7 +3,6 @@ package com.ilargia.games.entitas;
 import com.ilargia.games.entitas.api.ContextInfo;
 import com.ilargia.games.entitas.components.Position;
 import com.ilargia.games.entitas.components.View;
-import com.ilargia.games.entitas.events.EventBus;
 import com.ilargia.games.entitas.factories.Collections;
 import com.ilargia.games.entitas.factories.CollectionsFactory;
 import com.ilargia.games.entitas.api.events.GroupChanged;

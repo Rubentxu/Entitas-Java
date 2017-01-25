@@ -5,19 +5,14 @@ import com.ilargia.games.entitas.api.IComponent;
 import com.ilargia.games.entitas.api.IEntity;
 import com.ilargia.games.entitas.api.IGroup;
 import com.ilargia.games.entitas.api.events.GroupChanged;
-import com.ilargia.games.entitas.events.EventBus;
 import com.ilargia.games.entitas.events.GroupEvent;
 import com.ilargia.games.entitas.exceptions.EntityCollectorException;
 import com.ilargia.games.entitas.factories.Collections;
-import com.ilargia.games.entitas.group.Group;
 
 import java.util.Set;
 
-import static com.ilargia.games.entitas.events.GroupEvent.*;
-
 public class Collector<TEntity extends IEntity> {
 
-    private final EventBus<TEntity> _eventBus;
     public Set<TEntity> _collectedEntities; //ObjectOpenHashSet
     private IGroup<TEntity>[] _groups;
     private GroupEvent[] _groupEvents;
@@ -26,16 +21,15 @@ public class Collector<TEntity extends IEntity> {
     StringBuilder _toStringBuilder;
 
 
-    public Collector(IGroup<TEntity> group, GroupEvent eventType, EventBus<TEntity> eventBus) {
-        this(new IGroup[]{group}, new GroupEvent[]{eventType}, eventBus);
+    public Collector(IGroup<TEntity> group, GroupEvent eventType) {
+        this(new IGroup[]{group}, new GroupEvent[]{eventType});
 
     }
 
-    public Collector(IGroup<TEntity>[] groups, GroupEvent[] groupEvents, EventBus<TEntity> eventBus) {
+    public Collector(IGroup<TEntity>[] groups, GroupEvent[] groupEvents) {
         _groups = groups;
         _collectedEntities = Collections.createSet(Entity.class);
         _groupEvents = groupEvents;
-        _eventBus = eventBus;
 
         if (groups.length != groupEvents.length) {
             throw new EntityCollectorException("Unbalanced count with groups (" + groups.length +
@@ -56,14 +50,14 @@ public class Collector<TEntity extends IEntity> {
             GroupEvent groupEvent = _groupEvents[i];
             switch (groupEvent) {
                 case Added:
-                    _eventBus.OnEntityAdded.addListener(group,_addEntityCache);
+                    group.OnEntityAdded.addListener(_addEntityCache);
                     break;
                 case Removed:
-                    _eventBus.OnEntityRemoved.addListener(group,_addEntityCache);
+                    group.OnEntityRemoved.addListener(_addEntityCache);
                     break;
                 case AddedOrRemoved:
-                    _eventBus.OnEntityAdded.addListener(group,_addEntityCache);
-                    _eventBus.OnEntityRemoved .addListener(group,_addEntityCache);
+                    group.OnEntityAdded.addListener(_addEntityCache);
+                    group.OnEntityRemoved.addListener(_addEntityCache);
                     break;
             }
 
@@ -73,8 +67,8 @@ public class Collector<TEntity extends IEntity> {
     public void deactivate() {
         for (int i = 0; i < _groups.length; i++) {
             IGroup group = _groups[i];
-            _eventBus.OnEntityAdded.removeListener(group);
-            _eventBus.OnEntityRemoved.removeListener(group);
+            group.OnEntityAdded.clear();
+            group.OnEntityRemoved.clear();
 
         }
         clearCollectedEntities();

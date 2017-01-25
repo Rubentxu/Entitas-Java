@@ -5,7 +5,6 @@ import com.ilargia.games.entitas.api.ContextInfo;
 import com.ilargia.games.entitas.api.IComponent;
 import com.ilargia.games.entitas.api.IEntity;
 import com.ilargia.games.entitas.caching.EntitasCache;
-import com.ilargia.games.entitas.events.EventBus;
 import com.ilargia.games.entitas.exceptions.*;
 import com.ilargia.games.entitas.factories.Collections;
 
@@ -25,16 +24,15 @@ public class Entity implements IEntity {
     private String _toStringCache;
     private int _totalComponents;
     private ContextInfo _contextInfo;
-    private EventBus _eventBus;
     private StringBuilder _toStringBuilder;
 
-    public Entity(int totalComponents, Stack<IComponent>[] componentPools, ContextInfo contextInfo, EventBus eventBus) {
+    public Entity(int totalComponents, Stack<IComponent>[] componentPools, ContextInfo contextInfo) {
         _components = new IComponent[totalComponents];
         _totalComponents = totalComponents;
         _componentPools = componentPools;
         _isEnabled = true;
         owners = Collections.createSet(Object.class);
-        _eventBus = eventBus;
+
 
         if (contextInfo != null) {
             _contextInfo = contextInfo;
@@ -81,7 +79,7 @@ public class Entity implements IEntity {
         _components = new IComponent[totalComponents];
         _componentPools = componentPools;
 
-        if(contextInfo != null) {
+        if (contextInfo != null) {
             _contextInfo = contextInfo;
         } else {
             _contextInfo = createDefaultContextInfo();
@@ -111,7 +109,7 @@ public class Entity implements IEntity {
         _componentsCache = null;
         _componentIndicesCache = null;
         _toStringCache = null;
-        _eventBus.notifyComponentAdded(this, index, component);
+        notifyComponentAdded(this, index, component);
 
     }
 
@@ -154,15 +152,15 @@ public class Entity implements IEntity {
             _components[index] = replacement;
             _componentsCache = null;
             if (replacement != null) {
-                _eventBus.notifyComponentReplaced(this, index, previousComponent, replacement);
+                notifyComponentReplaced(this, index, previousComponent, replacement);
             } else {
                 _componentIndicesCache = null;
-                _eventBus.notifyComponentRemoved(this, index, previousComponent);
+                notifyComponentRemoved(this, index, previousComponent);
             }
             getComponentPool(index).push(previousComponent);
 
         } else {
-            _eventBus.notifyComponentReplaced(this, index, previousComponent, replacement);
+            notifyComponentReplaced(this, index, previousComponent, replacement);
         }
 
     }
@@ -311,7 +309,7 @@ public class Entity implements IEntity {
 
     @Override
     public void retain(Object owner) {
-        if(!owners.add(owner)) {
+        if (!owners.add(owner)) {
             throw new EntityIsAlreadyRetainedByOwnerException(owner);
         }
         _toStringCache = null;
@@ -320,13 +318,13 @@ public class Entity implements IEntity {
 
     @Override
     public void release(Object owner) {
-        if(!owners.remove(owner)) {
+        if (!owners.remove(owner)) {
             throw new EntityIsNotRetainedByOwnerException(owner);
         }
 
-        if(owners.size() == 0) {
+        if (owners.size() == 0) {
             _toStringCache = null;
-            _eventBus.notifyEntityReleased(this);
+            notifyEntityReleased(this);
         }
 
     }
@@ -339,7 +337,7 @@ public class Entity implements IEntity {
 
     ContextInfo createDefaultContextInfo() {
         String[] componentNames = new String[_totalComponents];
-        for(int i = 0; i < componentNames.length; i++) {
+        for (int i = 0; i < componentNames.length; i++) {
             componentNames[i] = String.valueOf(i);
         }
 
@@ -356,13 +354,13 @@ public class Entity implements IEntity {
 
     @Override
     public void removeAllOnEntityReleasedHandlers() {
-            // OnEntityReleased = null;
+        // OnEntityReleased = null;
     }
 
     @Override
     public String toString() {
-        if(_toStringCache == null) {
-            if(_toStringBuilder == null) {
+        if (_toStringCache == null) {
+            if (_toStringBuilder == null) {
                 _toStringBuilder = new StringBuilder();
             }
 
@@ -374,10 +372,10 @@ public class Entity implements IEntity {
                     .append(")")
                     .append("(");
 
-                String separator = ", ";
+            String separator = ", ";
             IComponent[] components = getComponents();
             int lastSeparator = components.length - 1;
-            for(int i = 0; i < components.length; i++) {
+            for (int i = 0; i < components.length; i++) {
                 IComponent component = components[i];
                 Object type = component.getClass();
 //                implementsToString = type.getMethod("ToString")
@@ -388,7 +386,7 @@ public class Entity implements IEntity {
 //                                : type.Name.RemoveComponentSuffix()
 //                );
 
-                if(i < lastSeparator) {
+                if (i < lastSeparator) {
                     _toStringBuilder.append(separator);
                 }
             }
@@ -401,17 +399,17 @@ public class Entity implements IEntity {
     }
 
     @Override
-    public int hashCode(){
+    public int hashCode() {
         return _creationIndex;
     }
 
     @Override
-    public boolean equals(Object o){
-        if(o == null)    return false;
-        if(!(o instanceof Entity)) return false;
+    public boolean equals(Object o) {
+        if (o == null) return false;
+        if (!(o instanceof Entity)) return false;
 
         IEntity other = (IEntity) o;
-        if(this._creationIndex != other.getCreationIndex())      return false;
+        if (this._creationIndex != other.getCreationIndex()) return false;
         return true;
     }
 

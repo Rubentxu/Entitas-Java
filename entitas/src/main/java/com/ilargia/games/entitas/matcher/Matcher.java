@@ -15,7 +15,7 @@ import java.util.Set;
 
 public class Matcher<TEntity extends IEntity> implements IAllOfMatcher<TEntity>, IAnyOfMatcher<TEntity>, INoneOfMatcher<TEntity> {
 
-    public String[] _componentNames;
+    private String[] _componentNames;
     private int[] _indices;
     private int[] _allOfIndices;
     private int[] _anyOfIndices;
@@ -207,11 +207,11 @@ public class Matcher<TEntity extends IEntity> implements IAllOfMatcher<TEntity>,
         return _noneOfIndices;
     }
 
-    private String[] getComponentNames() {
+    public String[] getComponentNames() {
         return _componentNames;
     }
 
-    private void setComponentNames(String[] componentNames) {
+    public void setComponentNames(String[] componentNames) {
         this._componentNames = componentNames;
     }
 

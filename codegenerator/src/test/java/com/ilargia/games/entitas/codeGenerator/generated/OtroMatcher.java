@@ -34,7 +34,7 @@ public class OtroMatcher {
 	public static Matcher View() {
 		if (_matcherView == null) {
 			Matcher matcher = (Matcher) Matcher.AllOf(OtroComponentIds.View);
-			matcher.componentNames = OtroComponentIds.componentNames();
+			matcher.setComponentNames( OtroComponentIds.componentNames());
 			_matcherView = matcher;
 		}
 		return _matcherView;

@@ -6,7 +6,6 @@ import com.ilargia.games.entitas.components.Interactive;
 import com.ilargia.games.entitas.components.Motion;
 import com.ilargia.games.entitas.components.Position;
 import com.ilargia.games.entitas.components.View;
-import com.ilargia.games.entitas.events.EventBus;
 import com.ilargia.games.entitas.exceptions.EntityAlreadyHasComponentException;
 import com.ilargia.games.entitas.exceptions.EntityDoesNotHaveComponentException;
 import com.ilargia.games.entitas.exceptions.EntityIsNotEnabledException;

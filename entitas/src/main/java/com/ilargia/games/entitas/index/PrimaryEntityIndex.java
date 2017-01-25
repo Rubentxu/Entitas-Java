@@ -3,7 +3,6 @@ package com.ilargia.games.entitas.index;
 import com.ilargia.games.entitas.api.IComponent;
 import com.ilargia.games.entitas.api.IEntity;
 import com.ilargia.games.entitas.api.IGroup;
-import com.ilargia.games.entitas.events.EventBus;
 import com.ilargia.games.entitas.exceptions.EntityIndexException;
 import com.ilargia.games.entitas.factories.Collections;
 
@@ -13,8 +12,8 @@ public class PrimaryEntityIndex<TEntity extends IEntity, TKey> extends AbstractE
 
     private Map<TKey, TEntity> _index; //Object2ObjectArrayMap
 
-    public PrimaryEntityIndex(IGroup group, Func<TEntity, IComponent, TKey> getKey, EventBus<TEntity> eventBus) {
-        super(group, getKey, eventBus);
+    public PrimaryEntityIndex(IGroup group, Func<TEntity, IComponent, TKey> getKey) {
+        super(group, getKey);
         _index = Collections.createMap(Object.class, Object.class);
         activate();
     }

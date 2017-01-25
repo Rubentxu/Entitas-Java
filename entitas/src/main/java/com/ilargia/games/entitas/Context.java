@@ -6,7 +6,6 @@ import com.ilargia.games.entitas.api.events.EntityComponentReplaced;
 import com.ilargia.games.entitas.api.events.EntityReleased;
 import com.ilargia.games.entitas.api.matcher.IMatcher;
 import com.ilargia.games.entitas.collector.Collector;
-import com.ilargia.games.entitas.events.EventBus;
 import com.ilargia.games.entitas.events.GroupEvent;
 import com.ilargia.games.entitas.exceptions.*;
 import com.ilargia.games.entitas.factories.Collections;
@@ -18,6 +17,7 @@ import java.util.Set;
 import java.util.Stack;
 
 public class Context<TEntity extends IEntity> implements IContext<TEntity> {
+
 
     public int _totalComponents;
     public Class<TEntity> entityType;
@@ -32,16 +32,15 @@ public class Context<TEntity extends IEntity> implements IContext<TEntity> {
     private FactoryEntity<TEntity> _factoryEntiy;
     private ContextInfo _contextInfo;
     private Stack<IComponent>[] _componentContexts;
-    private EventBus<TEntity> _eventBus;
     private Stack<IComponent>[] _componentPools;
+    EntityComponentChanged<TEntity> _cachedEntityChanged;
 
 
     public Context(int totalComponents, int startCreationIndex, ContextInfo metaData,
-                   EventBus<TEntity> eventBus, FactoryEntity<TEntity> factoryMethod) {
+                  FactoryEntity<TEntity> factoryMethod) {
         _totalComponents = totalComponents;
         _creationIndex = startCreationIndex;
         _factoryEntiy = factoryMethod;
-        _eventBus = eventBus;
 
         if (metaData != null) {
             _contextInfo = metaData;
@@ -69,18 +68,9 @@ public class Context<TEntity extends IEntity> implements IContext<TEntity> {
         _entities = Collections.createSet(Entity.class);
         _groups = Collections.createMap(IMatcher.class, Group.class);
 
-        EntityComponentChanged<TEntity> _cachedEntityChanged = (TEntity e, int idx, IComponent c) -> {
+        _cachedEntityChanged = (TEntity e, int idx, IComponent c) -> {
             updateGroupsComponentAddedOrRemoved(e, idx, c, _groupsForIndex);
         };
-        _eventBus.OnComponentAdded.addListener(_cachedEntityChanged);
-        _eventBus.OnComponentRemoved.addListener(_cachedEntityChanged);
-        _eventBus.OnComponentReplaced.addListener((EntityComponentReplaced<TEntity>) (TEntity e, int idx, IComponent pc, IComponent nc) -> {
-            updateGroupsComponentReplaced(e, idx, pc, nc, _groupsForIndex);
-        });
-        _eventBus.OnEntityReleased.addListener((EntityReleased<TEntity>) (TEntity e) -> {
-            onEntityReleased(e, _retainedEntities, _reusableEntities);
-        });
-
         entityType = (Class<TEntity>) _factoryEntiy.create(_totalComponents, _componentContexts, _contextInfo).getClass();
 
     }
@@ -98,12 +88,12 @@ public class Context<TEntity extends IEntity> implements IContext<TEntity> {
             eventTypes[i] = eventType;
         }
 
-        return new Collector(groups, eventTypes, _eventBus);
+        return new Collector(groups, eventTypes);
     }
 
     public TEntity createEntity() {
         TEntity ent;
-        if(_reusableEntities.size() > 0) {
+        if (_reusableEntities.size() > 0) {
             ent = _reusableEntities.pop();
             ent.reactivate(_creationIndex++);
         } else {
@@ -114,11 +104,15 @@ public class Context<TEntity extends IEntity> implements IContext<TEntity> {
         _entities.add(ent);
         ent.retain(this);
         _entitiesCache = null;
-//        entity.OnComponentAdded += _cachedEntityChanged;
-//        entity.OnComponentRemoved += _cachedEntityChanged;
-//        entity.OnComponentReplaced += _cachedComponentReplaced;
-//        entity.OnEntityReleased += _cachedEntityReleased;
-        _eventBus.notifyEntityCreated( this, ent);
+        ent.OnComponentAdded.addListener(_cachedEntityChanged);
+        ent.OnComponentRemoved.addListener(_cachedEntityChanged);
+        ent.OnComponentReplaced.addListener((EntityComponentReplaced<TEntity>) (TEntity e, int idx, IComponent pc, IComponent nc) -> {
+            updateGroupsComponentReplaced(e, idx, pc, nc, _groupsForIndex);
+        });
+        ent.OnEntityReleased.addListener((EntityReleased<TEntity>) (TEntity e) -> {
+            onEntityReleased(e, _retainedEntities, _reusableEntities);
+        });
+        notifyEntityCreated(this, ent);
 
         return ent;
 
@@ -130,11 +124,11 @@ public class Context<TEntity extends IEntity> implements IContext<TEntity> {
                     "Did you call pool.DestroyEntity() on a wrong pool?");
         }
         _entitiesCache = null;
-        _eventBus.notifyEntityWillBeDestroyed(this, entity);
+        notifyEntityWillBeDestroyed(this, entity);
 
         entity.destroy();
 
-        _eventBus.notifyEntityDestroyed( this, entity);
+        notifyEntityDestroyed(this, entity);
 
         if (entity.retainCount() == 1) {
             _reusableEntities.push(entity);
@@ -182,7 +176,7 @@ public class Context<TEntity extends IEntity> implements IContext<TEntity> {
         Group<TEntity> group = null;
         if (!(_groups.containsKey(matcher) ? (group = _groups.get(matcher)) == group : false)) {
 
-            group = new Group(matcher, entityType, _eventBus);
+            group = new Group(matcher, entityType);
             for (TEntity entity : getEntities()) {
                 group.handleEntitySilently(entity);
             }
@@ -194,7 +188,7 @@ public class Context<TEntity extends IEntity> implements IContext<TEntity> {
                 }
                 _groupsForIndex[index].add(group);
             }
-            _eventBus.notifyGroupCreated( this, group);
+            notifyGroupCreated(this, group);
 
         }
         return group;
@@ -207,7 +201,7 @@ public class Context<TEntity extends IEntity> implements IContext<TEntity> {
             for (IEntity entity : group.getEntities()) {
                 entity.release(group);
             }
-            _eventBus.notifyGroupCleared( this, group);
+            notifyGroupCleared(this, group);
         }
         _groups.clear();
 
@@ -263,7 +257,7 @@ public class Context<TEntity extends IEntity> implements IContext<TEntity> {
         clearGroups();
         destroyAllEntities();
         resetCreationIndex();
-        _eventBus.clearEventsPool();
+        clearEventsPool();
 
     }
 

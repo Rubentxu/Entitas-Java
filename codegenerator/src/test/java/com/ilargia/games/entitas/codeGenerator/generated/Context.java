@@ -4,7 +4,6 @@ import com.ilargia.games.entitas.api.ContextInfo;
 import com.ilargia.games.entitas.api.FactoryEntity;
 import java.util.Stack;
 import com.ilargia.games.entitas.api.IComponent;
-import com.ilargia.games.entitas.events.EventBus;
 
 /**
  * ---------------------------------------------------------------------------
