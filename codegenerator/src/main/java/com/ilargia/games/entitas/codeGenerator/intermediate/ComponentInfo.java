@@ -14,7 +14,7 @@ public class ComponentInfo {
     public List<MethodSource<JavaClassSource>> constructores;
     public List<FieldSource<JavaClassSource>> memberInfos;
     public List<String> internalEnums;
-    public List<String> pools;
+    public List<String> contexts;
     public boolean isSingleEntity;
     public String singleComponentPrefix;
     public boolean generateComponent;
@@ -26,14 +26,14 @@ public class ComponentInfo {
     public Integer index;
     public Integer totalComponents;
 
-    public ComponentInfo(String fullTypeName, String typeName, List<FieldSource<JavaClassSource>> memberInfos, List<String> pools,
+    public ComponentInfo(String fullTypeName, String typeName, List<FieldSource<JavaClassSource>> memberInfos, List<String> contexts,
                          boolean isSingleEntity, String singleComponentPrefix,
                          boolean generateComponent, boolean generateMethods, boolean generateIndex, boolean hideInBlueprintInspector,
                          List<MethodSource<JavaClassSource>> constructores, List<String> enums) {
 
         this.fullTypeName = fullTypeName;
         this.memberInfos = memberInfos;
-        this.pools = pools;
+        this.contexts = contexts;
         this.isSingleEntity = isSingleEntity;
         this.singleComponentPrefix = (singleComponentPrefix != null && !singleComponentPrefix.isEmpty()) ? singleComponentPrefix : "";
         this.generateComponent = generateComponent;
@@ -59,7 +59,7 @@ public class ComponentInfo {
                 "\n    nameComponent='" + nameComponent + '\'' +
                 ",\n    fullTypeName='" + fullTypeName + '\'' +
                 ",\n    memberInfos=" + memberInfos +
-                ",\n    pools=" + pools +
+                ",\n    contexts=" + contexts +
                 ",\n    isSingleEntity=" + isSingleEntity +
                 ",\n    singleComponentPrefix='" + singleComponentPrefix + '\'' +
                 ",\n    generateComponent=" + generateComponent +

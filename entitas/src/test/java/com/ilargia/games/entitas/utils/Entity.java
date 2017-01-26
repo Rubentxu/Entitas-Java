@@ -22,8 +22,8 @@ public class Entity extends com.ilargia.games.entitas.Entity {
 	public Player PlayerComponent = new Player();
 
 	public Entity(int totalComponents, Stack<IComponent>[] componentPools,
-                  ContextInfo contextInfo, EventBus<Entity> bus) {
-		super(totalComponents, componentPools, contextInfo, bus);
+                  ContextInfo contextInfo) {
+		super(totalComponents, componentPools, contextInfo);
 	}
 
 	public boolean isInteractive() {

@@ -14,12 +14,12 @@ import static org.junit.Assert.assertEquals;
 
 public class ComponentExtensionGeneratorTest {
 
-    private ComponentExtensionsGenerator generator;
+    private EntityGenerator generator;
     private List<String> poolNames;
 
     @Before
     public void setUp() throws Exception {
-        generator = new ComponentExtensionsGenerator();
+        generator = new EntityGenerator();
         poolNames = new ArrayList<String>();
         poolNames.add("pruebas");
         poolNames.add("core");
@@ -47,7 +47,7 @@ public class ComponentExtensionGeneratorTest {
 
         List<JavaClassSource> result = generator.generate(componentInfos, "com.pruebas.entitas");
 
-        assertEquals(4, result.size());
+        assertEquals(2, result.size());
 
     }
 

@@ -16,10 +16,8 @@ public class Context {
 
 	public Pool test;
 	public Pool test2;
-	public EventBus<Entity> bus;
 
 	public Context() {
-		bus = new EventBus<>();
 		test = createTestPool();
 		test2 = createTest2Pool();
 
@@ -28,15 +26,13 @@ public class Context {
 	public Pool createTestPool() {
 		return new Pool(TestComponentIds.totalComponents, 0,
 				new ContextInfo("Test", TestComponentIds.componentNames(),
-						TestComponentIds.componentTypes()), factoryEntity(),
-				bus);
+						TestComponentIds.componentTypes()), factoryEntity());
 	}
 
 	public Pool createTest2Pool() {
 		return new Pool(Test2ComponentIds.totalComponents, 0,
 				new ContextInfo("Test2", Test2ComponentIds.componentNames(),
-						Test2ComponentIds.componentTypes()), factoryEntity(),
-				bus);
+						Test2ComponentIds.componentTypes()), factoryEntity());
 	}
 
 	public Pool[] allPools() {
@@ -46,8 +42,7 @@ public class Context {
 	public FactoryEntity<Entity> factoryEntity() {
 		return (int totalComponents, Stack<IComponent>[] componentPools,
 				ContextInfo contextInfo) -> {
-			return new Entity(totalComponents, componentPools, contextInfo,
-					bus);
+			return new Entity(totalComponents, componentPools, contextInfo);
 		};
 	}
 }

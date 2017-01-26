@@ -44,7 +44,7 @@ public class CodeGenerator {
         for (ComponentInfo info : componentInfos) {
             info.index = index++;
             info.totalComponents = componentInfos.size();
-            for (String poolName : info.pools) {
+            for (String poolName : info.contexts) {
                 if (!poolsComponents.containsKey(poolName)) {
                     poolsComponents.put(poolName, new ArrayList<>());
                 }
@@ -78,8 +78,8 @@ public class CodeGenerator {
 
         if (sourcePackage.isPresent()) {
             for (ICodeGenerator generator : codeGenerators) {
-                if (generator instanceof IPoolCodeGenerator) {
-                    files.addAll(((IPoolCodeGenerator) generator).generate(provider.poolNames(), sourcePackage.get()));
+                if (generator instanceof IContextCodeGenerator) {
+                    files.addAll(((IContextCodeGenerator) generator).generate(provider.poolNames(), sourcePackage.get()));
 
                 }
 

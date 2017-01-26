@@ -1,8 +1,9 @@
 package com.ilargia.games.entitas.codeGenerator;
 
-import com.ilargia.games.entitas.codeGenerator.generators.ComponentExtensionsGenerator;
+import com.ilargia.games.entitas.codeGenerator.generators.EntityGenerator;
 import com.ilargia.games.entitas.codeGenerator.generators.ComponentIndicesGenerator;
 import com.ilargia.games.entitas.codeGenerator.generators.ContextGenerator;
+import com.ilargia.games.entitas.codeGenerator.generators.MatcherGenerator;
 import com.ilargia.games.entitas.codeGenerator.interfaces.ICodeGenerator;
 import com.ilargia.games.entitas.codeGenerator.intermediate.CodeGenFile;
 import com.ilargia.games.entitas.codeGenerator.providers.TypeReflectionProvider;
@@ -37,7 +38,7 @@ public class CodeGeneratorApp extends Application implements Initializable {
     @FXML
     private CheckBox componentsGenerator;
     @FXML
-    private CheckBox poolsGenerator;
+    private CheckBox contextsGenerator;
     @FXML
     private TextField fieldComponentFolder;
     @FXML
@@ -172,11 +173,13 @@ public class CodeGeneratorApp extends Application implements Initializable {
                 List<ICodeGenerator> codeGenerators = new ArrayList<>();
 
                 if (componentsGenerator.isSelected())
-                    codeGenerators.add(new ComponentExtensionsGenerator());
+                    codeGenerators.add(new EntityGenerator());
                 if (componentIndicesGenerator.isSelected())
                     codeGenerators.add(new ComponentIndicesGenerator());
-                if (poolsGenerator.isSelected())
+                if (contextsGenerator.isSelected())
                     codeGenerators.add(new ContextGenerator());
+
+                codeGenerators.add(new MatcherGenerator());
 
                 TypeReflectionProvider provider = new TypeReflectionProvider(fieldComponentFolder.getText());
                 CodeGenerator generator = new CodeGenerator();

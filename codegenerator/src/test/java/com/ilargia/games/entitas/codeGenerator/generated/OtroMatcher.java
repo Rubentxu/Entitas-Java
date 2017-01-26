@@ -9,18 +9,8 @@ import com.ilargia.games.entitas.matcher.Matcher;
  */
 public class OtroMatcher {
 
-	private static Matcher _matcherBall;
 	private static Matcher _matcherPlayer;
 	private static Matcher _matcherView;
-
-	public static Matcher Ball() {
-		if (_matcherBall == null) {
-			Matcher matcher = (Matcher) Matcher.AllOf(OtroComponentIds.Ball);
-			matcher.componentNames = OtroComponentIds.componentNames();
-			_matcherBall = matcher;
-		}
-		return _matcherBall;
-	}
 
 	public static Matcher Player() {
 		if (_matcherPlayer == null) {
@@ -34,7 +24,7 @@ public class OtroMatcher {
 	public static Matcher View() {
 		if (_matcherView == null) {
 			Matcher matcher = (Matcher) Matcher.AllOf(OtroComponentIds.View);
-			matcher.setComponentNames( OtroComponentIds.componentNames());
+			matcher.componentNames = OtroComponentIds.componentNames();
 			_matcherView = matcher;
 		}
 		return _matcherView;

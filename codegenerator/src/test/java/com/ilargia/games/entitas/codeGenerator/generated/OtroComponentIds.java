@@ -1,6 +1,5 @@
 package com.ilargia.games.entitas.codeGenerator.generated;
 
-import com.ilargia.games.entitas.codeGenerator.components.Ball;
 import com.ilargia.games.entitas.codeGenerator.components.Player;
 import com.ilargia.games.entitas.codeGenerator.components.View;
 
@@ -11,17 +10,15 @@ import com.ilargia.games.entitas.codeGenerator.components.View;
  */
 public class OtroComponentIds {
 
-	public static final int Ball = 0;
 	public static final int Player = 3;
-	public static final int View = 4;
-	public static final int totalComponents = 3;
+	public static final int View = 5;
+	public static final int totalComponents = 2;
 
 	public static String[] componentNames() {
-		return new String[]{"Ball", null, null, "Player", "View", null};
+		return new String[]{null, null, null, "Player", null, "View"};
 	}
 
 	public static Class[] componentTypes() {
-		return new Class[]{Ball.class, null, null, Player.class, View.class,
-				null};
+		return new Class[]{null, null, null, Player.class, null, View.class};
 	}
 }

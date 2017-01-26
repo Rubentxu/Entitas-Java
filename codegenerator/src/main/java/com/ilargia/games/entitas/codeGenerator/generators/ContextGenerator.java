@@ -2,103 +2,224 @@ package com.ilargia.games.entitas.codeGenerator.generators;
 
 
 import com.ilargia.games.entitas.codeGenerator.CodeGenerator;
-import com.ilargia.games.entitas.codeGenerator.interfaces.IPoolCodeGenerator;
+import com.ilargia.games.entitas.codeGenerator.interfaces.IComponentCodeGenerator;
+import com.ilargia.games.entitas.codeGenerator.intermediate.ComponentInfo;
 import org.jboss.forge.roaster.Roaster;
+import org.jboss.forge.roaster.model.source.FieldSource;
 import org.jboss.forge.roaster.model.source.JavaClassSource;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
+import java.util.stream.Collectors;
 
+public class ContextGenerator implements IComponentCodeGenerator {
 
-public class ContextGenerator implements IPoolCodeGenerator {
 
     @Override
-    public List<JavaClassSource> generate(Set<String> poolNames, String pkgDestiny) {
+    public List<JavaClassSource> generate(List<ComponentInfo> infos, String pkgDestiny) {
+        Map<String, List<ComponentInfo>> mapContextsComponents = CodeGenerator.generateMap(infos);
+
         List<JavaClassSource> result = new ArrayList<>();
-        JavaClassSource javaClass = Roaster.parse(JavaClassSource.class, "public class SplashContext {}");
-        javaClass.setPackage(pkgDestiny);
-        createMethodConstructor(javaClass, poolNames);
-        createPoolsMethod(javaClass, poolNames);
-        createMethodAllPools(javaClass, poolNames);
-        createPoolFields(javaClass, poolNames);
-        result.add(javaClass);
+
+        result.addAll((List) mapContextsComponents.keySet().stream()
+                .map(contextName -> generateContext(contextName, mapContextsComponents.get(contextName), pkgDestiny)
+                ).collect(Collectors.toList()));
+
         return result;
-
     }
+    private JavaClassSource generateContext(String contextName, List<ComponentInfo> infos, String pkgDestiny){
+        JavaClassSource contextClass = Roaster.parse(JavaClassSource.class, String.format("public class %1$sContext extends com.ilargia.games.entitas.Context<%1$sEntity> {}",contextName));
+        contextClass.setPackage(pkgDestiny);
 
-
-    private void createPoolsMethod(JavaClassSource javaClass, Set<String> poolNames) {
-        poolNames.forEach((poolName) -> {
-            String createMethodName = String.format("create%1$sPool", CodeGenerator.capitalize(poolName));
-            String body = String.format("return new SplashPool(%2$s.totalComponents, 0, new EntityMetaData(\"%1$s\", %2$s.componentNames(), %2$s.componentTypes()), factoryEntity(), bus);",
-                    CodeGenerator.capitalize(poolName), CodeGenerator.capitalize(poolName) + CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG);
-            javaClass.addMethod()
-                    .setPublic()
-                    .setName(createMethodName)
-                    .setReturnType("SplashPool")
-                    .setBody(body);
-
-        });
-
-    }
-
-    private void createMethodAllPools(JavaClassSource javaClass, Set<String> poolNames) {
-
-        String allPoolsList = poolNames.stream().reduce("", (acc, poolName) -> {
-            return acc + poolName.toLowerCase() + ", ";
-        });
-
-        javaClass.addMethod()
+        contextClass.addMethod()
+                .setName(contextName+"Context")
                 .setPublic()
-                .setName("allPools")
-                .setReturnType("SplashPool[]")
-                .setBody(String.format("return new SplashPool[] { %1$s };", allPoolsList));
-
-
-    }
-
-    private void createMethodConstructor(JavaClassSource javaClass, Set<String> poolNames) {
-        String setAllPools = poolNames.stream().reduce("\n", (acc, poolName) ->
-                acc + "    " + poolName.toLowerCase() + " = create" + CodeGenerator.capitalize(poolName) + "SplashPool();\n "
-        );
-        String eventBus = "bus = new EventBus<>();\n";
-
-        javaClass.addMethod()
                 .setConstructor(true)
-                .setPublic()
-                .setBody(eventBus + setAllPools);
+                .setParameters(String.format("int totalComponents, int startCreationIndex, ContextInfo contextInfo, FactoryEntity<%1$sEntity> factoryMethod", contextName))
+                .setBody("super(totalComponents, startCreationIndex, contextInfo, factoryMethod);");
+        contextClass.addImport("com.ilargia.games.entitas.api.*");
+
+
+        for (ComponentInfo info : infos) {
+            if (info.isSingleEntity) {
+                addContextMethods(contextName, info, contextClass);
+            }
+
+        }
+        return contextClass;
     }
 
-    private void createPoolFields(JavaClassSource javaClass, Set<String> poolNames) {
-        javaClass.addImport("com.ilargia.games.entitas.interfaces.FactoryEntity");
-        javaClass.addImport("java.util.Stack");
-        javaClass.addImport("com.ilargia.games.entitas.interfaces.IComponent");
-        javaClass.addImport("com.ilargia.games.entitas.EntityMetaData");
-        javaClass.addImport("com.ilargia.games.entitas.events.EventBus");
+    private void addContextMethods(String contextName, ComponentInfo info, JavaClassSource contextClass) {
+        addContextGetMethods(contextName, info, contextClass);
+        addContextHasMethods(contextName, info, contextClass);
+        addContextAddMethods(contextName, info, contextClass);
+        addContextReplaceMethods(contextName, info, contextClass);
+        addContextRemoveMethods(contextName, info, contextClass);
+    }
+
+    private void addContextGetMethods(String contextName, ComponentInfo info, JavaClassSource source) {
+        source.addMethod()
+                .setName(String.format("get%1$sEntity", info.typeName))
+                .setReturnType(contextName+"Entity")
+                .setPublic()
+                .setBody(String.format("return getGroup(%1$sMatcher.%2$s()).getSingleEntity();"
+                        , CodeGenerator.capitalize(info.contexts.get(0)), info.typeName));
+
+        if (!info.isSingletonComponent) {
+            source.addMethod()
+                    .setName(String.format("get%1$s", info.typeName))
+                    .setReturnType(info.typeName)
+                    .setPublic()
+                    .setBody(String.format("return get%1$sEntity().get%1$s();"
+                            , info.typeName));
+
+        }
+    }
+
+    private void addContextHasMethods(String contextName, ComponentInfo info, JavaClassSource source) {
+        if (info.isSingletonComponent) {
+            source.addMethod()
+                    .setName(String.format("is%1$s", info.typeName))
+                    .setReturnType("boolean")
+                    .setPublic()
+                    .setBody(String.format("return get%1$sEntity() != null;",
+                            info.typeName));
+
+            source.addMethod()
+                    .setName(String.format("set%1$s", info.typeName))
+                    .setReturnType(contextName+"Context")
+                    .setPublic()
+                    .setParameters("boolean value")
+                    .setBody(String.format("%2$sEntity entity = get%1$sEntity();\n" +
+                            "        if(value != (entity != null)) {\n" +
+                            "             if(value) {\n" +
+                            "                  entity.set%1$s(true);\n" +
+                            "             } else {\n" +
+                            "                  destroyEntity(entity);\n" +
+                            "             }\n" +
+                            "        }\n return this;", info.typeName, contextName));
+
+
+        } else {
+            source.addMethod()
+                    .setName(String.format("has%1$s", info.typeName))
+                    .setReturnType("boolean")
+                    .setPublic()
+                    .setBody(String.format("return get%1$sEntity() != null; ",
+                            info.typeName));
+
+        }
+    }
+
+    private void addContextAddMethods(String contextName, ComponentInfo info, JavaClassSource source) {
+        if (!info.isSingletonComponent) {
+            source.addMethod()
+                    .setName(String.format("set%1$s", info.typeName))
+                    .setReturnType(contextName+"Entity")
+                    .setPublic()
+                    .setParameters(memberNamesWithType(info.memberInfos))
+                    .setBody(String.format("if(has%1$s()) {\n" +
+                                    "            throw new EntitasException(\"Could not set %1$s!\" + this + \" already has an entity with %1$s!\", " +
+                                    "\"You should check if the context already has a %1$sEntity before setting it or use context.Replace%1$s().\");" +
+                                    "         }\n" +
+                                    "         %3$sEntity entity = createEntity();\n" +
+                                    "         entity.add%1$s(%2$s);\n" +
+                                    "         return entity;"
+                            , info.typeName, memberNames(info.memberInfos), contextName));
+
+            source.addImport(info.fullTypeName);
+
+        }
+    }
+
+    private void addContextReplaceMethods(String contextName, ComponentInfo info, JavaClassSource source) {
+        if (!info.isSingletonComponent) {
+            source.addMethod()
+                    .setName(String.format("replace%1$s", info.typeName))
+                    .setReturnType(contextName+"Entity")
+                    .setPublic()
+                    .setParameters(memberNamesWithType(info.memberInfos))
+                    .setBody(String.format("%3$sEntity entity = get%1$sEntity();" +
+                                    "         if(entity == null) {" +
+                                    "            entity = set%1$s(%2$s);" +
+                                    "         } else { " +
+                                    "           entity.replace%1$s(%2$s);" +
+                                    "         }" +
+                                    "         return entity;"
+                            , info.typeName, memberNames(info.memberInfos), contextName));
+
+
+        }
+    }
+
+    private void addContextRemoveMethods(String contextName, ComponentInfo info, JavaClassSource source) {
+        if (!info.isSingletonComponent) {
+            source.addMethod()
+                    .setName(String.format("remove%1$s", info.typeName))
+                    .setReturnType(contextName+"Context")
+                    .setPublic()
+                    .setBody(String.format("destroyEntity(get%1$sEntity()); return this;"
+                            , info.typeName, memberNames(info.memberInfos)));
+
+        }
+
+    }
+
+    public String memberNamesWithType(List<FieldSource<JavaClassSource>> memberInfos) {
+        return memberInfos.stream()
+                .map(info -> info.getType() + " " + info.getName())
+                .collect(Collectors.joining(", "));
+
+    }
+
+    public String memberNames(List<FieldSource<JavaClassSource>> memberInfos) {
+        return memberInfos.stream()
+                .map(info -> info.getName())
+                .collect(Collectors.joining(", "));
+    }
+
+
+    private JavaClassSource generateMatchers(String contextName, List<ComponentInfo> componentInfos, String pkgDestiny) {
+        JavaClassSource javaClass = Roaster.parse(JavaClassSource.class, String.format("public class %1$s {}",
+                CodeGenerator.capitalize(contextName) + "Matcher"));
+        javaClass.setPackage(pkgDestiny);
+        //javaClass.addImport("com.ilargia.games.entitas.interfaces.IMatcher");
+        javaClass.addImport("com.ilargia.games.entitas.matcher.Matcher");
+
+        for (ComponentInfo info : componentInfos) {
+            addMatcher(contextName, info, javaClass);
+            addMatcherMethods(contextName, info, javaClass);
+        }
+        System.out.println(javaClass);
+        return javaClass;
+    }
+
+    private JavaClassSource addMatcher(String contextName, ComponentInfo info, JavaClassSource javaClass) {
+        javaClass.addField()
+                .setName("_matcher" + info.typeName)
+                .setType("Matcher")
+                .setPrivate()
+                .setStatic(true);
+        return null;
+    }
+
+    private void addMatcherMethods(String contextName, ComponentInfo info, JavaClassSource javaClass) {
+        String body = "if (_matcher%2$s == null) {" +
+                "   Matcher matcher = (Matcher)Matcher.AllOf(%1$s.%2$s);" +
+                "   matcher.componentNames = %1$s.componentNames();" +
+                "   _matcher%2$s = matcher;" +
+                "}" +
+                "return _matcher%2$s;";
 
         javaClass.addMethod()
-                .setName("factoryEntity")
-                .setReturnType("FactoryEntity<SplashEntity>")
+                .setName(info.typeName)
+                .setReturnType("Matcher")
                 .setPublic()
-                .setBody("  return (int totalComponents, Stack<IComponent>[] componentPools, EntityMetaData entityMetaData) -> { \n" +
-                        "                   return new SplashEntity(totalComponents, componentPools, entityMetaData, bus);\n" +
-                        "        };");
-
-        poolNames.forEach((poolName) -> {
-            javaClass.addField()
-                    .setName(poolName.toLowerCase())
-                    .setType("SplashPool")
-                    .setPublic();
-
-        });
-
-        javaClass.addField()
-                .setName("bus")
-                .setType("EventBus<SplashEntity>")
-                .setPublic();
+                .setStatic(true)
+                .setBody(String.format(body, CodeGenerator.capitalize(contextName) + CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG,
+                        info.typeName));
 
     }
-
 
 }

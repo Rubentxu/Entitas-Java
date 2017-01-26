@@ -15,7 +15,7 @@ import java.util.Set;
 
 public class Matcher<TEntity extends IEntity> implements IAllOfMatcher<TEntity>, IAnyOfMatcher<TEntity>, INoneOfMatcher<TEntity> {
 
-    private String[] _componentNames;
+    public String[] componentNames;
     private int[] _indices;
     private int[] _allOfIndices;
     private int[] _anyOfIndices;
@@ -131,8 +131,8 @@ public class Matcher<TEntity extends IEntity> implements IAllOfMatcher<TEntity>,
     static <TEntity extends IEntity> String[] getComponentNames(IMatcher<TEntity>[] matchers) {
         for (int i = 0; i < matchers.length; i++) {
             Matcher matcher = (Matcher) matchers[i];
-            if (matcher != null && matcher.getComponentNames() != null) {
-                return matcher.getComponentNames();
+            if (matcher != null && matcher.componentNames != null) {
+                return matcher.componentNames;
             }
         }
 
@@ -142,7 +142,7 @@ public class Matcher<TEntity extends IEntity> implements IAllOfMatcher<TEntity>,
     static <TEntity extends IEntity> void setComponentNames(Matcher<TEntity> matcher, IMatcher<TEntity>[] matchers) {
         String[] componentNames = getComponentNames(matchers);
         if (componentNames != null) {
-            matcher.setComponentNames(componentNames);
+            matcher.componentNames = componentNames;
         }
 
     }
@@ -207,13 +207,6 @@ public class Matcher<TEntity extends IEntity> implements IAllOfMatcher<TEntity>,
         return _noneOfIndices;
     }
 
-    public String[] getComponentNames() {
-        return _componentNames;
-    }
-
-    public void setComponentNames(String[] componentNames) {
-        this._componentNames = componentNames;
-    }
 
     @Override
     public IAnyOfMatcher<TEntity> anyOf(int... indices) {
@@ -288,16 +281,16 @@ public class Matcher<TEntity extends IEntity> implements IAllOfMatcher<TEntity>,
         if (_toStringCache == null) {
             StringBuilder sb = new StringBuilder();
             if (_allOfIndices != null) {
-                appendIndices(sb, "AllOf", _allOfIndices, getComponentNames());
+                appendIndices(sb, "AllOf", _allOfIndices, componentNames);
             }
             if (_anyOfIndices != null) {
                 if (_allOfIndices != null) {
                     sb.append(".");
                 }
-                appendIndices(sb, "AnyOf", _anyOfIndices, getComponentNames());
+                appendIndices(sb, "AnyOf", _anyOfIndices, componentNames);
             }
             if (_noneOfIndices != null) {
-                appendIndices(sb, ".NoneOf", _noneOfIndices, getComponentNames());
+                appendIndices(sb, ".NoneOf", _noneOfIndices, componentNames);
             }
             _toStringCache = sb.toString();
         }

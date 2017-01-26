@@ -29,20 +29,18 @@ public class SystemsTest {
     private Systems systems;
     private MoveSystem moveSystem;
 
-    private EventBus<Entity> bus;
-
 
     public FactoryEntity<Entity> factoryEntity() {
         return (int totalComponents, Stack<IComponent>[] componentPools,
                 ContextInfo contextInfo) -> {
-            return new Entity(totalComponents, componentPools, contextInfo, bus);
+            return new Entity(totalComponents, componentPools, contextInfo);
         };
     }
 
     public Context createTestPool() {
         return new Context(TestComponentIds.totalComponents, 0,
                 new ContextInfo("Test", TestComponentIds.componentNames(),
-                        TestComponentIds.componentTypes()), bus, factoryEntity());
+                        TestComponentIds.componentTypes()), factoryEntity());
     }
 
     private void createCollections() {
@@ -68,7 +66,6 @@ public class SystemsTest {
     @Before
     public void setUp() throws Exception {
         createCollections();
-        bus = new EventBus<>();
         systems = new Systems();
         pool = createTestPool();
         moveSystem = new MoveSystem();
@@ -141,22 +138,16 @@ public class SystemsTest {
 
     }
 
-    public class MoveSystem implements IExecuteSystem, IInitializeSystem, ICleanupSystem, ITearDownSystem, ISetPool<Context>, ISetPools<Object> {
-        public Group<Entity> _group;
+    public class MoveSystem implements IExecuteSystem, IInitializeSystem, ICleanupSystem, ITearDownSystem {
+        public Group<com.ilargia.games.entitas.utils.Entity> _group;
         public boolean flagExecute = false;
         public boolean flagInitialize = false;
         public boolean flagCleanup = false;
         public boolean flagTearDown = false;
-        public Object pools;
 
-        @Override
-        public void setPool(Context pool) {
-            _group = pool.getGroup(Matcher.AllOf(TestMatcher.View()));
-        }
+        public MoveSystem(Context<com.ilargia.games.entitas.utils.Entity> context) {
+            _group = context.getGroup(Matcher.AllOf(TestMatcher.View()));
 
-        @Override
-        public void setPools(Object pools) {
-            this.pools = pools;
         }
 
         @Override

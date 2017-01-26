@@ -22,7 +22,7 @@
             <children>
                 <CheckBox fx:id="componentIndicesGenerator" alignment="CENTER" layoutX="156.0" layoutY="91.0" mnemonicParsing="false" selected="true" text="ComponentIndicesGenerator" textFill="WHITE" />
                 <CheckBox fx:id="componentsGenerator" alignment="CENTER" layoutX="156.0" layoutY="63.0" mnemonicParsing="false" selected="true" text="ComponentsGenerator" textAlignment="CENTER" textFill="WHITE" />
-                <CheckBox fx:id="poolsGenerator" alignment="CENTER" layoutX="155.0" layoutY="34.0" mnemonicParsing="false" selected="true" text="PoolsGenerator" textFill="WHITE" wrapText="true" />
+                <CheckBox fx:id="contextsGenerator" alignment="CENTER" layoutX="155.0" layoutY="34.0" mnemonicParsing="false" selected="true" text="PoolsGenerator" textFill="WHITE" wrapText="true" />
             <Label layoutX="177.0" layoutY="4.0" text="Code Generators" textAlignment="CENTER" textFill="WHITE" underline="true">
                <font>
                   <Font name="System Bold" size="18.0" />
