@@ -1,5 +1,6 @@
 package com.ilargia.games.entitas.index;
 
+import com.ilargia.games.entitas.Entity;
 import com.ilargia.games.entitas.api.IComponent;
 import com.ilargia.games.entitas.api.IEntity;
 import com.ilargia.games.entitas.api.IGroup;
@@ -8,7 +9,7 @@ import com.ilargia.games.entitas.factories.Collections;
 
 import java.util.Map;
 
-public class PrimaryEntityIndex<TEntity extends IEntity, TKey> extends AbstractEntityIndex<TEntity, TKey> {
+public class PrimaryEntityIndex<TEntity extends Entity, TKey> extends AbstractEntityIndex<TEntity, TKey> {
 
     private Map<TKey, TEntity> _index; //Object2ObjectArrayMap
 

@@ -1,14 +1,16 @@
 package com.ilargia.games.entitas.index;
 
+import com.ilargia.games.entitas.Entity;
 import com.ilargia.games.entitas.api.IComponent;
 import com.ilargia.games.entitas.api.IEntity;
 import com.ilargia.games.entitas.api.IEntityIndex;
 import com.ilargia.games.entitas.api.IGroup;
 import com.ilargia.games.entitas.api.events.GroupChanged;
+import com.ilargia.games.entitas.group.Group;
 
-public abstract class AbstractEntityIndex<TEntity extends IEntity, TKey> implements IEntityIndex {
+public abstract class AbstractEntityIndex<TEntity extends Entity, TKey> implements IEntityIndex {
 
-    protected IGroup<TEntity> _group;
+    protected Group<TEntity> _group;
     protected Func<TEntity, IComponent, TKey> _key;
     protected GroupChanged<TEntity> onEntityAdded = (IGroup<TEntity> group, TEntity entity, int index, IComponent component) -> {
         addEntity(entity, component);
@@ -19,7 +21,7 @@ public abstract class AbstractEntityIndex<TEntity extends IEntity, TKey> impleme
 
 
     protected AbstractEntityIndex(IGroup<TEntity> group, Func<TEntity, IComponent, TKey> key) {
-        _group = group;
+        _group = (Group<TEntity>) group;
         _key = key;
 
     }

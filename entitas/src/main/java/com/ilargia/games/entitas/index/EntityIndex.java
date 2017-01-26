@@ -11,7 +11,7 @@ import com.ilargia.games.entitas.factories.Collections;
 import java.util.Map;
 import java.util.Set;
 
-public class EntityIndex<TEntity extends IEntity, TKey> extends AbstractEntityIndex<TEntity, TKey> {
+public class EntityIndex<TEntity extends Entity, TKey> extends AbstractEntityIndex<TEntity, TKey> {
 
     private Map<TKey, Set<TEntity>> _index; // Object2ObjectArrayMap<ObjectOpenHashSet
 

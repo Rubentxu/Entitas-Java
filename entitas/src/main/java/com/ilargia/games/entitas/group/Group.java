@@ -6,6 +6,7 @@ import com.ilargia.games.entitas.api.IEntity;
 import com.ilargia.games.entitas.api.IGroup;
 import com.ilargia.games.entitas.api.events.Event;
 import com.ilargia.games.entitas.api.events.GroupChanged;
+import com.ilargia.games.entitas.api.events.GroupUpdated;
 import com.ilargia.games.entitas.api.matcher.IMatcher;
 import com.ilargia.games.entitas.collector.Collector;
 import com.ilargia.games.entitas.events.GroupEvent;
@@ -15,7 +16,11 @@ import com.ilargia.games.entitas.factories.Collections;
 import java.util.Iterator;
 import java.util.Set;
 
-public class Group<TEntity extends IEntity> implements IGroup<TEntity> {
+public class Group<TEntity extends Entity> implements IGroup<TEntity> {
+
+    public Event<GroupChanged<TEntity>> OnEntityAdded;
+    public Event<GroupChanged<TEntity>> OnEntityRemoved;
+    public Event<GroupUpdated<TEntity>> OnEntityUpdated;
 
     private IMatcher<TEntity> _matcher;
     private final Set<TEntity> _entities; //
@@ -40,6 +45,9 @@ public class Group<TEntity extends IEntity> implements IGroup<TEntity> {
         _entities = Collections.createSet(Entity.class);
         _matcher = matcher;
         type = clazz;
+        OnEntityAdded = new Event();
+        OnEntityRemoved = new Event();
+        OnEntityUpdated = new Event();
 
     }
 
@@ -75,7 +83,7 @@ public class Group<TEntity extends IEntity> implements IGroup<TEntity> {
     }
 
     @Override
-    public Event<GroupChanged> handleEntity(TEntity entity) {
+    public Event<GroupChanged<TEntity>> handleEntity(TEntity entity) {
         return (_matcher.matches(entity))
                 ? (addEntitySilently(entity)) ? OnEntityAdded : null
                 : (removeEntitySilently(entity)) ? OnEntityRemoved : null;
@@ -163,8 +171,34 @@ public class Group<TEntity extends IEntity> implements IGroup<TEntity> {
         return _toStringCache;
     }
 
-    public static <TE extends IEntity> Collector<TE> createCollector(IGroup<TE> group, GroupEvent groupEvent) {
+    public static <TE extends Entity> Collector<TE> createCollector(IGroup<TE> group, GroupEvent groupEvent) {
         return new Collector<TE>(group, groupEvent);
+    }
+
+    public void notifyOnEntityAdded(IGroup<TEntity> group, TEntity entity, int index, IComponent component) {
+        for (GroupChanged<TEntity> listener : OnEntityAdded.listeners()) {
+            listener.changed(group, entity, index, component);
+        }
+    }
+
+    public void notifyOnEntityRemoved(IGroup<TEntity> group, TEntity entity, int index, IComponent component) {
+        for (GroupChanged<TEntity> listener : OnEntityRemoved.listeners()) {
+            listener.changed(group, entity, index, component);
+        }
+    }
+
+    public void notifyOnEntityUpdated(IGroup<TEntity> group, TEntity entity, int index, IComponent component, IComponent newComponent) {
+        for (GroupUpdated<TEntity> listener : OnEntityUpdated.listeners()) {
+            listener.updated(group, entity, index, component, newComponent);
+        }
+    }
+
+
+    public void clearEventsPool() {
+        OnEntityAdded.clear();
+        OnEntityRemoved.clear();
+        OnEntityUpdated.clear();
+
     }
 
 }

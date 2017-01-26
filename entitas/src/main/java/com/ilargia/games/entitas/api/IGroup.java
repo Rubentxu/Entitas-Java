@@ -8,11 +8,6 @@ import com.ilargia.games.entitas.api.matcher.IMatcher;
 
 public interface IGroup<TEntity extends IEntity> {
 
-    Event<GroupChanged> OnEntityAdded = new Event();
-    Event<GroupChanged> OnEntityRemoved = new Event();
-    Event<GroupUpdated> OnEntityUpdated = new Event();
-
-
     int getCount();
 
     void removeAllEventHandlers();
@@ -23,7 +18,7 @@ public interface IGroup<TEntity extends IEntity> {
 
     void handleEntity(TEntity entity, int index, IComponent component);
 
-    Event<GroupChanged> handleEntity(TEntity entity);
+    Event<GroupChanged<TEntity>> handleEntity(TEntity entity);
 
     void updateEntity(TEntity entity, int index, IComponent previousComponent, IComponent newComponent);
 
@@ -33,31 +28,13 @@ public interface IGroup<TEntity extends IEntity> {
 
     TEntity getSingleEntity();
 
-    default void notifyOnEntityAdded(IGroup<TEntity> group, TEntity entity, int index, IComponent component) {
-        for (GroupChanged<TEntity> listener : OnEntityAdded.listeners()) {
-            listener.changed(group, entity, index, component);
-        }
-    }
+    void notifyOnEntityAdded(IGroup<TEntity> group, TEntity entity, int index, IComponent component);
 
-    default void notifyOnEntityRemoved(IGroup<TEntity> group, TEntity entity, int index, IComponent component) {
-        for (GroupChanged<TEntity> listener : OnEntityRemoved.listeners()) {
-            listener.changed(group, entity, index, component);
-        }
-    }
+    void notifyOnEntityRemoved(IGroup<TEntity> group, TEntity entity, int index, IComponent component);
 
-    default void notifyOnEntityUpdated(IGroup<TEntity> group, TEntity entity, int index, IComponent component, IComponent newComponent) {
-        for (GroupUpdated<TEntity> listener : OnEntityUpdated.listeners()) {
-            listener.updated(group, entity, index, component, newComponent);
-        }
-    }
+    void notifyOnEntityUpdated(IGroup<TEntity> group, TEntity entity, int index, IComponent component, IComponent newComponent);
 
-
-    default void clearEventsPool() {
-        OnEntityAdded.clear();
-        OnEntityRemoved.clear();
-        OnEntityUpdated.clear();
-
-    }
+    void clearEventsPool();
 
 
 }

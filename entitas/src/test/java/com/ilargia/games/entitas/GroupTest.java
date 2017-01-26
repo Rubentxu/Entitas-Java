@@ -1,6 +1,7 @@
 package com.ilargia.games.entitas;
 
 import com.ilargia.games.entitas.api.ContextInfo;
+import com.ilargia.games.entitas.api.events.Event;
 import com.ilargia.games.entitas.components.Position;
 import com.ilargia.games.entitas.components.View;
 import com.ilargia.games.entitas.factories.Collections;
@@ -8,6 +9,7 @@ import com.ilargia.games.entitas.factories.CollectionsFactory;
 import com.ilargia.games.entitas.api.events.GroupChanged;
 import com.ilargia.games.entitas.group.Group;
 import com.ilargia.games.entitas.utils.TestComponentIds;
+import com.ilargia.games.entitas.utils.TestEntity;
 import com.ilargia.games.entitas.utils.TestMatcher;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,10 +20,9 @@ import static org.junit.Assert.*;
 
 public class GroupTest {
 
-    private Group group;
-    private Entity entity;
+    private Group<TestEntity> group;
+    private TestEntity entity;
     private Group group2;
-    private EventBus<Entity> bus;
 
 
     private void createCollections() {
@@ -48,33 +49,38 @@ public class GroupTest {
     @Before
     public void setUp() throws Exception {
         createCollections();
-        bus = new EventBus<>();
-        entity = new Entity(10, new Stack[10], new ContextInfo("Test", TestComponentIds.componentNames(),
-                TestComponentIds.componentTypes()), bus);
-        entity.setCreationIndex(0);
+        entity = new TestEntity(10, new Stack[10], new ContextInfo("Test", TestComponentIds.componentNames(),
+                TestComponentIds.componentTypes()));
+        entity.reactivate(0);
         entity.addComponent(TestComponentIds.Position, new Position(100, 100));
         entity.addComponent(TestComponentIds.View, new View(1));
 
-        group = new Group(TestMatcher.Position(), Entity.class);
+        group = new Group<TestEntity>(TestMatcher.Position(), TestEntity.class);
         group2 = new Group(TestMatcher.Interactive(), Entity.class);
 
     }
 
     @Test
     public void handleEntityTest() {
-        group.OnEntityAdded = (group, e, idx, component) -> assertEquals(entity, e);
-        GroupChanged changed = group.handleEntity(entity);
+        group.OnEntityAdded.addListener((group, e, index, component) -> {
+            entityEquals(entity, e);
+        });
+        Event<GroupChanged<TestEntity>> changed = group.handleEntity(entity);
         assertEquals(group.OnEntityAdded, changed);
 
     }
 
+    private void entityEquals(TestEntity entity, Object entity2) {
+        assertEquals(entity, entity2);
+    }
+
     @Test
     public void handleEntityOnEntityRemovedTest() {
-        group.OnEntityRemoved = (group, e, idx, component) -> assertEquals(entity, e);
+        group.OnEntityRemoved.addListener((group, e, idx, component) -> assertEquals(entity, e));
         group.handleEntity(entity);
 
         entity.removeComponent(TestComponentIds.Position);
-        GroupChanged changed = group.handleEntity(entity);
+        Event<GroupChanged<TestEntity>> changed = group.handleEntity(entity);
 
         assertEquals(group.OnEntityRemoved, changed);
 

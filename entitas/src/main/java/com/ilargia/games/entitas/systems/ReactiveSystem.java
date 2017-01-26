@@ -9,7 +9,7 @@ import com.ilargia.games.entitas.factories.Collections;
 
 import java.util.List;
 
-public abstract class ReactiveSystem<TEntity extends IEntity> implements IReactiveSystem {
+public abstract class ReactiveSystem<TEntity extends Entity> implements IReactiveSystem {
 
     protected Collector<TEntity> _collector;
     protected List<TEntity> _buffer;

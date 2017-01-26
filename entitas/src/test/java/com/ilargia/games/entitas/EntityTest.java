@@ -1,6 +1,7 @@
 package com.ilargia.games.entitas;
 
 import com.ilargia.games.entitas.api.ContextInfo;
+import com.ilargia.games.entitas.api.IEntity;
 import com.ilargia.games.entitas.caching.EntitasCache;
 import com.ilargia.games.entitas.components.Interactive;
 import com.ilargia.games.entitas.components.Motion;
@@ -13,6 +14,7 @@ import com.ilargia.games.entitas.factories.Collections;
 import com.ilargia.games.entitas.factories.CollectionsFactory;
 import com.ilargia.games.entitas.api.IComponent;
 import com.ilargia.games.entitas.utils.TestComponentIds;
+import com.ilargia.games.entitas.utils.TestEntity;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -27,9 +29,9 @@ public class EntityTest {
     @Rule
     public ExpectedException exception = ExpectedException.none();
 
-    private Entity entity;
+    private TestEntity entity;
     private Stack<IComponent>[] _componentPools;
-    private EventBus<Entity> bus;
+
 
     private void createCollections() {
         new Collections(new CollectionsFactory() {
@@ -55,11 +57,10 @@ public class EntityTest {
     public void setUp() throws Exception {
         createCollections();
         _componentPools = new Stack[10];
-        bus = new EventBus<>();
         EntitasCache cache = new EntitasCache();
-        entity = new Entity(10, _componentPools, new ContextInfo("Test", TestComponentIds.componentNames(),
-                TestComponentIds.componentTypes()), bus);
-        entity.setCreationIndex(0);
+        entity = new TestEntity(10, _componentPools, new ContextInfo("Test", TestComponentIds.componentNames(),
+                TestComponentIds.componentTypes()));
+        entity.reactivate(0);
         entity.addComponent(TestComponentIds.Position, new Position(100, 100));
         entity.addComponent(TestComponentIds.View, new View(1));
 
@@ -106,7 +107,7 @@ public class EntityTest {
 
     @Test
     public void OnComponentAddedTest() {
-        bus.OnComponentAdded.addListener((Entity e, int index, IComponent c) -> assertEquals(TestComponentIds.Motion, index));
+        entity.OnComponentAdded.addListener((IEntity e, int index, IComponent c) -> assertEquals(TestComponentIds.Motion, index));
         entity.addComponent(TestComponentIds.Motion, new Motion(100, 100));
 
     }
@@ -114,7 +115,7 @@ public class EntityTest {
 
     @Test
     public void OnComponentReplacedTest() {
-        bus.OnComponentReplaced.addListener((Entity e, int index, IComponent c, IComponent n)
+        entity.OnComponentReplaced.addListener((IEntity e, int index, IComponent c, IComponent n)
                 -> assertEquals(33F, ((Position) n).x, 0.1f));
         entity.replaceComponent(TestComponentIds.Position, new Position(33, 100));
 
@@ -122,7 +123,7 @@ public class EntityTest {
 
     @Test
     public void OnComponentReplaced2Test() {
-        bus.OnComponentReplaced.addListener((Entity e, int index, IComponent c, IComponent n)
+        entity.OnComponentReplaced.addListener((IEntity e, int index, IComponent c, IComponent n)
                 -> assertEquals(100F, ((Position) n).x, 0.1f));
         entity.replaceComponent(TestComponentIds.Position, entity.getComponent(TestComponentIds.Position));
 
@@ -131,7 +132,7 @@ public class EntityTest {
 
     @Test
     public void OnComponentRemovedTest() {
-        bus.OnComponentRemoved.addListener((Entity e, int index, IComponent c)
+        entity.OnComponentRemoved.addListener((IEntity e, int index, IComponent c)
                 -> assertFalse(e.hasComponent(index)));
         entity.removeComponent(TestComponentIds.View);
 
@@ -188,24 +189,24 @@ public class EntityTest {
 
     @Test
     public void createComponent() throws InstantiationException, IllegalAccessException {
-        Interactive component = entity.createComponent(TestComponentIds.Interactive);
+        Interactive component = (Interactive) entity.createComponent(TestComponentIds.Interactive);
         assertNotNull(component);
 
     }
 
     @Test
     public void createComponentFromPool() throws InstantiationException, IllegalAccessException {
-        Interactive component = entity.createComponent(TestComponentIds.Interactive);
+        Interactive component = (Interactive) entity.createComponent(TestComponentIds.Interactive);
         entity.addComponent(TestComponentIds.Interactive, component);
         entity.removeComponent(TestComponentIds.Interactive);
-        component = entity.createComponent(TestComponentIds.Interactive);
+        component = (Interactive) entity.createComponent(TestComponentIds.Interactive);
         assertNotNull(component);
 
     }
 
     @Test
     public void recoverComponent() throws InstantiationException, IllegalAccessException {
-        Interactive component = entity.createComponent(TestComponentIds.Interactive);
+        Interactive component = (Interactive) entity.createComponent(TestComponentIds.Interactive);
         entity.addComponent(TestComponentIds.Interactive, component);
         entity.removeComponent(TestComponentIds.Interactive);
         component = (Interactive) entity.recoverComponent(TestComponentIds.Interactive);
@@ -222,21 +223,21 @@ public class EntityTest {
 
     @Test(expected = EntityIsNotEnabledException.class)
     public void notEnabled() {
-        entity.setEnabled(false);
+        entity.destroy();
         entity.addComponent(TestComponentIds.Position, new Position(100, 100));
 
     }
 
     @Test(expected = EntityIsNotEnabledException.class)
     public void notEnabled2() {
-        entity.setEnabled(false);
+        entity.destroy();
         entity.removeComponent(TestComponentIds.Position);
 
     }
 
     @Test(expected = EntityIsNotEnabledException.class)
     public void notEnabled3() {
-        entity.setEnabled(false);
+        entity.destroy();
         entity.replaceComponent(TestComponentIds.Position, new Position(100, 100));
 
     }
@@ -275,14 +276,14 @@ public class EntityTest {
     @Test
     public void retainTest() {
         entity.retain(new Object());
-        assertEquals(1, entity.getRetainCount());
+        assertEquals(1, entity.retainCount());
     }
 
 
     @Test
     public void releaseTest() {
         Object owner = new Object();
-        bus.OnEntityReleased.addListener((Entity e) -> assertEquals(0, e.getRetainCount()));
+        entity.OnEntityReleased.addListener((IEntity e) -> assertEquals(0, e.retainCount()));
         entity.retain(owner);
         entity.release(owner);
 

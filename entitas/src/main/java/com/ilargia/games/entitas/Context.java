@@ -1,9 +1,7 @@
 package com.ilargia.games.entitas;
 
 import com.ilargia.games.entitas.api.*;
-import com.ilargia.games.entitas.api.events.EntityComponentChanged;
-import com.ilargia.games.entitas.api.events.EntityComponentReplaced;
-import com.ilargia.games.entitas.api.events.EntityReleased;
+import com.ilargia.games.entitas.api.events.*;
 import com.ilargia.games.entitas.api.matcher.IMatcher;
 import com.ilargia.games.entitas.collector.Collector;
 import com.ilargia.games.entitas.events.GroupEvent;
@@ -11,13 +9,20 @@ import com.ilargia.games.entitas.exceptions.*;
 import com.ilargia.games.entitas.factories.Collections;
 import com.ilargia.games.entitas.group.Group;
 
+import java.lang.reflect.Array;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 
-public class Context<TEntity extends IEntity> implements IContext<TEntity> {
+public class Context<TEntity extends Entity> implements IContext<TEntity> {
 
+    // Eventos
+    public Event<ContextEntityChanged> OnEntityCreated;
+    public Event<ContextEntityChanged> OnEntityWillBeDestroyed;
+    public Event<ContextEntityChanged> OnEntityDestroyed;
+    public Event<ContextGroupChanged> OnGroupCreated;
+    public Event<ContextGroupChanged> OnGroupCleared;
 
     public int _totalComponents;
     public Class<TEntity> entityType;
@@ -41,6 +46,12 @@ public class Context<TEntity extends IEntity> implements IContext<TEntity> {
         _totalComponents = totalComponents;
         _creationIndex = startCreationIndex;
         _factoryEntiy = factoryMethod;
+
+        OnEntityCreated = new Event<>();
+        OnEntityWillBeDestroyed = new Event<>();
+        OnEntityDestroyed = new Event<>();
+        OnGroupCreated = new Event<>();
+        OnGroupCleared = new Event<>();
 
         if (metaData != null) {
             _contextInfo = metaData;
@@ -160,7 +171,7 @@ public class Context<TEntity extends IEntity> implements IContext<TEntity> {
 
     public TEntity[] getEntities() {
         if (_entitiesCache == null) {
-            _entitiesCache = (TEntity[]) new Entity[_entities.size()];
+            _entitiesCache = (TEntity[]) Array.newInstance(entityType, _entities.size());
             _entities.toArray(_entitiesCache);
         }
         return _entitiesCache;
@@ -318,6 +329,45 @@ public class Context<TEntity extends IEntity> implements IContext<TEntity> {
     public IEntity[] getEntities(IMatcher matcher) {
         return getGroup(matcher).getEntities();
 
+    }
+
+
+    public void notifyEntityCreated(IContext context, IEntity entity) {
+        for (ContextEntityChanged listener : OnEntityCreated.listeners()) {
+            listener.changed(context, entity);
+        }
+    }
+
+    public void notifyEntityWillBeDestroyed(IContext context, IEntity entity) {
+        for (ContextEntityChanged listener : OnEntityWillBeDestroyed.listeners()) {
+            listener.changed(context, entity);
+        }
+    }
+
+    public void notifyEntityDestroyed(IContext context, IEntity entity) {
+        for (ContextEntityChanged listener : OnEntityDestroyed.listeners()) {
+            listener.changed(context, entity);
+        }
+    }
+
+    public void notifyGroupCreated(IContext context, IGroup group) {
+        for (ContextGroupChanged listener : OnGroupCreated.listeners()) {
+            listener.changed(context, group);
+        }
+    }
+
+    public void notifyGroupCleared(IContext context, IGroup group) {
+        for (ContextGroupChanged listener : OnGroupCleared.listeners()) {
+            listener.changed(context, group);
+        }
+    }
+
+    public void clearEventsPool() {
+        OnEntityCreated.clear();
+        OnEntityWillBeDestroyed.clear();
+        OnEntityDestroyed.clear();
+        OnGroupCreated.clear();
+        OnGroupCleared.clear();
     }
 
 

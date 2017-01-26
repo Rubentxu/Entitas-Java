@@ -8,10 +8,11 @@ import com.ilargia.games.entitas.api.events.GroupChanged;
 import com.ilargia.games.entitas.events.GroupEvent;
 import com.ilargia.games.entitas.exceptions.EntityCollectorException;
 import com.ilargia.games.entitas.factories.Collections;
+import com.ilargia.games.entitas.group.Group;
 
 import java.util.Set;
 
-public class Collector<TEntity extends IEntity> {
+public class Collector<TEntity extends Entity> {
 
     public Set<TEntity> _collectedEntities; //ObjectOpenHashSet
     private IGroup<TEntity>[] _groups;
@@ -46,7 +47,7 @@ public class Collector<TEntity extends IEntity> {
 
     public void activate() {
         for (int i = 0; i < _groups.length; i++) {
-            IGroup group = _groups[i];
+            Group group = (Group) _groups[i];
             GroupEvent groupEvent = _groupEvents[i];
             switch (groupEvent) {
                 case Added:
@@ -66,7 +67,7 @@ public class Collector<TEntity extends IEntity> {
 
     public void deactivate() {
         for (int i = 0; i < _groups.length; i++) {
-            IGroup group = _groups[i];
+            Group group = (Group) _groups[i];
             group.OnEntityAdded.clear();
             group.OnEntityRemoved.clear();
 
