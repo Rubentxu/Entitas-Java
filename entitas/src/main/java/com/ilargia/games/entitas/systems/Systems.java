@@ -6,17 +6,19 @@ import com.ilargia.games.entitas.factories.Collections;
 import java.util.List;
 
 
-public class Systems implements IInitializeSystem, IExecuteSystem, ICleanupSystem, ITearDownSystem {
+public class Systems implements IInitializeSystem, IExecuteSystem, IRenderSystem, ICleanupSystem, ITearDownSystem {
 
 
     protected List<IInitializeSystem> _initializeSystems; // ObjectArrayList
     protected List<IExecuteSystem> _executeSystems;
+    protected List<IRenderSystem> _renderSystems;
     protected List<ICleanupSystem> _cleanupSystems;
     protected List<ITearDownSystem> _tearDownSystems;
 
     public Systems() {
         _initializeSystems = Collections.createList(ISystem.class);
         _executeSystems = Collections.createList(ISystem.class);
+        _renderSystems = Collections.createList(ISystem.class);
         _cleanupSystems = Collections.createList(ISystem.class);
         _tearDownSystems = Collections.createList(ISystem.class);
 
@@ -26,6 +28,7 @@ public class Systems implements IInitializeSystem, IExecuteSystem, ICleanupSyste
         if (system != null) {
             if (system instanceof IInitializeSystem) _initializeSystems.add((IInitializeSystem) system);
             if (system instanceof IExecuteSystem) _executeSystems.add((IExecuteSystem) system);
+            if (system instanceof IRenderSystem) _renderSystems.add((IRenderSystem) system);
             if (system instanceof ICleanupSystem) _cleanupSystems.add((ICleanupSystem) system);
             if (system instanceof ITearDownSystem) _tearDownSystems.add((ITearDownSystem) system);
         }
@@ -41,6 +44,14 @@ public class Systems implements IInitializeSystem, IExecuteSystem, ICleanupSyste
     public void execute(float deltaTime) {
         for (IExecuteSystem eSystem : _executeSystems) {
             eSystem.execute(deltaTime);
+        }
+    }
+
+
+    @Override
+    public void render() {
+        for (IRenderSystem eSystem : _renderSystems) {
+            eSystem.render();
         }
     }
 
@@ -101,6 +112,7 @@ public class Systems implements IInitializeSystem, IExecuteSystem, ICleanupSyste
     public void clearSystems() {
         _initializeSystems.clear();
         _executeSystems.clear();
+        _renderSystems.clear();
         _cleanupSystems.clear();
         _tearDownSystems.clear();
 

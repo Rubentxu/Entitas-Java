@@ -5,25 +5,24 @@ import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
 import com.ilargia.games.components.Motion;
 import com.ilargia.games.components.View;
+import com.ilargia.games.core.CoreContext;
+import com.ilargia.games.core.CoreEntity;
 import com.ilargia.games.core.CoreMatcher;
-import com.ilargia.games.core.Entity;
-import com.ilargia.games.core.Pool;
 import com.ilargia.games.entitas.group.Group;
 import com.ilargia.games.entitas.api.system.IExecuteSystem;
 import com.ilargia.games.entitas.matcher.Matcher;
 
 
-public class MoveSystem implements IExecuteSystem, ISetPool<Pool> {
-    private Group<Entity> _group;
+public class MoveSystem implements IExecuteSystem{
+    private Group<CoreEntity> _group;
 
-    @Override
-    public void setPool(Pool pool) {
-        _group = pool.getGroup(Matcher.AllOf(CoreMatcher.View(), CoreMatcher.Motion()));
+    public MoveSystem(CoreContext context) {
+        _group = context.getGroup(Matcher.AllOf(CoreMatcher.View(), CoreMatcher.Motion()));
     }
 
     @Override
     public void execute(float deltatime) {
-        for (Entity e : _group.getEntities()) {
+        for (CoreEntity e : _group.getEntities()) {
             Motion motion = e.getMotion();
             View view = e.getView();
 

@@ -5,7 +5,7 @@ import com.ilargia.games.entitas.api.IComponent;
 
 @Component(pools = {"Core"})
 public class Delay implements IComponent {
-    public final float duration;
+    public float duration;
     public float time;
 
     public Delay(float duration) {

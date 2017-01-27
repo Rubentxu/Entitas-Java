@@ -5,31 +5,31 @@ import com.badlogic.gdx.math.Rectangle;
 import com.ilargia.games.Pong;
 import com.ilargia.games.components.Motion;
 import com.ilargia.games.components.View;
+import com.ilargia.games.core.CoreContext;
+import com.ilargia.games.core.CoreEntity;
 import com.ilargia.games.core.CoreMatcher;
-import com.ilargia.games.core.Entity;
-import com.ilargia.games.core.Pool;
 import com.ilargia.games.entitas.group.Group;
 import com.ilargia.games.entitas.api.system.IExecuteSystem;
 import com.ilargia.games.entitas.matcher.Matcher;
 
 
-public class ContactSystem implements IExecuteSystem, ISetPool<Pool> {
+public class ContactSystem implements IExecuteSystem {
 
     int pongSpeed = 300;
-    private Group<Entity> _group;
-    private Pool _pool;
+    private Group<CoreEntity> _group;
+    private CoreContext _context;
     private Rectangle temp;
 
-    @Override
-    public void setPool(Pool pool) {
-        _pool = pool;
-        _group = pool.getGroup(Matcher.AllOf(CoreMatcher.View(), CoreMatcher.Motion(), CoreMatcher.Player()));
+
+    public ContactSystem(CoreContext context) {
+        _context = context;
+        _group = context.getGroup(Matcher.AllOf(CoreMatcher.View(), CoreMatcher.Motion(), CoreMatcher.Player()));
         temp = new Rectangle();
     }
 
     @Override
     public void execute(float deltatime) {
-        Entity ball = _pool.getBallEntity();
+        CoreEntity ball = _context.getBallEntity();
         Circle ballShape = (Circle) ball.getView().shape;
         Motion ballMotion = ball.getMotion();
 
@@ -46,7 +46,7 @@ public class ContactSystem implements IExecuteSystem, ISetPool<Pool> {
         }
 
 
-        for (Entity e : _group.getEntities()) {
+        for (CoreEntity e : _group.getEntities()) {
             View view = e.getView();
             circleRectCollision(ballShape, (Rectangle) view.shape, ballMotion);
         }

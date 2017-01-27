@@ -12,34 +12,31 @@ import com.badlogic.gdx.math.Rectangle;
 import com.ilargia.games.components.Score;
 import com.ilargia.games.components.TextureView;
 import com.ilargia.games.components.View;
+import com.ilargia.games.core.CoreContext;
+import com.ilargia.games.core.CoreEntity;
 import com.ilargia.games.core.CoreMatcher;
-import com.ilargia.games.core.Entity;
-import com.ilargia.games.core.Pool;
+import com.ilargia.games.entitas.api.system.IRenderSystem;
 import com.ilargia.games.entitas.group.Group;
 import com.ilargia.games.entitas.api.system.ISystem;
 
 
-public class RendererSystem implements ISystem.IRenderSystem, ISetPool<Pool> {
+public class RendererSystem implements IRenderSystem {
     private final BitmapFont font;
-    private Group<Entity> _group;
+    private Group<CoreEntity> _group;
     private ShapeRenderer sr;
     private OrthographicCamera cam;
-    private Group<Entity> _groupScore;
+    private Group<CoreEntity> _groupScore;
     private Batch batch;
-    private Group<Entity> _groupTextureView;
+    private Group<CoreEntity> _groupTextureView;
 
-    public RendererSystem(ShapeRenderer sr, OrthographicCamera cam, Batch batch, BitmapFont font) {
+    public RendererSystem(CoreContext context, ShapeRenderer sr, OrthographicCamera cam, Batch batch, BitmapFont font) {
         this.sr = sr;
         this.cam = cam;
         this.batch = batch;
         this.font = font;
-    }
-
-    @Override
-    public void setPool(Pool pool) {
-        _group = pool.getGroup(CoreMatcher.View());
-        _groupScore = pool.getGroup(CoreMatcher.Score());
-        _groupTextureView = pool.getGroup(CoreMatcher.TextureView());
+        _group = context.getGroup(CoreMatcher.View());
+        _groupScore = context.getGroup(CoreMatcher.Score());
+        _groupTextureView = context.getGroup(CoreMatcher.TextureView());
     }
 
     @Override
@@ -53,7 +50,7 @@ public class RendererSystem implements ISystem.IRenderSystem, ISetPool<Pool> {
         sr.begin(ShapeRenderer.ShapeType.Filled);
         sr.setColor(Color.WHITE);
 
-        for (Entity e : _group.getEntities()) {
+        for (CoreEntity e : _group.getEntities()) {
             View view = e.getView();
 
             if (view.shape instanceof Rectangle) {
@@ -69,11 +66,11 @@ public class RendererSystem implements ISystem.IRenderSystem, ISetPool<Pool> {
         sr.end();
 
         batch.begin();
-        for (Entity e : _groupScore.getEntities()) {
+        for (CoreEntity e : _groupScore.getEntities()) {
             Score score = e.getScore();
             font.draw(batch, score.text + " " + score.points, score.x, score.y);
         }
-        for (Entity e : _groupTextureView.getEntities()) {
+        for (CoreEntity e : _groupTextureView.getEntities()) {
             TextureView textureView = e.getTextureView();
             float originX = textureView.width * 0.5f;
             float originY = textureView.height * 0.5f;

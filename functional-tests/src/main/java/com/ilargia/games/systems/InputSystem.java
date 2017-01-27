@@ -7,26 +7,25 @@ import com.ilargia.games.Pong;
 import com.ilargia.games.components.Motion;
 import com.ilargia.games.components.Player;
 import com.ilargia.games.components.View;
+import com.ilargia.games.core.CoreContext;
+import com.ilargia.games.core.CoreEntity;
 import com.ilargia.games.core.CoreMatcher;
-import com.ilargia.games.core.Entity;
-import com.ilargia.games.core.Pool;
 import com.ilargia.games.entitas.group.Group;
 import com.ilargia.games.entitas.api.system.IExecuteSystem;
 import com.ilargia.games.entitas.matcher.Matcher;
 
 
-public class InputSystem implements IExecuteSystem, ISetPool<Pool> {
-    private Group<Entity> _group;
+public class InputSystem implements IExecuteSystem {
+    private Group<CoreEntity> _group;
 
 
-    @Override
-    public void setPool(Pool pool) {
+    public InputSystem(CoreContext pool) {
         _group = pool.getGroup(Matcher.AllOf(CoreMatcher.Motion(), CoreMatcher.Player(), CoreMatcher.View()));
     }
 
     @Override
     public void execute(float deltatime) {
-        for (Entity e : _group.getEntities()) {
+        for (CoreEntity e : _group.getEntities()) {
             Motion motion = e.getMotion();
             Player player = e.getPlayer();
             View view = e.getView();

@@ -37,7 +37,6 @@ public class Context<TEntity extends Entity> implements IContext<TEntity> {
     private FactoryEntity<TEntity> _factoryEntiy;
     private ContextInfo _contextInfo;
     private Stack<IComponent>[] _componentContexts;
-    private Stack<IComponent>[] _componentPools;
     EntityComponentChanged<TEntity> _cachedEntityChanged;
 
 
@@ -109,7 +108,7 @@ public class Context<TEntity extends Entity> implements IContext<TEntity> {
             ent.reactivate(_creationIndex++);
         } else {
             ent = _factoryEntiy.create(_totalComponents, _componentContexts, _contextInfo);
-            ent.initialize(_creationIndex++, _totalComponents, _componentPools, _contextInfo);
+            ent.initialize(_creationIndex++, _totalComponents, _componentContexts, _contextInfo);
         }
 
         _entities.add(ent);

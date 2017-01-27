@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.ilargia.games.Pong;
 import com.ilargia.games.PongEngine;
-import com.ilargia.games.core.Context;
+import com.ilargia.games.core.Contexts;
 import com.ilargia.games.egdx.base.BaseGameState;
 import com.ilargia.games.egdx.managers.EGAssetsManager;
 import com.ilargia.games.systems.DelaySystem;
@@ -17,10 +17,10 @@ public class SplashState extends BaseGameState {
     private EGAssetsManager assetsManager;
     private PongEngine engine;
 
-    private Context context;
+    private Contexts context;
 
     public SplashState(PongEngine engine) {
-        context = new Context();
+        context = new Contexts();
         this.engine = engine;
 
     }
@@ -35,8 +35,8 @@ public class SplashState extends BaseGameState {
 
     @Override
     public void initialize() {
-        systems.addSystem(context.core, new DelaySystem())
-                .addSystem(context.core, new RendererSystem(engine.sr, engine.cam, engine.batch, engine.font));
+        systems.add(new DelaySystem(context.core))
+                .add(new RendererSystem(context.core, engine.sr, engine.cam, engine.batch, engine.font));
 
         Texture texture = assetsManager.getTexture(splash);
 

@@ -6,33 +6,33 @@ import com.badlogic.gdx.math.MathUtils;
 import com.ilargia.games.components.Motion;
 import com.ilargia.games.components.Player;
 import com.ilargia.games.components.Score;
+import com.ilargia.games.core.CoreContext;
+import com.ilargia.games.core.CoreEntity;
 import com.ilargia.games.core.CoreMatcher;
-import com.ilargia.games.core.Entity;
-import com.ilargia.games.core.Pool;
 import com.ilargia.games.entitas.group.Group;
 import com.ilargia.games.entitas.api.system.IExecuteSystem;
 import com.ilargia.games.entitas.matcher.Matcher;
 
 
-public class BoundsSystem implements IExecuteSystem, ISetPool<Pool> {
+public class BoundsSystem implements IExecuteSystem {
     public static int WIDTH = Gdx.graphics.getWidth();
-    private Group<Entity> _groupPlayer;
-    private Pool _pool;
+    private Group<CoreEntity> _groupPlayer;
+    private CoreContext _context;
 
-    @Override
-    public void setPool(Pool pool) {
-        _pool = pool;
-        _groupPlayer = pool.getGroup(Matcher.AllOf(CoreMatcher.Player(), CoreMatcher.Score()));
+
+    public BoundsSystem(CoreContext context) {
+        _context = context;
+        _groupPlayer = context.getGroup(Matcher.AllOf(CoreMatcher.Player(), CoreMatcher.Score()));
 
     }
 
     @Override
     public void execute(float deltatime) {
-        Entity ball = _pool.getBallEntity();
+        CoreEntity ball = _context.getBallEntity();
         Circle ballShape = (Circle) ball.getView().shape;
         Motion motion = ball.getMotion();
 
-        for (Entity e : _groupPlayer.getEntities()) {
+        for (CoreEntity e : _groupPlayer.getEntities()) {
             Player player = e.getPlayer();
             Score score = e.getScore();
 

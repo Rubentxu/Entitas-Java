@@ -7,10 +7,10 @@ import com.ilargia.games.entitas.api.IComponent;
 
 @Component(pools = {"Core"})
 public class TextureView implements IComponent {
-    public final String name;
-    public final TextureRegion texture;
-    public final int height;
-    public final int width;
+    public String name;
+    public TextureRegion texture;
+    public int height;
+    public int width;
     public Vector2 position;
     public float rotation = 0;
 

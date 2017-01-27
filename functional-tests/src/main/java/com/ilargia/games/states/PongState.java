@@ -6,7 +6,8 @@ import com.badlogic.gdx.math.Rectangle;
 import com.ilargia.games.Pong;
 import com.ilargia.games.PongEngine;
 import com.ilargia.games.components.Player;
-import com.ilargia.games.core.Context;
+import com.ilargia.games.core.Contexts;
+import com.ilargia.games.core.CoreContext;
 import com.ilargia.games.egdx.base.BaseGameState;
 import com.ilargia.games.systems.*;
 
@@ -14,11 +15,11 @@ import com.ilargia.games.systems.*;
 public class PongState extends BaseGameState {
 
     private final PongEngine engine;
-    private final Context context;
+    private final Contexts context;
 
     public PongState(PongEngine engine) {
         this.engine = engine;
-        context = new Context();
+        context = new Contexts();
     }
 
     @Override
@@ -45,11 +46,11 @@ public class PongState extends BaseGameState {
                 .addView(new Rectangle(350, 0, Pong.PLAYER_WIDTH, Pong.PLAYER_HEIGHT))
                 .addMotion(0, 0);
 
-        systems.addSystem(context.core, new InputSystem())
-                .addSystem(context.core, new ContactSystem())
-                .addSystem(context.core, new BoundsSystem())
-                .addSystem(context.core, new MoveSystem())
-                .addSystem(context.core, new RendererSystem(engine.sr, engine.cam, engine.batch, engine.font));
+        systems.add(new InputSystem(context.core))
+                .add( new ContactSystem(context.core))
+                .add( new BoundsSystem(context.core))
+                .add( new MoveSystem(context.core))
+                .add( new RendererSystem(context.core, engine.sr, engine.cam, engine.batch, engine.font));
     }
 
     @Override

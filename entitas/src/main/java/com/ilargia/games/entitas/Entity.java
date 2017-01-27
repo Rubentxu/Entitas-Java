@@ -28,7 +28,7 @@ public class Entity implements IEntity {
     private int _creationIndex;
     private boolean _isEnabled;
     private IComponent[] _components;
-    private Stack<IComponent>[] _componentPools;
+    private Stack<IComponent>[] _componentContexts;
     private IComponent[] _componentsCache;
     private int[] _componentIndicesCache;
     private String _toStringCache;
@@ -36,10 +36,10 @@ public class Entity implements IEntity {
     private ContextInfo _contextInfo;
     private StringBuilder _toStringBuilder;
 
-    public Entity(int totalComponents, Stack<IComponent>[] componentPools, ContextInfo contextInfo) {
+    public Entity(int totalComponents, Stack<IComponent>[] componentContexts, ContextInfo contextInfo) {
         _components = new IComponent[totalComponents];
         _totalComponents = totalComponents;
-        _componentPools = componentPools;
+        _componentContexts = componentContexts;
         _isEnabled = true;
         owners = Collections.createSet(Object.class);
 
@@ -57,7 +57,7 @@ public class Entity implements IEntity {
             for (int i = 0; i < componentNames.length; i++) {
                 componentNames[i] = String.valueOf(i);
             }
-            _contextInfo = new ContextInfo("No Pool", componentNames, null);
+            _contextInfo = new ContextInfo("No Context", componentNames, null);
         }
     }
 
@@ -87,12 +87,12 @@ public class Entity implements IEntity {
     }
 
     @Override
-    public void initialize(int creationIndex, int totalComponents, Stack<IComponent>[] componentPools, ContextInfo contextInfo) {
+    public void initialize(int creationIndex, int totalComponents, Stack<IComponent>[] componentContexts, ContextInfo contextInfo) {
         reactivate(creationIndex);
 
         _totalComponents = totalComponents;
         _components = new IComponent[totalComponents];
-        _componentPools = componentPools;
+        _componentContexts = componentContexts;
 
         if (contextInfo != null) {
             _contextInfo = contextInfo;
@@ -274,21 +274,21 @@ public class Entity implements IEntity {
 
     @Override
     public Stack<IComponent> getComponentPool(int index) {
-        Stack<IComponent> componentPool = _componentPools[index];
-        if (componentPool == null) {
-            componentPool = new Stack<>();
-            _componentPools[index] = componentPool;
+        Stack<IComponent> componentContext = _componentContexts[index];
+        if (componentContext == null) {
+            componentContext = new Stack<>();
+            _componentContexts[index] = componentContext;
         }
 
-        return componentPool;
+        return componentContext;
     }
 
     @Override
     public IComponent createComponent(int index, Class clazz) {
-        Stack<IComponent> componentPool = getComponentPool(index);
+        Stack<IComponent> componentContext = getComponentPool(index);
         try {
-            if (componentPool.size() > 0) {
-                return componentPool.pop();
+            if (componentContext.size() > 0) {
+                return componentContext.pop();
             } else {
                 return (IComponent) clazz.cast(clazz.getConstructor((Class[]) null).newInstance());
             }
@@ -299,10 +299,10 @@ public class Entity implements IEntity {
 
     @Override
     public IComponent createComponent(int index) {
-        Stack<IComponent> componentPool = getComponentPool(index);
+        Stack<IComponent> componentContext = getComponentPool(index);
         try {
-            if (componentPool.size() > 0) {
-                return componentPool.pop();
+            if (componentContext.size() > 0) {
+                return componentContext.pop();
             } else {
                 Class<?> clazz = _contextInfo.componentTypes[index];
                 return (IComponent) clazz.cast(clazz.getConstructor((Class[]) null).newInstance());
@@ -360,9 +360,9 @@ public class Entity implements IEntity {
     }
 
     public IComponent recoverComponent(int index) {
-        Stack<IComponent> componentPool = getComponentPool(index);
-        if (componentPool.size() > 0) {
-            return componentPool.pop();
+        Stack<IComponent> componentContext = getComponentPool(index);
+        if (componentContext.size() > 0) {
+            return componentContext.pop();
         }
         return null;
     }

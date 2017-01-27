@@ -1,6 +1,12 @@
 package com.ilargia.games.core;
 
-import com.ilargia.games.components.*;
+import com.ilargia.games.components.Ball;
+import com.ilargia.games.components.Delay;
+import com.ilargia.games.components.Motion;
+import com.ilargia.games.components.Player;
+import com.ilargia.games.components.Score;
+import com.ilargia.games.components.TextureView;
+import com.ilargia.games.components.View;
 
 /**
  * ---------------------------------------------------------------------------
@@ -9,22 +15,22 @@ import com.ilargia.games.components.*;
  */
 public class CoreComponentIds {
 
-    public static final int Ball = 0;
-    public static final int Delay = 1;
-    public static final int Motion = 2;
-    public static final int Player = 3;
-    public static final int Score = 4;
-    public static final int TextureView = 5;
-    public static final int View = 6;
-    public static final int totalComponents = 7;
+	public static final int Ball = 0;
+	public static final int Delay = 1;
+	public static final int Motion = 2;
+	public static final int Player = 3;
+	public static final int Score = 4;
+	public static final int TextureView = 5;
+	public static final int View = 6;
+	public static final int totalComponents = 7;
 
-    public static String[] componentNames() {
-        return new String[]{"Ball", "Delay", "Motion", "Player", "Score",
-                "TextureView", "View"};
-    }
+	public static String[] componentNames() {
+		return new String[]{"Ball", "Delay", "Motion", "Player", "Score",
+				"TextureView", "View"};
+	}
 
-    public static Class[] componentTypes() {
-        return new Class[]{Ball.class, Delay.class, Motion.class, Player.class,
-                Score.class, TextureView.class, View.class};
-    }
+	public static Class[] componentTypes() {
+		return new Class[]{Ball.class, Delay.class, Motion.class, Player.class,
+				Score.class, TextureView.class, View.class};
+	}
 }
