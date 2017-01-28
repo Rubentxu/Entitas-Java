@@ -6,8 +6,6 @@ import com.badlogic.gdx.math.MathUtils;
 import com.ilargia.games.components.Motion;
 import com.ilargia.games.components.Player;
 import com.ilargia.games.components.Score;
-import com.ilargia.games.core.CoreContext;
-import com.ilargia.games.core.CoreEntity;
 import com.ilargia.games.entitas.group.Group;
 import com.ilargia.games.entitas.api.system.IExecuteSystem;
 import com.ilargia.games.entitas.matcher.Matcher;

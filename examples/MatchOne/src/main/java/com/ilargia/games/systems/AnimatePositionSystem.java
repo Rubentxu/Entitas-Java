@@ -14,11 +14,11 @@ import com.ilargia.games.entitas.systems.ReactiveSystem;
 import java.util.List;
 
 
-public class FillSystem extends ReactiveSystem {
+public class AnimatePositionSystem extends ReactiveSystem {
 
     GameContext context;
 
-    public FillSystem(GameContext context) {
+    public AnimatePositionSystem(GameContext context) {
         super(context);
         this.context = context;
     }

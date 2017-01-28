@@ -11,14 +11,24 @@ import com.ilargia.games.entitas.api.*;
  */
 public class Entitas {
 
+	public GameSessionContext gamesession;
 	public InputContext input;
-	public ScoreContext score;
-	public CoreContext core;
+	public GameContext game;
+	public RenderContext render;
 
 	public Entitas() {
+		gamesession = createGamesessionContext();
 		input = createInputContext();
-		score = createScoreContext();
-		core = createCoreContext();
+		game = createGameContext();
+		render = createRenderContext();
+	}
+
+	public GameSessionContext createGamesessionContext() {
+		return new GameSessionContext(GamesessionComponentIds.totalComponents,
+				0, new ContextInfo("GameSession",
+						GamesessionComponentIds.componentNames(),
+						GamesessionComponentIds.componentTypes()),
+				factoryGameSessionEntity());
 	}
 
 	public InputContext createInputContext() {
@@ -28,21 +38,29 @@ public class Entitas {
 				factoryInputEntity());
 	}
 
-	public ScoreContext createScoreContext() {
-		return new ScoreContext(ScoreComponentIds.totalComponents, 0,
-				new ContextInfo("Score", ScoreComponentIds.componentNames(),
-						ScoreComponentIds.componentTypes()),
-				factoryScoreEntity());
+	public GameContext createGameContext() {
+		return new GameContext(GameComponentIds.totalComponents, 0,
+				new ContextInfo("Game", GameComponentIds.componentNames(),
+						GameComponentIds.componentTypes()), factoryGameEntity());
 	}
 
-	public CoreContext createCoreContext() {
-		return new CoreContext(CoreComponentIds.totalComponents, 0,
-				new ContextInfo("Core", CoreComponentIds.componentNames(),
-						CoreComponentIds.componentTypes()), factoryCoreEntity());
+	public RenderContext createRenderContext() {
+		return new RenderContext(RenderComponentIds.totalComponents, 0,
+				new ContextInfo("Render", RenderComponentIds.componentNames(),
+						RenderComponentIds.componentTypes()),
+				factoryRenderEntity());
 	}
 
 	public Context[] allContexts() {
-		return new Context[]{input, score, core};
+		return new Context[]{gamesession, input, game, render};
+	}
+
+	public FactoryEntity<GameSessionEntity> factoryGameSessionEntity() {
+		return (int totalComponents, Stack<IComponent>[] componentContexts,
+				ContextInfo contextInfo) -> {
+			return new GameSessionEntity(totalComponents, componentContexts,
+					contextInfo);
+		};
 	}
 
 	public FactoryEntity<InputEntity> factoryInputEntity() {
@@ -53,18 +71,18 @@ public class Entitas {
 		};
 	}
 
-	public FactoryEntity<ScoreEntity> factoryScoreEntity() {
+	public FactoryEntity<GameEntity> factoryGameEntity() {
 		return (int totalComponents, Stack<IComponent>[] componentContexts,
 				ContextInfo contextInfo) -> {
-			return new ScoreEntity(totalComponents, componentContexts,
+			return new GameEntity(totalComponents, componentContexts,
 					contextInfo);
 		};
 	}
 
-	public FactoryEntity<CoreEntity> factoryCoreEntity() {
+	public FactoryEntity<RenderEntity> factoryRenderEntity() {
 		return (int totalComponents, Stack<IComponent>[] componentContexts,
 				ContextInfo contextInfo) -> {
-			return new CoreEntity(totalComponents, componentContexts,
+			return new RenderEntity(totalComponents, componentContexts,
 					contextInfo);
 		};
 	}

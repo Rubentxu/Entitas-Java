@@ -1,33 +1,37 @@
 package com.ilargia.games.systems;
 
-import com.badlogic.gdx.utils.Array;
-import com.ilargia.games.entitas.interfaces.IReactiveSystem;
-import com.ilargia.games.entitas.interfaces.ISetPool;
-import com.ilargia.games.entitas.matcher.TriggerOnEvent;
+import com.ilargia.games.core.GameContext;
+import com.ilargia.games.core.GameEntity;
+import com.ilargia.games.core.GameMatcher;
+import com.ilargia.games.entitas.api.IContext;
+import com.ilargia.games.entitas.collector.Collector;
+import com.ilargia.games.entitas.systems.ReactiveSystem;
+
+import java.util.List;
 
 
-public class DestroySystem implements ISetPool<Pool>, IReactiveSystem<Entity> {
-    private Pool _pool;
+public class DestroySystem extends ReactiveSystem<GameEntity> {
+    private GameContext context;
 
-    @Override
-    public TriggerOnEvent getTrigger() {
-        return CoreMatcher.Destroy().OnEntityAdded();
+    public DestroySystem(GameContext context) {
+        super(context);
+        this.context = context;
     }
 
-
     @Override
-    public void setPool(Pool pool) {
-        _pool = pool;
+    protected Collector getTrigger(IContext context) {
+        return context.createCollector(GameMatcher.Destroy());
     }
 
     @Override
-    public void execute(Array<Entity> entities) {
-
-        for (Entity e : entities) {
-            _pool.destroyEntity(e);
+    protected void execute(List<GameEntity> entities) {
+        for (GameEntity e : entities) {
+            context.destroyEntity(e);
         }
-
     }
 
-
+    @Override
+    protected boolean filter(GameEntity entity) {
+        return entity.isDestroy();
+    }
 }

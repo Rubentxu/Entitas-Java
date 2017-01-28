@@ -4,7 +4,7 @@ import com.ilargia.games.entitas.api.IComponent;
 import com.ilargia.games.entitas.codeGenerator.Component;
 
 
-@Component(pools = {"Core"})
+@Component(pools = {"Game"})
 public class Asset implements IComponent {
     public String name;
 

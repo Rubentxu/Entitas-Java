@@ -85,22 +85,7 @@ public class Context<TEntity extends Entity> implements IContext<TEntity> {
 
     }
 
-    public Collector createEntityCollector(Context[] contexts, IMatcher matcher) {
-        return createEntityCollector(contexts, matcher, GroupEvent.Added);
-    }
-
-    public Collector createEntityCollector(Context[] contexts, IMatcher matcher, GroupEvent eventType) {
-        Group[] groups = new Group[contexts.length];
-        GroupEvent[] eventTypes = new GroupEvent[contexts.length];
-
-        for (int i = 0; i < contexts.length; i++) {
-            groups[i] = contexts[i].getGroup(matcher);
-            eventTypes[i] = eventType;
-        }
-
-        return new Collector(groups, eventTypes);
-    }
-
+    @Override
     public TEntity createEntity() {
         TEntity ent;
         if (_reusableEntities.size() > 0) {
@@ -128,6 +113,7 @@ public class Context<TEntity extends Entity> implements IContext<TEntity> {
 
     }
 
+    @Override
     public void destroyEntity(TEntity entity) {
         if (!_entities.remove(entity)) {
             throw new ContextDoesNotContainEntityException("'" + this + "' cannot destroy " + entity + "!",
@@ -152,6 +138,7 @@ public class Context<TEntity extends Entity> implements IContext<TEntity> {
 
     }
 
+    @Override
     public void destroyAllEntities() {
         for (TEntity entity : getEntities()) {
             destroyEntity(entity);
@@ -164,10 +151,12 @@ public class Context<TEntity extends Entity> implements IContext<TEntity> {
 
     }
 
+    @Override
     public boolean hasEntity(TEntity entity) {
         return _entities.contains(entity);
     }
 
+    @Override
     public TEntity[] getEntities() {
         if (_entitiesCache == null) {
             _entitiesCache = (TEntity[]) Array.newInstance(entityType, _entities.size());
@@ -182,6 +171,7 @@ public class Context<TEntity extends Entity> implements IContext<TEntity> {
         return _totalComponents;
     }
 
+    @Override
     public Group<TEntity> getGroup(IMatcher matcher) {
         Group<TEntity> group = null;
         if (!(_groups.containsKey(matcher) ? (group = _groups.get(matcher)) == group : false)) {
@@ -205,6 +195,7 @@ public class Context<TEntity extends Entity> implements IContext<TEntity> {
 
     }
 
+    @Override
     public void clearGroups() {
         for (Group<TEntity> group : _groups.values()) {
             group.removeAllEventHandlers();
@@ -220,6 +211,7 @@ public class Context<TEntity extends Entity> implements IContext<TEntity> {
         }
     }
 
+    @Override
     public void addEntityIndex(String name, IEntityIndex entityIndex) {
         if (_entityIndices.containsKey(name)) {
             throw new ContextEntityIndexDoesAlreadyExistException(this, name);
@@ -228,6 +220,7 @@ public class Context<TEntity extends Entity> implements IContext<TEntity> {
 
     }
 
+    @Override
     public IEntityIndex getEntityIndex(String name) {
         IEntityIndex entityIndex;
         if (!_entityIndices.containsKey(name)) {
@@ -239,6 +232,7 @@ public class Context<TEntity extends Entity> implements IContext<TEntity> {
 
     }
 
+    @Override
     public void deactivateAndRemoveEntityIndices() {
         for (IEntityIndex entityIndex : _entityIndices.values()) {
             entityIndex.deactivate();
@@ -246,10 +240,12 @@ public class Context<TEntity extends Entity> implements IContext<TEntity> {
         _entityIndices.clear();
     }
 
+    @Override
     public void resetCreationIndex() {
         _creationIndex = 0;
     }
 
+    @Override
     public void clearComponentPool(int index) {
         Stack<IComponent> componentPool = _componentContexts[index];
         if (componentPool != null) {
@@ -257,12 +253,14 @@ public class Context<TEntity extends Entity> implements IContext<TEntity> {
         }
     }
 
+    @Override
     public void clearComponentPools() {
         for (int i = 0; i < _componentContexts.length; i++) {
             clearComponentPool(i);
         }
     }
 
+    @Override
     public void reset() {
         clearGroups();
         destroyAllEntities();
@@ -300,27 +298,27 @@ public class Context<TEntity extends Entity> implements IContext<TEntity> {
         reusableEntities.push(entity);
     }
 
+    @Override
     public Stack<IComponent>[] getComponentPools() {
         return _componentContexts;
     }
 
     @Override
     public ContextInfo getContextInfo() {
-        return null;
-    }
-
-    public ContextInfo getMetaData() {
         return _contextInfo;
     }
 
+    @Override
     public int getCount() {
         return _entities.size();
     }
 
+    @Override
     public int getReusableEntitiesCount() {
         return _reusableEntities.size();
     }
 
+    @Override
     public int getRetainedEntitiesCount() {
         return _retainedEntities.size();
     }
@@ -330,37 +328,42 @@ public class Context<TEntity extends Entity> implements IContext<TEntity> {
 
     }
 
-
+    @Override
     public void notifyEntityCreated(IContext context, IEntity entity) {
         for (ContextEntityChanged listener : OnEntityCreated.listeners()) {
             listener.changed(context, entity);
         }
     }
 
+    @Override
     public void notifyEntityWillBeDestroyed(IContext context, IEntity entity) {
         for (ContextEntityChanged listener : OnEntityWillBeDestroyed.listeners()) {
             listener.changed(context, entity);
         }
     }
 
+    @Override
     public void notifyEntityDestroyed(IContext context, IEntity entity) {
         for (ContextEntityChanged listener : OnEntityDestroyed.listeners()) {
             listener.changed(context, entity);
         }
     }
 
+    @Override
     public void notifyGroupCreated(IContext context, IGroup group) {
         for (ContextGroupChanged listener : OnGroupCreated.listeners()) {
             listener.changed(context, group);
         }
     }
 
+    @Override
     public void notifyGroupCleared(IContext context, IGroup group) {
         for (ContextGroupChanged listener : OnGroupCleared.listeners()) {
             listener.changed(context, group);
         }
     }
 
+    @Override
     public void clearEventsPool() {
         OnEntityCreated.clear();
         OnEntityWillBeDestroyed.clear();
@@ -369,5 +372,32 @@ public class Context<TEntity extends Entity> implements IContext<TEntity> {
         OnGroupCleared.clear();
     }
 
+    @Override
+    public Collector createCollector(IMatcher matcher) {
+        return new Collector(getGroup(matcher), GroupEvent.Added);
+    }
+
+    @Override
+    public Collector createCollector(IMatcher matcher, GroupEvent groupEvent) {
+        return new Collector(getGroup(matcher), groupEvent);
+    }
+
+    @Override
+    public Collector createEntityCollector(Context[] contexts, IMatcher matcher) {
+        return createEntityCollector(contexts, matcher, GroupEvent.Added);
+    }
+
+    @Override
+    public Collector createEntityCollector(Context[] contexts, IMatcher matcher, GroupEvent eventType) {
+        Group[] groups = new Group[contexts.length];
+        GroupEvent[] eventTypes = new GroupEvent[contexts.length];
+
+        for (int i = 0; i < contexts.length; i++) {
+            groups[i] = contexts[i].getGroup(matcher);
+            eventTypes[i] = eventType;
+        }
+
+        return new Collector(groups, eventTypes);
+    }
 
 }

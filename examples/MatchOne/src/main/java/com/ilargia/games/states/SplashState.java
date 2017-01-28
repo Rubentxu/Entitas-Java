@@ -4,9 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.ilargia.games.MatchOne;
-import com.ilargia.games.Pong;
-import com.ilargia.games.PongEngine;
-import com.ilargia.games.core.Entitas;
+import com.ilargia.games.MatchOneEngine;
 import com.ilargia.games.egdx.base.BaseGameState;
 import com.ilargia.games.egdx.managers.EGAssetsManager;
 import com.ilargia.games.systems.DelaySystem;
@@ -18,10 +16,10 @@ public class SplashState extends BaseGameState {
     private EGAssetsManager assetsManager;
     private MatchOneEngine engine;
 
-    private Entitas context;
+    private Entitas entitas;
 
     public SplashState(MatchOneEngine engine) {
-        context = new Entitas();
+        entitas = new Entitas();
         this.engine = engine;
 
     }
@@ -36,12 +34,12 @@ public class SplashState extends BaseGameState {
 
     @Override
     public void initialize() {
-        systems.add(new DelaySystem(context.core))
-                .add(new RendererSystem(context.core, engine.sr, engine.cam, engine.batch, engine.font));
+        systems.add(new DelaySystem(entitas.core))
+                .add(new RendererSystem(entitas.core, engine.sr, engine.cam, engine.batch, engine.font));
 
         Texture texture = assetsManager.getTexture(splash);
 
-        context.core.createEntity()
+        entitas.render.createEntity()
                 .addTextureView("MatchOne", new TextureRegion(texture, 0, 0, texture.getWidth(), texture.getHeight()), new Vector2(),
                         0, MatchOne.SCREEN_HEIGHT, MatchOne.SCREEN_WIDTH)
                 .addDelay(3);
@@ -61,7 +59,7 @@ public class SplashState extends BaseGameState {
     @Override
     public void unloadResources() {
         assetsManager.unloadTexture(splash);
-        context.core.destroyAllEntities();
+        entitas.core.destroyAllEntities();
         systems.clearSystems();
     }
 }

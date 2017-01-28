@@ -1,7 +1,6 @@
 package com.ilargia.games.systems;
 
 import com.badlogic.gdx.utils.Array;
-import com.ilargia.games.components.View;
 import com.ilargia.games.entitas.Group;
 import com.ilargia.games.entitas.interfaces.*;
 import com.ilargia.games.entitas.matcher.TriggerOnEvent;

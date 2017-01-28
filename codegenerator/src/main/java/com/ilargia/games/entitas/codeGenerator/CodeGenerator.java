@@ -40,10 +40,8 @@ public class CodeGenerator {
     public static Map<String, List<ComponentInfo>> generateMap(List<ComponentInfo> componentInfos) {
         Map<String, List<ComponentInfo>> poolsComponents = new HashMap<>();
         componentInfos.sort((c1, c2) -> c1.typeName.compareTo(c2.typeName));
-        int index = 0;
+
         for (ComponentInfo info : componentInfos) {
-            info.index = index++;
-            info.totalComponents = componentInfos.size();
             for (String poolName : info.contexts) {
                 if (!poolsComponents.containsKey(poolName)) {
                     poolsComponents.put(poolName, new ArrayList<>());
@@ -53,6 +51,13 @@ public class CodeGenerator {
             }
         }
 
+        for (List<ComponentInfo> infos : poolsComponents.values()) {
+            int index = 0;
+            for (ComponentInfo info : infos) {
+                info.index = index++;
+                info.totalComponents = infos.size();
+            }
+        }
         return poolsComponents;
 
     }

@@ -1,10 +1,13 @@
 package com.ilargia.games.entitas.api;
 
 
+import com.ilargia.games.entitas.Context;
 import com.ilargia.games.entitas.api.events.ContextEntityChanged;
 import com.ilargia.games.entitas.api.events.ContextGroupChanged;
 import com.ilargia.games.entitas.api.events.Event;
 import com.ilargia.games.entitas.api.matcher.IMatcher;
+import com.ilargia.games.entitas.collector.Collector;
+import com.ilargia.games.entitas.events.GroupEvent;
 
 import java.util.Stack;
 
@@ -61,5 +64,13 @@ public interface IContext<TEntity extends IEntity> {
     void notifyGroupCleared(IContext context, IGroup group);
 
     void clearEventsPool();
+
+    Collector createCollector(IMatcher matcher);
+
+    Collector createCollector(IMatcher matcher, GroupEvent groupEvent);
+
+    Collector createEntityCollector(Context[] contexts, IMatcher matcher);
+
+    Collector createEntityCollector(Context[] contexts, IMatcher matcher, GroupEvent eventType);
 
 }

@@ -1,44 +1,49 @@
 package com.ilargia.games.systems;
 
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.ObjectSet;
 import com.ilargia.games.EntityIndexExtension;
 import com.ilargia.games.components.Input;
-import com.ilargia.games.entitas.interfaces.IReactiveSystem;
-import com.ilargia.games.entitas.interfaces.ISetPools;
-import com.ilargia.games.entitas.matcher.TriggerOnEvent;
+import com.ilargia.games.core.*;
+import com.ilargia.games.entitas.api.IContext;
+import com.ilargia.games.entitas.collector.Collector;
+import com.ilargia.games.entitas.systems.ReactiveSystem;
+
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 
-public class ProcessInputSystem implements ISetPools<Pools>, IReactiveSystem<Entity> {
-    private Pools _pools;
+public class ProcessInputSystem extends ReactiveSystem<InputEntity> {
 
+    private final Entitas entitas;
+    private InputContext context;
 
-    @Override
-    public void setPools(Pools pools) {
-        _pools = pools;
+    public ProcessInputSystem(Entitas entitas) {
+        super(entitas.input);
+        this.context = entitas.input;
+        this.entitas = entitas;
     }
 
     @Override
-    public TriggerOnEvent getTrigger() {
-        return InputMatcher.Input().OnEntityAdded();
+    protected Collector<InputEntity> getTrigger(IContext<InputEntity> context) {
+        return context.createCollector(InputMatcher.Input());
     }
 
     @Override
-    public void execute(Array<Entity> entities) {
-        Entity inputEntity = entities.get(0);
+    protected boolean filter(InputEntity entity) {
+        return entity.hasInput();
+    }
+
+    @Override
+    protected void execute(List<InputEntity> entities) {
+        InputEntity inputEntity = context.getBurstModeEntity();
         Input input = inputEntity.getInput();
 
-        ObjectSet.ObjectSetIterator<Entity> it = EntityIndexExtension.getEntitiesWithPosition(_pools.core, input.x, input.y).iterator();
-        Entity entity;
-        Array<Entity> interactives = new Array<>();
-        while (it.hasNext()) {
-            entity = it.next();
-            if (entity.isInteractive())
-                interactives.add(entity);
-        }
+        Set<GameEntity> interactives = EntityIndexExtension.getEntitiesWithPosition(entitas.game, input.x, input.y)
+                .stream().filter(e -> e.isInteractive()).collect(Collectors.toSet());
 
-        for (Entity e : interactives) {
+        for (GameEntity e : interactives) {
             e.setDestroy(true);
         }
     }
+
 }

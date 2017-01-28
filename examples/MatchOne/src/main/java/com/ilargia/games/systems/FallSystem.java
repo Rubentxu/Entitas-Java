@@ -1,57 +1,62 @@
 package com.ilargia.games.systems;
 
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.ObjectSet;
 import com.ilargia.games.EntityIndexExtension;
 import com.ilargia.games.GameBoardLogic;
 import com.ilargia.games.components.GameBoard;
-import com.ilargia.games.entitas.interfaces.IReactiveSystem;
-import com.ilargia.games.entitas.interfaces.ISetPool;
-import com.ilargia.games.entitas.matcher.TriggerOnEvent;
+import com.ilargia.games.core.GameContext;
+import com.ilargia.games.core.GameEntity;
+import com.ilargia.games.core.GameMatcher;
+import com.ilargia.games.entitas.api.IContext;
+import com.ilargia.games.entitas.collector.Collector;
+import com.ilargia.games.entitas.events.GroupEvent;
+import com.ilargia.games.entitas.systems.ReactiveSystem;
+
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 
-public class FallSystem implements ISetPool<Pool>, IReactiveSystem<Entity> {
-    private Pool _pool;
+public class FallSystem extends ReactiveSystem<GameEntity> {
+    private GameContext context;
 
-    @Override
-    public TriggerOnEvent getTrigger() {
-        return CoreMatcher.GameBoardElement().OnEntityAdded();
+    public FallSystem(GameContext context) {
+        super(context);
+        this.context = context;
     }
 
-
     @Override
-    public void setPool(Pool pool) {
-        _pool = pool;
+    protected Collector<GameEntity> getTrigger(IContext<GameEntity> context) {
+        return context.createCollector(GameMatcher.GameBoardElement(), GroupEvent.Removed);
     }
 
     @Override
-    public void execute(Array entities) {
-        GameBoard gameBoard = _pool.getGameBoard();
+    protected boolean filter(GameEntity entity) {
+        return true;
+    }
+
+    @Override
+    protected void execute(List<GameEntity> gameEntities) {
+        GameBoard gameBoard = context.getGameBoard();
 
         for (int column = 0; column < gameBoard.columns; column++) {
             for (int row = 1; row < gameBoard.rows; row++) {
-                ObjectSet.ObjectSetIterator<Entity> it = EntityIndexExtension.getEntitiesWithPosition(_pool, column, row).iterator();
-                Entity e;
-                Array<Entity> movables = new Array<>();
-                while (it.hasNext()) {
-                    e = it.next();
-                    if (e.isMovable())
-                        movables.add(e);
-                }
-
-                for (Entity mov : movables) {
-                    moveDown(mov, column, row);
+                Set<GameEntity> movables = EntityIndexExtension.getEntitiesWithPosition(context, column, row).stream()
+                        .filter(e -> e.isMovable())
+                        .collect(Collectors.toSet());
+                for (GameEntity e : movables) {
+                    moveDown(e, column, row);
                 }
             }
         }
 
     }
 
-    void moveDown(Entity e, int column, int row) {
-        int nextRowPos = GameBoardLogic.getNextEmptyRow(_pool, column, row);
+    void moveDown(GameEntity e, int column, int row) {
+        int nextRowPos = GameBoardLogic.getNextEmptyRow(context, column, row);
         if (nextRowPos != row) {
             e.replacePosition(column, nextRowPos);
         }
     }
+
 
 }

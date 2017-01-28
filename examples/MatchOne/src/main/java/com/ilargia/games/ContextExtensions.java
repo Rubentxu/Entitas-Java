@@ -2,8 +2,10 @@ package com.ilargia.games;
 
 
 import com.badlogic.gdx.math.MathUtils;
+import com.ilargia.games.core.GameContext;
+import com.ilargia.games.entitas.Entity;
 
-public class PoolExtensions {
+public class ContextExtensions {
 
     public static class Res {
         public static String Piece0 = "Piece0";
@@ -24,8 +26,8 @@ public class PoolExtensions {
             Res.Piece5
     };
 
-    public static Entity createRandomPiece(Pool pool, int x, int y) {
-        return pool.createEntity()
+    public static Entity createRandomPiece(GameContext context, int x, int y) {
+        return context.createEntity()
                 .setGameBoardElement(true)
                 .addPosition(x, y)
                 .setMovable(true)
@@ -33,8 +35,8 @@ public class PoolExtensions {
                 .addAsset(_pieces[MathUtils.random(0, _pieces.length)]);
     }
 
-    public static Entity createBlocker(Pool pool, int x, int y) {
-        return pool.createEntity()
+    public static Entity createBlocker(GameContext context, int x, int y) {
+        return context.createEntity()
                 .setGameBoardElement(true)
                 .addPosition(x, y)
                 .addAsset(Res.Blocker);
