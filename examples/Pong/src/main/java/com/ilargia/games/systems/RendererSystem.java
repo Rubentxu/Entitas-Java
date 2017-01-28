@@ -17,7 +17,6 @@ import com.ilargia.games.core.CoreEntity;
 import com.ilargia.games.core.CoreMatcher;
 import com.ilargia.games.entitas.api.system.IRenderSystem;
 import com.ilargia.games.entitas.group.Group;
-import com.ilargia.games.entitas.api.system.ISystem;
 
 
 public class RendererSystem implements IRenderSystem {
