@@ -179,47 +179,4 @@ public class ContextGenerator implements IComponentCodeGenerator {
                 .collect(Collectors.joining(", "));
     }
 
-
-    private JavaClassSource generateMatchers(String contextName, List<ComponentInfo> componentInfos, String pkgDestiny) {
-        JavaClassSource javaClass = Roaster.parse(JavaClassSource.class, String.format("public class %1$s {}",
-                CodeGenerator.capitalize(contextName) + "Matcher"));
-        javaClass.setPackage(pkgDestiny);
-        //javaClass.addImport("com.ilargia.games.entitas.interfaces.IMatcher");
-        javaClass.addImport("com.ilargia.games.entitas.matcher.Matcher");
-
-        for (ComponentInfo info : componentInfos) {
-            addMatcher(contextName, info, javaClass);
-            addMatcherMethods(contextName, info, javaClass);
-        }
-        System.out.println(javaClass);
-        return javaClass;
-    }
-
-    private JavaClassSource addMatcher(String contextName, ComponentInfo info, JavaClassSource javaClass) {
-        javaClass.addField()
-                .setName("_matcher" + info.typeName)
-                .setType("Matcher")
-                .setPrivate()
-                .setStatic(true);
-        return null;
-    }
-
-    private void addMatcherMethods(String contextName, ComponentInfo info, JavaClassSource javaClass) {
-        String body = "if (_matcher%2$s == null) {" +
-                "   Matcher matcher = (Matcher)Matcher.AllOf(%1$s.%2$s);" +
-                "   matcher.componentNames = %1$s.componentNames();" +
-                "   _matcher%2$s = matcher;" +
-                "}" +
-                "return _matcher%2$s;";
-
-        javaClass.addMethod()
-                .setName(info.typeName)
-                .setReturnType("Matcher")
-                .setPublic()
-                .setStatic(true)
-                .setBody(String.format(body, CodeGenerator.capitalize(contextName) + CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG,
-                        info.typeName));
-
-    }
-
 }

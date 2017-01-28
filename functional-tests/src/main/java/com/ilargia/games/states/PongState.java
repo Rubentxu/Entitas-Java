@@ -6,8 +6,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.ilargia.games.Pong;
 import com.ilargia.games.PongEngine;
 import com.ilargia.games.components.Player;
-import com.ilargia.games.core.Contexts;
-import com.ilargia.games.core.CoreContext;
+import com.ilargia.games.core.Entitas;
 import com.ilargia.games.egdx.base.BaseGameState;
 import com.ilargia.games.systems.*;
 
@@ -15,11 +14,11 @@ import com.ilargia.games.systems.*;
 public class PongState extends BaseGameState {
 
     private final PongEngine engine;
-    private final Contexts context;
+    private final Entitas context;
 
     public PongState(PongEngine engine) {
         this.engine = engine;
-        context = new Contexts();
+        context = new Entitas();
     }
 
     @Override

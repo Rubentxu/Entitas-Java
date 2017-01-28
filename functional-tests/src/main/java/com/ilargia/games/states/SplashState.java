@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.ilargia.games.Pong;
 import com.ilargia.games.PongEngine;
-import com.ilargia.games.core.Contexts;
+import com.ilargia.games.core.Entitas;
 import com.ilargia.games.egdx.base.BaseGameState;
 import com.ilargia.games.egdx.managers.EGAssetsManager;
 import com.ilargia.games.systems.DelaySystem;
@@ -17,10 +17,10 @@ public class SplashState extends BaseGameState {
     private EGAssetsManager assetsManager;
     private PongEngine engine;
 
-    private Contexts context;
+    private Entitas context;
 
     public SplashState(PongEngine engine) {
-        context = new Contexts();
+        context = new Entitas();
         this.engine = engine;
 
     }
