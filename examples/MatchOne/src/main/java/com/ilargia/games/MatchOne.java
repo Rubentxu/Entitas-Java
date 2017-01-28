@@ -2,7 +2,6 @@ package com.ilargia.games;
 
 
 import com.badlogic.gdx.ApplicationAdapter;
-import com.ilargia.games.entitas.EntityIndex;
 
 
 public class MatchOne extends ApplicationAdapter {
