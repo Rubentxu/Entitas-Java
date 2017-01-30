@@ -1,10 +1,8 @@
 package com.ilargia.games.systems;
 
-import com.ilargia.games.entitas.interfaces.IExecuteSystem;
 
+public class RendererSystem /*implements IExecuteSystem, ISetPool<Pool>*/ {
 
-public class RendererSystem implements IExecuteSystem/*, ISetPool<Pool>*/ {
-    @Override
     public void execute() {
 
     }
