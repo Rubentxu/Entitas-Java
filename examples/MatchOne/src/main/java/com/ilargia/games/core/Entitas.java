@@ -14,13 +14,11 @@ public class Entitas {
 	public GameSessionContext gamesession;
 	public InputContext input;
 	public GameContext game;
-	public RenderContext render;
 
 	public Entitas() {
 		gamesession = createGamesessionContext();
 		input = createInputContext();
 		game = createGameContext();
-		render = createRenderContext();
 	}
 
 	public GameSessionContext createGamesessionContext() {
@@ -44,15 +42,8 @@ public class Entitas {
 						GameComponentIds.componentTypes()), factoryGameEntity());
 	}
 
-	public RenderContext createRenderContext() {
-		return new RenderContext(RenderComponentIds.totalComponents, 0,
-				new ContextInfo("Render", RenderComponentIds.componentNames(),
-						RenderComponentIds.componentTypes()),
-				factoryRenderEntity());
-	}
-
 	public Context[] allContexts() {
-		return new Context[]{gamesession, input, game, render};
+		return new Context[]{gamesession, input, game};
 	}
 
 	public FactoryEntity<GameSessionEntity> factoryGameSessionEntity() {
@@ -75,14 +66,6 @@ public class Entitas {
 		return (int totalComponents, Stack<IComponent>[] componentContexts,
 				ContextInfo contextInfo) -> {
 			return new GameEntity(totalComponents, componentContexts,
-					contextInfo);
-		};
-	}
-
-	public FactoryEntity<RenderEntity> factoryRenderEntity() {
-		return (int totalComponents, Stack<IComponent>[] componentContexts,
-				ContextInfo contextInfo) -> {
-			return new RenderEntity(totalComponents, componentContexts,
 					contextInfo);
 		};
 	}

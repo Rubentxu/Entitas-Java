@@ -7,7 +7,6 @@ import com.ilargia.games.egdx.base.interfaces.GameState;
 import com.ilargia.games.egdx.base.interfaces.commands.ChangeStateCommand;
 import com.ilargia.games.egdx.transitions.SlideTransition;
 import com.ilargia.games.states.MatchOneState;
-import com.ilargia.games.states.PongState;
 import net.engio.mbassy.listener.Handler;
 
 public class MatchOneGame extends BaseGame<MatchOneEngine> {

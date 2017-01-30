@@ -10,6 +10,9 @@ import com.ilargia.games.components.GameBoardElement;
 import com.ilargia.games.components.Interactive;
 import com.ilargia.games.components.Movable;
 import com.ilargia.games.components.Position;
+import com.ilargia.games.components.TextureView;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.physics.box2d.Body;
 
 /**
  * ---------------------------------------------------------------------------
@@ -169,7 +172,7 @@ public class GameEntity extends Entity {
 		return hasComponent(GameComponentIds.Position);
 	}
 
-	public GameEntity addPosition(int x, int y) {
+	public GameEntity addPosition(float x, float y) {
 		Position component = (Position) recoverComponent(GameComponentIds.Position);
 		if (component == null) {
 			component = new Position(x, y);
@@ -181,7 +184,7 @@ public class GameEntity extends Entity {
 		return this;
 	}
 
-	public GameEntity replacePosition(int x, int y) {
+	public GameEntity replacePosition(float x, float y) {
 		Position component = (Position) recoverComponent(GameComponentIds.Position);
 		if (component == null) {
 			component = new Position(x, y);
@@ -195,6 +198,47 @@ public class GameEntity extends Entity {
 
 	public GameEntity removePosition() {
 		removeComponent(GameComponentIds.Position);
+		return this;
+	}
+
+	public TextureView getTextureView() {
+		return (TextureView) getComponent(GameComponentIds.TextureView);
+	}
+
+	public boolean hasTextureView() {
+		return hasComponent(GameComponentIds.TextureView);
+	}
+
+	public GameEntity addTextureView(String name, TextureRegion texture,
+			Body body) {
+		TextureView component = (TextureView) recoverComponent(GameComponentIds.TextureView);
+		if (component == null) {
+			component = new TextureView(name, texture, body);
+		} else {
+			component.name = name;;
+			component.texture = texture;;
+			component.body = body;
+		}
+		addComponent(GameComponentIds.TextureView, component);
+		return this;
+	}
+
+	public GameEntity replaceTextureView(String name, TextureRegion texture,
+			Body body) {
+		TextureView component = (TextureView) recoverComponent(GameComponentIds.TextureView);
+		if (component == null) {
+			component = new TextureView(name, texture, body);
+		} else {
+			component.name = name;;
+			component.texture = texture;;
+			component.body = body;
+		}
+		replaceComponent(GameComponentIds.TextureView, component);
+		return this;
+	}
+
+	public GameEntity removeTextureView() {
+		removeComponent(GameComponentIds.TextureView);
 		return this;
 	}
 }

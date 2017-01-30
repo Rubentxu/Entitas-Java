@@ -1,14 +1,14 @@
 package com.ilargia.games.components;
 
-import com.ilargia.games.entitas.codeGenerator.Component;
 import com.ilargia.games.entitas.api.IComponent;
+import com.ilargia.games.entitas.codeGenerator.Component;
 
 @Component(pools = {"Input"})
 public class Input implements IComponent {
-    public int x;
-    public int y;
+    public float x;
+    public float y;
 
-    public Input(int x, int y) {
+    public Input(float x, float y) {
         this.x = x;
         this.y = y;
     }

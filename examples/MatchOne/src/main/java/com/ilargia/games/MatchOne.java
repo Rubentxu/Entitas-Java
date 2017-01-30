@@ -11,7 +11,7 @@ import com.ilargia.games.egdx.managers.EGAssetsManager;
 import com.ilargia.games.egdx.managers.EGPreferencesManager;
 import com.ilargia.games.entitas.factories.Collections;
 import com.ilargia.games.entitas.factories.CollectionsFactory;
-import com.ilargia.games.states.SplashState;
+import com.ilargia.games.states.MatchOneState;
 import com.ilargia.games.util.TestFileHandleResolver;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntArraySet;
@@ -51,7 +51,7 @@ public class MatchOne extends ApplicationAdapter {
         new Collections(new CollectionsFactory() {
             @Override
             public List createList(Class<?> clazz) {
-                if(clazz.equals(Integer.class))
+                if (clazz.equals(Integer.class))
                     return new IntArrayList();
                 else
                     return new ObjectArrayList();
@@ -59,7 +59,7 @@ public class MatchOne extends ApplicationAdapter {
 
             @Override
             public Set createSet(Class<?> clazz) {
-                if(clazz.equals(Integer.class))
+                if (clazz.equals(Integer.class))
                     return new IntArraySet();
                 else
                     return new ObjectOpenHashSet();
@@ -74,7 +74,7 @@ public class MatchOne extends ApplicationAdapter {
         });
         game = new MatchOneGame(engine, new EGEventBus(new MBassador()));
         game.init();
-        game.pushState(new SplashState(engine));
+        game.pushState(new MatchOneState(engine));
     }
 
     @Override

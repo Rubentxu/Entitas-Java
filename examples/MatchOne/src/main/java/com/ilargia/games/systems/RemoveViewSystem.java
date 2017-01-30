@@ -1,49 +1,50 @@
 package com.ilargia.games.systems;
 
-import com.badlogic.gdx.utils.Array;
-import com.ilargia.games.entitas.Group;
-import com.ilargia.games.entitas.interfaces.*;
-import com.ilargia.games.entitas.matcher.TriggerOnEvent;
+import com.ilargia.games.components.TextureView;
+import com.ilargia.games.core.Entitas;
+import com.ilargia.games.core.GameEntity;
+import com.ilargia.games.core.GameMatcher;
+import com.ilargia.games.entitas.api.IContext;
+import com.ilargia.games.entitas.api.IGroup;
+import com.ilargia.games.entitas.collector.Collector;
+import com.ilargia.games.entitas.events.GroupEvent;
+import com.ilargia.games.entitas.systems.ReactiveSystem;
 
+import java.util.List;
 
-public class RemoveViewSystem implements ISetPool<Pool>, IReactiveSystem<Entity>, IEnsureComponents {
+public class RemoveViewSystem extends ReactiveSystem<GameEntity> {
 
-
-    @Override
-    public void setPool(Pool pool) {
-        pool.getGroup(CoreMatcher.View()).OnEntityRemoved = RemoveViewSystem::onEntityRemoved;
+    public RemoveViewSystem(Entitas entitas) {
+        super(entitas.game);
     }
 
     @Override
-    public IMatcher getEnsureComponents() {
-        return CoreMatcher.View();
+    public Collector<GameEntity> getTrigger(IContext<GameEntity> context) {
+        return new Collector(new IGroup[]{
+                context.getGroup(GameMatcher.Asset()),
+                context.getGroup(GameMatcher.Destroy())
+        },
+                new GroupEvent[]{
+                        GroupEvent.Removed,
+                        GroupEvent.Added
+                }
+        );
     }
 
     @Override
-    public TriggerOnEvent getTrigger() {
-        return CoreMatcher.Asset().OnEntityRemoved();
+    public boolean filter(GameEntity entity) {
+        return entity.hasTextureView();
     }
 
     @Override
-    public void execute(Array<Entity> entities) {
-        for(Entity e : entities) {
-            e.removeView();
+    protected void execute(List<GameEntity> entities) {
+        for (GameEntity e : entities) {
+            destroyView(e.getTextureView());
+            e.removeTextureView();
         }
     }
 
-    public static void onEntityRemoved(Group<Entity> group, Entity entity, int index, IComponent component) {
-        View viewComponent = (View) component;
-//        var gameObject = viewComponent.gameObject;
-//        var spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
-//        var color = spriteRenderer.color;
-//        color.a = 0f;
-//        spriteRenderer.material.DOColor(color, 0.2f);
-//        gameObject.transform
-//                .DOScale(Vector3.one * 1.5f, 0.2f)
-//                .OnComplete(() => {
-//                gameObject.Unlink();
-//        Object.Destroy(gameObject);
-//                    });
-    }
+    private void destroyView(TextureView textureView) {
 
+    }
 }

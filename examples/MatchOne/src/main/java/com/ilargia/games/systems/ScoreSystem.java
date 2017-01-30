@@ -1,34 +1,43 @@
 package com.ilargia.games.systems;
 
-import com.badlogic.gdx.utils.Array;
-import com.ilargia.games.entitas.Group;
-import com.ilargia.games.entitas.matcher.TriggerOnEvent;
+import com.ilargia.games.core.Entitas;
+import com.ilargia.games.core.GameMatcher;
+import com.ilargia.games.core.GameSessionEntity;
+import com.ilargia.games.entitas.api.IContext;
+import com.ilargia.games.entitas.api.system.IInitializeSystem;
+import com.ilargia.games.entitas.collector.Collector;
+import com.ilargia.games.entitas.events.GroupEvent;
+import com.ilargia.games.entitas.systems.ReactiveSystem;
+
+import java.util.List;
 
 
-public class ScoreSystem implements ISetPools<Pools>, IReactiveSystem<Entity>, IInitializeSystem {
+public class ScoreSystem extends ReactiveSystem<GameSessionEntity> implements IInitializeSystem {
 
-    private Pools _pools;
+    private Entitas entitas;
 
-    @Override
-    public void setPools(Pools pools) {
-       _pools =  pools;
-    }
-
-    @Override
-    public TriggerOnEvent getTrigger() {
-        return CoreMatcher.GameBoardElement().OnEntityRemoved();
+    public ScoreSystem(Entitas entitas) {
+        super(entitas.gamesession);
+        this.entitas = entitas;
     }
 
     @Override
     public void initialize() {
-        _pools.score.setScore(0);
+        entitas.gamesession.setScore(0);
     }
 
     @Override
-    public void execute(Array<Entity> entities) {
-        _pools.score.replaceScore(_pools.score.getScore().value + entities.size);
-
+    protected Collector<GameSessionEntity> getTrigger(IContext<GameSessionEntity> context) {
+        return context.createCollector(GameMatcher.GameBoardElement(), GroupEvent.Removed);
     }
 
+    @Override
+    protected boolean filter(GameSessionEntity entity) {
+        return true;
+    }
 
+    @Override
+    protected void execute(List<GameSessionEntity> entities) {
+        entitas.gamesession.replaceScore(entitas.gamesession.getScore().value + entities.size());
+    }
 }

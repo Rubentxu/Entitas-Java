@@ -16,6 +16,7 @@ public class GameMatcher {
 	private static Matcher _matcherInteractive;
 	private static Matcher _matcherMovable;
 	private static Matcher _matcherPosition;
+	private static Matcher _matcherTextureView;
 
 	public static Matcher Asset() {
 		if (_matcherAsset == null) {
@@ -82,5 +83,15 @@ public class GameMatcher {
 			_matcherPosition = matcher;
 		}
 		return _matcherPosition;
+	}
+
+	public static Matcher TextureView() {
+		if (_matcherTextureView == null) {
+			Matcher matcher = (Matcher) Matcher
+					.AllOf(GameComponentIds.TextureView);
+			matcher.componentNames = GameComponentIds.componentNames();
+			_matcherTextureView = matcher;
+		}
+		return _matcherTextureView;
 	}
 }

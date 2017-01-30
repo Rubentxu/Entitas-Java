@@ -7,16 +7,6 @@ import com.ilargia.games.entitas.Entity;
 
 public class ContextExtensions {
 
-    public static class Res {
-        public static String Piece0 = "Piece0";
-        public static String Piece1 = "Piece1";
-        public static String Piece2 = "Piece2";
-        public static String Piece3 = "Piece3";
-        public static String Piece4 = "Piece4";
-        public static String Piece5 = "Piece5";
-        public static String Blocker = "Blocker";
-    }
-
     static String[] _pieces = {
             Res.Piece0,
             Res.Piece1,
@@ -40,5 +30,15 @@ public class ContextExtensions {
                 .setGameBoardElement(true)
                 .addPosition(x, y)
                 .addAsset(Res.Blocker);
+    }
+
+    public static class Res {
+        public static String Piece0 = "Piece0";
+        public static String Piece1 = "Piece1";
+        public static String Piece2 = "Piece2";
+        public static String Piece3 = "Piece3";
+        public static String Piece4 = "Piece4";
+        public static String Piece5 = "Piece5";
+        public static String Blocker = "Blocker";
     }
 }

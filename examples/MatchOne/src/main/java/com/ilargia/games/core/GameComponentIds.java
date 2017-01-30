@@ -7,6 +7,7 @@ import com.ilargia.games.components.GameBoardElement;
 import com.ilargia.games.components.Interactive;
 import com.ilargia.games.components.Movable;
 import com.ilargia.games.components.Position;
+import com.ilargia.games.components.TextureView;
 
 /**
  * ---------------------------------------------------------------------------
@@ -22,16 +23,18 @@ public class GameComponentIds {
 	public static final int Interactive = 4;
 	public static final int Movable = 5;
 	public static final int Position = 6;
-	public static final int totalComponents = 7;
+	public static final int TextureView = 7;
+	public static final int totalComponents = 8;
 
 	public static String[] componentNames() {
 		return new String[]{"Asset", "Destroy", "GameBoard",
-				"GameBoardElement", "Interactive", "Movable", "Position"};
+				"GameBoardElement", "Interactive", "Movable", "Position",
+				"TextureView"};
 	}
 
 	public static Class[] componentTypes() {
 		return new Class[]{Asset.class, Destroy.class, GameBoard.class,
 				GameBoardElement.class, Interactive.class, Movable.class,
-				Position.class};
+				Position.class, TextureView.class};
 	}
 }

@@ -2,6 +2,7 @@ package com.ilargia.games.components;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.ilargia.games.entitas.api.IComponent;
 import com.ilargia.games.entitas.codeGenerator.Component;
 
@@ -9,19 +10,14 @@ import com.ilargia.games.entitas.codeGenerator.Component;
 public class TextureView implements IComponent {
     public String name;
     public TextureRegion texture;
-    public int height;
-    public int width;
-    public Vector2 position;
-    public float rotation = 0;
+    public Body body;
 
 
-    public TextureView(String name, TextureRegion texture, Vector2 position, float rotation, int height, int width) {
+    public TextureView(String name, TextureRegion texture, Body body) {
         this.name = name;
         this.texture = texture;
-        this.position = position;
-        this.rotation = rotation;
-        this.height = height;
-        this.width = width;
+        this.body = body;
+
 
     }
 }

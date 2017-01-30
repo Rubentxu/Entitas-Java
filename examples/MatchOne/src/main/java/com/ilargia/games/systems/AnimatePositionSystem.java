@@ -4,17 +4,16 @@ import com.ilargia.games.ContextExtensions;
 import com.ilargia.games.GameBoardLogic;
 import com.ilargia.games.components.GameBoard;
 import com.ilargia.games.core.GameContext;
+import com.ilargia.games.core.GameEntity;
 import com.ilargia.games.core.GameMatcher;
-import com.ilargia.games.entitas.Entity;
 import com.ilargia.games.entitas.api.IContext;
 import com.ilargia.games.entitas.collector.Collector;
-import com.ilargia.games.entitas.events.GroupEvent;
 import com.ilargia.games.entitas.systems.ReactiveSystem;
 
 import java.util.List;
 
 
-public class AnimatePositionSystem extends ReactiveSystem {
+public class AnimatePositionSystem extends ReactiveSystem<GameEntity> {
 
     GameContext context;
 
@@ -25,12 +24,12 @@ public class AnimatePositionSystem extends ReactiveSystem {
 
     @Override
     protected Collector getTrigger(IContext context) {
-        return context.createCollector(GameMatcher.GameBoardElement(), GroupEvent.Removed);
+        return context.createCollector(GameMatcher.Position());
     }
 
     @Override
-    protected boolean filter(Entity entity) {
-        return true;
+    protected boolean filter(GameEntity entity) {
+        return entity.hasTextureView() && entity.hasPosition();
     }
 
     @Override
