@@ -4,9 +4,6 @@ group 'com.ilargia.games'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
-ext {
-    gdxVersion = '1.9.4'
-}
 
 allprojects {
     version '0.1.0'
@@ -14,6 +11,11 @@ allprojects {
     apply plugin: 'java'
     apply plugin: "eclipse"
     apply plugin: "idea"
+
+    ext {
+        gdxVersion = '1.9.5'
+    }
+
 
     idea {
         module {
