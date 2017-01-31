@@ -3,6 +3,7 @@ package com.ilargia.games.entitas;
 import com.ilargia.games.entitas.api.*;
 import com.ilargia.games.entitas.api.events.*;
 import com.ilargia.games.entitas.api.matcher.IMatcher;
+import com.ilargia.games.entitas.caching.EntitasCache;
 import com.ilargia.games.entitas.collector.Collector;
 import com.ilargia.games.entitas.events.GroupEvent;
 import com.ilargia.games.entitas.exceptions.*;
@@ -15,7 +16,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 
-public class Context<TEntity extends Entity> implements IContext<TEntity> {
+public class Context<TEntity extends IEntity> implements IContext<TEntity> {
 
     // Eventos
     public Event<ContextEntityChanged> OnEntityCreated;
@@ -89,22 +90,23 @@ public class Context<TEntity extends Entity> implements IContext<TEntity> {
     public TEntity createEntity() {
         TEntity ent;
         if (_reusableEntities.size() > 0) {
-            ent = _reusableEntities.pop();
+            ent =  _reusableEntities.pop();
             ent.reactivate(_creationIndex++);
         } else {
-            ent = _factoryEntiy.create(_totalComponents, _componentContexts, _contextInfo);
+            ent =  _factoryEntiy.create(_totalComponents, _componentContexts, _contextInfo);
             ent.initialize(_creationIndex++, _totalComponents, _componentContexts, _contextInfo);
         }
 
-        _entities.add(ent);
+        _entities.add((TEntity) ent);
         ent.retain(this);
         _entitiesCache = null;
-        ent.OnComponentAdded.addListener(_cachedEntityChanged);
-        ent.OnComponentRemoved.addListener(_cachedEntityChanged);
-        ent.OnComponentReplaced.addListener((EntityComponentReplaced<TEntity>) (TEntity e, int idx, IComponent pc, IComponent nc) -> {
+        Entity entity = (Entity) ent;
+        entity.OnComponentAdded.addListener(_cachedEntityChanged);
+        entity.OnComponentRemoved.addListener(_cachedEntityChanged);
+        entity.OnComponentReplaced.addListener((EntityComponentReplaced<TEntity>) (TEntity e, int idx, IComponent pc, IComponent nc) -> {
             updateGroupsComponentReplaced(e, idx, pc, nc, _groupsForIndex);
         });
-        ent.OnEntityReleased.addListener((EntityReleased<TEntity>) (TEntity e) -> {
+        entity.OnEntityReleased.addListener((EntityReleased<TEntity>) (TEntity e) -> {
             onEntityReleased(e, _retainedEntities, _reusableEntities);
         });
         notifyEntityCreated(this, ent);
@@ -272,6 +274,12 @@ public class Context<TEntity extends Entity> implements IContext<TEntity> {
     public void updateGroupsComponentAddedOrRemoved(TEntity entity, int index, IComponent component, List<Group<TEntity>>[] groupsForIndex) {
         List<Group<TEntity>> groups = groupsForIndex[index];
         if (groups != null) {
+            List<Event<GroupChanged<TEntity>>> events = EntitasCache.<TEntity>getGroupChangedList();
+
+            for(int i = 0; i < groups.size(); i++) {
+                events.add(groups.get(i).handleEntity(entity));
+            }
+
             for (int i = 0, groupsCount = groups.size(); i < groupsCount; i++) {
                 groups.get(i).handleEntity(entity, index, component);
             }

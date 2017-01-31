@@ -2,6 +2,7 @@ package com.ilargia.games.systems;
 
 import com.ilargia.games.components.TextureView;
 import com.ilargia.games.core.Entitas;
+import com.ilargia.games.core.GameContext;
 import com.ilargia.games.core.GameEntity;
 import com.ilargia.games.core.GameMatcher;
 import com.ilargia.games.entitas.api.IContext;
@@ -14,8 +15,8 @@ import java.util.List;
 
 public class RemoveViewSystem extends ReactiveSystem<GameEntity> {
 
-    public RemoveViewSystem(Entitas entitas) {
-        super(entitas.game);
+    public RemoveViewSystem(GameContext context) {
+        super(context);
     }
 
     @Override

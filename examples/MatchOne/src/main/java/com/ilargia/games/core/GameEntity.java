@@ -172,7 +172,7 @@ public class GameEntity extends Entity {
 		return hasComponent(GameComponentIds.Position);
 	}
 
-	public GameEntity addPosition(float x, float y) {
+	public GameEntity addPosition(int x, int y) {
 		Position component = (Position) recoverComponent(GameComponentIds.Position);
 		if (component == null) {
 			component = new Position(x, y);
@@ -184,7 +184,7 @@ public class GameEntity extends Entity {
 		return this;
 	}
 
-	public GameEntity replacePosition(float x, float y) {
+	public GameEntity replacePosition(int x, int y) {
 		Position component = (Position) recoverComponent(GameComponentIds.Position);
 		if (component == null) {
 			component = new Position(x, y);

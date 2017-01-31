@@ -16,7 +16,7 @@ import com.ilargia.games.entitas.factories.Collections;
 import java.util.Iterator;
 import java.util.Set;
 
-public class Group<TEntity extends Entity> implements IGroup<TEntity> {
+public class Group<TEntity extends IEntity> implements IGroup<TEntity> {
 
     public Event<GroupChanged<TEntity>> OnEntityAdded;
     public Event<GroupChanged<TEntity>> OnEntityRemoved;

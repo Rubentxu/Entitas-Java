@@ -13,7 +13,7 @@ import java.util.Set;
 public class EntityIndexExtension {
 
     public static final String PositionKey = "Position";
-    final int shiftX = 8;
+    static final int shiftX = 8;
 
     public static void addEntityIndices(Entitas contexts) {
         EntityIndex<GameEntity, Integer> positionIndex = new EntityIndex(
@@ -21,8 +21,8 @@ public class EntityIndexExtension {
                 (e, c) -> {
                     Position positionComponent = (Position) c;
                     return positionComponent != null
-                            ? positionComponent.x + "," + positionComponent.y
-                            : ((GameEntity) e).getPosition().x + "," + ((GameEntity) e).getPosition().y;
+                            ? (positionComponent.x << shiftX) + positionComponent.y
+                            : (((GameEntity) e).getPosition().x << shiftX) + ((GameEntity) e).getPosition().y;
                 }
         );
         contexts.game.addEntityIndex(PositionKey, positionIndex);

@@ -2,6 +2,8 @@ package com.ilargia.games.entitas.caching;
 
 
 import com.ilargia.games.entitas.api.IComponent;
+import com.ilargia.games.entitas.api.IEntity;
+import com.ilargia.games.entitas.api.events.Event;
 import com.ilargia.games.entitas.api.events.GroupChanged;
 import com.ilargia.games.entitas.factories.Collections;
 
@@ -19,7 +21,7 @@ public class EntitasCache {
     private static ObjectPool<Set> integerSet = new ObjectPool<Set>(() -> {
         return Collections.createSet(Integer.class);
     }, null);
-    private static ObjectPool<List<GroupChanged>> groupChangedArray = new ObjectPool<List<GroupChanged>>(() -> {
+    private static ObjectPool<List<Event<GroupChanged>>> groupChangedArray = new ObjectPool<List<Event<GroupChanged>>>(() -> {
         return Collections.createList(GroupChanged.class);
     }, null);
 
@@ -51,12 +53,12 @@ public class EntitasCache {
         integerSet.push(hashSet);
     }
 
-    public static List<GroupChanged> getGroupChangedList() {
+    public static <TEntity extends IEntity> List<Event<GroupChanged<TEntity>>> getGroupChangedList() {
         return groupChangedArray.get();
 
     }
 
-    public static void pushGroupChangedList(List<GroupChanged> list) {
+    public static <TEntity extends IEntity> void pushGroupChangedList(List<Event<GroupChanged<TEntity>>> list) {
         list.clear();
         groupChangedArray.push(list);
     }

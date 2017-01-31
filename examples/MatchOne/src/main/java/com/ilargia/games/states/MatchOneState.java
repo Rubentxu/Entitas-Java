@@ -1,33 +1,67 @@
 package com.ilargia.games.states;
 
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.World;
+import com.ilargia.games.EntityIndexExtension;
 import com.ilargia.games.MatchOneEngine;
 import com.ilargia.games.core.Entitas;
 import com.ilargia.games.egdx.base.BaseGameState;
-
+import com.ilargia.games.egdx.managers.EGAssetsManager;
+import com.ilargia.games.systems.*;
 
 public class MatchOneState extends BaseGameState {
+    private String Blocker = "assets/textures/Blocker.png";
+    private String Piece0 = "assets/textures/Piece0.png";
+    private String Piece1 = "assets/textures/Piece1.png";
+    private String Piece2 = "assets/textures/Piece2.png";
+    private String Piece3 = "assets/textures/Piece3.png";
+    private String Piece4 = "assets/textures/Piece4.png";
+    private String Piece5 = "assets/textures/Piece5.png";
 
-    private final MatchOneEngine engine;
-    private final Entitas context;
-    private final World physic;
+
+    private MatchOneEngine engine;
+    private Entitas entitas;
+
+    private EGAssetsManager assetsManager;
 
 
     public MatchOneState(MatchOneEngine engine) {
         this.engine = engine;
-        context = new Entitas();
-        physic = new World(new Vector2(0, -9.81f),true);
+
+
     }
 
     @Override
     public void loadResources() {
-
+        assetsManager = engine.getManager(EGAssetsManager.class);
+        assetsManager.loadTexture(Blocker);
+        assetsManager.loadTexture(Piece0);
+        assetsManager.loadTexture(Piece1);
+        assetsManager.loadTexture(Piece2);
+        assetsManager.loadTexture(Piece3);
+        assetsManager.loadTexture(Piece4);
+        assetsManager.loadTexture(Piece5);
+        assetsManager.finishLoading();
     }
 
     @Override
     public void initialize() {
-
+        entitas = new Entitas();
+        EntityIndexExtension.addEntityIndices(entitas);
+        // Input
+        systems.add(new EmitInputSystem(entitas.input, engine.physic, engine.cam))
+                .add(new ProcessInputSystem(entitas))
+                // Update
+                .add(new GameBoardSystem(entitas.game))
+                .add(new FallSystem(entitas.game))
+                .add(new FillSystem(entitas.game))
+                .add(new ScoreSystem(entitas))
+                // Render
+                .add(new RemoveViewSystem(entitas.game))
+                .add(new AddViewSystem(entitas.game, assetsManager, engine.bodyBuilder))
+                .add(new AnimatePositionSystem(entitas.game))
+                // Destroy
+                .add(new DestroySystem(entitas.game))
+                .add(new RendererSystem(entitas.game, engine.cam,engine.batch))
+                .add(new PhysicSystem(engine.physic));
     }
 
     @Override
@@ -42,9 +76,10 @@ public class MatchOneState extends BaseGameState {
 
     @Override
     public void unloadResources() {
-        context.game.destroyAllEntities();
+        entitas.game.destroyAllEntities();
         systems.clearSystems();
     }
+
 
 
 }

@@ -3,6 +3,7 @@ package com.ilargia.games;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.ilargia.games.core.GameContext;
+import com.ilargia.games.core.GameEntity;
 import com.ilargia.games.entitas.Entity;
 
 public class ContextExtensions {
@@ -16,16 +17,16 @@ public class ContextExtensions {
             Res.Piece5
     };
 
-    public static Entity createRandomPiece(GameContext context, int x, int y) {
+    public static GameEntity createRandomPiece(GameContext context, int x, int y) {
         return context.createEntity()
                 .setGameBoardElement(true)
                 .addPosition(x, y)
                 .setMovable(true)
                 .setInteractive(true)
-                .addAsset(_pieces[MathUtils.random(0, _pieces.length)]);
+                .addAsset(_pieces[MathUtils.random(0, _pieces.length-1)]);
     }
 
-    public static Entity createBlocker(GameContext context, int x, int y) {
+    public static GameEntity createBlocker(GameContext context, int x, int y) {
         return context.createEntity()
                 .setGameBoardElement(true)
                 .addPosition(x, y)
