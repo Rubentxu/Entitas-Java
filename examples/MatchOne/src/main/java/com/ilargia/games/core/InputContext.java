@@ -26,7 +26,7 @@ public class InputContext
 
 	public InputContext setBurstMode(boolean value) {
 		InputEntity entity = getBurstModeEntity();
-		if (value != (entity != null)) {
+		if (value &&  entity != null) {
 			if (value) {
 				entity.setBurstMode(true);
 			} else {

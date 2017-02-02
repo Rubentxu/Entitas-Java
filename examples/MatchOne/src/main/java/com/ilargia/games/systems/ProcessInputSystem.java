@@ -35,7 +35,7 @@ public class ProcessInputSystem extends ReactiveSystem<InputEntity> {
 
     @Override
     protected void execute(List<InputEntity> entities) {
-        InputEntity inputEntity = context.getBurstModeEntity();
+        InputEntity inputEntity = entities.get(0);
         Input input = inputEntity.getInput();
 
         Set<GameEntity> interactives = EntityIndexExtension.getEntitiesWithPosition(entitas.game, input.x, input.y)

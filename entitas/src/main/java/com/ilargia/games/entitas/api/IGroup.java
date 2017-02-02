@@ -18,7 +18,7 @@ public interface IGroup<TEntity extends IEntity> {
 
     void handleEntity(TEntity entity, int index, IComponent component);
 
-    Event<GroupChanged<TEntity>> handleEntity(TEntity entity);
+    Event<GroupChanged> handleEntity(TEntity entity);
 
     void updateEntity(TEntity entity, int index, IComponent previousComponent, IComponent newComponent);
 

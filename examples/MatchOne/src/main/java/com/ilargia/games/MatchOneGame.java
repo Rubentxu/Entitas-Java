@@ -18,6 +18,7 @@ public class MatchOneGame extends BaseGame<MatchOneEngine> {
     public MatchOneGame(MatchOneEngine engine, EventBus bus) {
         super(engine, bus);
         ebus.subscribe(this);
+
     }
 
 

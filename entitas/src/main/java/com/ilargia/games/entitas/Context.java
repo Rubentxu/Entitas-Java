@@ -176,7 +176,7 @@ public class Context<TEntity extends IEntity> implements IContext<TEntity> {
     @Override
     public Group<TEntity> getGroup(IMatcher matcher) {
         Group<TEntity> group = null;
-        if (!(_groups.containsKey(matcher) ? (group = _groups.get(matcher)) == group : false)) {
+        if (!(_groups.containsKey(matcher) ? (group = _groups.get(matcher)) == null : false)) {
 
             group = new Group(matcher, entityType);
             for (TEntity entity : getEntities()) {
@@ -274,15 +274,21 @@ public class Context<TEntity extends IEntity> implements IContext<TEntity> {
     public void updateGroupsComponentAddedOrRemoved(TEntity entity, int index, IComponent component, List<Group<TEntity>>[] groupsForIndex) {
         List<Group<TEntity>> groups = groupsForIndex[index];
         if (groups != null) {
-            List<Event<GroupChanged<TEntity>>> events = EntitasCache.<TEntity>getGroupChangedList();
+            List<Event<GroupChanged>> events = EntitasCache.getGroupChangedList();
 
             for(int i = 0; i < groups.size(); i++) {
                 events.add(groups.get(i).handleEntity(entity));
             }
 
-            for (int i = 0, groupsCount = groups.size(); i < groupsCount; i++) {
-                groups.get(i).handleEntity(entity, index, component);
+            for(int i = 0; i < events.size(); i++) {
+                Event<GroupChanged> groupChangedEvent = events.get(i);
+                if(groupChangedEvent != null) {
+                    for (GroupChanged listener : groupChangedEvent.listeners()) {
+                        listener.changed( groups.get(i), entity, index, component );
+                    };
+                }
             }
+            EntitasCache.pushGroupChangedList(events);
         }
 
     }
@@ -302,6 +308,7 @@ public class Context<TEntity extends IEntity> implements IContext<TEntity> {
         if (entity.isEnabled()) {
             throw new EntityIsNotDestroyedException("Cannot release entity.");
         }
+        entity.removeAllOnEntityReleasedHandlers();
         retainedEntities.remove(entity);
         reusableEntities.push(entity);
     }

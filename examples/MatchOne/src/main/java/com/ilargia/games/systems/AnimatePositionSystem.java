@@ -1,8 +1,10 @@
 package com.ilargia.games.systems;
 
+import com.badlogic.gdx.math.Vector2;
 import com.ilargia.games.ContextExtensions;
 import com.ilargia.games.GameBoardLogic;
 import com.ilargia.games.components.GameBoard;
+import com.ilargia.games.components.Position;
 import com.ilargia.games.core.GameContext;
 import com.ilargia.games.core.GameEntity;
 import com.ilargia.games.core.GameMatcher;
@@ -33,14 +35,10 @@ public class AnimatePositionSystem extends ReactiveSystem<GameEntity> {
     }
 
     @Override
-    public void execute(List entities) {
-        GameBoard gameBoard = context.getGameBoard();
-        for (int column = 0; column < gameBoard.columns; column++) {
-            int nextRowPos = GameBoardLogic.getNextEmptyRow(context, column, gameBoard.rows);
-            while (nextRowPos != gameBoard.rows) {
-                ContextExtensions.createRandomPiece(context, column, nextRowPos);
-                nextRowPos = GameBoardLogic.getNextEmptyRow(context, column, gameBoard.rows);
-            }
+    public void execute(List<GameEntity> entities) {
+        for(GameEntity e : entities) {
+            Position pos = e.getPosition();
+            e.getTextureView().body.setTransform(new Vector2(pos.x, pos.y), 0.3f);
         }
 
     }

@@ -53,12 +53,12 @@ public class EntitasCache {
         integerSet.push(hashSet);
     }
 
-    public static <TEntity extends IEntity> List<Event<GroupChanged<TEntity>>> getGroupChangedList() {
+    public static List<Event<GroupChanged>> getGroupChangedList() {
         return groupChangedArray.get();
 
     }
 
-    public static <TEntity extends IEntity> void pushGroupChangedList(List<Event<GroupChanged<TEntity>>> list) {
+    public static void pushGroupChangedList(List<Event<GroupChanged>> list) {
         list.clear();
         groupChangedArray.push(list);
     }

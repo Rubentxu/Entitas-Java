@@ -19,6 +19,11 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.engio.mbassy.bus.MBassador;
+import net.engio.mbassy.bus.config.BusConfiguration;
+import net.engio.mbassy.bus.config.IBusConfiguration;
+import net.engio.mbassy.bus.error.IPublicationErrorHandler;
+import net.engio.mbassy.bus.error.PublicationError;
+import net.engio.mbassy.listener.MessageHandler;
 
 import java.util.List;
 import java.util.Map;
@@ -26,11 +31,13 @@ import java.util.Set;
 
 
 public class MatchOne extends ApplicationAdapter {
-    public static final int SCREEN_WIDTH = 800;
-    public static final int SCREEN_HEIGHT = 480;
-    public static final int PLAYER_WIDTH = 20;
-    public static final int PLAYER_HEIGHT = 120;
-    public static float PLAYER_SPEED = 300;
+    public static final int SCREEN_WIDTH = 600;
+    public static final int SCREEN_HEIGHT = 600;
+    public static float WIDTH = 8; //30 metres
+    public static float HEIGHT = 9; // 20 metres
+
+    public static float METRES_TO_PIXELS = 128;
+    public static float PIXELS_TO_METRES = 1.0f / METRES_TO_PIXELS;
     private static MatchOneGame game;
 
     public static void main(String[] arg) {
@@ -72,7 +79,15 @@ public class MatchOne extends ApplicationAdapter {
             }
 
         });
-        game = new MatchOneGame(engine, new EGEventBus(new MBassador()));
+        MBassador bus = new MBassador(new IPublicationErrorHandler() {
+            @Override
+            public void handleError (PublicationError error) {
+                Gdx.app.error ("EBUS ERROR: ",error.toString());
+            }
+        });
+
+
+        game = new MatchOneGame(engine, new EGEventBus(bus));
         game.init();
         game.pushState(new MatchOneState(engine));
     }

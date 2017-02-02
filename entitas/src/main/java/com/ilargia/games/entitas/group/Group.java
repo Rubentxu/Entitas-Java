@@ -18,9 +18,9 @@ import java.util.Set;
 
 public class Group<TEntity extends IEntity> implements IGroup<TEntity> {
 
-    public Event<GroupChanged<TEntity>> OnEntityAdded;
-    public Event<GroupChanged<TEntity>> OnEntityRemoved;
-    public Event<GroupUpdated<TEntity>> OnEntityUpdated;
+    public Event<GroupChanged> OnEntityAdded;
+    public Event<GroupChanged> OnEntityRemoved;
+    public Event<GroupUpdated> OnEntityUpdated;
 
     private IMatcher<TEntity> _matcher;
     private final Set<TEntity> _entities; //
@@ -83,7 +83,7 @@ public class Group<TEntity extends IEntity> implements IGroup<TEntity> {
     }
 
     @Override
-    public Event<GroupChanged<TEntity>> handleEntity(TEntity entity) {
+    public Event<GroupChanged> handleEntity(TEntity entity) {
         return (_matcher.matches(entity))
                 ? (addEntitySilently(entity)) ? OnEntityAdded : null
                 : (removeEntitySilently(entity)) ? OnEntityRemoved : null;

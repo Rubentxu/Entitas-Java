@@ -31,17 +31,18 @@ public class RendererSystem implements IRenderSystem {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         cam.update();
+        batch.setProjectionMatrix(cam.combined);
 
 
         batch.begin();
         for (GameEntity e : _groupTextureView.getEntities()) {
             TextureView view = e.getTextureView();
 
-            float originX = view.texture.getRegionWidth()* 0.5f;
-            float originY = view.texture.getRegionHeight() * 0.5f;
+            float originX = 1 * 0.5f;
+            float originY = 1 * 0.5f;
 
-            batch.draw(view.texture, view.body.getPosition().x - originX,view.body.getPosition().y - originY,
-                    originX, originY, view.texture.getRegionWidth(), view.texture.getRegionHeight() , 1, 1, 0);
+            batch.draw(view.texture, view.body.getPosition().x - originX, view.body.getPosition().y - originY,
+                    originX, originY, 1f, 1f, 1, 1, 0);
 
         }
         batch.end();
