@@ -152,8 +152,8 @@ public class ContextTest {
 
     @Test
     public void onEntityReleasedTest() {
-        entity.destroy();
-        entity.release(context);
+        context.destroyEntity(entity);
+
 
         assertEquals(1, context.getReusableEntitiesCount());
     }
@@ -161,7 +161,7 @@ public class ContextTest {
     @Test(expected = EntityIsNotDestroyedException.class)
     public void EntityIsNotDestroyedExceptionTest() {
         entity.release(context);
-        entity.release(context);
+
     }
 
     @Test
@@ -254,9 +254,9 @@ public class ContextTest {
     public void resetTest() {
         context.OnEntityCreated((pool, entity) -> {
         });
-        assertEquals(1, context.OnEntityCreated.size());
+        assertEquals(1, context.OnEntityCreated.get(context).size());
         context.reset();
-        assertEquals(0, context.OnEntityCreated.size());
+        assertEquals(0, context.OnEntityCreated.get(context).size());
 
     }
 
