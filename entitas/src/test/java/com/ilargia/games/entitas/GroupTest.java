@@ -1,7 +1,6 @@
 package com.ilargia.games.entitas;
 
 import com.ilargia.games.entitas.api.ContextInfo;
-import com.ilargia.games.entitas.api.events.Event;
 import com.ilargia.games.entitas.components.Position;
 import com.ilargia.games.entitas.components.View;
 import com.ilargia.games.entitas.factories.Collections;
@@ -49,8 +48,10 @@ public class GroupTest {
     @Before
     public void setUp() throws Exception {
         createCollections();
+
         entity = new TestEntity(10, new Stack[10], new ContextInfo("Test", TestComponentIds.componentNames(),
                 TestComponentIds.componentTypes()));
+        entity.clearEventsListener();
         entity.reactivate(0);
         entity.addComponent(TestComponentIds.Position, new Position(100, 100));
         entity.addComponent(TestComponentIds.View, new View(1));
@@ -62,11 +63,12 @@ public class GroupTest {
 
     @Test
     public void handleEntityTest() {
-        group.OnEntityAdded.addListener((group, e, index, component) -> {
+        GroupChanged<TestEntity> lambda = (group, e, index, component) -> {
             entityEquals(entity, e);
-        });
-        Event<GroupChanged<TestEntity>> changed = group.handleEntity(entity);
-        assertEquals(group.OnEntityAdded, changed);
+        };
+        group.OnEntityAdded(lambda);
+        Set<GroupChanged> changed = group.handleEntity(entity);
+        assertTrue(changed.contains(lambda));
 
     }
 
@@ -76,13 +78,15 @@ public class GroupTest {
 
     @Test
     public void handleEntityOnEntityRemovedTest() {
-        group.OnEntityRemoved.addListener((group, e, idx, component) -> assertEquals(entity, e));
-        group.handleEntity(entity);
+        GroupChanged<TestEntity> lambda = (group, e, idx, component) -> assertEquals(entity, e);
+        group.OnEntityRemoved(lambda);
+        Set<GroupChanged> changed = group.handleEntity(entity);
+        assertNull(changed);
 
         entity.removeComponent(TestComponentIds.Position);
-        Event<GroupChanged<TestEntity>> changed = group.handleEntity(entity);
+        changed = group.handleEntity(entity);
+        assertTrue(changed.contains(lambda));
 
-        assertEquals(group.OnEntityRemoved, changed);
 
     }
 

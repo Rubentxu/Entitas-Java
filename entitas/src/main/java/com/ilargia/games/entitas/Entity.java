@@ -4,10 +4,6 @@ package com.ilargia.games.entitas;
 import com.ilargia.games.entitas.api.ContextInfo;
 import com.ilargia.games.entitas.api.IComponent;
 import com.ilargia.games.entitas.api.IEntity;
-import com.ilargia.games.entitas.api.events.EntityComponentChanged;
-import com.ilargia.games.entitas.api.events.EntityComponentReplaced;
-import com.ilargia.games.entitas.api.events.EntityReleased;
-import com.ilargia.games.entitas.api.events.Event;
 import com.ilargia.games.entitas.caching.EntitasCache;
 import com.ilargia.games.entitas.exceptions.*;
 import com.ilargia.games.entitas.factories.Collections;
@@ -17,12 +13,6 @@ import java.util.Set;
 import java.util.Stack;
 
 public class Entity implements IEntity {
-
-    // Eventos
-    public Event<EntityComponentChanged> OnComponentAdded;
-    public Event<EntityComponentChanged> OnComponentRemoved;
-    public Event<EntityComponentReplaced> OnComponentReplaced;
-    public Event<EntityReleased> OnEntityReleased;
 
     private Set<Object> owners; //ObjectOpenHashSet
     private int _creationIndex;
@@ -42,12 +32,6 @@ public class Entity implements IEntity {
         _componentContexts = componentContexts;
         _isEnabled = true;
         owners = Collections.createSet(Object.class);
-
-        OnComponentAdded = new Event<>();
-        OnComponentRemoved = new Event<>();
-        OnComponentReplaced = new Event<>();
-        OnEntityReleased = new Event<>();
-
 
         if (contextInfo != null) {
             _contextInfo = contextInfo;
@@ -124,7 +108,7 @@ public class Entity implements IEntity {
         _componentsCache = null;
         _componentIndicesCache = null;
         _toStringCache = null;
-        notifyComponentAdded(this, index, component);
+        notifyComponentAdded(index, component);
 
     }
 
@@ -167,15 +151,15 @@ public class Entity implements IEntity {
             _components[index] = replacement;
             _componentsCache = null;
             if (replacement != null) {
-                notifyComponentReplaced(this, index, previousComponent, replacement);
+                notifyComponentReplaced(index, previousComponent, replacement);
             } else {
                 _componentIndicesCache = null;
-                notifyComponentRemoved(this, index, previousComponent);
+                notifyComponentRemoved(index, previousComponent);
             }
             getComponentPool(index).push(previousComponent);
 
         } else {
-            notifyComponentReplaced(this, index, previousComponent, replacement);
+            notifyComponentReplaced(index, previousComponent, replacement);
         }
 
     }
@@ -339,7 +323,7 @@ public class Entity implements IEntity {
 
         if (owners.size() == 0) {
             _toStringCache = null;
-            notifyEntityReleased(this);
+            notifyEntityReleased();
         }
 
     }
@@ -367,10 +351,6 @@ public class Entity implements IEntity {
         return null;
     }
 
-    @Override
-    public void removeAllOnEntityReleasedHandlers() {
-        // OnEntityReleased = null;
-    }
 
     @Override
     public String toString() {
@@ -428,28 +408,5 @@ public class Entity implements IEntity {
         return true;
     }
 
-    public void notifyComponentAdded(IEntity entity, int index, IComponent component) {
-        for (EntityComponentChanged listener : OnComponentAdded.listeners()) {
-            listener.changed(entity, index, component);
-        }
-    }
-
-    public void notifyComponentRemoved(IEntity entity, int index, IComponent component) {
-        for (EntityComponentChanged listener : OnComponentRemoved.listeners()) {
-            listener.changed(entity, index, component);
-        }
-    }
-
-    public void notifyComponentReplaced(IEntity entity, int index, IComponent previousComponent, IComponent newComponent) {
-        for (EntityComponentReplaced listener : OnComponentReplaced.listeners()) {
-            listener.replaced(entity, index, previousComponent, newComponent);
-        }
-    }
-
-    public void notifyEntityReleased(IEntity entity) {
-        for (EntityReleased listener : OnEntityReleased.listeners()) {
-            listener.released(entity);
-        }
-    }
 
 }

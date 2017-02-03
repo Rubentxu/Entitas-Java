@@ -60,6 +60,7 @@ public class EntityTest {
         EntitasCache cache = new EntitasCache();
         entity = new TestEntity(10, _componentPools, new ContextInfo("Test", TestComponentIds.componentNames(),
                 TestComponentIds.componentTypes()));
+        entity.clearEventsListener();
         entity.reactivate(0);
         entity.addComponent(TestComponentIds.Position, new Position(100, 100));
         entity.addComponent(TestComponentIds.View, new View(1));
@@ -107,7 +108,7 @@ public class EntityTest {
 
     @Test
     public void OnComponentAddedTest() {
-        entity.OnComponentAdded.addListener((IEntity e, int index, IComponent c) -> assertEquals(TestComponentIds.Motion, index));
+        entity.OnComponentAdded((IEntity e, int index, IComponent c) -> assertEquals(TestComponentIds.Motion, index));
         entity.addComponent(TestComponentIds.Motion, new Motion(100, 100));
 
     }
@@ -115,7 +116,7 @@ public class EntityTest {
 
     @Test
     public void OnComponentReplacedTest() {
-        entity.OnComponentReplaced.addListener((IEntity e, int index, IComponent c, IComponent n)
+        entity.OnComponentReplaced((IEntity e, int index, IComponent c, IComponent n)
                 -> assertEquals(33F, ((Position) n).x, 0.1f));
         entity.replaceComponent(TestComponentIds.Position, new Position(33, 100));
 
@@ -123,7 +124,7 @@ public class EntityTest {
 
     @Test
     public void OnComponentReplaced2Test() {
-        entity.OnComponentReplaced.addListener((IEntity e, int index, IComponent c, IComponent n)
+        entity.OnComponentReplaced((IEntity e, int index, IComponent c, IComponent n)
                 -> assertEquals(100F, ((Position) n).x, 0.1f));
         entity.replaceComponent(TestComponentIds.Position, entity.getComponent(TestComponentIds.Position));
 
@@ -132,7 +133,7 @@ public class EntityTest {
 
     @Test
     public void OnComponentRemovedTest() {
-        entity.OnComponentRemoved.addListener((IEntity e, int index, IComponent c)
+        entity.OnComponentRemoved((IEntity e, int index, IComponent c)
                 -> assertFalse(e.hasComponent(index)));
         entity.removeComponent(TestComponentIds.View);
 
@@ -283,7 +284,7 @@ public class EntityTest {
     @Test
     public void releaseTest() {
         Object owner = new Object();
-        entity.OnEntityReleased.addListener((IEntity e) -> assertEquals(0, e.retainCount()));
+        entity.OnEntityReleased((IEntity e) -> assertEquals(0, e.retainCount()));
         entity.retain(owner);
         entity.release(owner);
 

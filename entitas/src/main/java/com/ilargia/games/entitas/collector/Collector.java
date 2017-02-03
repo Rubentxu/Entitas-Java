@@ -51,14 +51,14 @@ public class Collector<TEntity extends Entity> {
             GroupEvent groupEvent = _groupEvents[i];
             switch (groupEvent) {
                 case Added:
-                    group.OnEntityAdded.addListener(_addEntityCache);
+                    group.OnEntityAdded(_addEntityCache);
                     break;
                 case Removed:
-                    group.OnEntityRemoved.addListener(_addEntityCache);
+                    group.OnEntityRemoved(_addEntityCache);
                     break;
                 case AddedOrRemoved:
-                    group.OnEntityAdded.addListener(_addEntityCache);
-                    group.OnEntityRemoved.addListener(_addEntityCache);
+                    group.OnEntityAdded(_addEntityCache);
+                    group.OnEntityRemoved(_addEntityCache);
                     break;
             }
 

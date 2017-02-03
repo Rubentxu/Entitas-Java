@@ -21,7 +21,7 @@ public class EntitasCache {
     private static ObjectPool<Set> integerSet = new ObjectPool<Set>(() -> {
         return Collections.createSet(Integer.class);
     }, null);
-    private static ObjectPool<List<Event<GroupChanged>>> groupChangedArray = new ObjectPool<List<Event<GroupChanged>>>(() -> {
+    private static ObjectPool<List<Set<GroupChanged>>> groupChangedArray = new ObjectPool<List<Set<GroupChanged>>>(() -> {
         return Collections.createList(GroupChanged.class);
     }, null);
 
@@ -53,12 +53,12 @@ public class EntitasCache {
         integerSet.push(hashSet);
     }
 
-    public static List<Event<GroupChanged>> getGroupChangedList() {
+    public static List<Set<GroupChanged>> getGroupChangedList() {
         return groupChangedArray.get();
 
     }
 
-    public static void pushGroupChangedList(List<Event<GroupChanged>> list) {
+    public static void pushGroupChangedList(List<Set<GroupChanged>> list) {
         list.clear();
         groupChangedArray.push(list);
     }

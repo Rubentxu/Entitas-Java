@@ -28,15 +28,15 @@ public abstract class AbstractEntityIndex<TEntity extends Entity, TKey> implemen
 
     @Override
     public void activate() {
-        _group.OnEntityAdded.addListener(onEntityAdded);
-        _group.OnEntityRemoved.addListener(onEntityRemoved);
+        _group.OnEntityAdded(onEntityAdded);
+        _group.OnEntityRemoved(onEntityRemoved);
 
     }
 
     @Override
     public void deactivate() {
-        _group.OnEntityAdded.removeListener(onEntityAdded);
-        _group.OnEntityRemoved.removeListener(onEntityRemoved);
+        _group.OnEntityAdded.remove(onEntityAdded);
+        _group.OnEntityRemoved.remove(onEntityRemoved);
         clear();
 
     }

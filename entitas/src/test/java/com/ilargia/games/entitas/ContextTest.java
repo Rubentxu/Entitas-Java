@@ -21,7 +21,7 @@ import java.util.*;
 
 import static org.junit.Assert.*;
 
-public class PoolTest {
+public class ContextTest {
 
     @Rule
     public ExpectedException exception = ExpectedException.none();
@@ -69,13 +69,15 @@ public class PoolTest {
         createCollections();
         context = createTestPool();
         entity = context.createEntity();
+        entity.clearEventsListener();
+        context.clearEventsListener();
 
 
     }
 
     @Test
     public void OnEntityCreatedTest() {
-        context.OnEntityCreated.addListener((context, e) -> assertTrue(e.isEnabled()));
+        context.OnEntityCreated((context, e) -> assertTrue(e.isEnabled()));
         entity = context.createEntity();
     }
 
@@ -106,8 +108,8 @@ public class PoolTest {
 
     @Test
     public void OnEntityDestroyedTest() {
-        context.OnEntityWillBeDestroyed.addListener((IContext pool, IEntity e) -> assertTrue(e.isEnabled()));
-        context.OnEntityDestroyed.addListener((pool, e) -> assertFalse(e.isEnabled()));
+        context.OnEntityWillBeDestroyed((IContext pool, IEntity e) -> assertTrue(e.isEnabled()));
+        context.OnEntityDestroyed((pool, e) -> assertFalse(e.isEnabled()));
         context.destroyAllEntities();
         assertEquals(0, context.getCount());
 
@@ -158,6 +160,7 @@ public class PoolTest {
 
     @Test(expected = EntityIsNotDestroyedException.class)
     public void EntityIsNotDestroyedExceptionTest() {
+        entity.release(context);
         entity.release(context);
     }
 
@@ -249,11 +252,11 @@ public class PoolTest {
 
     @Test
     public void resetTest() {
-        context.OnEntityCreated.addListener((pool, entity) -> {
+        context.OnEntityCreated((pool, entity) -> {
         });
-        assertEquals(1, context.OnEntityCreated.listeners().size());
+        assertEquals(1, context.OnEntityCreated.size());
         context.reset();
-        assertEquals(0, context.OnEntityCreated.listeners().size());
+        assertEquals(0, context.OnEntityCreated.size());
 
     }
 
@@ -261,7 +264,7 @@ public class PoolTest {
     public void updateGroupsComponentAddedOrRemovedTest() {
         Position position = new Position();
         Group<TestEntity> group = context.getGroup(TestMatcher.Position());
-        group.OnEntityAdded.addListener((g, e, idx, pc) -> assertEquals(TestComponentIds.Position, idx));
+        group.OnEntityAdded((g, e, idx, pc) -> assertEquals(TestComponentIds.Position, idx));
 
         entity.addComponent(TestComponentIds.Position, position);
         context.updateGroupsComponentAddedOrRemoved(entity, TestComponentIds.Position, position, context._groupsForIndex);
@@ -274,8 +277,8 @@ public class PoolTest {
     public void updateGroupsComponentReplacedTest() {
         Position position = new Position();
         Position position2 = new Position();
-        Group<TestEntity> group = context.getGroup(TestMatcher.Position());
-        group.OnEntityUpdated.addListener((g, e, idx, pc, nc) -> {
+        Group<TestEntity> groupE = context.getGroup(TestMatcher.Position());
+        groupE.OnEntityUpdated((IGroup<TestEntity> group, final TestEntity entity, int index, IComponent previousComponent, IComponent nc) -> {
             System.out.println("Removed...........");
             assertEquals(position2, nc);
         });

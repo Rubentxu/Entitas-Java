@@ -18,12 +18,6 @@ import java.util.Stack;
 
 public class Context<TEntity extends IEntity> implements IContext<TEntity> {
 
-    // Eventos
-    public Event<ContextEntityChanged> OnEntityCreated;
-    public Event<ContextEntityChanged> OnEntityWillBeDestroyed;
-    public Event<ContextEntityChanged> OnEntityDestroyed;
-    public Event<ContextGroupChanged> OnGroupCreated;
-    public Event<ContextGroupChanged> OnGroupCleared;
 
     public int _totalComponents;
     public Class<TEntity> entityType;
@@ -46,12 +40,6 @@ public class Context<TEntity extends IEntity> implements IContext<TEntity> {
         _totalComponents = totalComponents;
         _creationIndex = startCreationIndex;
         _factoryEntiy = factoryMethod;
-
-        OnEntityCreated = new Event<>();
-        OnEntityWillBeDestroyed = new Event<>();
-        OnEntityDestroyed = new Event<>();
-        OnGroupCreated = new Event<>();
-        OnGroupCleared = new Event<>();
 
         if (metaData != null) {
             _contextInfo = metaData;
@@ -101,15 +89,15 @@ public class Context<TEntity extends IEntity> implements IContext<TEntity> {
         ent.retain(this);
         _entitiesCache = null;
         Entity entity = (Entity) ent;
-        entity.OnComponentAdded.addListener(_cachedEntityChanged);
-        entity.OnComponentRemoved.addListener(_cachedEntityChanged);
-        entity.OnComponentReplaced.addListener((EntityComponentReplaced<TEntity>) (TEntity e, int idx, IComponent pc, IComponent nc) -> {
+        entity.OnComponentAdded(_cachedEntityChanged);
+        entity.OnComponentRemoved(_cachedEntityChanged);
+        entity.OnComponentReplaced((EntityComponentReplaced<TEntity>) (TEntity e, int idx, IComponent pc, IComponent nc) -> {
             updateGroupsComponentReplaced(e, idx, pc, nc, _groupsForIndex);
         });
-        entity.OnEntityReleased.addListener((EntityReleased<TEntity>) (TEntity e) -> {
+        entity.OnEntityReleased((EntityReleased<TEntity>) (TEntity e) -> {
             onEntityReleased(e, _retainedEntities, _reusableEntities);
         });
-        notifyEntityCreated(this, ent);
+        notifyEntityCreated(ent);
 
         return ent;
 
@@ -122,11 +110,11 @@ public class Context<TEntity extends IEntity> implements IContext<TEntity> {
                     "Did you call pool.DestroyEntity() on a wrong pool?");
         }
         _entitiesCache = null;
-        notifyEntityWillBeDestroyed(this, entity);
+        notifyEntityWillBeDestroyed(entity);
 
         entity.destroy();
 
-        notifyEntityDestroyed(this, entity);
+        notifyEntityDestroyed(entity);
 
         if (entity.retainCount() == 1) {
             _reusableEntities.push(entity);
@@ -190,7 +178,7 @@ public class Context<TEntity extends IEntity> implements IContext<TEntity> {
                 }
                 _groupsForIndex[index].add(group);
             }
-            notifyGroupCreated(this, group);
+            notifyGroupCreated(group);
 
         }
         return group;
@@ -204,7 +192,7 @@ public class Context<TEntity extends IEntity> implements IContext<TEntity> {
             for (IEntity entity : group.getEntities()) {
                 entity.release(group);
             }
-            notifyGroupCleared(this, group);
+            notifyGroupCleared(group);
         }
         _groups.clear();
 
@@ -267,23 +255,23 @@ public class Context<TEntity extends IEntity> implements IContext<TEntity> {
         clearGroups();
         destroyAllEntities();
         resetCreationIndex();
-        clearEventsPool();
+        clearEventsListener();
 
     }
 
     public void updateGroupsComponentAddedOrRemoved(TEntity entity, int index, IComponent component, List<Group<TEntity>>[] groupsForIndex) {
         List<Group<TEntity>> groups = groupsForIndex[index];
         if (groups != null) {
-            List<Event<GroupChanged>> events = EntitasCache.getGroupChangedList();
+            List<Set<GroupChanged>> events = EntitasCache.getGroupChangedList();
 
             for(int i = 0; i < groups.size(); i++) {
                 events.add(groups.get(i).handleEntity(entity));
             }
 
             for(int i = 0; i < events.size(); i++) {
-                Event<GroupChanged> groupChangedEvent = events.get(i);
+                Set<GroupChanged> groupChangedEvent = events.get(i);
                 if(groupChangedEvent != null) {
-                    for (GroupChanged listener : groupChangedEvent.listeners()) {
+                    for (GroupChanged listener : groupChangedEvent) {
                         listener.changed( groups.get(i), entity, index, component );
                     };
                 }
@@ -343,49 +331,7 @@ public class Context<TEntity extends IEntity> implements IContext<TEntity> {
 
     }
 
-    @Override
-    public void notifyEntityCreated(IContext context, IEntity entity) {
-        for (ContextEntityChanged listener : OnEntityCreated.listeners()) {
-            listener.changed(context, entity);
-        }
-    }
 
-    @Override
-    public void notifyEntityWillBeDestroyed(IContext context, IEntity entity) {
-        for (ContextEntityChanged listener : OnEntityWillBeDestroyed.listeners()) {
-            listener.changed(context, entity);
-        }
-    }
-
-    @Override
-    public void notifyEntityDestroyed(IContext context, IEntity entity) {
-        for (ContextEntityChanged listener : OnEntityDestroyed.listeners()) {
-            listener.changed(context, entity);
-        }
-    }
-
-    @Override
-    public void notifyGroupCreated(IContext context, IGroup group) {
-        for (ContextGroupChanged listener : OnGroupCreated.listeners()) {
-            listener.changed(context, group);
-        }
-    }
-
-    @Override
-    public void notifyGroupCleared(IContext context, IGroup group) {
-        for (ContextGroupChanged listener : OnGroupCleared.listeners()) {
-            listener.changed(context, group);
-        }
-    }
-
-    @Override
-    public void clearEventsPool() {
-        OnEntityCreated.clear();
-        OnEntityWillBeDestroyed.clear();
-        OnEntityDestroyed.clear();
-        OnGroupCreated.clear();
-        OnGroupCleared.clear();
-    }
 
     @Override
     public Collector createCollector(IMatcher matcher) {

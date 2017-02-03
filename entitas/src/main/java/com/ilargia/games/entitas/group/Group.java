@@ -18,17 +18,12 @@ import java.util.Set;
 
 public class Group<TEntity extends IEntity> implements IGroup<TEntity> {
 
-    public Event<GroupChanged> OnEntityAdded;
-    public Event<GroupChanged> OnEntityRemoved;
-    public Event<GroupUpdated> OnEntityUpdated;
-
     private IMatcher<TEntity> _matcher;
     private final Set<TEntity> _entities; //
     private TEntity[] _entitiesCache;
     private TEntity _singleEntityCache;
     private String _toStringCache;
     public Class<TEntity> type;
-
 
     @Override
     public int getCount() {
@@ -45,9 +40,6 @@ public class Group<TEntity extends IEntity> implements IGroup<TEntity> {
         _entities = Collections.createSet(Entity.class);
         _matcher = matcher;
         type = clazz;
-        OnEntityAdded = new Event();
-        OnEntityRemoved = new Event();
-        OnEntityUpdated = new Event();
 
     }
 
@@ -70,9 +62,9 @@ public class Group<TEntity extends IEntity> implements IGroup<TEntity> {
 
     public void updateEntity(TEntity entity, int index, IComponent previousComponent, IComponent newComponent) {
         if (_entities.contains(entity)) {
-            notifyOnEntityRemoved(this, entity, index, previousComponent);
-            notifyOnEntityAdded(this, entity, index, previousComponent);
-            notifyOnEntityUpdated(this, entity, index, previousComponent, newComponent);
+            notifyOnEntityRemoved(entity, index, previousComponent);
+            notifyOnEntityAdded(entity, index, previousComponent);
+            notifyOnEntityUpdated(entity, index, previousComponent, newComponent);
         }
     }
 
@@ -83,10 +75,10 @@ public class Group<TEntity extends IEntity> implements IGroup<TEntity> {
     }
 
     @Override
-    public Event<GroupChanged> handleEntity(TEntity entity) {
+    public Set<GroupChanged> handleEntity(TEntity entity) {
         return (_matcher.matches(entity))
-                ? (addEntitySilently(entity)) ? OnEntityAdded : null
-                : (removeEntitySilently(entity)) ? OnEntityRemoved : null;
+                ? (addEntitySilently(entity)) ? OnEntityAdded.get(this) : null
+                : (removeEntitySilently(entity)) ? OnEntityRemoved.get(this) : null;
 
     }
 
@@ -103,7 +95,7 @@ public class Group<TEntity extends IEntity> implements IGroup<TEntity> {
 
     void addEntity(TEntity entity, int index, IComponent component) {
         if (addEntitySilently(entity)) {
-            notifyOnEntityAdded(this, entity, index, component);
+            notifyOnEntityAdded(entity, index, component);
         }
 
     }
@@ -124,7 +116,7 @@ public class Group<TEntity extends IEntity> implements IGroup<TEntity> {
         if (removed) {
             _entitiesCache = null;
             _singleEntityCache = null;
-            notifyOnEntityRemoved(this, entity, index, component);
+            notifyOnEntityRemoved(entity, index, component);
             entity.release(this);
         }
 
@@ -175,30 +167,6 @@ public class Group<TEntity extends IEntity> implements IGroup<TEntity> {
         return new Collector<TE>(group, groupEvent);
     }
 
-    public void notifyOnEntityAdded(IGroup<TEntity> group, TEntity entity, int index, IComponent component) {
-        for (GroupChanged<TEntity> listener : OnEntityAdded.listeners()) {
-            listener.changed(group, entity, index, component);
-        }
-    }
 
-    public void notifyOnEntityRemoved(IGroup<TEntity> group, TEntity entity, int index, IComponent component) {
-        for (GroupChanged<TEntity> listener : OnEntityRemoved.listeners()) {
-            listener.changed(group, entity, index, component);
-        }
-    }
-
-    public void notifyOnEntityUpdated(IGroup<TEntity> group, TEntity entity, int index, IComponent component, IComponent newComponent) {
-        for (GroupUpdated<TEntity> listener : OnEntityUpdated.listeners()) {
-            listener.updated(group, entity, index, component, newComponent);
-        }
-    }
-
-
-    public void clearEventsPool() {
-        OnEntityAdded.clear();
-        OnEntityRemoved.clear();
-        OnEntityUpdated.clear();
-
-    }
 
 }
