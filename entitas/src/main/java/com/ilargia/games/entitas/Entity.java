@@ -8,9 +8,7 @@ import com.ilargia.games.entitas.caching.EntitasCache;
 import com.ilargia.games.entitas.exceptions.*;
 import com.ilargia.games.entitas.factories.Collections;
 
-import java.util.List;
-import java.util.Set;
-import java.util.Stack;
+import java.util.*;
 
 public class Entity implements IEntity {
 
@@ -21,10 +19,8 @@ public class Entity implements IEntity {
     private Stack<IComponent>[] _componentContexts;
     private IComponent[] _componentsCache;
     private int[] _componentIndicesCache;
-    private String _toStringCache;
     private int _totalComponents;
     private ContextInfo _contextInfo;
-    private StringBuilder _toStringBuilder;
 
     public Entity(int totalComponents, Stack<IComponent>[] componentContexts, ContextInfo contextInfo) {
         _components = new IComponent[totalComponents];
@@ -107,7 +103,6 @@ public class Entity implements IEntity {
         _components[index] = component;
         _componentsCache = null;
         _componentIndicesCache = null;
-        _toStringCache = null;
         notifyComponentAdded(index, component);
 
     }
@@ -144,7 +139,6 @@ public class Entity implements IEntity {
     }
 
     private void replaceComponentInternal(int index, IComponent replacement) {
-        _toStringCache = null;
         IComponent previousComponent = _components[index];
 
         if (replacement != previousComponent) {
@@ -248,7 +242,6 @@ public class Entity implements IEntity {
 
     @Override
     public void removeAllComponents() {
-        _toStringCache = null;
         for (int i = 0; i < _components.length; i++) {
             if (_components[i] != null) {
                 replaceComponent(i, null);
@@ -311,7 +304,7 @@ public class Entity implements IEntity {
         if (!owners.add(owner)) {
             throw new EntityIsAlreadyRetainedByOwnerException(owner);
         }
-        _toStringCache = null;
+
 
     }
 
@@ -322,7 +315,6 @@ public class Entity implements IEntity {
         }
 
         if (owners.size() == 0) {
-            _toStringCache = null;
             notifyEntityReleased();
         }
 
@@ -353,44 +345,15 @@ public class Entity implements IEntity {
 
 
     @Override
-    public String toString() {
-        if (_toStringCache == null) {
-            if (_toStringBuilder == null) {
-                _toStringBuilder = new StringBuilder();
-            }
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
-            _toStringBuilder
-                    .append("Entity_")
-                    .append(_creationIndex)
-                    .append("(*")
-                    .append(retainCount())
-                    .append(")")
-                    .append("(");
+        Entity entity = (Entity) o;
 
-            String separator = ", ";
-            IComponent[] components = getComponents();
-            int lastSeparator = components.length - 1;
-            for (int i = 0; i < components.length; i++) {
-                IComponent component = components[i];
-                Object type = component.getClass();
-//                implementsToString = type.getMethod("ToString")
-//                        .DeclaringType == type;
-//                _toStringBuilder.append(
-//                        implementsToString
-//                                ? component.ToString()
-//                                : type.Name.RemoveComponentSuffix()
-//                );
-
-                if (i < lastSeparator) {
-                    _toStringBuilder.append(separator);
-                }
-            }
-
-            _toStringBuilder.append(")");
-            _toStringCache = _toStringBuilder.toString();
-        }
-
-        return _toStringCache;
+        if (_creationIndex != entity._creationIndex) return false;
+        if (_totalComponents != entity._totalComponents) return false;
+        return _contextInfo != null ? _contextInfo.equals(entity._contextInfo) : entity._contextInfo == null;
     }
 
     @Override
@@ -399,13 +362,12 @@ public class Entity implements IEntity {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (o == null) return false;
-        if (!(o instanceof Entity)) return false;
-
-        IEntity other = (IEntity) o;
-        if (this._creationIndex != other.getCreationIndex()) return false;
-        return true;
+    public String toString() {
+        return "Entity{" +
+                "_creationIndex=" + _creationIndex +
+                ", _isEnabled=" + _isEnabled +
+                ", _contextInfo=" + _contextInfo +
+                '}';
     }
 
 

@@ -63,13 +63,14 @@ public abstract class ReactiveSystem<TEntity extends Entity> implements IReactiv
         }
     }
 
+
     @Override
     public String toString() {
-        if (_toStringCache == null) {
-            _toStringCache = "ReactiveSystem(" + getClass().getName() + ")";
-        }
-
-        return _toStringCache;
+        return "ReactiveSystem{" +
+                "_collector=" + _collector +
+                ", _buffer=" + _buffer +
+                ", _toStringCache='" + _toStringCache + '\'' +
+                '}';
     }
 
 }

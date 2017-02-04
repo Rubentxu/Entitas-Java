@@ -10,9 +10,10 @@ import com.ilargia.games.entitas.exceptions.EntityCollectorException;
 import com.ilargia.games.entitas.factories.Collections;
 import com.ilargia.games.entitas.group.Group;
 
+import java.util.Arrays;
 import java.util.Set;
 
-public class Collector<TEntity extends Entity> {
+public class Collector<TEntity extends IEntity> {
 
     public Set<TEntity> _collectedEntities; //ObjectOpenHashSet
     private IGroup<TEntity>[] _groups;
@@ -29,7 +30,7 @@ public class Collector<TEntity extends Entity> {
 
     public Collector(IGroup<TEntity>[] groups, GroupEvent[] groupEvents) {
         _groups = groups;
-        _collectedEntities = Collections.createSet(Entity.class);
+        _collectedEntities = Collections.createSet(IEntity.class);
         _groupEvents = groupEvents;
 
         if (groups.length != groupEvents.length) {
@@ -83,7 +84,7 @@ public class Collector<TEntity extends Entity> {
 
     }
 
-    void addEntity(IGroup group, TEntity entity, int index, IComponent component) {
+    void addEntity(IGroup<TEntity> group, TEntity entity, int index, IComponent component) {
         boolean added = _collectedEntities.add(entity);
         if (added) {
             entity.retain(this);
@@ -92,28 +93,13 @@ public class Collector<TEntity extends Entity> {
 
     @Override
     public String toString() {
-        if (_toStringCache == null) {
-            if (_toStringBuilder == null) {
-                _toStringBuilder = new StringBuilder();
-            }
-            _toStringBuilder.append("Collector(");
-
-            String separator = ", ";
-            int lastSeparator = _groups.length - 1;
-            for (int i = 0; i < _groups.length; i++) {
-                _toStringBuilder.append(_groups[i]);
-                if (i < lastSeparator) {
-                    _toStringBuilder.append(separator);
-                }
-
-            }
-
-            _toStringBuilder.append(")");
-            _toStringCache = _toStringBuilder.toString();
-        }
-
-        return _toStringCache;
+        return "Collector{" +
+                "_collectedEntities=" + _collectedEntities +
+                ", _groups=" + Arrays.toString(_groups) +
+                ", _groupEvents=" + Arrays.toString(_groupEvents) +
+                ", _addEntityCache=" + _addEntityCache +
+                ", _toStringCache='" + _toStringCache + '\'' +
+                ", _toStringBuilder=" + _toStringBuilder +
+                '}';
     }
-
-
 }

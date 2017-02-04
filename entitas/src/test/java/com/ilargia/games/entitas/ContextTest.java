@@ -158,12 +158,6 @@ public class ContextTest {
         assertEquals(1, context.getReusableEntitiesCount());
     }
 
-    @Test(expected = EntityIsNotDestroyedException.class)
-    public void EntityIsNotDestroyedExceptionTest() {
-        entity.release(context);
-
-    }
-
     @Test
     public void getGroupTest() {
         entity.addComponent(TestComponentIds.Position, new Position());
@@ -204,7 +198,7 @@ public class ContextTest {
     public void duplicateEntityIndexTest() {
         entity.addComponent(TestComponentIds.Position, new Position());
         Group group = context.getGroup(TestMatcher.Position());
-        PrimaryEntityIndex<Entity,String> index = new PrimaryEntityIndex<>(group, (e, c) -> "positionEntities");
+        PrimaryEntityIndex<Entity, String> index = new PrimaryEntityIndex<>(group, (e, c) -> "positionEntities");
         context.addEntityIndex("duplicate", index);
         context.addEntityIndex("duplicate", index);
 

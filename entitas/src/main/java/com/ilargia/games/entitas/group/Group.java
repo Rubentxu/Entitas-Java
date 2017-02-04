@@ -13,17 +13,26 @@ import com.ilargia.games.entitas.events.GroupEvent;
 import com.ilargia.games.entitas.exceptions.GroupSingleEntityException;
 import com.ilargia.games.entitas.factories.Collections;
 
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.UUID;
 
 public class Group<TEntity extends IEntity> implements IGroup<TEntity> {
 
+    UUID id = UUID.randomUUID();
     private IMatcher<TEntity> _matcher;
-    private final Set<TEntity> _entities; //
+    private Set<TEntity> _entities; //
     private TEntity[] _entitiesCache;
     private TEntity _singleEntityCache;
-    private String _toStringCache;
     public Class<TEntity> type;
+
+    public Group(IMatcher<TEntity> matcher, Class<TEntity> clazz) {
+        _entities = Collections.createSet(Entity.class);
+        _matcher = matcher;
+        type = clazz;
+
+    }
 
     @Override
     public int getCount() {
@@ -35,13 +44,6 @@ public class Group<TEntity extends IEntity> implements IGroup<TEntity> {
         return _matcher;
     }
 
-
-    public Group(IMatcher<TEntity> matcher, Class<TEntity> clazz) {
-        _entities = Collections.createSet(Entity.class);
-        _matcher = matcher;
-        type = clazz;
-
-    }
 
     public void handleEntitySilently(TEntity entity) {
         if (_matcher.matches(entity)) {
@@ -156,11 +158,33 @@ public class Group<TEntity extends IEntity> implements IGroup<TEntity> {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Group)) return false;
+
+        Group<?> group = (Group<?>) o;
+
+        if (_matcher != null ? !_matcher.equals(group._matcher) : group._matcher != null) return false;
+        if (_entities != null ? !_entities.equals(group._entities) : group._entities != null) return false;
+        return type != null ? type.equals(group.type) : group.type == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = _matcher != null ? _matcher.hashCode() : 0;
+        result = 31 * result + id.hashCode() ;
+        result = 31 * result + (type != null ? type.hashCode() : 0);
+        return result;
+    }
+
+    @Override
     public String toString() {
-        if (_toStringCache == null) {
-            _toStringCache = "Group(" + _matcher + ")";
-        }
-        return _toStringCache;
+        return "Group{" +
+                "_matcher=" + _matcher +
+                ", _entities=" + _entities +
+                ", _singleEntityCache=" + _singleEntityCache +
+                ", type=" + type +
+                '}';
     }
 
     public static <TE extends Entity> Collector<TE> createCollector(IGroup<TE> group, GroupEvent groupEvent) {

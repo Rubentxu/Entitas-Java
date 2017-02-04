@@ -32,7 +32,7 @@ public class PrimaryEntityIndex<TEntity extends Entity, TKey> extends AbstractEn
     public TEntity getEntity(TKey key) {
         TEntity entity = tryGetEntity(key);
         if (entity == null) {
-            throw new EntityIndexException("SplashEntity for key '" + key + "' doesn't exist!",
+            throw new EntityIndexException("Entity for key '" + key + "' doesn't exist!",
                     "You should check if an entity with that key exists before getting it."
             );
         }
@@ -51,7 +51,7 @@ public class PrimaryEntityIndex<TEntity extends Entity, TKey> extends AbstractEn
     protected void addEntity(TEntity entity, IComponent component) {
         TKey key = _key.getKey(entity, component);
         if (_index.containsKey(key)) {
-            throw new EntityIndexException("SplashEntity for key '" + key + "' already exists!",
+            throw new EntityIndexException("Entity for key '" + key + "' already exists!",
                     "Only one entity for a primary key is allowed.");
         }
         _index.put(key, entity);
@@ -73,5 +73,23 @@ public class PrimaryEntityIndex<TEntity extends Entity, TKey> extends AbstractEn
         }
         _index.clear();
 
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        AbstractEntityIndex<?, ?> that = (AbstractEntityIndex<?, ?>) o;
+
+        if (id != null ? !id.equals(that.id) : that.id != null) return false;
+        return _key != null ? _key.equals(that._key) : that._key == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (_key != null ? _key.hashCode() : 0);
+        return result;
     }
 }

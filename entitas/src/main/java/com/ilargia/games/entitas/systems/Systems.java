@@ -118,5 +118,16 @@ public class Systems implements IInitializeSystem, IExecuteSystem, IRenderSystem
 
     }
 
+    @Override
+    public String toString() {
+        return "Systems{" +
+                "_initializeSystems=" + _initializeSystems +
+                ", _executeSystems=" + _executeSystems +
+                ", _renderSystems=" + _renderSystems +
+                ", _cleanupSystems=" + _cleanupSystems +
+                ", _tearDownSystems=" + _tearDownSystems +
+                '}';
+    }
+
 
 }

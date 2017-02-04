@@ -52,15 +52,32 @@ public class EntityIndex<TEntity extends Entity, TKey> extends AbstractEntityInd
 
     @Override
     protected void addEntity(TEntity entity, IComponent component) {
-        getEntities(_key.getKey(entity, component)).add(entity);
-        entity.retain(this);
+        if (getEntities(_key.getKey(entity, component)).add(entity))
+            entity.retain(this);
     }
 
     @Override
     protected void removeEntity(TEntity entity, IComponent component) {
-        getEntities(_key.getKey(entity, component)).remove(entity);
-        entity.release(this);
+        if (getEntities(_key.getKey(entity, component)).remove(entity))
+            entity.release(this);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        AbstractEntityIndex<?, ?> that = (AbstractEntityIndex<?, ?>) o;
+
+        if (id != null ? !id.equals(that.id) : that.id != null) return false;
+        return _key != null ? _key.equals(that._key) : that._key == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (_key != null ? _key.hashCode() : 0);
+        return result;
+    }
 
 }

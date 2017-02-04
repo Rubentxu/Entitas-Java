@@ -11,14 +11,11 @@ import com.ilargia.games.entitas.factories.Collections;
 import com.ilargia.games.entitas.group.Group;
 
 import java.lang.reflect.Array;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.Stack;
+import java.util.*;
 
 public class Context<TEntity extends IEntity> implements IContext<TEntity> {
 
-
+    private UUID id = UUID.randomUUID();
     public int _totalComponents;
     public Class<TEntity> entityType;
     protected Map<IMatcher, Group<TEntity>> _groups; //Object2ObjectArrayMap
@@ -30,6 +27,7 @@ public class Context<TEntity extends IEntity> implements IContext<TEntity> {
     private TEntity[] _entitiesCache;
     private Map<String, IEntityIndex> _entityIndices; // Map
     private FactoryEntity<TEntity> _factoryEntiy;
+
     private ContextInfo _contextInfo;
     private Stack<IComponent>[] _componentContexts;
     EntityComponentChanged<TEntity> _cachedEntityChanged;
@@ -361,4 +359,46 @@ public class Context<TEntity extends IEntity> implements IContext<TEntity> {
         return new Collector(groups, eventTypes);
     }
 
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Context<?> context = (Context<?>) o;
+
+        if (_totalComponents != context._totalComponents) return false;
+        if (id != null ? !id.equals(context.id) : context.id != null) return false;
+        if (entityType != null ? !entityType.equals(context.entityType) : context.entityType != null) return false;
+        return _contextInfo != null ? _contextInfo.equals(context._contextInfo) : context._contextInfo == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + _totalComponents;
+        result = 31 * result + (entityType != null ? entityType.hashCode() : 0);
+        result = 31 * result + (_contextInfo != null ? _contextInfo.hashCode() : 0);
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Context{" +
+                "_totalComponents=" + _totalComponents +
+                ", entityType=" + entityType +
+                ", _groups=" + _groups +
+                ", _groupsForIndex=" + Arrays.toString(_groupsForIndex) +
+                ", _creationIndex=" + _creationIndex +
+                ", _entities=" + _entities +
+                ", _reusableEntities=" + _reusableEntities +
+                ", _retainedEntities=" + _retainedEntities +
+                ", _entitiesCache=" + Arrays.toString(_entitiesCache) +
+                ", _entityIndices=" + _entityIndices +
+                ", _factoryEntiy=" + _factoryEntiy +
+                ", _contextInfo=" + _contextInfo +
+                ", _componentContexts=" + Arrays.toString(_componentContexts) +
+                ", _cachedEntityChanged=" + _cachedEntityChanged +
+                '}';
+    }
 }

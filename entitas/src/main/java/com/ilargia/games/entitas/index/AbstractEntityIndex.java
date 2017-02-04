@@ -8,8 +8,11 @@ import com.ilargia.games.entitas.api.IGroup;
 import com.ilargia.games.entitas.api.events.GroupChanged;
 import com.ilargia.games.entitas.group.Group;
 
+import java.util.UUID;
+
 public abstract class AbstractEntityIndex<TEntity extends Entity, TKey> implements IEntityIndex {
 
+    protected UUID id = UUID.randomUUID();
     protected Group<TEntity> _group;
     protected Func<TEntity, IComponent, TKey> _key;
     protected GroupChanged<TEntity> onEntityAdded = (IGroup<TEntity> group, TEntity entity, int index, IComponent component) -> {
@@ -57,5 +60,6 @@ public abstract class AbstractEntityIndex<TEntity extends Entity, TKey> implemen
     public interface Func<TEntity, IComponent, TKey> {
         TKey getKey(TEntity entity, IComponent component);
     }
+
 
 }
