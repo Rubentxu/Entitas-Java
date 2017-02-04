@@ -48,8 +48,8 @@ public class AddViewSystem extends ReactiveSystem<GameEntity> {
         for (GameEntity e : entities) {
             Texture texture = assetsManager.getTexture(String.format("assets/textures/%1$s.png",e.getAsset().name));
             Body body = bodyBuilder.fixture(new FixtureDefBuilder()
-                    .boxShape(1, 1))
-                    .type(BodyDef.BodyType.StaticBody)
+                    .boxShape(0.5f, 0.5f))
+                    .type(BodyDef.BodyType.KinematicBody)
                     .build();
             TextureRegion textureRegion = new TextureRegion(texture, 0, 0, texture.getWidth(), texture.getHeight());
             e.addTextureView(e.getAsset().name, textureRegion, body);

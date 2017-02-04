@@ -10,7 +10,7 @@ public class Event<T> {
     private Set<T> listeners;//ObjectArrayList
 
     public Event() {
-        this.listeners = Collections.createSet(Object.class);
+        //this.listeners = Collections.createSet(Object.class);
     }
 
     public boolean removeListener(T eventHandler) {

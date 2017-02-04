@@ -38,7 +38,7 @@ public class AnimatePositionSystem extends ReactiveSystem<GameEntity> {
     public void execute(List<GameEntity> entities) {
         for(GameEntity e : entities) {
             Position pos = e.getPosition();
-            e.getTextureView().body.setTransform(new Vector2(pos.x, pos.y), 0.3f);
+            e.getTextureView().body.applyForce(new Vector2(0, -2), new Vector2(pos.x, pos.y), true);
         }
 
     }

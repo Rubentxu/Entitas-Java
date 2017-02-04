@@ -25,16 +25,14 @@ import net.engio.mbassy.bus.error.IPublicationErrorHandler;
 import net.engio.mbassy.bus.error.PublicationError;
 import net.engio.mbassy.listener.MessageHandler;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 
 public class MatchOne extends ApplicationAdapter {
     public static final int SCREEN_WIDTH = 600;
     public static final int SCREEN_HEIGHT = 600;
     public static float WIDTH = 8; //30 metres
-    public static float HEIGHT = 9; // 20 metres
+    public static float HEIGHT = 12; // 20 metres
 
     public static float METRES_TO_PIXELS = 128;
     public static float PIXELS_TO_METRES = 1.0f / METRES_TO_PIXELS;
@@ -55,30 +53,48 @@ public class MatchOne extends ApplicationAdapter {
         EGPreferencesManager preferencesManager = new EGPreferencesManager();
         MatchOneEngine engine = new MatchOneEngine();
         engine.addManager(new EGAssetsManager(assetsManager, preferencesManager));
+//        new Collections(new CollectionsFactory() {
+//            @Override
+//            public <T> List<T> createList(Class<T> clazz) {
+//                if (clazz.equals(Integer.class))
+//                    return (List<T>) new IntArrayList();
+//                else
+//                    return new ObjectArrayList();
+//            }
+//
+//            @Override
+//            public <T> Set createSet(Class<T> clazz) {
+//                if (clazz.equals(Integer.class))
+//                    return new IntArraySet();
+//                else
+//                    return new ObjectOpenHashSet();
+//        }
+//
+//            @Override
+//            public <K, V> Map createMap(Class<K> keyClazz, Class<V> valueClazz) {
+//                return new Object2ObjectArrayMap();
+//            }
+//
+//
+//        });
+
         new Collections(new CollectionsFactory() {
             @Override
-            public List createList(Class<?> clazz) {
-                if (clazz.equals(Integer.class))
-                    return new IntArrayList();
-                else
-                    return new ObjectArrayList();
+            public <T> List createList(Class<T> clazz) {
+                return new ArrayList<T>();
             }
 
             @Override
-            public Set createSet(Class<?> clazz) {
-                if (clazz.equals(Integer.class))
-                    return new IntArraySet();
-                else
-                    return new ObjectOpenHashSet();
+            public <T> Set createSet(Class<T> clazz) {
+                return new HashSet<T>();
             }
 
             @Override
-            public Map createMap(Class<?> keyClazz, Class<?> valueClazz) {
-                return new Object2ObjectArrayMap();
-
+            public <K, V> Map createMap(Class<K> keyClazz, Class<V> valueClazz) {
+                return new HashMap();
             }
-
         });
+
         MBassador bus = new MBassador(new IPublicationErrorHandler() {
             @Override
             public void handleError (PublicationError error) {

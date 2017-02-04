@@ -1,7 +1,5 @@
 package com.ilargia.games.entitas.factories;
 
-import com.ilargia.games.entitas.api.IEntity;
-
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -18,11 +16,11 @@ public class Collections {
         return _factory.createList(clazz);
     }
 
-    public static Set createSet(Class<?> clazz) {
+    public static<T> Set createSet(Class<T> clazz) {
         return _factory.createSet(clazz);
     }
 
-    public static  Map createMap(Class<?> keyClazz, Class<?> valueClazz) {
+    public static Map createMap(Class<?> keyClazz, Class<?> valueClazz) {
         return _factory.createMap(keyClazz, valueClazz);
     }
 

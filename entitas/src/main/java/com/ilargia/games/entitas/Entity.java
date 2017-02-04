@@ -4,13 +4,24 @@ package com.ilargia.games.entitas;
 import com.ilargia.games.entitas.api.ContextInfo;
 import com.ilargia.games.entitas.api.IComponent;
 import com.ilargia.games.entitas.api.IEntity;
+import com.ilargia.games.entitas.api.events.EntityComponentChanged;
+import com.ilargia.games.entitas.api.events.EntityComponentReplaced;
+import com.ilargia.games.entitas.api.events.EntityReleased;
 import com.ilargia.games.entitas.caching.EntitasCache;
 import com.ilargia.games.entitas.exceptions.*;
 import com.ilargia.games.entitas.factories.Collections;
 
-import java.util.*;
+import java.util.List;
+import java.util.Set;
+import java.util.Stack;
 
 public class Entity implements IEntity {
+
+    // Eventos
+    public Set<EntityComponentChanged> OnComponentAdded = Collections.createSet(EntityComponentChanged.class);
+    public Set<EntityComponentChanged> OnComponentRemoved = Collections.createSet(EntityComponentChanged.class);
+    public Set<EntityComponentReplaced> OnComponentReplaced = Collections.createSet(EntityComponentReplaced.class);
+    public Set<EntityReleased> OnEntityReleased = Collections.createSet(EntityReleased.class);
 
     private Set<Object> owners; //ObjectOpenHashSet
     private int _creationIndex;
@@ -341,6 +352,78 @@ public class Entity implements IEntity {
             return componentContext.pop();
         }
         return null;
+    }
+
+    public void clearEventsListener() {
+        if (OnComponentAdded != null) OnComponentAdded.clear();
+        if (OnComponentRemoved != null) OnComponentRemoved.clear();
+        if (OnComponentReplaced != null) OnComponentReplaced.clear();
+        if (OnEntityReleased != null) OnEntityReleased.clear();
+
+    }
+
+    public void removeAllOnEntityReleasedHandlers() {
+        OnEntityReleased.clear();
+    }
+
+    public void OnComponentAdded(EntityComponentChanged listener) {
+        if (OnComponentAdded != null) {
+            OnComponentAdded = Collections.createSet(EntityComponentChanged.class);
+        }
+        OnComponentAdded.add(listener);
+    }
+
+    public void OnComponentRemoved(EntityComponentChanged listener) {
+        if (OnComponentRemoved != null) {
+            OnComponentRemoved = Collections.createSet(EntityComponentChanged.class);
+        }
+        OnComponentRemoved.add(listener);
+    }
+
+    public void OnComponentReplaced(EntityComponentReplaced listener) {
+        if (OnComponentReplaced != null) {
+            OnComponentReplaced = Collections.createSet(EntityComponentReplaced.class);
+        }
+        OnComponentReplaced.add(listener);
+    }
+
+    public void OnEntityReleased(EntityReleased listener) {
+        if (OnEntityReleased != null) {
+            OnEntityReleased = Collections.createSet(EntityReleased.class);
+        }
+        OnEntityReleased.add(listener);
+    }
+
+    public void notifyComponentAdded(int index, IComponent component) {
+        if (OnComponentAdded != null) {
+            for (EntityComponentChanged listener : OnComponentAdded) {
+                listener.changed(this, index, component);
+            }
+        }
+    }
+
+    public void notifyComponentRemoved(int index, IComponent component) {
+        if (OnComponentRemoved != null) {
+            for (EntityComponentChanged listener : OnComponentRemoved) {
+                listener.changed(this, index, component);
+            }
+        }
+    }
+
+    public void notifyComponentReplaced(int index, IComponent previousComponent, IComponent newComponent) {
+        if (OnComponentReplaced != null) {
+            for (EntityComponentReplaced listener : OnComponentReplaced) {
+                listener.replaced(this, index, previousComponent, newComponent);
+            }
+        }
+    }
+
+    public void notifyEntityReleased() {
+        if (OnEntityReleased != null) {
+            for (EntityReleased listener : OnEntityReleased) {
+                listener.released(this);
+            }
+        }
     }
 
 

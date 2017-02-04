@@ -4,7 +4,6 @@ import com.ilargia.games.entitas.Entity;
 import com.ilargia.games.entitas.api.IComponent;
 import com.ilargia.games.entitas.api.IEntity;
 import com.ilargia.games.entitas.api.IGroup;
-import com.ilargia.games.entitas.api.events.Event;
 import com.ilargia.games.entitas.api.events.GroupChanged;
 import com.ilargia.games.entitas.api.events.GroupUpdated;
 import com.ilargia.games.entitas.api.matcher.IMatcher;
@@ -13,25 +12,31 @@ import com.ilargia.games.entitas.events.GroupEvent;
 import com.ilargia.games.entitas.exceptions.GroupSingleEntityException;
 import com.ilargia.games.entitas.factories.Collections;
 
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.UUID;
 
 public class Group<TEntity extends IEntity> implements IGroup<TEntity> {
 
+    public Class<TEntity> type;
+    public Set<GroupChanged> OnEntityAdded = Collections.createSet(GroupChanged.class);
+    public Set<GroupChanged> OnEntityRemoved = Collections.createSet(GroupChanged.class);
+    public Set<GroupUpdated> OnEntityUpdated = Collections.createSet(GroupUpdated.class);
     UUID id = UUID.randomUUID();
     private IMatcher<TEntity> _matcher;
     private Set<TEntity> _entities; //
     private TEntity[] _entitiesCache;
     private TEntity _singleEntityCache;
-    public Class<TEntity> type;
 
     public Group(IMatcher<TEntity> matcher, Class<TEntity> clazz) {
         _entities = Collections.createSet(Entity.class);
         _matcher = matcher;
         type = clazz;
 
+    }
+
+    public static <TE extends Entity> Collector<TE> createCollector(IGroup<TE> group, GroupEvent groupEvent) {
+        return new Collector<TE>(group, groupEvent);
     }
 
     @Override
@@ -43,7 +48,6 @@ public class Group<TEntity extends IEntity> implements IGroup<TEntity> {
     public IMatcher getMatcher() {
         return _matcher;
     }
-
 
     public void handleEntitySilently(TEntity entity) {
         if (_matcher.matches(entity)) {
@@ -79,8 +83,8 @@ public class Group<TEntity extends IEntity> implements IGroup<TEntity> {
     @Override
     public Set<GroupChanged> handleEntity(TEntity entity) {
         return (_matcher.matches(entity))
-                ? (addEntitySilently(entity)) ? OnEntityAdded.get(this) : null
-                : (removeEntitySilently(entity)) ? OnEntityRemoved.get(this) : null;
+                ? (addEntitySilently(entity)) ? OnEntityAdded : null
+                : (removeEntitySilently(entity)) ? OnEntityRemoved : null;
 
     }
 
@@ -172,7 +176,7 @@ public class Group<TEntity extends IEntity> implements IGroup<TEntity> {
     @Override
     public int hashCode() {
         int result = _matcher != null ? _matcher.hashCode() : 0;
-        result = 31 * result + id.hashCode() ;
+        result = 31 * result + id.hashCode();
         result = 31 * result + (type != null ? type.hashCode() : 0);
         return result;
     }
@@ -187,10 +191,58 @@ public class Group<TEntity extends IEntity> implements IGroup<TEntity> {
                 '}';
     }
 
-    public static <TE extends Entity> Collector<TE> createCollector(IGroup<TE> group, GroupEvent groupEvent) {
-        return new Collector<TE>(group, groupEvent);
+    public void clearEventsListener() {
+        if (OnEntityAdded != null) OnEntityAdded.clear();
+        if (OnEntityRemoved != null) OnEntityRemoved.clear();
+        if (OnEntityUpdated != null) OnEntityUpdated.clear();
+
     }
 
+    public void OnEntityAdded(GroupChanged<TEntity> listener) {
+        if (OnEntityAdded != null) {
+            OnEntityAdded = Collections.createSet(GroupChanged.class);
+        }
+        OnEntityAdded.add(listener);
+    }
+
+    public void OnEntityUpdated(GroupUpdated<TEntity> listener) {
+        if (OnEntityUpdated != null) {
+            OnEntityUpdated = Collections.createSet(GroupUpdated.class);
+        }
+        OnEntityUpdated.add(listener);
+    }
+
+    public void OnEntityRemoved(GroupChanged<TEntity> listener) {
+        if (OnEntityRemoved != null) {
+            OnEntityRemoved = Collections.createSet(GroupChanged.class);
+        }
+        OnEntityRemoved.add(listener);
+    }
+
+
+    public void notifyOnEntityAdded(TEntity entity, int index, IComponent component) {
+        if (OnEntityAdded != null) {
+            for (GroupChanged<TEntity> listener : OnEntityAdded) {
+                listener.changed(this, entity, index, component);
+            }
+        }
+    }
+
+    public void notifyOnEntityUpdated(TEntity entity, int index, IComponent component, IComponent newComponent) {
+        if (OnEntityUpdated != null) {
+            for (GroupUpdated<TEntity> listener : OnEntityUpdated) {
+                listener.updated(this, entity, index, component, newComponent);
+            }
+        }
+    }
+
+    public void notifyOnEntityRemoved(TEntity entity, int index, IComponent component) {
+        if (OnEntityRemoved != null) {
+            for (GroupChanged<TEntity> listener : OnEntityRemoved) {
+                listener.changed(this, entity, index, component);
+            }
+        }
+    }
 
 
 }

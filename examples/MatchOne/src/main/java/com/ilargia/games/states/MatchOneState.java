@@ -47,7 +47,8 @@ public class MatchOneState extends BaseGameState {
         entitas = new Entitas();
         EntityIndexExtension.addEntityIndices(entitas);
         // Input
-        systems.add(new EmitInputSystem(entitas.input, engine.physic, engine.cam))
+        EmitInputSystem emitInputSystem = new EmitInputSystem(entitas.input, engine.physic, engine.cam);
+        systems
                 .add(new ProcessInputSystem(entitas))
                 // Update
                 .add(new GameBoardSystem(entitas.game))
@@ -55,13 +56,13 @@ public class MatchOneState extends BaseGameState {
                 .add(new FillSystem(entitas.game))
                 .add(new ScoreSystem(entitas))
                 // Render
-                .add(new RemoveViewSystem(entitas.game))
+                .add(new RemoveViewSystem(entitas.game, engine.physic))
                 .add(new AddViewSystem(entitas.game, assetsManager, engine.bodyBuilder))
                 .add(new AnimatePositionSystem(entitas.game))
                 // Destroy
                 .add(new DestroySystem(entitas.game))
-                .add(new RendererSystem(entitas.game, engine.cam,engine.batch))
-                .add(new PhysicSystem(engine.physic));
+                .add(new RendererSystem(entitas, engine.cam,engine.batch, engine.physic))
+                ;
     }
 
     @Override

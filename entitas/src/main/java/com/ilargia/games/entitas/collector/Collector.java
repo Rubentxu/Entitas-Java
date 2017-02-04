@@ -1,6 +1,5 @@
 package com.ilargia.games.entitas.collector;
 
-import com.ilargia.games.entitas.Entity;
 import com.ilargia.games.entitas.api.IComponent;
 import com.ilargia.games.entitas.api.IEntity;
 import com.ilargia.games.entitas.api.IGroup;
@@ -16,11 +15,11 @@ import java.util.Set;
 public class Collector<TEntity extends IEntity> {
 
     public Set<TEntity> _collectedEntities; //ObjectOpenHashSet
-    private IGroup<TEntity>[] _groups;
-    private GroupEvent[] _groupEvents;
     GroupChanged<TEntity> _addEntityCache;
     String _toStringCache;
     StringBuilder _toStringBuilder;
+    private IGroup<TEntity>[] _groups;
+    private GroupEvent[] _groupEvents;
 
 
     public Collector(IGroup<TEntity> group, GroupEvent eventType) {

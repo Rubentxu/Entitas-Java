@@ -1,10 +1,9 @@
 package com.ilargia.games.entitas.systems;
 
-import com.ilargia.games.entitas.collector.Collector;
 import com.ilargia.games.entitas.Entity;
 import com.ilargia.games.entitas.api.IContext;
-import com.ilargia.games.entitas.api.IEntity;
 import com.ilargia.games.entitas.api.system.IReactiveSystem;
+import com.ilargia.games.entitas.collector.Collector;
 import com.ilargia.games.entitas.factories.Collections;
 
 import java.util.List;

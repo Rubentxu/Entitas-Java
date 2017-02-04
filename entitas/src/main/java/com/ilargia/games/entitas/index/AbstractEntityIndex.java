@@ -2,7 +2,6 @@ package com.ilargia.games.entitas.index;
 
 import com.ilargia.games.entitas.Entity;
 import com.ilargia.games.entitas.api.IComponent;
-import com.ilargia.games.entitas.api.IEntity;
 import com.ilargia.games.entitas.api.IEntityIndex;
 import com.ilargia.games.entitas.api.IGroup;
 import com.ilargia.games.entitas.api.events.GroupChanged;

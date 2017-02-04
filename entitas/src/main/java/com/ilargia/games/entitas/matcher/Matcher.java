@@ -156,6 +156,36 @@ public class Matcher<TEntity extends IEntity> implements IAllOfMatcher<TEntity>,
         sb.append(")");
     }
 
+    private static int applyHash(int hash, int[] indices, int i1, int i2) {
+        if (indices != null) {
+            for (int i = 0, indicesLength = indices.length; i < indicesLength; i++) {
+                hash ^= indices[i] * i1;
+            }
+            hash ^= indices.length * i2;
+        }
+        return hash;
+    }
+
+    private static boolean equalIndices(int[] i1, int[] i2) {
+        if ((i1 == null) != (i2 == null)) {
+            return false;
+        }
+        if (i1 == null) {
+            return true;
+        }
+        if (i1.length != i2.length) {
+            return false;
+        }
+
+        for (int i = 0, indicesLength = i1.length; i < indicesLength; i++) {
+            if (i1[i] != i2[i]) {
+                return false;
+            }
+        }
+        return true;
+
+    }
+
     public int[] getIndices() {
         if (_indices == null) {
             _indices = mergeIndices(_allOfIndices, _anyOfIndices, _noneOfIndices);
@@ -175,7 +205,6 @@ public class Matcher<TEntity extends IEntity> implements IAllOfMatcher<TEntity>,
     public int[] getNoneOfIndices() {
         return _noneOfIndices;
     }
-
 
     @Override
     public IAnyOfMatcher<TEntity> anyOf(int... indices) {
@@ -223,16 +252,6 @@ public class Matcher<TEntity extends IEntity> implements IAllOfMatcher<TEntity>,
         return _hash;
     }
 
-    private static int applyHash(int hash, int[] indices, int i1, int i2) {
-        if (indices != null) {
-            for (int i = 0, indicesLength = indices.length; i < indicesLength; i++) {
-                hash ^= indices[i] * i1;
-            }
-            hash ^= indices.length * i2;
-        }
-        return hash;
-    }
-
     @Override
     public boolean equals(Object obj) {
         if (obj == null || obj.getClass() != getClass() ||
@@ -252,26 +271,6 @@ public class Matcher<TEntity extends IEntity> implements IAllOfMatcher<TEntity>,
         }
 
         return true;
-    }
-
-    private static boolean equalIndices(int[] i1, int[] i2) {
-        if ((i1 == null) != (i2 == null)) {
-            return false;
-        }
-        if (i1 == null) {
-            return true;
-        }
-        if (i1.length != i2.length) {
-            return false;
-        }
-
-        for (int i = 0, indicesLength = i1.length; i < indicesLength; i++) {
-            if (i1[i] != i2[i]) {
-                return false;
-            }
-        }
-        return true;
-
     }
 
     @Override

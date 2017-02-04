@@ -3,7 +3,6 @@ package com.ilargia.games.entitas.api.events;
 import com.ilargia.games.entitas.factories.Collections;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 
 public class EventMap<K, V> {
@@ -24,7 +23,7 @@ public class EventMap<K, V> {
     }
 
     public Collection<V> listeners() {
-        return  listeners.values();
+        return listeners.values();
     }
 
     public V getEventHandler(K key) {
