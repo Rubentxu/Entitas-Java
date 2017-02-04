@@ -47,17 +47,17 @@ public class ContextTest {
     private void createCollections() {
         new Collections(new CollectionsFactory() {
             @Override
-            public List createList(Class<?> clazz) {
+            public <T> List createList(Class<T> clazz) {
                 return new ArrayList();
             }
 
             @Override
-            public Set createSet(Class<?> clazz) {
+            public <T> Set createSet(Class<T> clazz) {
                 return new HashSet();
             }
 
             @Override
-            public Map createMap(Class<?> keyClazz, Class<?> valueClazz) {
+            public <K, V> Map createMap(Class<K> keyClazz, Class<V> valueClazz) {
                 return new HashMap();
             }
 
@@ -143,7 +143,7 @@ public class ContextTest {
 
     }
 
-    @Test(expected = EntityIsNotRetainedByOwnerException.class)
+    @Test(expected = ContextDoesNotContainEntityException.class)
     public void entityIsNotRetainedByOwnerExceptionTest() {
         TestEntity entity2 = new TestEntity(100, null, null);
         context.destroyEntity(entity2);
@@ -248,9 +248,9 @@ public class ContextTest {
     public void resetTest() {
         context.OnEntityCreated((pool, entity) -> {
         });
-        assertEquals(1, context.OnEntityCreated.get(context).size());
+        assertEquals(1, context.OnEntityCreated.size());
         context.reset();
-        assertEquals(0, context.OnEntityCreated.get(context).size());
+        assertEquals(0, context.OnEntityCreated.size());
 
     }
 

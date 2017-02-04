@@ -27,17 +27,17 @@ public class GroupTest {
     private void createCollections() {
         new Collections(new CollectionsFactory() {
             @Override
-            public List createList(Class<?> clazz) {
+            public <T> List createList(Class<T> clazz) {
                 return new ArrayList();
             }
 
             @Override
-            public Set createSet(Class<?> clazz) {
+            public <T> Set createSet(Class<T> clazz) {
                 return new HashSet();
             }
 
             @Override
-            public Map createMap(Class<?> keyClazz, Class<?> valueClazz) {
+            public <K, V> Map createMap(Class<K> keyClazz, Class<V> valueClazz) {
                 return new HashMap();
             }
 
@@ -81,7 +81,7 @@ public class GroupTest {
         GroupChanged<TestEntity> lambda = (group, e, idx, component) -> assertEquals(entity, e);
         group.OnEntityRemoved(lambda);
         Set<GroupChanged> changed = group.handleEntity(entity);
-        assertNull(changed);
+        assertEquals(0, changed.size());
 
         entity.removeComponent(TestComponentIds.Position);
         changed = group.handleEntity(entity);

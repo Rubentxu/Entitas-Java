@@ -49,17 +49,17 @@ public class SystemsTest {
     private void createCollections() {
         new Collections(new CollectionsFactory() {
             @Override
-            public List createList(Class<?> clazz) {
+            public <T> List createList(Class<T> clazz) {
                 return new ArrayList();
             }
 
             @Override
-            public Set createSet(Class<?> clazz) {
+            public <T> Set createSet(Class<T> clazz) {
                 return new HashSet();
             }
 
             @Override
-            public Map createMap(Class<?> keyClazz, Class<?> valueClazz) {
+            public <K, V> Map createMap(Class<K> keyClazz, Class<V> valueClazz) {
                 return new HashMap();
             }
 
