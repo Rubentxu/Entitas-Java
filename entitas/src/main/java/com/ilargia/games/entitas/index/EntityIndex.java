@@ -32,10 +32,10 @@ public class EntityIndex<TEntity extends Entity, TKey> extends AbstractEntityInd
         if (!_index.containsKey(key)) {
             entities = Collections.createSet(Entity.class);
             _index.put(key, entities);
-        } else {
-            entities = _index.get(key);
+            return entities;
         }
-        return entities;
+        return  _index.get(key);
+
     }
 
     @Override
