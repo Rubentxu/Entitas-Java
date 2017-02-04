@@ -19,9 +19,8 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.engio.mbassy.bus.MBassador;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+
+import java.util.*;
 
 
 public class Pong implements ApplicationListener {
@@ -49,27 +48,19 @@ public class Pong implements ApplicationListener {
         engine.addManager(new EGAssetsManager(assetsManager, preferencesManager));
         new Collections(new CollectionsFactory() {
             @Override
-            public List createList(Class<?> clazz) {
-               if(clazz.equals(Integer.class))
-                    return new IntArrayList();
-               else
-                   return new ObjectArrayList();
+            public <T> List createList(Class<T> clazz) {
+                return new ArrayList<T>();
             }
 
             @Override
-            public Set createSet(Class<?> clazz) {
-                if(clazz.equals(Integer.class))
-                    return new IntArraySet();
-                else
-                    return new ObjectOpenHashSet();
+            public <T> Set createSet(Class<T> clazz) {
+                return new HashSet<T>();
             }
 
             @Override
-            public Map createMap(Class<?> keyClazz, Class<?> valueClazz) {
-                 return new Object2ObjectArrayMap();
-
+            public <K, V> Map createMap(Class<K> keyClazz, Class<V> valueClazz) {
+                return new HashMap();
             }
-
         });
         game = new PongGame(engine, new EGEventBus(new MBassador()));
         game.init();

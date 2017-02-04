@@ -41,7 +41,7 @@ public class GameSessionEntity extends Entity {
 			component = new Score();
 		}
 		component.value = value;
-		removeComponent(GamesessionComponentIds.Score);
+		replaceComponent(GamesessionComponentIds.Score, component);
 		return this;
 	}
 

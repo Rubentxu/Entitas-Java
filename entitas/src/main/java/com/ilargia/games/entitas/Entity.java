@@ -316,7 +316,6 @@ public class Entity implements IEntity {
             throw new EntityIsAlreadyRetainedByOwnerException(owner);
         }
 
-
     }
 
     @Override

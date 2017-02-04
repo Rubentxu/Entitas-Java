@@ -82,7 +82,7 @@ public class ComponentIndicesGenerator implements IComponentCodeGenerator {
             if (info != null && info.index == i) {
                 code += String.format(format, info.typeName);
             } else {
-                code += String.format(" %1$s,\n", null);
+                code +=" null,\n";
             }
 
         }

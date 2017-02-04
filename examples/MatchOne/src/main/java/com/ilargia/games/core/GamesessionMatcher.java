@@ -9,11 +9,11 @@ import com.ilargia.games.entitas.matcher.Matcher;
  */
 public class GamesessionMatcher {
 
-	private static Matcher<GameSessionEntity> _matcherScore;
+	private static Matcher _matcherScore;
 
-	public static Matcher<GameSessionEntity> Score() {
+	public static Matcher Score() {
 		if (_matcherScore == null) {
-			Matcher<GameSessionEntity> matcher = (Matcher) Matcher
+			Matcher matcher = (Matcher) Matcher
 					.AllOf(GamesessionComponentIds.Score);
 			matcher.componentNames = GamesessionComponentIds.componentNames();
 			_matcherScore = matcher;

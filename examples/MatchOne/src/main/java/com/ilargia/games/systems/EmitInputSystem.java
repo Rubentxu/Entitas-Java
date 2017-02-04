@@ -64,8 +64,10 @@ public class EmitInputSystem extends InputAdapter {
             world.QueryAABB(callback, testPoint.x , testPoint.y , testPoint.x , testPoint.y );
 
             if (hitBody != null) {
+                Gdx.app.log("Input", hitBody.getPosition().toString());
+                Gdx.app.log("Input",String.format("int X: %d int Y: %d", (int)hitBody.getPosition().x, (int)hitBody.getPosition().y));
                 context.createEntity()
-                        .addInput(hitBody.getPosition().x, hitBody.getPosition().y);
+                        .addInput((int)hitBody.getPosition().x,(int) hitBody.getPosition().y);
             }
         }
         return false;

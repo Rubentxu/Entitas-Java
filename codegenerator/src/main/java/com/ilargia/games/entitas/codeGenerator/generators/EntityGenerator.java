@@ -182,7 +182,7 @@ public class EntityGenerator implements IComponentCodeGenerator {
                         info.typeName, bodyFromConstructor(info.constructores.get(0)), memberNamesFromConstructor(info.constructores.get(0)));
             } else {
                 method = String.format("%2$s component = (%2$s) recoverComponent(%1$s.%2$s);\n if(component == null) { " +
-                                "component = new %2$s();\n} %3$s\n removeComponent(%1$s.%2$s);\n return this;",
+                                "component = new %2$s();\n} %3$s\n replaceComponent(%1$s.%2$s, component);\n return this;",
                         CodeGenerator.capitalize(info.contexts.get(0)) + CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG,
                         info.typeName, memberAssignments(info.memberInfos));
             }

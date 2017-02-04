@@ -43,7 +43,7 @@ public class InputEntity extends Entity {
 		return hasComponent(InputComponentIds.Input);
 	}
 
-	public InputEntity addInput(float x, float y) {
+	public InputEntity addInput(int x, int y) {
 		Input component = (Input) recoverComponent(InputComponentIds.Input);
 		if (component == null) {
 			component = new Input(x, y);
@@ -55,7 +55,7 @@ public class InputEntity extends Entity {
 		return this;
 	}
 
-	public InputEntity replaceInput(float x, float y) {
+	public InputEntity replaceInput(int x, int y) {
 		Input component = (Input) recoverComponent(InputComponentIds.Input);
 		if (component == null) {
 			component = new Input(x, y);

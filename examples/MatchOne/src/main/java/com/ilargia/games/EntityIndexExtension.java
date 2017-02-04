@@ -28,8 +28,8 @@ public class EntityIndexExtension {
         contexts.game.addEntityIndex(PositionKey, positionIndex);
     }
 
-    public static Set<GameEntity> getEntitiesWithPosition(GameContext context, float x, float y) {
+    public static Set<GameEntity> getEntitiesWithPosition(GameContext context, int x, int y) {
         EntityIndex<GameEntity, Integer> index = (EntityIndex<GameEntity, Integer>) context.getEntityIndex(PositionKey);
-        return index.getEntities((Math.round(x) << shiftX) + Math.round(y));
+        return index.getEntities(( x << shiftX ) + y-1);
     }
 }
