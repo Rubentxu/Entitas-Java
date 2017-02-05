@@ -30,8 +30,8 @@ public class GameContext extends com.ilargia.games.entitas.Context<GameEntity> {
 	public GameEntity setGameBoard(int columns, int rows) {
 		if (hasGameBoard()) {
 			throw new EntitasException(
-					"Could not set GameBoard!" + this
-							+ " already has an entity with GameBoard!",
+					"Could not set GameWorld!" + this
+							+ " already has an entity with GameWorld!",
 					"You should check if the context already has a GameBoardEntity before setting it or use context.ReplaceGameBoard().");
 		}
 		GameEntity entity = createEntity();

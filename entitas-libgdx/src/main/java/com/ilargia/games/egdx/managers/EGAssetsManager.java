@@ -6,6 +6,7 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.ilargia.games.egdx.base.interfaces.managers.*;
 
 public class EGAssetsManager implements TextureManager<Texture,TextureAtlas>, FontManager<BitmapFont>,
@@ -25,6 +26,10 @@ public class EGAssetsManager implements TextureManager<Texture,TextureAtlas>, Fo
     private void loadAsset(String fileName, Class<?> id) {
         if (!assetManager.isLoaded(fileName))
             assetManager.load(fileName, id);
+    }
+
+    public TiledMap getMap(String name) {
+        return assetManager.get(name);
     }
 
     @Override

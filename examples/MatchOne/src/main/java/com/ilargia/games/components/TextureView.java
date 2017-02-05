@@ -9,14 +9,11 @@ import com.ilargia.games.entitas.codeGenerator.Component;
 public class TextureView implements IComponent {
     public String name;
     public TextureRegion texture;
-    public Body body;
-
 
     public TextureView(String name, TextureRegion texture, Body body) {
         this.name = name;
         this.texture = texture;
         this.body = body;
-
 
     }
 }

@@ -27,8 +27,8 @@ public class GameComponentIds {
 	public static final int totalComponents = 8;
 
 	public static String[] componentNames() {
-		return new String[]{"Asset", "Destroy", "GameBoard",
-				"GameBoardElement", "Interactive", "Movable", "Position",
+		return new String[]{"Asset", "Destroy", "GameWorld",
+				"GameElementFactory", "Interactive", "Movable", "Position",
 				"TextureView"};
 	}
 
