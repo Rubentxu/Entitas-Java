@@ -51,11 +51,22 @@ public class ContextGenerator implements IComponentCodeGenerator {
     }
 
     private void addContextMethods(String contextName, ComponentInfo info, JavaClassSource contextClass) {
+        addImports(info.memberInfos, contextClass);
         addContextGetMethods(contextName, info, contextClass);
         addContextHasMethods(contextName, info, contextClass);
         addContextAddMethods(contextName, info, contextClass);
         addContextReplaceMethods(contextName, info, contextClass);
         addContextRemoveMethods(contextName, info, contextClass);
+    }
+
+    private void addImports(List<FieldSource<JavaClassSource>> memberInfos, JavaClassSource source) {
+        for (FieldSource<JavaClassSource> info : memberInfos) {
+            if (info.getOrigin().getImport(info.getType().toString()) != null) {
+                if (source.getImport(info.getType().toString()) == null) {
+                    source.addImport(info.getType());
+                }
+            }
+        }
     }
 
     private void addContextGetMethods(String contextName, ComponentInfo info, JavaClassSource source) {
@@ -170,6 +181,7 @@ public class ContextGenerator implements IComponentCodeGenerator {
         return memberInfos.stream()
                 .map(info -> info.getType() + " " + info.getName())
                 .collect(Collectors.joining(", "));
+
 
     }
 

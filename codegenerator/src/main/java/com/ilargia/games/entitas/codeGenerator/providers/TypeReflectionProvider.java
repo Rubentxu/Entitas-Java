@@ -124,7 +124,8 @@ public class TypeReflectionProvider implements ICodeGeneratorDataProvider {
                     false,
                     false,
                     contructores,
-                    enums
+                    enums,
+                    component.getImports()
 
             );
         }

@@ -5,6 +5,8 @@ import com.ilargia.games.entitas.Entity;
 import java.util.Stack;
 import com.ilargia.games.entitas.codeGenerator.components.Player.ID;
 import com.ilargia.games.entitas.codeGenerator.components.Player;
+import com.ilargia.games.entitas.codeGenerator.Component;
+import com.ilargia.games.entitas.api.IComponent;
 import com.ilargia.games.entitas.codeGenerator.components.View;
 import com.badlogic.gdx.math.Shape2D;
 
