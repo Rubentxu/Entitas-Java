@@ -7,6 +7,7 @@ import com.ilargia.games.entitas.codeGenerator.intermediate.ComponentInfo;
 import org.jboss.forge.roaster.Roaster;
 import org.jboss.forge.roaster._shade.org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.jboss.forge.roaster.model.source.FieldSource;
+import org.jboss.forge.roaster.model.source.Import;
 import org.jboss.forge.roaster.model.source.JavaClassSource;
 import org.jboss.forge.roaster.model.source.MethodSource;
 
@@ -68,7 +69,7 @@ public class EntityGenerator implements IComponentCodeGenerator {
         addAddMethods(contextName, componentInfo, source);
         addReplaceMethods(contextName, componentInfo, source);
         addRemoveMethods(contextName, componentInfo, source);
-        addImportClass(contextName, componentInfo.memberInfos, source);
+        addImportClass(componentInfo, source);
 
     }
 
@@ -133,15 +134,14 @@ public class EntityGenerator implements IComponentCodeGenerator {
     }
 
 
-    public void addImportClass(String contextName, List<FieldSource<JavaClassSource>> memberInfos, JavaClassSource source) {
-        for (FieldSource<JavaClassSource> info : memberInfos) {
-            if (info.getOrigin().getImport(info.getType().toString()) != null) {
-                if (source.getImport(info.getType().toString()) == null) {
-                    source.addImport(info.getType());
+    public void addImportClass(ComponentInfo componentInfo, JavaClassSource source) {
+        if(componentInfo.imports !=null) {
+            for (Import imp : componentInfo.imports) {
+                if (!imp.getQualifiedName().equals("com.ilargia.games.entitas.codeGenerator.Component")) {
+                    source.addImport(imp);
                 }
             }
         }
-
     }
 
     private void addAddMethods(String contextName, ComponentInfo info, JavaClassSource source) {
