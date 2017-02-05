@@ -2,6 +2,7 @@ package com.ilargia.games.entitas.codeGenerator.intermediate;
 
 import com.ilargia.games.entitas.codeGenerator.CodeGenerator;
 import org.jboss.forge.roaster.model.source.FieldSource;
+import org.jboss.forge.roaster.model.source.Import;
 import org.jboss.forge.roaster.model.source.JavaClassSource;
 import org.jboss.forge.roaster.model.source.MethodSource;
 
@@ -15,6 +16,7 @@ public class ComponentInfo {
     public List<FieldSource<JavaClassSource>> memberInfos;
     public List<String> internalEnums;
     public List<String> contexts;
+    public List<Import> imports;
     public boolean isSingleEntity;
     public String singleComponentPrefix;
     public boolean generateComponent;
@@ -29,7 +31,7 @@ public class ComponentInfo {
     public ComponentInfo(String fullTypeName, String typeName, List<FieldSource<JavaClassSource>> memberInfos, List<String> contexts,
                          boolean isSingleEntity, String singleComponentPrefix,
                          boolean generateComponent, boolean generateMethods, boolean generateIndex, boolean hideInBlueprintInspector,
-                         List<MethodSource<JavaClassSource>> constructores, List<String> enums) {
+                         List<MethodSource<JavaClassSource>> constructores, List<String> enums, List<Import> imports) {
 
         this.fullTypeName = fullTypeName;
         this.memberInfos = memberInfos;
@@ -48,6 +50,7 @@ public class ComponentInfo {
         isSingletonComponent = memberInfos == null || memberInfos.size() == 0;
         this.constructores = constructores;
         this.internalEnums = enums;
+        this.imports = imports;
         this.index = null;
         this.totalComponents = 0;
     }
