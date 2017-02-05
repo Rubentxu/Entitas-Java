@@ -7,6 +7,7 @@ import com.ilargia.games.entitas.codeGenerator.Component;
 
 @Component(pools = {"Game"})
 public class TextureView implements IComponent {
+    public Body body;
     public String name;
     public TextureRegion texture;
 
