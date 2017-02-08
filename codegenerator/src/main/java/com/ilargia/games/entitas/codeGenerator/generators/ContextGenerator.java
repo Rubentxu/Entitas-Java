@@ -28,12 +28,13 @@ public class ContextGenerator implements IComponentCodeGenerator {
 
         return result;
     }
-    private JavaClassSource generateContext(String contextName, List<ComponentInfo> infos, String pkgDestiny){
-        JavaClassSource contextClass = Roaster.parse(JavaClassSource.class, String.format("public class %1$sContext extends com.ilargia.games.entitas.Context<%1$sEntity> {}",contextName));
+
+    private JavaClassSource generateContext(String contextName, List<ComponentInfo> infos, String pkgDestiny) {
+        JavaClassSource contextClass = Roaster.parse(JavaClassSource.class, String.format("public class %1$sContext extends com.ilargia.games.entitas.Context<%1$sEntity> {}", contextName));
         contextClass.setPackage(pkgDestiny);
 
         contextClass.addMethod()
-                .setName(contextName+"Context")
+                .setName(contextName + "Context")
                 .setPublic()
                 .setConstructor(true)
                 .setParameters(String.format("int totalComponents, int startCreationIndex, ContextInfo contextInfo, FactoryEntity<%1$sEntity> factoryMethod", contextName))
@@ -72,7 +73,7 @@ public class ContextGenerator implements IComponentCodeGenerator {
     private void addContextGetMethods(String contextName, ComponentInfo info, JavaClassSource source) {
         source.addMethod()
                 .setName(String.format("get%1$sEntity", info.typeName))
-                .setReturnType(contextName+"Entity")
+                .setReturnType(contextName + "Entity")
                 .setPublic()
                 .setBody(String.format("return getGroup(%1$sMatcher.%2$s()).getSingleEntity();"
                         , CodeGenerator.capitalize(info.contexts.get(0)), info.typeName));
@@ -99,7 +100,7 @@ public class ContextGenerator implements IComponentCodeGenerator {
 
             source.addMethod()
                     .setName(String.format("set%1$s", info.typeName))
-                    .setReturnType(contextName+"Context")
+                    .setReturnType(contextName + "Context")
                     .setPublic()
                     .setParameters("boolean value")
                     .setBody(String.format("%2$sEntity entity = get%1$sEntity();\n" +
@@ -127,7 +128,7 @@ public class ContextGenerator implements IComponentCodeGenerator {
         if (!info.isSingletonComponent) {
             source.addMethod()
                     .setName(String.format("set%1$s", info.typeName))
-                    .setReturnType(contextName+"Entity")
+                    .setReturnType(contextName + "Entity")
                     .setPublic()
                     .setParameters(memberNamesWithType(info.memberInfos))
                     .setBody(String.format("if(has%1$s()) {\n" +
@@ -148,7 +149,7 @@ public class ContextGenerator implements IComponentCodeGenerator {
         if (!info.isSingletonComponent) {
             source.addMethod()
                     .setName(String.format("replace%1$s", info.typeName))
-                    .setReturnType(contextName+"Entity")
+                    .setReturnType(contextName + "Entity")
                     .setPublic()
                     .setParameters(memberNamesWithType(info.memberInfos))
                     .setBody(String.format("%3$sEntity entity = get%1$sEntity();" +
@@ -168,7 +169,7 @@ public class ContextGenerator implements IComponentCodeGenerator {
         if (!info.isSingletonComponent) {
             source.addMethod()
                     .setName(String.format("remove%1$s", info.typeName))
-                    .setReturnType(contextName+"Context")
+                    .setReturnType(contextName + "Context")
                     .setPublic()
                     .setBody(String.format("destroyEntity(get%1$sEntity()); return this;"
                             , info.typeName, memberNames(info.memberInfos)));

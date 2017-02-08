@@ -4,7 +4,6 @@ package com.ilargia.games;
 import com.badlogic.gdx.math.MathUtils;
 import com.ilargia.games.core.GameContext;
 import com.ilargia.games.core.GameEntity;
-import com.ilargia.games.entitas.Entity;
 
 public class ContextExtensions {
 
@@ -23,7 +22,7 @@ public class ContextExtensions {
                 .addPosition(x, y)
                 .setMovable(true)
                 .setInteractive(true)
-                .addAsset(_pieces[MathUtils.random(0, _pieces.length-1)]);
+                .addAsset(_pieces[MathUtils.random(0, _pieces.length - 1)]);
     }
 
     public static GameEntity createBlocker(GameContext context, int x, int y) {

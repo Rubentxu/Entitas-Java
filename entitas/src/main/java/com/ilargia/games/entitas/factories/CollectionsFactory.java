@@ -10,6 +10,6 @@ public interface CollectionsFactory {
 
     <T> Set createSet(Class<T> clazz);
 
-    <K,V> Map createMap(Class<K> keyClazz, Class<V> valueClazz);
+    <K, V> Map createMap(Class<K> keyClazz, Class<V> valueClazz);
 
 }

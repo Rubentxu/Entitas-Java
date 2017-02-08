@@ -3,7 +3,6 @@ package com.ilargia.games.systems;
 import com.ilargia.games.core.Entitas;
 import com.ilargia.games.core.GameEntity;
 import com.ilargia.games.core.GameMatcher;
-import com.ilargia.games.core.GameSessionEntity;
 import com.ilargia.games.entitas.api.IContext;
 import com.ilargia.games.entitas.api.system.IInitializeSystem;
 import com.ilargia.games.entitas.collector.Collector;

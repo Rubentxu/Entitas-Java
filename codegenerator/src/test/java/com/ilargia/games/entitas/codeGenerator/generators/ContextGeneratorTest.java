@@ -1,14 +1,10 @@
 package com.ilargia.games.entitas.codeGenerator.generators;
 
-import org.jboss.forge.roaster.Roaster;
-import org.jboss.forge.roaster.model.source.JavaClassSource;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class ContextGeneratorTest {
 

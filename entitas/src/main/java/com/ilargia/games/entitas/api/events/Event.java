@@ -1,7 +1,6 @@
 package com.ilargia.games.entitas.api.events;
 
 import com.ilargia.games.entitas.Context;
-import com.ilargia.games.entitas.factories.Collections;
 
 import java.util.Set;
 

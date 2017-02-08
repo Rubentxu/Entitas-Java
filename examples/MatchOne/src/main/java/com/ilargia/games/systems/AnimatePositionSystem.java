@@ -38,16 +38,8 @@ public class AnimatePositionSystem extends ReactiveSystem<GameEntity> {
             Position pos = e.getPosition();
             //e.getTextureView().body.setTransform(new Vector2(0, -12), new Vector2(pos.x, pos.y - 1), true);
 
-            moveFocused(new Vector2(pos.x, pos.y-1),e.getTextureView().body);
+            moveFocused(new Vector2(pos.x, pos.y - 1), e.getTextureView().body);
         }
-
-    }
-
-    private class MoveData {
-        public Vector2 start;
-        public Vector2 direction;
-        public int current;
-        public int total;
 
     }
 
@@ -70,7 +62,7 @@ public class AnimatePositionSystem extends ReactiveSystem<GameEntity> {
         sEnd.scl(t);
         sEnd.add(moveData.start.cpy());
 
-        Vector2 sStart =body.getWorldCenter();
+        Vector2 sStart = body.getWorldCenter();
 
         sEnd.sub(sStart);
         sEnd.scl(60);
@@ -78,11 +70,19 @@ public class AnimatePositionSystem extends ReactiveSystem<GameEntity> {
         body.setLinearVelocity(sEnd);
     }
 
-    private int easeInOut(int t , int b, int c, int d ){
-        if ( ( t /= d / 2 ) < 1){
-            return c/2 * t * t * t * t + b;
+    private int easeInOut(int t, int b, int c, int d) {
+        if ((t /= d / 2) < 1) {
+            return c / 2 * t * t * t * t + b;
         }
-        return -c/2 * ( (t -= 2 ) * t * t * t - 2 ) + b;
+        return -c / 2 * ((t -= 2) * t * t * t - 2) + b;
+    }
+
+    private class MoveData {
+        public Vector2 start;
+        public Vector2 direction;
+        public int current;
+        public int total;
+
     }
 
 }

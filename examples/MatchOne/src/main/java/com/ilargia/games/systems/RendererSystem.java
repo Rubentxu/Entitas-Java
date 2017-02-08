@@ -15,10 +15,10 @@ import com.ilargia.games.entitas.api.system.IRenderSystem;
 import com.ilargia.games.entitas.group.Group;
 
 
-public class RendererSystem implements IRenderSystem ,ICleanupSystem {
+public class RendererSystem implements IRenderSystem, ICleanupSystem {
 
     // Debug   
-    public static boolean TESTING = true;  
+    public static boolean TESTING = true;
     public static String DEBUG_ENTITY;
     public static boolean DRAW_BOX2D_BODIES = true;
     public static boolean DRAW_BOX2D_JOINTS = true;
@@ -88,7 +88,7 @@ public class RendererSystem implements IRenderSystem ,ICleanupSystem {
             Input input = e.getInput();
 
             debugShapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-            debugShapeRenderer.circle( input.x, input.y,  0.3f);
+            debugShapeRenderer.circle(input.x, input.y, 0.3f);
         }
         debugShapeRenderer.end();
 

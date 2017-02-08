@@ -9,15 +9,15 @@ import com.ilargia.games.entitas.matcher.Matcher;
  */
 public class GamesessionMatcher {
 
-	private static Matcher _matcherScore;
+    private static Matcher _matcherScore;
 
-	public static Matcher Score() {
-		if (_matcherScore == null) {
-			Matcher matcher = (Matcher) Matcher
-					.AllOf(GamesessionComponentIds.Score);
-			matcher.componentNames = GamesessionComponentIds.componentNames();
-			_matcherScore = matcher;
-		}
-		return _matcherScore;
-	}
+    public static Matcher Score() {
+        if (_matcherScore == null) {
+            Matcher matcher = (Matcher) Matcher
+                    .AllOf(GamesessionComponentIds.Score);
+            matcher.componentNames = GamesessionComponentIds.componentNames();
+            _matcherScore = matcher;
+        }
+        return _matcherScore;
+    }
 }

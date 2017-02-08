@@ -61,8 +61,8 @@ public class MatchOneState extends BaseGameState {
                 .add(new AnimatePositionSystem(entitas.game))
                 // Destroy
                 .add(new DestroySystem(entitas.game))
-                .add(new RendererSystem(entitas, engine.cam,engine.batch, engine.physic))
-                ;
+                .add(new RendererSystem(entitas, engine.cam, engine.batch, engine.physic))
+        ;
     }
 
     @Override
@@ -80,7 +80,6 @@ public class MatchOneState extends BaseGameState {
         entitas.game.destroyAllEntities();
         systems.clearSystems();
     }
-
 
 
 }

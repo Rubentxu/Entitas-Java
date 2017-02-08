@@ -1,6 +1,5 @@
 package com.ilargia.games.core;
 
-import com.ilargia.games.entitas.api.*;
 import com.ilargia.games.components.Ball;
 
 /**
@@ -10,47 +9,47 @@ import com.ilargia.games.components.Ball;
  */
 public class CoreContext extends com.ilargia.games.entitas.Context<CoreEntity> {
 
-	public CoreContext(int totalComponents, int startCreationIndex,
-			ContextInfo contextInfo, FactoryEntity<CoreEntity> factoryMethod) {
-		super(totalComponents, startCreationIndex, contextInfo, factoryMethod);
-	}
+    public CoreContext(int totalComponents, int startCreationIndex,
+                       ContextInfo contextInfo, FactoryEntity<CoreEntity> factoryMethod) {
+        super(totalComponents, startCreationIndex, contextInfo, factoryMethod);
+    }
 
-	public CoreEntity getBallEntity() {
-		return getGroup(CoreMatcher.Ball()).getSingleEntity();
-	}
+    public CoreEntity getBallEntity() {
+        return getGroup(CoreMatcher.Ball()).getSingleEntity();
+    }
 
-	public Ball getBall() {
-		return getBallEntity().getBall();
-	}
+    public Ball getBall() {
+        return getBallEntity().getBall();
+    }
 
-	public boolean hasBall() {
-		return getBallEntity() != null;
-	}
+    public boolean hasBall() {
+        return getBallEntity() != null;
+    }
 
-	public CoreEntity setBall(boolean resetBall) {
-		if (hasBall()) {
-			throw new EntitasException(
-					"Could not set Ball!" + this
-							+ " already has an entity with Ball!",
-					"You should check if the context already has a BallEntity before setting it or use context.ReplaceBall().");
-		}
-		CoreEntity entity = createEntity();
-		entity.addBall(resetBall);
-		return entity;
-	}
+    public CoreEntity setBall(boolean resetBall) {
+        if (hasBall()) {
+            throw new EntitasException(
+                    "Could not set Ball!" + this
+                            + " already has an entity with Ball!",
+                    "You should check if the context already has a BallEntity before setting it or use context.ReplaceBall().");
+        }
+        CoreEntity entity = createEntity();
+        entity.addBall(resetBall);
+        return entity;
+    }
 
-	public CoreEntity replaceBall(boolean resetBall) {
-		CoreEntity entity = getBallEntity();
-		if (entity == null) {
-			entity = setBall(resetBall);
-		} else {
-			entity.replaceBall(resetBall);
-		}
-		return entity;
-	}
+    public CoreEntity replaceBall(boolean resetBall) {
+        CoreEntity entity = getBallEntity();
+        if (entity == null) {
+            entity = setBall(resetBall);
+        } else {
+            entity.replaceBall(resetBall);
+        }
+        return entity;
+    }
 
-	public CoreContext removeBall() {
-		destroyEntity(getBallEntity());
-		return this;
-	}
+    public CoreContext removeBall() {
+        destroyEntity(getBallEntity());
+        return this;
+    }
 }

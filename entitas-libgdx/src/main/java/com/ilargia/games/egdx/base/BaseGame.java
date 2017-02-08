@@ -57,7 +57,7 @@ public abstract class BaseGame<E extends Engine> implements Game<E> {
     @Override
     public void changeState(GameState state, StateTransition transition) {
         GameState oldState = _states.pop();
-        transition.states(this, oldState , state);
+        transition.states(this, oldState, state);
     }
 
 

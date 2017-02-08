@@ -34,7 +34,7 @@ public class EntityIndex<TEntity extends Entity, TKey> extends AbstractEntityInd
             _index.put(key, entities);
             return entities;
         }
-        return  _index.get(key);
+        return _index.get(key);
 
     }
 

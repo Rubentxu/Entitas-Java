@@ -7,9 +7,12 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.ilargia.games.egdx.base.interfaces.managers.*;
+import com.ilargia.games.egdx.base.interfaces.managers.FontManager;
+import com.ilargia.games.egdx.base.interfaces.managers.MusicManager;
+import com.ilargia.games.egdx.base.interfaces.managers.SoundManager;
+import com.ilargia.games.egdx.base.interfaces.managers.TextureManager;
 
-public class EGAssetsManager implements TextureManager<Texture,TextureAtlas>, FontManager<BitmapFont>,
+public class EGAssetsManager implements TextureManager<Texture, TextureAtlas>, FontManager<BitmapFont>,
         MusicManager<Music>, SoundManager<Sound> {
 
     private AssetManager assetManager;

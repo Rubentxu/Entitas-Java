@@ -1,7 +1,7 @@
 package com.ilargia.games.egdx.base.interfaces.managers;
 
 
-public interface TextureManager<Texture,Atlas> extends Manager {
+public interface TextureManager<Texture, Atlas> extends Manager {
 
     public void loadTexture(String name);
 

@@ -1,10 +1,10 @@
 package com.ilargia.games.entitas.codeGenerator.components;
 
 import com.badlogic.gdx.math.Shape2D;
-import com.ilargia.games.entitas.codeGenerator.Component;
 import com.ilargia.games.entitas.api.IComponent;
+import com.ilargia.games.entitas.codeGenerator.Component;
 
-@Component(pools = {"Core","Otro"})
+@Component(pools = {"Core", "Otro"})
 public class View implements IComponent {
     public Shape2D shape;
 

@@ -17,15 +17,15 @@ public class Context<TEntity extends Entity> implements IContext<TEntity> {
 
     public int _totalComponents;
     public Class<TEntity> entityType;
-    protected Map<IMatcher, Group<TEntity>> _groups; //Object2ObjectArrayMap
-    protected List<Group<TEntity>>[] _groupsForIndex; // ObjectArrayList
     // Eventos
     public Set<ContextEntityChanged> OnEntityCreated = Collections.createSet(ContextEntityChanged.class);
     public Set<ContextEntityChanged> OnEntityWillBeDestroyed = Collections.createSet(ContextEntityChanged.class);
     public Set<ContextEntityChanged> OnEntityDestroyed = Collections.createSet(ContextEntityChanged.class);
     public Set<ContextGroupChanged> OnGroupCreated = Collections.createSet(ContextGroupChanged.class);
     public Set<ContextGroupChanged> OnGroupCleared = Collections.createSet(ContextGroupChanged.class);
-    EntityComponentChanged<TEntity> _cachedEntityChanged;
+    protected Map<IMatcher, Group<TEntity>> _groups; //Object2ObjectArrayMap
+    protected List<Group<TEntity>>[] _groupsForIndex; // ObjectArrayList
+    protected EntityComponentChanged<TEntity> _cachedEntityChanged;
     private UUID id = UUID.randomUUID();
     private int _creationIndex;
     private Set<TEntity> _entities; //ObjectOpenHashSet
@@ -38,17 +38,17 @@ public class Context<TEntity extends Entity> implements IContext<TEntity> {
     private Stack<IComponent>[] _componentContexts;
 
 
-    public Context(int totalComponents, int startCreationIndex, ContextInfo metaData,
+    public Context(int totalComponents, int startCreationIndex, ContextInfo contexInfo,
                    FactoryEntity<TEntity> factoryMethod) {
         _totalComponents = totalComponents;
         _creationIndex = startCreationIndex;
         _factoryEntiy = factoryMethod;
 
-        if (metaData != null) {
-            _contextInfo = metaData;
+        if (contexInfo != null) {
+            _contextInfo = contexInfo;
 
-            if (metaData.componentNames.length != totalComponents) {
-                throw new ContextInfoException(this, metaData);
+            if (contexInfo.componentNames.length != totalComponents) {
+                throw new ContextInfoException(this, contexInfo);
             }
         } else {
             String[] componentNames = new String[totalComponents];

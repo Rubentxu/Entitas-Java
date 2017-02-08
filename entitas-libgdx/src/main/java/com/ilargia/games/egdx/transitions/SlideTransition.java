@@ -5,8 +5,6 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Interpolation;
-import com.badlogic.gdx.utils.Array;
-import com.ilargia.games.egdx.EGEngine;
 
 public class SlideTransition extends RenderTransition {
 

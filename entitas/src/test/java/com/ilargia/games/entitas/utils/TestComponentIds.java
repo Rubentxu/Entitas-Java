@@ -1,11 +1,6 @@
 package com.ilargia.games.entitas.utils;
 
-import com.ilargia.games.entitas.components.Interactive;
-import com.ilargia.games.entitas.components.Motion;
-import com.ilargia.games.entitas.components.Player;
-import com.ilargia.games.entitas.components.Position;
-import com.ilargia.games.entitas.components.Score;
-import com.ilargia.games.entitas.components.View;
+import com.ilargia.games.entitas.components.*;
 
 /**
  * ---------------------------------------------------------------------------
@@ -14,21 +9,21 @@ import com.ilargia.games.entitas.components.View;
  */
 public class TestComponentIds {
 
-	public static final int Interactive = 0;
-	public static final int Motion = 1;
-	public static final int Player = 2;
-	public static final int Position = 3;
-	public static final int Score = 4;
-	public static final int View = 5;
-	public static final int totalComponents = 6;
+    public static final int Interactive = 0;
+    public static final int Motion = 1;
+    public static final int Player = 2;
+    public static final int Position = 3;
+    public static final int Score = 4;
+    public static final int View = 5;
+    public static final int totalComponents = 6;
 
-	public static String[] componentNames() {
-		return new String[]{"Interactive", "Motion", "Player", "Position",
-				"Score", "View"};
-	}
+    public static String[] componentNames() {
+        return new String[]{"Interactive", "Motion", "Player", "Position",
+                "Score", "View"};
+    }
 
-	public static Class[] componentTypes() {
-		return new Class[]{Interactive.class, Motion.class, Player.class,
-				Position.class, Score.class, View.class};
-	}
+    public static Class[] componentTypes() {
+        return new Class[]{Interactive.class, Motion.class, Player.class,
+                Position.class, Score.class, View.class};
+    }
 }

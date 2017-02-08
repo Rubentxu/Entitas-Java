@@ -6,8 +6,8 @@ import com.ilargia.games.core.CoreContext;
 import com.ilargia.games.core.CoreEntity;
 import com.ilargia.games.core.CoreMatcher;
 import com.ilargia.games.egdx.base.interfaces.commands.ChangeStateCommand;
-import com.ilargia.games.entitas.group.Group;
 import com.ilargia.games.entitas.api.system.IExecuteSystem;
+import com.ilargia.games.entitas.group.Group;
 
 
 public class DelaySystem implements IExecuteSystem {

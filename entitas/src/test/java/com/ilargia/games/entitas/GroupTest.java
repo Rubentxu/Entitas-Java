@@ -1,19 +1,17 @@
 package com.ilargia.games.entitas;
 
 import com.ilargia.games.entitas.api.ContextInfo;
+import com.ilargia.games.entitas.api.events.GroupChanged;
 import com.ilargia.games.entitas.components.Position;
 import com.ilargia.games.entitas.components.View;
 import com.ilargia.games.entitas.factories.Collections;
 import com.ilargia.games.entitas.factories.CollectionsFactory;
-import com.ilargia.games.entitas.api.events.GroupChanged;
 import com.ilargia.games.entitas.group.Group;
 import com.ilargia.games.entitas.utils.TestComponentIds;
 import com.ilargia.games.entitas.utils.TestEntity;
 import com.ilargia.games.entitas.utils.TestMatcher;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.util.*;
 
 import static org.junit.Assert.*;
 

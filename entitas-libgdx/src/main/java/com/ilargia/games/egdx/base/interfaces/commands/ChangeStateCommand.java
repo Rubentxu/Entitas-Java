@@ -1,6 +1,5 @@
 package com.ilargia.games.egdx.base.interfaces.commands;
 
-import com.ilargia.games.egdx.base.interfaces.Engine;
 import com.ilargia.games.egdx.base.interfaces.Game;
 import com.ilargia.games.egdx.base.interfaces.events.GameEvent;
 

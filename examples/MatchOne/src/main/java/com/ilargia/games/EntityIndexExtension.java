@@ -30,6 +30,6 @@ public class EntityIndexExtension {
 
     public static Set<GameEntity> getEntitiesWithPosition(GameContext context, int x, int y) {
         EntityIndex<GameEntity, Integer> index = (EntityIndex<GameEntity, Integer>) context.getEntityIndex(PositionKey);
-        return index.getEntities(( x << shiftX ) + y-1);
+        return index.getEntities((x << shiftX) + y - 1);
     }
 }

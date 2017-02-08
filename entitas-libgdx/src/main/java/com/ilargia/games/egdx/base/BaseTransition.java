@@ -26,7 +26,7 @@ public abstract class BaseTransition implements StateTransition {
         } else {
             alpha = timeTransition / duration;
         }
-        timeTransition+= deltaTime;
+        timeTransition += deltaTime;
     }
 
     @Override

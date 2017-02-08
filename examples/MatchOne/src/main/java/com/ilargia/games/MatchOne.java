@@ -13,19 +13,9 @@ import com.ilargia.games.entitas.factories.Collections;
 import com.ilargia.games.entitas.factories.CollectionsFactory;
 import com.ilargia.games.states.MatchOneState;
 import com.ilargia.games.util.TestFileHandleResolver;
-import it.unimi.dsi.fastutil.ints.IntArrayList;
-import it.unimi.dsi.fastutil.ints.IntArraySet;
-import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.engio.mbassy.bus.MBassador;
-import net.engio.mbassy.bus.config.BusConfiguration;
-import net.engio.mbassy.bus.config.IBusConfiguration;
 import net.engio.mbassy.bus.error.IPublicationErrorHandler;
 import net.engio.mbassy.bus.error.PublicationError;
-import net.engio.mbassy.listener.MessageHandler;
-
-import java.util.*;
 
 
 public class MatchOne extends ApplicationAdapter {
@@ -97,8 +87,8 @@ public class MatchOne extends ApplicationAdapter {
 
         MBassador bus = new MBassador(new IPublicationErrorHandler() {
             @Override
-            public void handleError (PublicationError error) {
-                Gdx.app.error ("EBUS ERROR: ",error.toString());
+            public void handleError(PublicationError error) {
+                Gdx.app.error("EBUS ERROR: ", error.toString());
             }
         });
 

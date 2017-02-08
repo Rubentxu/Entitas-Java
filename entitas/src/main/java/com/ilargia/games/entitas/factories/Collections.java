@@ -16,7 +16,7 @@ public class Collections {
         return _factory.createList(clazz);
     }
 
-    public static<T> Set createSet(Class<T> clazz) {
+    public static <T> Set createSet(Class<T> clazz) {
         return _factory.createSet(clazz);
     }
 

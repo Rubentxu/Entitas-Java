@@ -52,7 +52,7 @@ public class EntitasGenerator implements IComponentCodeGenerator {
             javaClass.addMethod()
                     .setPublic()
                     .setName(createMethodName)
-                    .setReturnType(contextName+"Context")
+                    .setReturnType(contextName + "Context")
                     .setBody(body);
 
         });
@@ -95,18 +95,15 @@ public class EntitasGenerator implements IComponentCodeGenerator {
             javaClass.addMethod()
                     .setName(String.format("factory%1$sEntity", contextName))
                     .setReturnType(String.format("FactoryEntity<%1$sEntity>", contextName))
-                            .setPublic()
-                            .setBody(String.format("  return (int totalComponents, Stack<IComponent>[] componentContexts, ContextInfo contextInfo) -> { \n" +
-                                    "                   return new %1$sEntity(totalComponents, componentContexts, contextInfo);\n" +
-                                    "        };", contextName));
+                    .setPublic()
+                    .setBody(String.format("  return (int totalComponents, Stack<IComponent>[] componentContexts, ContextInfo contextInfo) -> { \n" +
+                            "                   return new %1$sEntity(totalComponents, componentContexts, contextInfo);\n" +
+                            "        };", contextName));
             javaClass.addField()
                     .setName(contextName.toLowerCase())
-                    .setType(contextName+"Context")
+                    .setType(contextName + "Context")
                     .setPublic();
         });
-
-
-
 
 
     }

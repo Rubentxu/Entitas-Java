@@ -5,7 +5,6 @@ import com.ilargia.games.entitas.codeGenerator.CodeGenerator;
 import com.ilargia.games.entitas.codeGenerator.interfaces.IComponentCodeGenerator;
 import com.ilargia.games.entitas.codeGenerator.intermediate.ComponentInfo;
 import org.jboss.forge.roaster.Roaster;
-import org.jboss.forge.roaster.model.source.FieldSource;
 import org.jboss.forge.roaster.model.source.JavaClassSource;
 
 import java.util.ArrayList;

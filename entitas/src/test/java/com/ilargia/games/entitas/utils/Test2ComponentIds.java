@@ -10,16 +10,16 @@ import com.ilargia.games.entitas.components.Player;
  */
 public class Test2ComponentIds {
 
-	public static final int Interactive = 0;
-	public static final int Player = 2;
-	public static final int totalComponents = 2;
+    public static final int Interactive = 0;
+    public static final int Player = 2;
+    public static final int totalComponents = 2;
 
-	public static String[] componentNames() {
-		return new String[]{"Interactive", null, "Player", null, null, null};
-	}
+    public static String[] componentNames() {
+        return new String[]{"Interactive", null, "Player", null, null, null};
+    }
 
-	public static Class[] componentTypes() {
-		return new Class[]{Interactive.class, null, Player.class, null, null,
-				null};
-	}
+    public static Class[] componentTypes() {
+        return new Class[]{Interactive.class, null, Player.class, null, null,
+                null};
+    }
 }

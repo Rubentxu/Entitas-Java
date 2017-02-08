@@ -46,10 +46,10 @@ public class PongState extends BaseGameState {
                 .addMotion(0, 0);
 
         systems.add(new InputSystem(context.core))
-                .add( new ContactSystem(context.core))
-                .add( new BoundsSystem(context.core))
-                .add( new MoveSystem(context.core))
-                .add( new RendererSystem(context.core, engine.sr, engine.cam, engine.batch, engine.font));
+                .add(new ContactSystem(context.core))
+                .add(new BoundsSystem(context.core))
+                .add(new MoveSystem(context.core))
+                .add(new RendererSystem(context.core, engine.sr, engine.cam, engine.batch, engine.font));
     }
 
     @Override

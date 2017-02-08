@@ -37,7 +37,7 @@ public class EntityGenerator implements IComponentCodeGenerator {
         JavaClassSource entityClass = Roaster.parse(JavaClassSource.class, String.format("public class %1$sEntity extends Entity {}", contextName));
         entityClass.setPackage(pkgDestiny);
         entityClass.addMethod()
-                .setName(contextName+"Entity")
+                .setName(contextName + "Entity")
                 .setPublic()
                 .setConstructor(true)
                 .setParameters("int totalComponents,Stack<IComponent>[] componentContexts, ContextInfo contextInfo")
@@ -54,7 +54,7 @@ public class EntityGenerator implements IComponentCodeGenerator {
         }
 
         System.out.println(Roaster.format(entityClass.toString()));
-        return  entityClass;
+        return entityClass;
     }
 
     private void addImporEnums(ComponentInfo info, JavaClassSource entityClass) {
@@ -108,7 +108,7 @@ public class EntityGenerator implements IComponentCodeGenerator {
 
             source.addMethod()
                     .setName(String.format("set%1$s", info.typeName))
-                    .setReturnType(contextName+"Entity")
+                    .setReturnType(contextName + "Entity")
                     .setPublic()
                     .setParameters("boolean value")
                     .setBody(String.format(" if(value != hasComponent(%1$s.%2$s)) {\n" +
@@ -135,7 +135,7 @@ public class EntityGenerator implements IComponentCodeGenerator {
 
 
     public void addImportClass(ComponentInfo componentInfo, JavaClassSource source) {
-        if(componentInfo.imports !=null) {
+        if (componentInfo.imports != null) {
             for (Import imp : componentInfo.imports) {
                 if (!imp.getQualifiedName().equals("com.ilargia.games.entitas.codeGenerator.Component")) {
                     source.addImport(imp);
@@ -162,7 +162,7 @@ public class EntityGenerator implements IComponentCodeGenerator {
 
             source.addMethod()
                     .setName(String.format("add%1$s", info.typeName))
-                    .setReturnType(contextName+"Entity")
+                    .setReturnType(contextName + "Entity")
                     .setPublic()
                     .setParameters(info.constructores != null && info.constructores.size() > 0
                             ? memberNamesWithTypeFromConstructor(info.constructores.get(0))
@@ -189,7 +189,7 @@ public class EntityGenerator implements IComponentCodeGenerator {
 
             source.addMethod()
                     .setName(String.format("replace%1$s", info.typeName))
-                    .setReturnType(contextName+"Entity")
+                    .setReturnType(contextName + "Entity")
                     .setPublic()
                     .setParameters(info.constructores != null && info.constructores.size() > 0
                             ? memberNamesWithTypeFromConstructor(info.constructores.get(0))
@@ -205,7 +205,7 @@ public class EntityGenerator implements IComponentCodeGenerator {
             String method = "removeComponent(%1$s.%2$s);return this;";
             source.addMethod()
                     .setName(String.format("remove%1$s", info.typeName))
-                    .setReturnType(contextName+"Entity")
+                    .setReturnType(contextName + "Entity")
                     .setPublic()
                     .setBody(String.format(method,
                             CodeGenerator.capitalize(info.contexts.get(0)) + CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG,
@@ -266,18 +266,6 @@ public class EntityGenerator implements IComponentCodeGenerator {
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
     private JavaClassSource generateMatchers(String contextName, List<ComponentInfo> componentInfos, String pkgDestiny) {
         JavaClassSource javaClass = Roaster.parse(JavaClassSource.class, String.format("public class %1$s {}",
                 CodeGenerator.capitalize(contextName) + "Matcher"));
@@ -292,7 +280,6 @@ public class EntityGenerator implements IComponentCodeGenerator {
         System.out.println(javaClass);
         return javaClass;
     }
-
 
 
     private JavaClassSource addMatcher(String contextName, ComponentInfo info, JavaClassSource javaClass) {

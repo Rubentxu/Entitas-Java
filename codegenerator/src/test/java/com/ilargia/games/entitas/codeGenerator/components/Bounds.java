@@ -1,15 +1,13 @@
 package com.ilargia.games.entitas.codeGenerator.components;
 
 import com.badlogic.gdx.math.Rectangle;
-import com.ilargia.games.entitas.codeGenerator.Component;
 import com.ilargia.games.entitas.api.IComponent;
+import com.ilargia.games.entitas.codeGenerator.Component;
 
 @Component(pools = {"Core"})
 public class Bounds implements IComponent {
-    public enum Tag { BoundPlayer1, BoundPlayer2}
     public Rectangle rectangle;
     public Tag tag;
-
     public Bounds() {
     }
 
@@ -17,4 +15,6 @@ public class Bounds implements IComponent {
         this.rectangle = new Rectangle(x, y, width, height);
         this.tag = tag;
     }
+
+    public enum Tag {BoundPlayer1, BoundPlayer2}
 }

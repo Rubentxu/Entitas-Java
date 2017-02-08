@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.ilargia.games.egdx.base.BaseTransition;
 
@@ -12,9 +11,9 @@ import com.ilargia.games.egdx.base.BaseTransition;
 public abstract class RenderTransition extends BaseTransition {
 
     protected final Batch batch;
+    Texture current, next;
     private FrameBuffer currFbo;
     private FrameBuffer nextFbo;
-    Texture current, next;
 
     public RenderTransition(float duration, Batch batch) {
         super(duration);

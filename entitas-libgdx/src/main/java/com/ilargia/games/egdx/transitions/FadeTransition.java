@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Interpolation;
-import com.ilargia.games.egdx.EGEngine;
 
 public class FadeTransition extends RenderTransition {
 
@@ -27,7 +26,6 @@ public class FadeTransition extends RenderTransition {
         batch.end();
 
     }
-
 
 
 }

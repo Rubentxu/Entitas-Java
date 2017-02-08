@@ -4,16 +4,13 @@ import com.ilargia.games.entitas.api.ContextInfo;
 import com.ilargia.games.entitas.api.FactoryEntity;
 import com.ilargia.games.entitas.api.IComponent;
 import com.ilargia.games.entitas.api.IContext;
-import com.ilargia.games.entitas.api.system.*;
 import com.ilargia.games.entitas.collector.Collector;
 import com.ilargia.games.entitas.components.Position;
 import com.ilargia.games.entitas.events.GroupEvent;
 import com.ilargia.games.entitas.factories.Collections;
 import com.ilargia.games.entitas.factories.CollectionsFactory;
 import com.ilargia.games.entitas.group.Group;
-import com.ilargia.games.entitas.interfaces.*;
 import com.ilargia.games.entitas.matcher.Matcher;
-import com.ilargia.games.entitas.matcher.TriggerOnEvent;
 import com.ilargia.games.entitas.systems.ReactiveSystem;
 import com.ilargia.games.entitas.systems.Systems;
 import com.ilargia.games.entitas.utils.TestComponentIds;
@@ -21,8 +18,6 @@ import com.ilargia.games.entitas.utils.TestEntity;
 import com.ilargia.games.entitas.utils.TestMatcher;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.util.*;
 
 import static org.junit.Assert.*;
 
@@ -90,7 +85,7 @@ public class SystemsTest {
     public void add2Test() {
         Object contextsTest = new Object();
         systems.add(moveSystem);
-       // assertEquals(contextsTest, moveSystem.contexts);
+        // assertEquals(contextsTest, moveSystem.contexts);
 
     }
 
@@ -105,7 +100,7 @@ public class SystemsTest {
 
         systems.execute(1);
 
-       // assertTrue(reactiveSystem.flagExecute);
+        // assertTrue(reactiveSystem.flagExecute);
 
     }
 
@@ -127,7 +122,7 @@ public class SystemsTest {
         systems.execute(1);
 
 
-       // assertTrue(reactiveSystem.flagExecute);
+        // assertTrue(reactiveSystem.flagExecute);
 
     }
 

@@ -11,7 +11,6 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.*;
 
 public class CodeGenerator {
 
@@ -73,8 +72,8 @@ public class CodeGenerator {
             add("src");
         }};
         Optional<String> sourcePackage = scrDir.stream().filter((base) -> destinyDirectory.lastIndexOf(base) != -1)
-                .map((base) -> destinyDirectory.substring(destinyDirectory.lastIndexOf(base) + base.length()+1))
-                .map((base) -> base.replaceAll("/", ".").replaceAll("\\\\", "." ) )
+                .map((base) -> destinyDirectory.substring(destinyDirectory.lastIndexOf(base) + base.length() + 1))
+                .map((base) -> base.replaceAll("/", ".").replaceAll("\\\\", "."))
                 .findFirst();
 
         ArrayList<CodeGenFile> generatedFiles = new ArrayList<CodeGenFile>();

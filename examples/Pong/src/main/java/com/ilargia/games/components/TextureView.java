@@ -2,8 +2,8 @@ package com.ilargia.games.components;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-import com.ilargia.games.entitas.codeGenerator.Component;
 import com.ilargia.games.entitas.api.IComponent;
+import com.ilargia.games.entitas.codeGenerator.Component;
 
 @Component(pools = {"Core"})
 public class TextureView implements IComponent {

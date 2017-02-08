@@ -9,24 +9,24 @@ import com.ilargia.games.entitas.matcher.Matcher;
  */
 public class OtroMatcher {
 
-	private static Matcher _matcherPlayer;
-	private static Matcher _matcherView;
+    private static Matcher _matcherPlayer;
+    private static Matcher _matcherView;
 
-	public static Matcher Player() {
-		if (_matcherPlayer == null) {
-			Matcher matcher = (Matcher) Matcher.AllOf(OtroComponentIds.Player);
-			matcher.componentNames = OtroComponentIds.componentNames();
-			_matcherPlayer = matcher;
-		}
-		return _matcherPlayer;
-	}
+    public static Matcher Player() {
+        if (_matcherPlayer == null) {
+            Matcher matcher = (Matcher) Matcher.AllOf(OtroComponentIds.Player);
+            matcher.componentNames = OtroComponentIds.componentNames();
+            _matcherPlayer = matcher;
+        }
+        return _matcherPlayer;
+    }
 
-	public static Matcher View() {
-		if (_matcherView == null) {
-			Matcher matcher = (Matcher) Matcher.AllOf(OtroComponentIds.View);
-			matcher.componentNames = OtroComponentIds.componentNames();
-			_matcherView = matcher;
-		}
-		return _matcherView;
-	}
+    public static Matcher View() {
+        if (_matcherView == null) {
+            Matcher matcher = (Matcher) Matcher.AllOf(OtroComponentIds.View);
+            matcher.componentNames = OtroComponentIds.componentNames();
+            _matcherView = matcher;
+        }
+        return _matcherView;
+    }
 }

@@ -1,9 +1,7 @@
 package com.ilargia.games.entitas;
 
-import com.ilargia.games.entitas.api.*;
 import com.ilargia.games.entitas.collector.Collector;
 import com.ilargia.games.entitas.components.Position;
-import com.ilargia.games.entitas.exceptions.*;
 import com.ilargia.games.entitas.factories.Collections;
 import com.ilargia.games.entitas.factories.CollectionsFactory;
 import com.ilargia.games.entitas.group.Group;
@@ -16,8 +14,6 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-
-import java.util.*;
 
 import static org.junit.Assert.*;
 
