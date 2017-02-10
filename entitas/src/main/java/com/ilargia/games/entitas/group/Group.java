@@ -14,7 +14,6 @@ import com.ilargia.games.entitas.factories.Collections;
 
 import java.util.Iterator;
 import java.util.Set;
-import java.util.UUID;
 
 public class Group<TEntity extends IEntity> implements IGroup<TEntity> {
 
@@ -22,7 +21,6 @@ public class Group<TEntity extends IEntity> implements IGroup<TEntity> {
     public Set<GroupChanged> OnEntityAdded = Collections.createSet(GroupChanged.class);
     public Set<GroupChanged> OnEntityRemoved = Collections.createSet(GroupChanged.class);
     public Set<GroupUpdated> OnEntityUpdated = Collections.createSet(GroupUpdated.class);
-    UUID id = UUID.randomUUID();
     private IMatcher<TEntity> _matcher;
     private Set<TEntity> _entities; //
     private TEntity[] _entitiesCache;
@@ -176,7 +174,6 @@ public class Group<TEntity extends IEntity> implements IGroup<TEntity> {
     @Override
     public int hashCode() {
         int result = _matcher != null ? _matcher.hashCode() : 0;
-        result = 31 * result + id.hashCode();
         result = 31 * result + (type != null ? type.hashCode() : 0);
         return result;
     }

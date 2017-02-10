@@ -1,17 +1,38 @@
 package com.ilargia.games.entitas;
 
-import com.ilargia.games.entitas.api.*;
-import com.ilargia.games.entitas.api.events.*;
+
+import com.ilargia.games.entitas.api.ContextInfo;
+import com.ilargia.games.entitas.api.FactoryEntity;
+import com.ilargia.games.entitas.api.IComponent;
+import com.ilargia.games.entitas.api.IContext;
+import com.ilargia.games.entitas.api.IEntity;
+import com.ilargia.games.entitas.api.IEntityIndex;
+import com.ilargia.games.entitas.api.IGroup;
+import com.ilargia.games.entitas.api.events.ContextEntityChanged;
+import com.ilargia.games.entitas.api.events.ContextGroupChanged;
+import com.ilargia.games.entitas.api.events.EntityComponentChanged;
+import com.ilargia.games.entitas.api.events.EntityComponentReplaced;
+import com.ilargia.games.entitas.api.events.EntityReleased;
+import com.ilargia.games.entitas.api.events.GroupChanged;
 import com.ilargia.games.entitas.api.matcher.IMatcher;
 import com.ilargia.games.entitas.caching.EntitasCache;
 import com.ilargia.games.entitas.collector.Collector;
 import com.ilargia.games.entitas.events.GroupEvent;
-import com.ilargia.games.entitas.exceptions.*;
+import com.ilargia.games.entitas.exceptions.ContextDoesNotContainEntityException;
+import com.ilargia.games.entitas.exceptions.ContextEntityIndexDoesAlreadyExistException;
+import com.ilargia.games.entitas.exceptions.ContextEntityIndexDoesNotExistException;
+import com.ilargia.games.entitas.exceptions.ContextInfoException;
+import com.ilargia.games.entitas.exceptions.ContextStillHasRetainedEntitiesException;
+import com.ilargia.games.entitas.exceptions.EntityIsNotDestroyedException;
 import com.ilargia.games.entitas.factories.Collections;
 import com.ilargia.games.entitas.group.Group;
 
 import java.lang.reflect.Array;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.Stack;
 
 public class Context<TEntity extends Entity> implements IContext<TEntity> {
 
@@ -26,7 +47,6 @@ public class Context<TEntity extends Entity> implements IContext<TEntity> {
     protected Map<IMatcher, Group<TEntity>> _groups; //Object2ObjectArrayMap
     protected List<Group<TEntity>>[] _groupsForIndex; // ObjectArrayList
     protected EntityComponentChanged<TEntity> _cachedEntityChanged;
-    private UUID id = UUID.randomUUID();
     private int _creationIndex;
     private Set<TEntity> _entities; //ObjectOpenHashSet
     private Stack<TEntity> _reusableEntities;
@@ -460,14 +480,13 @@ public class Context<TEntity extends Entity> implements IContext<TEntity> {
         Context<?> context = (Context<?>) o;
 
         if (_totalComponents != context._totalComponents) return false;
-        if (id != null ? !id.equals(context.id) : context.id != null) return false;
         if (entityType != null ? !entityType.equals(context.entityType) : context.entityType != null) return false;
         return _contextInfo != null ? _contextInfo.equals(context._contextInfo) : context._contextInfo == null;
     }
 
     @Override
     public int hashCode() {
-        int result = id != null ? id.hashCode() : 0;
+        int result = 0;
         result = 31 * result + _totalComponents;
         result = 31 * result + (entityType != null ? entityType.hashCode() : 0);
         result = 31 * result + (_contextInfo != null ? _contextInfo.hashCode() : 0);

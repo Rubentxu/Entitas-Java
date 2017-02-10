@@ -4,6 +4,10 @@ import com.ilargia.games.entitas.api.ContextInfo;
 import com.ilargia.games.entitas.api.FactoryEntity;
 import com.ilargia.games.entitas.api.IComponent;
 import com.ilargia.games.entitas.api.IContext;
+import com.ilargia.games.entitas.api.system.ICleanupSystem;
+import com.ilargia.games.entitas.api.system.IExecuteSystem;
+import com.ilargia.games.entitas.api.system.IInitializeSystem;
+import com.ilargia.games.entitas.api.system.ITearDownSystem;
 import com.ilargia.games.entitas.collector.Collector;
 import com.ilargia.games.entitas.components.Position;
 import com.ilargia.games.entitas.events.GroupEvent;
@@ -19,7 +23,16 @@ import com.ilargia.games.entitas.utils.TestMatcher;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.Stack;
+
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 public class SystemsTest {
 

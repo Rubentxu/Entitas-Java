@@ -1,6 +1,8 @@
 package com.ilargia.games.entitas.utils;
 
 import com.ilargia.games.entitas.Entity;
+import com.ilargia.games.entitas.api.ContextInfo;
+import com.ilargia.games.entitas.api.IComponent;
 import com.ilargia.games.entitas.components.Interactive;
 import com.ilargia.games.entitas.components.Player;
 

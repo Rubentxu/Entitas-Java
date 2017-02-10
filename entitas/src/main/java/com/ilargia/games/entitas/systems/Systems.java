@@ -1,6 +1,11 @@
 package com.ilargia.games.entitas.systems;
 
-import com.ilargia.games.entitas.api.system.*;
+import com.ilargia.games.entitas.api.system.ICleanupSystem;
+import com.ilargia.games.entitas.api.system.IExecuteSystem;
+import com.ilargia.games.entitas.api.system.IInitializeSystem;
+import com.ilargia.games.entitas.api.system.IRenderSystem;
+import com.ilargia.games.entitas.api.system.ISystem;
+import com.ilargia.games.entitas.api.system.ITearDownSystem;
 import com.ilargia.games.entitas.factories.Collections;
 
 import java.util.List;

@@ -1,4 +1,4 @@
-include 'entitas', 'codegenerator', 'entitas-libgdx', 'examples:Pong', 'examples:MatchOne'
+include 'entitas', 'codegenerator', 'entitas-libgdx', 'examples:Pong', 'examples:MatchOne', 'entitas-jsweet'
 
 
 

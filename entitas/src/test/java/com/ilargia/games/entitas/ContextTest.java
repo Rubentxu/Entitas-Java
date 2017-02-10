@@ -1,7 +1,17 @@
 package com.ilargia.games.entitas;
 
+import com.ilargia.games.entitas.api.ContextInfo;
+import com.ilargia.games.entitas.api.FactoryEntity;
+import com.ilargia.games.entitas.api.IComponent;
+import com.ilargia.games.entitas.api.IContext;
+import com.ilargia.games.entitas.api.IEntity;
+import com.ilargia.games.entitas.api.IGroup;
 import com.ilargia.games.entitas.collector.Collector;
 import com.ilargia.games.entitas.components.Position;
+import com.ilargia.games.entitas.exceptions.ContextDoesNotContainEntityException;
+import com.ilargia.games.entitas.exceptions.ContextEntityIndexDoesAlreadyExistException;
+import com.ilargia.games.entitas.exceptions.ContextEntityIndexDoesNotExistException;
+import com.ilargia.games.entitas.exceptions.ContextStillHasRetainedEntitiesException;
 import com.ilargia.games.entitas.factories.Collections;
 import com.ilargia.games.entitas.factories.CollectionsFactory;
 import com.ilargia.games.entitas.group.Group;
@@ -15,7 +25,18 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import static org.junit.Assert.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.Stack;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 public class ContextTest {
 

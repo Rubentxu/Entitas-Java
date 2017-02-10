@@ -8,7 +8,11 @@ import com.ilargia.games.entitas.api.events.EntityComponentChanged;
 import com.ilargia.games.entitas.api.events.EntityComponentReplaced;
 import com.ilargia.games.entitas.api.events.EntityReleased;
 import com.ilargia.games.entitas.caching.EntitasCache;
-import com.ilargia.games.entitas.exceptions.*;
+import com.ilargia.games.entitas.exceptions.EntityAlreadyHasComponentException;
+import com.ilargia.games.entitas.exceptions.EntityDoesNotHaveComponentException;
+import com.ilargia.games.entitas.exceptions.EntityIsAlreadyRetainedByOwnerException;
+import com.ilargia.games.entitas.exceptions.EntityIsNotEnabledException;
+import com.ilargia.games.entitas.exceptions.EntityIsNotRetainedByOwnerException;
 import com.ilargia.games.entitas.factories.Collections;
 
 import java.util.List;
@@ -230,7 +234,7 @@ public class Entity implements IEntity {
     }
 
     @Override
-    public boolean hasComponents(int... indices) {
+    public boolean hasComponents(int[] indices) {
         for (int index : indices) {
             if (_components[index] == null) {
                 return false;
@@ -241,7 +245,7 @@ public class Entity implements IEntity {
     }
 
     @Override
-    public boolean hasAnyComponent(int... indices) {
+    public boolean hasAnyComponent(int[] indices) {
         for (int i = 0; i < indices.length; i++) {
             if (_components[indices[i]] != null) {
                 return true;
@@ -250,6 +254,8 @@ public class Entity implements IEntity {
         return false;
 
     }
+
+
 
     @Override
     public void removeAllComponents() {

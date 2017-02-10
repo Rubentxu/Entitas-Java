@@ -1,0 +1,37 @@
+{
+  "candies": [
+    {
+      "name": "jsweet-core",
+      "version": "1.2.0-SNAPSHOT",
+      "lastUpdateTimestamp": 1482023744000,
+      "modelVersion": "unknown",
+      "transpilerVersion": "1.2.0",
+      "jsOutputDirPath": "D:\\Proyectos\\java\\Entitas-Java\\entitas-jsweet\\.jsweet\\candies\\js",
+      "jsDirPath": "META-INF/resources/webjars/jsweet-core/1.2.0-SNAPSHOT",
+      "jsFilesPaths": []
+    },
+    {
+      "name": "j4ts",
+      "version": "0.2.0-SNAPSHOT",
+      "lastUpdateTimestamp": 1473076602000,
+      "modelVersion": "unknown",
+      "transpilerVersion": "1.1.1",
+      "jsOutputDirPath": "D:\\Proyectos\\java\\Entitas-Java\\entitas-jsweet\\.jsweet\\candies\\js",
+      "jsDirPath": "META-INF/resources/webjars/j4ts/0.2.0-SNAPSHOT",
+      "jsFilesPaths": [
+        "META-INF/resources/webjars/j4ts/0.2.0-SNAPSHOT/.tsc-rootfile.js",
+        "META-INF/resources/webjars/j4ts/0.2.0-SNAPSHOT/bundle.js"
+      ]
+    },
+    {
+      "name": "sprintf-js",
+      "version": "0.0.0-SNAPSHOT",
+      "lastUpdateTimestamp": 1469510656000,
+      "modelVersion": "unknown",
+      "transpilerVersion": "1.2.0",
+      "jsOutputDirPath": "D:\\Proyectos\\java\\Entitas-Java\\entitas-jsweet\\.jsweet\\candies\\js",
+      "jsDirPath": "META-INF/resources/webjars/sprintf-js/0.0.0-SNAPSHOT",
+      "jsFilesPaths": []
+    }
+  ]
+}

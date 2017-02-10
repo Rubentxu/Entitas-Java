@@ -1,0 +1,55 @@
+apply plugin: 'java'
+apply plugin: 'org.jsweet.jsweet-gradle-plugin'
+
+archivesBaseName = 'Entitas-Jsweet'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+
+sourceSets.main.java.srcDirs = ['../entitas/src/main/java']
+
+
+buildscript {
+    repositories {
+        mavenCentral()
+        maven { url "http://repository.jsweet.org/artifactory/libs-release-local" }
+        maven { url "http://repository.jsweet.org/artifactory/libs-release-local/" }
+        maven { url "http://repository.jsweet.org/artifactory/libs-snapshot-local" }
+        maven { url "http://repository.jsweet.org/artifactory/plugins-release-local" }
+        maven { url "http://repository.jsweet.org/artifactory/plugins-snapshot-local" }
+        maven { url "http://google-diff-match-patch.googlecode.com/svn/trunk/maven" }
+    }
+    dependencies {
+        classpath('org.jsweet:jsweet-gradle-plugin:1.2.1-SNAPSHOT') { //
+            transitive = true }
+    }
+
+
+}
+
+repositories {
+    mavenCentral()
+    maven { url "http://repository.jsweet.org/artifactory/libs-release-local" }
+    maven { url "http://repository.jsweet.org/artifactory/libs-release-local/" }
+    maven { url "http://repository.jsweet.org/artifactory/libs-snapshot-local" }
+    maven { url "http://repository.jsweet.org/artifactory/plugins-release-local" }
+    maven { url "http://repository.jsweet.org/artifactory/plugins-snapshot-local" }
+    maven { url "http://google-diff-match-patch.googlecode.com/svn/trunk/maven" }
+}
+
+jsweet {
+    verbose = true
+    encoding = 'UTF-8'
+    sourceMap = true
+    outDir = new File('build/target/js')
+    tsOut = new File('src/main/js')
+    //targetVersion = EcmaScriptComplianceLevel.ES5
+
+}
+
+dependencies {
+    compile group: 'org.jsweet.candies', name: 'jsweet-core', version:'1.2.0-SNAPSHOT'
+    compile group: 'org.jsweet.candies', name: 'j4ts', version:'0.2.0-SNAPSHOT'
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+}
