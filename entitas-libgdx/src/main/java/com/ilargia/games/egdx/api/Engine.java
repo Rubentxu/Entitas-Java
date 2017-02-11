@@ -1,6 +1,6 @@
-package com.ilargia.games.egdx.base.interfaces;
+package com.ilargia.games.egdx.api;
 
-import com.ilargia.games.egdx.base.interfaces.managers.Manager;
+import com.ilargia.games.egdx.api.managers.Manager;
 
 public interface Engine {
 

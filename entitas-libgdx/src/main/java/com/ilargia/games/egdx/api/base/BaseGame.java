@@ -1,7 +1,11 @@
-package com.ilargia.games.egdx.base;
+package com.ilargia.games.egdx.api.base;
 
 
-import com.ilargia.games.egdx.base.interfaces.*;
+import com.ilargia.games.egdx.api.Engine;
+import com.ilargia.games.egdx.api.EventBus;
+import com.ilargia.games.egdx.api.Game;
+import com.ilargia.games.egdx.api.GameState;
+import com.ilargia.games.egdx.api.StateTransition;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 
 public abstract class BaseGame<E extends Engine> implements Game<E> {

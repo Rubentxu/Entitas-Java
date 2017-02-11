@@ -33,13 +33,13 @@ public class Context<TEntity extends Entity> implements IContext<TEntity> {
     private Set<TEntity> _retainedEntities; //ObjectOpenHashSet
     private TEntity[] _entitiesCache;
     private Map<String, IEntityIndex> _entityIndices; // Map
-    private FactoryEntity<TEntity> _factoryEntiy;
+    private EntityBaseFactory<TEntity> _factoryEntiy;
     private ContextInfo _contextInfo;
     private Stack<IComponent>[] _componentContexts;
 
 
     public Context(int totalComponents, int startCreationIndex, ContextInfo contexInfo,
-                   FactoryEntity<TEntity> factoryMethod) {
+                   EntityBaseFactory<TEntity> factoryMethod) {
         _totalComponents = totalComponents;
         _creationIndex = startCreationIndex;
         _factoryEntiy = factoryMethod;

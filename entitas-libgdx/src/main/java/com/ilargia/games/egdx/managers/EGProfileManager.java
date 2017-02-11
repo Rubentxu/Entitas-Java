@@ -5,7 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Base64Coder;
 import com.badlogic.gdx.utils.Json;
-import com.ilargia.games.egdx.base.interfaces.managers.ProfileManager;
+import com.ilargia.games.egdx.api.managers.ProfileManager;
 
 public class EGProfileManager<P> implements ProfileManager<P> {
 

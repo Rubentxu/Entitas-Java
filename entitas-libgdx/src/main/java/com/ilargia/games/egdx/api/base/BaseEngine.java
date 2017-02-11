@@ -1,8 +1,8 @@
-package com.ilargia.games.egdx.base;
+package com.ilargia.games.egdx.api.base;
 
 
-import com.ilargia.games.egdx.base.interfaces.Engine;
-import com.ilargia.games.egdx.base.interfaces.managers.Manager;
+import com.ilargia.games.egdx.api.Engine;
+import com.ilargia.games.egdx.api.managers.Manager;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 

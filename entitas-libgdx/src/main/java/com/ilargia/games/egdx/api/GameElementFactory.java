@@ -1,4 +1,4 @@
-package com.ilargia.games.egdx.base.interfaces;
+package com.ilargia.games.egdx.api;
 
 import com.ilargia.games.entitas.api.IEntity;
 

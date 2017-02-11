@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
-import com.ilargia.games.egdx.base.BaseTransition;
+import com.ilargia.games.egdx.api.base.BaseTransition;
 
 
 public abstract class RenderTransition extends BaseTransition {

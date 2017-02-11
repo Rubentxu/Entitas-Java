@@ -1,8 +1,8 @@
-package com.ilargia.games.egdx.base;
+package com.ilargia.games.egdx.api.base;
 
-import com.ilargia.games.egdx.base.interfaces.Game;
-import com.ilargia.games.egdx.base.interfaces.GameState;
-import com.ilargia.games.egdx.base.interfaces.StateTransition;
+import com.ilargia.games.egdx.api.Game;
+import com.ilargia.games.egdx.api.GameState;
+import com.ilargia.games.egdx.api.StateTransition;
 
 public abstract class BaseTransition implements StateTransition {
 

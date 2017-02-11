@@ -3,7 +3,7 @@ package com.ilargia.games.egdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.ilargia.games.egdx.base.BaseEngine;
+import com.ilargia.games.egdx.api.base.BaseEngine;
 
 
 public class EGEngine extends BaseEngine {

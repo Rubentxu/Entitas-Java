@@ -1,4 +1,4 @@
-package com.ilargia.games.egdx.base.interfaces.managers;
+package com.ilargia.games.egdx.api.managers;
 
 
 public interface ProfileManager<P> extends Manager {

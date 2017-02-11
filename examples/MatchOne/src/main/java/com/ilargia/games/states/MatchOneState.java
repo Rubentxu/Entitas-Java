@@ -3,7 +3,7 @@ package com.ilargia.games.states;
 import com.ilargia.games.EntityIndexExtension;
 import com.ilargia.games.MatchOneEngine;
 import com.ilargia.games.core.Entitas;
-import com.ilargia.games.egdx.base.BaseGameState;
+import com.ilargia.games.egdx.api.BaseGameState;
 import com.ilargia.games.egdx.managers.EGAssetsManager;
 import com.ilargia.games.systems.*;
 

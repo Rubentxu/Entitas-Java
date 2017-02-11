@@ -4,7 +4,7 @@ package com.ilargia.games.egdx.managers;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.math.MathUtils;
-import com.ilargia.games.egdx.base.interfaces.managers.PreferencesManager;
+import com.ilargia.games.egdx.api.managers.PreferencesManager;
 
 public class EGPreferencesManager implements PreferencesManager {
 

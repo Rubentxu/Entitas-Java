@@ -1,6 +1,6 @@
-package com.ilargia.games.egdx.base;
+package com.ilargia.games.egdx.api.base;
 
-import com.ilargia.games.egdx.base.interfaces.GameState;
+import com.ilargia.games.egdx.api.GameState;
 import com.ilargia.games.entitas.systems.Systems;
 
 public abstract class BaseGameState implements GameState {
