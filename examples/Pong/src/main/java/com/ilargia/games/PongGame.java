@@ -2,9 +2,9 @@ package com.ilargia.games;
 
 import com.badlogic.gdx.math.Interpolation;
 import com.ilargia.games.egdx.api.BaseGame;
-import com.ilargia.games.egdx.api.base.EventBus;
-import com.ilargia.games.egdx.api.base.GameState;
-import com.ilargia.games.egdx.api.base.commands.ChangeStateCommand;
+import com.ilargia.games.egdx.base.EventBus;
+import com.ilargia.games.egdx.base.GameState;
+import com.ilargia.games.egdx.base.commands.ChangeStateCommand;
 import com.ilargia.games.egdx.transitions.SlideTransition;
 import com.ilargia.games.states.PongState;
 import net.engio.mbassy.listener.Handler;

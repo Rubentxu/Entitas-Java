@@ -1,4 +1,4 @@
-package com.ilargia.games.egdx.api.base;
+package com.ilargia.games.egdx.base;
 
 import com.ilargia.games.egdx.api.Game;
 import com.ilargia.games.egdx.api.GameState;
