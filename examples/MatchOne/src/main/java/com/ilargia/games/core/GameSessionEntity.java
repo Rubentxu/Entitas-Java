@@ -1,9 +1,10 @@
 package com.ilargia.games.core;
 
-import com.ilargia.games.components.Score;
+import com.ilargia.games.entitas.api.*;
 import com.ilargia.games.entitas.Entity;
-
 import java.util.Stack;
+import com.ilargia.games.components.Score;
+import com.ilargia.games.entitas.api.IComponent;
 
 /**
  * ---------------------------------------------------------------------------
@@ -12,41 +13,39 @@ import java.util.Stack;
  */
 public class GameSessionEntity extends Entity {
 
-    public GameSessionEntity(int totalComponents,
-                             Stack<IComponent>[] componentContexts, ContextInfo contextInfo) {
-        super(totalComponents, componentContexts, contextInfo);
-    }
+	public GameSessionEntity() {
+	}
 
-    public Score getScore() {
-        return (Score) getComponent(GamesessionComponentIds.Score);
-    }
+	public Score getScore() {
+		return (Score) getComponent(GamesessionComponentIds.Score);
+	}
 
-    public boolean hasScore() {
-        return hasComponent(GamesessionComponentIds.Score);
-    }
+	public boolean hasScore() {
+		return hasComponent(GamesessionComponentIds.Score);
+	}
 
-    public GameSessionEntity addScore(int value) {
-        Score component = (Score) recoverComponent(GamesessionComponentIds.Score);
-        if (component == null) {
-            component = new Score();
-        }
-        component.value = value;
-        addComponent(GamesessionComponentIds.Score, component);
-        return this;
-    }
+	public GameSessionEntity addScore(int value) {
+		Score component = (Score) recoverComponent(GamesessionComponentIds.Score);
+		if (component == null) {
+			component = new Score();
+		}
+		component.value = value;
+		addComponent(GamesessionComponentIds.Score, component);
+		return this;
+	}
 
-    public GameSessionEntity replaceScore(int value) {
-        Score component = (Score) recoverComponent(GamesessionComponentIds.Score);
-        if (component == null) {
-            component = new Score();
-        }
-        component.value = value;
-        replaceComponent(GamesessionComponentIds.Score, component);
-        return this;
-    }
+	public GameSessionEntity replaceScore(int value) {
+		Score component = (Score) recoverComponent(GamesessionComponentIds.Score);
+		if (component == null) {
+			component = new Score();
+		}
+		component.value = value;
+		replaceComponent(GamesessionComponentIds.Score, component);
+		return this;
+	}
 
-    public GameSessionEntity removeScore() {
-        removeComponent(GamesessionComponentIds.Score);
-        return this;
-    }
+	public GameSessionEntity removeScore() {
+		removeComponent(GamesessionComponentIds.Score);
+		return this;
+	}
 }

@@ -33,20 +33,9 @@ public class EntityIndex<TEntity extends Entity, TKey> extends AbstractEntityInd
         indexEntities(_group);
     }
 
-    @Override
-    protected void addEntity(TKey tKey, TEntity entity) {
-
-    }
-
-    @Override
-    protected void removeEntity(TKey tKey, TEntity entity) {
-
-    }
-
     public Set<TEntity> getEntities(TKey key) {
-        Set<TEntity> entities = null;
         if (!_index.containsKey(key)) {
-            entities = Collections.createSet(Entity.class);
+            Set<TEntity> entities = Collections.createSet(Entity.class);
             _index.put(key, entities);
             return entities;
         }
@@ -58,42 +47,30 @@ public class EntityIndex<TEntity extends Entity, TKey> extends AbstractEntityInd
     protected void clear() {
         for (Set<TEntity> entities : _index.values()) {
             for (IEntity entity : entities) {
-                entity.release(this);
+                if(entity.owners().contains(this)) {
+                    entity.release(this);
+                }
             }
         }
         _index.clear();
 
     }
 
-
     @Override
-    protected void addEntity(TEntity entity, IComponent component) {
-        if (getEntities(_key.getKey(entity, component)).add(entity))
+    protected void addEntity(TKey tKey, TEntity entity) {
+        getEntities(tKey).add(entity);
+        if(!entity.owners().contains(this)) {
             entity.retain(this);
+        }
     }
 
     @Override
-    protected void removeEntity(TEntity entity, IComponent component) {
-        if (getEntities(_key.getKey(entity, component)).remove(entity))
+    protected void removeEntity(TKey tKey, TEntity entity) {
+        getEntities(tKey).remove(entity);
+        if(entity.owners().contains(this)) {
             entity.release(this);
+        }
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        AbstractEntityIndex<?, ?> that = (AbstractEntityIndex<?, ?>) o;
-
-        if (id != null ? !id.equals(that.id) : that.id != null) return false;
-        return _key != null ? _key.equals(that._key) : that._key == null;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (_key != null ? _key.hashCode() : 0);
-        return result;
-    }
 
 }

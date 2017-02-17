@@ -1,10 +1,9 @@
 package com.ilargia.games;
 
 import com.badlogic.gdx.math.Interpolation;
-import com.ilargia.games.egdx.api.BaseGame;
-import com.ilargia.games.egdx.base.EventBus;
-import com.ilargia.games.egdx.base.GameState;
-import com.ilargia.games.egdx.base.commands.ChangeStateCommand;
+import com.ilargia.games.egdx.api.ChangeStateCommand;
+import com.ilargia.games.egdx.api.EventBus;
+import com.ilargia.games.egdx.base.BaseGame;
 import com.ilargia.games.egdx.transitions.SlideTransition;
 import com.ilargia.games.states.PongState;
 import net.engio.mbassy.listener.Handler;
@@ -48,7 +47,7 @@ public class PongGame extends BaseGame<PongEngine> {
         return 0;
     }
 
-    public GameState getPongState() {
+    public PongState getPongState() {
         if (pongState == null)
             pongState = new PongState(_engine);
         return pongState;

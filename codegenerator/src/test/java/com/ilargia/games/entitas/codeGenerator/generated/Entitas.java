@@ -1,8 +1,8 @@
 package com.ilargia.games.entitas.codeGenerator.generated;
 
-import com.ilargia.games.entitas.Context;
-
 import java.util.Stack;
+import com.ilargia.games.entitas.Context;
+import com.ilargia.games.entitas.api.*;
 
 /**
  * ---------------------------------------------------------------------------
@@ -11,43 +11,39 @@ import java.util.Stack;
  */
 public class Entitas {
 
-    public OtroContext otro;
-    public CoreContext core;
+	public OtroContext otro;
+	public CoreContext core;
 
-    public Entitas() {
-        otro = createOtroContext();
-        core = createCoreContext();
-    }
+	public Entitas() {
+		otro = createOtroContext();
+		core = createCoreContext();
+	}
 
-    public OtroContext createOtroContext() {
-        return new OtroContext(OtroComponentIds.totalComponents, 0,
-                new ContextInfo("Otro", OtroComponentIds.componentNames(),
-                        OtroComponentIds.componentTypes()), factoryOtroEntity());
-    }
+	public OtroContext createOtroContext() {
+		return new OtroContext(OtroComponentIds.totalComponents, 0,
+				new ContextInfo("Otro", OtroComponentIds.componentNames(),
+						OtroComponentIds.componentTypes()), factoryOtroEntity());
+	}
 
-    public CoreContext createCoreContext() {
-        return new CoreContext(CoreComponentIds.totalComponents, 0,
-                new ContextInfo("Core", CoreComponentIds.componentNames(),
-                        CoreComponentIds.componentTypes()), factoryCoreEntity());
-    }
+	public CoreContext createCoreContext() {
+		return new CoreContext(CoreComponentIds.totalComponents, 0,
+				new ContextInfo("Core", CoreComponentIds.componentNames(),
+						CoreComponentIds.componentTypes()), factoryCoreEntity());
+	}
 
-    public Context[] allContexts() {
-        return new Context[]{otro, core};
-    }
+	public Context[] allContexts() {
+		return new Context[]{otro, core};
+	}
 
-    public FactoryEntity<OtroEntity> factoryOtroEntity() {
-        return (int totalComponents, Stack<IComponent>[] componentContexts,
-                ContextInfo contextInfo) -> {
-            return new OtroEntity(totalComponents, componentContexts,
-                    contextInfo);
-        };
-    }
+	public EntityBaseFactory<OtroEntity> factoryOtroEntity() {
+		return () -> {
+			return new OtroEntity();
+		};
+	}
 
-    public FactoryEntity<CoreEntity> factoryCoreEntity() {
-        return (int totalComponents, Stack<IComponent>[] componentContexts,
-                ContextInfo contextInfo) -> {
-            return new CoreEntity(totalComponents, componentContexts,
-                    contextInfo);
-        };
-    }
+	public EntityBaseFactory<CoreEntity> factoryCoreEntity() {
+		return () -> {
+			return new CoreEntity();
+		};
+	}
 }

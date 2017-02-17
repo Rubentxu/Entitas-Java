@@ -9,14 +9,14 @@ import com.ilargia.games.components.Score;
  */
 public class GamesessionComponentIds {
 
-    public static final int Score = 0;
-    public static final int totalComponents = 1;
+	public static final int Score = 0;
+	public static final int totalComponents = 1;
 
-    public static String[] componentNames() {
-        return new String[]{"Score"};
-    }
+	public static String[] componentNames() {
+		return new String[]{"Score"};
+	}
 
-    public static Class[] componentTypes() {
-        return new Class[]{Score.class};
-    }
+	public static Class[] componentTypes() {
+		return new Class[]{Score.class};
+	}
 }

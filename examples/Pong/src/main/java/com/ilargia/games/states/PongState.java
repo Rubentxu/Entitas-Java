@@ -7,7 +7,7 @@ import com.ilargia.games.Pong;
 import com.ilargia.games.PongEngine;
 import com.ilargia.games.components.Player;
 import com.ilargia.games.core.Entitas;
-import com.ilargia.games.egdx.api.BaseGameState;
+import com.ilargia.games.egdx.base.BaseGameState;
 import com.ilargia.games.systems.*;
 
 

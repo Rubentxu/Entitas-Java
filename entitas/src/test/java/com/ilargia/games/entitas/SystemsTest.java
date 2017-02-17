@@ -1,12 +1,16 @@
 package com.ilargia.games.entitas;
 
 import com.ilargia.games.entitas.api.ContextInfo;
-import com.ilargia.games.entitas.api.FactoryEntity;
+import com.ilargia.games.entitas.api.EntityBaseFactory;
 import com.ilargia.games.entitas.api.IComponent;
 import com.ilargia.games.entitas.api.IContext;
+import com.ilargia.games.entitas.api.system.ICleanupSystem;
+import com.ilargia.games.entitas.api.system.IExecuteSystem;
+import com.ilargia.games.entitas.api.system.IInitializeSystem;
+import com.ilargia.games.entitas.api.system.ITearDownSystem;
 import com.ilargia.games.entitas.collector.Collector;
 import com.ilargia.games.entitas.components.Position;
-import com.ilargia.games.entitas.events.GroupEvent;
+import com.ilargia.games.entitas.group.GroupEvent;
 import com.ilargia.games.entitas.factories.Collections;
 import com.ilargia.games.entitas.factories.CollectionsFactory;
 import com.ilargia.games.entitas.group.Group;
@@ -19,6 +23,14 @@ import com.ilargia.games.entitas.utils.TestMatcher;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.Stack;
+
 import static org.junit.Assert.*;
 
 public class SystemsTest {
@@ -28,10 +40,9 @@ public class SystemsTest {
     private MoveSystem moveSystem;
 
 
-    public FactoryEntity<Entity> factoryEntity() {
-        return (int totalComponents, Stack<IComponent>[] componentPools,
-                ContextInfo contextInfo) -> {
-            return new Entity(totalComponents, componentPools, contextInfo);
+    public EntityBaseFactory<Entity> factoryEntity() {
+        return () -> {
+            return new Entity();
         };
     }
 

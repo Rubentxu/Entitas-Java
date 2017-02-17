@@ -1,6 +1,13 @@
 package com.ilargia.games.core;
 
-import com.ilargia.games.components.*;
+import com.ilargia.games.components.Asset;
+import com.ilargia.games.components.Destroy;
+import com.ilargia.games.components.GameBoard;
+import com.ilargia.games.components.GameBoardElement;
+import com.ilargia.games.components.Interactive;
+import com.ilargia.games.components.Movable;
+import com.ilargia.games.components.Position;
+import com.ilargia.games.components.TextureView;
 
 /**
  * ---------------------------------------------------------------------------
@@ -9,25 +16,25 @@ import com.ilargia.games.components.*;
  */
 public class GameComponentIds {
 
-    public static final int Asset = 0;
-    public static final int Destroy = 1;
-    public static final int GameBoard = 2;
-    public static final int GameBoardElement = 3;
-    public static final int Interactive = 4;
-    public static final int Movable = 5;
-    public static final int Position = 6;
-    public static final int TextureView = 7;
-    public static final int totalComponents = 8;
+	public static final int Asset = 0;
+	public static final int Destroy = 1;
+	public static final int GameBoard = 2;
+	public static final int GameBoardElement = 3;
+	public static final int Interactive = 4;
+	public static final int Movable = 5;
+	public static final int Position = 6;
+	public static final int TextureView = 7;
+	public static final int totalComponents = 8;
 
-    public static String[] componentNames() {
-        return new String[]{"Asset", "Destroy", "GameWorld",
-                "GameElementFactory", "Interactive", "Movable", "Position",
-                "TextureView"};
-    }
+	public static String[] componentNames() {
+		return new String[]{"Asset", "Destroy", "GameBoard",
+				"GameBoardElement", "Interactive", "Movable", "Position",
+				"TextureView"};
+	}
 
-    public static Class[] componentTypes() {
-        return new Class[]{Asset.class, Destroy.class, GameBoard.class,
-                GameBoardElement.class, Interactive.class, Movable.class,
-                Position.class, TextureView.class};
-    }
+	public static Class[] componentTypes() {
+		return new Class[]{Asset.class, Destroy.class, GameBoard.class,
+				GameBoardElement.class, Interactive.class, Movable.class,
+				Position.class, TextureView.class};
+	}
 }

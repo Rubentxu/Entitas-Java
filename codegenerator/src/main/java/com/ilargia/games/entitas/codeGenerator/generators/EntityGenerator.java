@@ -40,8 +40,7 @@ public class EntityGenerator implements IComponentCodeGenerator {
                 .setName(contextName + "Entity")
                 .setPublic()
                 .setConstructor(true)
-                .setParameters("int totalComponents,Stack<IComponent>[] componentContexts, ContextInfo contextInfo")
-                .setBody("super(totalComponents, componentContexts, contextInfo);");
+                .setBody("");
         entityClass.addImport("com.ilargia.games.entitas.api.*");
         entityClass.addImport("com.ilargia.games.entitas.Entity");
         entityClass.addImport("java.util.Stack");

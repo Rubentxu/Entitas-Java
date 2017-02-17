@@ -1,7 +1,17 @@
 package com.ilargia.games.entitas;
 
+import com.ilargia.games.entitas.api.ContextInfo;
+import com.ilargia.games.entitas.api.EntityBaseFactory;
+import com.ilargia.games.entitas.api.IComponent;
+import com.ilargia.games.entitas.api.IContext;
+import com.ilargia.games.entitas.api.IEntity;
+import com.ilargia.games.entitas.api.IGroup;
 import com.ilargia.games.entitas.collector.Collector;
 import com.ilargia.games.entitas.components.Position;
+import com.ilargia.games.entitas.exceptions.ContextDoesNotContainEntityException;
+import com.ilargia.games.entitas.exceptions.ContextEntityIndexDoesAlreadyExistException;
+import com.ilargia.games.entitas.exceptions.ContextEntityIndexDoesNotExistException;
+import com.ilargia.games.entitas.exceptions.ContextStillHasRetainedEntitiesException;
 import com.ilargia.games.entitas.factories.Collections;
 import com.ilargia.games.entitas.factories.CollectionsFactory;
 import com.ilargia.games.entitas.group.Group;
@@ -15,6 +25,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import java.util.*;
+
 import static org.junit.Assert.*;
 
 public class ContextTest {
@@ -26,10 +38,9 @@ public class ContextTest {
     private TestEntity entity;
 
 
-    public FactoryEntity<TestEntity> factoryEntity() {
-        return (int totalComponents, Stack<IComponent>[] componentPools,
-                ContextInfo contextInfo) -> {
-            return new TestEntity(totalComponents, componentPools, contextInfo);
+    public EntityBaseFactory<TestEntity> factoryEntity() {
+        return () -> {
+            return new TestEntity();
         };
     }
 
@@ -141,7 +152,8 @@ public class ContextTest {
 
     @Test(expected = ContextDoesNotContainEntityException.class)
     public void entityIsNotRetainedByOwnerExceptionTest() {
-        TestEntity entity2 = new TestEntity(100, null, null);
+        TestEntity entity2 = new TestEntity();
+        entity2.initialize(0, 100, null, null);
         context.destroyEntity(entity2);
 
     }
@@ -149,9 +161,7 @@ public class ContextTest {
     @Test
     public void onEntityReleasedTest() {
         context.destroyEntity(entity);
-
-
-        assertEquals(1, context.getReusableEntitiesCount());
+        assertEquals(2, context.getReusableEntitiesCount());
     }
 
     @Test
@@ -182,7 +192,7 @@ public class ContextTest {
     public void entityIndexTest() {
         entity.addComponent(TestComponentIds.Position, new Position());
         Group group = context.getGroup(TestMatcher.Position());
-        PrimaryEntityIndex<Entity, String> index = new PrimaryEntityIndex<>(group, (e, c) -> "positionEntities");
+        PrimaryEntityIndex<Entity, String> index = new PrimaryEntityIndex((e, c) -> "positionEntities", group);
         context.addEntityIndex("positions", index);
         index = (PrimaryEntityIndex<Entity, String>) context.getEntityIndex("positions");
         assertNotNull(index);
@@ -194,7 +204,7 @@ public class ContextTest {
     public void duplicateEntityIndexTest() {
         entity.addComponent(TestComponentIds.Position, new Position());
         Group group = context.getGroup(TestMatcher.Position());
-        PrimaryEntityIndex<Entity, String> index = new PrimaryEntityIndex<>(group, (e, c) -> "positionEntities");
+        PrimaryEntityIndex<Entity, String> index = new PrimaryEntityIndex(group, (e, c) -> new String [] {"positionEntities"});
         context.addEntityIndex("duplicate", index);
         context.addEntityIndex("duplicate", index);
 
@@ -205,7 +215,7 @@ public class ContextTest {
     public void deactivateAndRemoveEntityIndicesTest() {
         entity.addComponent(TestComponentIds.Position, new Position());
         Group group = context.getGroup(TestMatcher.Position());
-        PrimaryEntityIndex<Entity, String> index = new PrimaryEntityIndex<>(group, (e, c) -> "positionEntities");
+        PrimaryEntityIndex<Entity, String> index = new PrimaryEntityIndex((e, c) -> new String[] {"positionEntities"}, group);
         context.addEntityIndex("positions", index);
 
         context.deactivateAndRemoveEntityIndices();
@@ -281,7 +291,7 @@ public class ContextTest {
     @Test
     public void createEntityCollectorTest() {
         Context[] pools = new Context[]{context};
-        Collector collector = context.createEntityCollector(pools, TestMatcher.Position());
+        Collector collector = context.createCollector(TestMatcher.Position());
         assertNotNull(collector);
 
     }

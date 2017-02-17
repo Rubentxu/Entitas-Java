@@ -4,7 +4,7 @@ import com.ilargia.games.entitas.api.IComponent;
 import com.ilargia.games.entitas.api.IEntity;
 import com.ilargia.games.entitas.api.IGroup;
 import com.ilargia.games.entitas.api.events.GroupChanged;
-import com.ilargia.games.entitas.events.GroupEvent;
+import com.ilargia.games.entitas.group.GroupEvent;
 import com.ilargia.games.entitas.exceptions.CollectorException;
 import com.ilargia.games.entitas.factories.Collections;
 import com.ilargia.games.entitas.group.Group;

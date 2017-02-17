@@ -1,5 +1,6 @@
 package com.ilargia.games.core;
 
+import com.ilargia.games.entitas.api.*;
 import com.ilargia.games.components.GameBoard;
 
 /**
@@ -9,47 +10,47 @@ import com.ilargia.games.components.GameBoard;
  */
 public class GameContext extends com.ilargia.games.entitas.Context<GameEntity> {
 
-    public GameContext(int totalComponents, int startCreationIndex,
-                       ContextInfo contextInfo, FactoryEntity<GameEntity> factoryMethod) {
-        super(totalComponents, startCreationIndex, contextInfo, factoryMethod);
-    }
+	public GameContext(int totalComponents, int startCreationIndex,
+			ContextInfo contextInfo, EntityBaseFactory<GameEntity> factoryMethod) {
+		super(totalComponents, startCreationIndex, contextInfo, factoryMethod);
+	}
 
-    public GameEntity getGameBoardEntity() {
-        return getGroup(GameMatcher.GameBoard()).getSingleEntity();
-    }
+	public GameEntity getGameBoardEntity() {
+		return getGroup(GameMatcher.GameBoard()).getSingleEntity();
+	}
 
-    public GameBoard getGameBoard() {
-        return getGameBoardEntity().getGameBoard();
-    }
+	public GameBoard getGameBoard() {
+		return getGameBoardEntity().getGameBoard();
+	}
 
-    public boolean hasGameBoard() {
-        return getGameBoardEntity() != null;
-    }
+	public boolean hasGameBoard() {
+		return getGameBoardEntity() != null;
+	}
 
-    public GameEntity setGameBoard(int columns, int rows) {
-        if (hasGameBoard()) {
-            throw new EntitasException(
-                    "Could not set GameWorld!" + this
-                            + " already has an entity with GameWorld!",
-                    "You should check if the context already has a GameBoardEntity before setting it or use context.ReplaceGameBoard().");
-        }
-        GameEntity entity = createEntity();
-        entity.addGameBoard(columns, rows);
-        return entity;
-    }
+	public GameEntity setGameBoard(int columns, int rows) {
+		if (hasGameBoard()) {
+			throw new EntitasException(
+					"Could not set GameBoard!" + this
+							+ " already has an entity with GameBoard!",
+					"You should check if the context already has a GameBoardEntity before setting it or use context.ReplaceGameBoard().");
+		}
+		GameEntity entity = createEntity();
+		entity.addGameBoard(columns, rows);
+		return entity;
+	}
 
-    public GameEntity replaceGameBoard(int columns, int rows) {
-        GameEntity entity = getGameBoardEntity();
-        if (entity == null) {
-            entity = setGameBoard(columns, rows);
-        } else {
-            entity.replaceGameBoard(columns, rows);
-        }
-        return entity;
-    }
+	public GameEntity replaceGameBoard(int columns, int rows) {
+		GameEntity entity = getGameBoardEntity();
+		if (entity == null) {
+			entity = setGameBoard(columns, rows);
+		} else {
+			entity.replaceGameBoard(columns, rows);
+		}
+		return entity;
+	}
 
-    public GameContext removeGameBoard() {
-        destroyEntity(getGameBoardEntity());
-        return this;
-    }
+	public GameContext removeGameBoard() {
+		destroyEntity(getGameBoardEntity());
+		return this;
+	}
 }

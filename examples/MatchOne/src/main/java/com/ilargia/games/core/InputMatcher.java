@@ -9,25 +9,25 @@ import com.ilargia.games.entitas.matcher.Matcher;
  */
 public class InputMatcher {
 
-    private static Matcher _matcherBurstMode;
-    private static Matcher _matcherInput;
+	private static Matcher _matcherBurstMode;
+	private static Matcher _matcherInput;
 
-    public static Matcher BurstMode() {
-        if (_matcherBurstMode == null) {
-            Matcher matcher = (Matcher) Matcher
-                    .AllOf(InputComponentIds.BurstMode);
-            matcher.componentNames = InputComponentIds.componentNames();
-            _matcherBurstMode = matcher;
-        }
-        return _matcherBurstMode;
-    }
+	public static Matcher BurstMode() {
+		if (_matcherBurstMode == null) {
+			Matcher matcher = (Matcher) Matcher
+					.AllOf(InputComponentIds.BurstMode);
+			matcher.componentNames = InputComponentIds.componentNames();
+			_matcherBurstMode = matcher;
+		}
+		return _matcherBurstMode;
+	}
 
-    public static Matcher Input() {
-        if (_matcherInput == null) {
-            Matcher matcher = (Matcher) Matcher.AllOf(InputComponentIds.Input);
-            matcher.componentNames = InputComponentIds.componentNames();
-            _matcherInput = matcher;
-        }
-        return _matcherInput;
-    }
+	public static Matcher Input() {
+		if (_matcherInput == null) {
+			Matcher matcher = (Matcher) Matcher.AllOf(InputComponentIds.Input);
+			matcher.componentNames = InputComponentIds.componentNames();
+			_matcherInput = matcher;
+		}
+		return _matcherInput;
+	}
 }

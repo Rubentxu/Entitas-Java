@@ -1,4 +1,4 @@
-package com.ilargia.games.entitas.events;
+package com.ilargia.games.entitas.group;
 
 public enum GroupEvent {
     Added,

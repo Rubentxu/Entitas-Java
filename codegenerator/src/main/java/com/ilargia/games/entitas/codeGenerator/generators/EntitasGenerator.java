@@ -96,8 +96,8 @@ public class EntitasGenerator implements IComponentCodeGenerator {
                     .setName(String.format("factory%1$sEntity", contextName))
                     .setReturnType(String.format("EntityBaseFactory<%1$sEntity>", contextName))
                     .setPublic()
-                    .setBody(String.format("  return (int totalComponents, Stack<IComponent>[] componentContexts, ContextInfo contextInfo) -> { \n" +
-                            "                   return new %1$sEntity(totalComponents, componentContexts, contextInfo);\n" +
+                    .setBody(String.format("  return () -> { \n" +
+                            "                   return new %1$sEntity();\n" +
                             "        };", contextName));
             javaClass.addField()
                     .setName(contextName.toLowerCase())

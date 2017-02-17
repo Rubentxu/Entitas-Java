@@ -295,6 +295,14 @@ public class Entity implements IEntity {
         }
     }
 
+    public IComponent recoverComponent(int index) {
+        Stack<IComponent> componentContext = getComponentPool(index);
+        if (componentContext.size() > 0) {
+            return componentContext.pop();
+        }
+        return null;
+    }
+
     @Override
     public Set<Object> owners() {
         return owners;

@@ -1,6 +1,8 @@
 package com.ilargia.games.entitas.utils;
 
 import com.ilargia.games.entitas.Entity;
+import com.ilargia.games.entitas.api.ContextInfo;
+import com.ilargia.games.entitas.api.IComponent;
 import com.ilargia.games.entitas.components.Interactive;
 import com.ilargia.games.entitas.components.Player;
 
@@ -16,9 +18,7 @@ public class Test2Entity extends Entity {
     public Interactive InteractiveComponent = new Interactive();
     public Player PlayerComponent = new Player();
 
-    public Test2Entity(int totalComponents,
-                       Stack<IComponent>[] componentContexts, ContextInfo contextInfo) {
-        super(totalComponents, componentContexts, contextInfo);
+    public Test2Entity() {
     }
 
     public boolean isInteractive() {

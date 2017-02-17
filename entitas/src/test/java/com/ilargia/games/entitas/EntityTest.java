@@ -20,6 +20,14 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.Stack;
+
 import static org.junit.Assert.*;
 
 public class EntityTest {
@@ -56,7 +64,8 @@ public class EntityTest {
         createCollections();
         _componentPools = new Stack[10];
         EntitasCache cache = new EntitasCache();
-        entity = new TestEntity(10, _componentPools, new ContextInfo("Test", TestComponentIds.componentNames(),
+        entity = new TestEntity();
+        entity.initialize(0, 10, _componentPools, new ContextInfo("Test", TestComponentIds.componentNames(),
                 TestComponentIds.componentTypes()));
         entity.clearEventsListener();
         entity.reactivate(0);
@@ -176,7 +185,7 @@ public class EntityTest {
 
     @Test(expected = EntityDoesNotHaveComponentException.class)
     public void EntityDoesNotHaveComponentException3() {
-        entity.removeComponent(100);
+        entity.removeComponent(TestComponentIds.Score);
 
     }
 

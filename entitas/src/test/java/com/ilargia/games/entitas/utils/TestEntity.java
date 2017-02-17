@@ -15,9 +15,8 @@ public class TestEntity extends Entity {
     public Interactive InteractiveComponent = new Interactive();
     public Player PlayerComponent = new Player();
 
-    public TestEntity(int totalComponents,
-                      Stack<IComponent>[] componentContexts, ContextInfo contextInfo) {
-        super(totalComponents, componentContexts, contextInfo);
+    public TestEntity() {
+
     }
 
     public boolean isInteractive() {

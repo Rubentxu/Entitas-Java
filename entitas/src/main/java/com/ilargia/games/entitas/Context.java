@@ -5,7 +5,7 @@ import com.ilargia.games.entitas.api.events.*;
 import com.ilargia.games.entitas.api.matcher.IMatcher;
 import com.ilargia.games.entitas.caching.EntitasCache;
 import com.ilargia.games.entitas.collector.Collector;
-import com.ilargia.games.entitas.events.GroupEvent;
+import com.ilargia.games.entitas.group.GroupEvent;
 import com.ilargia.games.entitas.exceptions.*;
 import com.ilargia.games.entitas.factories.Collections;
 import com.ilargia.games.entitas.group.Group;
@@ -76,7 +76,7 @@ public class Context<TEntity extends Entity> implements IContext<TEntity> {
         _cachedEntityReleased =(final TEntity e) -> {
             onEntityReleased(e);
         };
-        entityType = (Class<TEntity>) _factoryEntiy.create(_totalComponents, _componentPools, _contextInfo).getClass();
+        entityType = (Class<TEntity>) _factoryEntiy.create().getClass();
 
     }
 
@@ -98,7 +98,7 @@ public class Context<TEntity extends Entity> implements IContext<TEntity> {
             ent = _reusableEntities.pop();
             ent.reactivate(_creationIndex++);
         } else {
-            ent = _factoryEntiy.create(_totalComponents, _componentPools, _contextInfo);
+            ent = _factoryEntiy.create();
             ent.initialize(_creationIndex++, _totalComponents, _componentPools, _contextInfo);
         }
 

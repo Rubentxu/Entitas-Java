@@ -8,7 +8,7 @@ import com.ilargia.games.core.GameEntity;
 import com.ilargia.games.core.GameMatcher;
 import com.ilargia.games.entitas.api.IContext;
 import com.ilargia.games.entitas.collector.Collector;
-import com.ilargia.games.entitas.events.GroupEvent;
+import com.ilargia.games.entitas.group.GroupEvent;
 import com.ilargia.games.entitas.systems.ReactiveSystem;
 
 import java.util.List;

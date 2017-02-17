@@ -13,6 +13,14 @@ import com.ilargia.games.entitas.utils.TestMatcher;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.Stack;
+
 import static org.junit.Assert.*;
 
 public class GroupTest {
@@ -47,7 +55,8 @@ public class GroupTest {
     public void setUp() throws Exception {
         createCollections();
 
-        entity = new TestEntity(10, new Stack[10], new ContextInfo("Test", TestComponentIds.componentNames(),
+        entity = new TestEntity();
+        entity.initialize(0,10, new Stack[10], new ContextInfo("Test", TestComponentIds.componentNames(),
                 TestComponentIds.componentTypes()));
         entity.clearEventsListener();
         entity.reactivate(0);

@@ -37,7 +37,7 @@ public class ContextGenerator implements IComponentCodeGenerator {
                 .setName(contextName + "Context")
                 .setPublic()
                 .setConstructor(true)
-                .setParameters(String.format("int totalComponents, int startCreationIndex, ContextInfo contextInfo, FactoryEntity<%1$sEntity> factoryMethod", contextName))
+                .setParameters(String.format("int totalComponents, int startCreationIndex, ContextInfo contextInfo, EntityBaseFactory<%1$sEntity> factoryMethod", contextName))
                 .setBody("super(totalComponents, startCreationIndex, contextInfo, factoryMethod);");
         contextClass.addImport("com.ilargia.games.entitas.api.*");
 

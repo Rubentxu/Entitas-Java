@@ -8,13 +8,11 @@ import com.ilargia.games.entitas.api.events.GroupChanged;
 import com.ilargia.games.entitas.api.events.GroupUpdated;
 import com.ilargia.games.entitas.api.matcher.IMatcher;
 import com.ilargia.games.entitas.collector.Collector;
-import com.ilargia.games.entitas.events.GroupEvent;
 import com.ilargia.games.entitas.exceptions.GroupSingleEntityException;
 import com.ilargia.games.entitas.factories.Collections;
 
 import java.util.Iterator;
 import java.util.Set;
-import java.util.UUID;
 
 public class Group<TEntity extends IEntity> implements IGroup<TEntity> {
 
@@ -22,7 +20,7 @@ public class Group<TEntity extends IEntity> implements IGroup<TEntity> {
     public Set<GroupChanged> OnEntityAdded = Collections.createSet(GroupChanged.class);
     public Set<GroupChanged> OnEntityRemoved = Collections.createSet(GroupChanged.class);
     public Set<GroupUpdated> OnEntityUpdated = Collections.createSet(GroupUpdated.class);
-    UUID id = UUID.randomUUID();
+
     private IMatcher<TEntity> _matcher;
     private Set<TEntity> _entities; //
     private TEntity[] _entitiesCache;
@@ -35,8 +33,8 @@ public class Group<TEntity extends IEntity> implements IGroup<TEntity> {
 
     }
 
-    public static <TE extends Entity> Collector<TE> createCollector(IGroup<TE> group, GroupEvent groupEvent) {
-        return new Collector<TE>(group, groupEvent);
+    public Collector<TEntity> createCollector(GroupEvent groupEvent) {
+        return new Collector<TEntity>(this, groupEvent);
     }
 
     @Override
@@ -59,9 +57,9 @@ public class Group<TEntity extends IEntity> implements IGroup<TEntity> {
 
     public void handleEntity(TEntity entity, int index, IComponent component) {
         if (_matcher.matches(entity)) {
-            addEntitySilently(entity);
+            addEntity(entity, index, component);
         } else {
-            removeEntitySilently(entity);
+            removeEntity(entity, index, component);
         }
 
     }
@@ -89,14 +87,16 @@ public class Group<TEntity extends IEntity> implements IGroup<TEntity> {
     }
 
     private boolean addEntitySilently(TEntity entity) {
-        boolean added = _entities.add(entity);
-        if (added) {
-            _entitiesCache = null;
-            _singleEntityCache = null;
-            entity.retain(this);
+        if(entity.isEnabled()) {
+            boolean added = _entities.add(entity);
+            if (added) {
+                _entitiesCache = null;
+                _singleEntityCache = null;
+                entity.retain(this);
+            }
+            return added;
         }
-        return added;
-
+        return false;
     }
 
     void addEntity(TEntity entity, int index, IComponent component) {
@@ -161,25 +161,6 @@ public class Group<TEntity extends IEntity> implements IGroup<TEntity> {
         return _singleEntityCache;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Group)) return false;
-
-        Group<?> group = (Group<?>) o;
-
-        if (_matcher != null ? !_matcher.equals(group._matcher) : group._matcher != null) return false;
-        if (_entities != null ? !_entities.equals(group._entities) : group._entities != null) return false;
-        return type != null ? type.equals(group.type) : group.type == null;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = _matcher != null ? _matcher.hashCode() : 0;
-        result = 31 * result + id.hashCode();
-        result = 31 * result + (type != null ? type.hashCode() : 0);
-        return result;
-    }
 
     @Override
     public String toString() {

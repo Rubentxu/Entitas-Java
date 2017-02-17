@@ -39,7 +39,7 @@ public abstract class AbstractEntityIndex<TEntity extends Entity, TKey> implemen
     protected AbstractEntityIndex(Func<TEntity, IComponent, TKey> key, IGroup<TEntity> group) {
         _group = (Group<TEntity>) group;
         _key = key;
-        _isSingleKey = false;
+        _isSingleKey = true;
 
     }
 
@@ -72,9 +72,8 @@ public abstract class AbstractEntityIndex<TEntity extends Entity, TKey> implemen
             if(_isSingleKey) {
                 addEntity(_key.getKey(entity, null), entity);
             } else {
-                TKey[] keys = _keys.getKey(entity, null);
-                for(int j = 0; j < keys.length; j++) {
-                    addEntity(keys[j], entity);
+                for (TKey k : _keys.getKey(entity, null)) {
+                    addEntity(k, entity);
                 }
             }
 

@@ -12,17 +12,23 @@ public class PrimaryEntityIndex<TEntity extends Entity, TKey> extends AbstractEn
 
     private Map<TKey, TEntity> _index; //Object2ObjectArrayMap
 
-    public PrimaryEntityIndex(IGroup group, Func<TEntity, IComponent, TKey> getKey) {
-        super(group, getKey);
+    public PrimaryEntityIndex(Func<TEntity, IComponent, TKey> key, IGroup group) {
+        super(key, group);
         _index = Collections.createMap(Object.class, Object.class);
         activate();
     }
 
+    public PrimaryEntityIndex(IGroup<TEntity> group, Func<TEntity, IComponent, TKey[]> keys) {
+        super(group, keys);
+        _index = Collections.createMap(Object.class, Object.class);
+        activate();
+    }
     @Override
     public void activate() {
         super.activate();
         indexEntities(_group);
     }
+
 
     public boolean hasEntity(TKey key) {
         return _index.containsKey(key);
@@ -35,7 +41,6 @@ public class PrimaryEntityIndex<TEntity extends Entity, TKey> extends AbstractEn
                     "You should check if an entity with that key exists before getting it."
             );
         }
-
         return entity;
     }
 
@@ -45,50 +50,39 @@ public class PrimaryEntityIndex<TEntity extends Entity, TKey> extends AbstractEn
         return entity;
     }
 
-
-    @Override
-    protected void addEntity(TEntity entity, IComponent component) {
-        TKey key = _key.getKey(entity, component);
-        if (_index.containsKey(key)) {
-            throw new EntityIndexException("Entity for key '" + key + "' already exists!",
-                    "Only one entity for a primary key is allowed.");
-        }
-        _index.put(key, entity);
-        entity.retain(this);
-
-    }
-
-
-    @Override
-    protected void removeEntity(TEntity entity, IComponent component) {
-        _index.remove(_key.getKey(entity, component));
-        entity.release(this);
-    }
-
     @Override
     protected void clear() {
         for (TEntity entity : _index.values()) {
-            entity.release(this);
+            if(entity.owners().contains(this)) {
+                entity.release(this);
+            }
+
         }
         _index.clear();
 
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+    protected void addEntity(TKey key, TEntity entity) {
+        if(_index.containsKey(key)) {
+            throw new EntityIndexException(
+                    "Entity for key '" + key + "' already exists!",
+                    "Only one entity for a primary key is allowed.");
+        }
 
-        AbstractEntityIndex<?, ?> that = (AbstractEntityIndex<?, ?>) o;
-
-        if (id != null ? !id.equals(that.id) : that.id != null) return false;
-        return _key != null ? _key.equals(that._key) : that._key == null;
+        _index.put(key, entity);
+        if(!entity.owners().contains(this)) {
+            entity.retain(this);
+        }
     }
 
     @Override
-    public int hashCode() {
-        int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (_key != null ? _key.hashCode() : 0);
-        return result;
+    protected void removeEntity(TKey key, TEntity entity) {
+        _index.remove(key);
+        if(entity.owners().contains(this)) {
+            entity.release(this);
+        }
     }
+
+
 }

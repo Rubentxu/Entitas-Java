@@ -1,6 +1,11 @@
 package com.ilargia.games.entitas.codeGenerator.generated;
 
-import com.ilargia.games.entitas.codeGenerator.components.*;
+import com.ilargia.games.entitas.codeGenerator.components.Ball;
+import com.ilargia.games.entitas.codeGenerator.components.Bounds;
+import com.ilargia.games.entitas.codeGenerator.components.Motion;
+import com.ilargia.games.entitas.codeGenerator.components.Player;
+import com.ilargia.games.entitas.codeGenerator.components.Score;
+import com.ilargia.games.entitas.codeGenerator.components.View;
 
 /**
  * ---------------------------------------------------------------------------
@@ -9,21 +14,21 @@ import com.ilargia.games.entitas.codeGenerator.components.*;
  */
 public class CoreComponentIds {
 
-    public static final int Ball = 0;
-    public static final int Bounds = 1;
-    public static final int Motion = 2;
-    public static final int Player = 3;
-    public static final int Score = 4;
-    public static final int View = 5;
-    public static final int totalComponents = 6;
+	public static final int Ball = 0;
+	public static final int Bounds = 1;
+	public static final int Motion = 2;
+	public static final int Player = 3;
+	public static final int Score = 4;
+	public static final int View = 5;
+	public static final int totalComponents = 6;
 
-    public static String[] componentNames() {
-        return new String[]{"Ball", "Bounds", "Motion", "Player", "Score",
-                "View"};
-    }
+	public static String[] componentNames() {
+		return new String[]{"Ball", "Bounds", "Motion", "Player", "Score",
+				"View"};
+	}
 
-    public static Class[] componentTypes() {
-        return new Class[]{Ball.class, Bounds.class, Motion.class,
-                Player.class, Score.class, View.class};
-    }
+	public static Class[] componentTypes() {
+		return new Class[]{Ball.class, Bounds.class, Motion.class,
+				Player.class, Score.class, View.class};
+	}
 }

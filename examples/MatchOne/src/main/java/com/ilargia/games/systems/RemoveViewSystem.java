@@ -10,7 +10,7 @@ import com.ilargia.games.entitas.api.IContext;
 import com.ilargia.games.entitas.api.IGroup;
 import com.ilargia.games.entitas.api.system.ICleanupSystem;
 import com.ilargia.games.entitas.collector.Collector;
-import com.ilargia.games.entitas.events.GroupEvent;
+import com.ilargia.games.entitas.group.GroupEvent;
 import com.ilargia.games.entitas.systems.ReactiveSystem;
 
 import java.util.List;
