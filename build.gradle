@@ -14,6 +14,7 @@ allprojects {
 
     ext {
         gdxVersion = '1.9.5'
+        box2dlightsVersion = '1.4'
     }
 
 
