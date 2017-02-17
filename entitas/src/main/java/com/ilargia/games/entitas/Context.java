@@ -26,6 +26,8 @@ public class Context<TEntity extends Entity> implements IContext<TEntity> {
     protected Map<IMatcher, Group<TEntity>> _groups; //Object2ObjectArrayMap
     protected List<Group<TEntity>>[] _groupsForIndex; // ObjectArrayList
     protected EntityComponentChanged<TEntity> _cachedEntityChanged;
+    protected EntityComponentReplaced<TEntity> _cachedComponentReplaced;
+    protected EntityReleased<TEntity> _cachedEntityReleased;
     private UUID id = UUID.randomUUID();
     private int _creationIndex;
     private Set<TEntity> _entities; //ObjectOpenHashSet
@@ -35,7 +37,7 @@ public class Context<TEntity extends Entity> implements IContext<TEntity> {
     private Map<String, IEntityIndex> _entityIndices; // Map
     private EntityBaseFactory<TEntity> _factoryEntiy;
     private ContextInfo _contextInfo;
-    private Stack<IComponent>[] _componentContexts;
+    private Stack<IComponent>[] _componentPools;
 
 
     public Context(int totalComponents, int startCreationIndex, ContextInfo contexInfo,
@@ -51,18 +53,11 @@ public class Context<TEntity extends Entity> implements IContext<TEntity> {
                 throw new ContextInfoException(this, contexInfo);
             }
         } else {
-            String[] componentNames = new String[totalComponents];
-            String prefix = "Index ";
-            for (int i = 0; i < componentNames.length; i++) {
-                componentNames[i] = prefix + i;
-            }
-            _contextInfo = new ContextInfo(
-                    "Unnamed SplashPool", componentNames, null
-            );
+            _contextInfo = createDefaultContextInfo();
         }
 
         _groupsForIndex = new List[_totalComponents];
-        _componentContexts = new Stack[totalComponents];
+        _componentPools = new Stack[totalComponents];
         _entityIndices = Collections.createMap(String.class, IEntityIndex.class);
 
         _reusableEntities = new Stack<>();
@@ -73,9 +68,28 @@ public class Context<TEntity extends Entity> implements IContext<TEntity> {
         _cachedEntityChanged = (TEntity e, int idx, IComponent c) -> {
             updateGroupsComponentAddedOrRemoved(e, idx, c, _groupsForIndex);
         };
-        entityType = (Class<TEntity>) _factoryEntiy.create(_totalComponents, _componentContexts, _contextInfo).getClass();
+
+        _cachedComponentReplaced =(final TEntity e, final int idx, final IComponent pComponent, final IComponent nComponent) -> {
+            updateGroupsComponentReplaced(e, idx, pComponent, nComponent, _groupsForIndex);
+        };
+
+        _cachedEntityReleased =(final TEntity e) -> {
+            onEntityReleased(e);
+        };
+        entityType = (Class<TEntity>) _factoryEntiy.create(_totalComponents, _componentPools, _contextInfo).getClass();
 
     }
+
+    ContextInfo createDefaultContextInfo() {
+        String[] componentNames = new String[_totalComponents];
+        String prefix = "Index ";
+        for(int i = 0; i < componentNames.length; i++) {
+            componentNames[i] = prefix + i;
+        }
+
+        return new ContextInfo("Unnamed Context", componentNames, null);
+    }
+
 
     @Override
     public TEntity createEntity() {
@@ -84,8 +98,8 @@ public class Context<TEntity extends Entity> implements IContext<TEntity> {
             ent = _reusableEntities.pop();
             ent.reactivate(_creationIndex++);
         } else {
-            ent = _factoryEntiy.create(_totalComponents, _componentContexts, _contextInfo);
-            ent.initialize(_creationIndex++, _totalComponents, _componentContexts, _contextInfo);
+            ent = _factoryEntiy.create(_totalComponents, _componentPools, _contextInfo);
+            ent.initialize(_creationIndex++, _totalComponents, _componentPools, _contextInfo);
         }
 
         _entities.add((TEntity) ent);
@@ -94,12 +108,8 @@ public class Context<TEntity extends Entity> implements IContext<TEntity> {
         Entity entity = (Entity) ent;
         entity.OnComponentAdded(_cachedEntityChanged);
         entity.OnComponentRemoved(_cachedEntityChanged);
-        entity.OnComponentReplaced((EntityComponentReplaced<TEntity>) (TEntity e, int idx, IComponent pc, IComponent nc) -> {
-            updateGroupsComponentReplaced(e, idx, pc, nc, _groupsForIndex);
-        });
-        entity.OnEntityReleased((EntityReleased<TEntity>) (TEntity e) -> {
-            onEntityReleased(e, _retainedEntities, _reusableEntities);
-        });
+        entity.OnComponentReplaced(_cachedComponentReplaced);
+        entity.OnEntityReleased(_cachedEntityReleased);
         notifyEntityCreated(ent);
 
         return ent;
@@ -110,7 +120,7 @@ public class Context<TEntity extends Entity> implements IContext<TEntity> {
     public void destroyEntity(TEntity entity) {
         if (!_entities.remove(entity)) {
             throw new ContextDoesNotContainEntityException("'" + this + "' cannot destroy " + entity + "!",
-                    "Did you call pool.DestroyEntity() on a wrong pool?");
+                    "Did you call context.DestroyEntity() on a wrong context?");
         }
         _entitiesCache = null;
         notifyEntityWillBeDestroyed(entity);
@@ -120,6 +130,7 @@ public class Context<TEntity extends Entity> implements IContext<TEntity> {
         notifyEntityDestroyed(entity);
 
         if (entity.retainCount() == 1) {
+            entity.OnEntityReleased(_cachedEntityReleased);
             _reusableEntities.push(entity);
             entity.release(this);
             entity.removeAllOnEntityReleasedHandlers();
@@ -166,10 +177,10 @@ public class Context<TEntity extends Entity> implements IContext<TEntity> {
 
     @Override
     public Group<TEntity> getGroup(IMatcher matcher) {
-        Group<TEntity> group = null;
-        if (!(_groups.containsKey(matcher) ? (group = _groups.get(matcher)) == null : false)) {
 
-            group = new Group(matcher, entityType);
+
+        if (!_groups.containsKey(matcher)) {
+            Group<TEntity> group = new Group(matcher, entityType);
             for (TEntity entity : getEntities()) {
                 group.handleEntitySilently(entity);
             }
@@ -182,9 +193,9 @@ public class Context<TEntity extends Entity> implements IContext<TEntity> {
                 _groupsForIndex[index].add(group);
             }
             notifyGroupCreated(group);
-
+            return group;
         }
-        return group;
+        return _groups.get(matcher);
 
     }
 
@@ -215,13 +226,10 @@ public class Context<TEntity extends Entity> implements IContext<TEntity> {
 
     @Override
     public IEntityIndex getEntityIndex(String name) {
-        IEntityIndex entityIndex;
         if (!_entityIndices.containsKey(name)) {
             throw new ContextEntityIndexDoesNotExistException(this, name);
-        } else {
-            entityIndex = _entityIndices.get(name);
         }
-        return entityIndex;
+        return _entityIndices.get(name);
 
     }
 
@@ -240,7 +248,7 @@ public class Context<TEntity extends Entity> implements IContext<TEntity> {
 
     @Override
     public void clearComponentPool(int index) {
-        Stack<IComponent> componentPool = _componentContexts[index];
+        Stack<IComponent> componentPool = _componentPools[index];
         if (componentPool != null) {
             componentPool.clear();
         }
@@ -248,7 +256,7 @@ public class Context<TEntity extends Entity> implements IContext<TEntity> {
 
     @Override
     public void clearComponentPools() {
-        for (int i = 0; i < _componentContexts.length; i++) {
+        for (int i = 0; i < _componentPools.length; i++) {
             clearComponentPool(i);
         }
     }
@@ -296,18 +304,18 @@ public class Context<TEntity extends Entity> implements IContext<TEntity> {
 
     }
 
-    protected void onEntityReleased(TEntity entity, Set<TEntity> retainedEntities, Stack<TEntity> reusableEntities) {
+    protected void onEntityReleased(TEntity entity) {
         if (entity.isEnabled()) {
-            throw new EntityIsNotDestroyedException("Cannot release entity.");
+            throw new EntityIsNotDestroyedException("Cannot release "+ entity);
         }
         entity.removeAllOnEntityReleasedHandlers();
-        retainedEntities.remove(entity);
-        reusableEntities.push(entity);
+        _retainedEntities.remove(entity);
+        _reusableEntities.push(entity);
     }
 
     @Override
     public Stack<IComponent>[] getComponentPools() {
-        return _componentContexts;
+        return _componentPools;
     }
 
     @Override
@@ -346,23 +354,23 @@ public class Context<TEntity extends Entity> implements IContext<TEntity> {
         return new Collector(getGroup(matcher), groupEvent);
     }
 
-    @Override
-    public Collector createEntityCollector(Context[] contexts, IMatcher matcher) {
-        return createEntityCollector(contexts, matcher, GroupEvent.Added);
-    }
-
-    @Override
-    public Collector createEntityCollector(Context[] contexts, IMatcher matcher, GroupEvent eventType) {
-        Group[] groups = new Group[contexts.length];
-        GroupEvent[] eventTypes = new GroupEvent[contexts.length];
-
-        for (int i = 0; i < contexts.length; i++) {
-            groups[i] = contexts[i].getGroup(matcher);
-            eventTypes[i] = eventType;
-        }
-
-        return new Collector(groups, eventTypes);
-    }
+//    @Override
+//    public Collector createEntityCollector(Context[] contexts, IMatcher matcher) {
+//        return createEntityCollector(contexts, matcher, GroupEvent.Added);
+//    }
+//
+//    @Override
+//    public Collector createEntityCollector(Context[] contexts, IMatcher matcher, GroupEvent eventType) {
+//        Group[] groups = new Group[contexts.length];
+//        GroupEvent[] eventTypes = new GroupEvent[contexts.length];
+//
+//        for (int i = 0; i < contexts.length; i++) {
+//            groups[i] = contexts[i].getGroup(matcher);
+//            eventTypes[i] = eventType;
+//        }
+//
+//        return new Collector(groups, eventTypes);
+//    }
 
     public void clearEventsListener() {
         if (OnEntityCreated != null) OnEntityCreated.clear();
@@ -452,27 +460,27 @@ public class Context<TEntity extends Entity> implements IContext<TEntity> {
         }
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Context<?> context = (Context<?>) o;
-
-        if (_totalComponents != context._totalComponents) return false;
-        if (id != null ? !id.equals(context.id) : context.id != null) return false;
-        if (entityType != null ? !entityType.equals(context.entityType) : context.entityType != null) return false;
-        return _contextInfo != null ? _contextInfo.equals(context._contextInfo) : context._contextInfo == null;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + _totalComponents;
-        result = 31 * result + (entityType != null ? entityType.hashCode() : 0);
-        result = 31 * result + (_contextInfo != null ? _contextInfo.hashCode() : 0);
-        return result;
-    }
+//    @Override
+//    public boolean equals(Object o) {
+//        if (this == o) return true;
+//        if (o == null || getClass() != o.getClass()) return false;
+//
+//        Context<?> context = (Context<?>) o;
+//
+//        if (_totalComponents != context._totalComponents) return false;
+//        if (id != null ? !id.equals(context.id) : context.id != null) return false;
+//        if (entityType != null ? !entityType.equals(context.entityType) : context.entityType != null) return false;
+//        return _contextInfo != null ? _contextInfo.equals(context._contextInfo) : context._contextInfo == null;
+//    }
+//
+//    @Override
+//    public int hashCode() {
+//        int result = id != null ? id.hashCode() : 0;
+//        result = 31 * result + _totalComponents;
+//        result = 31 * result + (entityType != null ? entityType.hashCode() : 0);
+//        result = 31 * result + (_contextInfo != null ? _contextInfo.hashCode() : 0);
+//        return result;
+//    }
 
     @Override
     public String toString() {
@@ -489,7 +497,7 @@ public class Context<TEntity extends Entity> implements IContext<TEntity> {
                 ", _entityIndices=" + _entityIndices +
                 ", _factoryEntiy=" + _factoryEntiy +
                 ", _contextInfo=" + _contextInfo +
-                ", _componentContexts=" + Arrays.toString(_componentContexts) +
+                ", _componentPools=" + Arrays.toString(_componentPools) +
                 ", _cachedEntityChanged=" + _cachedEntityChanged +
                 '}';
     }

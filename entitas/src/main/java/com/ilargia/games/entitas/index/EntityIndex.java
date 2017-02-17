@@ -15,16 +15,32 @@ public class EntityIndex<TEntity extends Entity, TKey> extends AbstractEntityInd
 
     private Map<TKey, Set<TEntity>> _index; // Object2ObjectArrayMap<ObjectOpenHashSet
 
-    public EntityIndex(IGroup<TEntity> group, Func<TEntity, IComponent, TKey> key) {
-        super(group, key);
+    public EntityIndex( Func<TEntity, IComponent, TKey> key, IGroup<TEntity> group) {
+        super(key, group);
         _index = Collections.createMap(Object.class, Entity.class); //Object2ObjectArrayMap
         activate();
     }
 
+
+    public EntityIndex(IGroup<TEntity> group, Func<TEntity, IComponent, TKey[]> keys)  {
+        super(group, keys);
+        _index = Collections.createMap(Object.class, Entity.class); //Object2ObjectArrayMap
+        activate();
+    }
     @Override
     public void activate() throws EntityIndexException {
         super.activate();
         indexEntities(_group);
+    }
+
+    @Override
+    protected void addEntity(TKey tKey, TEntity entity) {
+
+    }
+
+    @Override
+    protected void removeEntity(TKey tKey, TEntity entity) {
+
     }
 
     public Set<TEntity> getEntities(TKey key) {

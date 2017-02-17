@@ -7,26 +7,48 @@ import com.ilargia.games.entitas.api.IGroup;
 import com.ilargia.games.entitas.api.events.GroupChanged;
 import com.ilargia.games.entitas.group.Group;
 
-import java.util.UUID;
-
 public abstract class AbstractEntityIndex<TEntity extends Entity, TKey> implements IEntityIndex {
 
-    protected UUID id = UUID.randomUUID();
     protected Group<TEntity> _group;
     protected Func<TEntity, IComponent, TKey> _key;
+    protected Func<TEntity, IComponent, TKey[]> _keys;
+    protected boolean _isSingleKey;
+
     protected GroupChanged<TEntity> onEntityAdded = (IGroup<TEntity> group, TEntity entity, int index, IComponent component) -> {
-        addEntity(entity, component);
+        if(_isSingleKey) {
+            addEntity(_key.getKey(entity, component), entity);
+        } else {
+            TKey[] keys = _keys.getKey(entity, component);
+            for(int i = 0; i < keys.length; i++) {
+                addEntity(keys[i], entity);
+            }
+        }
     };
     protected GroupChanged<TEntity> onEntityRemoved = (IGroup<TEntity> group, TEntity entity, int index, IComponent component) -> {
-        removeEntity(entity, component);
+        if(_isSingleKey) {
+            removeEntity(_key.getKey(entity, component), entity);
+        } else {
+            TKey[] keys = _keys.getKey(entity, component);
+            for(int i = 0; i < keys.length; i++) {
+                removeEntity(keys[i], entity);
+            }
+        }
     };
 
 
-    protected AbstractEntityIndex(IGroup<TEntity> group, Func<TEntity, IComponent, TKey> key) {
+    protected AbstractEntityIndex(Func<TEntity, IComponent, TKey> key, IGroup<TEntity> group) {
         _group = (Group<TEntity>) group;
         _key = key;
+        _isSingleKey = false;
 
     }
+
+    protected AbstractEntityIndex(IGroup<TEntity> group, Func<TEntity, IComponent, TKey[]> keys) {
+        _group = (Group<TEntity>) group;
+        _keys = keys;
+        _isSingleKey = false;
+    }
+
 
     @Override
     public void activate() {
@@ -46,13 +68,22 @@ public abstract class AbstractEntityIndex<TEntity extends Entity, TKey> implemen
     protected void indexEntities(IGroup<TEntity> group) {
         TEntity[] entities = group.getEntities();
         for (int i = 0; i < entities.length; i++) {
-            addEntity(entities[i], null);
+            TEntity entity = entities[i];
+            if(_isSingleKey) {
+                addEntity(_key.getKey(entity, null), entity);
+            } else {
+                TKey[] keys = _keys.getKey(entity, null);
+                for(int j = 0; j < keys.length; j++) {
+                    addEntity(keys[j], entity);
+                }
+            }
+
         }
     }
 
-    protected abstract void addEntity(TEntity entity, IComponent component);
+    protected abstract void addEntity(TKey key, TEntity entity);
 
-    protected abstract void removeEntity(TEntity entity, IComponent component);
+    protected abstract void removeEntity(TKey key, TEntity entity);
 
     protected abstract void clear();
 

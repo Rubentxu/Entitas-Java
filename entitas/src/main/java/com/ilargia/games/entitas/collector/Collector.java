@@ -5,7 +5,7 @@ import com.ilargia.games.entitas.api.IEntity;
 import com.ilargia.games.entitas.api.IGroup;
 import com.ilargia.games.entitas.api.events.GroupChanged;
 import com.ilargia.games.entitas.events.GroupEvent;
-import com.ilargia.games.entitas.exceptions.EntityCollectorException;
+import com.ilargia.games.entitas.exceptions.CollectorException;
 import com.ilargia.games.entitas.factories.Collections;
 import com.ilargia.games.entitas.group.Group;
 
@@ -33,9 +33,9 @@ public class Collector<TEntity extends IEntity> {
         _groupEvents = groupEvents;
 
         if (groups.length != groupEvents.length) {
-            throw new EntityCollectorException("Unbalanced count with groups (" + groups.length +
-                    ") and event types (" + groupEvents.length + ").",
-                    "Group and event type count must be equal."
+            throw new CollectorException("Unbalanced count with groups (" + groups.length +
+                    ") and group events (" + groupEvents.length + ").",
+                    "Group and group event count must be equal."
             );
         }
 
@@ -68,8 +68,8 @@ public class Collector<TEntity extends IEntity> {
     public void deactivate() {
         for (int i = 0; i < _groups.length; i++) {
             Group group = (Group) _groups[i];
-            group.OnEntityAdded.clear();
-            group.OnEntityRemoved.clear();
+            group.OnEntityAdded.remove(_addEntityCache);
+            group.OnEntityRemoved.remove(_addEntityCache);
 
         }
         clearCollectedEntities();

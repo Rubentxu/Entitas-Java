@@ -54,9 +54,9 @@ public interface IContext<TEntity extends IEntity> {
 
     Collector createCollector(IMatcher matcher, GroupEvent groupEvent);
 
-    Collector createEntityCollector(Context[] contexts, IMatcher matcher);
-
-    Collector createEntityCollector(Context[] contexts, IMatcher matcher, GroupEvent eventType);
+//    Collector createEntityCollector(Context[] contexts, IMatcher matcher);
+//
+//    Collector createEntityCollector(Context[] contexts, IMatcher matcher, GroupEvent eventType);
 
 
 }

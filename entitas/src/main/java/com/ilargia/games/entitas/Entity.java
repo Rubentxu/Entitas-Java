@@ -27,29 +27,15 @@ public class Entity implements IEntity {
     private int _creationIndex;
     private boolean _isEnabled;
     private IComponent[] _components;
-    private Stack<IComponent>[] _componentContexts;
+    private Stack<IComponent>[] _componentPools;
     private IComponent[] _componentsCache;
     private int[] _componentIndicesCache;
     private int _totalComponents;
     private ContextInfo _contextInfo;
 
-    public Entity(int totalComponents, Stack<IComponent>[] componentContexts, ContextInfo contextInfo) {
-        _components = new IComponent[totalComponents];
-        _totalComponents = totalComponents;
-        _componentContexts = componentContexts;
-        _isEnabled = true;
+    public Entity() {
         owners = Collections.createSet(Object.class);
 
-        if (contextInfo != null) {
-            _contextInfo = contextInfo;
-        } else {
-
-            String[] componentNames = new String[totalComponents];
-            for (int i = 0; i < componentNames.length; i++) {
-                componentNames[i] = String.valueOf(i);
-            }
-            _contextInfo = new ContextInfo("No Context", componentNames, null);
-        }
     }
 
     @Override
@@ -78,12 +64,12 @@ public class Entity implements IEntity {
     }
 
     @Override
-    public void initialize(int creationIndex, int totalComponents, Stack<IComponent>[] componentContexts, ContextInfo contextInfo) {
+    public void initialize(int creationIndex, int totalComponents, Stack<IComponent>[] componentPools, ContextInfo contextInfo) {
         reactivate(creationIndex);
 
         _totalComponents = totalComponents;
         _components = new IComponent[totalComponents];
-        _componentContexts = componentContexts;
+        _componentPools = componentPools;
 
         if (contextInfo != null) {
             _contextInfo = contextInfo;
@@ -91,6 +77,15 @@ public class Entity implements IEntity {
             _contextInfo = createDefaultContextInfo();
         }
 
+    }
+
+    private ContextInfo createDefaultContextInfo() {
+        String[] componentNames = new String[_totalComponents];
+        for (int i = 0; i < componentNames.length; i++) {
+            componentNames[i] = String.valueOf(i);
+        }
+
+        return new ContextInfo("No Context", componentNames, null);
     }
 
     @Override
@@ -127,7 +122,7 @@ public class Entity implements IEntity {
 
         if (!hasComponent(index)) {
             String errorMsg = "Cannot remove component " + _contextInfo.componentNames[index] +
-                    "' from " + this + "!";
+                    "' from " + this + "You should check if an entity has the component before removing it.";
             throw new EntityDoesNotHaveComponentException(errorMsg, index);
         }
         replaceComponentInternal(index, null);
@@ -172,9 +167,9 @@ public class Entity implements IEntity {
     @Override
     public IComponent getComponent(int index) {
         if (!hasComponent(index)) {
-            String errorMsg = "Cannot get component at index " +
+            String errorMsg = "Cannot get component " +
                     _contextInfo.componentNames[index] + "' from " +
-                    this + "!";
+                    this + "!  You should check if an entity has the component before getting it.";
             throw new EntityDoesNotHaveComponentException(errorMsg, index);
         }
         return _components[index];
@@ -222,11 +217,11 @@ public class Entity implements IEntity {
 
     @Override
     public boolean hasComponent(int index) {
-        try {
+        if(index < _components.length )
             return _components[index] != null;
-        } catch (ArrayIndexOutOfBoundsException ex) {
-            throw new EntityDoesNotHaveComponentException("ArrayIndexOutOfBoundsException", index);
-        }
+        else
+            return false;
+
     }
 
     @Override
@@ -262,13 +257,13 @@ public class Entity implements IEntity {
 
     @Override
     public Stack<IComponent> getComponentPool(int index) {
-        Stack<IComponent> componentContext = _componentContexts[index];
-        if (componentContext == null) {
-            componentContext = new Stack<>();
-            _componentContexts[index] = componentContext;
+        Stack<IComponent> componentPool = _componentPools[index];
+        if (componentPool == null) {
+            componentPool = new Stack<>();
+            _componentPools[index] = componentPool;
         }
 
-        return componentContext;
+        return componentPool;
     }
 
     @Override
@@ -287,10 +282,10 @@ public class Entity implements IEntity {
 
     @Override
     public IComponent createComponent(int index) {
-        Stack<IComponent> componentContext = getComponentPool(index);
+        Stack<IComponent> componentPool = getComponentPool(index);
         try {
-            if (componentContext.size() > 0) {
-                return componentContext.pop();
+            if (componentPool.size() > 0) {
+                return componentPool.pop();
             } else {
                 Class<?> clazz = _contextInfo.componentTypes[index];
                 return (IComponent) clazz.cast(clazz.getConstructor((Class[]) null).newInstance());
@@ -334,30 +329,15 @@ public class Entity implements IEntity {
     public void destroy() {
         removeAllComponents();
         _isEnabled = false;
+        clearEventsListener();
     }
 
-    ContextInfo createDefaultContextInfo() {
-        String[] componentNames = new String[_totalComponents];
-        for (int i = 0; i < componentNames.length; i++) {
-            componentNames[i] = String.valueOf(i);
-        }
-
-        return new ContextInfo("No Context", componentNames, null);
-    }
-
-    public IComponent recoverComponent(int index) {
-        Stack<IComponent> componentContext = getComponentPool(index);
-        if (componentContext.size() > 0) {
-            return componentContext.pop();
-        }
-        return null;
-    }
 
     public void clearEventsListener() {
         if (OnComponentAdded != null) OnComponentAdded.clear();
         if (OnComponentRemoved != null) OnComponentRemoved.clear();
         if (OnComponentReplaced != null) OnComponentReplaced.clear();
-        if (OnEntityReleased != null) OnEntityReleased.clear();
+
 
     }
 
@@ -428,14 +408,9 @@ public class Entity implements IEntity {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+        return this == (Entity) o;
 
-        Entity entity = (Entity) o;
-
-        if (_creationIndex != entity._creationIndex) return false;
-        if (_totalComponents != entity._totalComponents) return false;
-        return _contextInfo != null ? _contextInfo.equals(entity._contextInfo) : entity._contextInfo == null;
     }
 
     @Override
