@@ -1,12 +1,11 @@
 package com.ilargia.games.egdx.api;
 
+import com.ilargia.games.entitas.api.IContext;
 import com.ilargia.games.entitas.api.IEntity;
 
-@FunctionalInterface
 public interface EntityFactory<E extends IEntity> {
 
-    default void loadAssets(Engine engine) {
-    }
+    void loadAssets(Engine engine);
 
-    E create(float posX, float posY);
+    E create(Engine engine, IContext<E> context, float posX, float posY);
 }

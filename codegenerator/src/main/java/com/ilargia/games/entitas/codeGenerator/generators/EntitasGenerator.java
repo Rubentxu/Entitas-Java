@@ -32,7 +32,7 @@ public class EntitasGenerator implements IComponentCodeGenerator {
 
 
     public JavaClassSource generateEntitas(Set<String> contextNames, String pkgDestiny) {
-        JavaClassSource javaClass = Roaster.parse(JavaClassSource.class, "public class Entitas {}");
+        JavaClassSource javaClass = Roaster.parse(JavaClassSource.class, "public class Entitas implements IContexts{}");
         javaClass.setPackage(pkgDestiny);
         createMethodConstructor(javaClass, contextNames);
         createContextsMethod(javaClass, contextNames);

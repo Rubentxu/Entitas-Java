@@ -5,15 +5,17 @@ import com.ilargia.games.entitas.api.IEntity;
 
 public interface SceneManager<M> extends Manager {
 
-    public void addEntityFactory(String name, EntityFactory factory);
+    void initialize();
 
-    public <TEntity extends IEntity> TEntity createEntity(String name, float posX, float posY);
+    void addEntityFactory(String name, EntityFactory factory);
 
-    public  void generateScene(M map);
+    <TEntity extends IEntity> TEntity createEntity(String name, float posX, float posY);
 
-    public <L> L createLight();
+    void createScene(M map);
 
-    public <C> C createCamera();
+    <L> L createLight();
+
+    <C> C createCamera();
 
 
 }

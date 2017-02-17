@@ -4,6 +4,7 @@ import box2dLight.Light;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.ilargia.games.egdx.EGEngine;
 import com.ilargia.games.egdx.api.EntityFactory;
 import com.ilargia.games.egdx.api.managers.SceneManager;
 import com.ilargia.games.entitas.factories.Collections;
@@ -11,10 +12,23 @@ import com.ilargia.games.entitas.factories.Collections;
 import java.util.Map;
 
 public abstract class EGSceneManager implements SceneManager<TiledMap> {
-    private Map<String, EntityFactory> factories;
 
-    public EGSceneManager() {
-        factories = Collections.createMap(String.class, EntityFactory.class);
+    protected Map<String, EntityFactory> factories;
+    protected EGEngine egEngine;
+
+    public EGSceneManager(EGEngine egEngine) {
+        this.egEngine = egEngine;
+        this.factories = Collections.createMap(String.class, EntityFactory.class);
+
+    }
+
+    @Override
+    public void initialize() {
+        EGAssetsManager assetsManager = egEngine.getManager(EGAssetsManager.class);
+        for (EntityFactory factory : factories.values()) {
+            factory.loadAssets(egEngine);
+        }
+        assetsManager.finishLoading();
     }
 
     @Override
