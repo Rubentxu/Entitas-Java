@@ -9,7 +9,7 @@ import com.ilargia.games.components.Position;
 import com.ilargia.games.core.GameContext;
 import com.ilargia.games.core.GameEntity;
 import com.ilargia.games.core.GameMatcher;
-import com.ilargia.games.egdx.managers.EGAssetsManager;
+import com.ilargia.games.egdx.base.managers.EGAssetsManager;
 import com.ilargia.games.entitas.api.IContext;
 import com.ilargia.games.entitas.collector.Collector;
 import com.ilargia.games.entitas.systems.ReactiveSystem;

@@ -1,4 +1,4 @@
-package com.ilargia.games.egdx.managers;
+package com.ilargia.games.egdx.base.managers;
 
 
 import com.badlogic.gdx.Gdx;
@@ -7,12 +7,12 @@ import com.badlogic.gdx.utils.Base64Coder;
 import com.badlogic.gdx.utils.Json;
 import com.ilargia.games.egdx.api.managers.ProfileManager;
 
-public class EGProfileManager<P> implements ProfileManager<P> {
+public class BaseProfileManager<P> implements ProfileManager<P> {
 
-    private EGPreferencesManager preferencesManager;
+    private BasePreferencesManager preferencesManager;
     private P profile;
 
-    public EGProfileManager(P profile, EGPreferencesManager preferencesManager) {
+    public BaseProfileManager(P profile, BasePreferencesManager preferencesManager) {
         this.profile = profile;
         this.preferencesManager = preferencesManager;
     }
@@ -65,6 +65,11 @@ public class EGProfileManager<P> implements ProfileManager<P> {
     public P getProfile() {
         if (profile == null) return retrieveProfile();
         return profile;
+    }
+
+    @Override
+    public void initialize() {
+
     }
 
     @Override

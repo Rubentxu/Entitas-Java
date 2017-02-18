@@ -1,4 +1,4 @@
-package com.ilargia.games.egdx.managers;
+package com.ilargia.games.egdx.base.managers;
 
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
@@ -12,21 +12,21 @@ import com.ilargia.games.egdx.api.managers.MusicManager;
 import com.ilargia.games.egdx.api.managers.SoundManager;
 import com.ilargia.games.egdx.api.managers.TextureManager;
 
-public class EGAssetsManager implements TextureManager<Texture, TextureAtlas>, FontManager<BitmapFont>,
+public class BaseAssetsManager implements TextureManager<Texture, TextureAtlas>, FontManager<BitmapFont>,
         MusicManager<Music>, SoundManager<Sound> {
 
     private AssetManager assetManager;
-    private EGPreferencesManager preferencesManager;
+    private BasePreferencesManager preferencesManager;
     private Music currentMusicPlaying;
     private Sound soundToPlay;
 
-    public EGAssetsManager(AssetManager assetManager, EGPreferencesManager preferencesManager) {
+    public BaseAssetsManager(AssetManager assetManager, BasePreferencesManager preferencesManager) {
         this.assetManager = assetManager;
         this.preferencesManager = preferencesManager;
 
     }
 
-    private void loadAsset(String fileName, Class<?> id) {
+    public void loadAsset(String fileName, Class<?> id) {
         if (!assetManager.isLoaded(fileName))
             assetManager.load(fileName, id);
     }
@@ -152,6 +152,11 @@ public class EGAssetsManager implements TextureManager<Texture, TextureAtlas>, F
         return assetManager.get(fileName, Sound.class);
     }
 
+
+    @Override
+    public void initialize() {
+
+    }
 
     public void dispose() {
         assetManager.dispose();

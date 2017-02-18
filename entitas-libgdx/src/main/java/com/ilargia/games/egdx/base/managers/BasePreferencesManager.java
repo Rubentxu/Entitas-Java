@@ -1,4 +1,4 @@
-package com.ilargia.games.egdx.managers;
+package com.ilargia.games.egdx.base.managers;
 
 
 import com.badlogic.gdx.Gdx;
@@ -6,7 +6,7 @@ import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.math.MathUtils;
 import com.ilargia.games.egdx.api.managers.PreferencesManager;
 
-public class EGPreferencesManager implements PreferencesManager {
+public class BasePreferencesManager implements PreferencesManager {
 
     public String APP_NAME = "";
     public String LOG = "";
@@ -30,7 +30,7 @@ public class EGPreferencesManager implements PreferencesManager {
     public String INIT_PROFILE_DATA_FILE = "data/initProfile.game";
     private Preferences preferences;
 
-    public EGPreferencesManager() {
+    public BasePreferencesManager() {
         preferences = Gdx.app.getPreferences("PREFS_NAME");
         load();
     }
@@ -67,6 +67,11 @@ public class EGPreferencesManager implements PreferencesManager {
         preferences.putBoolean(Constants.PREF_TOUCHPAD_ENABLED, TOUCH_PAD_ENABLED);
         preferences.flush();
         load();
+    }
+
+    @Override
+    public void initialize() {
+
     }
 
     @Override

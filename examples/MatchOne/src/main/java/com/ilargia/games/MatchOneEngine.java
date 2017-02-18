@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
-import com.ilargia.games.egdx.EGEngine;
 import com.ilargia.games.util.BodyBuilder;
 
 public class MatchOneEngine extends EGEngine {

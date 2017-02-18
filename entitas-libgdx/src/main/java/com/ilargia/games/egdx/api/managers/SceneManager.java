@@ -1,21 +1,23 @@
 package com.ilargia.games.egdx.api.managers;
 
+import com.badlogic.gdx.graphics.Color;
 import com.ilargia.games.egdx.api.EntityFactory;
-import com.ilargia.games.entitas.api.IEntity;
+import com.ilargia.games.entitas.Context;
+import com.ilargia.games.entitas.Entity;
 
 public interface SceneManager<M> extends Manager {
 
-    void initialize();
-
     void addEntityFactory(String name, EntityFactory factory);
 
-    <TEntity extends IEntity> TEntity createEntity(String name, float posX, float posY);
+    <TEntity extends Entity> TEntity createEntity(String name, Context<TEntity> context);
+
+    <L> L createLight(String type, int raysNum, int distance, int colorRGBA);
+
+    <C> C createCamera(String type);
+
+    <B> B getBatch();
 
     void createScene(M map);
-
-    <L> L createLight();
-
-    <C> C createCamera();
 
 
 }

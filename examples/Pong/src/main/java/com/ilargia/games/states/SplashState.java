@@ -7,7 +7,7 @@ import com.ilargia.games.Pong;
 import com.ilargia.games.PongEngine;
 import com.ilargia.games.core.Entitas;
 import com.ilargia.games.egdx.base.BaseGameState;
-import com.ilargia.games.egdx.managers.EGAssetsManager;
+import com.ilargia.games.egdx.base.managers.EGAssetsManager;
 import com.ilargia.games.systems.DelaySystem;
 import com.ilargia.games.systems.RendererSystem;
 

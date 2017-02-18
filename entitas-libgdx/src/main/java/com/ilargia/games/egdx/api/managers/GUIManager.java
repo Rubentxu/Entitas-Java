@@ -7,14 +7,16 @@ import com.ilargia.games.entitas.api.IEntity;
 
 public interface GUIManager<A> extends Manager {
 
-    void initialize();
-
     void loadAssets(A assetsManager);
 
     Skin createSkin(A assetsManager);
 
+    Skin getSkin();
+
+    <F> F getDefaultFont();
+
     void addGUIFactory(String name, GUIFactory factory);
 
-    <TEntity extends IEntity> TEntity createEntity(String name, float posX, float posY);
+    <TEntity extends IEntity> TEntity createGUIElement(String name, float posX, float posY);
 
 }

@@ -3,10 +3,12 @@ package com.ilargia.games.egdx.base;
 
 import com.ilargia.games.egdx.api.Engine;
 import com.ilargia.games.egdx.api.managers.Manager;
+import com.ilargia.games.entitas.api.IContext;
+import com.ilargia.games.entitas.api.IContexts;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 
-public class BaseEngine implements Engine {
+public class BaseEngine implements Engine, IContexts {
 
     public Object2ObjectMap<Class<? extends Manager>, Manager> _managers;
 
@@ -38,4 +40,8 @@ public class BaseEngine implements Engine {
     }
 
 
+    @Override
+    public IContext[] allContexts() {
+        return new IContext[0];
+    }
 }
