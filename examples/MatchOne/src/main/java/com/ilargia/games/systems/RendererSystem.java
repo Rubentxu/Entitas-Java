@@ -1,6 +1,7 @@
 package com.ilargia.games.systems;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -37,11 +38,11 @@ public class RendererSystem implements IRenderSystem, ICleanupSystem {
 
     private ShapeRenderer debugShapeRenderer;
     private Box2DDebugRenderer debugRenderer;
-    private OrthographicCamera cam;
+    private Camera cam;
     private Batch batch;
     private Group<GameEntity> _groupTextureView;
 
-    public RendererSystem(Entitas entitas, OrthographicCamera cam, Batch batch, World world) {
+    public RendererSystem(Entitas entitas, Camera cam, Batch batch, World world) {
         this.physics = world;
         this.cam = cam;
         this.batch = batch;

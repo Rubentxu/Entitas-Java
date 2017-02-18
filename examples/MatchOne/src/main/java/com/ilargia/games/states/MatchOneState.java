@@ -48,7 +48,7 @@ public class MatchOneState extends BaseGameState {
         entitas = new Entitas();
         EntityIndexExtension.addEntityIndices(entitas);
         // Input
-        EmitInputSystem emitInputSystem = new EmitInputSystem(entitas.input, engine.physic, engine.cam);
+        EmitInputSystem emitInputSystem = new EmitInputSystem(entitas.input, engine.physic, engine.camera);
         systems
                 .add(new ProcessInputSystem(entitas))
                 // Update
@@ -62,7 +62,7 @@ public class MatchOneState extends BaseGameState {
                 .add(new AnimatePositionSystem(entitas.game))
                 // Destroy
                 .add(new DestroySystem(entitas.game))
-                .add(new RendererSystem(entitas, engine.cam, engine.batch, engine.physic))
+                .add(new RendererSystem(entitas, engine.camera, engine.batch, engine.physic))
         ;
     }
 

@@ -49,7 +49,7 @@ public class PongState extends BaseGameState {
                 .add(new ContactSystem(context.core))
                 .add(new BoundsSystem(context.core))
                 .add(new MoveSystem(context.core))
-                .add(new RendererSystem(context.core, engine.sr, engine.cam, engine.batch, engine.font));
+                .add(new RendererSystem(context.core, engine.sr, engine.camera, engine.batch, engine.font));
     }
 
     @Override

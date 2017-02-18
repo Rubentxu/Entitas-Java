@@ -1,9 +1,7 @@
 package com.ilargia.games.systems;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -23,12 +21,12 @@ public class RendererSystem implements IRenderSystem {
     private final BitmapFont font;
     private Group<CoreEntity> _group;
     private ShapeRenderer sr;
-    private OrthographicCamera cam;
+    private Camera cam;
     private Group<CoreEntity> _groupScore;
     private Batch batch;
     private Group<CoreEntity> _groupTextureView;
 
-    public RendererSystem(CoreContext context, ShapeRenderer sr, OrthographicCamera cam, Batch batch, BitmapFont font) {
+    public RendererSystem(CoreContext context, ShapeRenderer sr, Camera cam, Batch batch, BitmapFont font) {
         this.sr = sr;
         this.cam = cam;
         this.batch = batch;

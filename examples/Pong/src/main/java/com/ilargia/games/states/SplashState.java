@@ -36,7 +36,7 @@ public class SplashState extends BaseGameState {
     @Override
     public void initialize() {
         systems.add(new DelaySystem(context.core))
-                .add(new RendererSystem(context.core, engine.sr, engine.cam, engine.batch, engine.font));
+                .add(new RendererSystem(context.core, engine.sr, engine.camera, engine.batch, engine.font));
 
         Texture texture = assetsManager.getTexture(splash);
 

@@ -69,7 +69,8 @@ public class EntitasGenerator implements IComponentCodeGenerator {
                 .setPublic()
                 .setName("allContexts")
                 .setReturnType("Context[]")
-                .setBody(String.format("return new Context[] { %1$s };", allContextsList));
+                .setBody(String.format("return new Context[] { %1$s };", allContextsList))
+                .addAnnotation("Override");
 
 
     }

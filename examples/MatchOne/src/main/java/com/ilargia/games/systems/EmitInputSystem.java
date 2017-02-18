@@ -3,6 +3,7 @@ package com.ilargia.games.systems;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -19,7 +20,7 @@ public class EmitInputSystem extends InputAdapter {
 
     Body hitBody = null;
     Vector3 testPoint = new Vector3();
-    OrthographicCamera cam;
+    Camera cam;
     World world;
     QueryCallback callback = new QueryCallback() {
         @Override
@@ -35,7 +36,7 @@ public class EmitInputSystem extends InputAdapter {
     private Group<InputEntity> inputs;
 
 
-    public EmitInputSystem(InputContext context, World world, OrthographicCamera cam) {
+    public EmitInputSystem(InputContext context, World world, Camera cam) {
         this.context = context;
         this.inputs = context.getGroup(InputMatcher.Input());
         this.world = world;
