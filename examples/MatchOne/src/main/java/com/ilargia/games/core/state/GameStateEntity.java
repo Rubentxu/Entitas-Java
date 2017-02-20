@@ -17,35 +17,35 @@ public class GameStateEntity extends Entity {
 	}
 
 	public Score getScore() {
-		return (Score) getComponent(GamestateComponentIds.Score);
+		return (Score) getComponent(GamestateComponentsLookup.Score);
 	}
 
 	public boolean hasScore() {
-		return hasComponent(GamestateComponentIds.Score);
+		return hasComponent(GamestateComponentsLookup.Score);
 	}
 
 	public GameStateEntity addScore(int value) {
-		Score component = (Score) recoverComponent(GamestateComponentIds.Score);
+		Score component = (Score) recoverComponent(GamestateComponentsLookup.Score);
 		if (component == null) {
 			component = new Score();
 		}
 		component.value = value;
-		addComponent(GamestateComponentIds.Score, component);
+		addComponent(GamestateComponentsLookup.Score, component);
 		return this;
 	}
 
 	public GameStateEntity replaceScore(int value) {
-		Score component = (Score) recoverComponent(GamestateComponentIds.Score);
+		Score component = (Score) recoverComponent(GamestateComponentsLookup.Score);
 		if (component == null) {
 			component = new Score();
 		}
 		component.value = value;
-		replaceComponent(GamestateComponentIds.Score, component);
+		replaceComponent(GamestateComponentsLookup.Score, component);
 		return this;
 	}
 
 	public GameStateEntity removeScore() {
-		removeComponent(GamestateComponentIds.Score);
+		removeComponent(GamestateComponentsLookup.Score);
 		return this;
 	}
 }

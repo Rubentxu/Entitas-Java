@@ -6,9 +6,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.math.Vector2;
 import com.ilargia.games.egdx.EGEventBus;
-import com.ilargia.games.egdx.base.managers.EGAssetsManager;
-import com.ilargia.games.egdx.base.managers.EGPreferencesManager;
+import com.ilargia.games.egdx.base.managers.*;
 import com.ilargia.games.entitas.factories.Collections;
 import com.ilargia.games.entitas.factories.CollectionsFactory;
 import com.ilargia.games.states.SplashState;
@@ -38,9 +39,16 @@ public class Pong implements ApplicationListener {
     @Override
     public void create() {
         AssetManager assetsManager = new AssetManager(new TestFileHandleResolver());
-        EGPreferencesManager preferencesManager = new EGPreferencesManager();
+        BasePreferencesManager preferencesManager = new BasePreferencesManager();
         PongEngine engine = new PongEngine();
-        engine.addManager(new EGAssetsManager(assetsManager, preferencesManager));
+        engine.addManager(new BaseAssetsManager(assetsManager, preferencesManager));
+        engine.addManager(new BasePhysicsManager(new Vector2(0,0)));
+        engine.addManager(new BaseSceneManager(engine) {
+            @Override
+            public void createScene(TiledMap map) {
+
+            }
+        });
         new Collections(new CollectionsFactory() {
             @Override
             public <T> List createList(Class<T> clazz) {

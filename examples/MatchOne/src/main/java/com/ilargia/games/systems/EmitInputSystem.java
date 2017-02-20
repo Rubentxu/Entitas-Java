@@ -4,15 +4,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.Fixture;
-import com.badlogic.gdx.physics.box2d.QueryCallback;
-import com.badlogic.gdx.physics.box2d.World;
-import com.ilargia.games.core.InputContext;
-import com.ilargia.games.core.InputEntity;
-import com.ilargia.games.core.InputMatcher;
+import com.badlogic.gdx.physics.box2d.*;
+import com.ilargia.games.core.input.InputContext;
+import com.ilargia.games.core.input.InputEntity;
+import com.ilargia.games.core.input.InputMatcher;
 import com.ilargia.games.entitas.group.Group;
 
 

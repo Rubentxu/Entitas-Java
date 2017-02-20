@@ -15,6 +15,8 @@ public interface SceneManager<M> extends Manager {
 
     <C> C createCamera(String type);
 
+    <C> C getDefaultCamera();
+
     <B> B getBatch();
 
     void createScene(M map);

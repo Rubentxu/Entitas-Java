@@ -1,8 +1,8 @@
 package com.ilargia.games.systems;
 
-import com.ilargia.games.core.GameContext;
-import com.ilargia.games.core.GameEntity;
-import com.ilargia.games.core.GameMatcher;
+import com.ilargia.games.core.game.GameContext;
+import com.ilargia.games.core.game.GameEntity;
+import com.ilargia.games.core.game.GameMatcher;
 import com.ilargia.games.entitas.api.IContext;
 import com.ilargia.games.entitas.collector.Collector;
 import com.ilargia.games.entitas.systems.ReactiveSystem;

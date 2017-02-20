@@ -12,6 +12,7 @@ import com.ilargia.games.egdx.api.managers.SceneManager;
 import com.ilargia.games.egdx.base.BaseEngine;
 import com.ilargia.games.entitas.Context;
 import com.ilargia.games.entitas.Entity;
+import com.ilargia.games.entitas.api.EntitasException;
 import com.ilargia.games.entitas.factories.Collections;
 
 import java.util.Map;
@@ -20,13 +21,15 @@ public abstract class BaseSceneManager implements SceneManager<TiledMap> {
 
     protected Map<String, EntityFactory> factories;
     protected BaseEngine engine;
-    private final RayHandler rayHandler;
-    public Batch batch;
-    public Camera defaultCamera;
+    protected final RayHandler rayHandler;
+    protected Batch batch;
+    protected Camera defaultCamera;
 
     public BaseSceneManager(BaseEngine engine) {
         this.engine = engine;
         this.factories = Collections.createMap(String.class, EntityFactory.class);
+        if(engine.getManager(BasePhysicsManager.class)== null) throw new EntitasException("BaseSceneManager",
+                "BaseSceneManager needs to first load BasePhysicsManager on the engine");
         rayHandler = new RayHandler(engine.getManager(BasePhysicsManager.class).getPhysics());
         batch = new SpriteBatch();
         defaultCamera = createCamera("Orthographic");
@@ -70,6 +73,11 @@ public abstract class BaseSceneManager implements SceneManager<TiledMap> {
             return new OrthographicCamera();
         else
             return new PerspectiveCamera();
+    }
+
+    @Override
+    public Camera getDefaultCamera() {
+        return defaultCamera;
     }
 
     @Override

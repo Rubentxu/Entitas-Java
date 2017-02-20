@@ -1,11 +1,13 @@
 package com.ilargia.games;
 
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Interpolation;
 
 import com.ilargia.games.egdx.api.ChangeStateCommand;
 import com.ilargia.games.egdx.api.EventBus;
 import com.ilargia.games.egdx.api.GameState;
 import com.ilargia.games.egdx.base.BaseGame;
+import com.ilargia.games.egdx.base.managers.BaseSceneManager;
 import com.ilargia.games.egdx.transitions.SlideTransition;
 import com.ilargia.games.states.MatchOneState;
 import net.engio.mbassy.listener.Handler;
@@ -35,7 +37,8 @@ public class MatchOneGame extends BaseGame<MatchOneEngine> {
 
     public SlideTransition getSlideTransition() {
         if (slideTransition == null)
-            slideTransition = new SlideTransition(1, SlideTransition.DOWN, false, Interpolation.bounceOut, _engine.batch);
+            slideTransition = new SlideTransition(1, SlideTransition.DOWN, false, Interpolation.bounceOut,
+                    _engine.getManager(BaseSceneManager.class).getBatch());
         return slideTransition;
     }
 

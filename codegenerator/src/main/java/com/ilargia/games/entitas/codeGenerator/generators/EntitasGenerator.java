@@ -21,10 +21,11 @@ public class EntitasGenerator implements IComponentCodeGenerator {
         Map<String, List<ComponentInfo>> mapContextsComponents = CodeGenerator.generateMap(infos);
 
         List<JavaClassSource> result = new ArrayList<>();
-
-        result.addAll((List) mapContextsComponents.keySet().stream()
-                .map(contextName -> generateEntitas(mapContextsComponents.keySet(), pkgDestiny)
-                ).collect(Collectors.toList()));
+        JavaClassSource source = generateEntitas(mapContextsComponents.keySet(), pkgDestiny);
+        mapContextsComponents.forEach((context, lista)-> {
+            String fullTypename = lista.get(0).fullTypeName;
+        });
+        result.add(source);
 
         return result;
     }
@@ -87,7 +88,6 @@ public class EntitasGenerator implements IComponentCodeGenerator {
     }
 
     private void createContextFields(JavaClassSource javaClass, Set<String> contextNames) {
-        javaClass.addImport("java.util.Stack");
         javaClass.addImport("com.ilargia.games.entitas.Context");
         javaClass.addImport("com.ilargia.games.entitas.api.*");
         contextNames.forEach((contextName) -> {

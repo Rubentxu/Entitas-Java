@@ -47,7 +47,7 @@ public class ComponentIndicesGeneratorTest {
         poolNames.add("Otro");
 
         return new ComponentInfo("com.ilargia.games.entitas.codeGenerator.components.Player", "Player", memberInfos, poolNames,
-                false, "", true, true, false, false, null, null, null,null);
+                false, "", true, true, false, false, null, null, null,"");
     }
 
     private ComponentInfo createBounds(JavaClassSource javaClass) {
@@ -60,7 +60,7 @@ public class ComponentIndicesGeneratorTest {
 
 
         return new ComponentInfo("com.ilargia.games.entitas.codeGenerator.components.Bounds", "Bounds", memberInfos, poolNames,
-                false, "", true, true, false, false, null, null, null,null);
+                false, "", true, true, false, false, null, null, null,"");
     }
 
     private ComponentInfo createView(JavaClassSource javaClass) {
@@ -72,7 +72,7 @@ public class ComponentIndicesGeneratorTest {
         poolNames.add("Otro");
 
         return new ComponentInfo("com.ilargia.games.entitas.codeGenerator.components.View", "View", memberInfos, poolNames,
-                false, "", true, true, false, false, null, null, null,null);
+                false, "", true, true, false, false, null, null, null,"");
     }
 
     private ComponentInfo createBall(JavaClassSource javaClass) {
@@ -84,7 +84,7 @@ public class ComponentIndicesGeneratorTest {
         poolNames.add("Otro");
 
         return new ComponentInfo("com.ilargia.games.entitas.codeGenerator.components.Ball", "Ball", memberInfos, poolNames,
-                false, "", true, true, false, false, null, null, null,null);
+                false, "", true, true, false, false, null, null, null,"");
     }
 
     private ComponentInfo createMotion(JavaClassSource javaClass) {
@@ -95,7 +95,7 @@ public class ComponentIndicesGeneratorTest {
         poolNames.add("Core");
 
         return new ComponentInfo("com.ilargia.games.entitas.codeGenerator.components.Motion", "Motion", memberInfos, poolNames,
-                false, "", true, true, false, false, null, null, null,null );
+                false, "", true, true, false, false, null, null, null,"" );
     }
 
     private ComponentInfo createScore(JavaClassSource javaClass) {
@@ -106,7 +106,7 @@ public class ComponentIndicesGeneratorTest {
         poolNames.add("Core");
 
         return new ComponentInfo("com.ilargia.games.entitas.codeGenerator.components.Score", "Score", memberInfos, poolNames,
-                false, "", true, true, false, false, null, null, null,null);
+                false, "", true, true, false, false, null, null, null,"");
     }
 
     @Test

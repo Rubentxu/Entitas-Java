@@ -1,6 +1,7 @@
 package com.ilargia.games;
 
-import com.ilargia.games.core.GameContext;
+
+import com.ilargia.games.core.game.GameContext;
 
 public class GameBoardLogic {
 

@@ -1,13 +1,21 @@
 package com.ilargia.games.states;
 
+import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.physics.box2d.World;
 import com.ilargia.games.Pong;
 import com.ilargia.games.PongEngine;
 import com.ilargia.games.components.Player;
 import com.ilargia.games.core.Entitas;
 import com.ilargia.games.egdx.base.BaseGameState;
+import com.ilargia.games.egdx.base.managers.BaseGUIManager;
+import com.ilargia.games.egdx.base.managers.BasePhysicsManager;
+import com.ilargia.games.egdx.base.managers.BaseSceneManager;
+import com.ilargia.games.egdx.util.BodyBuilder;
 import com.ilargia.games.systems.*;
 
 
@@ -28,6 +36,10 @@ public class PongState extends BaseGameState {
 
     @Override
     public void initialize() {
+        // Input
+        Camera camera = engine.getManager(BaseSceneManager.class).getDefaultCamera();
+        Batch batch = engine.getManager(BaseSceneManager.class).getBatch();
+        BitmapFont font = engine.getManager(BaseGUIManager.class).getDefaultFont();
         context.core.createEntity()
                 .addBall(false)
                 .addView(new Circle(0, 0, 8))
@@ -49,7 +61,7 @@ public class PongState extends BaseGameState {
                 .add(new ContactSystem(context.core))
                 .add(new BoundsSystem(context.core))
                 .add(new MoveSystem(context.core))
-                .add(new RendererSystem(context.core, engine.sr, engine.camera, engine.batch, engine.font));
+                .add(new RendererSystem(context.core, engine.sr, camera, batch, font));
     }
 
     @Override

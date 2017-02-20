@@ -27,153 +27,153 @@ public class CoreEntity extends Entity {
 	}
 
 	public Ball getBall() {
-		return (Ball) getComponent(CoreComponentIds.Ball);
+		return (Ball) getComponent(CoreComponentsLookup.Ball);
 	}
 
 	public boolean hasBall() {
-		return hasComponent(CoreComponentIds.Ball);
+		return hasComponent(CoreComponentsLookup.Ball);
 	}
 
 	public CoreEntity addBall(boolean resetBall) {
-		Ball component = (Ball) recoverComponent(CoreComponentIds.Ball);
+		Ball component = (Ball) recoverComponent(CoreComponentsLookup.Ball);
 		if (component == null) {
 			component = new Ball();
 		}
 		component.resetBall = resetBall;
-		addComponent(CoreComponentIds.Ball, component);
+		addComponent(CoreComponentsLookup.Ball, component);
 		return this;
 	}
 
 	public CoreEntity replaceBall(boolean resetBall) {
-		Ball component = (Ball) recoverComponent(CoreComponentIds.Ball);
+		Ball component = (Ball) recoverComponent(CoreComponentsLookup.Ball);
 		if (component == null) {
 			component = new Ball();
 		}
 		component.resetBall = resetBall;
-		replaceComponent(CoreComponentIds.Ball, component);
+		replaceComponent(CoreComponentsLookup.Ball, component);
 		return this;
 	}
 
 	public CoreEntity removeBall() {
-		removeComponent(CoreComponentIds.Ball);
+		removeComponent(CoreComponentsLookup.Ball);
 		return this;
 	}
 
 	public Delay getDelay() {
-		return (Delay) getComponent(CoreComponentIds.Delay);
+		return (Delay) getComponent(CoreComponentsLookup.Delay);
 	}
 
 	public boolean hasDelay() {
-		return hasComponent(CoreComponentIds.Delay);
+		return hasComponent(CoreComponentsLookup.Delay);
 	}
 
 	public CoreEntity addDelay(float duration) {
-		Delay component = (Delay) recoverComponent(CoreComponentIds.Delay);
+		Delay component = (Delay) recoverComponent(CoreComponentsLookup.Delay);
 		if (component == null) {
 			component = new Delay(duration);
 		} else {
 			component.duration = duration;;
 			component.time = 0;
 		}
-		addComponent(CoreComponentIds.Delay, component);
+		addComponent(CoreComponentsLookup.Delay, component);
 		return this;
 	}
 
 	public CoreEntity replaceDelay(float duration) {
-		Delay component = (Delay) recoverComponent(CoreComponentIds.Delay);
+		Delay component = (Delay) recoverComponent(CoreComponentsLookup.Delay);
 		if (component == null) {
 			component = new Delay(duration);
 		} else {
 			component.duration = duration;;
 			component.time = 0;
 		}
-		replaceComponent(CoreComponentIds.Delay, component);
+		replaceComponent(CoreComponentsLookup.Delay, component);
 		return this;
 	}
 
 	public CoreEntity removeDelay() {
-		removeComponent(CoreComponentIds.Delay);
+		removeComponent(CoreComponentsLookup.Delay);
 		return this;
 	}
 
 	public Motion getMotion() {
-		return (Motion) getComponent(CoreComponentIds.Motion);
+		return (Motion) getComponent(CoreComponentsLookup.Motion);
 	}
 
 	public boolean hasMotion() {
-		return hasComponent(CoreComponentIds.Motion);
+		return hasComponent(CoreComponentsLookup.Motion);
 	}
 
 	public CoreEntity addMotion(float x, float y) {
-		Motion component = (Motion) recoverComponent(CoreComponentIds.Motion);
+		Motion component = (Motion) recoverComponent(CoreComponentsLookup.Motion);
 		if (component == null) {
 			component = new Motion(x, y);
 		} else {
 			component.velocity = new Vector2(x, y);
 		}
-		addComponent(CoreComponentIds.Motion, component);
+		addComponent(CoreComponentsLookup.Motion, component);
 		return this;
 	}
 
 	public CoreEntity replaceMotion(float x, float y) {
-		Motion component = (Motion) recoverComponent(CoreComponentIds.Motion);
+		Motion component = (Motion) recoverComponent(CoreComponentsLookup.Motion);
 		if (component == null) {
 			component = new Motion(x, y);
 		} else {
 			component.velocity = new Vector2(x, y);
 		}
-		replaceComponent(CoreComponentIds.Motion, component);
+		replaceComponent(CoreComponentsLookup.Motion, component);
 		return this;
 	}
 
 	public CoreEntity removeMotion() {
-		removeComponent(CoreComponentIds.Motion);
+		removeComponent(CoreComponentsLookup.Motion);
 		return this;
 	}
 
 	public Player getPlayer() {
-		return (Player) getComponent(CoreComponentIds.Player);
+		return (Player) getComponent(CoreComponentsLookup.Player);
 	}
 
 	public boolean hasPlayer() {
-		return hasComponent(CoreComponentIds.Player);
+		return hasComponent(CoreComponentsLookup.Player);
 	}
 
 	public CoreEntity addPlayer(ID id) {
-		Player component = (Player) recoverComponent(CoreComponentIds.Player);
+		Player component = (Player) recoverComponent(CoreComponentsLookup.Player);
 		if (component == null) {
 			component = new Player();
 		}
 		component.id = id;
-		addComponent(CoreComponentIds.Player, component);
+		addComponent(CoreComponentsLookup.Player, component);
 		return this;
 	}
 
 	public CoreEntity replacePlayer(ID id) {
-		Player component = (Player) recoverComponent(CoreComponentIds.Player);
+		Player component = (Player) recoverComponent(CoreComponentsLookup.Player);
 		if (component == null) {
 			component = new Player();
 		}
 		component.id = id;
-		replaceComponent(CoreComponentIds.Player, component);
+		replaceComponent(CoreComponentsLookup.Player, component);
 		return this;
 	}
 
 	public CoreEntity removePlayer() {
-		removeComponent(CoreComponentIds.Player);
+		removeComponent(CoreComponentsLookup.Player);
 		return this;
 	}
 
 	public Score getScore() {
-		return (Score) getComponent(CoreComponentIds.Score);
+		return (Score) getComponent(CoreComponentsLookup.Score);
 	}
 
 	public boolean hasScore() {
-		return hasComponent(CoreComponentIds.Score);
+		return hasComponent(CoreComponentsLookup.Score);
 	}
 
 	public CoreEntity addScore(String text, int x, int y) {
-		Score component = (Score) recoverComponent(CoreComponentIds.Score);
+		Score component = (Score) recoverComponent(CoreComponentsLookup.Score);
 		if (component == null) {
 			component = new Score(text, x, y);
 		} else {
@@ -182,12 +182,12 @@ public class CoreEntity extends Entity {
 			component.y = y;;
 			component.points = 0;
 		}
-		addComponent(CoreComponentIds.Score, component);
+		addComponent(CoreComponentsLookup.Score, component);
 		return this;
 	}
 
 	public CoreEntity replaceScore(String text, int x, int y) {
-		Score component = (Score) recoverComponent(CoreComponentIds.Score);
+		Score component = (Score) recoverComponent(CoreComponentsLookup.Score);
 		if (component == null) {
 			component = new Score(text, x, y);
 		} else {
@@ -196,26 +196,26 @@ public class CoreEntity extends Entity {
 			component.y = y;;
 			component.points = 0;
 		}
-		replaceComponent(CoreComponentIds.Score, component);
+		replaceComponent(CoreComponentsLookup.Score, component);
 		return this;
 	}
 
 	public CoreEntity removeScore() {
-		removeComponent(CoreComponentIds.Score);
+		removeComponent(CoreComponentsLookup.Score);
 		return this;
 	}
 
 	public TextureView getTextureView() {
-		return (TextureView) getComponent(CoreComponentIds.TextureView);
+		return (TextureView) getComponent(CoreComponentsLookup.TextureView);
 	}
 
 	public boolean hasTextureView() {
-		return hasComponent(CoreComponentIds.TextureView);
+		return hasComponent(CoreComponentsLookup.TextureView);
 	}
 
 	public CoreEntity addTextureView(String name, TextureRegion texture,
 			Vector2 position, float rotation, int height, int width) {
-		TextureView component = (TextureView) recoverComponent(CoreComponentIds.TextureView);
+		TextureView component = (TextureView) recoverComponent(CoreComponentsLookup.TextureView);
 		if (component == null) {
 			component = new TextureView(name, texture, position, rotation,
 					height, width);
@@ -227,13 +227,13 @@ public class CoreEntity extends Entity {
 			component.height = height;;
 			component.width = width;
 		}
-		addComponent(CoreComponentIds.TextureView, component);
+		addComponent(CoreComponentsLookup.TextureView, component);
 		return this;
 	}
 
 	public CoreEntity replaceTextureView(String name, TextureRegion texture,
 			Vector2 position, float rotation, int height, int width) {
-		TextureView component = (TextureView) recoverComponent(CoreComponentIds.TextureView);
+		TextureView component = (TextureView) recoverComponent(CoreComponentsLookup.TextureView);
 		if (component == null) {
 			component = new TextureView(name, texture, position, rotation,
 					height, width);
@@ -245,47 +245,47 @@ public class CoreEntity extends Entity {
 			component.height = height;;
 			component.width = width;
 		}
-		replaceComponent(CoreComponentIds.TextureView, component);
+		replaceComponent(CoreComponentsLookup.TextureView, component);
 		return this;
 	}
 
 	public CoreEntity removeTextureView() {
-		removeComponent(CoreComponentIds.TextureView);
+		removeComponent(CoreComponentsLookup.TextureView);
 		return this;
 	}
 
 	public View getView() {
-		return (View) getComponent(CoreComponentIds.View);
+		return (View) getComponent(CoreComponentsLookup.View);
 	}
 
 	public boolean hasView() {
-		return hasComponent(CoreComponentIds.View);
+		return hasComponent(CoreComponentsLookup.View);
 	}
 
 	public CoreEntity addView(Shape2D shape) {
-		View component = (View) recoverComponent(CoreComponentIds.View);
+		View component = (View) recoverComponent(CoreComponentsLookup.View);
 		if (component == null) {
 			component = new View(shape);
 		} else {
 			component.shape = shape;
 		}
-		addComponent(CoreComponentIds.View, component);
+		addComponent(CoreComponentsLookup.View, component);
 		return this;
 	}
 
 	public CoreEntity replaceView(Shape2D shape) {
-		View component = (View) recoverComponent(CoreComponentIds.View);
+		View component = (View) recoverComponent(CoreComponentsLookup.View);
 		if (component == null) {
 			component = new View(shape);
 		} else {
 			component.shape = shape;
 		}
-		replaceComponent(CoreComponentIds.View, component);
+		replaceComponent(CoreComponentsLookup.View, component);
 		return this;
 	}
 
 	public CoreEntity removeView() {
-		removeComponent(CoreComponentIds.View);
+		removeComponent(CoreComponentsLookup.View);
 		return this;
 	}
 }

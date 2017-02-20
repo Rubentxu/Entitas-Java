@@ -3,6 +3,10 @@ package com.ilargia.games.systems;
 import com.ilargia.games.EntityIndexExtension;
 import com.ilargia.games.components.input.Input;
 import com.ilargia.games.core.*;
+import com.ilargia.games.core.game.GameEntity;
+import com.ilargia.games.core.input.InputContext;
+import com.ilargia.games.core.input.InputEntity;
+import com.ilargia.games.core.input.InputMatcher;
 import com.ilargia.games.entitas.api.IContext;
 import com.ilargia.games.entitas.collector.Collector;
 import com.ilargia.games.entitas.systems.ReactiveSystem;
@@ -14,10 +18,10 @@ import java.util.stream.Collectors;
 
 public class ProcessInputSystem extends ReactiveSystem<InputEntity> {
 
-    private final Entitasaaa entitas;
+    private final Entitas entitas;
     private InputContext context;
 
-    public ProcessInputSystem(Entitasaaa entitas) {
+    public ProcessInputSystem(Entitas entitas) {
         super(entitas.input);
         this.context = entitas.input;
         this.entitas = entitas;

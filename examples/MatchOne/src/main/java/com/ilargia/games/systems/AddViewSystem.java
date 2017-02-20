@@ -6,26 +6,26 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.ilargia.games.components.game.Position;
-import com.ilargia.games.core.GameContext;
-import com.ilargia.games.core.GameEntity;
-import com.ilargia.games.core.GameMatcher;
-import com.ilargia.games.egdx.base.managers.EGAssetsManager;
+import com.ilargia.games.core.game.GameContext;
+import com.ilargia.games.core.game.GameEntity;
+import com.ilargia.games.core.game.GameMatcher;
+import com.ilargia.games.egdx.base.managers.BaseAssetsManager;
+import com.ilargia.games.egdx.util.BodyBuilder;
+import com.ilargia.games.egdx.util.FixtureDefBuilder;
 import com.ilargia.games.entitas.api.IContext;
 import com.ilargia.games.entitas.collector.Collector;
 import com.ilargia.games.entitas.systems.ReactiveSystem;
-import com.ilargia.games.util.BodyBuilder;
-import com.ilargia.games.util.FixtureDefBuilder;
 
 import java.util.List;
 
 
 public class AddViewSystem extends ReactiveSystem<GameEntity> {
 
-    private final EGAssetsManager assetsManager;
+    private final BaseAssetsManager assetsManager;
     private final BodyBuilder bodyBuilder;
     private GameContext context;
 
-    public AddViewSystem(GameContext context, EGAssetsManager assetsManager, BodyBuilder bodyBuilder) {
+    public AddViewSystem(GameContext context, BaseAssetsManager assetsManager, BodyBuilder bodyBuilder) {
         super(context);
         this.assetsManager = assetsManager;
         this.bodyBuilder = bodyBuilder;

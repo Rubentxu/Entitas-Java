@@ -31,10 +31,11 @@ public class MatcherGenerator implements IComponentCodeGenerator {
     private JavaClassSource generateMatchers(String contextName, List<ComponentInfo> componentInfos, String pkgDestiny) {
         JavaClassSource javaClass = Roaster.parse(JavaClassSource.class, String.format("public class %1$s {}",
                 CodeGenerator.capitalize(contextName) + "Matcher"));
-        if(componentInfos.size() > 0 && !pkgDestiny.contains(componentInfos.get(0).subDir)) {
+        if(componentInfos.size() > 0 && !pkgDestiny.endsWith(componentInfos.get(0).subDir)) {
             pkgDestiny+= "."+componentInfos.get(0).subDir;
 
         }
+
         javaClass.setPackage(pkgDestiny);
         //javaClass.addImport("com.ilargia.games.entitas.interfaces.IMatcher");
         javaClass.addImport("com.ilargia.games.entitas.matcher.Matcher");

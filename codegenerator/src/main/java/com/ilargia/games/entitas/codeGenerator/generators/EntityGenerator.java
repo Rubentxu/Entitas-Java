@@ -35,7 +35,11 @@ public class EntityGenerator implements IComponentCodeGenerator {
 
         JavaClassSource entityClass = Roaster.parse(JavaClassSource.class, String.format("public class %1$sEntity extends Entity {}", contextName));
 
-        if(infos.size() > 0 && infos.get(0).subDir !=null) {
+//        if(infos.size() > 0 && infos.get(0).subDir !=null) {
+//            pkgDestiny+= "."+infos.get(0).subDir;
+//
+//        }
+        if(infos.size() > 0 && !pkgDestiny.endsWith(infos.get(0).subDir)) {
             pkgDestiny+= "."+infos.get(0).subDir;
 
         }

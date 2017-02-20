@@ -1,8 +1,16 @@
 package com.ilargia.games.core;
 
-import java.util.Stack;
 import com.ilargia.games.entitas.Context;
 import com.ilargia.games.entitas.api.*;
+import com.ilargia.games.core.input.InputEntity;
+import com.ilargia.games.core.game.GameEntity;
+import com.ilargia.games.core.state.GameStateEntity;
+import com.ilargia.games.core.input.InputComponentsLookup;
+import com.ilargia.games.core.game.GameComponentsLookup;
+import com.ilargia.games.core.state.GamestateComponentsLookup;
+import com.ilargia.games.core.input.InputContext;
+import com.ilargia.games.core.game.GameContext;
+import com.ilargia.games.core.state.GameStateContext;
 
 /**
  * ---------------------------------------------------------------------------
@@ -22,23 +30,25 @@ public class Entitas implements IContexts {
 	}
 
 	public InputContext createInputContext() {
-		return new InputContext(InputComponentIds.totalComponents, 0,
-				new ContextInfo("Input", InputComponentIds.componentNames(),
-						InputComponentIds.componentTypes()),
+		return new InputContext(InputComponentsLookup.totalComponents, 0,
+				new ContextInfo("Input",
+						InputComponentsLookup.componentNames(),
+						InputComponentsLookup.componentTypes()),
 				factoryInputEntity());
 	}
 
 	public GameContext createGameContext() {
-		return new GameContext(GameComponentIds.totalComponents, 0,
-				new ContextInfo("Game", GameComponentIds.componentNames(),
-						GameComponentIds.componentTypes()), factoryGameEntity());
+		return new GameContext(GameComponentsLookup.totalComponents, 0,
+				new ContextInfo("Game", GameComponentsLookup.componentNames(),
+						GameComponentsLookup.componentTypes()),
+				factoryGameEntity());
 	}
 
 	public GameStateContext createGamestateContext() {
-		return new GameStateContext(GamestateComponentIds.totalComponents, 0,
-				new ContextInfo("GameState", GamestateComponentIds
-						.componentNames(), GamestateComponentIds
-						.componentTypes()),
+		return new GameStateContext(GamestateComponentsLookup.totalComponents,
+				0, new ContextInfo("GameState",
+						GamestateComponentsLookup.componentNames(),
+						GamestateComponentsLookup.componentTypes()),
 				factoryGameStateEntity());
 	}
 

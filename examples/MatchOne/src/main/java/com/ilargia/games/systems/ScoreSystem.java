@@ -1,8 +1,9 @@
 package com.ilargia.games.systems;
 
-import com.ilargia.games.core.Entitasaaa;
-import com.ilargia.games.core.GameEntity;
-import com.ilargia.games.core.GameMatcher;
+
+import com.ilargia.games.core.Entitas;
+import com.ilargia.games.core.game.GameEntity;
+import com.ilargia.games.core.game.GameMatcher;
 import com.ilargia.games.entitas.api.IContext;
 import com.ilargia.games.entitas.api.system.IInitializeSystem;
 import com.ilargia.games.entitas.collector.Collector;
@@ -14,16 +15,16 @@ import java.util.List;
 
 public class ScoreSystem extends ReactiveSystem<GameEntity> implements IInitializeSystem {
 
-    private Entitasaaa entitas;
+    private Entitas entitas;
 
-    public ScoreSystem(Entitasaaa entitas) {
+    public ScoreSystem(Entitas entitas) {
         super(entitas.game);
         this.entitas = entitas;
     }
 
     @Override
     public void initialize() {
-        entitas.gamesession.setScore(0);
+        entitas.gamestate.setScore(0);
     }
 
     @Override
@@ -38,6 +39,6 @@ public class ScoreSystem extends ReactiveSystem<GameEntity> implements IInitiali
 
     @Override
     protected void execute(List<GameEntity> entities) {
-        entitas.gamesession.replaceScore(entitas.gamesession.getScore().value + entities.size());
+        entitas.gamestate.replaceScore(entitas.gamestate.getScore().value + entities.size());
     }
 }

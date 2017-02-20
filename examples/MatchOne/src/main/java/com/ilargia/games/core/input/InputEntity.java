@@ -20,54 +20,55 @@ public class InputEntity extends Entity {
 	}
 
 	public boolean isBurstMode() {
-		return hasComponent(InputComponentIds.BurstMode);
+		return hasComponent(InputComponentsLookup.BurstMode);
 	}
 
 	public InputEntity setBurstMode(boolean value) {
-		if (value != hasComponent(InputComponentIds.BurstMode)) {
+		if (value != hasComponent(InputComponentsLookup.BurstMode)) {
 			if (value) {
-				addComponent(InputComponentIds.BurstMode, BurstModeComponent);
+				addComponent(InputComponentsLookup.BurstMode,
+						BurstModeComponent);
 			} else {
-				removeComponent(InputComponentIds.BurstMode);
+				removeComponent(InputComponentsLookup.BurstMode);
 			}
 		}
 		return this;
 	}
 
 	public Input getInput() {
-		return (Input) getComponent(InputComponentIds.Input);
+		return (Input) getComponent(InputComponentsLookup.Input);
 	}
 
 	public boolean hasInput() {
-		return hasComponent(InputComponentIds.Input);
+		return hasComponent(InputComponentsLookup.Input);
 	}
 
 	public InputEntity addInput(int x, int y) {
-		Input component = (Input) recoverComponent(InputComponentIds.Input);
+		Input component = (Input) recoverComponent(InputComponentsLookup.Input);
 		if (component == null) {
 			component = new Input(x, y);
 		} else {
 			component.x = x;;
 			component.y = y;
 		}
-		addComponent(InputComponentIds.Input, component);
+		addComponent(InputComponentsLookup.Input, component);
 		return this;
 	}
 
 	public InputEntity replaceInput(int x, int y) {
-		Input component = (Input) recoverComponent(InputComponentIds.Input);
+		Input component = (Input) recoverComponent(InputComponentsLookup.Input);
 		if (component == null) {
 			component = new Input(x, y);
 		} else {
 			component.x = x;;
 			component.y = y;
 		}
-		replaceComponent(InputComponentIds.Input, component);
+		replaceComponent(InputComponentsLookup.Input, component);
 		return this;
 	}
 
 	public InputEntity removeInput() {
-		removeComponent(InputComponentIds.Input);
+		removeComponent(InputComponentsLookup.Input);
 		return this;
 	}
 }

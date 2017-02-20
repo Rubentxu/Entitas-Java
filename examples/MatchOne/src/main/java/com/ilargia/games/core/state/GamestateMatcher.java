@@ -14,8 +14,8 @@ public class GamestateMatcher {
 	public static Matcher Score() {
 		if (_matcherScore == null) {
 			Matcher matcher = (Matcher) Matcher
-					.AllOf(GamestateComponentIds.Score);
-			matcher.componentNames = GamestateComponentIds.componentNames();
+					.AllOf(GamestateComponentsLookup.Score);
+			matcher.componentNames = GamestateComponentsLookup.componentNames();
 			_matcherScore = matcher;
 		}
 		return _matcherScore;

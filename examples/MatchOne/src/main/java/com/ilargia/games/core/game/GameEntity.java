@@ -31,186 +31,187 @@ public class GameEntity extends Entity {
 	}
 
 	public Asset getAsset() {
-		return (Asset) getComponent(GameComponentIds.Asset);
+		return (Asset) getComponent(GameComponentsLookup.Asset);
 	}
 
 	public boolean hasAsset() {
-		return hasComponent(GameComponentIds.Asset);
+		return hasComponent(GameComponentsLookup.Asset);
 	}
 
 	public GameEntity addAsset(String name) {
-		Asset component = (Asset) recoverComponent(GameComponentIds.Asset);
+		Asset component = (Asset) recoverComponent(GameComponentsLookup.Asset);
 		if (component == null) {
 			component = new Asset(name);
 		} else {
 			component.name = name;
 		}
-		addComponent(GameComponentIds.Asset, component);
+		addComponent(GameComponentsLookup.Asset, component);
 		return this;
 	}
 
 	public GameEntity replaceAsset(String name) {
-		Asset component = (Asset) recoverComponent(GameComponentIds.Asset);
+		Asset component = (Asset) recoverComponent(GameComponentsLookup.Asset);
 		if (component == null) {
 			component = new Asset(name);
 		} else {
 			component.name = name;
 		}
-		replaceComponent(GameComponentIds.Asset, component);
+		replaceComponent(GameComponentsLookup.Asset, component);
 		return this;
 	}
 
 	public GameEntity removeAsset() {
-		removeComponent(GameComponentIds.Asset);
+		removeComponent(GameComponentsLookup.Asset);
 		return this;
 	}
 
 	public boolean isDestroy() {
-		return hasComponent(GameComponentIds.Destroy);
+		return hasComponent(GameComponentsLookup.Destroy);
 	}
 
 	public GameEntity setDestroy(boolean value) {
-		if (value != hasComponent(GameComponentIds.Destroy)) {
+		if (value != hasComponent(GameComponentsLookup.Destroy)) {
 			if (value) {
-				addComponent(GameComponentIds.Destroy, DestroyComponent);
+				addComponent(GameComponentsLookup.Destroy, DestroyComponent);
 			} else {
-				removeComponent(GameComponentIds.Destroy);
+				removeComponent(GameComponentsLookup.Destroy);
 			}
 		}
 		return this;
 	}
 
 	public GameBoard getGameBoard() {
-		return (GameBoard) getComponent(GameComponentIds.GameBoard);
+		return (GameBoard) getComponent(GameComponentsLookup.GameBoard);
 	}
 
 	public boolean hasGameBoard() {
-		return hasComponent(GameComponentIds.GameBoard);
+		return hasComponent(GameComponentsLookup.GameBoard);
 	}
 
 	public GameEntity addGameBoard(int columns, int rows) {
-		GameBoard component = (GameBoard) recoverComponent(GameComponentIds.GameBoard);
+		GameBoard component = (GameBoard) recoverComponent(GameComponentsLookup.GameBoard);
 		if (component == null) {
 			component = new GameBoard(columns, rows);
 		} else {
 			component.columns = columns;;
 			component.rows = rows;
 		}
-		addComponent(GameComponentIds.GameBoard, component);
+		addComponent(GameComponentsLookup.GameBoard, component);
 		return this;
 	}
 
 	public GameEntity replaceGameBoard(int columns, int rows) {
-		GameBoard component = (GameBoard) recoverComponent(GameComponentIds.GameBoard);
+		GameBoard component = (GameBoard) recoverComponent(GameComponentsLookup.GameBoard);
 		if (component == null) {
 			component = new GameBoard(columns, rows);
 		} else {
 			component.columns = columns;;
 			component.rows = rows;
 		}
-		replaceComponent(GameComponentIds.GameBoard, component);
+		replaceComponent(GameComponentsLookup.GameBoard, component);
 		return this;
 	}
 
 	public GameEntity removeGameBoard() {
-		removeComponent(GameComponentIds.GameBoard);
+		removeComponent(GameComponentsLookup.GameBoard);
 		return this;
 	}
 
 	public boolean isGameBoardElement() {
-		return hasComponent(GameComponentIds.GameBoardElement);
+		return hasComponent(GameComponentsLookup.GameBoardElement);
 	}
 
 	public GameEntity setGameBoardElement(boolean value) {
-		if (value != hasComponent(GameComponentIds.GameBoardElement)) {
+		if (value != hasComponent(GameComponentsLookup.GameBoardElement)) {
 			if (value) {
-				addComponent(GameComponentIds.GameBoardElement,
+				addComponent(GameComponentsLookup.GameBoardElement,
 						GameBoardElementComponent);
 			} else {
-				removeComponent(GameComponentIds.GameBoardElement);
+				removeComponent(GameComponentsLookup.GameBoardElement);
 			}
 		}
 		return this;
 	}
 
 	public boolean isInteractive() {
-		return hasComponent(GameComponentIds.Interactive);
+		return hasComponent(GameComponentsLookup.Interactive);
 	}
 
 	public GameEntity setInteractive(boolean value) {
-		if (value != hasComponent(GameComponentIds.Interactive)) {
+		if (value != hasComponent(GameComponentsLookup.Interactive)) {
 			if (value) {
-				addComponent(GameComponentIds.Interactive, InteractiveComponent);
+				addComponent(GameComponentsLookup.Interactive,
+						InteractiveComponent);
 			} else {
-				removeComponent(GameComponentIds.Interactive);
+				removeComponent(GameComponentsLookup.Interactive);
 			}
 		}
 		return this;
 	}
 
 	public boolean isMovable() {
-		return hasComponent(GameComponentIds.Movable);
+		return hasComponent(GameComponentsLookup.Movable);
 	}
 
 	public GameEntity setMovable(boolean value) {
-		if (value != hasComponent(GameComponentIds.Movable)) {
+		if (value != hasComponent(GameComponentsLookup.Movable)) {
 			if (value) {
-				addComponent(GameComponentIds.Movable, MovableComponent);
+				addComponent(GameComponentsLookup.Movable, MovableComponent);
 			} else {
-				removeComponent(GameComponentIds.Movable);
+				removeComponent(GameComponentsLookup.Movable);
 			}
 		}
 		return this;
 	}
 
 	public Position getPosition() {
-		return (Position) getComponent(GameComponentIds.Position);
+		return (Position) getComponent(GameComponentsLookup.Position);
 	}
 
 	public boolean hasPosition() {
-		return hasComponent(GameComponentIds.Position);
+		return hasComponent(GameComponentsLookup.Position);
 	}
 
 	public GameEntity addPosition(int x, int y) {
-		Position component = (Position) recoverComponent(GameComponentIds.Position);
+		Position component = (Position) recoverComponent(GameComponentsLookup.Position);
 		if (component == null) {
 			component = new Position(x, y);
 		} else {
 			component.x = x;;
 			component.y = y;
 		}
-		addComponent(GameComponentIds.Position, component);
+		addComponent(GameComponentsLookup.Position, component);
 		return this;
 	}
 
 	public GameEntity replacePosition(int x, int y) {
-		Position component = (Position) recoverComponent(GameComponentIds.Position);
+		Position component = (Position) recoverComponent(GameComponentsLookup.Position);
 		if (component == null) {
 			component = new Position(x, y);
 		} else {
 			component.x = x;;
 			component.y = y;
 		}
-		replaceComponent(GameComponentIds.Position, component);
+		replaceComponent(GameComponentsLookup.Position, component);
 		return this;
 	}
 
 	public GameEntity removePosition() {
-		removeComponent(GameComponentIds.Position);
+		removeComponent(GameComponentsLookup.Position);
 		return this;
 	}
 
 	public TextureView getTextureView() {
-		return (TextureView) getComponent(GameComponentIds.TextureView);
+		return (TextureView) getComponent(GameComponentsLookup.TextureView);
 	}
 
 	public boolean hasTextureView() {
-		return hasComponent(GameComponentIds.TextureView);
+		return hasComponent(GameComponentsLookup.TextureView);
 	}
 
 	public GameEntity addTextureView(String name, TextureRegion texture,
 			Body body) {
-		TextureView component = (TextureView) recoverComponent(GameComponentIds.TextureView);
+		TextureView component = (TextureView) recoverComponent(GameComponentsLookup.TextureView);
 		if (component == null) {
 			component = new TextureView(name, texture, body);
 		} else {
@@ -218,13 +219,13 @@ public class GameEntity extends Entity {
 			component.texture = texture;;
 			component.body = body;
 		}
-		addComponent(GameComponentIds.TextureView, component);
+		addComponent(GameComponentsLookup.TextureView, component);
 		return this;
 	}
 
 	public GameEntity replaceTextureView(String name, TextureRegion texture,
 			Body body) {
-		TextureView component = (TextureView) recoverComponent(GameComponentIds.TextureView);
+		TextureView component = (TextureView) recoverComponent(GameComponentsLookup.TextureView);
 		if (component == null) {
 			component = new TextureView(name, texture, body);
 		} else {
@@ -232,12 +233,12 @@ public class GameEntity extends Entity {
 			component.texture = texture;;
 			component.body = body;
 		}
-		replaceComponent(GameComponentIds.TextureView, component);
+		replaceComponent(GameComponentsLookup.TextureView, component);
 		return this;
 	}
 
 	public GameEntity removeTextureView() {
-		removeComponent(GameComponentIds.TextureView);
+		removeComponent(GameComponentsLookup.TextureView);
 		return this;
 	}
 }

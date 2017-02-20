@@ -19,8 +19,9 @@ public class CoreMatcher {
 
 	public static Matcher Ball() {
 		if (_matcherBall == null) {
-			Matcher matcher = (Matcher) Matcher.AllOf(CoreComponentIds.Ball);
-			matcher.componentNames = CoreComponentIds.componentNames();
+			Matcher matcher = (Matcher) Matcher
+					.AllOf(CoreComponentsLookup.Ball);
+			matcher.componentNames = CoreComponentsLookup.componentNames();
 			_matcherBall = matcher;
 		}
 		return _matcherBall;
@@ -28,8 +29,9 @@ public class CoreMatcher {
 
 	public static Matcher Delay() {
 		if (_matcherDelay == null) {
-			Matcher matcher = (Matcher) Matcher.AllOf(CoreComponentIds.Delay);
-			matcher.componentNames = CoreComponentIds.componentNames();
+			Matcher matcher = (Matcher) Matcher
+					.AllOf(CoreComponentsLookup.Delay);
+			matcher.componentNames = CoreComponentsLookup.componentNames();
 			_matcherDelay = matcher;
 		}
 		return _matcherDelay;
@@ -37,8 +39,9 @@ public class CoreMatcher {
 
 	public static Matcher Motion() {
 		if (_matcherMotion == null) {
-			Matcher matcher = (Matcher) Matcher.AllOf(CoreComponentIds.Motion);
-			matcher.componentNames = CoreComponentIds.componentNames();
+			Matcher matcher = (Matcher) Matcher
+					.AllOf(CoreComponentsLookup.Motion);
+			matcher.componentNames = CoreComponentsLookup.componentNames();
 			_matcherMotion = matcher;
 		}
 		return _matcherMotion;
@@ -46,8 +49,9 @@ public class CoreMatcher {
 
 	public static Matcher Player() {
 		if (_matcherPlayer == null) {
-			Matcher matcher = (Matcher) Matcher.AllOf(CoreComponentIds.Player);
-			matcher.componentNames = CoreComponentIds.componentNames();
+			Matcher matcher = (Matcher) Matcher
+					.AllOf(CoreComponentsLookup.Player);
+			matcher.componentNames = CoreComponentsLookup.componentNames();
 			_matcherPlayer = matcher;
 		}
 		return _matcherPlayer;
@@ -55,8 +59,9 @@ public class CoreMatcher {
 
 	public static Matcher Score() {
 		if (_matcherScore == null) {
-			Matcher matcher = (Matcher) Matcher.AllOf(CoreComponentIds.Score);
-			matcher.componentNames = CoreComponentIds.componentNames();
+			Matcher matcher = (Matcher) Matcher
+					.AllOf(CoreComponentsLookup.Score);
+			matcher.componentNames = CoreComponentsLookup.componentNames();
 			_matcherScore = matcher;
 		}
 		return _matcherScore;
@@ -65,8 +70,8 @@ public class CoreMatcher {
 	public static Matcher TextureView() {
 		if (_matcherTextureView == null) {
 			Matcher matcher = (Matcher) Matcher
-					.AllOf(CoreComponentIds.TextureView);
-			matcher.componentNames = CoreComponentIds.componentNames();
+					.AllOf(CoreComponentsLookup.TextureView);
+			matcher.componentNames = CoreComponentsLookup.componentNames();
 			_matcherTextureView = matcher;
 		}
 		return _matcherTextureView;
@@ -74,8 +79,9 @@ public class CoreMatcher {
 
 	public static Matcher View() {
 		if (_matcherView == null) {
-			Matcher matcher = (Matcher) Matcher.AllOf(CoreComponentIds.View);
-			matcher.componentNames = CoreComponentIds.componentNames();
+			Matcher matcher = (Matcher) Matcher
+					.AllOf(CoreComponentsLookup.View);
+			matcher.componentNames = CoreComponentsLookup.componentNames();
 			_matcherView = matcher;
 		}
 		return _matcherView;

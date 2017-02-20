@@ -7,8 +7,8 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.ilargia.games.egdx.EGEventBus;
-import com.ilargia.games.egdx.base.managers.EGAssetsManager;
-import com.ilargia.games.egdx.base.managers.EGPreferencesManager;
+import com.ilargia.games.egdx.base.managers.BaseAssetsManager;
+import com.ilargia.games.egdx.base.managers.BasePreferencesManager;
 import com.ilargia.games.entitas.factories.Collections;
 import com.ilargia.games.entitas.factories.CollectionsFactory;
 import com.ilargia.games.states.MatchOneState;
@@ -42,9 +42,9 @@ public class MatchOne extends ApplicationAdapter {
     @Override
     public void create() {
         AssetManager assetsManager = new AssetManager(new TestFileHandleResolver());
-        EGPreferencesManager preferencesManager = new EGPreferencesManager();
+        BasePreferencesManager preferencesManager = new BasePreferencesManager();
         MatchOneEngine engine = new MatchOneEngine();
-        engine.addManager(new EGAssetsManager(assetsManager, preferencesManager));
+        engine.addManager(new BaseAssetsManager(assetsManager, preferencesManager));
 //        new Collections(new CollectionsFactory() {
 //            @Override
 //            public <T> List<T> createList(Class<T> clazz) {

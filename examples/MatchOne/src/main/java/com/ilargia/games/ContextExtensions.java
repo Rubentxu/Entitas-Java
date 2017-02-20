@@ -2,8 +2,9 @@ package com.ilargia.games;
 
 
 import com.badlogic.gdx.math.MathUtils;
-import com.ilargia.games.core.GameContext;
-import com.ilargia.games.core.GameEntity;
+import com.ilargia.games.core.game.GameContext;
+import com.ilargia.games.core.game.GameEntity;
+
 
 public class ContextExtensions {
 

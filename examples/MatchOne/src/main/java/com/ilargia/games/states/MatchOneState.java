@@ -1,11 +1,18 @@
 package com.ilargia.games.states;
 
+import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.physics.box2d.World;
 import com.ilargia.games.EntityIndexExtension;
 import com.ilargia.games.MatchOneEngine;
-import com.ilargia.games.core.Entitasaaa;
 
+import com.ilargia.games.core.Entitas;
+import com.ilargia.games.egdx.api.managers.SceneManager;
 import com.ilargia.games.egdx.base.BaseGameState;
-import com.ilargia.games.egdx.base.managers.EGAssetsManager;
+import com.ilargia.games.egdx.base.managers.BaseAssetsManager;
+import com.ilargia.games.egdx.base.managers.BasePhysicsManager;
+import com.ilargia.games.egdx.base.managers.BaseSceneManager;
+import com.ilargia.games.egdx.util.BodyBuilder;
 import com.ilargia.games.systems.*;
 
 public class MatchOneState extends BaseGameState {
@@ -19,9 +26,9 @@ public class MatchOneState extends BaseGameState {
 
 
     private MatchOneEngine engine;
-    private Entitasaaa entitas;
+    private Entitas entitas;
 
-    private EGAssetsManager assetsManager;
+    private BaseAssetsManager assetsManager;
 
 
     public MatchOneState(MatchOneEngine engine) {
@@ -32,7 +39,7 @@ public class MatchOneState extends BaseGameState {
 
     @Override
     public void loadResources() {
-        assetsManager = engine.getManager(EGAssetsManager.class);
+        assetsManager = engine.getManager(BaseAssetsManager.class);
         assetsManager.loadTexture(Blocker);
         assetsManager.loadTexture(Piece0);
         assetsManager.loadTexture(Piece1);
@@ -45,10 +52,15 @@ public class MatchOneState extends BaseGameState {
 
     @Override
     public void initialize() {
-        entitas = new Entitasaaa();
+        entitas = new Entitas();
         EntityIndexExtension.addEntityIndices(entitas);
         // Input
-        EmitInputSystem emitInputSystem = new EmitInputSystem(entitas.input, engine.physic, engine.camera);
+        World physics = engine.getManager(BasePhysicsManager.class).getPhysics();
+        BodyBuilder bodyBuilder = engine.getManager(BasePhysicsManager.class).getBodyBuilder();
+        Camera camera = engine.getManager(BaseSceneManager.class).getDefaultCamera();
+        Batch batch = engine.getManager(BaseSceneManager.class).getBatch();
+
+        EmitInputSystem emitInputSystem = new EmitInputSystem(entitas.input, physics, camera );
         systems
                 .add(new ProcessInputSystem(entitas))
                 // Update
@@ -57,12 +69,12 @@ public class MatchOneState extends BaseGameState {
                 .add(new FillSystem(entitas.game))
                 .add(new ScoreSystem(entitas))
                 // Render
-                .add(new RemoveViewSystem(entitas.game, engine.physic))
-                .add(new AddViewSystem(entitas.game, assetsManager, engine.bodyBuilder))
+                .add(new RemoveViewSystem(entitas.game, physics))
+                .add(new AddViewSystem(entitas.game, assetsManager, bodyBuilder ))
                 .add(new AnimatePositionSystem(entitas.game))
                 // Destroy
                 .add(new DestroySystem(entitas.game))
-                .add(new RendererSystem(entitas, engine.camera, engine.batch, engine.physic))
+                .add(new RendererSystem(entitas, camera, batch, physics))
         ;
     }
 

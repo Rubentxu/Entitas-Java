@@ -15,8 +15,8 @@ public class InputMatcher {
 	public static Matcher BurstMode() {
 		if (_matcherBurstMode == null) {
 			Matcher matcher = (Matcher) Matcher
-					.AllOf(InputComponentIds.BurstMode);
-			matcher.componentNames = InputComponentIds.componentNames();
+					.AllOf(InputComponentsLookup.BurstMode);
+			matcher.componentNames = InputComponentsLookup.componentNames();
 			_matcherBurstMode = matcher;
 		}
 		return _matcherBurstMode;
@@ -24,8 +24,9 @@ public class InputMatcher {
 
 	public static Matcher Input() {
 		if (_matcherInput == null) {
-			Matcher matcher = (Matcher) Matcher.AllOf(InputComponentIds.Input);
-			matcher.componentNames = InputComponentIds.componentNames();
+			Matcher matcher = (Matcher) Matcher
+					.AllOf(InputComponentsLookup.Input);
+			matcher.componentNames = InputComponentsLookup.componentNames();
 			_matcherInput = matcher;
 		}
 		return _matcherInput;
