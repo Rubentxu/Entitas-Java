@@ -26,12 +26,13 @@ public class ComponentInfo {
     public String typeName;
     public boolean isSingletonComponent;
     public Integer index;
+    public String subDir;
     public Integer totalComponents;
 
     public ComponentInfo(String fullTypeName, String typeName, List<FieldSource<JavaClassSource>> memberInfos, List<String> contexts,
                          boolean isSingleEntity, String singleComponentPrefix,
                          boolean generateComponent, boolean generateMethods, boolean generateIndex, boolean hideInBlueprintInspector,
-                         List<MethodSource<JavaClassSource>> constructores, List<String> enums, List<Import> imports) {
+                         List<MethodSource<JavaClassSource>> constructores, List<String> enums, List<Import> imports, String subDir) {
 
         this.fullTypeName = fullTypeName;
         this.memberInfos = memberInfos;
@@ -53,6 +54,7 @@ public class ComponentInfo {
         this.imports = imports;
         this.index = null;
         this.totalComponents = 0;
+        this.subDir = subDir;
     }
 
 
@@ -71,6 +73,7 @@ public class ComponentInfo {
                 ",\n    hideInBlueprintInspector=" + hideInBlueprintInspector +
                 ",\n    typeName='" + typeName + '\'' +
                 ",\n    isSingletonComponent=" + isSingletonComponent +
+                ",\n    subDIr=" + subDir +
                 "\n}";
     }
 

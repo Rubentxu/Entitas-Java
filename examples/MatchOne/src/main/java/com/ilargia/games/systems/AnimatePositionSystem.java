@@ -2,7 +2,7 @@ package com.ilargia.games.systems;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
-import com.ilargia.games.components.Position;
+import com.ilargia.games.components.game.Position;
 import com.ilargia.games.core.GameContext;
 import com.ilargia.games.core.GameEntity;
 import com.ilargia.games.core.GameMatcher;

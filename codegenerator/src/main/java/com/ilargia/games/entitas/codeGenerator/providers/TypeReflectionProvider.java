@@ -12,11 +12,9 @@ import org.jboss.forge.roaster.model.source.MethodSource;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -33,40 +31,51 @@ public class TypeReflectionProvider implements ICodeGeneratorDataProvider {
 
     }
 
-    public static List<File> readFileComponents(String pathname) {
-        List<File> recursiveList = new ArrayList<File>();
+    public static Map<String, List<File>> readFileComponents(String pathname) {
+        Map<String, List<File>> recursiveList = new HashMap(){{put("",new ArrayList<>());}};
         File d = new File(pathname);
+
         if (d.isDirectory()) {
-            File[] listFiles = d.listFiles();
-            for (int i = 0; i < listFiles.length; i++) {
-                try {
-                    recursiveList.addAll(readFileComponents(listFiles[i].getCanonicalPath()));
-                } catch (IOException e) {
-                    System.out.println("Error : " + e.getMessage());
+            for (File listFile : d.listFiles()) {
+                if (listFile.isDirectory()) {
+                    List<File> listSubDir = Arrays.asList(listFile.listFiles());
+                    if(listSubDir.size() > 0) {
+                        Path path = Paths.get(listSubDir.get(0).getAbsolutePath());
+                        String subDir = path.getName(path.getNameCount() - 2).toString();
+                        recursiveList.put(subDir, listSubDir );
+                    }
+
+                } else {
+                    recursiveList.get("").add(listFile);
                 }
+
+
             }
-        } else {
-            recursiveList.add(d);
+
         }
         return recursiveList;
 
     }
 
+
     @Override
     public List<ComponentInfo> componentInfos() {
         if (_componentInfos == null || _componentInfos.size() == 0) {
-            _componentInfos.addAll(readFileComponents(path).stream()
-                    .map((file) -> {
-                        try {
-                            return Roaster.parse(JavaClassSource.class, file);
-                        } catch (FileNotFoundException e) {
-                            return null;
-                        }
-                    }).filter((source) -> source != null)
-                    .filter((source) -> source.getInterfaces().toString().matches(".*\\bIComponent\\b.*"))
-                    .map((source) -> createComponentInfo(source))
-                    .filter(info -> info != null)
-                    .collect(Collectors.toList()));
+            Map<String, List<File>> mapFiles = readFileComponents(path);
+            mapFiles.forEach((subDir, files) -> {
+                _componentInfos.addAll(files.stream()
+                        .map((file) -> {
+                            try {
+                                return Roaster.parse(JavaClassSource.class, file);
+                            } catch (FileNotFoundException e) {
+                                return null;
+                            }
+                        }).filter((source) -> source != null)
+                        .filter((source) -> source.getInterfaces().toString().matches(".*\\bIComponent\\b.*"))
+                        .map((source) -> createComponentInfo(source, subDir))
+                        .filter(info -> info != null)
+                        .collect(Collectors.toList()));
+            });
         }
         return _componentInfos;
 
@@ -82,7 +91,7 @@ public class TypeReflectionProvider implements ICodeGeneratorDataProvider {
         return new ArrayList<>();
     }
 
-    public ComponentInfo createComponentInfo(JavaClassSource component) {
+    public ComponentInfo createComponentInfo(JavaClassSource component, String subDir) {
 
         String name = component.getName();
         String fullName = component.getCanonicalName();
@@ -129,7 +138,8 @@ public class TypeReflectionProvider implements ICodeGeneratorDataProvider {
                     false,
                     contructores,
                     enums,
-                    component.getImports()
+                    component.getImports(),
+                    subDir
 
             );
         }

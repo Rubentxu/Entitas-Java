@@ -1,7 +1,7 @@
 package com.ilargia.games;
 
-import com.ilargia.games.components.Position;
-import com.ilargia.games.core.Entitas;
+import com.ilargia.games.components.game.Position;
+import com.ilargia.games.core.Entitasaaa;
 import com.ilargia.games.core.GameContext;
 import com.ilargia.games.core.GameEntity;
 import com.ilargia.games.core.GameMatcher;
@@ -15,7 +15,7 @@ public class EntityIndexExtension {
     public static final String PositionKey = "Position";
     static final int shiftX = 8;
 
-    public static void addEntityIndices(Entitas contexts) {
+    public static void addEntityIndices(Entitasaaa contexts) {
         EntityIndex<GameEntity, Integer> positionIndex = new EntityIndex(
                 contexts.game.getGroup(GameMatcher.Position()),
                 (e, c) -> {

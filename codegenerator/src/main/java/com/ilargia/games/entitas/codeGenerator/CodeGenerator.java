@@ -7,15 +7,8 @@ import com.ilargia.games.entitas.codeGenerator.intermediate.ComponentInfo;
 import org.jboss.forge.roaster.model.source.JavaClassSource;
 import org.jboss.forge.roaster.model.source.JavaDocSource;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.io.*;
+import java.util.*;
 
 public class CodeGenerator {
 
@@ -81,8 +74,8 @@ public class CodeGenerator {
                 .map((base) -> base.replaceAll("/", ".").replaceAll("\\\\", "."))
                 .findFirst();
 
+
         ArrayList<CodeGenFile> generatedFiles = new ArrayList<CodeGenFile>();
-        List<ComponentInfo> componentInfos = provider.componentInfos();
         List<JavaClassSource> files = new ArrayList<>();
 
         if (sourcePackage.isPresent()) {
@@ -93,7 +86,7 @@ public class CodeGenerator {
                 }
 
                 if (generator instanceof IComponentCodeGenerator) {
-                    files.addAll(((IComponentCodeGenerator) generator).generate(componentInfos, sourcePackage.get()));
+                    files.addAll(((IComponentCodeGenerator) generator).generate(provider.componentInfos(), sourcePackage.get()));
 
                 }
 
@@ -101,9 +94,10 @@ public class CodeGenerator {
                     files.addAll(((IBlueprintsCodeGenerator) generator).generate(provider.blueprintNames(), sourcePackage.get()));
 
                 }
-                writeFiles(destinyDirectory, files);
+
             }
         }
+        writeFiles(destinyDirectory, files);
         return generatedFiles;
 
     }
@@ -118,23 +112,63 @@ public class CodeGenerator {
         files.stream().forEach((file) -> {
             JavaDocSource javaDoc = file.getJavaDoc();
             javaDoc.setFullText(String.format(AUTO_GENERATED_HEADER_FORMAT, "CodeGenerator"));
-
-            String fileName = directory.getPath() + "/" + file.getName() + ".java";
-            write(fileName, file.toString());
+            toFile(file, directory);
 
         });
 
     }
 
-    public void write(String fileName, String content) {
-        System.out.println(content);
-        File file = new File(fileName);
+    public static void toFile(JavaClassSource javaClass, File srcFolder)  {
+
+        File f = srcFolder;
+        String[] parts = javaClass.getPackage().split("\\.");
+
         try {
-            FileWriter fw = new FileWriter(file.getAbsoluteFile());
-            BufferedWriter bw = new BufferedWriter(fw);
-            bw.write(content);
-            bw.close();
+        if(!srcFolder.getAbsolutePath().endsWith(parts[parts.length-1])) {
+            f = new File(f, parts[parts.length-1]);
+            createParentDirs(f);
+        }
+        f = new File(f, javaClass.getName() + ".java");
+
+
+        write(f, javaClass.toString());
+
         } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public static void createParentDirs(File file) throws IOException {
+        if (file != null) {
+            File parent = file.getCanonicalFile();
+            if (parent == null) {
+                return;
+            }
+            parent.mkdirs();
+
+            if (parent.mkdirs() && !parent.isDirectory()) {
+                throw new IOException("Unable to create parent directories of " + file);
+            }
+        }
+    }
+
+
+    public static void write(File file , String content) {
+        System.out.println(content);
+//        try {
+//            FileWriter fw = new FileWriter(file.getAbsoluteFile());
+//            BufferedWriter bw = new BufferedWriter(fw);
+//            bw.write(content);
+//            bw.close();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            System.exit(-1);
+//        }
+        try (Writer writer = new BufferedWriter(new OutputStreamWriter(
+                new FileOutputStream(file.getAbsolutePath()), "utf-8"))) {
+            writer.write(content);
+        }catch (IOException e) {
             e.printStackTrace();
             System.exit(-1);
         }

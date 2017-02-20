@@ -2,7 +2,7 @@ package com.ilargia.games.systems;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.physics.box2d.World;
-import com.ilargia.games.components.TextureView;
+import com.ilargia.games.components.game.TextureView;
 import com.ilargia.games.core.GameContext;
 import com.ilargia.games.core.GameEntity;
 import com.ilargia.games.core.GameMatcher;

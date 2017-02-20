@@ -1,7 +1,7 @@
 package com.ilargia.games.systems;
 
 import com.ilargia.games.EntityIndexExtension;
-import com.ilargia.games.components.Input;
+import com.ilargia.games.components.input.Input;
 import com.ilargia.games.core.*;
 import com.ilargia.games.entitas.api.IContext;
 import com.ilargia.games.entitas.collector.Collector;
@@ -14,10 +14,10 @@ import java.util.stream.Collectors;
 
 public class ProcessInputSystem extends ReactiveSystem<InputEntity> {
 
-    private final Entitas entitas;
+    private final Entitasaaa entitas;
     private InputContext context;
 
-    public ProcessInputSystem(Entitas entitas) {
+    public ProcessInputSystem(Entitasaaa entitas) {
         super(entitas.input);
         this.context = entitas.input;
         this.entitas = entitas;

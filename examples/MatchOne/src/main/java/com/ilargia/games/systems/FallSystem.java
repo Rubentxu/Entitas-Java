@@ -2,7 +2,7 @@ package com.ilargia.games.systems;
 
 import com.ilargia.games.EntityIndexExtension;
 import com.ilargia.games.GameBoardLogic;
-import com.ilargia.games.components.GameBoard;
+import com.ilargia.games.components.game.GameBoard;
 import com.ilargia.games.core.GameContext;
 import com.ilargia.games.core.GameEntity;
 import com.ilargia.games.core.GameMatcher;

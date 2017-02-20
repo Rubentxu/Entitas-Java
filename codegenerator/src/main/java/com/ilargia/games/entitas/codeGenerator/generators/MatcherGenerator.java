@@ -18,7 +18,6 @@ public class MatcherGenerator implements IComponentCodeGenerator {
     @Override
     public List<JavaClassSource> generate(List<ComponentInfo> infos, String pkgDestiny) {
         Map<String, List<ComponentInfo>> mapContextsComponents = CodeGenerator.generateMap(infos);
-
         List<JavaClassSource> result = new ArrayList<>();
 
         result.addAll((List) mapContextsComponents.keySet().stream()
@@ -32,6 +31,10 @@ public class MatcherGenerator implements IComponentCodeGenerator {
     private JavaClassSource generateMatchers(String contextName, List<ComponentInfo> componentInfos, String pkgDestiny) {
         JavaClassSource javaClass = Roaster.parse(JavaClassSource.class, String.format("public class %1$s {}",
                 CodeGenerator.capitalize(contextName) + "Matcher"));
+        if(componentInfos.size() > 0 && !pkgDestiny.contains(componentInfos.get(0).subDir)) {
+            pkgDestiny+= "."+componentInfos.get(0).subDir;
+
+        }
         javaClass.setPackage(pkgDestiny);
         //javaClass.addImport("com.ilargia.games.entitas.interfaces.IMatcher");
         javaClass.addImport("com.ilargia.games.entitas.matcher.Matcher");

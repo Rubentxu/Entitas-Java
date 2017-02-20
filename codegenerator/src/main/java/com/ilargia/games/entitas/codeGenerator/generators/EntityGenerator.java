@@ -22,7 +22,6 @@ public class EntityGenerator implements IComponentCodeGenerator {
     @Override
     public List<JavaClassSource> generate(List<ComponentInfo> infos, String pkgDestiny) {
         Map<String, List<ComponentInfo>> mapContextsComponents = CodeGenerator.generateMap(infos);
-
         List<JavaClassSource> result = new ArrayList<>();
 
         result.addAll((List) mapContextsComponents.keySet().stream()
@@ -35,6 +34,11 @@ public class EntityGenerator implements IComponentCodeGenerator {
     private JavaClassSource generateEntity(String contextName, List<ComponentInfo> infos, String pkgDestiny) {
 
         JavaClassSource entityClass = Roaster.parse(JavaClassSource.class, String.format("public class %1$sEntity extends Entity {}", contextName));
+
+        if(infos.size() > 0 && infos.get(0).subDir !=null) {
+            pkgDestiny+= "."+infos.get(0).subDir;
+
+        }
         entityClass.setPackage(pkgDestiny);
         entityClass.addMethod()
                 .setName(contextName + "Entity")

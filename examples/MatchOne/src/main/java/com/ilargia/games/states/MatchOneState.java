@@ -2,7 +2,7 @@ package com.ilargia.games.states;
 
 import com.ilargia.games.EntityIndexExtension;
 import com.ilargia.games.MatchOneEngine;
-import com.ilargia.games.core.Entitas;
+import com.ilargia.games.core.Entitasaaa;
 
 import com.ilargia.games.egdx.base.BaseGameState;
 import com.ilargia.games.egdx.base.managers.EGAssetsManager;
@@ -19,7 +19,7 @@ public class MatchOneState extends BaseGameState {
 
 
     private MatchOneEngine engine;
-    private Entitas entitas;
+    private Entitasaaa entitas;
 
     private EGAssetsManager assetsManager;
 
@@ -45,7 +45,7 @@ public class MatchOneState extends BaseGameState {
 
     @Override
     public void initialize() {
-        entitas = new Entitas();
+        entitas = new Entitasaaa();
         EntityIndexExtension.addEntityIndices(entitas);
         // Input
         EmitInputSystem emitInputSystem = new EmitInputSystem(entitas.input, engine.physic, engine.camera);

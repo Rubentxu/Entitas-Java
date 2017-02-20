@@ -21,7 +21,6 @@ public class EntitasGenerator implements IComponentCodeGenerator {
         Map<String, List<ComponentInfo>> mapContextsComponents = CodeGenerator.generateMap(infos);
 
         List<JavaClassSource> result = new ArrayList<>();
-        ;
 
         result.addAll((List) mapContextsComponents.keySet().stream()
                 .map(contextName -> generateEntitas(mapContextsComponents.keySet(), pkgDestiny)

@@ -8,6 +8,8 @@ import org.jboss.forge.roaster.Roaster;
 import org.jboss.forge.roaster.model.source.FieldSource;
 import org.jboss.forge.roaster.model.source.JavaClassSource;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -31,7 +33,13 @@ public class ContextGenerator implements IComponentCodeGenerator {
 
     private JavaClassSource generateContext(String contextName, List<ComponentInfo> infos, String pkgDestiny) {
         JavaClassSource contextClass = Roaster.parse(JavaClassSource.class, String.format("public class %1$sContext extends com.ilargia.games.entitas.Context<%1$sEntity> {}", contextName));
+
+        if(infos.size() > 0 && infos.get(0).subDir !=null) {
+            pkgDestiny+= "."+infos.get(0).subDir;
+
+        }
         contextClass.setPackage(pkgDestiny);
+
 
         contextClass.addMethod()
                 .setName(contextName + "Context")

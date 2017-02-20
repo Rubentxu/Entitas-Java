@@ -30,7 +30,13 @@ public class ComponentIndicesGenerator implements IComponentCodeGenerator {
     private JavaClassSource generateIndicesLookup(String poolName, List<ComponentInfo> componentInfos, String pkgDestiny) {
         JavaClassSource javaClass = Roaster.parse(JavaClassSource.class, String.format("public class %1$s {}",
                 CodeGenerator.capitalize(poolName) + CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG));
+
+        if(componentInfos.size() > 0 && componentInfos.get(0).subDir !=null) {
+            pkgDestiny+= "."+componentInfos.get(0).subDir;
+
+        }
         javaClass.setPackage(pkgDestiny);
+
         addIndices(componentInfos, javaClass);
         addComponentNames(componentInfos, javaClass);
         addComponentTypes(componentInfos, javaClass);

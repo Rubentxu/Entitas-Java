@@ -1,6 +1,6 @@
 package com.ilargia.games.systems;
 
-import com.ilargia.games.core.Entitas;
+import com.ilargia.games.core.Entitasaaa;
 import com.ilargia.games.core.GameEntity;
 import com.ilargia.games.core.GameMatcher;
 import com.ilargia.games.entitas.api.IContext;
@@ -14,9 +14,9 @@ import java.util.List;
 
 public class ScoreSystem extends ReactiveSystem<GameEntity> implements IInitializeSystem {
 
-    private Entitas entitas;
+    private Entitasaaa entitas;
 
-    public ScoreSystem(Entitas entitas) {
+    public ScoreSystem(Entitasaaa entitas) {
         super(entitas.game);
         this.entitas = entitas;
     }

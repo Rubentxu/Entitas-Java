@@ -3,13 +3,12 @@ package com.ilargia.games.systems;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
-import com.ilargia.games.components.Input;
-import com.ilargia.games.components.TextureView;
+import com.ilargia.games.components.input.Input;
+import com.ilargia.games.components.game.TextureView;
 import com.ilargia.games.core.*;
 import com.ilargia.games.entitas.api.system.ICleanupSystem;
 import com.ilargia.games.entitas.api.system.IRenderSystem;
@@ -33,7 +32,7 @@ public class RendererSystem implements IRenderSystem, ICleanupSystem {
     public static float drawFPSPosX = 0;
     public static float drawFPSPosY = 0;
     private final World physics;
-    private final Entitas entitas;
+    private final Entitasaaa entitas;
     private Group<InputEntity> inputs;
 
     private ShapeRenderer debugShapeRenderer;
@@ -42,7 +41,7 @@ public class RendererSystem implements IRenderSystem, ICleanupSystem {
     private Batch batch;
     private Group<GameEntity> _groupTextureView;
 
-    public RendererSystem(Entitas entitas, Camera cam, Batch batch, World world) {
+    public RendererSystem(Entitasaaa entitas, Camera cam, Batch batch, World world) {
         this.physics = world;
         this.cam = cam;
         this.batch = batch;
