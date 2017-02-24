@@ -13,7 +13,7 @@ import com.ilargia.games.egdx.base.BaseEngine;
 import com.ilargia.games.entitas.Context;
 import com.ilargia.games.entitas.Entity;
 import com.ilargia.games.entitas.api.EntitasException;
-import com.ilargia.games.entitas.factories.Collections;
+import com.ilargia.games.entitas.factories.CollectionFactories;
 
 import java.util.Map;
 
@@ -27,7 +27,7 @@ public abstract class BaseSceneManager implements SceneManager<TiledMap> {
 
     public BaseSceneManager(BaseEngine engine) {
         this.engine = engine;
-        this.factories = Collections.createMap(String.class, EntityFactory.class);
+        this.factories = CollectionFactories.createMap(String.class, EntityFactory.class);
         if(engine.getManager(BasePhysicsManager.class)== null) throw new EntitasException("BaseSceneManager",
                 "BaseSceneManager needs to first load BasePhysicsManager on the engine");
         rayHandler = new RayHandler(engine.getManager(BasePhysicsManager.class).getPhysics());

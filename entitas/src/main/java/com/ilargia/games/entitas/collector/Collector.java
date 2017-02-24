@@ -6,7 +6,7 @@ import com.ilargia.games.entitas.api.IGroup;
 import com.ilargia.games.entitas.api.events.GroupChanged;
 import com.ilargia.games.entitas.group.GroupEvent;
 import com.ilargia.games.entitas.exceptions.CollectorException;
-import com.ilargia.games.entitas.factories.Collections;
+import com.ilargia.games.entitas.factories.CollectionFactories;
 import com.ilargia.games.entitas.group.Group;
 
 import java.util.Arrays;
@@ -29,7 +29,7 @@ public class Collector<TEntity extends IEntity> {
 
     public Collector(IGroup<TEntity>[] groups, GroupEvent[] groupEvents) {
         _groups = groups;
-        _collectedEntities = Collections.createSet(IEntity.class);
+        _collectedEntities = CollectionFactories.createSet(IEntity.class);
         _groupEvents = groupEvents;
 
         if (groups.length != groupEvents.length) {

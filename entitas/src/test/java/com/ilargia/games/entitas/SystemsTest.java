@@ -2,7 +2,6 @@ package com.ilargia.games.entitas;
 
 import com.ilargia.games.entitas.api.ContextInfo;
 import com.ilargia.games.entitas.api.EntityBaseFactory;
-import com.ilargia.games.entitas.api.IComponent;
 import com.ilargia.games.entitas.api.IContext;
 import com.ilargia.games.entitas.api.system.ICleanupSystem;
 import com.ilargia.games.entitas.api.system.IExecuteSystem;
@@ -11,7 +10,7 @@ import com.ilargia.games.entitas.api.system.ITearDownSystem;
 import com.ilargia.games.entitas.collector.Collector;
 import com.ilargia.games.entitas.components.Position;
 import com.ilargia.games.entitas.group.GroupEvent;
-import com.ilargia.games.entitas.factories.Collections;
+import com.ilargia.games.entitas.factories.CollectionFactories;
 import com.ilargia.games.entitas.factories.CollectionsFactory;
 import com.ilargia.games.entitas.group.Group;
 import com.ilargia.games.entitas.matcher.Matcher;
@@ -29,7 +28,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.Stack;
 
 import static org.junit.Assert.*;
 
@@ -53,7 +51,7 @@ public class SystemsTest {
     }
 
     private void createCollections() {
-        new Collections(new CollectionsFactory() {
+        new CollectionFactories(new CollectionsFactory() {
             @Override
             public <T> List createList(Class<T> clazz) {
                 return new ArrayList();

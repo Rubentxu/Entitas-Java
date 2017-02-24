@@ -4,7 +4,7 @@ import com.ilargia.games.entitas.Entity;
 import com.ilargia.games.entitas.api.IComponent;
 import com.ilargia.games.entitas.api.IGroup;
 import com.ilargia.games.entitas.exceptions.EntityIndexException;
-import com.ilargia.games.entitas.factories.Collections;
+import com.ilargia.games.entitas.factories.CollectionFactories;
 
 import java.util.Map;
 
@@ -14,13 +14,13 @@ public class PrimaryEntityIndex<TEntity extends Entity, TKey> extends AbstractEn
 
     public PrimaryEntityIndex(Func<TEntity, IComponent, TKey> key, IGroup group) {
         super(key, group);
-        _index = Collections.createMap(Object.class, Object.class);
+        _index = CollectionFactories.createMap(Object.class, Object.class);
         activate();
     }
 
     public PrimaryEntityIndex(IGroup<TEntity> group, Func<TEntity, IComponent, TKey[]> keys) {
         super(group, keys);
-        _index = Collections.createMap(Object.class, Object.class);
+        _index = CollectionFactories.createMap(Object.class, Object.class);
         activate();
     }
     @Override

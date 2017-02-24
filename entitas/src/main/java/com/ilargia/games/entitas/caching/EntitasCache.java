@@ -3,7 +3,7 @@ package com.ilargia.games.entitas.caching;
 
 import com.ilargia.games.entitas.api.IComponent;
 import com.ilargia.games.entitas.api.events.GroupChanged;
-import com.ilargia.games.entitas.factories.Collections;
+import com.ilargia.games.entitas.factories.CollectionFactories;
 
 import java.util.List;
 import java.util.Set;
@@ -11,16 +11,16 @@ import java.util.Set;
 public class EntitasCache {
 
     private static ObjectPool<List<IComponent>> componentArray = new ObjectPool<List<IComponent>>(() -> {
-        return Collections.createList(IComponent.class);
+        return CollectionFactories.createList(IComponent.class);
     }, null);
     private static ObjectPool<List> integerArray = new ObjectPool<List>(() -> {
-        return Collections.createList(Integer.class);
+        return CollectionFactories.createList(Integer.class);
     }, null);
     private static ObjectPool<Set> integerSet = new ObjectPool<Set>(() -> {
-        return Collections.createSet(Integer.class);
+        return CollectionFactories.createSet(Integer.class);
     }, null);
     private static ObjectPool<List<Set<GroupChanged>>> groupChangedArray = new ObjectPool<List<Set<GroupChanged>>>(() -> {
-        return Collections.createList(GroupChanged.class);
+        return CollectionFactories.createList(GroupChanged.class);
     }, null);
 
 

@@ -9,7 +9,7 @@ import com.ilargia.games.entitas.api.events.GroupUpdated;
 import com.ilargia.games.entitas.api.matcher.IMatcher;
 import com.ilargia.games.entitas.collector.Collector;
 import com.ilargia.games.entitas.exceptions.GroupSingleEntityException;
-import com.ilargia.games.entitas.factories.Collections;
+import com.ilargia.games.entitas.factories.CollectionFactories;
 
 import java.util.Iterator;
 import java.util.Set;
@@ -17,9 +17,9 @@ import java.util.Set;
 public class Group<TEntity extends IEntity> implements IGroup<TEntity> {
 
     public Class<TEntity> type;
-    public Set<GroupChanged> OnEntityAdded = Collections.createSet(GroupChanged.class);
-    public Set<GroupChanged> OnEntityRemoved = Collections.createSet(GroupChanged.class);
-    public Set<GroupUpdated> OnEntityUpdated = Collections.createSet(GroupUpdated.class);
+    public Set<GroupChanged> OnEntityAdded = CollectionFactories.createSet(GroupChanged.class);
+    public Set<GroupChanged> OnEntityRemoved = CollectionFactories.createSet(GroupChanged.class);
+    public Set<GroupUpdated> OnEntityUpdated = CollectionFactories.createSet(GroupUpdated.class);
 
     private IMatcher<TEntity> _matcher;
     private Set<TEntity> _entities; //
@@ -27,7 +27,7 @@ public class Group<TEntity extends IEntity> implements IGroup<TEntity> {
     private TEntity _singleEntityCache;
 
     public Group(IMatcher<TEntity> matcher, Class<TEntity> clazz) {
-        _entities = Collections.createSet(Entity.class);
+        _entities = CollectionFactories.createSet(Entity.class);
         _matcher = matcher;
         type = clazz;
 
@@ -181,21 +181,21 @@ public class Group<TEntity extends IEntity> implements IGroup<TEntity> {
 
     public void OnEntityAdded(GroupChanged<TEntity> listener) {
         if (OnEntityAdded != null) {
-            OnEntityAdded = Collections.createSet(GroupChanged.class);
+            OnEntityAdded = CollectionFactories.createSet(GroupChanged.class);
         }
         OnEntityAdded.add(listener);
     }
 
     public void OnEntityUpdated(GroupUpdated<TEntity> listener) {
         if (OnEntityUpdated != null) {
-            OnEntityUpdated = Collections.createSet(GroupUpdated.class);
+            OnEntityUpdated = CollectionFactories.createSet(GroupUpdated.class);
         }
         OnEntityUpdated.add(listener);
     }
 
     public void OnEntityRemoved(GroupChanged<TEntity> listener) {
         if (OnEntityRemoved != null) {
-            OnEntityRemoved = Collections.createSet(GroupChanged.class);
+            OnEntityRemoved = CollectionFactories.createSet(GroupChanged.class);
         }
         OnEntityRemoved.add(listener);
     }

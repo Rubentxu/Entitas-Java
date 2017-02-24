@@ -4,7 +4,7 @@ import com.ilargia.games.entitas.Entity;
 import com.ilargia.games.entitas.api.IContext;
 import com.ilargia.games.entitas.api.system.IReactiveSystem;
 import com.ilargia.games.entitas.collector.Collector;
-import com.ilargia.games.entitas.factories.Collections;
+import com.ilargia.games.entitas.factories.CollectionFactories;
 
 import java.util.List;
 
@@ -16,12 +16,12 @@ public abstract class ReactiveSystem<TEntity extends Entity> implements IReactiv
 
     protected ReactiveSystem(IContext<TEntity> context) {
         _collector = getTrigger(context);
-        _buffer = Collections.createList(Entity.class);
+        _buffer = CollectionFactories.createList(Entity.class);
     }
 
     protected ReactiveSystem(Collector<TEntity> collector) {
         _collector = collector;
-        _buffer = Collections.createList(Entity.class);
+        _buffer = CollectionFactories.createList(Entity.class);
     }
 
     protected abstract Collector<TEntity> getTrigger(IContext<TEntity> context);
