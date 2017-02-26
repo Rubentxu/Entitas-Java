@@ -10,6 +10,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.ilargia.games.egdx.api.EntityFactory;
 import com.ilargia.games.egdx.api.managers.SceneManager;
 import com.ilargia.games.egdx.base.BaseEngine;
+import com.ilargia.games.egdx.util.MapEntityParser;
 import com.ilargia.games.entitas.Context;
 import com.ilargia.games.entitas.Entity;
 import com.ilargia.games.entitas.api.EntitasException;
@@ -17,22 +18,26 @@ import com.ilargia.games.entitas.factories.CollectionFactories;
 
 import java.util.Map;
 
-public abstract class BaseSceneManager implements SceneManager<TiledMap> {
+public class BaseSceneManager implements SceneManager<TiledMap> {
 
-    protected Map<String, EntityFactory> factories;
-    protected BaseEngine engine;
-    protected final RayHandler rayHandler;
+    public BasePhysicsManager physics;
+    public Map<String, EntityFactory> factories;
+    public BaseEngine engine;
+    public RayHandler rayHandler;
     protected Batch batch;
     protected Camera defaultCamera;
+    protected MapEntityParser mapParser;
 
     public BaseSceneManager(BaseEngine engine) {
         this.engine = engine;
         this.factories = CollectionFactories.createMap(String.class, EntityFactory.class);
         if(engine.getManager(BasePhysicsManager.class)== null) throw new EntitasException("BaseSceneManager",
                 "BaseSceneManager needs to first load BasePhysicsManager on the engine");
-        rayHandler = new RayHandler(engine.getManager(BasePhysicsManager.class).getPhysics());
+        physics = engine.getManager(BasePhysicsManager.class);
+        rayHandler = new RayHandler(physics.getPhysics());
         batch = new SpriteBatch();
         defaultCamera = createCamera("Orthographic");
+        mapParser =  new MapEntityParser(this);
     }
 
     @Override
@@ -50,11 +55,11 @@ public abstract class BaseSceneManager implements SceneManager<TiledMap> {
     }
 
     @Override
-    public <TEntity extends Entity> TEntity createEntity(String name, Context<TEntity> context) {
+    public <TEntity extends Entity> TEntity createEntity(String name) {
         EntityFactory<TEntity> factory = factories.get(name);
         TEntity entity = null;
         if (factory != null) {
-            entity = factory.create(engine, context);
+            entity = factory.create(engine);
         }
         return entity;
 
@@ -84,6 +89,13 @@ public abstract class BaseSceneManager implements SceneManager<TiledMap> {
     public Batch getBatch() {
         return batch;
     }
+
+
+    @Override
+    public void createScene(TiledMap map) {
+
+    }
+
 
     @Override
     public void dispose() {

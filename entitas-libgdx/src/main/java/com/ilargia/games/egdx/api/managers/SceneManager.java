@@ -9,7 +9,7 @@ public interface SceneManager<M> extends Manager {
 
     void addEntityFactory(String name, EntityFactory factory);
 
-    <TEntity extends Entity> TEntity createEntity(String name, Context<TEntity> context);
+    <TEntity extends Entity> TEntity createEntity(String name);
 
     <L> L createLight(String type, int raysNum, int distance, int colorRGBA);
 
