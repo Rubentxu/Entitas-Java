@@ -18,7 +18,7 @@ import com.ilargia.games.entitas.factories.CollectionFactories;
 
 import java.util.Map;
 
-public class BaseSceneManager implements SceneManager<TiledMap> {
+public class BaseSceneManager implements SceneManager {
 
     public BasePhysicsManager physics;
     public Map<String, EntityFactory> factories;
@@ -92,8 +92,8 @@ public class BaseSceneManager implements SceneManager<TiledMap> {
 
 
     @Override
-    public void createScene(TiledMap map) {
-
+    public void createScene(String scene) {
+        mapParser.load(scene);
     }
 
 

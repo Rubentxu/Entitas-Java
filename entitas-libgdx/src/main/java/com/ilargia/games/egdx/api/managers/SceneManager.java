@@ -5,7 +5,7 @@ import com.ilargia.games.egdx.api.EntityFactory;
 import com.ilargia.games.entitas.Context;
 import com.ilargia.games.entitas.Entity;
 
-public interface SceneManager<M> extends Manager {
+public interface SceneManager extends Manager {
 
     void addEntityFactory(String name, EntityFactory factory);
 
@@ -19,7 +19,7 @@ public interface SceneManager<M> extends Manager {
 
     <B> B getBatch();
 
-    void createScene(M map);
+    void createScene(String scene);
 
 
 }
