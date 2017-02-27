@@ -4,11 +4,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class Collections {
+public class CollectionFactories {
 
     private static CollectionsFactory _factory;
 
-    public Collections(CollectionsFactory factory) {
+    public CollectionFactories(CollectionsFactory factory) {
         _factory = factory;
     }
 

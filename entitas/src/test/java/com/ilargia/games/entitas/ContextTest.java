@@ -12,7 +12,7 @@ import com.ilargia.games.entitas.exceptions.ContextDoesNotContainEntityException
 import com.ilargia.games.entitas.exceptions.ContextEntityIndexDoesAlreadyExistException;
 import com.ilargia.games.entitas.exceptions.ContextEntityIndexDoesNotExistException;
 import com.ilargia.games.entitas.exceptions.ContextStillHasRetainedEntitiesException;
-import com.ilargia.games.entitas.factories.Collections;
+import com.ilargia.games.entitas.factories.CollectionFactories;
 import com.ilargia.games.entitas.factories.CollectionsFactory;
 import com.ilargia.games.entitas.group.Group;
 import com.ilargia.games.entitas.index.PrimaryEntityIndex;
@@ -52,7 +52,7 @@ public class ContextTest {
 
 
     private void createCollections() {
-        new Collections(new CollectionsFactory() {
+        new CollectionFactories(new CollectionsFactory() {
             @Override
             public <T> List createList(Class<T> clazz) {
                 return new ArrayList();

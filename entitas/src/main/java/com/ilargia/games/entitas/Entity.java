@@ -9,7 +9,7 @@ import com.ilargia.games.entitas.api.events.EntityComponentReplaced;
 import com.ilargia.games.entitas.api.events.EntityReleased;
 import com.ilargia.games.entitas.caching.EntitasCache;
 import com.ilargia.games.entitas.exceptions.*;
-import com.ilargia.games.entitas.factories.Collections;
+import com.ilargia.games.entitas.factories.CollectionFactories;
 
 import java.util.List;
 import java.util.Set;
@@ -18,10 +18,10 @@ import java.util.Stack;
 public class Entity implements IEntity {
 
     // Eventos
-    public Set<EntityComponentChanged> OnComponentAdded = Collections.createSet(EntityComponentChanged.class);
-    public Set<EntityComponentChanged> OnComponentRemoved = Collections.createSet(EntityComponentChanged.class);
-    public Set<EntityComponentReplaced> OnComponentReplaced = Collections.createSet(EntityComponentReplaced.class);
-    public Set<EntityReleased> OnEntityReleased = Collections.createSet(EntityReleased.class);
+    public Set<EntityComponentChanged> OnComponentAdded = CollectionFactories.createSet(EntityComponentChanged.class);
+    public Set<EntityComponentChanged> OnComponentRemoved = CollectionFactories.createSet(EntityComponentChanged.class);
+    public Set<EntityComponentReplaced> OnComponentReplaced = CollectionFactories.createSet(EntityComponentReplaced.class);
+    public Set<EntityReleased> OnEntityReleased = CollectionFactories.createSet(EntityReleased.class);
 
     private Set<Object> owners; //ObjectOpenHashSet
     private int _creationIndex;
@@ -34,7 +34,7 @@ public class Entity implements IEntity {
     private ContextInfo _contextInfo;
 
     public Entity() {
-        owners = Collections.createSet(Object.class);
+        owners = CollectionFactories.createSet(Object.class);
 
     }
 
@@ -355,28 +355,28 @@ public class Entity implements IEntity {
 
     public void OnComponentAdded(EntityComponentChanged listener) {
         if (OnComponentAdded != null) {
-            OnComponentAdded = Collections.createSet(EntityComponentChanged.class);
+            OnComponentAdded = CollectionFactories.createSet(EntityComponentChanged.class);
         }
         OnComponentAdded.add(listener);
     }
 
     public void OnComponentRemoved(EntityComponentChanged listener) {
         if (OnComponentRemoved != null) {
-            OnComponentRemoved = Collections.createSet(EntityComponentChanged.class);
+            OnComponentRemoved = CollectionFactories.createSet(EntityComponentChanged.class);
         }
         OnComponentRemoved.add(listener);
     }
 
     public void OnComponentReplaced(EntityComponentReplaced listener) {
         if (OnComponentReplaced != null) {
-            OnComponentReplaced = Collections.createSet(EntityComponentReplaced.class);
+            OnComponentReplaced = CollectionFactories.createSet(EntityComponentReplaced.class);
         }
         OnComponentReplaced.add(listener);
     }
 
     public void OnEntityReleased(EntityReleased listener) {
         if (OnEntityReleased != null) {
-            OnEntityReleased = Collections.createSet(EntityReleased.class);
+            OnEntityReleased = CollectionFactories.createSet(EntityReleased.class);
         }
         OnEntityReleased.add(listener);
     }

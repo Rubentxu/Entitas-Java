@@ -4,7 +4,7 @@ import com.ilargia.games.entitas.api.ContextInfo;
 import com.ilargia.games.entitas.api.events.GroupChanged;
 import com.ilargia.games.entitas.components.Position;
 import com.ilargia.games.entitas.components.View;
-import com.ilargia.games.entitas.factories.Collections;
+import com.ilargia.games.entitas.factories.CollectionFactories;
 import com.ilargia.games.entitas.factories.CollectionsFactory;
 import com.ilargia.games.entitas.group.Group;
 import com.ilargia.games.entitas.utils.TestComponentIds;
@@ -31,7 +31,7 @@ public class GroupTest {
 
 
     private void createCollections() {
-        new Collections(new CollectionsFactory() {
+        new CollectionFactories(new CollectionsFactory() {
             @Override
             public <T> List createList(Class<T> clazz) {
                 return new ArrayList();

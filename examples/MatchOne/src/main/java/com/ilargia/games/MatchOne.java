@@ -9,7 +9,7 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.ilargia.games.egdx.EGEventBus;
 import com.ilargia.games.egdx.base.managers.BaseAssetsManager;
 import com.ilargia.games.egdx.base.managers.BasePreferencesManager;
-import com.ilargia.games.entitas.factories.Collections;
+import com.ilargia.games.entitas.factories.CollectionFactories;
 import com.ilargia.games.entitas.factories.CollectionsFactory;
 import com.ilargia.games.states.MatchOneState;
 import com.ilargia.games.util.TestFileHandleResolver;
@@ -70,7 +70,7 @@ public class MatchOne extends ApplicationAdapter {
 //
 //        });
 
-        new Collections(new CollectionsFactory() {
+        new CollectionFactories(new CollectionsFactory() {
             @Override
             public <T> List createList(Class<T> clazz) {
                 return new ArrayList<T>();

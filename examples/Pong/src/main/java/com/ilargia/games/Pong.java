@@ -10,7 +10,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Vector2;
 import com.ilargia.games.egdx.EGEventBus;
 import com.ilargia.games.egdx.base.managers.*;
-import com.ilargia.games.entitas.factories.Collections;
+import com.ilargia.games.entitas.factories.CollectionFactories;
 import com.ilargia.games.entitas.factories.CollectionsFactory;
 import com.ilargia.games.states.SplashState;
 import com.ilargia.games.util.TestFileHandleResolver;
@@ -49,7 +49,7 @@ public class Pong implements ApplicationListener {
 
             }
         });
-        new Collections(new CollectionsFactory() {
+        new CollectionFactories(new CollectionsFactory() {
             @Override
             public <T> List createList(Class<T> clazz) {
                 return new ArrayList<T>();
