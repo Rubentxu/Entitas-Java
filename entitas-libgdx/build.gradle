@@ -10,8 +10,8 @@ dependencies {
     compile "com.badlogicgames.gdx:gdx:$gdxVersion"
     compile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
     compile "com.badlogicgames.box2dlights:box2dlights:$box2dlightsVersion"
-compile group: 'net.dermetfan.libgdx-utils', name: 'libgdx-utils', version: '0.13.4'
-compile group: 'net.dermetfan.libgdx-utils', name: 'libgdx-utils-box2d', version: '0.13.4'
+    compile group: 'net.dermetfan.libgdx-utils', name: 'libgdx-utils', version: '0.13.4'
+    compile group: 'net.dermetfan.libgdx-utils', name: 'libgdx-utils-box2d', version: '0.13.4'
 
 
     compile group: 'it.unimi.dsi', name: 'fastutil', version: '7.0.13'

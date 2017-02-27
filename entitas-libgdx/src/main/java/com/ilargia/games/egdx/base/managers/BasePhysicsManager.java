@@ -11,7 +11,7 @@ public class BasePhysicsManager implements PhysicsManager<World> {
     private BodyBuilder bodyBuilder;
 
     public BasePhysicsManager(Vector2 gravity) {
-        physics = new World(gravity,false);
+        physics = new World(gravity, false);
         bodyBuilder = new BodyBuilder(physics);
 
     }

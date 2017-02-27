@@ -26,14 +26,14 @@ public class MapEntityParser {
 
         for (MapObject object : characters) {
             String type = object.getProperties().get(aliases.Character, "", String.class);
-            if(type!=null)
+            if (type != null)
                 baseSceneManager.createEntity(type);
 
         }
 
         for (MapObject object : statics) {
             String type = object.getProperties().get(aliases.Statics, "", String.class);
-            if(type!=null)
+            if (type != null)
                 baseSceneManager.createEntity(type);
 
         }

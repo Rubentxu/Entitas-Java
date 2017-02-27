@@ -7,10 +7,6 @@ import com.ilargia.games.entitas.api.IEntity;
 
 public interface GUIManager<A> extends Manager {
 
-    void loadAssets(A assetsManager);
-
-    Skin createSkin(A assetsManager);
-
     Skin getSkin();
 
     <F> F getDefaultFont();
