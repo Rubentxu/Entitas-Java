@@ -2,9 +2,9 @@ package com.ilargia.games.systems;
 
 import com.ilargia.games.ContextExtensions;
 import com.ilargia.games.GameBoardLogic;
-import com.ilargia.games.components.game.GameBoard;
-import com.ilargia.games.core.game.GameContext;
-import com.ilargia.games.core.game.GameMatcher;
+import com.ilargia.games.core.component.game.GameBoard;
+import com.ilargia.games.core.gen.game.GameContext;
+import com.ilargia.games.core.gen.game.GameMatcher;
 import com.ilargia.games.entitas.Entity;
 import com.ilargia.games.entitas.api.IContext;
 import com.ilargia.games.entitas.collector.Collector;

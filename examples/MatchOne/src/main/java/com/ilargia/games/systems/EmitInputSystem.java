@@ -6,9 +6,9 @@ import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
-import com.ilargia.games.core.input.InputContext;
-import com.ilargia.games.core.input.InputEntity;
-import com.ilargia.games.core.input.InputMatcher;
+import com.ilargia.games.core.gen.input.InputContext;
+import com.ilargia.games.core.gen.input.InputEntity;
+import com.ilargia.games.core.gen.input.InputMatcher;
 import com.ilargia.games.entitas.group.Group;
 
 

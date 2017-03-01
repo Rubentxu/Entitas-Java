@@ -1,10 +1,7 @@
 package com.ilargia.games.core.state;
 
-import com.ilargia.games.entitas.api.*;
 import com.ilargia.games.entitas.Entity;
-import java.util.Stack;
-import com.ilargia.games.components.state.Score;
-import com.ilargia.games.entitas.api.IComponent;
+import com.ilargia.games.core.component.state.Score;
 
 /**
  * ---------------------------------------------------------------------------

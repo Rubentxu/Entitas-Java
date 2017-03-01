@@ -12,8 +12,8 @@ import com.ilargia.games.entitas.exceptions.ContextDoesNotContainEntityException
 import com.ilargia.games.entitas.exceptions.ContextEntityIndexDoesAlreadyExistException;
 import com.ilargia.games.entitas.exceptions.ContextEntityIndexDoesNotExistException;
 import com.ilargia.games.entitas.exceptions.ContextStillHasRetainedEntitiesException;
-import com.ilargia.games.entitas.factories.CollectionFactories;
-import com.ilargia.games.entitas.factories.CollectionsFactory;
+import com.ilargia.games.entitas.factories.CollectionsFactories;
+import com.ilargia.games.entitas.factories.EntitasCollections;
 import com.ilargia.games.entitas.group.Group;
 import com.ilargia.games.entitas.index.PrimaryEntityIndex;
 import com.ilargia.games.entitas.utils.TestComponentIds;
@@ -52,23 +52,7 @@ public class ContextTest {
 
 
     private void createCollections() {
-        new CollectionFactories(new CollectionsFactory() {
-            @Override
-            public <T> List createList(Class<T> clazz) {
-                return new ArrayList();
-            }
-
-            @Override
-            public <T> Set createSet(Class<T> clazz) {
-                return new HashSet();
-            }
-
-            @Override
-            public <K, V> Map createMap(Class<K> keyClazz, Class<V> valueClazz) {
-                return new HashMap();
-            }
-
-        });
+        new EntitasCollections(new CollectionsFactories(){});
     }
 
     @Before

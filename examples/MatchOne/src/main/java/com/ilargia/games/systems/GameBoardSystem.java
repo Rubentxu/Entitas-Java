@@ -2,10 +2,10 @@ package com.ilargia.games.systems;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.ilargia.games.ContextExtensions;
-import com.ilargia.games.components.game.GameBoard;
-import com.ilargia.games.core.game.GameContext;
-import com.ilargia.games.core.game.GameEntity;
-import com.ilargia.games.core.game.GameMatcher;
+import com.ilargia.games.core.component.game.GameBoard;
+import com.ilargia.games.core.gen.game.GameContext;
+import com.ilargia.games.core.gen.game.GameEntity;
+import com.ilargia.games.core.gen.game.GameMatcher;
 import com.ilargia.games.entitas.api.IContext;
 import com.ilargia.games.entitas.api.system.IInitializeSystem;
 import com.ilargia.games.entitas.collector.Collector;

@@ -1,12 +1,12 @@
 package com.ilargia.games.core;
 
-import com.ilargia.games.components.Ball;
-import com.ilargia.games.components.Delay;
-import com.ilargia.games.components.Motion;
-import com.ilargia.games.components.Player;
-import com.ilargia.games.components.Score;
-import com.ilargia.games.components.TextureView;
-import com.ilargia.games.components.View;
+import com.ilargia.games.core.component.Ball;
+import com.ilargia.games.core.component.Delay;
+import com.ilargia.games.core.component.Motion;
+import com.ilargia.games.core.component.Player;
+import com.ilargia.games.core.component.Score;
+import com.ilargia.games.core.component.TextureView;
+import com.ilargia.games.core.component.View;
 
 /**
  * ---------------------------------------------------------------------------

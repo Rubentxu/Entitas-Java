@@ -1,27 +1,34 @@
 package com.ilargia.games.entitas.caching;
 
 
+import com.ilargia.games.entitas.Entity;
 import com.ilargia.games.entitas.api.IComponent;
+import com.ilargia.games.entitas.api.IEntity;
 import com.ilargia.games.entitas.api.events.GroupChanged;
-import com.ilargia.games.entitas.factories.CollectionFactories;
+import com.ilargia.games.entitas.factories.EntitasCollections;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
 public class EntitasCache {
 
     private static ObjectPool<List<IComponent>> componentArray = new ObjectPool<List<IComponent>>(() -> {
-        return CollectionFactories.createList(IComponent.class);
+        return EntitasCollections.createList(IComponent.class);
     }, null);
-    private static ObjectPool<List> integerArray = new ObjectPool<List>(() -> {
-        return CollectionFactories.createList(Integer.class);
+    private static ObjectPool<List<Integer>> integerArray = new ObjectPool<>(() -> {
+        return EntitasCollections.createList(Integer.class);
     }, null);
-    private static ObjectPool<Set> integerSet = new ObjectPool<Set>(() -> {
-        return CollectionFactories.createSet(Integer.class);
+    private static ObjectPool<Set<Integer>> integerSet = new ObjectPool<>(() -> {
+        return EntitasCollections.createSet(Integer.class);
     }, null);
+
     private static ObjectPool<List<Set<GroupChanged>>> groupChangedArray = new ObjectPool<List<Set<GroupChanged>>>(() -> {
-        return CollectionFactories.createList(GroupChanged.class);
+        return EntitasCollections.<Set<GroupChanged>>createList(null);
     }, null);
+
+
 
 
     public static List<IComponent> getIComponentList() {

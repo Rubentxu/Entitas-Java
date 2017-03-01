@@ -9,10 +9,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.ilargia.games.egdx.api.EntityFactory;
 import com.ilargia.games.egdx.api.managers.SceneManager;
 import com.ilargia.games.egdx.base.BaseEngine;
-import com.ilargia.games.egdx.util.MapEntityParser;
+import com.ilargia.games.egdx.base.util.MapEntityParser;
 import com.ilargia.games.entitas.Entity;
 import com.ilargia.games.entitas.api.EntitasException;
-import com.ilargia.games.entitas.factories.CollectionFactories;
+import com.ilargia.games.entitas.factories.EntitasCollections;
 
 import java.util.Map;
 
@@ -28,7 +28,7 @@ public class BaseSceneManager implements SceneManager {
 
     public BaseSceneManager(BaseEngine engine) {
         this.engine = engine;
-        this.entityFactories = CollectionFactories.createMap(String.class, EntityFactory.class);
+        this.entityFactories = EntitasCollections.createMap(String.class, EntityFactory.class);
         if (engine.getManager(BasePhysicsManager.class) == null) throw new EntitasException("BaseSceneManager",
                 "BaseSceneManager needs to first load BasePhysicsManager on the engine");
         physics = engine.getManager(BasePhysicsManager.class);

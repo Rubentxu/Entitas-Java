@@ -2,10 +2,10 @@ package com.ilargia.games.systems;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.physics.box2d.World;
-import com.ilargia.games.components.game.TextureView;
-import com.ilargia.games.core.game.GameContext;
-import com.ilargia.games.core.game.GameEntity;
-import com.ilargia.games.core.game.GameMatcher;
+import com.ilargia.games.core.component.game.TextureView;
+import com.ilargia.games.core.gen.game.GameContext;
+import com.ilargia.games.core.gen.game.GameEntity;
+import com.ilargia.games.core.gen.game.GameMatcher;
 import com.ilargia.games.entitas.api.IContext;
 import com.ilargia.games.entitas.api.IGroup;
 import com.ilargia.games.entitas.api.system.ICleanupSystem;

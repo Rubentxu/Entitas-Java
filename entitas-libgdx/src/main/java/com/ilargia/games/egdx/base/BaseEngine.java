@@ -5,16 +5,19 @@ import com.ilargia.games.egdx.api.Engine;
 import com.ilargia.games.egdx.api.managers.Manager;
 import com.ilargia.games.entitas.api.IContext;
 import com.ilargia.games.entitas.api.IContexts;
-import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
-import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
+import com.ilargia.games.entitas.factories.CollectionsFactories;
+import com.ilargia.games.entitas.factories.EntitasCollections;
+
+import java.util.Map;
 
 public class BaseEngine implements Engine, IContexts {
 
-    public Object2ObjectMap<Class<? extends Manager>, Manager> _managers;
+    private final EntitasCollections collectionsImpl;
+    public Map<Class<? extends Manager>, Manager> _managers;
 
-    public BaseEngine() {
-        _managers = new Object2ObjectArrayMap();
-
+    public BaseEngine(CollectionsFactories factories) {
+        collectionsImpl = new EntitasCollections(factories);
+        _managers = EntitasCollections.createMap(Class.class, Manager.class);
     }
 
     @Override

@@ -7,18 +7,19 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
-import com.ilargia.games.components.Score;
-import com.ilargia.games.components.TextureView;
-import com.ilargia.games.components.View;
+import com.ilargia.games.core.component.Score;
+import com.ilargia.games.core.component.TextureView;
+import com.ilargia.games.core.component.View;
 import com.ilargia.games.core.CoreContext;
 import com.ilargia.games.core.CoreEntity;
 import com.ilargia.games.core.CoreMatcher;
 import com.ilargia.games.entitas.api.system.IRenderSystem;
+import com.ilargia.games.entitas.api.system.ITearDownSystem;
 import com.ilargia.games.entitas.group.Group;
 
 
-public class RendererSystem implements IRenderSystem {
-    private final BitmapFont font;
+public class RendererSystem implements IRenderSystem, ITearDownSystem {
+    private BitmapFont font;
     private Group<CoreEntity> _group;
     private ShapeRenderer sr;
     private Camera cam;
@@ -49,7 +50,7 @@ public class RendererSystem implements IRenderSystem {
 
         for (CoreEntity e : _group.getEntities()) {
             View view = e.getView();
-
+            System.out.printf("..views");
             if (view.shape instanceof Rectangle) {
                 Rectangle ret = (Rectangle) view.shape;
                 sr.rect(ret.x, ret.y, ret.width, ret.height);
@@ -69,8 +70,6 @@ public class RendererSystem implements IRenderSystem {
         }
         for (CoreEntity e : _groupTextureView.getEntities()) {
             TextureView textureView = e.getTextureView();
-            float originX = textureView.width * 0.5f;
-            float originY = textureView.height * 0.5f;
 
             batch.draw(textureView.texture, textureView.position.x, textureView.position.y,
                     0, 0, textureView.width, textureView.height, 1, 1, textureView.rotation);
@@ -80,4 +79,15 @@ public class RendererSystem implements IRenderSystem {
         batch.end();
     }
 
+    @Override
+    public void tearDown() {
+        //batch.end();
+        batch = null;
+//        //cam = null;
+//        font = null;
+//        _group = null;
+//        sr = null;
+//        cam = null;
+//        _groupTextureView = null;
+    }
 }

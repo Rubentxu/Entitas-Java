@@ -6,7 +6,7 @@ import com.ilargia.games.entitas.api.IComponent;
 import com.ilargia.games.entitas.api.IEntity;
 import com.ilargia.games.entitas.api.IGroup;
 import com.ilargia.games.entitas.exceptions.EntityIndexException;
-import com.ilargia.games.entitas.factories.CollectionFactories;
+import com.ilargia.games.entitas.factories.EntitasCollections;
 
 import java.util.Map;
 import java.util.Set;
@@ -17,14 +17,14 @@ public class EntityIndex<TEntity extends Entity, TKey> extends AbstractEntityInd
 
     public EntityIndex( Func<TEntity, IComponent, TKey> key, IGroup<TEntity> group) {
         super(key, group);
-        _index = CollectionFactories.createMap(Object.class, Entity.class); //Object2ObjectArrayMap
+        _index = EntitasCollections.createMap(Object.class, Entity.class); //Object2ObjectArrayMap
         activate();
     }
 
 
     public EntityIndex(IGroup<TEntity> group, Func<TEntity, IComponent, TKey[]> keys)  {
         super(group, keys);
-        _index = CollectionFactories.createMap(Object.class, Entity.class); //Object2ObjectArrayMap
+        _index = EntitasCollections.createMap(Object.class, Entity.class); //Object2ObjectArrayMap
         activate();
     }
     @Override
@@ -35,7 +35,7 @@ public class EntityIndex<TEntity extends Entity, TKey> extends AbstractEntityInd
 
     public Set<TEntity> getEntities(TKey key) {
         if (!_index.containsKey(key)) {
-            Set<TEntity> entities = CollectionFactories.createSet(Entity.class);
+            Set<TEntity> entities = EntitasCollections.createSet(Entity.class);
             _index.put(key, entities);
             return entities;
         }

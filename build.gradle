@@ -6,7 +6,7 @@ targetCompatibility = 1.8
 
 
 allprojects {
-    version '0.2.0'
+    version '0.3.0'
 
     apply plugin: 'java'
     apply plugin: "eclipse"
@@ -33,24 +33,3 @@ allprojects {
     }
 
 }
-//
-//class MyDownload extends DefaultTask {
-//    @Input
-//    String sourceUrl
-//
-//    @OutputFile
-//    File target
-//
-//    @TaskAction
-//    void download() {
-//        ant.get(src: sourceUrl, dest: target)
-//    }
-//}
-//
-//task downloadSomething(type: MyDownload) {
-//    sourceUrl = 'https://github.com/Rubentxu/Entitas-Java/releases/download/Entitas-0.1.0/Entitas-Java-0.1.0.jar'
-//    target = file('build/entitas-java.jar')
-//}
-//
-//jar.dependsOn downloadSomething
-

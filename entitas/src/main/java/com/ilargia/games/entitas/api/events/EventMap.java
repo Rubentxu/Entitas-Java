@@ -1,6 +1,6 @@
 package com.ilargia.games.entitas.api.events;
 
-import com.ilargia.games.entitas.factories.CollectionFactories;
+import com.ilargia.games.entitas.factories.EntitasCollections;
 
 import java.util.Collection;
 import java.util.Map;
@@ -10,7 +10,7 @@ public class EventMap<K, V> {
     private Map<K, V> listeners;//ObjectArrayList
 
     public EventMap() {
-        this.listeners = CollectionFactories.createMap(Object.class, Object.class);
+        this.listeners = EntitasCollections.createMap(Object.class, Object.class);
     }
 
     public V removeListener(K key) {

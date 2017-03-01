@@ -1,7 +1,7 @@
 package com.ilargia.games.entitas.systems;
 
 import com.ilargia.games.entitas.api.system.*;
-import com.ilargia.games.entitas.factories.CollectionFactories;
+import com.ilargia.games.entitas.factories.EntitasCollections;
 
 import java.util.List;
 
@@ -16,11 +16,11 @@ public class Systems implements IInitializeSystem, IExecuteSystem, IRenderSystem
     protected List<ITearDownSystem> _tearDownSystems;
 
     public Systems() {
-        _initializeSystems = CollectionFactories.createList(ISystem.class);
-        _executeSystems = CollectionFactories.createList(ISystem.class);
-        _renderSystems = CollectionFactories.createList(ISystem.class);
-        _cleanupSystems = CollectionFactories.createList(ISystem.class);
-        _tearDownSystems = CollectionFactories.createList(ISystem.class);
+        _initializeSystems = EntitasCollections.createList(ISystem.class);
+        _executeSystems = EntitasCollections.createList(ISystem.class);
+        _renderSystems = EntitasCollections.createList(ISystem.class);
+        _cleanupSystems = EntitasCollections.createList(ISystem.class);
+        _tearDownSystems = EntitasCollections.createList(ISystem.class);
 
     }
 

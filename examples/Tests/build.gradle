@@ -1,0 +1,39 @@
+apply plugin: 'java'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+
+configurations {
+    provided
+    compile.extendsFrom provided
+}
+
+jar {
+    baseName = 'Tests'
+    manifest {
+        attributes 'Implementation-Title': 'Test fatJar',
+                'Implementation-Version': version,
+                'Main-Class': 'com.ilargia.games.Tests'
+    }
+    dependsOn configurations.runtime
+    from {
+        (configurations.compile - configurations.provided).collect {
+            it.isDirectory() ? it : zipTree(it)
+        }
+    }
+}
+
+
+dependencies {
+    compile project(":entitas")
+    compile project(":entitas-libgdx")
+    compile "com.badlogicgames.gdx:gdx:$gdxVersion"
+    compile "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
+    compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+    compile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
+    compile "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
+    compile "com.badlogicgames.box2dlights:box2dlights:$box2dlightsVersion"
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+
+}

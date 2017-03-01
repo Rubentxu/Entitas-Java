@@ -1,12 +1,12 @@
 package com.ilargia.games.systems;
 
 import com.ilargia.games.EntityIndexExtension;
-import com.ilargia.games.components.input.Input;
+import com.ilargia.games.core.component.input.Input;
 import com.ilargia.games.core.*;
-import com.ilargia.games.core.game.GameEntity;
-import com.ilargia.games.core.input.InputContext;
-import com.ilargia.games.core.input.InputEntity;
-import com.ilargia.games.core.input.InputMatcher;
+import com.ilargia.games.core.gen.game.GameEntity;
+import com.ilargia.games.core.gen.input.InputContext;
+import com.ilargia.games.core.gen.input.InputEntity;
+import com.ilargia.games.core.gen.input.InputMatcher;
 import com.ilargia.games.entitas.api.IContext;
 import com.ilargia.games.entitas.collector.Collector;
 import com.ilargia.games.entitas.systems.ReactiveSystem;

@@ -6,7 +6,7 @@ import com.ilargia.games.egdx.api.GUIFactory;
 import com.ilargia.games.egdx.api.managers.GUIManager;
 import com.ilargia.games.egdx.base.BaseEngine;
 import com.ilargia.games.entitas.api.IEntity;
-import com.ilargia.games.entitas.factories.CollectionFactories;
+import com.ilargia.games.entitas.factories.EntitasCollections;
 
 import java.util.Map;
 
@@ -17,7 +17,7 @@ public class BaseGUIManager implements GUIManager<BaseAssetsManager> {
     protected Skin skin;
 
     public BaseGUIManager(BitmapFont defaultFont, Skin skin, BaseEngine engine) {
-        this.guiFactories = CollectionFactories.createMap(String.class, GUIFactory.class);
+        this.guiFactories = EntitasCollections.createMap(String.class, GUIFactory.class);
         this.defaultFont = defaultFont;
         this.skin = skin;
         this.engine = engine;

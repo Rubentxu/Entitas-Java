@@ -2,14 +2,14 @@ package com.ilargia.games.core;
 
 import com.ilargia.games.entitas.Context;
 import com.ilargia.games.entitas.api.*;
-import com.ilargia.games.core.input.InputEntity;
-import com.ilargia.games.core.game.GameEntity;
+import com.ilargia.games.core.gen.input.InputEntity;
+import com.ilargia.games.core.gen.game.GameEntity;
 import com.ilargia.games.core.state.GameStateEntity;
-import com.ilargia.games.core.input.InputComponentsLookup;
-import com.ilargia.games.core.game.GameComponentsLookup;
+import com.ilargia.games.core.gen.input.InputComponentsLookup;
+import com.ilargia.games.core.gen.game.GameComponentsLookup;
 import com.ilargia.games.core.state.GamestateComponentsLookup;
-import com.ilargia.games.core.input.InputContext;
-import com.ilargia.games.core.game.GameContext;
+import com.ilargia.games.core.gen.input.InputContext;
+import com.ilargia.games.core.gen.game.GameContext;
 import com.ilargia.games.core.state.GameStateContext;
 
 /**

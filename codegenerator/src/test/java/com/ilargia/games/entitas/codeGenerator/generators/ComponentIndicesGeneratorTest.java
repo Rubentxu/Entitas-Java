@@ -46,7 +46,7 @@ public class ComponentIndicesGeneratorTest {
         List<String> poolNames = new ArrayList<String>();
         poolNames.add("Otro");
 
-        return new ComponentInfo("com.ilargia.games.entitas.codeGenerator.components.Player", "Player", memberInfos, poolNames,
+        return new ComponentInfo("com.ilargia.games.entitas.codeGenerator.component.Player", "Player", memberInfos, poolNames,
                 false, "", true, true, false, false, null, null, null,"");
     }
 
@@ -59,7 +59,7 @@ public class ComponentIndicesGeneratorTest {
         poolNames.add("Core");
 
 
-        return new ComponentInfo("com.ilargia.games.entitas.codeGenerator.components.Bounds", "Bounds", memberInfos, poolNames,
+        return new ComponentInfo("com.ilargia.games.entitas.codeGenerator.component.Bounds", "Bounds", memberInfos, poolNames,
                 false, "", true, true, false, false, null, null, null,"");
     }
 
@@ -71,7 +71,7 @@ public class ComponentIndicesGeneratorTest {
         poolNames.add("Core");
         poolNames.add("Otro");
 
-        return new ComponentInfo("com.ilargia.games.entitas.codeGenerator.components.View", "View", memberInfos, poolNames,
+        return new ComponentInfo("com.ilargia.games.entitas.codeGenerator.component.View", "View", memberInfos, poolNames,
                 false, "", true, true, false, false, null, null, null,"");
     }
 
@@ -83,7 +83,7 @@ public class ComponentIndicesGeneratorTest {
         poolNames.add("Core");
         poolNames.add("Otro");
 
-        return new ComponentInfo("com.ilargia.games.entitas.codeGenerator.components.Ball", "Ball", memberInfos, poolNames,
+        return new ComponentInfo("com.ilargia.games.entitas.codeGenerator.component.Ball", "Ball", memberInfos, poolNames,
                 false, "", true, true, false, false, null, null, null,"");
     }
 
@@ -94,7 +94,7 @@ public class ComponentIndicesGeneratorTest {
         List<String> poolNames = new ArrayList<String>();
         poolNames.add("Core");
 
-        return new ComponentInfo("com.ilargia.games.entitas.codeGenerator.components.Motion", "Motion", memberInfos, poolNames,
+        return new ComponentInfo("com.ilargia.games.entitas.codeGenerator.component.Motion", "Motion", memberInfos, poolNames,
                 false, "", true, true, false, false, null, null, null,"" );
     }
 
@@ -105,7 +105,7 @@ public class ComponentIndicesGeneratorTest {
         List<String> poolNames = new ArrayList<String>();
         poolNames.add("Core");
 
-        return new ComponentInfo("com.ilargia.games.entitas.codeGenerator.components.Score", "Score", memberInfos, poolNames,
+        return new ComponentInfo("com.ilargia.games.entitas.codeGenerator.component.Score", "Score", memberInfos, poolNames,
                 false, "", true, true, false, false, null, null, null,"");
     }
 

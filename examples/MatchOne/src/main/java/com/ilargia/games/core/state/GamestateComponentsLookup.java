@@ -1,6 +1,6 @@
 package com.ilargia.games.core.state;
 
-import com.ilargia.games.components.state.Score;
+import com.ilargia.games.core.component.state.Score;
 
 /**
  * ---------------------------------------------------------------------------

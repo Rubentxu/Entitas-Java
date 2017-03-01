@@ -1,7 +1,7 @@
 package com.ilargia.games.systems;
 
 import com.ilargia.games.PongGame;
-import com.ilargia.games.components.Delay;
+import com.ilargia.games.core.component.Delay;
 import com.ilargia.games.core.CoreContext;
 import com.ilargia.games.core.CoreEntity;
 import com.ilargia.games.core.CoreMatcher;

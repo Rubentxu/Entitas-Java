@@ -2,29 +2,30 @@ package com.ilargia.games.egdx.base;
 
 
 import com.ilargia.games.egdx.api.*;
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import com.ilargia.games.entitas.factories.EntitasCollections;
+import java.util.Stack;
+
 
 public abstract class BaseGame<E extends Engine> implements Game<E> {
 
     public static EventBus ebus;
-    protected ObjectArrayList<GameState> _states;
+    protected Stack<GameState> _states;
     protected E _engine;
 
     public BaseGame(E engine, EventBus bus) {
         this._engine = engine;
-        this._states = new ObjectArrayList<>();
+        this._states = EntitasCollections.createStack(GameState.class);
         this.ebus = bus;
     }
 
     @Override
     public void update(float deltaTime) {
-        _states.top().update(deltaTime);
-        _states.top().render();
+        _states.peek().update(deltaTime);
+        _states.peek().render();
     }
 
     @Override
     public void dispose() {
-        _states.clear();
         _states = null;
         _engine = null;
 

@@ -6,16 +6,13 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.physics.box2d.World;
 import com.ilargia.games.Pong;
 import com.ilargia.games.PongEngine;
-import com.ilargia.games.components.Player;
+import com.ilargia.games.core.component.Player;
 import com.ilargia.games.core.Entitas;
 import com.ilargia.games.egdx.base.BaseGameState;
 import com.ilargia.games.egdx.base.managers.BaseGUIManager;
-import com.ilargia.games.egdx.base.managers.BasePhysicsManager;
 import com.ilargia.games.egdx.base.managers.BaseSceneManager;
-import com.ilargia.games.egdx.util.BodyBuilder;
 import com.ilargia.games.systems.*;
 
 

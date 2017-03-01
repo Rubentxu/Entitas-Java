@@ -11,8 +11,8 @@ import com.ilargia.games.entitas.components.View;
 import com.ilargia.games.entitas.exceptions.EntityAlreadyHasComponentException;
 import com.ilargia.games.entitas.exceptions.EntityDoesNotHaveComponentException;
 import com.ilargia.games.entitas.exceptions.EntityIsNotEnabledException;
-import com.ilargia.games.entitas.factories.CollectionFactories;
-import com.ilargia.games.entitas.factories.CollectionsFactory;
+import com.ilargia.games.entitas.factories.CollectionsFactories;
+import com.ilargia.games.entitas.factories.EntitasCollections;
 import com.ilargia.games.entitas.utils.TestComponentIds;
 import com.ilargia.games.entitas.utils.TestEntity;
 import org.junit.Before;
@@ -40,21 +40,7 @@ public class EntityTest {
 
 
     private void createCollections() {
-        new CollectionFactories(new CollectionsFactory() {
-            @Override
-            public <T> List createList(Class<T> clazz) {
-                return new ArrayList();
-            }
-
-            @Override
-            public <T> Set createSet(Class<T> clazz) {
-                return new HashSet();
-            }
-
-            @Override
-            public <K, V> Map createMap(Class<K> keyClazz, Class<V> valueClazz) {
-                return new HashMap();
-            }
+        new EntitasCollections(new CollectionsFactories() {
 
         });
     }

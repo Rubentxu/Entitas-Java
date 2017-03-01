@@ -1,7 +1,7 @@
 package com.ilargia.games.core;
 
 import com.ilargia.games.entitas.api.*;
-import com.ilargia.games.components.Ball;
+import com.ilargia.games.core.component.Ball;
 
 /**
  * ---------------------------------------------------------------------------

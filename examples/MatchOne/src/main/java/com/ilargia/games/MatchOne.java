@@ -9,8 +9,8 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.ilargia.games.egdx.EGEventBus;
 import com.ilargia.games.egdx.base.managers.BaseAssetsManager;
 import com.ilargia.games.egdx.base.managers.BasePreferencesManager;
-import com.ilargia.games.entitas.factories.CollectionFactories;
-import com.ilargia.games.entitas.factories.CollectionsFactory;
+import com.ilargia.games.entitas.factories.CollectionsFactories;
+import com.ilargia.games.entitas.factories.EntitasCollections;
 import com.ilargia.games.states.MatchOneState;
 import com.ilargia.games.util.TestFileHandleResolver;
 import net.engio.mbassy.bus.MBassador;
@@ -70,22 +70,7 @@ public class MatchOne extends ApplicationAdapter {
 //
 //        });
 
-        new CollectionFactories(new CollectionsFactory() {
-            @Override
-            public <T> List createList(Class<T> clazz) {
-                return new ArrayList<T>();
-            }
-
-            @Override
-            public <T> Set createSet(Class<T> clazz) {
-                return new HashSet<T>();
-            }
-
-            @Override
-            public <K, V> Map createMap(Class<K> keyClazz, Class<V> valueClazz) {
-                return new HashMap();
-            }
-        });
+        new EntitasCollections(new CollectionsFactories(){});
 
         MBassador bus = new MBassador(new IPublicationErrorHandler() {
             @Override

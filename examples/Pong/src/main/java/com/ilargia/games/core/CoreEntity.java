@@ -1,19 +1,16 @@
 package com.ilargia.games.core;
 
-import com.ilargia.games.entitas.api.*;
 import com.ilargia.games.entitas.Entity;
-import java.util.Stack;
-import com.ilargia.games.components.Ball;
-import com.ilargia.games.entitas.api.IComponent;
-import com.ilargia.games.components.Delay;
-import com.ilargia.games.components.Motion;
+import com.ilargia.games.core.component.Ball;
+import com.ilargia.games.core.component.Delay;
+import com.ilargia.games.core.component.Motion;
 import com.badlogic.gdx.math.Vector2;
-import com.ilargia.games.components.Player.ID;
-import com.ilargia.games.components.Player;
-import com.ilargia.games.components.Score;
-import com.ilargia.games.components.TextureView;
+import com.ilargia.games.core.component.Player.ID;
+import com.ilargia.games.core.component.Player;
+import com.ilargia.games.core.component.Score;
+import com.ilargia.games.core.component.TextureView;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.ilargia.games.components.View;
+import com.ilargia.games.core.component.View;
 import com.badlogic.gdx.math.Shape2D;
 
 /**

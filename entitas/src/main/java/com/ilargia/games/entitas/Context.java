@@ -7,7 +7,7 @@ import com.ilargia.games.entitas.caching.EntitasCache;
 import com.ilargia.games.entitas.collector.Collector;
 import com.ilargia.games.entitas.group.GroupEvent;
 import com.ilargia.games.entitas.exceptions.*;
-import com.ilargia.games.entitas.factories.CollectionFactories;
+import com.ilargia.games.entitas.factories.EntitasCollections;
 import com.ilargia.games.entitas.group.Group;
 
 import java.lang.reflect.Array;
@@ -18,11 +18,11 @@ public class Context<TEntity extends Entity> implements IContext<TEntity> {
     public int _totalComponents;
     public Class<TEntity> entityType;
     // Eventos
-    public Set<ContextEntityChanged> OnEntityCreated = CollectionFactories.createSet(ContextEntityChanged.class);
-    public Set<ContextEntityChanged> OnEntityWillBeDestroyed = CollectionFactories.createSet(ContextEntityChanged.class);
-    public Set<ContextEntityChanged> OnEntityDestroyed = CollectionFactories.createSet(ContextEntityChanged.class);
-    public Set<ContextGroupChanged> OnGroupCreated = CollectionFactories.createSet(ContextGroupChanged.class);
-    public Set<ContextGroupChanged> OnGroupCleared = CollectionFactories.createSet(ContextGroupChanged.class);
+    public Set<ContextEntityChanged> OnEntityCreated = EntitasCollections.createSet(ContextEntityChanged.class);
+    public Set<ContextEntityChanged> OnEntityWillBeDestroyed = EntitasCollections.createSet(ContextEntityChanged.class);
+    public Set<ContextEntityChanged> OnEntityDestroyed = EntitasCollections.createSet(ContextEntityChanged.class);
+    public Set<ContextGroupChanged> OnGroupCreated = EntitasCollections.createSet(ContextGroupChanged.class);
+    public Set<ContextGroupChanged> OnGroupCleared = EntitasCollections.createSet(ContextGroupChanged.class);
     protected Map<IMatcher, Group<TEntity>> _groups; //Object2ObjectArrayMap
     protected List<Group<TEntity>>[] _groupsForIndex; // ObjectArrayList
     protected EntityComponentChanged<TEntity> _cachedEntityChanged;
@@ -58,22 +58,22 @@ public class Context<TEntity extends Entity> implements IContext<TEntity> {
 
         _groupsForIndex = new List[_totalComponents];
         _componentPools = new Stack[totalComponents];
-        _entityIndices = CollectionFactories.createMap(String.class, IEntityIndex.class);
+        _entityIndices = EntitasCollections.createMap(String.class, IEntityIndex.class);
 
         _reusableEntities = new Stack<>();
-        _retainedEntities = CollectionFactories.createSet(Entity.class);
-        _entities = CollectionFactories.createSet(Entity.class);
-        _groups = CollectionFactories.createMap(IMatcher.class, Group.class);
+        _retainedEntities = (Set<TEntity>) EntitasCollections.<Entity>createSet(Entity.class);
+        _entities = (Set<TEntity>) EntitasCollections.<Entity>createSet(Entity.class);
+        _groups = EntitasCollections.createMap(IMatcher.class, Group.class);
 
         _cachedEntityChanged = (TEntity e, int idx, IComponent c) -> {
             updateGroupsComponentAddedOrRemoved(e, idx, c, _groupsForIndex);
         };
 
-        _cachedComponentReplaced =(final TEntity e, final int idx, final IComponent pComponent, final IComponent nComponent) -> {
+        _cachedComponentReplaced = (final TEntity e, final int idx, final IComponent pComponent, final IComponent nComponent) -> {
             updateGroupsComponentReplaced(e, idx, pComponent, nComponent, _groupsForIndex);
         };
 
-        _cachedEntityReleased =(final TEntity e) -> {
+        _cachedEntityReleased = (final TEntity e) -> {
             onEntityReleased(e);
         };
         entityType = (Class<TEntity>) _factoryEntiy.create().getClass();
@@ -83,7 +83,7 @@ public class Context<TEntity extends Entity> implements IContext<TEntity> {
     ContextInfo createDefaultContextInfo() {
         String[] componentNames = new String[_totalComponents];
         String prefix = "Index ";
-        for(int i = 0; i < componentNames.length; i++) {
+        for (int i = 0; i < componentNames.length; i++) {
             componentNames[i] = prefix + i;
         }
 
@@ -188,7 +188,7 @@ public class Context<TEntity extends Entity> implements IContext<TEntity> {
 
             for (int index : matcher.getIndices()) {
                 if (_groupsForIndex[index] == null) {
-                    _groupsForIndex[index] = CollectionFactories.createList(Group.class);
+                    _groupsForIndex[index] = EntitasCollections.<Group<TEntity>>createList(Group.class);
                 }
                 _groupsForIndex[index].add(group);
             }
@@ -306,7 +306,7 @@ public class Context<TEntity extends Entity> implements IContext<TEntity> {
 
     protected void onEntityReleased(TEntity entity) {
         if (entity.isEnabled()) {
-            throw new EntityIsNotDestroyedException("Cannot release "+ entity);
+            throw new EntityIsNotDestroyedException("Cannot release " + entity);
         }
         entity.removeAllOnEntityReleasedHandlers();
         _retainedEntities.remove(entity);
@@ -383,35 +383,35 @@ public class Context<TEntity extends Entity> implements IContext<TEntity> {
 
     public void OnEntityCreated(ContextEntityChanged listener) {
         if (OnEntityCreated != null) {
-            OnEntityCreated = CollectionFactories.createSet(ContextEntityChanged.class);
+            OnEntityCreated = EntitasCollections.createSet(ContextEntityChanged.class);
         }
         OnEntityCreated.add(listener);
     }
 
     public void OnEntityWillBeDestroyed(ContextEntityChanged listener) {
         if (OnEntityWillBeDestroyed != null) {
-            OnEntityWillBeDestroyed = CollectionFactories.createSet(ContextEntityChanged.class);
+            OnEntityWillBeDestroyed = EntitasCollections.createSet(ContextEntityChanged.class);
         }
         OnEntityWillBeDestroyed.add(listener);
     }
 
     public void OnEntityDestroyed(ContextEntityChanged listener) {
         if (OnEntityDestroyed != null) {
-            OnEntityDestroyed = CollectionFactories.createSet(ContextEntityChanged.class);
+            OnEntityDestroyed = EntitasCollections.createSet(ContextEntityChanged.class);
         }
         OnEntityDestroyed.add(listener);
     }
 
     public void OnGroupCreated(ContextGroupChanged listener) {
         if (OnGroupCreated != null) {
-            OnGroupCreated = CollectionFactories.createSet(ContextGroupChanged.class);
+            OnGroupCreated = EntitasCollections.createSet(ContextGroupChanged.class);
         }
         OnGroupCreated.add(listener);
     }
 
     public void OnGroupCleared(ContextGroupChanged listener) {
         if (OnGroupCleared != null) {
-            OnGroupCleared = CollectionFactories.createSet(ContextGroupChanged.class);
+            OnGroupCleared = EntitasCollections.createSet(ContextGroupChanged.class);
         }
         OnGroupCleared.add(listener);
     }

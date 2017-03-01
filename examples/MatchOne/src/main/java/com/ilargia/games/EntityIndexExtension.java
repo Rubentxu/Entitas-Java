@@ -1,10 +1,10 @@
 package com.ilargia.games;
 
-import com.ilargia.games.components.game.Position;
+import com.ilargia.games.core.component.game.Position;
 import com.ilargia.games.core.Entitas;
-import com.ilargia.games.core.game.GameContext;
-import com.ilargia.games.core.game.GameEntity;
-import com.ilargia.games.core.game.GameMatcher;
+import com.ilargia.games.core.gen.game.GameContext;
+import com.ilargia.games.core.gen.game.GameEntity;
+import com.ilargia.games.core.gen.game.GameMatcher;
 import com.ilargia.games.entitas.index.EntityIndex;
 
 import java.util.Set;
