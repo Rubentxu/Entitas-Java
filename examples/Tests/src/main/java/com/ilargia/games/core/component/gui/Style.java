@@ -5,13 +5,11 @@ import com.ilargia.games.entitas.codeGenerator.Component;
 
 
 @Component(pools = {"Gui"})
-public class Label implements IComponent {
-    public String text;
-    public String font;
+public class Style implements IComponent {
+    public String name;
 
-    public Label(String text, String font) {
-        this.text = text;
-        this.font = font;
+    public Style(String styleName) {
+        this.name = name;
     }
 
 }
