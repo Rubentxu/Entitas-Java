@@ -1,8 +1,22 @@
 package com.ilargia.games.core.gen.gui;
 
+import com.ilargia.games.entitas.api.*;
 import com.ilargia.games.entitas.Entity;
-import com.ilargia.games.states.game.component.gui.Label;
-import com.ilargia.games.states.game.component.gui.Score;
+import java.util.Stack;
+import com.ilargia.games.core.component.gui.Bounds;
+import com.ilargia.games.entitas.api.IComponent;
+import com.ilargia.games.core.component.gui.ButtonWidget.Type;
+import com.ilargia.games.core.component.gui.ButtonWidget;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.ilargia.games.core.component.gui.ImageWidget;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.indignado.games.states.game.component.gui.Label;
+import com.ilargia.games.core.component.gui.LabelWidget;
+import com.ilargia.games.core.component.gui.Position;
+import com.ilargia.games.core.component.gui.Score;
+import com.ilargia.games.core.component.gui.Style;
+import com.ilargia.games.core.component.gui.TextFieldWidget;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 
 /**
  * ---------------------------------------------------------------------------
@@ -14,40 +28,180 @@ public class GuiEntity extends Entity {
 	public GuiEntity() {
 	}
 
-	public Label getLabel() {
-		return (Label) getComponent(GuiComponentsLookup.Label);
+	public Bounds getBounds() {
+		return (Bounds) getComponent(GuiComponentsLookup.Bounds);
 	}
 
-	public boolean hasLabel() {
-		return hasComponent(GuiComponentsLookup.Label);
+	public boolean hasBounds() {
+		return hasComponent(GuiComponentsLookup.Bounds);
 	}
 
-	public GuiEntity addLabel(String text, String font) {
-		Label component = (Label) recoverComponent(GuiComponentsLookup.Label);
+	public GuiEntity addBounds(float extentsX, float extentsY) {
+		Bounds component = (Bounds) recoverComponent(GuiComponentsLookup.Bounds);
 		if (component == null) {
-			component = new Label(text, font);
+			component = new Bounds(extentsX, extentsY);
 		} else {
-			component.text = text;;
-			component.font = font;
+			component.extentsX = extentsX;
+			component.extentsY = extentsY;
 		}
-		addComponent(GuiComponentsLookup.Label, component);
+		addComponent(GuiComponentsLookup.Bounds, component);
 		return this;
 	}
 
-	public GuiEntity replaceLabel(String text, String font) {
-		Label component = (Label) recoverComponent(GuiComponentsLookup.Label);
+	public GuiEntity replaceBounds(float extentsX, float extentsY) {
+		Bounds component = (Bounds) recoverComponent(GuiComponentsLookup.Bounds);
 		if (component == null) {
-			component = new Label(text, font);
+			component = new Bounds(extentsX, extentsY);
 		} else {
-			component.text = text;;
-			component.font = font;
+			component.extentsX = extentsX;
+			component.extentsY = extentsY;
 		}
-		replaceComponent(GuiComponentsLookup.Label, component);
+		replaceComponent(GuiComponentsLookup.Bounds, component);
 		return this;
 	}
 
-	public GuiEntity removeLabel() {
-		removeComponent(GuiComponentsLookup.Label);
+	public GuiEntity removeBounds() {
+		removeComponent(GuiComponentsLookup.Bounds);
+		return this;
+	}
+
+	public ButtonWidget getButtonWidget() {
+		return (ButtonWidget) getComponent(GuiComponentsLookup.ButtonWidget);
+	}
+
+	public boolean hasButtonWidget() {
+		return hasComponent(GuiComponentsLookup.ButtonWidget);
+	}
+
+	public GuiEntity addButtonWidget(Type type) {
+		ButtonWidget component = (ButtonWidget) recoverComponent(GuiComponentsLookup.ButtonWidget);
+		if (component == null) {
+			component = new ButtonWidget(type);
+		} else {
+			component.type = type;
+		}
+		addComponent(GuiComponentsLookup.ButtonWidget, component);
+		return this;
+	}
+
+	public GuiEntity replaceButtonWidget(Type type) {
+		ButtonWidget component = (ButtonWidget) recoverComponent(GuiComponentsLookup.ButtonWidget);
+		if (component == null) {
+			component = new ButtonWidget(type);
+		} else {
+			component.type = type;
+		}
+		replaceComponent(GuiComponentsLookup.ButtonWidget, component);
+		return this;
+	}
+
+	public GuiEntity removeButtonWidget() {
+		removeComponent(GuiComponentsLookup.ButtonWidget);
+		return this;
+	}
+
+	public ImageWidget getImageWidget() {
+		return (ImageWidget) getComponent(GuiComponentsLookup.ImageWidget);
+	}
+
+	public boolean hasImageWidget() {
+		return hasComponent(GuiComponentsLookup.ImageWidget);
+	}
+
+	public GuiEntity addImageWidget(Image image) {
+		ImageWidget component = (ImageWidget) recoverComponent(GuiComponentsLookup.ImageWidget);
+		if (component == null) {
+			component = new ImageWidget();
+		}
+		component.image = image;
+		addComponent(GuiComponentsLookup.ImageWidget, component);
+		return this;
+	}
+
+	public GuiEntity replaceImageWidget(Image image) {
+		ImageWidget component = (ImageWidget) recoverComponent(GuiComponentsLookup.ImageWidget);
+		if (component == null) {
+			component = new ImageWidget();
+		}
+		component.image = image;
+		replaceComponent(GuiComponentsLookup.ImageWidget, component);
+		return this;
+	}
+
+	public GuiEntity removeImageWidget() {
+		removeComponent(GuiComponentsLookup.ImageWidget);
+		return this;
+	}
+
+	public LabelWidget getLabelWidget() {
+		return (LabelWidget) getComponent(GuiComponentsLookup.LabelWidget);
+	}
+
+	public boolean hasLabelWidget() {
+		return hasComponent(GuiComponentsLookup.LabelWidget);
+	}
+
+	public GuiEntity addLabelWidget(String text) {
+		LabelWidget component = (LabelWidget) recoverComponent(GuiComponentsLookup.LabelWidget);
+		if (component == null) {
+			component = new LabelWidget(text);
+		} else {
+			component.text = text;
+		}
+		addComponent(GuiComponentsLookup.LabelWidget, component);
+		return this;
+	}
+
+	public GuiEntity replaceLabelWidget(String text) {
+		LabelWidget component = (LabelWidget) recoverComponent(GuiComponentsLookup.LabelWidget);
+		if (component == null) {
+			component = new LabelWidget(text);
+		} else {
+			component.text = text;
+		}
+		replaceComponent(GuiComponentsLookup.LabelWidget, component);
+		return this;
+	}
+
+	public GuiEntity removeLabelWidget() {
+		removeComponent(GuiComponentsLookup.LabelWidget);
+		return this;
+	}
+
+	public Position getPosition() {
+		return (Position) getComponent(GuiComponentsLookup.Position);
+	}
+
+	public boolean hasPosition() {
+		return hasComponent(GuiComponentsLookup.Position);
+	}
+
+	public GuiEntity addPosition(float x, float y) {
+		Position component = (Position) recoverComponent(GuiComponentsLookup.Position);
+		if (component == null) {
+			component = new Position(x, y);
+		} else {
+			component.x = x;
+			component.y = y;
+		}
+		addComponent(GuiComponentsLookup.Position, component);
+		return this;
+	}
+
+	public GuiEntity replacePosition(float x, float y) {
+		Position component = (Position) recoverComponent(GuiComponentsLookup.Position);
+		if (component == null) {
+			component = new Position(x, y);
+		} else {
+			component.x = x;
+			component.y = y;
+		}
+		replaceComponent(GuiComponentsLookup.Position, component);
+		return this;
+	}
+
+	public GuiEntity removePosition() {
+		removeComponent(GuiComponentsLookup.Position);
 		return this;
 	}
 
@@ -81,6 +235,74 @@ public class GuiEntity extends Entity {
 
 	public GuiEntity removeScore() {
 		removeComponent(GuiComponentsLookup.Score);
+		return this;
+	}
+
+	public Style getStyle() {
+		return (Style) getComponent(GuiComponentsLookup.Style);
+	}
+
+	public boolean hasStyle() {
+		return hasComponent(GuiComponentsLookup.Style);
+	}
+
+	public GuiEntity addStyle(String styleName) {
+		Style component = (Style) recoverComponent(GuiComponentsLookup.Style);
+		if (component == null) {
+			component = new Style(styleName);
+		} else {
+			component.name = name;
+		}
+		addComponent(GuiComponentsLookup.Style, component);
+		return this;
+	}
+
+	public GuiEntity replaceStyle(String styleName) {
+		Style component = (Style) recoverComponent(GuiComponentsLookup.Style);
+		if (component == null) {
+			component = new Style(styleName);
+		} else {
+			component.name = name;
+		}
+		replaceComponent(GuiComponentsLookup.Style, component);
+		return this;
+	}
+
+	public GuiEntity removeStyle() {
+		removeComponent(GuiComponentsLookup.Style);
+		return this;
+	}
+
+	public TextFieldWidget getTextFieldWidget() {
+		return (TextFieldWidget) getComponent(GuiComponentsLookup.TextFieldWidget);
+	}
+
+	public boolean hasTextFieldWidget() {
+		return hasComponent(GuiComponentsLookup.TextFieldWidget);
+	}
+
+	public GuiEntity addTextFieldWidget(TextField texField) {
+		TextFieldWidget component = (TextFieldWidget) recoverComponent(GuiComponentsLookup.TextFieldWidget);
+		if (component == null) {
+			component = new TextFieldWidget();
+		}
+		component.texField = texField;
+		addComponent(GuiComponentsLookup.TextFieldWidget, component);
+		return this;
+	}
+
+	public GuiEntity replaceTextFieldWidget(TextField texField) {
+		TextFieldWidget component = (TextFieldWidget) recoverComponent(GuiComponentsLookup.TextFieldWidget);
+		if (component == null) {
+			component = new TextFieldWidget();
+		}
+		component.texField = texField;
+		replaceComponent(GuiComponentsLookup.TextFieldWidget, component);
+		return this;
+	}
+
+	public GuiEntity removeTextFieldWidget() {
+		removeComponent(GuiComponentsLookup.TextFieldWidget);
 		return this;
 	}
 }

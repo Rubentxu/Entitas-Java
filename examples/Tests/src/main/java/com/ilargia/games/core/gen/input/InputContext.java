@@ -1,9 +1,7 @@
 package com.ilargia.games.core.gen.input;
 
-import com.ilargia.games.entitas.api.ContextInfo;
-import com.ilargia.games.entitas.api.EntitasException;
-import com.ilargia.games.entitas.api.EntityBaseFactory;
-import com.ilargia.games.states.game.component.input.PlayerInputController;
+import com.ilargia.games.entitas.api.*;
+import com.ilargia.games.core.component.input.PlayerInputController;
 
 /**
  * ---------------------------------------------------------------------------
@@ -53,7 +51,7 @@ public class InputContext
 	}
 
 	public InputEntity setPlayerInputController(boolean leftPressed,
-                                                boolean rightPressed, boolean jumpPressed) {
+			boolean rightPressed, boolean jumpPressed) {
 		if (hasPlayerInputController()) {
 			throw new EntitasException(
 					"Could not set PlayerInputController!"
@@ -67,7 +65,7 @@ public class InputContext
 	}
 
 	public InputEntity replacePlayerInputController(boolean leftPressed,
-                                                    boolean rightPressed, boolean jumpPressed) {
+			boolean rightPressed, boolean jumpPressed) {
 		InputEntity entity = getPlayerInputControllerEntity();
 		if (entity == null) {
 			entity = setPlayerInputController(leftPressed, rightPressed,

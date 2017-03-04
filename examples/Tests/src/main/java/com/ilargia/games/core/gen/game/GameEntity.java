@@ -1,16 +1,26 @@
 package com.ilargia.games.core.gen.game;
 
-import com.badlogic.gdx.graphics.Color;
+import com.ilargia.games.entitas.api.*;
+import com.ilargia.games.entitas.Entity;
+import java.util.Stack;
+import com.ilargia.games.core.component.game.Animations;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.ilargia.games.entitas.Entity;
-import com.ilargia.games.states.game.component.game.*;
-import com.ilargia.games.states.game.component.game.Character;
-import com.ilargia.games.core.data.Bounds;
-import com.ilargia.games.core.data.StateCharacter;
-
+import com.ilargia.games.entitas.api.IComponent;
 import java.util.Map;
+import com.ilargia.games.core.component.game.Character;
+import com.ilargia.games.core.data.StateCharacter;
+import com.ilargia.games.core.component.game.Destroy;
+import com.ilargia.games.core.component.game.Element;
+import com.ilargia.games.core.component.game.Interactive;
+import com.ilargia.games.core.component.game.Movable;
+import com.ilargia.games.core.component.game.OnGround;
+import com.ilargia.games.core.component.game.Player;
+import com.ilargia.games.core.component.game.RigidBody;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.ilargia.games.core.component.game.TextureView;
+import com.badlogic.gdx.graphics.Color;
+import com.ilargia.games.core.data.Bounds;
 
 /**
  * ---------------------------------------------------------------------------
@@ -68,7 +78,7 @@ public class GameEntity extends Entity {
 		return this;
 	}
 
-	public com.ilargia.games.states.game.component.game.Character getCharacter() {
+	public Character getCharacter() {
 		return (Character) getComponent(GameComponentsLookup.Character);
 	}
 
@@ -77,7 +87,7 @@ public class GameEntity extends Entity {
 	}
 
 	public GameEntity addCharacter(String tag, StateCharacter currentState,
-                                   boolean facingLeft) {
+			boolean facingLeft) {
 		Character component = (Character) recoverComponent(GameComponentsLookup.Character);
 		if (component == null) {
 			component = new Character();
@@ -90,7 +100,7 @@ public class GameEntity extends Entity {
 	}
 
 	public GameEntity replaceCharacter(String tag, StateCharacter currentState,
-                                       boolean facingLeft) {
+			boolean facingLeft) {
 		Character component = (Character) recoverComponent(GameComponentsLookup.Character);
 		if (component == null) {
 			component = new Character();
@@ -280,18 +290,18 @@ public class GameEntity extends Entity {
 	}
 
 	public GameEntity addTextureView(TextureRegion texture, Bounds bounds,
-                                     boolean flipX, boolean flipY, int opacity, int layer, Color tint) {
+			boolean flipX, boolean flipY, int opacity, int layer, Color tint) {
 		TextureView component = (TextureView) recoverComponent(GameComponentsLookup.TextureView);
 		if (component == null) {
 			component = new TextureView(texture, bounds, flipX, flipY, opacity,
 					layer, tint);
 		} else {
-			component.texture = texture;;
-			component.bounds = bounds;;
-			component.flipX = flipX;;
-			component.flipY = flipY;;
-			component.opacity = opacity;;
-			component.layer = layer;;
+			component.texture = texture;
+			component.bounds = bounds;
+			component.flipX = flipX;
+			component.flipY = flipY;
+			component.opacity = opacity;
+			component.layer = layer;
 			component.tint = tint;
 		}
 		addComponent(GameComponentsLookup.TextureView, component);
@@ -299,18 +309,18 @@ public class GameEntity extends Entity {
 	}
 
 	public GameEntity replaceTextureView(TextureRegion texture, Bounds bounds,
-                                         boolean flipX, boolean flipY, int opacity, int layer, Color tint) {
+			boolean flipX, boolean flipY, int opacity, int layer, Color tint) {
 		TextureView component = (TextureView) recoverComponent(GameComponentsLookup.TextureView);
 		if (component == null) {
 			component = new TextureView(texture, bounds, flipX, flipY, opacity,
 					layer, tint);
 		} else {
-			component.texture = texture;;
-			component.bounds = bounds;;
-			component.flipX = flipX;;
-			component.flipY = flipY;;
-			component.opacity = opacity;;
-			component.layer = layer;;
+			component.texture = texture;
+			component.bounds = bounds;
+			component.flipX = flipX;
+			component.flipY = flipY;
+			component.opacity = opacity;
+			component.layer = layer;
 			component.tint = tint;
 		}
 		replaceComponent(GameComponentsLookup.TextureView, component);

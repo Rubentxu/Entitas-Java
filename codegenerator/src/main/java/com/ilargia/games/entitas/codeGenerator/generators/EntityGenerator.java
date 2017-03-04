@@ -5,11 +5,8 @@ import com.ilargia.games.entitas.codeGenerator.CodeGenerator;
 import com.ilargia.games.entitas.codeGenerator.interfaces.IComponentCodeGenerator;
 import com.ilargia.games.entitas.codeGenerator.intermediate.ComponentInfo;
 import org.jboss.forge.roaster.Roaster;
-import org.jboss.forge.roaster._shade.org.eclipse.jdt.core.dom.MethodDeclaration;
-import org.jboss.forge.roaster.model.source.FieldSource;
-import org.jboss.forge.roaster.model.source.Import;
-import org.jboss.forge.roaster.model.source.JavaClassSource;
-import org.jboss.forge.roaster.model.source.MethodSource;
+import org.jboss.forge.roaster.model.JavaType;
+import org.jboss.forge.roaster.model.source.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,12 +32,8 @@ public class EntityGenerator implements IComponentCodeGenerator {
 
         JavaClassSource entityClass = Roaster.parse(JavaClassSource.class, String.format("public class %1$sEntity extends Entity {}", contextName));
 
-//        if(infos.size() > 0 && infos.get(0).subDir !=null) {
-//            pkgDestiny+= "."+infos.get(0).subDir;
-//
-//        }
-        if(infos.size() > 0 && !pkgDestiny.endsWith(infos.get(0).subDir)) {
-            pkgDestiny+= "."+infos.get(0).subDir;
+        if (infos.size() > 0 && !pkgDestiny.endsWith(infos.get(0).subDir)) {
+            pkgDestiny += "." + infos.get(0).subDir;
 
         }
         entityClass.setPackage(pkgDestiny);
@@ -83,6 +76,9 @@ public class EntityGenerator implements IComponentCodeGenerator {
     private void addGetMethods(ComponentInfo info, JavaClassSource source) {
         source.addImport(info.fullTypeName);
 
+
+        String method = "";
+
         if (info.isSingletonComponent) {
             source.addField()
                     .setName(info.typeName + CodeGenerator.COMPONENT_SUFFIX)
@@ -91,12 +87,25 @@ public class EntityGenerator implements IComponentCodeGenerator {
                     .setPublic();
 
         } else {
-            source.addMethod()
+            MethodSource<JavaClassSource> methodGET = source.addMethod()
                     .setName(String.format("get%1$s", info.typeName))
                     .setReturnType(info.typeName)
-                    .setPublic()
-                    .setBody(String.format("return (%1$s)getComponent(%2$s.%1$s);"
-                            , info.typeName, CodeGenerator.capitalize(info.contexts.get(0)) + CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG));
+                    .setPublic();
+
+            String typeName = info.typeName ;
+            if(info.generics.size()>0) typeName+="<";
+            for ( TypeVariableSource<JavaClassSource> generic : info.generics) {
+                String javaType[] = new String[generic.getBounds().size()];
+                for (int i = 0; i < generic.getBounds().size(); i++) {
+                    javaType[i] = (String) generic.getBounds().get(i).getSimpleName();
+                }
+                methodGET.addTypeVariable().setName(generic.getName()).setBounds(javaType);
+                if(typeName.indexOf("<") !=  typeName.length()-1) typeName+= ",";
+                typeName+= generic.getName();
+            }
+            if(info.generics.size()>0) typeName+=">";
+            methodGET.setBody(String.format("return (%1$s)getComponent(%2$s.%3$s);"
+                            , typeName, CodeGenerator.capitalize(info.contexts.get(0)) + CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG, info.typeName));
 
         }
     }
@@ -153,56 +162,88 @@ public class EntityGenerator implements IComponentCodeGenerator {
 
     private void addAddMethods(String contextName, ComponentInfo info, JavaClassSource source) {
         if (!info.isSingletonComponent) {
-            String method = "";
-            if (info.constructores != null && info.constructores.size() > 0) {
-                method = String.format("%2$s component = (%2$s) recoverComponent(%1$s.%2$s);\n if(component == null) { " +
-                                "component = new %2$s(%4$s);\n } else {\n%3$s\n} addComponent(%1$s.%2$s, component);\n return this;",
-                        CodeGenerator.capitalize(info.contexts.get(0)) + CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG,
-                        info.typeName, bodyFromConstructor(info.constructores.get(0)), memberNamesFromConstructor(info.constructores.get(0)));
 
-            } else {
-                method = String.format("%2$s component = (%2$s) recoverComponent(%1$s.%2$s);\n if(component == null) { " +
-                                "component = new %2$s();\n } \n%3$s\n addComponent(%1$s.%2$s, component);\n return this;",
-                        CodeGenerator.capitalize(info.contexts.get(0)) + CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG,
-                        info.typeName, memberAssignments(info.memberInfos));
-            }
-
-            source.addMethod()
+            MethodSource<JavaClassSource> addMethod = source.addMethod()
                     .setName(String.format("add%1$s", info.typeName))
                     .setReturnType(contextName + "Entity")
                     .setPublic()
                     .setParameters(info.constructores != null && info.constructores.size() > 0
                             ? memberNamesWithTypeFromConstructor(info.constructores.get(0))
-                            : memberNamesWithType(info.memberInfos))
-                    .setBody(method);
+                            : memberNamesWithType(info.memberInfos));
+
+
+
+            String typeName = info.typeName ;
+            if(info.generics.size()>0) typeName+="<";
+            for ( TypeVariableSource<JavaClassSource> generic : info.generics) {
+                String javaType[] = new String[generic.getBounds().size()];
+                for (int i = 0; i < generic.getBounds().size(); i++) {
+                    javaType[i] = (String) generic.getBounds().get(i).getSimpleName();
+                }
+                addMethod.addTypeVariable().setName(generic.getName()).setBounds(javaType);
+                if(typeName.indexOf("<") !=  typeName.length()-1) typeName+= ",";
+                typeName+= generic.getName();
+            }
+            if(info.generics.size()>0) typeName+=">";
+            String method = "";
+
+            if (info.constructores != null && info.constructores.size() > 0) {
+                method = String.format("%2$s component = (%2$s) recoverComponent(%1$s.%5$s);\n if(component == null) { " +
+                                "component = new %2$s(%4$s);\n } else {\n%3$s\n} addComponent(%1$s.%5$s, component);\n return this;",
+                        CodeGenerator.capitalize(info.contexts.get(0)) + CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG,
+                        typeName, bodyFromConstructor(info.constructores.get(0)), memberNamesFromConstructor(info.constructores.get(0))
+                        ,info.typeName);
+
+            } else {
+                method = String.format("%2$s component = (%2$s) recoverComponent(%1$s.%2$s);\n if(component == null) { " +
+                                "component = new %2$s();\n } \n%3$s\n addComponent(%1$s.%2$s, component);\n return this;",
+                        CodeGenerator.capitalize(info.contexts.get(0)) + CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG,
+                        typeName, memberAssignments(info.memberInfos),info.typeName);
+            }
+            addMethod.setBody(method);
 
         }
     }
 
+
     private void addReplaceMethods(String contextName, ComponentInfo info, JavaClassSource source) {
         if (!info.isSingletonComponent) {
-            String method;
-            if (info.constructores != null && info.constructores.size() > 0) {
-                method = String.format("%2$s component = (%2$s) recoverComponent(%1$s.%2$s);\n if(component == null) { " +
-                                "component = new %2$s(%4$s);\n } else {\n%3$s\n} replaceComponent(%1$s.%2$s, component);\n return this;"
-                        , CodeGenerator.capitalize(info.contexts.get(0)) + CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG,
-                        info.typeName, bodyFromConstructor(info.constructores.get(0)), memberNamesFromConstructor(info.constructores.get(0)));
-            } else {
-                method = String.format("%2$s component = (%2$s) recoverComponent(%1$s.%2$s);\n if(component == null) { " +
-                                "component = new %2$s();\n} %3$s\n replaceComponent(%1$s.%2$s, component);\n return this;",
-                        CodeGenerator.capitalize(info.contexts.get(0)) + CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG,
-                        info.typeName, memberAssignments(info.memberInfos));
-            }
 
-            source.addMethod()
+            MethodSource<JavaClassSource> replaceMethod = source.addMethod()
                     .setName(String.format("replace%1$s", info.typeName))
                     .setReturnType(contextName + "Entity")
                     .setPublic()
                     .setParameters(info.constructores != null && info.constructores.size() > 0
                             ? memberNamesWithTypeFromConstructor(info.constructores.get(0))
-                            : memberNamesWithType(info.memberInfos))
-                    .setBody(method);
+                            : memberNamesWithType(info.memberInfos));
 
+            String typeName = info.typeName ;
+            if(info.generics.size()>0) typeName+="<";
+            for ( TypeVariableSource<JavaClassSource> generic : info.generics) {
+                String javaType[] = new String[generic.getBounds().size()];
+                for (int i = 0; i < generic.getBounds().size(); i++) {
+                    javaType[i] = (String) generic.getBounds().get(i).getSimpleName();
+                }
+                replaceMethod.addTypeVariable().setName(generic.getName()).setBounds(javaType);
+                if(typeName.indexOf("<") !=  typeName.length()-1) typeName+= ",";
+                typeName+= generic.getName();
+            }
+            if(info.generics.size()>0) typeName+=">";
+
+            String method;
+            if (info.constructores != null && info.constructores.size() > 0) {
+                method = String.format("%2$s component = (%2$s) recoverComponent(%1$s.%5$s);\n if(component == null) { " +
+                                "component = new %2$s(%4$s);\n } else {\n%3$s\n} replaceComponent(%1$s.%5$s, component);\n return this;"
+                        , CodeGenerator.capitalize(info.contexts.get(0)) + CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG,
+                        typeName, bodyFromConstructor(info.constructores.get(0)), memberNamesFromConstructor(info.constructores.get(0))
+                        ,info.typeName);
+            } else {
+                method = String.format("%2$s component = (%2$s) recoverComponent(%1$s.%2$s);\n if(component == null) { " +
+                                "component = new %2$s();\n} %3$s\n replaceComponent(%1$s.%2$s, component);\n return this;",
+                        CodeGenerator.capitalize(info.contexts.get(0)) + CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG,
+                        typeName, memberAssignments(info.memberInfos),info.typeName);
+            }
+            replaceMethod.setBody(method);
 
         }
     }
@@ -249,16 +290,7 @@ public class EntityGenerator implements IComponentCodeGenerator {
     }
 
     public String bodyFromConstructor(MethodSource<JavaClassSource> constructor) {
-        return ((MethodDeclaration) constructor.getInternal()).getBody().statements()
-                .stream()
-                .map(line -> line.toString().replaceAll("this", "component").toString())
-                .reduce((t, u) -> {
-                    if (!u.toString().startsWith("component")) {
-                        u = "component." + u;
-                    }
-                    return t + ";\n " + u;
-                }).get().toString();
-        //return constructor.getBody().replaceAll("this","component");
+        return constructor.getBody().replaceAll("this", "component");
     }
 
     public String memberAssignments(List<FieldSource<JavaClassSource>> memberInfos) {

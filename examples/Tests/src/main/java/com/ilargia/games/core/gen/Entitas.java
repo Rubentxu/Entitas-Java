@@ -1,24 +1,25 @@
 package com.ilargia.games.core.gen;
 
-import com.ilargia.games.core.gen.actuator.ActuatorComponentsLookup;
-import com.ilargia.games.core.gen.actuator.ActuatorContext;
-import com.ilargia.games.core.gen.actuator.ActuatorEntity;
-import com.ilargia.games.core.gen.game.GameComponentsLookup;
-import com.ilargia.games.core.gen.game.GameContext;
-import com.ilargia.games.core.gen.game.GameEntity;
-import com.ilargia.games.core.gen.gui.GuiComponentsLookup;
-import com.ilargia.games.core.gen.gui.GuiContext;
-import com.ilargia.games.core.gen.gui.GuiEntity;
-import com.ilargia.games.core.gen.input.InputComponentsLookup;
-import com.ilargia.games.core.gen.input.InputContext;
-import com.ilargia.games.core.gen.input.InputEntity;
-import com.ilargia.games.core.gen.scene.SceneComponentsLookup;
-import com.ilargia.games.core.gen.scene.SceneContext;
-import com.ilargia.games.core.gen.scene.SceneEntity;
 import com.ilargia.games.entitas.Context;
-import com.ilargia.games.entitas.api.ContextInfo;
-import com.ilargia.games.entitas.api.EntityBaseFactory;
-import com.ilargia.games.entitas.api.IContexts;
+import com.ilargia.games.entitas.api.*;
+import com.ilargia.games.core.gen.input.InputEntity;
+import com.ilargia.games.core.gen.game.GameEntity;
+import com.ilargia.games.core.gen.gui.GuiEntity;
+import com.ilargia.games.core.gen.scene.SceneEntity;
+import com.ilargia.games.core.gen.sensor.SensorEntity;
+import com.ilargia.games.core.gen.actuator.ActuatorEntity;
+import com.ilargia.games.core.gen.input.InputComponentsLookup;
+import com.ilargia.games.core.gen.game.GameComponentsLookup;
+import com.ilargia.games.core.gen.gui.GuiComponentsLookup;
+import com.ilargia.games.core.gen.scene.SceneComponentsLookup;
+import com.ilargia.games.core.gen.sensor.SensorComponentsLookup;
+import com.ilargia.games.core.gen.actuator.ActuatorComponentsLookup;
+import com.ilargia.games.core.gen.input.InputContext;
+import com.ilargia.games.core.gen.game.GameContext;
+import com.ilargia.games.core.gen.gui.GuiContext;
+import com.ilargia.games.core.gen.scene.SceneContext;
+import com.ilargia.games.core.gen.sensor.SensorContext;
+import com.ilargia.games.core.gen.actuator.ActuatorContext;
 
 /**
  * ---------------------------------------------------------------------------
@@ -31,6 +32,7 @@ public class Entitas implements IContexts {
 	public GameContext game;
 	public GuiContext gui;
 	public SceneContext scene;
+	public SensorContext sensor;
 	public ActuatorContext actuator;
 
 	public Entitas() {
@@ -38,6 +40,7 @@ public class Entitas implements IContexts {
 		game = createGameContext();
 		gui = createGuiContext();
 		scene = createSceneContext();
+		sensor = createSensorContext();
 		actuator = createActuatorContext();
 	}
 
@@ -71,6 +74,14 @@ public class Entitas implements IContexts {
 				factorySceneEntity());
 	}
 
+	public SensorContext createSensorContext() {
+		return new SensorContext(SensorComponentsLookup.totalComponents, 0,
+				new ContextInfo("Sensor", SensorComponentsLookup
+						.componentNames(), SensorComponentsLookup
+						.componentTypes()),
+				factorySensorEntity());
+	}
+
 	public ActuatorContext createActuatorContext() {
 		return new ActuatorContext(ActuatorComponentsLookup.totalComponents, 0,
 				new ContextInfo("Actuator", ActuatorComponentsLookup
@@ -81,7 +92,7 @@ public class Entitas implements IContexts {
 
 	@Override
 	public Context[] allContexts() {
-		return new Context[]{input, game, gui, scene, actuator};
+		return new Context[]{input, game, gui, scene, sensor, actuator};
 	}
 
 	public EntityBaseFactory<InputEntity> factoryInputEntity() {
@@ -105,6 +116,12 @@ public class Entitas implements IContexts {
 	public EntityBaseFactory<SceneEntity> factorySceneEntity() {
 		return () -> {
 			return new SceneEntity();
+		};
+	}
+
+	public EntityBaseFactory<SensorEntity> factorySensorEntity() {
+		return () -> {
+			return new SensorEntity();
 		};
 	}
 

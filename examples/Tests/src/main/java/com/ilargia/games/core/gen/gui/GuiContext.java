@@ -1,9 +1,7 @@
 package com.ilargia.games.core.gen.gui;
 
-import com.ilargia.games.entitas.api.ContextInfo;
-import com.ilargia.games.entitas.api.EntitasException;
-import com.ilargia.games.entitas.api.EntityBaseFactory;
-import com.ilargia.games.states.game.component.gui.Score;
+import com.ilargia.games.entitas.api.*;
+import com.ilargia.games.core.component.gui.Score;
 
 /**
  * ---------------------------------------------------------------------------

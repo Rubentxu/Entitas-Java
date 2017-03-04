@@ -1,9 +1,12 @@
 package com.ilargia.games.core.gen.input;
 
+import com.ilargia.games.entitas.api.*;
 import com.ilargia.games.entitas.Entity;
-import com.ilargia.games.states.game.component.input.PadButtons;
-import com.ilargia.games.states.game.component.input.PlayerInputController;
-import com.ilargia.games.states.game.component.input.TouchPad;
+import java.util.Stack;
+import com.ilargia.games.core.component.input.PadButtons;
+import com.ilargia.games.entitas.api.IComponent;
+import com.ilargia.games.core.component.input.PlayerInputController;
+import com.ilargia.games.core.component.input.TouchPad;
 
 /**
  * ---------------------------------------------------------------------------
@@ -43,7 +46,7 @@ public class InputEntity extends Entity {
 	}
 
 	public InputEntity addPlayerInputController(boolean leftPressed,
-                                                boolean rightPressed, boolean jumpPressed) {
+			boolean rightPressed, boolean jumpPressed) {
 		PlayerInputController component = (PlayerInputController) recoverComponent(InputComponentsLookup.PlayerInputController);
 		if (component == null) {
 			component = new PlayerInputController();
@@ -56,7 +59,7 @@ public class InputEntity extends Entity {
 	}
 
 	public InputEntity replacePlayerInputController(boolean leftPressed,
-                                                    boolean rightPressed, boolean jumpPressed) {
+			boolean rightPressed, boolean jumpPressed) {
 		PlayerInputController component = (PlayerInputController) recoverComponent(InputComponentsLookup.PlayerInputController);
 		if (component == null) {
 			component = new PlayerInputController();

@@ -1,10 +1,7 @@
 package com.ilargia.games.entitas.codeGenerator.intermediate;
 
 import com.ilargia.games.entitas.codeGenerator.CodeGenerator;
-import org.jboss.forge.roaster.model.source.FieldSource;
-import org.jboss.forge.roaster.model.source.Import;
-import org.jboss.forge.roaster.model.source.JavaClassSource;
-import org.jboss.forge.roaster.model.source.MethodSource;
+import org.jboss.forge.roaster.model.source.*;
 
 import java.util.List;
 
@@ -16,6 +13,7 @@ public class ComponentInfo {
     public List<FieldSource<JavaClassSource>> memberInfos;
     public List<String> internalEnums;
     public List<String> contexts;
+    public List<TypeVariableSource<JavaClassSource>> generics;
     public List<Import> imports;
     public boolean isSingleEntity;
     public String singleComponentPrefix;
@@ -29,10 +27,11 @@ public class ComponentInfo {
     public String subDir;
     public Integer totalComponents;
 
+
     public ComponentInfo(String fullTypeName, String typeName, List<FieldSource<JavaClassSource>> memberInfos, List<String> contexts,
                          boolean isSingleEntity, String singleComponentPrefix,
                          boolean generateComponent, boolean generateMethods, boolean generateIndex, boolean hideInBlueprintInspector,
-                         List<MethodSource<JavaClassSource>> constructores, List<String> enums, List<Import> imports, String subDir) {
+                         List<MethodSource<JavaClassSource>> constructores, List<String> enums, List<Import> imports, String subDir, List<TypeVariableSource<JavaClassSource>> generics) {
 
         this.fullTypeName = fullTypeName;
         this.memberInfos = memberInfos;
@@ -55,6 +54,8 @@ public class ComponentInfo {
         this.index = null;
         this.totalComponents = 0;
         this.subDir = subDir;
+        this.generics = generics;
+
     }
 
 

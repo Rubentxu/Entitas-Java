@@ -1,7 +1,6 @@
 package com.ilargia.games.core.gen.game;
 
-import com.ilargia.games.entitas.api.ContextInfo;
-import com.ilargia.games.entitas.api.EntityBaseFactory;
+import com.ilargia.games.entitas.api.*;
 
 /**
  * ---------------------------------------------------------------------------

@@ -4,10 +4,7 @@ package com.ilargia.games.entitas.codeGenerator.providers;
 import com.ilargia.games.entitas.codeGenerator.interfaces.ICodeGeneratorDataProvider;
 import com.ilargia.games.entitas.codeGenerator.intermediate.ComponentInfo;
 import org.jboss.forge.roaster.Roaster;
-import org.jboss.forge.roaster.model.source.AnnotationSource;
-import org.jboss.forge.roaster.model.source.FieldSource;
-import org.jboss.forge.roaster.model.source.JavaClassSource;
-import org.jboss.forge.roaster.model.source.MethodSource;
+import org.jboss.forge.roaster.model.source.*;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -48,8 +45,6 @@ public class TypeReflectionProvider implements ICodeGeneratorDataProvider {
                 } else {
                     recursiveList.get("").add(listFile);
                 }
-
-
             }
 
         }
@@ -108,7 +103,7 @@ public class TypeReflectionProvider implements ICodeGeneratorDataProvider {
                 .map(method -> method.getCanonicalName())
                 .collect(Collectors.toList());
 
-
+        List<TypeVariableSource<JavaClassSource>> generics = component.getOrigin().getTypeVariables();
         AnnotationSource<JavaClassSource> annotation = component.getAnnotation("Component");
 
         if (annotation != null) {
@@ -139,8 +134,8 @@ public class TypeReflectionProvider implements ICodeGeneratorDataProvider {
                     contructores,
                     enums,
                     component.getImports(),
-                    subDir
-
+                    subDir,
+                    generics
             );
         }
         return null;

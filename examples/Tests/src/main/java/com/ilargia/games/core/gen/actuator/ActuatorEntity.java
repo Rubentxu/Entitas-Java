@@ -1,14 +1,17 @@
 package com.ilargia.games.core.gen.actuator;
 
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.math.Vector2;
+import com.ilargia.games.entitas.api.*;
 import com.ilargia.games.entitas.Entity;
-import com.ilargia.games.states.game.component.actuator.CameraActuator;
-import com.ilargia.games.states.game.component.actuator.CharacterActuator;
-import com.ilargia.games.states.game.component.actuator.TextureActuator;
-import com.ilargia.games.states.game.component.actuator.VelocityActuator;
-import com.ilargia.games.core.data.Bounds;
+import java.util.Stack;
+import com.ilargia.games.core.component.actuator.CameraActuator;
+import com.ilargia.games.entitas.api.IComponent;
+import com.ilargia.games.core.component.actuator.CharacterActuator;
 import com.ilargia.games.core.data.StateCharacter;
+import com.ilargia.games.core.component.actuator.TextureActuator;
+import com.badlogic.gdx.graphics.Color;
+import com.ilargia.games.core.data.Bounds;
+import com.ilargia.games.core.component.actuator.VelocityActuator;
+import com.badlogic.gdx.math.Vector2;
 
 /**
  * ---------------------------------------------------------------------------
@@ -29,7 +32,7 @@ public class ActuatorEntity extends Entity {
 	}
 
 	public ActuatorEntity addCameraActuator(short height, float damping,
-                                            String followTagEntity) {
+			String followTagEntity) {
 		CameraActuator component = (CameraActuator) recoverComponent(ActuatorComponentsLookup.CameraActuator);
 		if (component == null) {
 			component = new CameraActuator();
@@ -42,7 +45,7 @@ public class ActuatorEntity extends Entity {
 	}
 
 	public ActuatorEntity replaceCameraActuator(short height, float damping,
-                                                String followTagEntity) {
+			String followTagEntity) {
 		CameraActuator component = (CameraActuator) recoverComponent(ActuatorComponentsLookup.CameraActuator);
 		if (component == null) {
 			component = new CameraActuator();
@@ -68,7 +71,7 @@ public class ActuatorEntity extends Entity {
 	}
 
 	public ActuatorEntity addCharacterActuator(String target,
-                                               StateCharacter newState, boolean facingLeft) {
+			StateCharacter newState, boolean facingLeft) {
 		CharacterActuator component = (CharacterActuator) recoverComponent(ActuatorComponentsLookup.CharacterActuator);
 		if (component == null) {
 			component = new CharacterActuator();
@@ -81,7 +84,7 @@ public class ActuatorEntity extends Entity {
 	}
 
 	public ActuatorEntity replaceCharacterActuator(String target,
-                                                   StateCharacter newState, boolean facingLeft) {
+			StateCharacter newState, boolean facingLeft) {
 		CharacterActuator component = (CharacterActuator) recoverComponent(ActuatorComponentsLookup.CharacterActuator);
 		if (component == null) {
 			component = new CharacterActuator();
@@ -107,7 +110,7 @@ public class ActuatorEntity extends Entity {
 	}
 
 	public ActuatorEntity addTextureActuator(String target, Bounds bounds,
-                                             int opacity, Boolean flipX, Boolean flipY, Color tint) {
+			int opacity, Boolean flipX, Boolean flipY, Color tint) {
 		TextureActuator component = (TextureActuator) recoverComponent(ActuatorComponentsLookup.TextureActuator);
 		if (component == null) {
 			component = new TextureActuator();
@@ -123,7 +126,7 @@ public class ActuatorEntity extends Entity {
 	}
 
 	public ActuatorEntity replaceTextureActuator(String target, Bounds bounds,
-                                                 int opacity, Boolean flipX, Boolean flipY, Color tint) {
+			int opacity, Boolean flipX, Boolean flipY, Color tint) {
 		TextureActuator component = (TextureActuator) recoverComponent(ActuatorComponentsLookup.TextureActuator);
 		if (component == null) {
 			component = new TextureActuator();
@@ -152,7 +155,7 @@ public class ActuatorEntity extends Entity {
 	}
 
 	public ActuatorEntity addVelocityActuator(String target, Vector2 velocity,
-                                              float angularVelocity) {
+			float angularVelocity) {
 		VelocityActuator component = (VelocityActuator) recoverComponent(ActuatorComponentsLookup.VelocityActuator);
 		if (component == null) {
 			component = new VelocityActuator();
@@ -165,7 +168,7 @@ public class ActuatorEntity extends Entity {
 	}
 
 	public ActuatorEntity replaceVelocityActuator(String target,
-                                                  Vector2 velocity, float angularVelocity) {
+			Vector2 velocity, float angularVelocity) {
 		VelocityActuator component = (VelocityActuator) recoverComponent(ActuatorComponentsLookup.VelocityActuator);
 		if (component == null) {
 			component = new VelocityActuator();

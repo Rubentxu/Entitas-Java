@@ -1,15 +1,13 @@
 package com.ilargia.games.core.gen.scene;
 
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.ilargia.games.entitas.api.*;
 import com.badlogic.gdx.graphics.Texture;
-import com.ilargia.games.entitas.api.ContextInfo;
-import com.ilargia.games.entitas.api.EntitasException;
-import com.ilargia.games.entitas.api.EntityBaseFactory;
-import com.ilargia.games.states.game.component.scene.Background;
-import com.ilargia.games.states.game.component.scene.Camera;
-import com.ilargia.games.states.game.component.scene.GameWorld;
-import com.ilargia.games.states.game.component.scene.Tiled;
+import com.ilargia.games.core.component.scene.Background;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.ilargia.games.core.component.scene.Camera;
+import com.badlogic.gdx.graphics.Color;
+import com.ilargia.games.core.component.scene.GameWorld;
+import com.ilargia.games.core.component.scene.Tiled;
 
 /**
  * ---------------------------------------------------------------------------
@@ -51,7 +49,7 @@ public class SceneContext
 	}
 
 	public SceneEntity replaceBackground(Texture front, Texture middle,
-                                         Texture back) {
+			Texture back) {
 		SceneEntity entity = getBackgroundEntity();
 		if (entity == null) {
 			entity = setBackground(front, middle, back);
@@ -118,8 +116,8 @@ public class SceneContext
 	}
 
 	public SceneEntity setGameWorld(float width, float height,
-                                    float metresToPixels, float pixelsToMetres, boolean catchBack,
-                                    boolean catchMenu, Color backGroundColor) {
+			float metresToPixels, float pixelsToMetres, boolean catchBack,
+			boolean catchMenu, Color backGroundColor) {
 		if (hasGameWorld()) {
 			throw new EntitasException(
 					"Could not set GameWorld!" + this
@@ -133,8 +131,8 @@ public class SceneContext
 	}
 
 	public SceneEntity replaceGameWorld(float width, float height,
-                                        float metresToPixels, float pixelsToMetres, boolean catchBack,
-                                        boolean catchMenu, Color backGroundColor) {
+			float metresToPixels, float pixelsToMetres, boolean catchBack,
+			boolean catchMenu, Color backGroundColor) {
 		SceneEntity entity = getGameWorldEntity();
 		if (entity == null) {
 			entity = setGameWorld(width, height, metresToPixels,

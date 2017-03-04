@@ -1,10 +1,17 @@
 package com.ilargia.games.core.gen.scene;
 
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
+import com.ilargia.games.entitas.api.*;
 import com.ilargia.games.entitas.Entity;
-import com.ilargia.games.states.game.component.scene.*;
+import java.util.Stack;
+import com.ilargia.games.core.component.scene.Background;
+import com.badlogic.gdx.graphics.Texture;
+import com.ilargia.games.entitas.api.IComponent;
+import com.ilargia.games.core.component.scene.Camera;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.ilargia.games.core.component.scene.GameWorld;
+import com.badlogic.gdx.graphics.Color;
+import com.ilargia.games.core.component.scene.Light;
+import com.ilargia.games.core.component.scene.Tiled;
 
 /**
  * ---------------------------------------------------------------------------
@@ -37,7 +44,7 @@ public class SceneEntity extends Entity {
 	}
 
 	public SceneEntity replaceBackground(Texture front, Texture middle,
-                                         Texture back) {
+			Texture back) {
 		Background component = (Background) recoverComponent(SceneComponentsLookup.Background);
 		if (component == null) {
 			component = new Background();
@@ -96,8 +103,8 @@ public class SceneEntity extends Entity {
 	}
 
 	public SceneEntity addGameWorld(float width, float height,
-                                    float metresToPixels, float pixelsToMetres, boolean catchBack,
-                                    boolean catchMenu, Color backGroundColor) {
+			float metresToPixels, float pixelsToMetres, boolean catchBack,
+			boolean catchMenu, Color backGroundColor) {
 		GameWorld component = (GameWorld) recoverComponent(SceneComponentsLookup.GameWorld);
 		if (component == null) {
 			component = new GameWorld();
@@ -114,8 +121,8 @@ public class SceneEntity extends Entity {
 	}
 
 	public SceneEntity replaceGameWorld(float width, float height,
-                                        float metresToPixels, float pixelsToMetres, boolean catchBack,
-                                        boolean catchMenu, Color backGroundColor) {
+			float metresToPixels, float pixelsToMetres, boolean catchBack,
+			boolean catchMenu, Color backGroundColor) {
 		GameWorld component = (GameWorld) recoverComponent(SceneComponentsLookup.GameWorld);
 		if (component == null) {
 			component = new GameWorld();
