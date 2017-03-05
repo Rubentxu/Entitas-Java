@@ -41,9 +41,9 @@ public class ComponentExtensionGeneratorTest {
 
 
         componentInfos.add(new ComponentInfo("com.ilargia.games.entitas.component.Position", "Position", memberInfos, poolNames,
-                false, "", true, true, false, false, null, null, null,""));
+                false, "", true, true, false, false, null, null, null,"", null));
         componentInfos.add(new ComponentInfo("com.ilargia.games.entitas.component.Movable", "Movable", memberInfos2, poolNames,
-                true, "", true, true, false, false, null, null, null,""));
+                true, "", true, true, false, false, null, null, null,"", null));
 
         List<JavaClassSource> result = generator.generate(componentInfos, "com.pruebas.entitas");
 
