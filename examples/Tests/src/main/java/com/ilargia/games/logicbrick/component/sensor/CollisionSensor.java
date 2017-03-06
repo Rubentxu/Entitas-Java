@@ -3,6 +3,7 @@ package com.ilargia.games.logicbrick.component.sensor;
 
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.ilargia.games.entitas.api.IComponent;
+import com.ilargia.games.entitas.api.IEntity;
 import com.ilargia.games.entitas.codeGenerator.Component;
 import com.ilargia.games.entitas.factories.EntitasCollections;
 
@@ -13,16 +14,9 @@ public class CollisionSensor implements IComponent {
     // Config Values
     public String targetTag;
 
-    // Signal Values
-    public Set<Contact> contactList;
 
     public CollisionSensor(String targetTag) {
         this.targetTag = targetTag;
-        if (this.contactList == null) {
-            this.contactList = EntitasCollections.createSet(Contact.class);
-        } else {
-            this.contactList.clear();
-        }
     }
 }
 

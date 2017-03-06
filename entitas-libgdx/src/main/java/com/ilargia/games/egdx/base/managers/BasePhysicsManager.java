@@ -2,11 +2,11 @@ package com.ilargia.games.egdx.base.managers;
 
 
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.physics.box2d.*;
 import com.ilargia.games.egdx.api.managers.PhysicsManager;
 import com.ilargia.games.egdx.base.util.BodyBuilder;
 
-public class BasePhysicsManager implements PhysicsManager<World> {
+public class BasePhysicsManager implements PhysicsManager<World,ContactListener> {
     private World physics;
     private BodyBuilder bodyBuilder;
 
@@ -19,6 +19,11 @@ public class BasePhysicsManager implements PhysicsManager<World> {
     @Override
     public void initialize() {
 
+    }
+
+    @Override
+    public void addListener(ContactListener listener) {
+        physics.setContactListener(listener);
     }
 
     @Override
@@ -36,4 +41,5 @@ public class BasePhysicsManager implements PhysicsManager<World> {
     public void dispose() {
 
     }
+
 }

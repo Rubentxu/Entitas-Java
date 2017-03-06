@@ -4,10 +4,8 @@ import com.ilargia.games.logicbrick.component.sensor.AlwaysSensor;
 import com.ilargia.games.logicbrick.component.sensor.CollisionSensor;
 import com.ilargia.games.logicbrick.component.sensor.DelaySensor;
 import com.ilargia.games.logicbrick.component.sensor.Frequency;
-import com.ilargia.games.logicbrick.component.sensor.Link;
 import com.ilargia.games.logicbrick.component.sensor.Mode;
-import com.ilargia.games.logicbrick.component.sensor.Positive;
-import com.ilargia.games.logicbrick.component.sensor.Tap;
+import com.ilargia.games.logicbrick.component.sensor.Signal;
 
 /**
  * ---------------------------------------------------------------------------
@@ -20,20 +18,17 @@ public class SensorComponentsLookup {
 	public static final int CollisionSensor = 1;
 	public static final int DelaySensor = 2;
 	public static final int Frequency = 3;
-	public static final int Link = 4;
-	public static final int Mode = 5;
-	public static final int Positive = 6;
-	public static final int Tap = 7;
-	public static final int totalComponents = 8;
+	public static final int Mode = 4;
+	public static final int Signal = 5;
+	public static final int totalComponents = 6;
 
 	public static String[] componentNames() {
 		return new String[]{"AlwaysSensor", "CollisionSensor", "DelaySensor",
-				"Frequency", "Link", "Mode", "Positive", "Tap"};
+				"Frequency", "Mode", "Signal"};
 	}
 
 	public static Class[] componentTypes() {
 		return new Class[]{AlwaysSensor.class, CollisionSensor.class,
-				DelaySensor.class, Frequency.class, Link.class, Mode.class,
-				Positive.class, Tap.class};
+				DelaySensor.class, Frequency.class, Mode.class, Signal.class};
 	}
 }

@@ -13,7 +13,7 @@ import org.junit.Test;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-public class DelaySensorSystemTest {
+public class CollisionSensorSystemTest {
     private EntitasCollections collections;
     private DelaySensorSystem sensorSystem;
     SensorEntity entity;
@@ -25,7 +25,7 @@ public class DelaySensorSystemTest {
         Entitas entitas = new Entitas();
         this.sensorSystem = new DelaySensorSystem(entitas.sensor);
         entity = entitas.sensor.createEntity();
-        entity.addSignal().addDelaySensor(0.5f, 1,false);
+        entity.addSignal(null).addDelaySensor(0.5f, 1,false);
 
     }
 

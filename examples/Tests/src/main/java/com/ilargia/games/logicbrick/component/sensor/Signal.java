@@ -6,14 +6,12 @@ import com.ilargia.games.entitas.api.IEntity;
 import com.ilargia.games.entitas.codeGenerator.Component;
 
 @Component(pools = {"Sensor"})
-public class Link<TEntity extends IEntity> implements IComponent {
-    public TEntity target;
+public class Signal implements IComponent {
     public boolean isOpen;
     public boolean isChanged;
     public boolean pulse;
 
-    public Link(TEntity target) {
-        this.target = target;
+    public Signal() {
         this.isOpen = false;
         this.isChanged = false;
         this.pulse = false;

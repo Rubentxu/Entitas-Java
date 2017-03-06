@@ -7,15 +7,13 @@ import com.ilargia.games.logicbrick.component.sensor.AlwaysSensor;
 import com.ilargia.games.entitas.api.IComponent;
 import com.ilargia.games.logicbrick.component.sensor.CollisionSensor;
 import com.badlogic.gdx.physics.box2d.Contact;
+import com.ilargia.games.entitas.api.IEntity;
 import com.ilargia.games.entitas.factories.EntitasCollections;
 import java.util.Set;
 import com.ilargia.games.logicbrick.component.sensor.DelaySensor;
 import com.ilargia.games.logicbrick.component.sensor.Frequency;
-import com.ilargia.games.logicbrick.component.sensor.Link;
-import com.ilargia.games.entitas.api.IEntity;
 import com.ilargia.games.logicbrick.component.sensor.Mode;
-import com.ilargia.games.logicbrick.component.sensor.Positive;
-import com.ilargia.games.logicbrick.component.sensor.Tap;
+import com.ilargia.games.logicbrick.component.sensor.Signal;
 
 /**
  * ---------------------------------------------------------------------------
@@ -25,8 +23,6 @@ import com.ilargia.games.logicbrick.component.sensor.Tap;
 public class SensorEntity extends Entity {
 
 	public AlwaysSensor AlwaysSensorComponent = new AlwaysSensor();
-	public Positive PositiveComponent = new Positive();
-	public Tap TapComponent = new Tap();
 
 	public SensorEntity() {
 	}
@@ -61,12 +57,6 @@ public class SensorEntity extends Entity {
 			component = new CollisionSensor(targetTag);
 		} else {
 			component.targetTag = targetTag;
-			if (component.contactList == null) {
-				component.contactList = EntitasCollections
-						.createSet(Contact.class);
-			} else {
-				component.contactList.clear();
-			}
 		}
 		addComponent(SensorComponentsLookup.CollisionSensor, component);
 		return this;
@@ -78,12 +68,6 @@ public class SensorEntity extends Entity {
 			component = new CollisionSensor(targetTag);
 		} else {
 			component.targetTag = targetTag;
-			if (component.contactList == null) {
-				component.contactList = EntitasCollections
-						.createSet(Contact.class);
-			} else {
-				component.contactList.clear();
-			}
 		}
 		replaceComponent(SensorComponentsLookup.CollisionSensor, component);
 		return this;
@@ -172,45 +156,6 @@ public class SensorEntity extends Entity {
 		return this;
 	}
 
-	public <TEntity extends IEntity> Link getLink() {
-		return (Link<TEntity>) getComponent(SensorComponentsLookup.Link);
-	}
-
-	public boolean hasLink() {
-		return hasComponent(SensorComponentsLookup.Link);
-	}
-
-	public <TEntity extends IEntity> SensorEntity addLink(TEntity target) {
-		Link<TEntity> component = (Link<TEntity>) recoverComponent(SensorComponentsLookup.Link);
-		if (component == null) {
-			component = new Link<TEntity>(target);
-		} else {
-			component.target = target;
-			component.isOpen = false;
-			component.pulse = false;
-		}
-		addComponent(SensorComponentsLookup.Link, component);
-		return this;
-	}
-
-	public <TEntity extends IEntity> SensorEntity replaceLink(TEntity target) {
-		Link<TEntity> component = (Link<TEntity>) recoverComponent(SensorComponentsLookup.Link);
-		if (component == null) {
-			component = new Link<TEntity>(target);
-		} else {
-			component.target = target;
-			component.isOpen = false;
-			component.pulse = false;
-		}
-		replaceComponent(SensorComponentsLookup.Link, component);
-		return this;
-	}
-
-	public SensorEntity removeLink() {
-		removeComponent(SensorComponentsLookup.Link);
-		return this;
-	}
-
 	public Mode getMode() {
 		return (Mode) getComponent(SensorComponentsLookup.Mode);
 	}
@@ -244,33 +189,42 @@ public class SensorEntity extends Entity {
 		return this;
 	}
 
-	public boolean isPositive() {
-		return hasComponent(SensorComponentsLookup.Positive);
+	public Signal getSignal() {
+		return (Signal) getComponent(SensorComponentsLookup.Signal);
 	}
 
-	public SensorEntity setPositive(boolean value) {
-		if (value != hasComponent(SensorComponentsLookup.Positive)) {
-			if (value) {
-				addComponent(SensorComponentsLookup.Positive, PositiveComponent);
-			} else {
-				removeComponent(SensorComponentsLookup.Positive);
-			}
+	public boolean hasSignal() {
+		return hasComponent(SensorComponentsLookup.Signal);
+	}
+
+	public SensorEntity addSignal(boolean isOpen, boolean isChanged,
+			boolean pulse) {
+		Signal component = (Signal) recoverComponent(SensorComponentsLookup.Signal);
+		if (component == null) {
+			component = new Signal();
 		}
+		component.isOpen = isOpen;
+		component.isChanged = isChanged;
+		component.pulse = pulse;
+		addComponent(SensorComponentsLookup.Signal, component);
 		return this;
 	}
 
-	public boolean isTap() {
-		return hasComponent(SensorComponentsLookup.Tap);
+	public SensorEntity replaceSignal(boolean isOpen, boolean isChanged,
+			boolean pulse) {
+		Signal component = (Signal) recoverComponent(SensorComponentsLookup.Signal);
+		if (component == null) {
+			component = new Signal();
+		}
+		component.isOpen = isOpen;
+		component.isChanged = isChanged;
+		component.pulse = pulse;
+		replaceComponent(SensorComponentsLookup.Signal, component);
+		return this;
 	}
 
-	public SensorEntity setTap(boolean value) {
-		if (value != hasComponent(SensorComponentsLookup.Tap)) {
-			if (value) {
-				addComponent(SensorComponentsLookup.Tap, TapComponent);
-			} else {
-				removeComponent(SensorComponentsLookup.Tap);
-			}
-		}
+	public SensorEntity removeSignal() {
+		removeComponent(SensorComponentsLookup.Signal);
 		return this;
 	}
 }

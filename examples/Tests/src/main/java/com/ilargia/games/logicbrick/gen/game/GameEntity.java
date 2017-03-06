@@ -10,8 +10,15 @@ import com.ilargia.games.entitas.api.IComponent;
 import java.util.Map;
 import com.ilargia.games.logicbrick.component.game.Character;
 import com.ilargia.games.logicbrick.data.StateCharacter;
+import com.ilargia.games.logicbrick.component.game.CollisionSensorComponents;
+import com.ilargia.games.entitas.factories.EntitasCollections;
+import com.ilargia.games.logicbrick.component.sensor.CollisionSensor;
+import com.ilargia.games.logicbrick.gen.sensor.SensorEntity;
+import java.util.List;
+import com.ilargia.games.logicbrick.component.game.DelaySensorComponents;
+import com.ilargia.games.logicbrick.component.sensor.DelaySensor;
 import com.ilargia.games.logicbrick.component.game.Destroy;
-import com.ilargia.games.logicbrick.component.game.Element;
+import com.ilargia.games.logicbrick.component.game.Identity;
 import com.ilargia.games.logicbrick.component.game.Interactive;
 import com.ilargia.games.logicbrick.component.game.Movable;
 import com.ilargia.games.logicbrick.component.game.OnGround;
@@ -117,6 +124,125 @@ public class GameEntity extends Entity {
 		return this;
 	}
 
+	public CollisionSensorComponents getCollisionSensorComponents() {
+		return (CollisionSensorComponents) getComponent(GameComponentsLookup.CollisionSensorComponents);
+	}
+
+	public boolean hasCollisionSensorComponents() {
+		return hasComponent(GameComponentsLookup.CollisionSensorComponents);
+	}
+
+	public GameEntity addCollisionSensorComponents(SensorEntity sensor) {
+		CollisionSensorComponents component = (CollisionSensorComponents) recoverComponent(GameComponentsLookup.CollisionSensorComponents);
+		if (component == null) {
+			component = new CollisionSensorComponents(sensor);
+		} else {
+			if (component.collisionSensors == null) {
+				component.collisionSensors = EntitasCollections
+						.createList(CollisionSensor.class);
+			} else {
+				for (SensorEntity collisionSensor : component.collisionSensors) {
+					collisionSensor.release(component);
+				}
+				component.collisionSensors.clear();
+			}
+			if (sensor.hasCollisionSensor()) {
+				sensor.retain(component);
+				component.collisionSensors.add(sensor);
+			}
+		}
+		addComponent(GameComponentsLookup.CollisionSensorComponents, component);
+		return this;
+	}
+
+	public GameEntity replaceCollisionSensorComponents(SensorEntity sensor) {
+		CollisionSensorComponents component = (CollisionSensorComponents) recoverComponent(GameComponentsLookup.CollisionSensorComponents);
+		if (component == null) {
+			component = new CollisionSensorComponents(sensor);
+		} else {
+			if (component.collisionSensors == null) {
+				component.collisionSensors = EntitasCollections
+						.createList(CollisionSensor.class);
+			} else {
+				for (SensorEntity collisionSensor : component.collisionSensors) {
+					collisionSensor.release(component);
+				}
+				component.collisionSensors.clear();
+			}
+			if (sensor.hasCollisionSensor()) {
+				sensor.retain(component);
+				component.collisionSensors.add(sensor);
+			}
+		}
+		replaceComponent(GameComponentsLookup.CollisionSensorComponents,
+				component);
+		return this;
+	}
+
+	public GameEntity removeCollisionSensorComponents() {
+		removeComponent(GameComponentsLookup.CollisionSensorComponents);
+		return this;
+	}
+
+	public DelaySensorComponents getDelaySensorComponents() {
+		return (DelaySensorComponents) getComponent(GameComponentsLookup.DelaySensorComponents);
+	}
+
+	public boolean hasDelaySensorComponents() {
+		return hasComponent(GameComponentsLookup.DelaySensorComponents);
+	}
+
+	public GameEntity addDelaySensorComponents(SensorEntity sensor) {
+		DelaySensorComponents component = (DelaySensorComponents) recoverComponent(GameComponentsLookup.DelaySensorComponents);
+		if (component == null) {
+			component = new DelaySensorComponents(sensor);
+		} else {
+			if (component.delaySensors == null) {
+				component.delaySensors = EntitasCollections
+						.createList(DelaySensor.class);
+			} else {
+				for (SensorEntity delaySensor : component.delaySensors) {
+					delaySensor.release(component);
+				}
+				component.delaySensors.clear();
+			}
+			if (sensor.hasDelaySensor()) {
+				sensor.retain(component);
+				component.delaySensors.add(sensor);
+			}
+		}
+		addComponent(GameComponentsLookup.DelaySensorComponents, component);
+		return this;
+	}
+
+	public GameEntity replaceDelaySensorComponents(SensorEntity sensor) {
+		DelaySensorComponents component = (DelaySensorComponents) recoverComponent(GameComponentsLookup.DelaySensorComponents);
+		if (component == null) {
+			component = new DelaySensorComponents(sensor);
+		} else {
+			if (component.delaySensors == null) {
+				component.delaySensors = EntitasCollections
+						.createList(DelaySensor.class);
+			} else {
+				for (SensorEntity delaySensor : component.delaySensors) {
+					delaySensor.release(component);
+				}
+				component.delaySensors.clear();
+			}
+			if (sensor.hasDelaySensor()) {
+				sensor.retain(component);
+				component.delaySensors.add(sensor);
+			}
+		}
+		replaceComponent(GameComponentsLookup.DelaySensorComponents, component);
+		return this;
+	}
+
+	public GameEntity removeDelaySensorComponents() {
+		removeComponent(GameComponentsLookup.DelaySensorComponents);
+		return this;
+	}
+
 	public boolean isDestroy() {
 		return hasComponent(GameComponentsLookup.Destroy);
 	}
@@ -132,38 +258,38 @@ public class GameEntity extends Entity {
 		return this;
 	}
 
-	public Element getElement() {
-		return (Element) getComponent(GameComponentsLookup.Element);
+	public Identity getIdentity() {
+		return (Identity) getComponent(GameComponentsLookup.Identity);
 	}
 
-	public boolean hasElement() {
-		return hasComponent(GameComponentsLookup.Element);
+	public boolean hasIdentity() {
+		return hasComponent(GameComponentsLookup.Identity);
 	}
 
-	public GameEntity addElement(String type, String tags) {
-		Element component = (Element) recoverComponent(GameComponentsLookup.Element);
+	public GameEntity addIdentity(String type, String tags) {
+		Identity component = (Identity) recoverComponent(GameComponentsLookup.Identity);
 		if (component == null) {
-			component = new Element();
+			component = new Identity();
 		}
 		component.type = type;
 		component.tags = tags;
-		addComponent(GameComponentsLookup.Element, component);
+		addComponent(GameComponentsLookup.Identity, component);
 		return this;
 	}
 
-	public GameEntity replaceElement(String type, String tags) {
-		Element component = (Element) recoverComponent(GameComponentsLookup.Element);
+	public GameEntity replaceIdentity(String type, String tags) {
+		Identity component = (Identity) recoverComponent(GameComponentsLookup.Identity);
 		if (component == null) {
-			component = new Element();
+			component = new Identity();
 		}
 		component.type = type;
 		component.tags = tags;
-		replaceComponent(GameComponentsLookup.Element, component);
+		replaceComponent(GameComponentsLookup.Identity, component);
 		return this;
 	}
 
-	public GameEntity removeElement() {
-		removeComponent(GameComponentsLookup.Element);
+	public GameEntity removeIdentity() {
+		removeComponent(GameComponentsLookup.Identity);
 		return this;
 	}
 

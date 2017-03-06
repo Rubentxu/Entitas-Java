@@ -13,10 +13,8 @@ public class SensorMatcher {
 	private static Matcher _matcherCollisionSensor;
 	private static Matcher _matcherDelaySensor;
 	private static Matcher _matcherFrequency;
-	private static Matcher _matcherLink;
 	private static Matcher _matcherMode;
-	private static Matcher _matcherPositive;
-	private static Matcher _matcherTap;
+	private static Matcher _matcherSignal;
 
 	public static Matcher AlwaysSensor() {
 		if (_matcherAlwaysSensor == null) {
@@ -58,16 +56,6 @@ public class SensorMatcher {
 		return _matcherFrequency;
 	}
 
-	public static Matcher Link() {
-		if (_matcherLink == null) {
-			Matcher matcher = (Matcher) Matcher
-					.AllOf(SensorComponentsLookup.Link);
-			matcher.componentNames = SensorComponentsLookup.componentNames();
-			_matcherLink = matcher;
-		}
-		return _matcherLink;
-	}
-
 	public static Matcher Mode() {
 		if (_matcherMode == null) {
 			Matcher matcher = (Matcher) Matcher
@@ -78,23 +66,13 @@ public class SensorMatcher {
 		return _matcherMode;
 	}
 
-	public static Matcher Positive() {
-		if (_matcherPositive == null) {
+	public static Matcher Signal() {
+		if (_matcherSignal == null) {
 			Matcher matcher = (Matcher) Matcher
-					.AllOf(SensorComponentsLookup.Positive);
+					.AllOf(SensorComponentsLookup.Signal);
 			matcher.componentNames = SensorComponentsLookup.componentNames();
-			_matcherPositive = matcher;
+			_matcherSignal = matcher;
 		}
-		return _matcherPositive;
-	}
-
-	public static Matcher Tap() {
-		if (_matcherTap == null) {
-			Matcher matcher = (Matcher) Matcher
-					.AllOf(SensorComponentsLookup.Tap);
-			matcher.componentNames = SensorComponentsLookup.componentNames();
-			_matcherTap = matcher;
-		}
-		return _matcherTap;
+		return _matcherSignal;
 	}
 }

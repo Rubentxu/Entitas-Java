@@ -1,7 +1,7 @@
 package com.ilargia.games.logicbrick.system.sensor;
 
 import com.ilargia.games.logicbrick.component.sensor.Frequency;
-import com.ilargia.games.logicbrick.component.sensor.Link;
+import com.ilargia.games.logicbrick.component.sensor.Signal;
 import com.ilargia.games.logicbrick.gen.sensor.SensorEntity;
 
 public abstract class SensorSystem {
@@ -9,7 +9,7 @@ public abstract class SensorSystem {
     public void process(SensorEntity[] entities, float deltaTime) {
 
         for (SensorEntity sensor : entities) {
-            Link link = sensor.getLink();
+            Signal link = sensor.getLink();
             boolean lastPulse = link.pulse;
             link.pulse = query(sensor, deltaTime);
 
