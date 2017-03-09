@@ -57,6 +57,7 @@ public class SensorEntity extends Entity {
 			component = new CollisionSensor(targetTag);
 		} else {
 			component.targetTag = targetTag;
+			component.collisionSignal = false;
 		}
 		addComponent(SensorComponentsLookup.CollisionSensor, component);
 		return this;
@@ -68,6 +69,7 @@ public class SensorEntity extends Entity {
 			component = new CollisionSensor(targetTag);
 		} else {
 			component.targetTag = targetTag;
+			component.collisionSignal = false;
 		}
 		replaceComponent(SensorComponentsLookup.CollisionSensor, component);
 		return this;

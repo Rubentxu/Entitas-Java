@@ -94,7 +94,7 @@ public class TypeReflectionProvider implements ICodeGeneratorDataProvider {
         List<MethodSource<JavaClassSource>> contructores = component.getMethods().stream()
                 .filter(method -> method.isPublic())
                 .filter(method -> method.isConstructor())
-                .filter(method -> method.getParameters().size() > 0)
+//                .filter(method -> method.getParameters().size() > 0)
                 .collect(Collectors.toList());
 
         List<String> enums = component.getNestedTypes().stream()

@@ -14,7 +14,7 @@ public class DelaySensorSystem extends SensorSystem implements IExecuteSystem {
     private Group<SensorEntity> sensorGroup;
 
     public DelaySensorSystem(SensorContext context) {
-        sensorGroup = context.getGroup(Matcher.AllOf(SensorMatcher.DelaySensor(), SensorMatcher.Link()));
+        sensorGroup = context.getGroup(Matcher.AllOf(SensorMatcher.DelaySensor(), SensorMatcher.Signal()));
 
     }
 
@@ -24,8 +24,7 @@ public class DelaySensorSystem extends SensorSystem implements IExecuteSystem {
         DelaySensor sensor = delaySensor.getDelaySensor();
         if (sensor.time != -1) sensor.time += deltaTime;
 
-        if (sensor.time >= sensor.delay) {
-            if (sensor.time >= (sensor.delay + sensor.duration)) {
+        if (sensor.time >= sensor.delay) {            if (sensor.time >= (sensor.delay + sensor.duration)) {
                 if (sensor.repeat) {
                     sensor.time = 0;
                 } else {
@@ -34,7 +33,6 @@ public class DelaySensorSystem extends SensorSystem implements IExecuteSystem {
             } else {
                 isActive = true;
             }
-
         }
         return isActive;
 
@@ -42,7 +40,9 @@ public class DelaySensorSystem extends SensorSystem implements IExecuteSystem {
 
     @Override
     public void execute(float deltaTime) {
-        process(sensorGroup.getEntities(), deltaTime);
+        for (SensorEntity sensorEntity : sensorGroup.getEntities()) {
+            process(sensorEntity, deltaTime);
+        }
 
     }
 

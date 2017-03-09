@@ -7,6 +7,7 @@ import com.ilargia.games.logicbrick.component.actuator.CameraActuator;
 import com.ilargia.games.entitas.api.IComponent;
 import com.ilargia.games.logicbrick.component.actuator.CharacterActuator;
 import com.ilargia.games.logicbrick.data.StateCharacter;
+import com.ilargia.games.logicbrick.component.actuator.Signal;
 import com.ilargia.games.logicbrick.component.actuator.TextureActuator;
 import com.badlogic.gdx.graphics.Color;
 import com.ilargia.games.logicbrick.data.Bounds;
@@ -98,6 +99,45 @@ public class ActuatorEntity extends Entity {
 
 	public ActuatorEntity removeCharacterActuator() {
 		removeComponent(ActuatorComponentsLookup.CharacterActuator);
+		return this;
+	}
+
+	public Signal getSignal() {
+		return (Signal) getComponent(ActuatorComponentsLookup.Signal);
+	}
+
+	public boolean hasSignal() {
+		return hasComponent(ActuatorComponentsLookup.Signal);
+	}
+
+	public ActuatorEntity addSignal(boolean isOpen, boolean isChanged,
+			boolean pulse) {
+		Signal component = (Signal) recoverComponent(ActuatorComponentsLookup.Signal);
+		if (component == null) {
+			component = new Signal();
+		}
+		component.isOpen = isOpen;
+		component.isChanged = isChanged;
+		component.pulse = pulse;
+		addComponent(ActuatorComponentsLookup.Signal, component);
+		return this;
+	}
+
+	public ActuatorEntity replaceSignal(boolean isOpen, boolean isChanged,
+			boolean pulse) {
+		Signal component = (Signal) recoverComponent(ActuatorComponentsLookup.Signal);
+		if (component == null) {
+			component = new Signal();
+		}
+		component.isOpen = isOpen;
+		component.isChanged = isChanged;
+		component.pulse = pulse;
+		replaceComponent(ActuatorComponentsLookup.Signal, component);
+		return this;
+	}
+
+	public ActuatorEntity removeSignal() {
+		removeComponent(ActuatorComponentsLookup.Signal);
 		return this;
 	}
 

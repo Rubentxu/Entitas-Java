@@ -44,7 +44,7 @@ public class EntityIndex<TEntity extends Entity, TKey> extends AbstractEntityInd
     }
 
     @Override
-    protected void clear() {
+    public void clear() {
         for (Set<TEntity> entities : _index.values()) {
             for (IEntity entity : entities) {
                 if(entity.owners().contains(this)) {
@@ -57,7 +57,7 @@ public class EntityIndex<TEntity extends Entity, TKey> extends AbstractEntityInd
     }
 
     @Override
-    protected void addEntity(TKey tKey, TEntity entity) {
+    public void addEntity(TKey tKey, TEntity entity) {
         getEntities(tKey).add(entity);
         if(!entity.owners().contains(this)) {
             entity.retain(this);
@@ -65,7 +65,7 @@ public class EntityIndex<TEntity extends Entity, TKey> extends AbstractEntityInd
     }
 
     @Override
-    protected void removeEntity(TKey tKey, TEntity entity) {
+    public void removeEntity(TKey tKey, TEntity entity) {
         getEntities(tKey).remove(entity);
         if(entity.owners().contains(this)) {
             entity.release(this);
