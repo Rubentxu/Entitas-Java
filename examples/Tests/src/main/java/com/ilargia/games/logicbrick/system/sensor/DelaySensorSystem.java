@@ -14,7 +14,7 @@ public class DelaySensorSystem extends SensorSystem implements IExecuteSystem {
     private Group<SensorEntity> sensorGroup;
 
     public DelaySensorSystem(SensorContext context) {
-        sensorGroup = context.getGroup(Matcher.AllOf(SensorMatcher.DelaySensor(), SensorMatcher.Signal()));
+        sensorGroup = context.getGroup(Matcher.AllOf(SensorMatcher.DelaySensor(), SensorMatcher.Link()));
 
     }
 

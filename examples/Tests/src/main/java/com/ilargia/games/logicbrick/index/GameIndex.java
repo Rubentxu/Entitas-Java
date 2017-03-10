@@ -22,6 +22,11 @@ public class GameIndex {
         eIndex.addEntity(index, entity);
     }
 
+    public static void removeGameEntity(GameContext context, Integer index, GameEntity entity) {
+        EntityIndex<GameEntity, Integer> eIndex = (EntityIndex<GameEntity, Integer>) context.getEntityIndex(GameKey);
+        eIndex.removeEntity(index, entity);
+    }
+
     public static Set<GameEntity> getEntitiesGame(GameContext context, SensorEntity entity) {
         EntityIndex<GameEntity, Integer> eIndex = (EntityIndex<GameEntity, Integer>) context.getEntityIndex(GameKey);
         return eIndex.getEntities(entity.getCreationIndex());

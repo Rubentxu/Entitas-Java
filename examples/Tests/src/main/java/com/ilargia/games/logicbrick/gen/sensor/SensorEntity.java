@@ -12,8 +12,9 @@ import com.ilargia.games.entitas.factories.EntitasCollections;
 import java.util.Set;
 import com.ilargia.games.logicbrick.component.sensor.DelaySensor;
 import com.ilargia.games.logicbrick.component.sensor.Frequency;
+import com.ilargia.games.logicbrick.component.sensor.Link;
 import com.ilargia.games.logicbrick.component.sensor.Mode;
-import com.ilargia.games.logicbrick.component.sensor.Signal;
+import com.ilargia.games.logicbrick.component.sensor.NearSensor;
 
 /**
  * ---------------------------------------------------------------------------
@@ -158,6 +159,47 @@ public class SensorEntity extends Entity {
 		return this;
 	}
 
+	public Link getLink() {
+		return (Link) getComponent(SensorComponentsLookup.Link);
+	}
+
+	public boolean hasLink() {
+		return hasComponent(SensorComponentsLookup.Link);
+	}
+
+	public SensorEntity addLink(int targetEntity) {
+		Link component = (Link) recoverComponent(SensorComponentsLookup.Link);
+		if (component == null) {
+			component = new Link(targetEntity);
+		} else {
+			component.targetEntity = targetEntity;
+			component.isOpen = false;
+			component.isChanged = false;
+			component.pulse = false;
+		}
+		addComponent(SensorComponentsLookup.Link, component);
+		return this;
+	}
+
+	public SensorEntity replaceLink(int targetEntity) {
+		Link component = (Link) recoverComponent(SensorComponentsLookup.Link);
+		if (component == null) {
+			component = new Link(targetEntity);
+		} else {
+			component.targetEntity = targetEntity;
+			component.isOpen = false;
+			component.isChanged = false;
+			component.pulse = false;
+		}
+		replaceComponent(SensorComponentsLookup.Link, component);
+		return this;
+	}
+
+	public SensorEntity removeLink() {
+		removeComponent(SensorComponentsLookup.Link);
+		return this;
+	}
+
 	public Mode getMode() {
 		return (Mode) getComponent(SensorComponentsLookup.Mode);
 	}
@@ -191,42 +233,40 @@ public class SensorEntity extends Entity {
 		return this;
 	}
 
-	public Signal getSignal() {
-		return (Signal) getComponent(SensorComponentsLookup.Signal);
+	public NearSensor getNearSensor() {
+		return (NearSensor) getComponent(SensorComponentsLookup.NearSensor);
 	}
 
-	public boolean hasSignal() {
-		return hasComponent(SensorComponentsLookup.Signal);
+	public boolean hasNearSensor() {
+		return hasComponent(SensorComponentsLookup.NearSensor);
 	}
 
-	public SensorEntity addSignal() {
-		Signal component = (Signal) recoverComponent(SensorComponentsLookup.Signal);
+	public SensorEntity addNearSensor(String targetTag) {
+		NearSensor component = (NearSensor) recoverComponent(SensorComponentsLookup.NearSensor);
 		if (component == null) {
-			component = new Signal();
+			component = new NearSensor(targetTag);
 		} else {
-			component.isOpen = false;
-			component.isChanged = false;
-			component.pulse = false;
+			component.targetTag = targetTag;
+			component.collisionSignal = false;
 		}
-		addComponent(SensorComponentsLookup.Signal, component);
+		addComponent(SensorComponentsLookup.NearSensor, component);
 		return this;
 	}
 
-	public SensorEntity replaceSignal() {
-		Signal component = (Signal) recoverComponent(SensorComponentsLookup.Signal);
+	public SensorEntity replaceNearSensor(String targetTag) {
+		NearSensor component = (NearSensor) recoverComponent(SensorComponentsLookup.NearSensor);
 		if (component == null) {
-			component = new Signal();
+			component = new NearSensor(targetTag);
 		} else {
-			component.isOpen = false;
-			component.isChanged = false;
-			component.pulse = false;
+			component.targetTag = targetTag;
+			component.collisionSignal = false;
 		}
-		replaceComponent(SensorComponentsLookup.Signal, component);
+		replaceComponent(SensorComponentsLookup.NearSensor, component);
 		return this;
 	}
 
-	public SensorEntity removeSignal() {
-		removeComponent(SensorComponentsLookup.Signal);
+	public SensorEntity removeNearSensor() {
+		removeComponent(SensorComponentsLookup.NearSensor);
 		return this;
 	}
 }

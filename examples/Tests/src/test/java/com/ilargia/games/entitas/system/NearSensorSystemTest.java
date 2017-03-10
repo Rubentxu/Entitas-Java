@@ -3,39 +3,33 @@ package com.ilargia.games.entitas.system;
 
 import com.ilargia.games.entitas.factories.CollectionsFactories;
 import com.ilargia.games.entitas.factories.EntitasCollections;
-import com.ilargia.games.entitas.index.EntityIndex;
 import com.ilargia.games.logicbrick.component.sensor.Link;
 import com.ilargia.games.logicbrick.gen.Entitas;
 import com.ilargia.games.logicbrick.gen.game.GameEntity;
 import com.ilargia.games.logicbrick.gen.sensor.SensorEntity;
 import com.ilargia.games.logicbrick.index.GameIndex;
-import com.ilargia.games.logicbrick.index.SensorIndex;
 import com.ilargia.games.logicbrick.system.sensor.CollisionSensorSystem;
 import com.ilargia.games.logicbrick.system.sensor.LinkSensorSystem;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-public class CollisionSensorSystemTest {
-    Entitas entitas;
+public class NearSensorSystemTest {
     private EntitasCollections collections;
     private CollisionSensorSystem collisionSensorSystem;
     private LinkSensorSystem linkSensorSystem;
     private SensorEntity sensorEntity;
-    private SensorEntity sensorEntity2;
     private GameEntity boss;
     private GameEntity groundEntity;
     private GameEntity playerEntity;
-    private SensorEntity sensorEntity3;
-    private SensorEntity sensorEntity4;
+
 
     @Before
     public void setUp() {
         collections = new EntitasCollections(new CollectionsFactories() {});
-        entitas = new Entitas();
+        Entitas entitas = new Entitas();
         this.collisionSensorSystem = new CollisionSensorSystem(entitas);
         this.linkSensorSystem = new LinkSensorSystem(entitas);
         linkSensorSystem.activate();
@@ -53,33 +47,21 @@ public class CollisionSensorSystemTest {
                 .addCollisionSensor("Boss")
                 .addLink(playerEntity.getCreationIndex());
 
-        sensorEntity2 = entitas.sensor.createEntity()
-                .addCollisionSensor("Ground")
-                .addLink(playerEntity.getCreationIndex());
-
-        sensorEntity4 = entitas.sensor.createEntity()
-                .addCollisionSensor("Ground")
-                .addLink(boss.getCreationIndex());
-
+        GameIndex.createSensorEntityIndices(entitas.game);
         linkSensorSystem.execute(1);
+
 
     }
 
     @Test
     public void queryTrue() {
-        EntityIndex<SensorEntity, Integer> eIndex = (EntityIndex<SensorEntity, Integer>)entitas.sensor.getEntityIndex("Sensors");
-        EntityIndex<GameEntity, Integer> gameIndex = (EntityIndex<GameEntity, Integer>) entitas.game.getEntityIndex("GameEntities");
         collisionSensorSystem.processCollision(playerEntity, boss, true);
         collisionSensorSystem.execute( 0.5F);
         Link link = sensorEntity.getLink();
 
-
         assertTrue(link.pulse);
         assertTrue(link.isOpen);
         assertTrue(link.isChanged);
-
-        assertEquals(2, eIndex.getEntities(playerEntity.getCreationIndex()).size());
-        assertEquals( 1, gameIndex.getEntities(sensorEntity.getCreationIndex()).size());
 
         collisionSensorSystem.execute( 0.5F);
         assertTrue(link.pulse);
@@ -91,14 +73,6 @@ public class CollisionSensorSystemTest {
         assertFalse(link.pulse);
         assertTrue(link.isOpen);
         assertTrue(link.isChanged);
-        sensorEntity3 = entitas.sensor.createEntity()
-                .addCollisionSensor("Ground")
-                .addLink(playerEntity.getCreationIndex());
-        linkSensorSystem.execute(1);
-
-
-        assertEquals(3, eIndex.getEntities(playerEntity.getCreationIndex()).size());
-        assertEquals(0, gameIndex.getEntities(sensorEntity.getCreationIndex()).size());
 
         collisionSensorSystem.execute( 0.5F);
         assertFalse(link.pulse);
@@ -110,8 +84,6 @@ public class CollisionSensorSystemTest {
         assertFalse(link.pulse);
         assertFalse(link.isOpen);
         assertFalse(link.isChanged);
-        assertEquals(3, eIndex.getEntities(playerEntity.getCreationIndex()).size());
-        assertEquals(0, gameIndex.getEntities(sensorEntity.getCreationIndex()).size());
 
         collisionSensorSystem.execute( 0.5F);
         assertFalse(link.pulse);

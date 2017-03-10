@@ -21,12 +21,12 @@ public class EntityIndex<TEntity extends Entity, TKey> extends AbstractEntityInd
         activate();
     }
 
-
     public EntityIndex(IGroup<TEntity> group, Func<TEntity, IComponent, TKey[]> keys)  {
         super(group, keys);
         _index = EntitasCollections.createMap(Object.class, Entity.class); //Object2ObjectArrayMap
         activate();
     }
+
     @Override
     public void activate() throws EntityIndexException {
         super.activate();
@@ -71,6 +71,5 @@ public class EntityIndex<TEntity extends Entity, TKey> extends AbstractEntityInd
             entity.release(this);
         }
     }
-
 
 }

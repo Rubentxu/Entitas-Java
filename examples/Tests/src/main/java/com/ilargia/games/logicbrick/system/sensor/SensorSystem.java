@@ -1,37 +1,37 @@
 package com.ilargia.games.logicbrick.system.sensor;
 
 import com.ilargia.games.logicbrick.component.sensor.Frequency;
-import com.ilargia.games.logicbrick.component.sensor.Signal;
+import com.ilargia.games.logicbrick.component.sensor.Link;
 import com.ilargia.games.logicbrick.gen.sensor.SensorEntity;
 
 public abstract class SensorSystem {
 
     public void process(SensorEntity sensor, float deltaTime) {
-        Signal signal = sensor.getSignal();
-        boolean lastPulse = signal.pulse;
-        signal.pulse = query(sensor, deltaTime);
+        Link link = sensor.getLink();
+        boolean lastPulse = link.pulse;
+        link.pulse = query(sensor, deltaTime);
 
         if (sensor.hasFrequency()) {
             Frequency frequency = sensor.getFrequency();
             if ((frequency.time += deltaTime) >= frequency.tick) {
                 if (sensor.hasMode()) {
-                    signal.isOpen = signal.isChanged || (sensor.getMode().type == signal.pulse);
+                    link.isOpen = link.isChanged || (sensor.getMode().type == link.pulse);
                 } else {
-                    signal.isOpen = signal.isChanged;
+                    link.isOpen = link.isChanged;
                 }
                 frequency.time = 0;
             } else {
-                signal.isOpen = false;
+                link.isOpen = false;
 
             }
         } else {
             if (sensor.hasMode()) {
-                signal.isOpen = (lastPulse != signal.pulse) || (sensor.getMode().type == signal.pulse);
+                link.isOpen = (lastPulse != link.pulse) || (sensor.getMode().type == link.pulse);
             } else {
-                signal.isOpen = lastPulse != signal.pulse;
+                link.isOpen = lastPulse != link.pulse;
             }
         }
-        signal.isChanged = lastPulse != signal.pulse;
+        link.isChanged = lastPulse != link.pulse;
 
 
     }

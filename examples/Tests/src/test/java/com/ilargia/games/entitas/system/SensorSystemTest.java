@@ -3,7 +3,7 @@ package com.ilargia.games.entitas.system;
 
 import com.ilargia.games.entitas.factories.CollectionsFactories;
 import com.ilargia.games.entitas.factories.EntitasCollections;
-import com.ilargia.games.logicbrick.component.sensor.Signal;
+import com.ilargia.games.logicbrick.component.sensor.Link;
 import com.ilargia.games.logicbrick.gen.Entitas;
 import com.ilargia.games.logicbrick.gen.sensor.SensorEntity;
 import com.ilargia.games.logicbrick.system.sensor.SensorSystem;
@@ -33,7 +33,7 @@ public class SensorSystemTest {
         Entitas entitas = new Entitas();
         entity = entitas.sensor.createEntity();
 
-        entity.addSignal();
+        entity.addLink(0);
       
 
     }
@@ -47,7 +47,7 @@ public class SensorSystemTest {
     public void queryTrue() {
         query = true;
         sensorSystem.process(entity, 0.5F);
-        Signal link = entity.getSignal();
+        Link link = entity.getLink();
 
         assertTrue(link.pulse);
         assertTrue(link.isOpen);
@@ -80,7 +80,7 @@ public class SensorSystemTest {
     public void queryFalse() {
         query = false;
         sensorSystem.process(entity, 0.5f);
-        Signal link = entity.getSignal();
+        Link link = entity.getLink();
 
         assertFalse(link.pulse);
         assertFalse(link.isOpen);
@@ -108,7 +108,7 @@ public class SensorSystemTest {
     public void queryTrueAndModeTrue() {
         query = true;
         entity.addMode(true);
-        Signal link = entity.getSignal();
+        Link link = entity.getLink();
 
         sensorSystem.process(entity, 0.5F);
         assertTrue(link.pulse);
@@ -161,7 +161,7 @@ public class SensorSystemTest {
     public void queryFalseAndModeFalse() {
         query = true;
         entity.addMode(false);
-        Signal link = entity.getSignal();
+        Link link = entity.getLink();
 
         sensorSystem.process(entity, 0.5F);
         assertTrue(link.pulse);
@@ -214,7 +214,7 @@ public class SensorSystemTest {
     public void frecuencyAndQueryTrue() {
         query = true;
         entity.addFrequency(1);
-        Signal link = entity.getSignal();
+        Link link = entity.getLink();
 
         sensorSystem.process(entity, 0.5F);
         assertTrue(link.pulse);
@@ -263,7 +263,7 @@ public class SensorSystemTest {
     public void frecuencyAndQueryFalse() {
         query = false;
         entity.addFrequency(1);
-        Signal link = entity.getSignal();
+        Link link = entity.getLink();
 
         sensorSystem.process(entity, 0.5F);
         assertFalse(link.pulse);
@@ -313,7 +313,7 @@ public class SensorSystemTest {
     public void frecuencyAndQueryTrueAndModeTrue() {
         query = true;
         entity.addFrequency(1).addMode(true);
-        Signal link = entity.getSignal();
+        Link link = entity.getLink();
 
         sensorSystem.process(entity, 0.5f);
         assertTrue(link.pulse);
@@ -362,7 +362,7 @@ public class SensorSystemTest {
     public void frecuencyAndQueryFalseAndModeFalse() {
         query = true;
         entity.addFrequency(1).addMode(false);
-        Signal link = entity.getSignal();
+        Link link = entity.getLink();
 
         sensorSystem.process(entity, 0.5f);
         assertTrue(link.pulse);

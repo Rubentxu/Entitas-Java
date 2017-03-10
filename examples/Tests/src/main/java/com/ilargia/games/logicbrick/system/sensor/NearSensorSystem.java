@@ -6,26 +6,45 @@ import com.ilargia.games.entitas.api.system.IExecuteSystem;
 import com.ilargia.games.entitas.group.Group;
 import com.ilargia.games.entitas.matcher.Matcher;
 import com.ilargia.games.logicbrick.component.sensor.CollisionSensor;
+import com.ilargia.games.logicbrick.component.sensor.NearSensor;
 import com.ilargia.games.logicbrick.gen.Entitas;
+import com.ilargia.games.logicbrick.gen.game.GameContext;
 import com.ilargia.games.logicbrick.gen.game.GameEntity;
 import com.ilargia.games.logicbrick.gen.sensor.SensorContext;
 import com.ilargia.games.logicbrick.gen.sensor.SensorEntity;
 import com.ilargia.games.logicbrick.gen.sensor.SensorMatcher;
+import com.ilargia.games.logicbrick.index.GameIndex;
 import com.ilargia.games.logicbrick.index.SensorIndex;
 
 public class NearSensorSystem extends SensorSystem implements IExecuteSystem, Collision<GameEntity> {
     private final SensorContext sensorContex;
     private final Group<SensorEntity> sensorGroup;
+    private final GameContext gameContex;
 
     public NearSensorSystem(Entitas entitas) {
         this.sensorContex = entitas.sensor;
-        sensorGroup = sensorContex.getGroup(Matcher.AllOf(SensorMatcher.CollisionSensor(), SensorMatcher.Signal()));
+        this.gameContex = entitas.game;
+        this.sensorGroup = sensorContex.getGroup(Matcher.AllOf(SensorMatcher.NearSensor(), SensorMatcher.Link()));
 
     }
 
     @Override
     protected boolean query(SensorEntity sensorEntity, float deltaTime) {
-        return sensorEntity.getCollisionSensor().collisionSignal;
+        boolean isActive = false;
+        NearSensor sensor = sensorEntity.getNearSensor();
+        GameIndex.getEntitiesGame(gameContex,sensorEntity);
+//        if (sensor.distanceContactList.size > 0) {
+//            isActive = true;
+//            if (!sensor.initContact) sensor.initContact = true;
+//
+//        } else if (sensor.initContact && sensor.resetDistanceContactList.size > 0) {
+//            isActive = true;
+//
+//        } else if (sensor.initContact) {
+//            sensor.initContact = false;
+//
+//        }
+        return isActive;
 
     }
 
@@ -40,10 +59,15 @@ public class NearSensorSystem extends SensorSystem implements IExecuteSystem, Co
     public void processCollision(GameEntity entityA, GameEntity entityB, boolean collisionSignal) {
         if(entityA != null && entityB !=null) {
             for (SensorEntity entity : SensorIndex.getEntitiesSensor(sensorContex, entityA)) {
-                CollisionSensor collision = entity.getCollisionSensor();
-                if(entityB.getIdentity().tags.contains(collision.targetTag))
+                NearSensor collision = entity.getNearSensor();
+                if(entityB.getIdentity().tags.contains(collision.targetTag)) {
+                    if(collisionSignal) {
+                        GameIndex.addGameEntity(gameContex, entity.getCreationIndex(), entityB);
+                    } else {
+                        GameIndex.removeGameEntity(gameContex, entity.getCreationIndex(), entityB);
+                    }
                     collision.collisionSignal = collisionSignal;
-
+                }
             }
         }
     }

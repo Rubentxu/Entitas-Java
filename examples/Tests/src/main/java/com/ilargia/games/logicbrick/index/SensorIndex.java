@@ -13,7 +13,7 @@ public class SensorIndex {
 
     public static void createSensorEntityIndices(SensorContext context) {
         EntityIndex<SensorEntity, Integer> eIndex = new EntityIndex<SensorEntity, Integer>(((e, c) -> e.getCreationIndex()),
-                context.getGroup(SensorMatcher.Signal()));
+                context.getGroup(SensorMatcher.Link()));
         context.addEntityIndex(SensorKey, eIndex);
     }
 

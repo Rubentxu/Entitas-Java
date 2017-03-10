@@ -13,8 +13,9 @@ public class SensorMatcher {
 	private static Matcher _matcherCollisionSensor;
 	private static Matcher _matcherDelaySensor;
 	private static Matcher _matcherFrequency;
+	private static Matcher _matcherLink;
 	private static Matcher _matcherMode;
-	private static Matcher _matcherSignal;
+	private static Matcher _matcherNearSensor;
 
 	public static Matcher AlwaysSensor() {
 		if (_matcherAlwaysSensor == null) {
@@ -56,6 +57,16 @@ public class SensorMatcher {
 		return _matcherFrequency;
 	}
 
+	public static Matcher Link() {
+		if (_matcherLink == null) {
+			Matcher matcher = (Matcher) Matcher
+					.AllOf(SensorComponentsLookup.Link);
+			matcher.componentNames = SensorComponentsLookup.componentNames();
+			_matcherLink = matcher;
+		}
+		return _matcherLink;
+	}
+
 	public static Matcher Mode() {
 		if (_matcherMode == null) {
 			Matcher matcher = (Matcher) Matcher
@@ -66,13 +77,13 @@ public class SensorMatcher {
 		return _matcherMode;
 	}
 
-	public static Matcher Signal() {
-		if (_matcherSignal == null) {
+	public static Matcher NearSensor() {
+		if (_matcherNearSensor == null) {
 			Matcher matcher = (Matcher) Matcher
-					.AllOf(SensorComponentsLookup.Signal);
+					.AllOf(SensorComponentsLookup.NearSensor);
 			matcher.componentNames = SensorComponentsLookup.componentNames();
-			_matcherSignal = matcher;
+			_matcherNearSensor = matcher;
 		}
-		return _matcherSignal;
+		return _matcherNearSensor;
 	}
 }

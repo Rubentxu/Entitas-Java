@@ -285,7 +285,7 @@ public class Context<TEntity extends Entity> implements IContext<TEntity> {
                     for (GroupChanged listener : groupChangedEvent) {
                         listener.changed(groups.get(i), entity, index, component);
                     }
-                    ;
+
                 }
             }
             EntitasCache.pushGroupChangedList(events);
