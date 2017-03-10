@@ -34,18 +34,18 @@ public class SceneSystem extends ReactiveSystem<GameEntity> implements IInitiali
         super(entitas.game);
         this.physics = world;
         this.context = entitas.scene;
-        this.gameElements = entitas.game.getGroup(Matcher.AllOf(GameMatcher.Element(), GameMatcher.RigidBody()));
+        this.gameElements = entitas.game.getGroup(Matcher.AllOf(GameMatcher.Identity(), GameMatcher.RigidBody()));
         // this.factories = EntitasCollections.createMap(String.class, GUIFactory.class);
     }
 
     @Override
     protected Collector<GameEntity> getTrigger(IContext<GameEntity> context) {
-        return context.createCollector(GameMatcher.Element());
+        return context.createCollector(GameMatcher.Identity());
     }
 
     @Override
     protected boolean filter(GameEntity entity) {
-        return entity.hasElement() && (!entity.hasTextureView() || !entity.hasRigidBody());
+        return entity.hasIdentity() && (!entity.hasTextureView() || !entity.hasRigidBody());
     }
 
 
@@ -62,7 +62,7 @@ public class SceneSystem extends ReactiveSystem<GameEntity> implements IInitiali
     @Override
     protected void execute(List<GameEntity> gameEntities) {
         for (GameEntity gameEntity : gameEntities) {
-            //  factories.get(gameEntity.getElement().type).create(null);
+            //  factories.get(gameEntity.getIdentity().type).create(null);
         }
     }
 

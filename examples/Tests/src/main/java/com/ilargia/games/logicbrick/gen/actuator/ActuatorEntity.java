@@ -110,28 +110,28 @@ public class ActuatorEntity extends Entity {
 		return hasComponent(ActuatorComponentsLookup.Signal);
 	}
 
-	public ActuatorEntity addSignal(boolean isOpen, boolean isChanged,
-			boolean pulse) {
+	public ActuatorEntity addSignal() {
 		Signal component = (Signal) recoverComponent(ActuatorComponentsLookup.Signal);
 		if (component == null) {
 			component = new Signal();
+		} else {
+			component.isOpen = false;
+			component.isChanged = false;
+			component.pulse = false;
 		}
-		component.isOpen = isOpen;
-		component.isChanged = isChanged;
-		component.pulse = pulse;
 		addComponent(ActuatorComponentsLookup.Signal, component);
 		return this;
 	}
 
-	public ActuatorEntity replaceSignal(boolean isOpen, boolean isChanged,
-			boolean pulse) {
+	public ActuatorEntity replaceSignal() {
 		Signal component = (Signal) recoverComponent(ActuatorComponentsLookup.Signal);
 		if (component == null) {
 			component = new Signal();
+		} else {
+			component.isOpen = false;
+			component.isChanged = false;
+			component.pulse = false;
 		}
-		component.isOpen = isOpen;
-		component.isChanged = isChanged;
-		component.pulse = pulse;
 		replaceComponent(ActuatorComponentsLookup.Signal, component);
 		return this;
 	}

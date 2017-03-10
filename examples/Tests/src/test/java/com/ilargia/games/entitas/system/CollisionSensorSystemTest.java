@@ -3,9 +3,11 @@ package com.ilargia.games.entitas.system;
 
 import com.ilargia.games.entitas.factories.CollectionsFactories;
 import com.ilargia.games.entitas.factories.EntitasCollections;
+import com.ilargia.games.logicbrick.component.sensor.CollisionSensor;
 import com.ilargia.games.logicbrick.component.sensor.Signal;
 import com.ilargia.games.logicbrick.gen.Entitas;
 import com.ilargia.games.logicbrick.gen.sensor.SensorEntity;
+import com.ilargia.games.logicbrick.system.sensor.CollisionSensorSystem;
 import com.ilargia.games.logicbrick.system.sensor.DelaySensorSystem;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,288 +17,384 @@ import static org.junit.Assert.assertTrue;
 
 public class CollisionSensorSystemTest {
     private EntitasCollections collections;
-    private DelaySensorSystem sensorSystem;
+    private CollisionSensorSystem sensorSystem;
     SensorEntity entity;
+    private CollisionSensor sensor;
 
 
     @Before
     public void setUp() {
         collections = new EntitasCollections(new CollectionsFactories(){});
         Entitas entitas = new Entitas();
-        this.sensorSystem = new DelaySensorSystem(entitas.sensor);
+        this.sensorSystem = new CollisionSensorSystem(entitas);
         entity = entitas.sensor.createEntity();
-        entity.addSignal().addDelaySensor(0.5f, 1,false);
+        entity.addSignal().addCollisionSensor("Ename");
+        sensor = entity.getCollisionSensor();
 
     }
 
     @Test
-    public void defaultTest() {
-        sensorSystem.execute(0.2F);
-        Signal signal = entity.getSignal();
+    public void queryTrue() {
+        sensor.collisionSignal = true;
+        sensorSystem.process(entity, 0.5F);
+        Signal link = entity.getSignal();
 
-        assertFalse(signal.pulse);
-        assertFalse(signal.isOpen);
-        assertFalse(signal.isChanged);
+        assertTrue(link.pulse);
+        assertTrue(link.isOpen);
+        assertTrue(link.isChanged);
 
-        sensorSystem.execute(0.5F);
-        assertTrue(signal.pulse);
-        assertTrue(signal.isOpen);
-        assertTrue(signal.isChanged);
+        sensorSystem.process(entity, 0.5F);
+        assertTrue(link.pulse);
+        assertFalse(link.isOpen);
+        assertFalse(link.isChanged);
 
-        sensorSystem.execute(0.5F);
-        assertTrue(signal.pulse);
-        assertFalse(signal.isOpen);
-        assertFalse(signal.isChanged);
+        sensor.collisionSignal =false;
+        sensorSystem.process(entity, 0.5F);
+        assertFalse(link.pulse);
+        assertTrue(link.isOpen);
+        assertTrue(link.isChanged);
 
-        sensorSystem.execute(0.5F);
-        assertFalse(signal.pulse);
-        assertTrue(signal.isOpen);
-        assertTrue(signal.isChanged);
+        sensorSystem.process(entity, 0.5F);
+        assertFalse(link.pulse);
+        assertFalse(link.isOpen);
+        assertFalse(link.isChanged);
+
+
+    }
+
+    /* Pulses
+    * ....
+    * ------------
+    * */
+    @Test
+    public void queryFalse() {
+        sensor.collisionSignal =false;
+        sensorSystem.process(entity, 0.5f);
+        Signal link = entity.getSignal();
+
+        assertFalse(link.pulse);
+        assertFalse(link.isOpen);
+        assertFalse(link.isChanged);
+
+        sensorSystem.process(entity, 0.5f);
+        assertFalse(link.pulse);
+        assertFalse(link.isOpen);
+        assertFalse(link.isChanged);
+
+        sensor.collisionSignal =true;
+        sensorSystem.process(entity, 0.5f);
+        assertTrue(link.pulse);
+        assertTrue(link.isOpen);
+        assertTrue(link.isChanged);
+
+        sensorSystem.process(entity, 0.5f);
+        assertTrue(link.pulse);
+        assertFalse(link.isOpen);
+        assertFalse(link.isChanged);
 
     }
 
     @Test
-    public void modeTrue() {
+    public void queryTrueAndModeTrue() {
+        sensor.collisionSignal =true;
         entity.addMode(true);
-        Signal signal = entity.getSignal();
+        Signal link = entity.getSignal();
 
-        sensorSystem.execute(0.2F);
-        assertFalse(signal.pulse);
-        assertFalse(signal.isOpen);
-        assertFalse(signal.isChanged);
+        sensorSystem.process(entity, 0.5F);
+        assertTrue(link.pulse);
+        assertTrue(link.isOpen);
+        assertTrue(link.isChanged);
 
-        sensorSystem.execute(0.5F);
-        assertTrue(signal.pulse);
-        assertTrue(signal.isOpen);
-        assertTrue(signal.isChanged);
+        sensorSystem.process(entity, 0.5F);
+        assertTrue(link.pulse);
+        assertTrue(link.isOpen);
+        assertFalse(link.isChanged);
 
-        sensorSystem.execute(0.5F);
-        assertTrue(signal.pulse);
-        assertTrue(signal.isOpen);
-        assertFalse(signal.isChanged);
+        sensorSystem.process(entity, 0.5F);
+        assertTrue(link.pulse);
+        assertTrue(link.isOpen);
+        assertFalse(link.isChanged);
 
-        sensorSystem.execute(0.5F);
-        assertFalse(signal.pulse);
-        assertTrue(signal.isOpen);
-        assertTrue(signal.isChanged);
+        sensorSystem.process(entity, 0.5F);
+        assertTrue(link.pulse);
+        assertTrue(link.isOpen);
+        assertFalse(link.isChanged);
 
+        sensor.collisionSignal =false;
+        sensorSystem.process(entity, 0.5F);
+        assertFalse(link.pulse);
+        assertTrue(link.isOpen);
+        assertTrue(link.isChanged);
 
-        sensorSystem.execute(0.5F);
-        assertFalse(signal.pulse);
-        assertFalse(signal.isOpen);
-        assertFalse(signal.isChanged);
+        sensorSystem.process(entity, 0.5F);
+        assertFalse(link.pulse);
+        assertFalse(link.isOpen);
+        assertFalse(link.isChanged);
 
-        sensorSystem.execute(0.5F);
-        assertFalse(signal.pulse);
-        assertFalse(signal.isOpen);
-        assertFalse(signal.isChanged);
+        sensorSystem.process(entity, 0.5F);
+        assertFalse(link.pulse);
+        assertFalse(link.isOpen);
+        assertFalse(link.isChanged);
 
-        sensorSystem.execute(0.5F);
-        assertFalse(signal.pulse);
-        assertFalse(signal.isOpen);
-        assertFalse(signal.isChanged);
-
-        sensorSystem.execute(0.5F);
-        assertFalse(signal.pulse);
-        assertFalse(signal.isOpen);
-        assertFalse(signal.isChanged);
+        sensorSystem.process(entity, 0.5F);
+        assertFalse(link.pulse);
+        assertFalse(link.isOpen);
+        assertFalse(link.isChanged);
 
     }
 
+    /* Pulses
+    * ....
+    * ------------
+    * */
     @Test
-    public void ModeFalse() {
+    public void queryFalseAndModeFalse() {
+        sensor.collisionSignal =true;
         entity.addMode(false);
-        Signal signal = entity.getSignal();
+        Signal link = entity.getSignal();
 
-        sensorSystem.execute(0.2F);
-        assertFalse(signal.pulse);
-        assertTrue(signal.isOpen);
-        assertFalse(signal.isChanged);
+        sensorSystem.process(entity, 0.5F);
+        assertTrue(link.pulse);
+        assertTrue(link.isOpen);
+        assertTrue(link.isChanged);
 
-        sensorSystem.execute(0.5F);
-        assertTrue(signal.pulse);
-        assertTrue(signal.isOpen);
-        assertTrue(signal.isChanged);
+        sensorSystem.process(entity, 0.5F);
+        assertTrue(link.pulse);
+        assertFalse(link.isOpen);
+        assertFalse(link.isChanged);
 
-        sensorSystem.execute(0.5F);
-        assertTrue(signal.pulse);
-        assertFalse(signal.isOpen);
-        assertFalse(signal.isChanged);
+        sensorSystem.process(entity, 0.5F);
+        assertTrue(link.pulse);
+        assertFalse(link.isOpen);
+        assertFalse(link.isChanged);
 
-        sensorSystem.execute(0.5F);
-        assertFalse(signal.pulse);
-        assertTrue(signal.isOpen);
-        assertTrue(signal.isChanged);
+        sensorSystem.process(entity, 0.5F);
+        assertTrue(link.pulse);
+        assertFalse(link.isOpen);
+        assertFalse(link.isChanged);
 
+        sensor.collisionSignal =false;
+        sensorSystem.process(entity, 0.5F);
+        assertFalse(link.pulse);
+        assertTrue(link.isOpen);
+        assertTrue(link.isChanged);
 
-        sensorSystem.execute(0.5F);
-        assertFalse(signal.pulse);
-        assertTrue(signal.isOpen);
-        assertFalse(signal.isChanged);
+        sensorSystem.process(entity, 0.5F);
+        assertFalse(link.pulse);
+        assertTrue(link.isOpen);
+        assertFalse(link.isChanged);
 
-        sensorSystem.execute(0.5F);
-        assertFalse(signal.pulse);
-        assertTrue(signal.isOpen);
-        assertFalse(signal.isChanged);
+        sensorSystem.process(entity, 0.5F);
+        assertFalse(link.pulse);
+        assertTrue(link.isOpen);
+        assertFalse(link.isChanged);
 
-        sensorSystem.execute(0.5F);
-        assertFalse(signal.pulse);
-        assertTrue(signal.isOpen);
-        assertFalse(signal.isChanged);
-
-        sensorSystem.execute(0.5F);
-        assertFalse(signal.pulse);
-        assertTrue(signal.isOpen);
-        assertFalse(signal.isChanged);
+        sensorSystem.process(entity, 0.5F);
+        assertFalse(link.pulse);
+        assertTrue(link.isOpen);
+        assertFalse(link.isChanged);
 
     }
 
+    /* Pulses
+    * .:......
+    * ------------
+    * */
     @Test
-    public void frecuency() {
+    public void frecuencyAndQueryTrue() {
+        sensor.collisionSignal =true;
         entity.addFrequency(1);
-        Signal signal = entity.getSignal();
+        Signal link = entity.getSignal();
 
-        sensorSystem.execute(0.2F);
-        assertFalse(signal.pulse);
-        assertFalse(signal.isOpen);
-        assertFalse(signal.isChanged);
+        sensorSystem.process(entity, 0.5F);
+        assertTrue(link.pulse);
+        assertFalse(link.isOpen);
+        assertTrue(link.isChanged);
 
-        sensorSystem.execute(0.5f);
-        assertTrue(signal.pulse);
-        assertFalse(signal.isOpen);
-        assertTrue(signal.isChanged);
+        sensorSystem.process(entity, 0.5f);
+        assertTrue(link.pulse);
+        assertTrue(link.isOpen);
+        assertFalse(link.isChanged);
 
-        sensorSystem.execute(0.5F);
-        assertTrue(signal.pulse);
-        assertTrue(signal.isOpen);
-        assertFalse(signal.isChanged);
+        sensorSystem.process(entity, 0.5F);
+        assertTrue(link.pulse);
+        assertFalse(link.isOpen);
+        assertFalse(link.isChanged);
 
-        sensorSystem.execute(0.5F);
-        assertFalse(signal.pulse);
-        assertFalse(signal.isOpen);
-        assertTrue(signal.isChanged);
+        sensorSystem.process(entity, 0.5F);
+        assertTrue(link.pulse);
+        assertFalse(link.isOpen);
+        assertFalse(link.isChanged);
 
+        sensor.collisionSignal =false;
+        sensorSystem.process(entity, 0.5F);
+        assertFalse(link.pulse);
+        assertFalse(link.isOpen);
+        assertTrue(link.isChanged);
 
-        sensorSystem.execute(0.5F);
-        assertFalse(signal.pulse);
-        assertTrue(signal.isOpen);
-        assertFalse(signal.isChanged);
+        sensorSystem.process(entity, 0.5f);
+        assertFalse(link.pulse);
+        assertTrue(link.isOpen);
+        assertFalse(link.isChanged);
 
-        sensorSystem.execute(0.5f);
-        assertFalse(signal.pulse);
-        assertFalse(signal.isOpen);
-        assertFalse(signal.isChanged);
+        sensorSystem.process(entity, 0.5F);
+        assertFalse(link.pulse);
+        assertFalse(link.isOpen);
+        assertFalse(link.isChanged);
 
-        sensorSystem.execute(0.5F);
-        assertFalse(signal.pulse);
-        assertFalse(signal.isOpen);
-        assertFalse(signal.isChanged);
+        sensorSystem.process(entity, 0.5F);
+        assertFalse(link.pulse);
+        assertFalse(link.isOpen);
+        assertFalse(link.isChanged);
 
-        sensorSystem.execute(0.5F);
-        assertFalse(signal.pulse);
-        assertFalse(signal.isOpen);
-        assertFalse(signal.isChanged);
+    }
+
+    @Test
+    public void frecuencyAndQueryFalse() {
+        sensor.collisionSignal =false;
+        entity.addFrequency(1);
+        Signal link = entity.getSignal();
+
+        sensorSystem.process(entity, 0.5F);
+        assertFalse(link.pulse);
+        assertFalse(link.isOpen);
+        assertFalse(link.isChanged);
+
+        sensorSystem.process(entity, 0.5f);
+        assertFalse(link.pulse);
+        assertFalse(link.isOpen);
+        assertFalse(link.isChanged);
+
+        sensorSystem.process(entity, 0.5F);
+        assertFalse(link.pulse);
+        assertFalse(link.isOpen);
+        assertFalse(link.isChanged);
+
+        sensorSystem.process(entity, 0.5F);
+        assertFalse(link.pulse);
+        assertFalse(link.isOpen);
+        assertFalse(link.isChanged);
+
+        sensor.collisionSignal =true;
+        sensorSystem.process(entity, 0.5F);
+        assertTrue(link.pulse);
+        assertFalse(link.isOpen);
+        assertTrue(link.isChanged);
+
+        sensorSystem.process(entity, 0.5f);
+        assertTrue(link.pulse);
+        assertTrue(link.isOpen);
+        assertFalse(link.isChanged);
+
+        sensorSystem.process(entity, 0.5F);
+        assertTrue(link.pulse);
+        assertFalse(link.isOpen);
+        assertFalse(link.isChanged);
+
+        sensorSystem.process(entity, 0.5F);
+        assertTrue(link.pulse);
+        assertFalse(link.isOpen);
+        assertFalse(link.isChanged);
 
     }
 
 
     @Test
-    public void frecuencyAndModeTrue() {
-
+    public void frecuencyAndQueryTrueAndModeTrue() {
+        sensor.collisionSignal =true;
         entity.addFrequency(1).addMode(true);
-        Signal signal = entity.getSignal();
+        Signal link = entity.getSignal();
 
-        sensorSystem.execute(0.2f);
-        assertFalse(signal.pulse);
-        assertFalse(signal.isOpen);
-        assertFalse(signal.isChanged);
+        sensorSystem.process(entity, 0.5f);
+        assertTrue(link.pulse);
+        assertFalse(link.isOpen);
+        assertTrue(link.isChanged);
 
-        sensorSystem.execute(0.5F);
-        assertTrue(signal.pulse);
-        assertFalse(signal.isOpen);
-        assertTrue(signal.isChanged);
+        sensorSystem.process(entity, 0.5F);
+        assertTrue(link.pulse);
+        assertTrue(link.isOpen);
+        assertFalse(link.isChanged);
 
-        sensorSystem.execute(0.5F);
-        assertTrue(signal.pulse);
-        assertTrue(signal.isOpen);
-        assertFalse(signal.isChanged);
+        sensorSystem.process(entity, 0.5F);
+        assertTrue(link.pulse);
+        assertFalse(link.isOpen);
+        assertFalse(link.isChanged);
 
-        sensorSystem.execute(0.5F);
-        assertFalse(signal.pulse);
-        assertFalse(signal.isOpen);
-        assertTrue(signal.isChanged);
+        sensorSystem.process(entity, 0.5F);
+        assertTrue(link.pulse);
+        assertTrue(link.isOpen);
+        assertFalse(link.isChanged);
 
+        sensor.collisionSignal =false;
+        sensorSystem.process(entity, 0.5f);
+        assertFalse(link.pulse);
+        assertFalse(link.isOpen);
+        assertTrue(link.isChanged);
 
-        sensorSystem.execute(0.5f);
-        assertFalse(signal.pulse);
-        assertTrue(signal.isOpen);
-        assertFalse(signal.isChanged);
+        sensorSystem.process(entity, 0.5F);
+        assertFalse(link.pulse);
+        assertTrue(link.isOpen);
+        assertFalse(link.isChanged);
 
-        sensorSystem.execute(0.5F);
-        assertFalse(signal.pulse);
-        assertFalse(signal.isOpen);
-        assertFalse(signal.isChanged);
+        sensorSystem.process(entity, 0.5F);
+        assertFalse(link.pulse);
+        assertFalse(link.isOpen);
+        assertFalse(link.isChanged);
 
-        sensorSystem.execute(0.5F);
-        assertFalse(signal.pulse);
-        assertFalse(signal.isOpen);
-        assertFalse(signal.isChanged);
-
-        sensorSystem.execute(0.5F);
-        assertFalse(signal.pulse);
-        assertFalse(signal.isOpen);
-        assertFalse(signal.isChanged);
+        sensorSystem.process(entity, 0.5F);
+        assertFalse(link.pulse);
+        assertFalse(link.isOpen);
+        assertFalse(link.isChanged);
 
     }
 
     @Test
-    public void frecuencyAndModeFalse() {
-
+    public void frecuencyAndQueryFalseAndModeFalse() {
+        sensor.collisionSignal =true;
         entity.addFrequency(1).addMode(false);
-        Signal signal = entity.getSignal();
+        Signal link = entity.getSignal();
 
-        sensorSystem.execute(0.2f);
-        assertFalse(signal.pulse);
-        assertFalse(signal.isOpen);
-        assertFalse(signal.isChanged);
+        sensorSystem.process(entity, 0.5f);
+        assertTrue(link.pulse);
+        assertFalse(link.isOpen);
+        assertTrue(link.isChanged);
 
-        sensorSystem.execute(0.5F);
-        assertTrue(signal.pulse);
-        assertFalse(signal.isOpen);
-        assertTrue(signal.isChanged);
+        sensorSystem.process(entity, 0.5F);
+        assertTrue(link.pulse);
+        assertTrue(link.isOpen);
+        assertFalse(link.isChanged);
 
-        sensorSystem.execute(0.5F);
-        assertTrue(signal.pulse);
-        assertTrue(signal.isOpen);
-        assertFalse(signal.isChanged);
+        sensorSystem.process(entity, 0.5F);
+        assertTrue(link.pulse);
+        assertFalse(link.isOpen);
+        assertFalse(link.isChanged);
 
-        sensorSystem.execute(0.5F);
-        assertFalse(signal.pulse);
-        assertFalse(signal.isOpen);
-        assertTrue(signal.isChanged);
+        sensorSystem.process(entity, 0.5F);
+        assertTrue(link.pulse);
+        assertFalse(link.isOpen);
+        assertFalse(link.isChanged);
 
+        sensor.collisionSignal =false;
+        sensorSystem.process(entity, 0.5f);
+        assertFalse(link.pulse);
+        assertFalse(link.isOpen);
+        assertTrue(link.isChanged);
 
-        sensorSystem.execute(0.5f);
-        assertFalse(signal.pulse);
-        assertTrue(signal.isOpen);
-        assertFalse(signal.isChanged);
+        sensorSystem.process(entity, 0.5F);
+        assertFalse(link.pulse);
+        assertTrue(link.isOpen);
+        assertFalse(link.isChanged);
 
-        sensorSystem.execute(0.5F);
-        assertFalse(signal.pulse);
-        assertFalse(signal.isOpen);
-        assertFalse(signal.isChanged);
+        sensorSystem.process(entity, 0.5F);
+        assertFalse(link.pulse);
+        assertFalse(link.isOpen);
+        assertFalse(link.isChanged);
 
-        sensorSystem.execute(0.5F);
-        assertFalse(signal.pulse);
-        assertTrue(signal.isOpen);
-        assertFalse(signal.isChanged);
-
-        sensorSystem.execute(0.5F);
-        assertFalse(signal.pulse);
-        assertFalse(signal.isOpen);
-        assertFalse(signal.isChanged);
+        sensorSystem.process(entity, 0.5F);
+        assertFalse(link.pulse);
+        assertTrue(link.isOpen);
+        assertFalse(link.isChanged);
 
     }
-
 
 }

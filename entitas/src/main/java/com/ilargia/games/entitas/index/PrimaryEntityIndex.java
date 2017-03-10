@@ -30,23 +30,14 @@ public class PrimaryEntityIndex<TEntity extends Entity, TKey> extends AbstractEn
     }
 
 
-    public boolean hasEntity(TKey key) {
-        return _index.containsKey(key);
-    }
 
     public TEntity getEntity(TKey key) {
-        TEntity entity = tryGetEntity(key);
+        TEntity entity =  _index.get(key);
         if (entity == null) {
             throw new EntityIndexException("Entity for key '" + key + "' doesn't exist!",
                     "You should check if an entity with that key exists before getting it."
             );
         }
-        return entity;
-    }
-
-    public TEntity tryGetEntity(TKey key) {
-        TEntity entity = null;
-        _index.get(key);
         return entity;
     }
 

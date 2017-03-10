@@ -108,22 +108,22 @@ public class GuiEntity extends Entity {
 		return hasComponent(GuiComponentsLookup.ImageWidget);
 	}
 
-	public GuiEntity addImageWidget(Image image) {
+	public GuiEntity addImageWidget() {
 		ImageWidget component = (ImageWidget) recoverComponent(GuiComponentsLookup.ImageWidget);
 		if (component == null) {
 			component = new ImageWidget();
+		} else {
 		}
-		component.image = image;
 		addComponent(GuiComponentsLookup.ImageWidget, component);
 		return this;
 	}
 
-	public GuiEntity replaceImageWidget(Image image) {
+	public GuiEntity replaceImageWidget() {
 		ImageWidget component = (ImageWidget) recoverComponent(GuiComponentsLookup.ImageWidget);
 		if (component == null) {
 			component = new ImageWidget();
+		} else {
 		}
-		component.image = image;
 		replaceComponent(GuiComponentsLookup.ImageWidget, component);
 		return this;
 	}
@@ -281,22 +281,22 @@ public class GuiEntity extends Entity {
 		return hasComponent(GuiComponentsLookup.TextFieldWidget);
 	}
 
-	public GuiEntity addTextFieldWidget(TextField texField) {
+	public GuiEntity addTextFieldWidget() {
 		TextFieldWidget component = (TextFieldWidget) recoverComponent(GuiComponentsLookup.TextFieldWidget);
 		if (component == null) {
 			component = new TextFieldWidget();
+		} else {
 		}
-		component.texField = texField;
 		addComponent(GuiComponentsLookup.TextFieldWidget, component);
 		return this;
 	}
 
-	public GuiEntity replaceTextFieldWidget(TextField texField) {
+	public GuiEntity replaceTextFieldWidget() {
 		TextFieldWidget component = (TextFieldWidget) recoverComponent(GuiComponentsLookup.TextFieldWidget);
 		if (component == null) {
 			component = new TextFieldWidget();
+		} else {
 		}
-		component.texField = texField;
 		replaceComponent(GuiComponentsLookup.TextFieldWidget, component);
 		return this;
 	}

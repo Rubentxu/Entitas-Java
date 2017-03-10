@@ -11,6 +11,7 @@ public class Signal implements IComponent {
     public boolean isChanged;
     public boolean pulse;
 
+
     public Signal() {
         this.isOpen = false;
         this.isChanged = false;

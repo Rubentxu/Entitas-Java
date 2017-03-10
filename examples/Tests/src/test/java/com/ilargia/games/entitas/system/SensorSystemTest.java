@@ -17,7 +17,6 @@ public class SensorSystemTest {
     private EntitasCollections collections;
     private boolean query;
     private SensorSystem sensorSystem;
-    SensorEntity[] entities;
     SensorEntity entity;
 
 
@@ -34,8 +33,8 @@ public class SensorSystemTest {
         Entitas entitas = new Entitas();
         entity = entitas.sensor.createEntity();
 
-        entity.addLink(null);
-        entities = new SensorEntity[]{entity};
+        entity.addSignal();
+      
 
     }
 
@@ -47,25 +46,25 @@ public class SensorSystemTest {
     @Test
     public void queryTrue() {
         query = true;
-        sensorSystem.process(entities, 0.5F);
-        Signal link = entity.getLink();
+        sensorSystem.process(entity, 0.5F);
+        Signal link = entity.getSignal();
 
         assertTrue(link.pulse);
         assertTrue(link.isOpen);
         assertTrue(link.isChanged);
 
-        sensorSystem.process(entities, 0.5F);
+        sensorSystem.process(entity, 0.5F);
         assertTrue(link.pulse);
         assertFalse(link.isOpen);
         assertFalse(link.isChanged);
 
         query = false;
-        sensorSystem.process(entities, 0.5F);
+        sensorSystem.process(entity, 0.5F);
         assertFalse(link.pulse);
         assertTrue(link.isOpen);
         assertTrue(link.isChanged);
 
-        sensorSystem.process(entities, 0.5F);
+        sensorSystem.process(entity, 0.5F);
         assertFalse(link.pulse);
         assertFalse(link.isOpen);
         assertFalse(link.isChanged);
@@ -80,25 +79,25 @@ public class SensorSystemTest {
     @Test
     public void queryFalse() {
         query = false;
-        sensorSystem.process(entities, 0.5f);
-        Signal link = entity.getLink();
+        sensorSystem.process(entity, 0.5f);
+        Signal link = entity.getSignal();
 
         assertFalse(link.pulse);
         assertFalse(link.isOpen);
         assertFalse(link.isChanged);
 
-        sensorSystem.process(entities, 0.5f);
+        sensorSystem.process(entity, 0.5f);
         assertFalse(link.pulse);
         assertFalse(link.isOpen);
         assertFalse(link.isChanged);
 
         query = true;
-        sensorSystem.process(entities, 0.5f);
+        sensorSystem.process(entity, 0.5f);
         assertTrue(link.pulse);
         assertTrue(link.isOpen);
         assertTrue(link.isChanged);
 
-        sensorSystem.process(entities, 0.5f);
+        sensorSystem.process(entity, 0.5f);
         assertTrue(link.pulse);
         assertFalse(link.isOpen);
         assertFalse(link.isChanged);
@@ -109,45 +108,45 @@ public class SensorSystemTest {
     public void queryTrueAndModeTrue() {
         query = true;
         entity.addMode(true);
-        Signal link = entity.getLink();
+        Signal link = entity.getSignal();
 
-        sensorSystem.process(entities, 0.5F);
+        sensorSystem.process(entity, 0.5F);
         assertTrue(link.pulse);
         assertTrue(link.isOpen);
         assertTrue(link.isChanged);
 
-        sensorSystem.process(entities, 0.5F);
+        sensorSystem.process(entity, 0.5F);
         assertTrue(link.pulse);
         assertTrue(link.isOpen);
         assertFalse(link.isChanged);
 
-        sensorSystem.process(entities, 0.5F);
+        sensorSystem.process(entity, 0.5F);
         assertTrue(link.pulse);
         assertTrue(link.isOpen);
         assertFalse(link.isChanged);
 
-        sensorSystem.process(entities, 0.5F);
+        sensorSystem.process(entity, 0.5F);
         assertTrue(link.pulse);
         assertTrue(link.isOpen);
         assertFalse(link.isChanged);
 
         query = false;
-        sensorSystem.process(entities, 0.5F);
+        sensorSystem.process(entity, 0.5F);
         assertFalse(link.pulse);
         assertTrue(link.isOpen);
         assertTrue(link.isChanged);
 
-        sensorSystem.process(entities, 0.5F);
+        sensorSystem.process(entity, 0.5F);
         assertFalse(link.pulse);
         assertFalse(link.isOpen);
         assertFalse(link.isChanged);
 
-        sensorSystem.process(entities, 0.5F);
+        sensorSystem.process(entity, 0.5F);
         assertFalse(link.pulse);
         assertFalse(link.isOpen);
         assertFalse(link.isChanged);
 
-        sensorSystem.process(entities, 0.5F);
+        sensorSystem.process(entity, 0.5F);
         assertFalse(link.pulse);
         assertFalse(link.isOpen);
         assertFalse(link.isChanged);
@@ -162,45 +161,45 @@ public class SensorSystemTest {
     public void queryFalseAndModeFalse() {
         query = true;
         entity.addMode(false);
-        Signal link = entity.getLink();
+        Signal link = entity.getSignal();
 
-        sensorSystem.process(entities, 0.5F);
+        sensorSystem.process(entity, 0.5F);
         assertTrue(link.pulse);
         assertTrue(link.isOpen);
         assertTrue(link.isChanged);
 
-        sensorSystem.process(entities, 0.5F);
+        sensorSystem.process(entity, 0.5F);
         assertTrue(link.pulse);
         assertFalse(link.isOpen);
         assertFalse(link.isChanged);
 
-        sensorSystem.process(entities, 0.5F);
+        sensorSystem.process(entity, 0.5F);
         assertTrue(link.pulse);
         assertFalse(link.isOpen);
         assertFalse(link.isChanged);
 
-        sensorSystem.process(entities, 0.5F);
+        sensorSystem.process(entity, 0.5F);
         assertTrue(link.pulse);
         assertFalse(link.isOpen);
         assertFalse(link.isChanged);
 
         query = false;
-        sensorSystem.process(entities, 0.5F);
+        sensorSystem.process(entity, 0.5F);
         assertFalse(link.pulse);
         assertTrue(link.isOpen);
         assertTrue(link.isChanged);
 
-        sensorSystem.process(entities, 0.5F);
+        sensorSystem.process(entity, 0.5F);
         assertFalse(link.pulse);
         assertTrue(link.isOpen);
         assertFalse(link.isChanged);
 
-        sensorSystem.process(entities, 0.5F);
+        sensorSystem.process(entity, 0.5F);
         assertFalse(link.pulse);
         assertTrue(link.isOpen);
         assertFalse(link.isChanged);
 
-        sensorSystem.process(entities, 0.5F);
+        sensorSystem.process(entity, 0.5F);
         assertFalse(link.pulse);
         assertTrue(link.isOpen);
         assertFalse(link.isChanged);
@@ -215,45 +214,45 @@ public class SensorSystemTest {
     public void frecuencyAndQueryTrue() {
         query = true;
         entity.addFrequency(1);
-        Signal link = entity.getLink();
+        Signal link = entity.getSignal();
 
-        sensorSystem.process(entities, 0.5F);
+        sensorSystem.process(entity, 0.5F);
         assertTrue(link.pulse);
         assertFalse(link.isOpen);
         assertTrue(link.isChanged);
 
-        sensorSystem.process(entities, 0.5f);
+        sensorSystem.process(entity, 0.5f);
         assertTrue(link.pulse);
         assertTrue(link.isOpen);
         assertFalse(link.isChanged);
 
-        sensorSystem.process(entities, 0.5F);
+        sensorSystem.process(entity, 0.5F);
         assertTrue(link.pulse);
         assertFalse(link.isOpen);
         assertFalse(link.isChanged);
 
-        sensorSystem.process(entities, 0.5F);
+        sensorSystem.process(entity, 0.5F);
         assertTrue(link.pulse);
         assertFalse(link.isOpen);
         assertFalse(link.isChanged);
 
         query = false;
-        sensorSystem.process(entities, 0.5F);
+        sensorSystem.process(entity, 0.5F);
         assertFalse(link.pulse);
         assertFalse(link.isOpen);
         assertTrue(link.isChanged);
 
-        sensorSystem.process(entities, 0.5f);
+        sensorSystem.process(entity, 0.5f);
         assertFalse(link.pulse);
         assertTrue(link.isOpen);
         assertFalse(link.isChanged);
 
-        sensorSystem.process(entities, 0.5F);
+        sensorSystem.process(entity, 0.5F);
         assertFalse(link.pulse);
         assertFalse(link.isOpen);
         assertFalse(link.isChanged);
 
-        sensorSystem.process(entities, 0.5F);
+        sensorSystem.process(entity, 0.5F);
         assertFalse(link.pulse);
         assertFalse(link.isOpen);
         assertFalse(link.isChanged);
@@ -264,45 +263,45 @@ public class SensorSystemTest {
     public void frecuencyAndQueryFalse() {
         query = false;
         entity.addFrequency(1);
-        Signal link = entity.getLink();
+        Signal link = entity.getSignal();
 
-        sensorSystem.process(entities, 0.5F);
+        sensorSystem.process(entity, 0.5F);
         assertFalse(link.pulse);
         assertFalse(link.isOpen);
         assertFalse(link.isChanged);
 
-        sensorSystem.process(entities, 0.5f);
+        sensorSystem.process(entity, 0.5f);
         assertFalse(link.pulse);
         assertFalse(link.isOpen);
         assertFalse(link.isChanged);
 
-        sensorSystem.process(entities, 0.5F);
+        sensorSystem.process(entity, 0.5F);
         assertFalse(link.pulse);
         assertFalse(link.isOpen);
         assertFalse(link.isChanged);
 
-        sensorSystem.process(entities, 0.5F);
+        sensorSystem.process(entity, 0.5F);
         assertFalse(link.pulse);
         assertFalse(link.isOpen);
         assertFalse(link.isChanged);
 
         query = true;
-        sensorSystem.process(entities, 0.5F);
+        sensorSystem.process(entity, 0.5F);
         assertTrue(link.pulse);
         assertFalse(link.isOpen);
         assertTrue(link.isChanged);
 
-        sensorSystem.process(entities, 0.5f);
+        sensorSystem.process(entity, 0.5f);
         assertTrue(link.pulse);
         assertTrue(link.isOpen);
         assertFalse(link.isChanged);
 
-        sensorSystem.process(entities, 0.5F);
+        sensorSystem.process(entity, 0.5F);
         assertTrue(link.pulse);
         assertFalse(link.isOpen);
         assertFalse(link.isChanged);
 
-        sensorSystem.process(entities, 0.5F);
+        sensorSystem.process(entity, 0.5F);
         assertTrue(link.pulse);
         assertFalse(link.isOpen);
         assertFalse(link.isChanged);
@@ -314,45 +313,45 @@ public class SensorSystemTest {
     public void frecuencyAndQueryTrueAndModeTrue() {
         query = true;
         entity.addFrequency(1).addMode(true);
-        Signal link = entity.getLink();
+        Signal link = entity.getSignal();
 
-        sensorSystem.process(entities, 0.5f);
+        sensorSystem.process(entity, 0.5f);
         assertTrue(link.pulse);
         assertFalse(link.isOpen);
         assertTrue(link.isChanged);
 
-        sensorSystem.process(entities, 0.5F);
+        sensorSystem.process(entity, 0.5F);
         assertTrue(link.pulse);
         assertTrue(link.isOpen);
         assertFalse(link.isChanged);
 
-        sensorSystem.process(entities, 0.5F);
+        sensorSystem.process(entity, 0.5F);
         assertTrue(link.pulse);
         assertFalse(link.isOpen);
         assertFalse(link.isChanged);
 
-        sensorSystem.process(entities, 0.5F);
+        sensorSystem.process(entity, 0.5F);
         assertTrue(link.pulse);
         assertTrue(link.isOpen);
         assertFalse(link.isChanged);
 
         query = false;
-        sensorSystem.process(entities, 0.5f);
+        sensorSystem.process(entity, 0.5f);
         assertFalse(link.pulse);
         assertFalse(link.isOpen);
         assertTrue(link.isChanged);
 
-        sensorSystem.process(entities, 0.5F);
+        sensorSystem.process(entity, 0.5F);
         assertFalse(link.pulse);
         assertTrue(link.isOpen);
         assertFalse(link.isChanged);
 
-        sensorSystem.process(entities, 0.5F);
+        sensorSystem.process(entity, 0.5F);
         assertFalse(link.pulse);
         assertFalse(link.isOpen);
         assertFalse(link.isChanged);
 
-        sensorSystem.process(entities, 0.5F);
+        sensorSystem.process(entity, 0.5F);
         assertFalse(link.pulse);
         assertFalse(link.isOpen);
         assertFalse(link.isChanged);
@@ -363,45 +362,45 @@ public class SensorSystemTest {
     public void frecuencyAndQueryFalseAndModeFalse() {
         query = true;
         entity.addFrequency(1).addMode(false);
-        Signal link = entity.getLink();
+        Signal link = entity.getSignal();
 
-        sensorSystem.process(entities, 0.5f);
+        sensorSystem.process(entity, 0.5f);
         assertTrue(link.pulse);
         assertFalse(link.isOpen);
         assertTrue(link.isChanged);
 
-        sensorSystem.process(entities, 0.5F);
+        sensorSystem.process(entity, 0.5F);
         assertTrue(link.pulse);
         assertTrue(link.isOpen);
         assertFalse(link.isChanged);
 
-        sensorSystem.process(entities, 0.5F);
+        sensorSystem.process(entity, 0.5F);
         assertTrue(link.pulse);
         assertFalse(link.isOpen);
         assertFalse(link.isChanged);
 
-        sensorSystem.process(entities, 0.5F);
+        sensorSystem.process(entity, 0.5F);
         assertTrue(link.pulse);
         assertFalse(link.isOpen);
         assertFalse(link.isChanged);
 
         query = false;
-        sensorSystem.process(entities, 0.5f);
+        sensorSystem.process(entity, 0.5f);
         assertFalse(link.pulse);
         assertFalse(link.isOpen);
         assertTrue(link.isChanged);
 
-        sensorSystem.process(entities, 0.5F);
+        sensorSystem.process(entity, 0.5F);
         assertFalse(link.pulse);
         assertTrue(link.isOpen);
         assertFalse(link.isChanged);
 
-        sensorSystem.process(entities, 0.5F);
+        sensorSystem.process(entity, 0.5F);
         assertFalse(link.pulse);
         assertFalse(link.isOpen);
         assertFalse(link.isChanged);
 
-        sensorSystem.process(entities, 0.5F);
+        sensorSystem.process(entity, 0.5F);
         assertFalse(link.pulse);
         assertTrue(link.isOpen);
         assertFalse(link.isChanged);

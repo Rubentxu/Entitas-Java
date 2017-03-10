@@ -3,6 +3,7 @@ package com.ilargia.games.entitas.system;
 
 import com.ilargia.games.entitas.factories.CollectionsFactories;
 import com.ilargia.games.entitas.factories.EntitasCollections;
+
 import com.ilargia.games.logicbrick.component.sensor.Signal;
 import com.ilargia.games.logicbrick.gen.Entitas;
 import com.ilargia.games.logicbrick.gen.sensor.SensorEntity;
@@ -25,7 +26,7 @@ public class DelaySensorSystemTest {
         Entitas entitas = new Entitas();
         this.sensorSystem = new DelaySensorSystem(entitas.sensor);
         entity = entitas.sensor.createEntity();
-        entity.addSignal().addDelaySensor(0.5f, 1,false);
+        entity.addSignal().addCollisionSensor("Enemy");
 
     }
 

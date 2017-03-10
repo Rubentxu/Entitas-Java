@@ -199,28 +199,28 @@ public class SensorEntity extends Entity {
 		return hasComponent(SensorComponentsLookup.Signal);
 	}
 
-	public SensorEntity addSignal(boolean isOpen, boolean isChanged,
-			boolean pulse) {
+	public SensorEntity addSignal() {
 		Signal component = (Signal) recoverComponent(SensorComponentsLookup.Signal);
 		if (component == null) {
 			component = new Signal();
+		} else {
+			component.isOpen = false;
+			component.isChanged = false;
+			component.pulse = false;
 		}
-		component.isOpen = isOpen;
-		component.isChanged = isChanged;
-		component.pulse = pulse;
 		addComponent(SensorComponentsLookup.Signal, component);
 		return this;
 	}
 
-	public SensorEntity replaceSignal(boolean isOpen, boolean isChanged,
-			boolean pulse) {
+	public SensorEntity replaceSignal() {
 		Signal component = (Signal) recoverComponent(SensorComponentsLookup.Signal);
 		if (component == null) {
 			component = new Signal();
+		} else {
+			component.isOpen = false;
+			component.isChanged = false;
+			component.pulse = false;
 		}
-		component.isOpen = isOpen;
-		component.isChanged = isChanged;
-		component.pulse = pulse;
 		replaceComponent(SensorComponentsLookup.Signal, component);
 		return this;
 	}

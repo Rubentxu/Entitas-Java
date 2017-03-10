@@ -4,11 +4,16 @@ package com.ilargia.games.egdx.base.managers;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.ilargia.games.egdx.api.managers.PhysicsManager;
+import com.ilargia.games.egdx.api.managers.listener.Collision;
 import com.ilargia.games.egdx.base.util.BodyBuilder;
+import com.ilargia.games.entitas.api.IEntity;
 
-public class BasePhysicsManager implements PhysicsManager<World,ContactListener> {
+import java.util.Set;
+
+public class BasePhysicsManager<TEntity extends IEntity> implements PhysicsManager<World,Collision<TEntity>>, ContactListener {
     private World physics;
     private BodyBuilder bodyBuilder;
+    private Set<Collision<TEntity>> collisionListeners;
 
     public BasePhysicsManager(Vector2 gravity) {
         physics = new World(gravity, false);
@@ -18,12 +23,12 @@ public class BasePhysicsManager implements PhysicsManager<World,ContactListener>
 
     @Override
     public void initialize() {
-
+        physics.setContactListener(this);
     }
 
     @Override
-    public void addListener(ContactListener listener) {
-        physics.setContactListener(listener);
+    public void addListener(Collision listener) {
+       collisionListeners.add(listener);
     }
 
     @Override
@@ -39,6 +44,38 @@ public class BasePhysicsManager implements PhysicsManager<World,ContactListener>
 
     @Override
     public void dispose() {
+
+    }
+
+    @Override
+    public void beginContact(Contact contact) {
+        TEntity dataA = (TEntity) contact.getFixtureA().getBody().getUserData();
+        TEntity dataB = (TEntity) contact.getFixtureB().getBody().getUserData();
+        for (Collision<TEntity> listener : collisionListeners) {
+            listener.processCollision(dataA, dataB, true);
+            listener.processCollision(dataB, dataA, true);
+        }
+
+    }
+
+    @Override
+    public void endContact(Contact contact) {
+        TEntity dataA = (TEntity) contact.getFixtureA().getBody().getUserData();
+        TEntity dataB = (TEntity) contact.getFixtureB().getBody().getUserData();
+        for (Collision<TEntity> listener : collisionListeners) {
+            listener.processCollision(dataA, dataB, false);
+            listener.processCollision(dataB, dataA, false);
+        }
+
+    }
+
+    @Override
+    public void preSolve(Contact contact, Manifold manifold) {
+
+    }
+
+    @Override
+    public void postSolve(Contact contact, ContactImpulse contactImpulse) {
 
     }
 
