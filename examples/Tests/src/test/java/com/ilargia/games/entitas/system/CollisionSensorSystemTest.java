@@ -8,22 +8,18 @@ import com.ilargia.games.logicbrick.component.sensor.Link;
 import com.ilargia.games.logicbrick.gen.Entitas;
 import com.ilargia.games.logicbrick.gen.game.GameEntity;
 import com.ilargia.games.logicbrick.gen.sensor.SensorEntity;
-import com.ilargia.games.logicbrick.index.GameIndex;
-import com.ilargia.games.logicbrick.index.SensorIndex;
 import com.ilargia.games.logicbrick.system.sensor.CollisionSensorSystem;
-import com.ilargia.games.logicbrick.system.sensor.LinkSensorSystem;
+import com.ilargia.games.logicbrick.system.sensor.IndexingLinkSensorSystem;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class CollisionSensorSystemTest {
     Entitas entitas;
     private EntitasCollections collections;
     private CollisionSensorSystem collisionSensorSystem;
-    private LinkSensorSystem linkSensorSystem;
+    private IndexingLinkSensorSystem linkSensorSystem;
     private SensorEntity sensorEntity;
     private SensorEntity sensorEntity2;
     private GameEntity boss;
@@ -37,7 +33,7 @@ public class CollisionSensorSystemTest {
         collections = new EntitasCollections(new CollectionsFactories() {});
         entitas = new Entitas();
         this.collisionSensorSystem = new CollisionSensorSystem(entitas);
-        this.linkSensorSystem = new LinkSensorSystem(entitas);
+        this.linkSensorSystem = new IndexingLinkSensorSystem(entitas);
         linkSensorSystem.activate();
 
         boss = entitas.game.createEntity()

@@ -43,7 +43,7 @@ public class CollisionSensorSystem extends SensorSystem implements IExecuteSyste
     @Override
     public void processCollision(GameEntity entityA, GameEntity entityB, boolean collisionSignal) {
         if(entityA != null && entityB !=null) {
-            for (SensorEntity entity : SensorIndex.getEntitiesSensor(sensorContex, entityA)) {
+            for (SensorEntity entity : SensorIndex.getSensors(sensorContex, entityA)) {
                 CollisionSensor collision = entity.getCollisionSensor();
                 if(entityB.getIdentity().tags.contains(collision.targetTag)) {
                     if(collisionSignal) {

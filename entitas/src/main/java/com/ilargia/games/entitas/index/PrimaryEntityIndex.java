@@ -42,7 +42,7 @@ public class PrimaryEntityIndex<TEntity extends Entity, TKey> extends AbstractEn
     }
 
     @Override
-    protected void clear() {
+    public void clear() {
         for (TEntity entity : _index.values()) {
             if(entity.owners().contains(this)) {
                 entity.release(this);
@@ -54,7 +54,7 @@ public class PrimaryEntityIndex<TEntity extends Entity, TKey> extends AbstractEn
     }
 
     @Override
-    protected void addEntity(TKey key, TEntity entity) {
+    public void addEntity(TKey key, TEntity entity) {
         if(_index.containsKey(key)) {
             throw new EntityIndexException(
                     "Entity for key '" + key + "' already exists!",
@@ -68,7 +68,7 @@ public class PrimaryEntityIndex<TEntity extends Entity, TKey> extends AbstractEn
     }
 
     @Override
-    protected void removeEntity(TKey key, TEntity entity) {
+    public void removeEntity(TKey key, TEntity entity) {
         _index.remove(key);
         if(entity.owners().contains(this)) {
             entity.release(this);

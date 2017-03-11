@@ -5,7 +5,6 @@ import com.ilargia.games.egdx.api.managers.listener.Collision;
 import com.ilargia.games.entitas.api.system.IExecuteSystem;
 import com.ilargia.games.entitas.group.Group;
 import com.ilargia.games.entitas.matcher.Matcher;
-import com.ilargia.games.logicbrick.component.sensor.CollisionSensor;
 import com.ilargia.games.logicbrick.component.sensor.NearSensor;
 import com.ilargia.games.logicbrick.gen.Entitas;
 import com.ilargia.games.logicbrick.gen.game.GameContext;
@@ -32,7 +31,7 @@ public class NearSensorSystem extends SensorSystem implements IExecuteSystem, Co
     protected boolean query(SensorEntity sensorEntity, float deltaTime) {
         boolean isActive = false;
         NearSensor sensor = sensorEntity.getNearSensor();
-        GameIndex.getEntitiesGame(gameContex,sensorEntity);
+        GameIndex.getGameEntities(gameContex,sensorEntity);
 //        if (sensor.distanceContactList.size > 0) {
 //            isActive = true;
 //            if (!sensor.initContact) sensor.initContact = true;
@@ -58,7 +57,7 @@ public class NearSensorSystem extends SensorSystem implements IExecuteSystem, Co
     @Override
     public void processCollision(GameEntity entityA, GameEntity entityB, boolean collisionSignal) {
         if(entityA != null && entityB !=null) {
-            for (SensorEntity entity : SensorIndex.getEntitiesSensor(sensorContex, entityA)) {
+            for (SensorEntity entity : SensorIndex.getSensors(sensorContex, entityA)) {
                 NearSensor collision = entity.getNearSensor();
                 if(entityB.getIdentity().tags.contains(collision.targetTag)) {
                     if(collisionSignal) {
