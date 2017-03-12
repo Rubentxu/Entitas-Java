@@ -5,7 +5,7 @@ import com.ilargia.games.egdx.api.managers.listener.Collision;
 import com.ilargia.games.entitas.api.system.IExecuteSystem;
 import com.ilargia.games.entitas.group.Group;
 import com.ilargia.games.entitas.matcher.Matcher;
-import com.ilargia.games.logicbrick.component.sensor.NearSensor;
+import com.ilargia.games.logicbrick.component.sensor.RadarSensor;
 import com.ilargia.games.logicbrick.gen.Entitas;
 import com.ilargia.games.logicbrick.gen.game.GameContext;
 import com.ilargia.games.logicbrick.gen.game.GameEntity;
@@ -16,34 +16,21 @@ import com.ilargia.games.logicbrick.index.GameIndex;
 import com.ilargia.games.logicbrick.index.SensorIndex;
 import com.ilargia.games.logicbrick.index.SimpleGameIndex;
 
-public class NearSensorSystem extends SensorSystem implements IExecuteSystem, Collision {
+public class RadarSensorSystem extends SensorSystem implements IExecuteSystem, Collision {
     private final SensorContext sensorContex;
     private final Group<SensorEntity> sensorGroup;
     private final GameContext gameContex;
 
-    public NearSensorSystem(Entitas entitas) {
+    public RadarSensorSystem(Entitas entitas) {
         this.sensorContex = entitas.sensor;
         this.gameContex = entitas.game;
-        this.sensorGroup = sensorContex.getGroup(Matcher.AllOf(SensorMatcher.NearSensor(), SensorMatcher.Link()));
+        this.sensorGroup = sensorContex.getGroup(Matcher.AllOf(SensorMatcher.RadarSensor(), SensorMatcher.Link()));
 
     }
 
     @Override
     protected boolean query(SensorEntity sensorEntity, float deltaTime) {
-        boolean isActive = false;
-        NearSensor sensor = sensorEntity.getNearSensor();
-        if (sensor.distanceContactList.size() > 0) {
-            isActive = true;
-            if (!sensor.initContact) sensor.initContact = true;
-
-        } else if (sensor.initContact && sensor.resetDistanceContactList.size() > 0) {
-            isActive = true;
-
-        } else if (sensor.initContact) {
-            sensor.initContact = false;
-
-        }
-        return isActive;
+        return sensorEntity.getRadarSensor().collisionSignal;
 
     }
 
@@ -55,29 +42,25 @@ public class NearSensorSystem extends SensorSystem implements IExecuteSystem, Co
     }
 
     @Override
+    public void processCollision(Integer indexEntityA, Integer indexEntityB, boolean collisionSignal) {
+
+    }
+
+    @Override
     public void processSensorCollision(Integer indexEntityA, Integer indexEntityB, String tagSensorA, boolean collisionSignal) {
-        if (indexEntityA != null && indexEntityB != null) {
+        if (indexEntityA != null && indexEntityB != null && tagSensorA.equals("RadarSensor")) {
             GameEntity entityA = SimpleGameIndex.getGameEntity(gameContex, indexEntityA);
             GameEntity entityB = SimpleGameIndex.getGameEntity(gameContex, indexEntityB);
-            if (entityA != null && entityB != null && tagSensorA != null) {
+            if (entityA != null && entityB != null) {
                 for (SensorEntity entity : SensorIndex.getSensors(sensorContex, entityA)) {
-                    NearSensor sensor = entity.getNearSensor();
-                    if (entityB.getIdentity().tags.contains(sensor.targetTag)) {
+                    RadarSensor radar = entity.getRadarSensor();
+                    if (entityB.getIdentity().tags.contains(radar.targetTag)) {
                         if (collisionSignal) {
-                            if (tagSensorA.equals("NearSensor")) {
-                                sensor.distanceContactList.add(indexEntityB);
-                            } else if (tagSensorA.equals("ResetNearSensor")) {
-                                sensor.resetDistanceContactList.add(indexEntityB);
-                            }
-
+                            GameIndex.addGameEntity(gameContex, entity.getCreationIndex(), entityB);
                         } else {
-                            if (tagSensorA.equals("NearSensor")) {
-                                sensor.distanceContactList.remove(indexEntityB);
-                            } else if (tagSensorA.equals("ResetNearSensor")) {
-                                sensor.resetDistanceContactList.remove(indexEntityB);
-                            }
+                            GameIndex.removeGameEntity(gameContex, entity.getCreationIndex(), entityB);
                         }
-
+                        radar.collisionSignal = collisionSignal;
                     }
                 }
             }

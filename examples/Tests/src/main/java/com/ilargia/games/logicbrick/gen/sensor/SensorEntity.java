@@ -15,7 +15,9 @@ import com.ilargia.games.logicbrick.component.sensor.Frequency;
 import com.ilargia.games.logicbrick.component.sensor.Link;
 import com.ilargia.games.logicbrick.component.sensor.Mode;
 import com.ilargia.games.logicbrick.component.sensor.NearSensor;
-import com.ilargia.games.logicbrick.gen.Entitas;
+import com.ilargia.games.logicbrick.component.sensor.RadarSensor;
+import com.ilargia.games.logicbrick.data.Axis2D;
+import com.ilargia.games.logicbrick.component.sensor.RaySensor;
 
 /**
  * ---------------------------------------------------------------------------
@@ -242,14 +244,15 @@ public class SensorEntity extends Entity {
 		return hasComponent(SensorComponentsLookup.NearSensor);
 	}
 
-	public SensorEntity addNearSensor(String targetTag) {
+	public SensorEntity addNearSensor(String targetTag, float distance,
+			float resetDistance) {
 		NearSensor component = (NearSensor) recoverComponent(SensorComponentsLookup.NearSensor);
 		if (component == null) {
-			component = new NearSensor(targetTag);
+			component = new NearSensor(targetTag, distance, resetDistance);
 		} else {
 			component.targetTag = targetTag;
-			component.distance = 0;
-			component.resetDistance = 0;
+			component.distance = distance;
+			component.resetDistance = resetDistance;
 			component.distanceContactList = EntitasCollections
 					.createSet(Integer.class);
 			component.resetDistanceContactList = EntitasCollections
@@ -259,14 +262,15 @@ public class SensorEntity extends Entity {
 		return this;
 	}
 
-	public SensorEntity replaceNearSensor(String targetTag) {
+	public SensorEntity replaceNearSensor(String targetTag, float distance,
+			float resetDistance) {
 		NearSensor component = (NearSensor) recoverComponent(SensorComponentsLookup.NearSensor);
 		if (component == null) {
-			component = new NearSensor(targetTag);
+			component = new NearSensor(targetTag, distance, resetDistance);
 		} else {
 			component.targetTag = targetTag;
-			component.distance = 0;
-			component.resetDistance = 0;
+			component.distance = distance;
+			component.resetDistance = resetDistance;
 			component.distanceContactList = EntitasCollections
 					.createSet(Integer.class);
 			component.resetDistanceContactList = EntitasCollections
@@ -278,6 +282,96 @@ public class SensorEntity extends Entity {
 
 	public SensorEntity removeNearSensor() {
 		removeComponent(SensorComponentsLookup.NearSensor);
+		return this;
+	}
+
+	public RadarSensor getRadarSensor() {
+		return (RadarSensor) getComponent(SensorComponentsLookup.RadarSensor);
+	}
+
+	public boolean hasRadarSensor() {
+		return hasComponent(SensorComponentsLookup.RadarSensor);
+	}
+
+	public SensorEntity addRadarSensor(String targetTag, Axis2D axis2D,
+			float distance, float angle) {
+		RadarSensor component = (RadarSensor) recoverComponent(SensorComponentsLookup.RadarSensor);
+		if (component == null) {
+			component = new RadarSensor(targetTag, axis2D, distance, angle);
+		} else {
+			component.targetTag = targetTag;
+			component.axis2D = axis2D;
+			component.distance = distance;
+			component.angle = angle;
+			component.collisionSignal = false;
+		}
+		addComponent(SensorComponentsLookup.RadarSensor, component);
+		return this;
+	}
+
+	public SensorEntity replaceRadarSensor(String targetTag, Axis2D axis2D,
+			float distance, float angle) {
+		RadarSensor component = (RadarSensor) recoverComponent(SensorComponentsLookup.RadarSensor);
+		if (component == null) {
+			component = new RadarSensor(targetTag, axis2D, distance, angle);
+		} else {
+			component.targetTag = targetTag;
+			component.axis2D = axis2D;
+			component.distance = distance;
+			component.angle = angle;
+			component.collisionSignal = false;
+		}
+		replaceComponent(SensorComponentsLookup.RadarSensor, component);
+		return this;
+	}
+
+	public SensorEntity removeRadarSensor() {
+		removeComponent(SensorComponentsLookup.RadarSensor);
+		return this;
+	}
+
+	public RaySensor getRaySensor() {
+		return (RaySensor) getComponent(SensorComponentsLookup.RaySensor);
+	}
+
+	public boolean hasRaySensor() {
+		return hasComponent(SensorComponentsLookup.RaySensor);
+	}
+
+	public SensorEntity addRaySensor(String targetTag, Axis2D axis2D,
+			float range, boolean xRayMode) {
+		RaySensor component = (RaySensor) recoverComponent(SensorComponentsLookup.RaySensor);
+		if (component == null) {
+			component = new RaySensor(targetTag, axis2D, range, xRayMode);
+		} else {
+			component.targetTag = targetTag;
+			component.axis2D = axis2D;
+			component.range = range;
+			component.xRayMode = xRayMode;
+			component.collisionSignal = false;
+		}
+		addComponent(SensorComponentsLookup.RaySensor, component);
+		return this;
+	}
+
+	public SensorEntity replaceRaySensor(String targetTag, Axis2D axis2D,
+			float range, boolean xRayMode) {
+		RaySensor component = (RaySensor) recoverComponent(SensorComponentsLookup.RaySensor);
+		if (component == null) {
+			component = new RaySensor(targetTag, axis2D, range, xRayMode);
+		} else {
+			component.targetTag = targetTag;
+			component.axis2D = axis2D;
+			component.range = range;
+			component.xRayMode = xRayMode;
+			component.collisionSignal = false;
+		}
+		replaceComponent(SensorComponentsLookup.RaySensor, component);
+		return this;
+	}
+
+	public SensorEntity removeRaySensor() {
+		removeComponent(SensorComponentsLookup.RaySensor);
 		return this;
 	}
 }

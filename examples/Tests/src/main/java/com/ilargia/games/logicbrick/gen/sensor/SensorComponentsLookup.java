@@ -7,6 +7,8 @@ import com.ilargia.games.logicbrick.component.sensor.Frequency;
 import com.ilargia.games.logicbrick.component.sensor.Link;
 import com.ilargia.games.logicbrick.component.sensor.Mode;
 import com.ilargia.games.logicbrick.component.sensor.NearSensor;
+import com.ilargia.games.logicbrick.component.sensor.RadarSensor;
+import com.ilargia.games.logicbrick.component.sensor.RaySensor;
 
 /**
  * ---------------------------------------------------------------------------
@@ -22,16 +24,19 @@ public class SensorComponentsLookup {
 	public static final int Link = 4;
 	public static final int Mode = 5;
 	public static final int NearSensor = 6;
-	public static final int totalComponents = 7;
+	public static final int RadarSensor = 7;
+	public static final int RaySensor = 8;
+	public static final int totalComponents = 9;
 
 	public static String[] componentNames() {
 		return new String[]{"AlwaysSensor", "CollisionSensor", "DelaySensor",
-				"Frequency", "Link", "Mode", "NearSensor"};
+				"Frequency", "Link", "Mode", "NearSensor", "RadarSensor",
+				"RaySensor"};
 	}
 
 	public static Class[] componentTypes() {
 		return new Class[]{AlwaysSensor.class, CollisionSensor.class,
 				DelaySensor.class, Frequency.class, Link.class, Mode.class,
-				NearSensor.class};
+				NearSensor.class, RadarSensor.class, RaySensor.class};
 	}
 }

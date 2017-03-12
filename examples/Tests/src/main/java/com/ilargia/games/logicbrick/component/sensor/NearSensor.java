@@ -4,7 +4,6 @@ package com.ilargia.games.logicbrick.component.sensor;
 import com.ilargia.games.entitas.api.IComponent;
 import com.ilargia.games.entitas.codeGenerator.Component;
 import com.ilargia.games.entitas.factories.EntitasCollections;
-import com.ilargia.games.logicbrick.gen.Entitas;
 
 import java.util.Set;
 
@@ -12,18 +11,18 @@ import java.util.Set;
 public class NearSensor implements IComponent {
     // Config Values
     public String targetTag;
-    public float distance = 0;
-    public float resetDistance = 0;
+    public float distance;
+    public float resetDistance;
 
     public Set<Integer> distanceContactList;
     public Set<Integer> resetDistanceContactList;
     public boolean initContact = false;
 
 
-    public NearSensor(String targetTag) {
+    public NearSensor(String targetTag, float distance, float resetDistance) {
         this.targetTag = targetTag;
-        this.distance = 0;
-        this.resetDistance = 0;
+        this.distance = distance;
+        this.resetDistance = resetDistance;
         this.distanceContactList = EntitasCollections.createSet(Integer.class);
         this.resetDistanceContactList = EntitasCollections.createSet(Integer.class);
     }

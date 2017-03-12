@@ -16,6 +16,8 @@ public class SensorMatcher {
 	private static Matcher _matcherLink;
 	private static Matcher _matcherMode;
 	private static Matcher _matcherNearSensor;
+	private static Matcher _matcherRadarSensor;
+	private static Matcher _matcherRaySensor;
 
 	public static Matcher AlwaysSensor() {
 		if (_matcherAlwaysSensor == null) {
@@ -85,5 +87,25 @@ public class SensorMatcher {
 			_matcherNearSensor = matcher;
 		}
 		return _matcherNearSensor;
+	}
+
+	public static Matcher RadarSensor() {
+		if (_matcherRadarSensor == null) {
+			Matcher matcher = (Matcher) Matcher
+					.AllOf(SensorComponentsLookup.RadarSensor);
+			matcher.componentNames = SensorComponentsLookup.componentNames();
+			_matcherRadarSensor = matcher;
+		}
+		return _matcherRadarSensor;
+	}
+
+	public static Matcher RaySensor() {
+		if (_matcherRaySensor == null) {
+			Matcher matcher = (Matcher) Matcher
+					.AllOf(SensorComponentsLookup.RaySensor);
+			matcher.componentNames = SensorComponentsLookup.componentNames();
+			_matcherRaySensor = matcher;
+		}
+		return _matcherRaySensor;
 	}
 }
