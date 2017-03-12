@@ -1,8 +1,9 @@
 package com.ilargia.games.egdx.api.managers.listener;
 
-import com.ilargia.games.entitas.api.IEntity;
+@FunctionalInterface
+public interface Collision {
+    default void processCollision(Integer indexEntityA, Integer indexEntityB, boolean collisionSignal){ }
 
-public interface Collision<TEntity extends IEntity> {
-    void processCollision(TEntity entityA, TEntity entityB, boolean collisionSignal);
+    void processSensorCollision(Integer indexEntityA, Integer indexEntityB, String tagSensorA, boolean collisionSignal);
 
 }

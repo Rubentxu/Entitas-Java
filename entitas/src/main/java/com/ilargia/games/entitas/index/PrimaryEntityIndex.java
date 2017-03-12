@@ -23,13 +23,12 @@ public class PrimaryEntityIndex<TEntity extends Entity, TKey> extends AbstractEn
         _index = EntitasCollections.createMap(Object.class, Object.class);
         activate();
     }
+
     @Override
     public void activate() {
         super.activate();
         indexEntities(_group);
     }
-
-
 
     public TEntity getEntity(TKey key) {
         TEntity entity =  _index.get(key);

@@ -18,9 +18,9 @@ public class SimpleGameIndex {
         context.addEntityIndex(GameKey, eIndex);
     }
 
-    public static void addGameEntity(GameContext context, Integer index, GameEntity entity) {
+    public static void addGameEntity(GameContext context, GameEntity entity) {
         PrimaryEntityIndex<GameEntity, Integer> eIndex = (PrimaryEntityIndex<GameEntity, Integer>) context.getEntityIndex(GameKey);
-        eIndex.addEntity(index, entity);
+        eIndex.addEntity(entity.getCreationIndex(), entity);
     }
 
     public static void removeGameEntity(GameContext context, Integer index, GameEntity entity) {
@@ -28,9 +28,9 @@ public class SimpleGameIndex {
         eIndex.removeEntity(index, entity);
     }
 
-    public static Set<GameEntity> getGameEntity(GameContext context, SensorEntity entity) {
-        EntityIndex<GameEntity, Integer> eIndex = (EntityIndex<GameEntity, Integer>) context.getEntityIndex(GameKey);
-        return eIndex.getEntities(entity.getCreationIndex());
+    public static GameEntity getGameEntity(GameContext context, Integer indexEntity) {
+        PrimaryEntityIndex<GameEntity, Integer> eIndex = (PrimaryEntityIndex<GameEntity, Integer>) context.getEntityIndex(GameKey);
+        return eIndex.getEntity(indexEntity);
     }
 
 

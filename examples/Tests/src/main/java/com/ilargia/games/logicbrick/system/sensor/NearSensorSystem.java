@@ -14,8 +14,9 @@ import com.ilargia.games.logicbrick.gen.sensor.SensorEntity;
 import com.ilargia.games.logicbrick.gen.sensor.SensorMatcher;
 import com.ilargia.games.logicbrick.index.GameIndex;
 import com.ilargia.games.logicbrick.index.SensorIndex;
+import com.ilargia.games.logicbrick.index.SimpleGameIndex;
 
-public class NearSensorSystem extends SensorSystem implements IExecuteSystem, Collision<GameEntity> {
+public class NearSensorSystem extends SensorSystem implements IExecuteSystem, Collision {
     private final SensorContext sensorContex;
     private final Group<SensorEntity> sensorGroup;
     private final GameContext gameContex;
@@ -31,18 +32,17 @@ public class NearSensorSystem extends SensorSystem implements IExecuteSystem, Co
     protected boolean query(SensorEntity sensorEntity, float deltaTime) {
         boolean isActive = false;
         NearSensor sensor = sensorEntity.getNearSensor();
-        GameIndex.getGameEntities(gameContex,sensorEntity);
-//        if (sensor.distanceContactList.size > 0) {
-//            isActive = true;
-//            if (!sensor.initContact) sensor.initContact = true;
-//
-//        } else if (sensor.initContact && sensor.resetDistanceContactList.size > 0) {
-//            isActive = true;
-//
-//        } else if (sensor.initContact) {
-//            sensor.initContact = false;
-//
-//        }
+        if (sensor.distanceContactList.size() > 0) {
+            isActive = true;
+            if (!sensor.initContact) sensor.initContact = true;
+
+        } else if (sensor.initContact && sensor.resetDistanceContactList.size() > 0) {
+            isActive = true;
+
+        } else if (sensor.initContact) {
+            sensor.initContact = false;
+
+        }
         return isActive;
 
     }
@@ -55,17 +55,30 @@ public class NearSensorSystem extends SensorSystem implements IExecuteSystem, Co
     }
 
     @Override
-    public void processCollision(GameEntity entityA, GameEntity entityB, boolean collisionSignal) {
-        if(entityA != null && entityB !=null) {
-            for (SensorEntity entity : SensorIndex.getSensors(sensorContex, entityA)) {
-                NearSensor collision = entity.getNearSensor();
-                if(entityB.getIdentity().tags.contains(collision.targetTag)) {
-                    if(collisionSignal) {
-                        GameIndex.addGameEntity(gameContex, entity.getCreationIndex(), entityB);
-                    } else {
-                        GameIndex.removeGameEntity(gameContex, entity.getCreationIndex(), entityB);
+    public void processSensorCollision(Integer indexEntityA, Integer indexEntityB, String tagSensorA, boolean collisionSignal) {
+        if (indexEntityA != null && indexEntityB != null) {
+            GameEntity entityA = SimpleGameIndex.getGameEntity(gameContex, indexEntityA);
+            GameEntity entityB = SimpleGameIndex.getGameEntity(gameContex, indexEntityA);
+            if (entityA != null && entityB != null && tagSensorA != null) {
+                for (SensorEntity entity : SensorIndex.getSensors(sensorContex, entityA)) {
+                    NearSensor sensor = entity.getNearSensor();
+                    if (entityB.getIdentity().tags.contains(sensor.targetTag)) {
+                        if (collisionSignal) {
+                            if (tagSensorA.equals("NearSensor")) {
+                                sensor.distanceContactList.add(indexEntityB);
+                            } else if (tagSensorA.equals("ResetNearSensor")) {
+                                sensor.resetDistanceContactList.add(indexEntityB);
+                            }
+
+                        } else {
+                            if (tagSensorA.equals("NearSensor")) {
+                                sensor.distanceContactList.remove(indexEntityB);
+                            } else if (tagSensorA.equals("ResetNearSensor")) {
+                                sensor.resetDistanceContactList.remove(indexEntityB);
+                            }
+                        }
+
                     }
-                    collision.collisionSignal = collisionSignal;
                 }
             }
         }

@@ -10,10 +10,10 @@ import com.ilargia.games.entitas.api.IEntity;
 
 import java.util.Set;
 
-public class BasePhysicsManager<TEntity extends IEntity> implements PhysicsManager<World,Collision<TEntity>>, ContactListener {
+public class BasePhysicsManager<TEntity extends IEntity> implements PhysicsManager<World,Collision>, ContactListener {
     private World physics;
     private BodyBuilder bodyBuilder;
-    private Set<Collision<TEntity>> collisionListeners;
+    private Set<Collision> collisionListeners;
 
     public BasePhysicsManager(Vector2 gravity) {
         physics = new World(gravity, false);
@@ -49,22 +49,45 @@ public class BasePhysicsManager<TEntity extends IEntity> implements PhysicsManag
 
     @Override
     public void beginContact(Contact contact) {
-        TEntity dataA = (TEntity) contact.getFixtureA().getBody().getUserData();
-        TEntity dataB = (TEntity) contact.getFixtureB().getBody().getUserData();
-        for (Collision<TEntity> listener : collisionListeners) {
-            listener.processCollision(dataA, dataB, true);
-            listener.processCollision(dataB, dataA, true);
-        }
+        if(contact.getFixtureA().isSensor()) {
+            String tagSensorA = (String) contact.getFixtureA().getUserData();
+            String tagSensorB = (String) contact.getFixtureB().getUserData();
+            Integer dataA = (Integer) contact.getFixtureA().getBody().getUserData();
+            Integer dataB = (Integer) contact.getFixtureB().getBody().getUserData();
+            for (Collision listener : collisionListeners) {
+                listener.processSensorCollision(dataA, dataB, tagSensorA,true);
+                listener.processSensorCollision(dataB, dataA, tagSensorB,true);
 
+            }
+        } else {
+            Integer dataA = (Integer) contact.getFixtureA().getBody().getUserData();
+            Integer dataB = (Integer) contact.getFixtureB().getBody().getUserData();
+            for (Collision listener : collisionListeners) {
+                listener.processCollision(dataA, dataB, true);
+                listener.processCollision(dataB, dataA, true);
+            }
+        }
     }
 
     @Override
     public void endContact(Contact contact) {
-        TEntity dataA = (TEntity) contact.getFixtureA().getBody().getUserData();
-        TEntity dataB = (TEntity) contact.getFixtureB().getBody().getUserData();
-        for (Collision<TEntity> listener : collisionListeners) {
-            listener.processCollision(dataA, dataB, false);
-            listener.processCollision(dataB, dataA, false);
+        if(contact.getFixtureA().isSensor()) {
+            String tagSensorA = (String) contact.getFixtureA().getUserData();
+            String tagSensorB = (String) contact.getFixtureB().getUserData();
+            Integer dataA = (Integer) contact.getFixtureA().getBody().getUserData();
+            Integer dataB = (Integer) contact.getFixtureB().getBody().getUserData();
+            for (Collision listener : collisionListeners) {
+                listener.processSensorCollision(dataA, dataB, tagSensorA,false);
+                listener.processSensorCollision(dataB, dataA, tagSensorB,false);
+
+            }
+        } else {
+            Integer dataA = (Integer) contact.getFixtureA().getBody().getUserData();
+            Integer dataB = (Integer) contact.getFixtureB().getBody().getUserData();
+            for (Collision listener : collisionListeners) {
+                listener.processCollision(dataA, dataB, false);
+                listener.processCollision(dataB, dataA, false);
+            }
         }
 
     }

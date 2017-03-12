@@ -8,6 +8,7 @@ import com.ilargia.games.logicbrick.component.sensor.Link;
 import com.ilargia.games.logicbrick.gen.Entitas;
 import com.ilargia.games.logicbrick.gen.game.GameEntity;
 import com.ilargia.games.logicbrick.gen.sensor.SensorEntity;
+import com.ilargia.games.logicbrick.index.SimpleGameIndex;
 import com.ilargia.games.logicbrick.system.sensor.CollisionSensorSystem;
 import com.ilargia.games.logicbrick.system.sensor.IndexingLinkSensorSystem;
 import org.junit.Before;
@@ -28,12 +29,12 @@ public class CollisionSensorSystemTest {
     private SensorEntity sensorEntity3;
     private SensorEntity sensorEntity4;
 
-    @Before
-    public void setUp() {
+    public CollisionSensorSystemTest() {
         collections = new EntitasCollections(new CollectionsFactories() {});
         entitas = new Entitas();
         this.collisionSensorSystem = new CollisionSensorSystem(entitas);
         this.linkSensorSystem = new IndexingLinkSensorSystem(entitas);
+        SimpleGameIndex.createGameEntityIndices(entitas.game);
         linkSensorSystem.activate();
 
         boss = entitas.game.createEntity()
@@ -59,16 +60,18 @@ public class CollisionSensorSystemTest {
 
         linkSensorSystem.execute(1);
 
+
+
     }
+
 
     @Test
     public void queryTrue() {
         EntityIndex<SensorEntity, Integer> eIndex = (EntityIndex<SensorEntity, Integer>)entitas.sensor.getEntityIndex("Sensors");
         EntityIndex<GameEntity, Integer> gameIndex = (EntityIndex<GameEntity, Integer>) entitas.game.getEntityIndex("GameEntities");
-        collisionSensorSystem.processCollision(playerEntity, boss, true);
+        collisionSensorSystem.processCollision(playerEntity.getCreationIndex(), boss.getCreationIndex(), true);
         collisionSensorSystem.execute( 0.5F);
         Link link = sensorEntity.getLink();
-
 
         assertTrue(link.pulse);
         assertTrue(link.isOpen);
@@ -82,7 +85,7 @@ public class CollisionSensorSystemTest {
         assertFalse(link.isOpen);
         assertFalse(link.isChanged);
 
-        collisionSensorSystem.processCollision(playerEntity, boss, false);
+        collisionSensorSystem.processCollision(playerEntity.getCreationIndex(), boss.getCreationIndex(), false);
         collisionSensorSystem.execute( 0.5F);
         assertFalse(link.pulse);
         assertTrue(link.isOpen);
@@ -101,7 +104,7 @@ public class CollisionSensorSystemTest {
         assertFalse(link.isOpen);
         assertFalse(link.isChanged);
 
-        collisionSensorSystem.processCollision(playerEntity, groundEntity, true);
+        collisionSensorSystem.processCollision(playerEntity.getCreationIndex(), groundEntity.getCreationIndex(), true);
         collisionSensorSystem.execute( 0.5F);
         assertFalse(link.pulse);
         assertFalse(link.isOpen);
@@ -123,7 +126,7 @@ public class CollisionSensorSystemTest {
     * */
     @Test
     public void queryFalse() {
-        collisionSensorSystem.processCollision(playerEntity, boss, false);
+        collisionSensorSystem.processCollision(playerEntity.getCreationIndex(), boss.getCreationIndex(), false);
         collisionSensorSystem.execute( 0.5f);
         Link link = sensorEntity.getLink();
 
@@ -136,7 +139,7 @@ public class CollisionSensorSystemTest {
         assertFalse(link.isOpen);
         assertFalse(link.isChanged);
 
-        collisionSensorSystem.processCollision(playerEntity, boss, true);
+        collisionSensorSystem.processCollision(playerEntity.getCreationIndex(), boss.getCreationIndex(), true);
         collisionSensorSystem.execute( 0.5f);
         assertTrue(link.pulse);
         assertTrue(link.isOpen);
@@ -151,7 +154,7 @@ public class CollisionSensorSystemTest {
 
     @Test
     public void queryTrueAndModeTrue() {
-        collisionSensorSystem.processCollision(playerEntity, boss, true);
+        collisionSensorSystem.processCollision(playerEntity.getCreationIndex(), boss.getCreationIndex(), true);
         sensorEntity.addMode(true);
         Link link = sensorEntity.getLink();
 
@@ -175,7 +178,7 @@ public class CollisionSensorSystemTest {
         assertTrue(link.isOpen);
         assertFalse(link.isChanged);
 
-        collisionSensorSystem.processCollision(playerEntity, boss, false);
+        collisionSensorSystem.processCollision(playerEntity.getCreationIndex(), boss.getCreationIndex(), false);
         collisionSensorSystem.execute( 0.5F);
         assertFalse(link.pulse);
         assertTrue(link.isOpen);
@@ -204,7 +207,7 @@ public class CollisionSensorSystemTest {
     * */
     @Test
     public void queryFalseAndModeFalse() {
-        collisionSensorSystem.processCollision(playerEntity, boss, true);
+        collisionSensorSystem.processCollision(playerEntity.getCreationIndex(), boss.getCreationIndex(), true);
         sensorEntity.addMode(false);
         Link link = sensorEntity.getLink();
 
@@ -228,7 +231,7 @@ public class CollisionSensorSystemTest {
         assertFalse(link.isOpen);
         assertFalse(link.isChanged);
 
-        collisionSensorSystem.processCollision(playerEntity, boss, false);
+        collisionSensorSystem.processCollision(playerEntity.getCreationIndex(), boss.getCreationIndex(), false);
         collisionSensorSystem.execute( 0.5F);
         assertFalse(link.pulse);
         assertTrue(link.isOpen);
@@ -257,7 +260,7 @@ public class CollisionSensorSystemTest {
     * */
     @Test
     public void frecuencyAndQueryTrue() {
-        collisionSensorSystem.processCollision(playerEntity, boss, true);
+        collisionSensorSystem.processCollision(playerEntity.getCreationIndex(), boss.getCreationIndex(), true);
         sensorEntity.addFrequency(1);
         Link link = sensorEntity.getLink();
 
@@ -281,7 +284,7 @@ public class CollisionSensorSystemTest {
         assertFalse(link.isOpen);
         assertFalse(link.isChanged);
 
-        collisionSensorSystem.processCollision(playerEntity, boss, false);
+        collisionSensorSystem.processCollision(playerEntity.getCreationIndex(), boss.getCreationIndex(), false);
         collisionSensorSystem.execute( 0.5F);
         assertFalse(link.pulse);
         assertFalse(link.isOpen);
@@ -306,7 +309,7 @@ public class CollisionSensorSystemTest {
 
     @Test
     public void frecuencyAndQueryFalse() {
-        collisionSensorSystem.processCollision(playerEntity, boss, false);
+        collisionSensorSystem.processCollision(playerEntity.getCreationIndex(), boss.getCreationIndex(), false);
         sensorEntity.addFrequency(1);
         Link link = sensorEntity.getLink();
 
@@ -330,7 +333,7 @@ public class CollisionSensorSystemTest {
         assertFalse(link.isOpen);
         assertFalse(link.isChanged);
 
-        collisionSensorSystem.processCollision(playerEntity, boss, true);
+        collisionSensorSystem.processCollision(playerEntity.getCreationIndex(), boss.getCreationIndex(), true);
         collisionSensorSystem.execute( 0.5F);
         assertTrue(link.pulse);
         assertFalse(link.isOpen);
@@ -356,7 +359,7 @@ public class CollisionSensorSystemTest {
 
     @Test
     public void frecuencyAndQueryTrueAndModeTrue() {
-        collisionSensorSystem.processCollision(playerEntity, boss, true);
+        collisionSensorSystem.processCollision(playerEntity.getCreationIndex(), boss.getCreationIndex(), true);
         sensorEntity.addFrequency(1).addMode(true);
         Link link = sensorEntity.getLink();
 
@@ -380,7 +383,7 @@ public class CollisionSensorSystemTest {
         assertTrue(link.isOpen);
         assertFalse(link.isChanged);
 
-        collisionSensorSystem.processCollision(playerEntity, boss, false);
+        collisionSensorSystem.processCollision(playerEntity.getCreationIndex(), boss.getCreationIndex(), false);
         collisionSensorSystem.execute( 0.5f);
         assertFalse(link.pulse);
         assertFalse(link.isOpen);
@@ -405,7 +408,7 @@ public class CollisionSensorSystemTest {
 
     @Test
     public void frecuencyAndQueryFalseAndModeFalse() {
-        collisionSensorSystem.processCollision(playerEntity, boss, true);
+        collisionSensorSystem.processCollision(playerEntity.getCreationIndex(), boss.getCreationIndex(), true);
         sensorEntity.addFrequency(1).addMode(false);
         Link link = sensorEntity.getLink();
 
@@ -429,7 +432,7 @@ public class CollisionSensorSystemTest {
         assertFalse(link.isOpen);
         assertFalse(link.isChanged);
 
-        collisionSensorSystem.processCollision(playerEntity, boss, false);
+        collisionSensorSystem.processCollision(playerEntity.getCreationIndex(), boss.getCreationIndex(), false);
         collisionSensorSystem.execute( 0.5f);
         assertFalse(link.pulse);
         assertFalse(link.isOpen);

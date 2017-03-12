@@ -24,6 +24,7 @@ public abstract class AbstractEntityIndex<TEntity extends Entity, TKey> implemen
             }
         }
     };
+
     protected GroupChanged<TEntity> onEntityRemoved = (IGroup<TEntity> group, TEntity entity, int index, IComponent component) -> {
         if(_isSingleKey) {
             removeEntity(_key.getKey(entity, component), entity);

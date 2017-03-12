@@ -40,7 +40,7 @@ public class IndexingEntitiesSystem extends ReactiveSystem<GameEntity> {
     @Override
     protected void execute(List<GameEntity> entities) {
         for (GameEntity e : entities) {
-            SimpleGameIndex.addGameEntity(gameContext, e.getCreationIndex(), e);
+            SimpleGameIndex.addGameEntity(gameContext, e);
         }
 
     }

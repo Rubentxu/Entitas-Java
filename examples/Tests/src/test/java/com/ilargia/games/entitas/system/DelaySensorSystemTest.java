@@ -26,7 +26,7 @@ public class DelaySensorSystemTest {
         Entitas entitas = new Entitas();
         this.sensorSystem = new DelaySensorSystem(entitas.sensor);
         entity = entitas.sensor.createEntity();
-        entity.addLink(0).addCollisionSensor("Enemy");
+        entity.addLink(0).addDelaySensor(0.5f,1,false);
 
     }
 

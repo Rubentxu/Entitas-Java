@@ -15,6 +15,7 @@ import com.ilargia.games.logicbrick.component.sensor.Frequency;
 import com.ilargia.games.logicbrick.component.sensor.Link;
 import com.ilargia.games.logicbrick.component.sensor.Mode;
 import com.ilargia.games.logicbrick.component.sensor.NearSensor;
+import com.ilargia.games.logicbrick.gen.Entitas;
 
 /**
  * ---------------------------------------------------------------------------
@@ -247,7 +248,12 @@ public class SensorEntity extends Entity {
 			component = new NearSensor(targetTag);
 		} else {
 			component.targetTag = targetTag;
-			component.collisionSignal = false;
+			component.distance = 0;
+			component.resetDistance = 0;
+			component.distanceContactList = EntitasCollections
+					.createSet(Integer.class);
+			component.resetDistanceContactList = EntitasCollections
+					.createSet(Integer.class);
 		}
 		addComponent(SensorComponentsLookup.NearSensor, component);
 		return this;
@@ -259,7 +265,12 @@ public class SensorEntity extends Entity {
 			component = new NearSensor(targetTag);
 		} else {
 			component.targetTag = targetTag;
-			component.collisionSignal = false;
+			component.distance = 0;
+			component.resetDistance = 0;
+			component.distanceContactList = EntitasCollections
+					.createSet(Integer.class);
+			component.resetDistanceContactList = EntitasCollections
+					.createSet(Integer.class);
 		}
 		replaceComponent(SensorComponentsLookup.NearSensor, component);
 		return this;
