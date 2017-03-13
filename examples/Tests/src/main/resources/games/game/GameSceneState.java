@@ -11,7 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Array;
 import com.ilargia.games.logicbrick.data.Bounds;
-import com.ilargia.games.logicbrick.system.AnimationSystem;
+import com.ilargia.games.logicbrick.system.game.AnimationSystem;
 import com.ilargia.games.logicbrick.system.InputsControllerSystem;
 import com.ilargia.games.logicbrick.system.render.TextureRendererSystem;
 import games.utils.GuiFactory;

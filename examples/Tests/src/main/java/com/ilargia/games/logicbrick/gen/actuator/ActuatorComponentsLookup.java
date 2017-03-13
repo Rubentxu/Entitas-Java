@@ -2,7 +2,7 @@ package com.ilargia.games.logicbrick.gen.actuator;
 
 import com.ilargia.games.logicbrick.component.actuator.CameraActuator;
 import com.ilargia.games.logicbrick.component.actuator.CharacterActuator;
-import com.ilargia.games.logicbrick.component.actuator.Signal;
+import com.ilargia.games.logicbrick.component.actuator.Link;
 import com.ilargia.games.logicbrick.component.actuator.TextureActuator;
 import com.ilargia.games.logicbrick.component.actuator.VelocityActuator;
 
@@ -15,18 +15,18 @@ public class ActuatorComponentsLookup {
 
 	public static final int CameraActuator = 0;
 	public static final int CharacterActuator = 1;
-	public static final int Signal = 2;
+	public static final int Link = 2;
 	public static final int TextureActuator = 3;
 	public static final int VelocityActuator = 4;
 	public static final int totalComponents = 5;
 
 	public static String[] componentNames() {
-		return new String[]{"CameraActuator", "CharacterActuator", "Signal",
+		return new String[]{"CameraActuator", "CharacterActuator", "Link",
 				"TextureActuator", "VelocityActuator"};
 	}
 
 	public static Class[] componentTypes() {
 		return new Class[]{CameraActuator.class, CharacterActuator.class,
-				Signal.class, TextureActuator.class, VelocityActuator.class};
+				Link.class, TextureActuator.class, VelocityActuator.class};
 	}
 }

@@ -11,7 +11,7 @@ public class ActuatorMatcher {
 
 	private static Matcher _matcherCameraActuator;
 	private static Matcher _matcherCharacterActuator;
-	private static Matcher _matcherSignal;
+	private static Matcher _matcherLink;
 	private static Matcher _matcherTextureActuator;
 	private static Matcher _matcherVelocityActuator;
 
@@ -35,14 +35,14 @@ public class ActuatorMatcher {
 		return _matcherCharacterActuator;
 	}
 
-	public static Matcher Signal() {
-		if (_matcherSignal == null) {
+	public static Matcher Link() {
+		if (_matcherLink == null) {
 			Matcher matcher = (Matcher) Matcher
-					.AllOf(ActuatorComponentsLookup.Signal);
+					.AllOf(ActuatorComponentsLookup.Link);
 			matcher.componentNames = ActuatorComponentsLookup.componentNames();
-			_matcherSignal = matcher;
+			_matcherLink = matcher;
 		}
-		return _matcherSignal;
+		return _matcherLink;
 	}
 
 	public static Matcher TextureActuator() {

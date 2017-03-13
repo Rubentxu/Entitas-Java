@@ -1,4 +1,4 @@
-package com.ilargia.games.logicbrick.system;
+package com.ilargia.games.logicbrick.system.game;
 
 
 import com.badlogic.gdx.physics.box2d.Body;
@@ -27,10 +27,9 @@ public class RigidBodySystem extends ReactiveSystem<GameEntity> {
     protected void execute(List<GameEntity> entities) {
         for (GameEntity e : entities) {
             Body body = e.getRigidBody().body;
-            e.retain(body);
-            body.setUserData(e);
+            body.setUserData(e.getCreationIndex());
         }
-        _collector.clearCollectedEntities();
+
     }
 
     @Override

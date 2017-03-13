@@ -1,4 +1,4 @@
-package com.ilargia.games.logicbrick.system;
+package com.ilargia.games.logicbrick.system.game;
 
 
 import com.badlogic.gdx.physics.box2d.Body;

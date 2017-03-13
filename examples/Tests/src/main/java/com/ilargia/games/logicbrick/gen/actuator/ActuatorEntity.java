@@ -7,7 +7,7 @@ import com.ilargia.games.logicbrick.component.actuator.CameraActuator;
 import com.ilargia.games.entitas.api.IComponent;
 import com.ilargia.games.logicbrick.component.actuator.CharacterActuator;
 import com.ilargia.games.logicbrick.data.StateCharacter;
-import com.ilargia.games.logicbrick.component.actuator.Signal;
+import com.ilargia.games.logicbrick.component.actuator.Link;
 import com.ilargia.games.logicbrick.component.actuator.TextureActuator;
 import com.badlogic.gdx.graphics.Color;
 import com.ilargia.games.logicbrick.data.Bounds;
@@ -102,42 +102,44 @@ public class ActuatorEntity extends Entity {
 		return this;
 	}
 
-	public Signal getSignal() {
-		return (Signal) getComponent(ActuatorComponentsLookup.Signal);
+	public Link getLink() {
+		return (Link) getComponent(ActuatorComponentsLookup.Link);
 	}
 
-	public boolean hasSignal() {
-		return hasComponent(ActuatorComponentsLookup.Signal);
+	public boolean hasLink() {
+		return hasComponent(ActuatorComponentsLookup.Link);
 	}
 
-	public ActuatorEntity addSignal() {
-		Signal component = (Signal) recoverComponent(ActuatorComponentsLookup.Signal);
+	public ActuatorEntity addLink(int targetEntity) {
+		Link component = (Link) recoverComponent(ActuatorComponentsLookup.Link);
 		if (component == null) {
-			component = new Signal();
+			component = new Link(targetEntity);
 		} else {
+			component.targetEntity = targetEntity;
 			component.isOpen = false;
 			component.isChanged = false;
 			component.pulse = false;
 		}
-		addComponent(ActuatorComponentsLookup.Signal, component);
+		addComponent(ActuatorComponentsLookup.Link, component);
 		return this;
 	}
 
-	public ActuatorEntity replaceSignal() {
-		Signal component = (Signal) recoverComponent(ActuatorComponentsLookup.Signal);
+	public ActuatorEntity replaceLink(int targetEntity) {
+		Link component = (Link) recoverComponent(ActuatorComponentsLookup.Link);
 		if (component == null) {
-			component = new Signal();
+			component = new Link(targetEntity);
 		} else {
+			component.targetEntity = targetEntity;
 			component.isOpen = false;
 			component.isChanged = false;
 			component.pulse = false;
 		}
-		replaceComponent(ActuatorComponentsLookup.Signal, component);
+		replaceComponent(ActuatorComponentsLookup.Link, component);
 		return this;
 	}
 
-	public ActuatorEntity removeSignal() {
-		removeComponent(ActuatorComponentsLookup.Signal);
+	public ActuatorEntity removeLink() {
+		removeComponent(ActuatorComponentsLookup.Link);
 		return this;
 	}
 

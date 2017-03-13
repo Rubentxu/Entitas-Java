@@ -349,6 +349,8 @@ public class SensorEntity extends Entity {
 			component.range = range;
 			component.xRayMode = xRayMode;
 			component.collisionSignal = false;
+			component.rayContactList = EntitasCollections
+					.createSet(Integer.class);
 		}
 		addComponent(SensorComponentsLookup.RaySensor, component);
 		return this;
@@ -365,6 +367,8 @@ public class SensorEntity extends Entity {
 			component.range = range;
 			component.xRayMode = xRayMode;
 			component.collisionSignal = false;
+			component.rayContactList = EntitasCollections
+					.createSet(Integer.class);
 		}
 		replaceComponent(SensorComponentsLookup.RaySensor, component);
 		return this;

@@ -13,7 +13,7 @@ public class ActuatorIndex {
 
     public static void createSensorEntityIndices(ActuatorContext context) {
         EntityIndex<ActuatorEntity, Integer> eIndex = new EntityIndex<ActuatorEntity, Integer>(((e, c) -> e.getCreationIndex()),
-                context.getGroup(ActuatorMatcher.Signal()));
+                context.getGroup(ActuatorMatcher.Link()));
         context.addEntityIndex(ActuatorKey, eIndex);
     }
 
