@@ -26,10 +26,26 @@ allprojects {
     }
 
     repositories {
+        mavenLocal()
         mavenCentral()
+        jcenter {
+            url "http://jcenter.bintray.com/"
+        }
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
         maven { url "https://oss.sonatype.org/content/repositories/releases/" }
-        mavenLocal()
+
+    }
+
+    task listJars {
+        doLast {
+            configurations.compile.each { File file -> println file.name }
+        }
+    }
+
+    task list(dependsOn: configurations.compile) {
+        doLast {
+            println "classpath = ${configurations.compile.collect { File file -> file.name }}"
+        }
     }
 
 }

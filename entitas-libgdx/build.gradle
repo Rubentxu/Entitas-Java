@@ -17,5 +17,7 @@ dependencies {
     compile group: 'it.unimi.dsi', name: 'fastutil', version: '7.0.13'
     compile group: 'net.engio', name: 'mbassador', version: '1.3.0'
     testCompile group: 'junit', name: 'junit', version: '4.11'
+    // testCompile "org.mockito:mockito-core:2.7.14"
+    testCompile fileTree(include: ['mockito-core*.jar'], dir: '../../lib')
 
 }

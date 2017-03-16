@@ -5,10 +5,10 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
-import com.ilargia.games.egdx.base.BaseTransition;
+import com.ilargia.games.egdx.impl.TransitionGDX;
 
 
-public abstract class RenderTransition extends BaseTransition {
+public abstract class RenderTransition extends TransitionGDX {
 
     protected final Batch batch;
     Texture current, next;

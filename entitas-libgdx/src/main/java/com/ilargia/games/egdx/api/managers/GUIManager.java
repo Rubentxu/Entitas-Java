@@ -9,8 +9,6 @@ public interface GUIManager<A> extends Manager {
 
     Skin getSkin();
 
-    <F> F getDefaultFont();
-
     void addGUIFactory(String name, GUIFactory factory);
 
     <TEntity extends IEntity> TEntity createGUIElement(String name, float posX, float posY);
