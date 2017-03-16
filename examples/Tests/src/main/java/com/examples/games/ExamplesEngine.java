@@ -1,19 +1,16 @@
 package com.examples.games;
 
-
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.ilargia.games.egdx.impl.EngineGDX;
+import com.ilargia.games.egdx.logicbricks.gen.Entitas;
 import com.ilargia.games.entitas.factories.CollectionsFactories;
 
 public class ExamplesEngine extends EngineGDX {
+    public Entitas entitas;
 
-    public ShapeRenderer sr;
-
-    public ExamplesEngine() {
-        super(new CollectionsFactories(){});
-        sr = new ShapeRenderer();
+    public ExamplesEngine(Entitas entitas) {
+        super(new CollectionsFactories() {});
+        this.entitas = entitas;
 
     }
-
 
 }

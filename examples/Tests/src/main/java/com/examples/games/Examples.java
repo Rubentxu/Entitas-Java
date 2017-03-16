@@ -13,6 +13,7 @@ import com.examples.games.states.PlatformExampleState;
 import com.examples.games.util.TestFileHandleResolver;
 import com.ilargia.games.egdx.impl.EventBusGDX;
 import com.ilargia.games.egdx.impl.managers.*;
+import com.ilargia.games.egdx.logicbricks.gen.Entitas;
 import net.engio.mbassy.bus.MBassador;
 
 
@@ -33,7 +34,7 @@ public class Examples implements ApplicationListener {
 
     @Override
     public void create() {
-        ExamplesEngine engine = new ExamplesEngine();
+        ExamplesEngine engine = new ExamplesEngine(new Entitas());
 
         AssetManager assetsManager = new AssetManager(new TestFileHandleResolver());
         engine.addManager(new AssetsManagerGDX(assetsManager, preferencesManager));

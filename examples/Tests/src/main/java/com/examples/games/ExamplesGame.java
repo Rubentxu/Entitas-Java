@@ -12,7 +12,6 @@ import net.engio.mbassy.listener.Handler;
 
 public class ExamplesGame extends GameGDX<ExamplesEngine> {
 
-
     private SlideTransition slideTransition;
     private PlatformExampleState exampleState;
 
@@ -20,7 +19,6 @@ public class ExamplesGame extends GameGDX<ExamplesEngine> {
         super(engine, bus);
 
     }
-
 
     @Handler
     public void handleChangeState(ChangeStateCommand command) {
@@ -38,7 +36,6 @@ public class ExamplesGame extends GameGDX<ExamplesEngine> {
         return slideTransition;
     }
 
-
     @Override
     public boolean isRunning() {
         return false;
@@ -54,4 +51,5 @@ public class ExamplesGame extends GameGDX<ExamplesEngine> {
             exampleState = new PlatformExampleState(_engine);
         return exampleState;
     }
+
 }

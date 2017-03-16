@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 public class BodyBuilder {
     private final World world;
-    FixtureDefBuilder fixtureDefBuilder;
+    public FixtureDefBuilder fixtureDefBuilder;
     private BodyDef bodyDef;
     private ArrayList<FixtureDef> fixtureDefs;
     private ArrayList<Object> fixtureUserDatas;

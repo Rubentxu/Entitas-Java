@@ -10,7 +10,7 @@ import com.ilargia.games.entitas.api.IEntity;
 
 import java.util.Set;
 
-public class PhysicsManagerGDX<TEntity extends IEntity> implements PhysicsManager<World,Collision>, ContactListener {
+public class PhysicsManagerGDX implements PhysicsManager<World,Collision>, ContactListener {
     private World physics;
     private BodyBuilder bodyBuilder;
     private Set<Collision> collisionListeners;
