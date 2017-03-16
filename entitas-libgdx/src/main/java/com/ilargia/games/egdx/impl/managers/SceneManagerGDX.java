@@ -18,9 +18,9 @@ import java.util.Map;
 
 public class SceneManagerGDX implements SceneManager {
 
+    public EngineGDX engine;
     public PhysicsManagerGDX physics;
     public Map<String, EntityFactory> entityFactories;
-    public EngineGDX engine;
     public RayHandler rayHandler;
     protected Batch batch;
     protected Camera defaultCamera;

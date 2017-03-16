@@ -14,11 +14,11 @@ public class ExamplesGame extends GameGDX<ExamplesEngine> {
 
 
     private SlideTransition slideTransition;
-    private PlatformExampleState pongState;
+    private PlatformExampleState exampleState;
 
     public ExamplesGame(ExamplesEngine engine, EventBus bus) {
         super(engine, bus);
-        ebus.subscribe(this);
+
     }
 
 
@@ -29,7 +29,7 @@ public class ExamplesGame extends GameGDX<ExamplesEngine> {
 
     @Override
     public void init() {
-
+        ebus.subscribe(this);
     }
 
     public SlideTransition getSlideTransition() {
@@ -49,9 +49,9 @@ public class ExamplesGame extends GameGDX<ExamplesEngine> {
         return 0;
     }
 
-    public PlatformExampleState getPongState() {
-        if (pongState == null)
-            pongState = new PlatformExampleState(_engine);
-        return pongState;
+    public PlatformExampleState getExampleState() {
+        if (exampleState == null)
+            exampleState = new PlatformExampleState(_engine);
+        return exampleState;
     }
 }

@@ -25,7 +25,7 @@ public class SceneSystem extends ReactiveSystem<GameEntity> implements IInitiali
     public static int BOX2D_POSITION_ITERATIONS = 10;
     private final SceneContext context;
     private final Group<GameEntity> gameElements;
-    // private final Map<String, GUIFactory> factories;
+    // private final Map<String, GUIFactory> entities;
     private World physics;
     //private Map<String, GameElementFactory> entityFactories;
 
@@ -35,7 +35,7 @@ public class SceneSystem extends ReactiveSystem<GameEntity> implements IInitiali
         this.physics = world;
         this.context = entitas.scene;
         this.gameElements = entitas.game.getGroup(Matcher.AllOf(GameMatcher.Identity(), GameMatcher.RigidBody()));
-        // this.factories = EntitasCollections.createMap(String.class, GUIFactory.class);
+        // this.entities = EntitasCollections.createMap(String.class, GUIFactory.class);
     }
 
     @Override
@@ -62,7 +62,7 @@ public class SceneSystem extends ReactiveSystem<GameEntity> implements IInitiali
     @Override
     protected void execute(List<GameEntity> gameEntities) {
         for (GameEntity gameEntity : gameEntities) {
-            //  factories.get(gameEntity.getIdentity().type).create(null);
+            //  entities.get(gameEntity.getIdentity().type).create(null);
         }
     }
 
