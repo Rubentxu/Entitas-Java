@@ -5,11 +5,9 @@ import com.ilargia.games.egdx.logicbricks.gen.Entitas;
 import com.ilargia.games.entitas.factories.CollectionsFactories;
 
 public class ExamplesEngine extends EngineGDX {
-    public Entitas entitas;
 
-    public ExamplesEngine(Entitas entitas) {
+    public ExamplesEngine() {
         super(new CollectionsFactories() {});
-        this.entitas = entitas;
 
     }
 

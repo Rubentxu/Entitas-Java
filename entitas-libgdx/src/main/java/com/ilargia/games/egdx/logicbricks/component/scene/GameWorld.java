@@ -6,14 +6,20 @@ import com.ilargia.games.entitas.codeGenerator.Component;
 
 @Component(pools = {"Scene"}, isSingleEntity = true)
 public class GameWorld implements IComponent {
-
     public float width;
     public float height;
-    public float metresToPixels = 64;
-    public float pixelsToMetres = 1.0f / metresToPixels;
-    public boolean catchBack = true;
-    public boolean catchMenu = true;
-    public Color backGroundColor = Color.BLUE;
+    public float metresToPixels;
+    public float pixelsToMetres;
+    public Color backGroundColor;
 
+
+    public GameWorld(float width, float height, float metresToPixels, Color backGroundColor) {
+        this.width = width;
+        this.height = height;
+        this.metresToPixels = metresToPixels;
+        this.pixelsToMetres = 1.0f / metresToPixels;
+        this.backGroundColor = backGroundColor;
+
+    }
 
 }

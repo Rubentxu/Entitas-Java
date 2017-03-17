@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.ilargia.games.egdx.logicbricks.gen.Entitas;
@@ -25,7 +26,7 @@ public class DebugRendererSystem implements IInitializeSystem, IRenderSystem {
 
     private World physics;
     private Entitas entitas;
-    private ShapeRenderer debugShapeRenderer;
+    private ShapeRenderer shapeRenderer;
     private Box2DDebugRenderer debugRenderer;
     private OrthographicCamera cam;
 
@@ -34,7 +35,7 @@ public class DebugRendererSystem implements IInitializeSystem, IRenderSystem {
         this.physics = world;
         this.entitas = entitas;
 
-        this.debugShapeRenderer = new ShapeRenderer();
+        this.shapeRenderer = new ShapeRenderer();
         this.debugRenderer = new Box2DDebugRenderer(DRAW_BOX2D_BODIES, DRAW_BOX2D_JOINTS, DRAW_BOX2D_ABBs,
                 DRAW_BOX2D_INACTIVE_BODIES, DRAW_BOX2D_VELOCITIES, DRAW_BOX2D_CONTACTS);
         debugRenderer.setDrawAABBs(DRAW_BOX2D_ABBs);
@@ -54,17 +55,26 @@ public class DebugRendererSystem implements IInitializeSystem, IRenderSystem {
 
     @Override
     public void render() {
-        Gdx.gl.glClearColor(0, 0, 0, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        cam.update();
+       // cam.update();
 
+        Rectangle rect = new Rectangle(cam.position.x, cam.position.y, 3, 10);
 
-//        debugShapeRenderer.setProjectionMatrix(cam.combined);
-//        debugShapeRenderer.setColor(1.0f, 0.0f, 0.0f, 1.0f);
-//
-//        debugShapeRenderer.end();
+        shapeRenderer.setProjectionMatrix(cam.combined);
 
-        debugRenderer.render(physics, cam.combined);
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+        shapeRenderer.identity();
+        shapeRenderer.translate(20, 12, 2);
+        shapeRenderer.rotate(0, 0, 1, 90);
+        shapeRenderer.rect(cam.position.x , cam.position.y, 50, 30);
+        shapeRenderer.end();
+
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        shapeRenderer.identity();
+        shapeRenderer.translate(20, 12, 2);
+        shapeRenderer.rotate(0, 0, 1, 90);
+        shapeRenderer.rect(-rect.getX() / 2, -rect.getY() / 2, rect.width, rect.height);
+        shapeRenderer.end();
+       // debugRenderer.render(physics, cam.combined);
     }
 
 

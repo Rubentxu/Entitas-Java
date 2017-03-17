@@ -9,15 +9,18 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.ilargia.games.egdx.api.EntityFactory;
 import com.ilargia.games.egdx.api.managers.SceneManager;
 import com.ilargia.games.egdx.impl.EngineGDX;
+import com.ilargia.games.egdx.logicbricks.gen.Entitas;
 import com.ilargia.games.egdx.util.MapEntityParser;
 import com.ilargia.games.entitas.Entity;
 import com.ilargia.games.entitas.api.EntitasException;
+import com.ilargia.games.entitas.api.IContexts;
 import com.ilargia.games.entitas.factories.EntitasCollections;
 
 import java.util.Map;
 
 public class SceneManagerGDX implements SceneManager {
 
+    private final Entitas entitas;
     public EngineGDX engine;
     public PhysicsManagerGDX physics;
     public Map<String, EntityFactory> entityFactories;
@@ -26,8 +29,9 @@ public class SceneManagerGDX implements SceneManager {
     protected Camera defaultCamera;
     protected MapEntityParser mapParser;
 
-    public SceneManagerGDX(EngineGDX engine) {
+    public SceneManagerGDX(EngineGDX engine, Entitas entitas) {
         this.engine = engine;
+        this.entitas = entitas;
         this.entityFactories = EntitasCollections.createMap(String.class, EntityFactory.class);
         if (engine.getManager(PhysicsManagerGDX.class) == null) throw new EntitasException("BaseSceneManager",
                 "BaseSceneManager needs to first load BasePhysicsManager on the engine");
@@ -54,10 +58,10 @@ public class SceneManagerGDX implements SceneManager {
 
     @Override
     public <TEntity extends Entity> TEntity createEntity(String name) {
-        EntityFactory<TEntity> factory = entityFactories.get(name);
+        EntityFactory<IContexts,TEntity> factory = entityFactories.get(name);
         TEntity entity = null;
         if (factory != null) {
-            entity = factory.create(engine);
+            entity = factory.create(engine, entitas);
         }
         return entity;
 

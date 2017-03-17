@@ -12,8 +12,8 @@ public class PreferencesManagerGDX implements PreferencesManager {
     public String LOG = "";
     public float GAME_HEIGHT = 16.875f; // 1080 / 64 =16.875 px
     public float GAME_WIDTH = 30f;     //  1920 / 64 = 30f px
-    public int VIRTUAL_DEVICE_HEIGHT = 1080; // 16.875 x 64 =1080 px
-    public int VIRTUAL_DEVICE_WIDTH = 1920;     //  30 x 64 = 1920 px
+    public int VIRTUAL_DEVICE_HEIGHT = 260; // 16.875 x 64 =1080 px
+    public int VIRTUAL_DEVICE_WIDTH = 480;     //  30 x 64 = 1920 px
     // Box2D config
     public float RUNNING_FRAME_DURATION = 0.02f;
     public int VELOCITY_ITERATIONS = 10;
@@ -31,42 +31,50 @@ public class PreferencesManagerGDX implements PreferencesManager {
     private Preferences preferences;
 
     public PreferencesManagerGDX() {
-        preferences = Gdx.app.getPreferences("PREFS_NAME");
-        load();
+        try {
+            preferences = Gdx.app.getPreferences("PREFS_NAME");
+            if(preferences != null) load();
+        } catch (Exception ex) {
+
+        }
+
     }
 
     @Override
     public void load() {
-        APP_NAME = preferences.getString(Constants.PREFS_NAME, "TEST_GAME");
-        SOUND = preferences.getBoolean(Constants.PREF_SOUND_ENABLED, true);
-        MUSIC = preferences.getBoolean(Constants.PREF_MUSIC_ENABLED, true);
-        VOL_SOUND = MathUtils.clamp(preferences.getFloat(Constants.PREF_VOLUME_SOUND, 0.5f),
-                0.0f, 1.0f);
-        VOL_MUSIC = MathUtils.clamp(preferences.getFloat(Constants.PREF_VOLUME_MUSIC, 0.5f),
-                0.0f, 1.0f);
-        TOUCH_PAD_ENABLED = preferences.getBoolean(Constants.PREF_TOUCHPAD_ENABLED, true);
-        PROFILE_DATA_FILE = preferences.getString(Constants.PREF_PROFILE_DATA_FILE, "data/profile.game");
-        INIT_PROFILE_DATA_FILE = preferences.getString(Constants.PREF_INIT_PROFILE_DATA_FILE, "data/initProfile.game");
-        LOG = APP_NAME;
-        GAME_HEIGHT = preferences.getFloat(Constants.PREF_GAME_HEIGHT, 16.875F); // 1080 / 64 =16.875 px
-        GAME_WIDTH = preferences.getFloat(Constants.PREF_GAME_WIDTH, 30F); // 1920 / 64 = 30f px
-        VIRTUAL_DEVICE_HEIGHT = preferences.getInteger(Constants.PREF_VIRTUAL_DEVICE_HEIGHT, 1080); // 16.875 x 64 =1080 px
-        VIRTUAL_DEVICE_WIDTH = preferences.getInteger(Constants.PREF_VIRTUAL_DEVICE_WIDTH, 1920); //  30 x 64 = 1920 px
-        RUNNING_FRAME_DURATION = preferences.getFloat(Constants.PREF_RUNNING_FRAME_DURATION, 0.02F); //  30 x 64 = 1920 px
-        VELOCITY_ITERATIONS = preferences.getInteger(Constants.PREF_VELOCITY_ITERATIONS, 10); //  30 x 64 = 1920 px
-        POSITION_ITERATIONS = preferences.getInteger(Constants.PREF_POSITION_ITERATIONS, 8); //  30 x 64 = 1920 px
-
+        if(preferences != null) {
+            APP_NAME = preferences.getString(Constants.PREFS_NAME, "TEST_GAME");
+            SOUND = preferences.getBoolean(Constants.PREF_SOUND_ENABLED, true);
+            MUSIC = preferences.getBoolean(Constants.PREF_MUSIC_ENABLED, true);
+            VOL_SOUND = MathUtils.clamp(preferences.getFloat(Constants.PREF_VOLUME_SOUND, 0.5f),
+                    0.0f, 1.0f);
+            VOL_MUSIC = MathUtils.clamp(preferences.getFloat(Constants.PREF_VOLUME_MUSIC, 0.5f),
+                    0.0f, 1.0f);
+            TOUCH_PAD_ENABLED = preferences.getBoolean(Constants.PREF_TOUCHPAD_ENABLED, true);
+            PROFILE_DATA_FILE = preferences.getString(Constants.PREF_PROFILE_DATA_FILE, "data/profile.game");
+            INIT_PROFILE_DATA_FILE = preferences.getString(Constants.PREF_INIT_PROFILE_DATA_FILE, "data/initProfile.game");
+            LOG = APP_NAME;
+            GAME_HEIGHT = preferences.getFloat(Constants.PREF_GAME_HEIGHT, 16.875F); // 1080 / 64 =16.875 px
+            GAME_WIDTH = preferences.getFloat(Constants.PREF_GAME_WIDTH, 30F); // 1920 / 64 = 30f px
+            VIRTUAL_DEVICE_HEIGHT = preferences.getInteger(Constants.PREF_VIRTUAL_DEVICE_HEIGHT, 1080); // 16.875 x 64 =1080 px
+            VIRTUAL_DEVICE_WIDTH = preferences.getInteger(Constants.PREF_VIRTUAL_DEVICE_WIDTH, 1920); //  30 x 64 = 1920 px
+            RUNNING_FRAME_DURATION = preferences.getFloat(Constants.PREF_RUNNING_FRAME_DURATION, 0.02F); //  30 x 64 = 1920 px
+            VELOCITY_ITERATIONS = preferences.getInteger(Constants.PREF_VELOCITY_ITERATIONS, 10); //  30 x 64 = 1920 px
+            POSITION_ITERATIONS = preferences.getInteger(Constants.PREF_POSITION_ITERATIONS, 8); //  30 x 64 = 1920 px
+        }
     }
 
     @Override
     public void save() {
-        preferences.putBoolean(Constants.PREF_SOUND_ENABLED, SOUND);
-        preferences.putBoolean(Constants.PREF_MUSIC_ENABLED, MUSIC);
-        preferences.putFloat(Constants.PREF_VOLUME_SOUND, VOL_SOUND);
-        preferences.putFloat(Constants.PREF_VOLUME_MUSIC, VOL_MUSIC);
-        preferences.putBoolean(Constants.PREF_TOUCHPAD_ENABLED, TOUCH_PAD_ENABLED);
-        preferences.flush();
-        load();
+        if(preferences != null) {
+            preferences.putBoolean(Constants.PREF_SOUND_ENABLED, SOUND);
+            preferences.putBoolean(Constants.PREF_MUSIC_ENABLED, MUSIC);
+            preferences.putFloat(Constants.PREF_VOLUME_SOUND, VOL_SOUND);
+            preferences.putFloat(Constants.PREF_VOLUME_MUSIC, VOL_MUSIC);
+            preferences.putBoolean(Constants.PREF_TOUCHPAD_ENABLED, TOUCH_PAD_ENABLED);
+            preferences.flush();
+            load();
+        }
     }
 
     @Override

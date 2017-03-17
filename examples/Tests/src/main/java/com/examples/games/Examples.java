@@ -20,6 +20,8 @@ import net.engio.mbassy.bus.MBassador;
 public class Examples implements ApplicationListener {
     private static PreferencesManagerGDX preferencesManager;
     private static ExamplesGame game;
+    private ExamplesEngine engine;
+    private Entitas entitas;
 
     public static void main(String[] arg) {
         LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
@@ -34,18 +36,19 @@ public class Examples implements ApplicationListener {
 
     @Override
     public void create() {
-        ExamplesEngine engine = new ExamplesEngine(new Entitas());
+        engine = new ExamplesEngine();
+        entitas = new Entitas();
 
         AssetManager assetsManager = new AssetManager(new TestFileHandleResolver());
         engine.addManager(new AssetsManagerGDX(assetsManager, preferencesManager));
         engine.addManager(new PhysicsManagerGDX(new Vector2(0,0)));
         engine.addManager(new GUIManagerGDX(new BitmapFont(), null, engine));
-        engine.addManager(new SceneManagerExamples(engine));
+        engine.addManager(new SceneManagerExamples(engine, entitas));
         engine.addManager(preferencesManager);
 
         game = new ExamplesGame(engine, new EventBusGDX(new MBassador()));
         game.init();
-        game.pushState(new PlatformExampleState(engine));
+        game.pushState(new PlatformExampleState(engine, entitas));
 
     }
 

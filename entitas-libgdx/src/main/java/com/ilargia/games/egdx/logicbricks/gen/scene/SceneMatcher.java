@@ -11,6 +11,7 @@ public class SceneMatcher {
 
 	private static Matcher _matcherBackground;
 	private static Matcher _matcherCamera;
+	private static Matcher _matcherCatch;
 	private static Matcher _matcherGameWorld;
 	private static Matcher _matcherLight;
 	private static Matcher _matcherTiled;
@@ -33,6 +34,16 @@ public class SceneMatcher {
 			_matcherCamera = matcher;
 		}
 		return _matcherCamera;
+	}
+
+	public static Matcher Catch() {
+		if (_matcherCatch == null) {
+			Matcher matcher = (Matcher) Matcher
+					.AllOf(SceneComponentsLookup.Catch);
+			matcher.componentNames = SceneComponentsLookup.componentNames();
+			_matcherCatch = matcher;
+		}
+		return _matcherCatch;
 	}
 
 	public static Matcher GameWorld() {

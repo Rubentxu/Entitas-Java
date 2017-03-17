@@ -38,6 +38,7 @@ public class EngineGDX implements Engine, IContexts {
 
     @Override
     public <M extends Manager> Engine addManager(M manager) {
+        manager.initialize();
         _managers.put(manager.getClass(), manager);
         return this;
     }

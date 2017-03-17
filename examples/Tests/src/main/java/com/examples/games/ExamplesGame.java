@@ -46,10 +46,10 @@ public class ExamplesGame extends GameGDX<ExamplesEngine> {
         return 0;
     }
 
-    public PlatformExampleState getExampleState() {
-        if (exampleState == null)
-            exampleState = new PlatformExampleState(_engine);
-        return exampleState;
-    }
+//    public PlatformExampleState getExampleState() {
+//        if (exampleState == null)
+//            exampleState = new PlatformExampleState(_engine);
+//        return exampleState;
+//    }
 
 }

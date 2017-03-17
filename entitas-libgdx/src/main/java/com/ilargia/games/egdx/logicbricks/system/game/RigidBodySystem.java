@@ -3,6 +3,7 @@ package com.ilargia.games.egdx.logicbricks.system.game;
 
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
+import com.ilargia.games.egdx.logicbricks.gen.Entitas;
 import com.ilargia.games.entitas.api.IContext;
 import com.ilargia.games.entitas.collector.Collector;
 import com.ilargia.games.entitas.systems.ReactiveSystem;
@@ -14,8 +15,8 @@ import java.util.List;
 
 public class RigidBodySystem extends ReactiveSystem<GameEntity> {
 
-    public RigidBodySystem(GameContext context, World world) {
-        super(context);
+    public RigidBodySystem(Entitas entitas) {
+        super(entitas.game);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.ilargia.games.egdx.logicbricks.system.sensor;
 
 
+import com.ilargia.games.egdx.logicbricks.gen.Entitas;
 import com.ilargia.games.entitas.api.system.IExecuteSystem;
 import com.ilargia.games.entitas.group.Group;
 import com.ilargia.games.entitas.matcher.Matcher;
@@ -13,8 +14,8 @@ public class DelaySensorSystem extends SensorSystem implements IExecuteSystem {
 
     private Group<SensorEntity> sensorGroup;
 
-    public DelaySensorSystem(SensorContext context) {
-        sensorGroup = context.getGroup(Matcher.AllOf(SensorMatcher.DelaySensor(), SensorMatcher.Link()));
+    public DelaySensorSystem(Entitas entitas) {
+        sensorGroup = entitas.sensor.getGroup(Matcher.AllOf(SensorMatcher.DelaySensor(), SensorMatcher.Link()));
 
     }
 

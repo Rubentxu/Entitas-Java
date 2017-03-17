@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.ilargia.games.egdx.logicbricks.component.scene.Background;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.ilargia.games.egdx.logicbricks.component.scene.Camera;
+import com.ilargia.games.egdx.logicbricks.component.scene.Catch;
 import com.badlogic.gdx.graphics.Color;
 import com.ilargia.games.egdx.logicbricks.component.scene.GameWorld;
 import com.ilargia.games.egdx.logicbricks.component.scene.Tiled;
@@ -103,6 +104,45 @@ public class SceneContext
 		return this;
 	}
 
+	public SceneEntity getCatchEntity() {
+		return getGroup(SceneMatcher.Catch()).getSingleEntity();
+	}
+
+	public Catch getCatch() {
+		return getCatchEntity().getCatch();
+	}
+
+	public boolean hasCatch() {
+		return getCatchEntity() != null;
+	}
+
+	public SceneEntity setCatch(boolean catchBack, boolean catchMenu) {
+		if (hasCatch()) {
+			throw new EntitasException(
+					"Could not set Catch!" + this
+							+ " already has an entity with Catch!",
+					"You should check if the context already has a CatchEntity before setting it or use context.ReplaceCatch().");
+		}
+		SceneEntity entity = createEntity();
+		entity.addCatch(catchBack, catchMenu);
+		return entity;
+	}
+
+	public SceneEntity replaceCatch(boolean catchBack, boolean catchMenu) {
+		SceneEntity entity = getCatchEntity();
+		if (entity == null) {
+			entity = setCatch(catchBack, catchMenu);
+		} else {
+			entity.replaceCatch(catchBack, catchMenu);
+		}
+		return entity;
+	}
+
+	public SceneContext removeCatch() {
+		destroyEntity(getCatchEntity());
+		return this;
+	}
+
 	public SceneEntity getGameWorldEntity() {
 		return getGroup(SceneMatcher.GameWorld()).getSingleEntity();
 	}
@@ -116,8 +156,7 @@ public class SceneContext
 	}
 
 	public SceneEntity setGameWorld(float width, float height,
-			float metresToPixels, float pixelsToMetres, boolean catchBack,
-			boolean catchMenu, Color backGroundColor) {
+			float metresToPixels, Color backGroundColor) {
 		if (hasGameWorld()) {
 			throw new EntitasException(
 					"Could not set GameWorld!" + this
@@ -125,21 +164,20 @@ public class SceneContext
 					"You should check if the context already has a GameWorldEntity before setting it or use context.ReplaceGameWorld().");
 		}
 		SceneEntity entity = createEntity();
-		entity.addGameWorld(width, height, metresToPixels, pixelsToMetres,
-				catchBack, catchMenu, backGroundColor);
+		entity.addGameWorld(width, height, metresToPixels,
+				backGroundColor);
 		return entity;
 	}
 
 	public SceneEntity replaceGameWorld(float width, float height,
-			float metresToPixels, float pixelsToMetres, boolean catchBack,
-			boolean catchMenu, Color backGroundColor) {
+			float metresToPixels, Color backGroundColor) {
 		SceneEntity entity = getGameWorldEntity();
 		if (entity == null) {
-			entity = setGameWorld(width, height, metresToPixels,
-					pixelsToMetres, catchBack, catchMenu, backGroundColor);
+			entity = setGameWorld(width, height, metresToPixels
+					, backGroundColor);
 		} else {
-			entity.replaceGameWorld(width, height, metresToPixels,
-					pixelsToMetres, catchBack, catchMenu, backGroundColor);
+			entity.replaceGameWorld(width, height, metresToPixels
+					, backGroundColor);
 		}
 		return entity;
 	}

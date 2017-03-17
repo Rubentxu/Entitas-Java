@@ -8,8 +8,9 @@ import com.badlogic.gdx.graphics.Texture;
 import com.ilargia.games.entitas.api.IComponent;
 import com.ilargia.games.egdx.logicbricks.component.scene.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.ilargia.games.egdx.logicbricks.component.scene.GameWorld;
+import com.ilargia.games.egdx.logicbricks.component.scene.Catch;
 import com.badlogic.gdx.graphics.Color;
+import com.ilargia.games.egdx.logicbricks.component.scene.GameWorld;
 import com.ilargia.games.egdx.logicbricks.component.scene.Light;
 import com.ilargia.games.egdx.logicbricks.component.scene.Tiled;
 
@@ -94,6 +95,41 @@ public class SceneEntity extends Entity {
 		return this;
 	}
 
+	public Catch getCatch() {
+		return (Catch) getComponent(SceneComponentsLookup.Catch);
+	}
+
+	public boolean hasCatch() {
+		return hasComponent(SceneComponentsLookup.Catch);
+	}
+
+	public SceneEntity addCatch(boolean catchBack, boolean catchMenu) {
+		Catch component = (Catch) recoverComponent(SceneComponentsLookup.Catch);
+		if (component == null) {
+			component = new Catch();
+		}
+		component.catchBack = catchBack;
+		component.catchMenu = catchMenu;
+		addComponent(SceneComponentsLookup.Catch, component);
+		return this;
+	}
+
+	public SceneEntity replaceCatch(boolean catchBack, boolean catchMenu) {
+		Catch component = (Catch) recoverComponent(SceneComponentsLookup.Catch);
+		if (component == null) {
+			component = new Catch();
+		}
+		component.catchBack = catchBack;
+		component.catchMenu = catchMenu;
+		replaceComponent(SceneComponentsLookup.Catch, component);
+		return this;
+	}
+
+	public SceneEntity removeCatch() {
+		removeComponent(SceneComponentsLookup.Catch);
+		return this;
+	}
+
 	public GameWorld getGameWorld() {
 		return (GameWorld) getComponent(SceneComponentsLookup.GameWorld);
 	}
@@ -103,37 +139,35 @@ public class SceneEntity extends Entity {
 	}
 
 	public SceneEntity addGameWorld(float width, float height,
-			float metresToPixels, float pixelsToMetres, boolean catchBack,
-			boolean catchMenu, Color backGroundColor) {
+			float metresToPixels, Color backGroundColor) {
 		GameWorld component = (GameWorld) recoverComponent(SceneComponentsLookup.GameWorld);
 		if (component == null) {
-			component = new GameWorld();
+			component = new GameWorld(width, height, metresToPixels,
+					backGroundColor);
+		} else {
+			component.width = width;
+			component.height = height;
+			component.metresToPixels = metresToPixels;
+			component.pixelsToMetres = 1.0f / metresToPixels;
+			component.backGroundColor = backGroundColor;
 		}
-		component.width = width;
-		component.height = height;
-		component.metresToPixels = metresToPixels;
-		component.pixelsToMetres = pixelsToMetres;
-		component.catchBack = catchBack;
-		component.catchMenu = catchMenu;
-		component.backGroundColor = backGroundColor;
 		addComponent(SceneComponentsLookup.GameWorld, component);
 		return this;
 	}
 
 	public SceneEntity replaceGameWorld(float width, float height,
-			float metresToPixels, float pixelsToMetres, boolean catchBack,
-			boolean catchMenu, Color backGroundColor) {
+			float metresToPixels, Color backGroundColor) {
 		GameWorld component = (GameWorld) recoverComponent(SceneComponentsLookup.GameWorld);
 		if (component == null) {
-			component = new GameWorld();
+			component = new GameWorld(width, height, metresToPixels,
+					backGroundColor);
+		} else {
+			component.width = width;
+			component.height = height;
+			component.metresToPixels = metresToPixels;
+			component.pixelsToMetres = 1.0f / metresToPixels;
+			component.backGroundColor = backGroundColor;
 		}
-		component.width = width;
-		component.height = height;
-		component.metresToPixels = metresToPixels;
-		component.pixelsToMetres = pixelsToMetres;
-		component.catchBack = catchBack;
-		component.catchMenu = catchMenu;
-		component.backGroundColor = backGroundColor;
 		replaceComponent(SceneComponentsLookup.GameWorld, component);
 		return this;
 	}
