@@ -6,8 +6,7 @@ import com.ilargia.games.egdx.logicbricks.component.sensor.NearSensor;
 import com.ilargia.games.egdx.logicbricks.gen.Entitas;
 import com.ilargia.games.egdx.logicbricks.gen.game.GameEntity;
 import com.ilargia.games.egdx.logicbricks.gen.sensor.SensorEntity;
-import com.ilargia.games.egdx.logicbricks.index.SimpleGameIndex;
-import com.ilargia.games.egdx.logicbricks.system.sensor.IndexingLinkSensorSystem;
+import com.ilargia.games.egdx.logicbricks.system.sensor.IndexingSystem;
 import com.ilargia.games.egdx.logicbricks.system.sensor.NearSensorSystem;
 import com.ilargia.games.entitas.factories.CollectionsFactories;
 import com.ilargia.games.entitas.factories.EntitasCollections;
@@ -23,7 +22,7 @@ public class NearSensorSystemTest {
     Entitas entitas;
     private EntitasCollections collections;
     private NearSensorSystem nearSensorSystem;
-    private IndexingLinkSensorSystem linkSensorSystem;
+    private IndexingSystem linkSensorSystem;
     EntityIndex<SensorEntity, Integer> sensorsIndex;
     EntityIndex<GameEntity, Integer> gameIndex;
     private SensorEntity sensorEntity;
@@ -39,18 +38,16 @@ public class NearSensorSystemTest {
         collections = new EntitasCollections(new CollectionsFactories() {});
         entitas = new Entitas();
         this.nearSensorSystem = new NearSensorSystem(entitas);
-        this.linkSensorSystem = new IndexingLinkSensorSystem(entitas);
-        SimpleGameIndex.createGameEntityIndices(entitas.game);
-        linkSensorSystem.activate();
+        this.linkSensorSystem = new IndexingSystem(entitas);
 
         boss = entitas.game.createEntity()
-                .addIdentity("Enemy","Boss");
+                .addTags("Enemy","Boss");
 
         groundEntity = entitas.game.createEntity()
-                .addIdentity("Ground","Ground");
+                .addTags("Ground","Ground");
 
         playerEntity = entitas.game.createEntity()
-                .addIdentity("Player","Player1");
+                .addTags("Player","Player1");
 
         sensorEntity = entitas.sensor.createEntity()
                 .addNearSensor("Boss", 1, 1)
@@ -68,8 +65,6 @@ public class NearSensorSystemTest {
                 .addCollisionSensor("Player")
                 .addLink(boss.getCreationIndex());
 
-
-        linkSensorSystem.execute(1);
         sensorsIndex = (EntityIndex<SensorEntity, Integer>)entitas.sensor.getEntityIndex("Sensors");
         gameIndex = (EntityIndex<GameEntity, Integer>) entitas.game.getEntityIndex("GameEntities");
 
@@ -107,8 +102,6 @@ public class NearSensorSystemTest {
         assertFalse(link.pulse);
         assertTrue(link.isOpen);
         assertTrue(link.isChanged);
-
-        linkSensorSystem.execute(1);
 
 
         assertEquals(2, sensorsIndex.getEntities(playerEntity.getCreationIndex()).size());

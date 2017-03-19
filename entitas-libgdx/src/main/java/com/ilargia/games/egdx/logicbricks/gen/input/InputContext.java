@@ -30,7 +30,7 @@ public class InputContext
 		InputEntity entity = getPadButtonsEntity();
 		if (value != (entity != null)) {
 			if (value) {
-				entity.setPadButtons(true);
+				createEntity().setPadButtons(true);
 			} else {
 				destroyEntity(entity);
 			}
@@ -94,7 +94,7 @@ public class InputContext
 		InputEntity entity = getTouchPadEntity();
 		if (value != (entity != null)) {
 			if (value) {
-				entity.setTouchPad(true);
+				createEntity().setTouchPad(true);
 			} else {
 				destroyEntity(entity);
 			}

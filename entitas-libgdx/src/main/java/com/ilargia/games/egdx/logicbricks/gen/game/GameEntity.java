@@ -10,21 +10,17 @@ import com.ilargia.games.entitas.api.IComponent;
 import java.util.Map;
 import com.ilargia.games.egdx.logicbricks.component.game.Character;
 import com.ilargia.games.egdx.logicbricks.data.StateCharacter;
-import com.ilargia.games.egdx.logicbricks.component.game.CollisionSensorComponents;
-import com.ilargia.games.entitas.factories.EntitasCollections;
-import com.ilargia.games.egdx.logicbricks.component.sensor.CollisionSensor;
-import com.ilargia.games.egdx.logicbricks.gen.sensor.SensorEntity;
-import java.util.List;
-import com.ilargia.games.egdx.logicbricks.component.game.DelaySensorComponents;
-import com.ilargia.games.egdx.logicbricks.component.sensor.DelaySensor;
 import com.ilargia.games.egdx.logicbricks.component.game.Destroy;
-import com.ilargia.games.egdx.logicbricks.component.game.Identity;
 import com.ilargia.games.egdx.logicbricks.component.game.Interactive;
 import com.ilargia.games.egdx.logicbricks.component.game.Movable;
 import com.ilargia.games.egdx.logicbricks.component.game.OnGround;
 import com.ilargia.games.egdx.logicbricks.component.game.Player;
 import com.ilargia.games.egdx.logicbricks.component.game.RigidBody;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.ilargia.games.egdx.logicbricks.component.game.Tags;
+import com.ilargia.games.egdx.logicbricks.component.sensor.CollisionSensor;
+import com.ilargia.games.entitas.factories.EntitasCollections;
+import java.util.Set;
 import com.ilargia.games.egdx.logicbricks.component.game.TextureView;
 import com.badlogic.gdx.graphics.Color;
 import com.ilargia.games.egdx.logicbricks.data.Bounds;
@@ -124,125 +120,6 @@ public class GameEntity extends Entity {
 		return this;
 	}
 
-	public CollisionSensorComponents getCollisionSensorComponents() {
-		return (CollisionSensorComponents) getComponent(GameComponentsLookup.CollisionSensorComponents);
-	}
-
-	public boolean hasCollisionSensorComponents() {
-		return hasComponent(GameComponentsLookup.CollisionSensorComponents);
-	}
-
-	public GameEntity addCollisionSensorComponents(SensorEntity sensor) {
-		CollisionSensorComponents component = (CollisionSensorComponents) recoverComponent(GameComponentsLookup.CollisionSensorComponents);
-		if (component == null) {
-			component = new CollisionSensorComponents(sensor);
-		} else {
-			if (component.collisionSensors == null) {
-				component.collisionSensors = EntitasCollections
-						.createList(CollisionSensor.class);
-			} else {
-				for (SensorEntity collisionSensor : component.collisionSensors) {
-					collisionSensor.release(component);
-				}
-				component.collisionSensors.clear();
-			}
-			if (sensor.hasCollisionSensor()) {
-				sensor.retain(component);
-				component.collisionSensors.add(sensor);
-			}
-		}
-		addComponent(GameComponentsLookup.CollisionSensorComponents, component);
-		return this;
-	}
-
-	public GameEntity replaceCollisionSensorComponents(SensorEntity sensor) {
-		CollisionSensorComponents component = (CollisionSensorComponents) recoverComponent(GameComponentsLookup.CollisionSensorComponents);
-		if (component == null) {
-			component = new CollisionSensorComponents(sensor);
-		} else {
-			if (component.collisionSensors == null) {
-				component.collisionSensors = EntitasCollections
-						.createList(CollisionSensor.class);
-			} else {
-				for (SensorEntity collisionSensor : component.collisionSensors) {
-					collisionSensor.release(component);
-				}
-				component.collisionSensors.clear();
-			}
-			if (sensor.hasCollisionSensor()) {
-				sensor.retain(component);
-				component.collisionSensors.add(sensor);
-			}
-		}
-		replaceComponent(GameComponentsLookup.CollisionSensorComponents,
-				component);
-		return this;
-	}
-
-	public GameEntity removeCollisionSensorComponents() {
-		removeComponent(GameComponentsLookup.CollisionSensorComponents);
-		return this;
-	}
-
-	public DelaySensorComponents getDelaySensorComponents() {
-		return (DelaySensorComponents) getComponent(GameComponentsLookup.DelaySensorComponents);
-	}
-
-	public boolean hasDelaySensorComponents() {
-		return hasComponent(GameComponentsLookup.DelaySensorComponents);
-	}
-
-	public GameEntity addDelaySensorComponents(SensorEntity sensor) {
-		DelaySensorComponents component = (DelaySensorComponents) recoverComponent(GameComponentsLookup.DelaySensorComponents);
-		if (component == null) {
-			component = new DelaySensorComponents(sensor);
-		} else {
-			if (component.delaySensors == null) {
-				component.delaySensors = EntitasCollections
-						.createList(DelaySensor.class);
-			} else {
-				for (SensorEntity delaySensor : component.delaySensors) {
-					delaySensor.release(component);
-				}
-				component.delaySensors.clear();
-			}
-			if (sensor.hasDelaySensor()) {
-				sensor.retain(component);
-				component.delaySensors.add(sensor);
-			}
-		}
-		addComponent(GameComponentsLookup.DelaySensorComponents, component);
-		return this;
-	}
-
-	public GameEntity replaceDelaySensorComponents(SensorEntity sensor) {
-		DelaySensorComponents component = (DelaySensorComponents) recoverComponent(GameComponentsLookup.DelaySensorComponents);
-		if (component == null) {
-			component = new DelaySensorComponents(sensor);
-		} else {
-			if (component.delaySensors == null) {
-				component.delaySensors = EntitasCollections
-						.createList(DelaySensor.class);
-			} else {
-				for (SensorEntity delaySensor : component.delaySensors) {
-					delaySensor.release(component);
-				}
-				component.delaySensors.clear();
-			}
-			if (sensor.hasDelaySensor()) {
-				sensor.retain(component);
-				component.delaySensors.add(sensor);
-			}
-		}
-		replaceComponent(GameComponentsLookup.DelaySensorComponents, component);
-		return this;
-	}
-
-	public GameEntity removeDelaySensorComponents() {
-		removeComponent(GameComponentsLookup.DelaySensorComponents);
-		return this;
-	}
-
 	public boolean isDestroy() {
 		return hasComponent(GameComponentsLookup.Destroy);
 	}
@@ -255,41 +132,6 @@ public class GameEntity extends Entity {
 				removeComponent(GameComponentsLookup.Destroy);
 			}
 		}
-		return this;
-	}
-
-	public Identity getIdentity() {
-		return (Identity) getComponent(GameComponentsLookup.Identity);
-	}
-
-	public boolean hasIdentity() {
-		return hasComponent(GameComponentsLookup.Identity);
-	}
-
-	public GameEntity addIdentity(String type, String tags) {
-		Identity component = (Identity) recoverComponent(GameComponentsLookup.Identity);
-		if (component == null) {
-			component = new Identity();
-		}
-		component.type = type;
-		component.tags = tags;
-		addComponent(GameComponentsLookup.Identity, component);
-		return this;
-	}
-
-	public GameEntity replaceIdentity(String type, String tags) {
-		Identity component = (Identity) recoverComponent(GameComponentsLookup.Identity);
-		if (component == null) {
-			component = new Identity();
-		}
-		component.type = type;
-		component.tags = tags;
-		replaceComponent(GameComponentsLookup.Identity, component);
-		return this;
-	}
-
-	public GameEntity removeIdentity() {
-		removeComponent(GameComponentsLookup.Identity);
 		return this;
 	}
 
@@ -404,6 +246,55 @@ public class GameEntity extends Entity {
 
 	public GameEntity removeRigidBody() {
 		removeComponent(GameComponentsLookup.RigidBody);
+		return this;
+	}
+
+	public Tags getTags() {
+		return (Tags) getComponent(GameComponentsLookup.Tags);
+	}
+
+	public boolean hasTags() {
+		return hasComponent(GameComponentsLookup.Tags);
+	}
+
+	public GameEntity addTags(String... values) {
+		Tags component = (Tags) recoverComponent(GameComponentsLookup.Tags);
+		if (component == null) {
+			component = new Tags(values);
+		} else {
+			if (component.values == null) {
+				component.values = EntitasCollections.createSet(String.class);
+			} else {
+				component.values.clear();
+			}
+			for (String value : values) {
+				component.values.add(value);
+			}
+		}
+		addComponent(GameComponentsLookup.Tags, component);
+		return this;
+	}
+
+	public GameEntity replaceTags(String... values) {
+		Tags component = (Tags) recoverComponent(GameComponentsLookup.Tags);
+		if (component == null) {
+			component = new Tags(values);
+		} else {
+			if (component.values == null) {
+				component.values = EntitasCollections.createSet(String.class);
+			} else {
+				component.values.clear();
+			}
+			for (String value : values) {
+				component.values.add(value);
+			}
+		}
+		replaceComponent(GameComponentsLookup.Tags, component);
+		return this;
+	}
+
+	public GameEntity removeTags() {
+		removeComponent(GameComponentsLookup.Tags);
 		return this;
 	}
 

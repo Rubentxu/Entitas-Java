@@ -16,6 +16,11 @@ public class SceneManagerExamples extends SceneManagerGDX {
     public void createScene(String scene) {
         initialize();
         GameEntity ground = createEntity("Ground");
-        ground.getRigidBody().body.setTransform(10,10,0);
+        ground.getRigidBody().body.setTransform(10,1,0);
+
+        GameEntity mariano = createEntity("Mariano");
+        mariano.getRigidBody().body.setTransform(10,3,0);
+
+
     }
 }

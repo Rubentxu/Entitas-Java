@@ -6,8 +6,7 @@ import com.ilargia.games.egdx.logicbricks.data.Axis2D;
 import com.ilargia.games.egdx.logicbricks.gen.Entitas;
 import com.ilargia.games.egdx.logicbricks.gen.game.GameEntity;
 import com.ilargia.games.egdx.logicbricks.gen.sensor.SensorEntity;
-import com.ilargia.games.egdx.logicbricks.index.SimpleGameIndex;
-import com.ilargia.games.egdx.logicbricks.system.sensor.IndexingLinkSensorSystem;
+import com.ilargia.games.egdx.logicbricks.system.sensor.IndexingSystem;
 import com.ilargia.games.egdx.logicbricks.system.sensor.RadarSensorSystem;
 import com.ilargia.games.entitas.factories.CollectionsFactories;
 import com.ilargia.games.entitas.factories.EntitasCollections;
@@ -22,7 +21,7 @@ public class RadarSensorSystemTest {
     Entitas entitas;
     private EntitasCollections collections;
     private RadarSensorSystem radarSensorSystem;
-    private IndexingLinkSensorSystem linkSensorSystem;
+    private IndexingSystem linkSensorSystem;
     private SensorEntity sensorEntity;
     private SensorEntity sensorEntity2;
     private GameEntity boss;
@@ -35,18 +34,16 @@ public class RadarSensorSystemTest {
         collections = new EntitasCollections(new CollectionsFactories() {});
         entitas = new Entitas();
         this.radarSensorSystem = new RadarSensorSystem(entitas);
-        this.linkSensorSystem = new IndexingLinkSensorSystem(entitas);
-        SimpleGameIndex.createGameEntityIndices(entitas.game);
-        linkSensorSystem.activate();
+        this.linkSensorSystem = new IndexingSystem(entitas);
 
         boss = entitas.game.createEntity()
-                .addIdentity("Enemy","Boss");
+                .addTags("Enemy","Boss");
 
         groundEntity = entitas.game.createEntity()
-                .addIdentity("Ground","Ground");
+                .addTags("Ground","Ground");
 
         playerEntity = entitas.game.createEntity()
-                .addIdentity("Player","Player1");
+                .addTags("Player","Player1");
 
         sensorEntity = entitas.sensor.createEntity()
                 .addRadarSensor("Boss", Axis2D.Xnegative, 1,1)
@@ -59,8 +56,6 @@ public class RadarSensorSystemTest {
         sensorEntity4 = entitas.sensor.createEntity()
                 .addRadarSensor("Ground", Axis2D.Xnegative, 1,1)
                 .addLink(boss.getCreationIndex());
-
-        linkSensorSystem.execute(1);
 
 
 
@@ -95,8 +90,6 @@ public class RadarSensorSystemTest {
         sensorEntity3 = entitas.sensor.createEntity()
                 .addRadarSensor("Ground", Axis2D.Xnegative, 1,1)
                 .addLink(playerEntity.getCreationIndex());
-        linkSensorSystem.execute(1);
-
 
         assertEquals(3, eIndex.getEntities(playerEntity.getCreationIndex()).size());
         assertEquals(0, gameIndex.getEntities(sensorEntity.getCreationIndex()).size());

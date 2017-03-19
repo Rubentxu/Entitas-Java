@@ -41,7 +41,7 @@ public class Examples implements ApplicationListener {
 
         AssetManager assetsManager = new AssetManager(new TestFileHandleResolver());
         engine.addManager(new AssetsManagerGDX(assetsManager, preferencesManager));
-        engine.addManager(new PhysicsManagerGDX(new Vector2(0,0)));
+        engine.addManager(new PhysicsManagerGDX(new Vector2(0,-9.8f)));
         engine.addManager(new GUIManagerGDX(new BitmapFont(), null, engine));
         engine.addManager(new SceneManagerExamples(engine, entitas));
         engine.addManager(preferencesManager);

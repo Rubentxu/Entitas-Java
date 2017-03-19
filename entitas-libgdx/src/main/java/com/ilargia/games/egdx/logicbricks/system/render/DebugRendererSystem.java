@@ -1,8 +1,7 @@
 package com.ilargia.games.egdx.logicbricks.system.render;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
@@ -23,6 +22,7 @@ public class DebugRendererSystem implements IInitializeSystem, IRenderSystem {
     public static boolean DRAW_BOX2D_INACTIVE_BODIES = true;
     public static boolean DRAW_BOX2D_VELOCITIES = true;
     public static boolean DRAW_BOX2D_CONTACTS = true;
+    private final Batch batch;
 
     private World physics;
     private Entitas entitas;
@@ -31,9 +31,10 @@ public class DebugRendererSystem implements IInitializeSystem, IRenderSystem {
     private OrthographicCamera cam;
 
 
-    public DebugRendererSystem(Entitas entitas, World world) {
+    public DebugRendererSystem(Entitas entitas, World world, Batch batch) {
         this.physics = world;
         this.entitas = entitas;
+        this.batch = batch;
 
         this.shapeRenderer = new ShapeRenderer();
         this.debugRenderer = new Box2DDebugRenderer(DRAW_BOX2D_BODIES, DRAW_BOX2D_JOINTS, DRAW_BOX2D_ABBs,
@@ -56,7 +57,7 @@ public class DebugRendererSystem implements IInitializeSystem, IRenderSystem {
     @Override
     public void render() {
        // cam.update();
-
+        batch.begin();
         Rectangle rect = new Rectangle(cam.position.x, cam.position.y, 3, 10);
 
         shapeRenderer.setProjectionMatrix(cam.combined);
@@ -74,7 +75,8 @@ public class DebugRendererSystem implements IInitializeSystem, IRenderSystem {
         shapeRenderer.rotate(0, 0, 1, 90);
         shapeRenderer.rect(-rect.getX() / 2, -rect.getY() / 2, rect.width, rect.height);
         shapeRenderer.end();
-       // debugRenderer.render(physics, cam.combined);
+        debugRenderer.render(physics, cam.combined);
+        batch.end();
     }
 
 

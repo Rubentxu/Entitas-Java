@@ -12,7 +12,7 @@ import com.ilargia.games.egdx.logicbricks.gen.game.GameEntity;
 import com.ilargia.games.egdx.util.BodyBuilder;
 
 
-public class Ground implements EntityFactory<Entitas,GameEntity>{
+public class Ground implements EntityFactory<Entitas, GameEntity> {
 
     private AssetsManagerGDX assetsManager;
 
@@ -26,13 +26,13 @@ public class Ground implements EntityFactory<Entitas,GameEntity>{
     public GameEntity create(Engine engine, Entitas entitas) {
         BodyBuilder bodyBuilder = engine.getManager(PhysicsManagerGDX.class).getBodyBuilder();
 
-
         return entitas.game.createEntity().addIdentity("Ground", "Ground")
-                .addRigidBody(bodyBuilder.fixture(bodyBuilder.fixtureDefBuilder.boxShape(50, 0.5f)
-                .friction(0.5f))
-                .build())
-                .addTextureView(new TextureRegion(assetsManager.getTexture("assets/textures/pong.jpg")),new Bounds(30,30),false, false, 1, 1, Color.WHITE);
-
+                .addRigidBody(bodyBuilder.fixture(bodyBuilder.fixtureDefBuilder
+                        .boxShape(50, 0.5f)
+                        .friction(0.5f))
+                        .build());
+                //.addTextureView(new TextureRegion(assetsManager.getTexture("assets/textures/pong.jpg")),
+                 //       new Bounds(30, 30), false, false, 1, 1, Color.WHITE);
 
     }
 

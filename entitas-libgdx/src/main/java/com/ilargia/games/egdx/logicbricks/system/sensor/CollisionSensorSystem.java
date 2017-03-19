@@ -2,9 +2,6 @@ package com.ilargia.games.egdx.logicbricks.system.sensor;
 
 
 import com.ilargia.games.egdx.api.managers.listener.Collision;
-import com.ilargia.games.entitas.api.system.IExecuteSystem;
-import com.ilargia.games.entitas.group.Group;
-import com.ilargia.games.entitas.matcher.Matcher;
 import com.ilargia.games.egdx.logicbricks.component.sensor.CollisionSensor;
 import com.ilargia.games.egdx.logicbricks.gen.Entitas;
 import com.ilargia.games.egdx.logicbricks.gen.game.GameContext;
@@ -12,11 +9,11 @@ import com.ilargia.games.egdx.logicbricks.gen.game.GameEntity;
 import com.ilargia.games.egdx.logicbricks.gen.sensor.SensorContext;
 import com.ilargia.games.egdx.logicbricks.gen.sensor.SensorEntity;
 import com.ilargia.games.egdx.logicbricks.gen.sensor.SensorMatcher;
-import com.ilargia.games.egdx.logicbricks.index.GameIndex;
-import com.ilargia.games.egdx.logicbricks.index.SensorIndex;
-import com.ilargia.games.egdx.logicbricks.index.SimpleGameIndex;
+import com.ilargia.games.egdx.logicbricks.index.Indexed;
+import com.ilargia.games.entitas.group.Group;
+import com.ilargia.games.entitas.matcher.Matcher;
 
-public class CollisionSensorSystem extends SensorSystem implements IExecuteSystem, Collision {
+public class CollisionSensorSystem extends SensorSystem implements Collision {
     private final SensorContext sensorContex;
     private final Group<SensorEntity> sensorGroup;
     private final GameContext gameContex;
@@ -44,16 +41,16 @@ public class CollisionSensorSystem extends SensorSystem implements IExecuteSyste
     @Override
     public void processCollision(Integer indexEntityA, Integer indexEntityB, boolean collisionSignal) {
         if (indexEntityA != null && indexEntityB != null) {
-            GameEntity entityA = SimpleGameIndex.getGameEntity(gameContex, indexEntityA);
-            GameEntity entityB = SimpleGameIndex.getGameEntity(gameContex, indexEntityB);
+            GameEntity entityA =  Indexed.getInteractiveEntity(indexEntityA);
+            GameEntity entityB =  Indexed.getInteractiveEntity(indexEntityB);
             if (entityA != null && entityB != null) {
-                for (SensorEntity entity : SensorIndex.getSensors(sensorContex, entityA)) {
+                for (SensorEntity entity : Indexed.getSensorsEntities(entityA)) {
                     CollisionSensor collision = entity.getCollisionSensor();
-                    if (entityB.getIdentity().tags.contains(collision.targetTag)) {
+                    if (entityB.getTags().values.contains(collision.targetTag)) {
                         if (collisionSignal) {
-                            GameIndex.addGameEntity(gameContex, entity.getCreationIndex(), entityB);
+                            Indexed.addEntityInSensor(entity, entityB);
                         } else {
-                            GameIndex.removeGameEntity(gameContex, entity.getCreationIndex(), entityB);
+                            Indexed.removeEntityInSensor(entity, entityB);
                         }
                         collision.collisionSignal = collisionSignal;
                     }

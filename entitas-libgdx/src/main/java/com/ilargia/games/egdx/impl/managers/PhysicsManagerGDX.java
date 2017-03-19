@@ -7,6 +7,7 @@ import com.ilargia.games.egdx.api.managers.PhysicsManager;
 import com.ilargia.games.egdx.api.managers.listener.Collision;
 import com.ilargia.games.egdx.util.BodyBuilder;
 import com.ilargia.games.entitas.api.IEntity;
+import com.ilargia.games.entitas.factories.EntitasCollections;
 
 import java.util.Set;
 
@@ -18,6 +19,7 @@ public class PhysicsManagerGDX implements PhysicsManager<World,Collision>, Conta
     public PhysicsManagerGDX(Vector2 gravity) {
         physics = new World(gravity, false);
         bodyBuilder = new BodyBuilder(physics);
+        collisionListeners = EntitasCollections.createSet(Collision.class);
 
     }
 

@@ -7,9 +7,8 @@ import com.ilargia.games.entitas.codeGenerator.intermediate.ComponentInfo;
 import org.jboss.forge.roaster.Roaster;
 import org.jboss.forge.roaster.model.source.FieldSource;
 import org.jboss.forge.roaster.model.source.JavaClassSource;
+import org.jboss.forge.roaster.model.source.MethodSource;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -38,8 +37,8 @@ public class ContextGenerator implements IComponentCodeGenerator {
 //            pkgDestiny+= "."+infos.get(0).subDir;
 //
 //        }
-        if(infos.size() > 0 && !pkgDestiny.endsWith(infos.get(0).subDir)) {
-            pkgDestiny+= "."+infos.get(0).subDir;
+        if (infos.size() > 0 && !pkgDestiny.endsWith(infos.get(0).subDir)) {
+            pkgDestiny += "." + infos.get(0).subDir;
 
         }
         contextClass.setPackage(pkgDestiny);
@@ -118,7 +117,7 @@ public class ContextGenerator implements IComponentCodeGenerator {
                     .setBody(String.format("%2$sEntity entity = get%1$sEntity();\n" +
                             "        if(value != (entity != null)) {\n" +
                             "             if(value) {\n" +
-                            "                  entity.set%1$s(true);\n" +
+                            "                  createEntity().set%1$s(true);\n" +
                             "             } else {\n" +
                             "                  destroyEntity(entity);\n" +
                             "             }\n" +
@@ -142,7 +141,9 @@ public class ContextGenerator implements IComponentCodeGenerator {
                     .setName(String.format("set%1$s", info.typeName))
                     .setReturnType(contextName + "Entity")
                     .setPublic()
-                    .setParameters(memberNamesWithType(info.memberInfos))
+                    .setParameters(info.constructores != null && info.constructores.size() > 0
+                            ? memberNamesWithTypeFromConstructor(info.constructores.get(0))
+                            : memberNamesWithType(info.memberInfos))
                     .setBody(String.format("if(has%1$s()) {\n" +
                                     "            throw new EntitasException(\"Could not set %1$s!\" + this + \" already has an entity with %1$s!\", " +
                                     "\"You should check if the context already has a %1$sEntity before setting it or use context.Replace%1$s().\");" +
@@ -150,7 +151,11 @@ public class ContextGenerator implements IComponentCodeGenerator {
                                     "         %3$sEntity entity = createEntity();\n" +
                                     "         entity.add%1$s(%2$s);\n" +
                                     "         return entity;"
-                            , info.typeName, memberNames(info.memberInfos), contextName));
+                            , info.typeName,
+                            info.constructores != null && info.constructores.size() > 0
+                                    ? memberNamesFromConstructor(info.constructores.get(0))
+                                    : memberNames(info.memberInfos)
+                            , contextName));
 
             source.addImport(info.fullTypeName);
 
@@ -163,7 +168,9 @@ public class ContextGenerator implements IComponentCodeGenerator {
                     .setName(String.format("replace%1$s", info.typeName))
                     .setReturnType(contextName + "Entity")
                     .setPublic()
-                    .setParameters(memberNamesWithType(info.memberInfos))
+                    .setParameters(info.constructores != null && info.constructores.size() > 0
+                            ? memberNamesWithTypeFromConstructor(info.constructores.get(0))
+                            : memberNamesWithType(info.memberInfos))
                     .setBody(String.format("%3$sEntity entity = get%1$sEntity();" +
                                     "         if(entity == null) {" +
                                     "            entity = set%1$s(%2$s);" +
@@ -171,7 +178,10 @@ public class ContextGenerator implements IComponentCodeGenerator {
                                     "           entity.replace%1$s(%2$s);" +
                                     "         }" +
                                     "         return entity;"
-                            , info.typeName, memberNames(info.memberInfos), contextName));
+                            , info.typeName,  info.constructores != null && info.constructores.size() > 0
+                                    ? memberNamesFromConstructor(info.constructores.get(0))
+                                    : memberNames(info.memberInfos)
+                            , contextName));
 
 
         }
@@ -203,5 +213,18 @@ public class ContextGenerator implements IComponentCodeGenerator {
                 .map(info -> info.getName())
                 .collect(Collectors.joining(", "));
     }
+
+    public String memberNamesFromConstructor(MethodSource<JavaClassSource> constructor) {
+        return constructor.getParameters().stream()
+                .map(info -> info.getName())
+                .collect(Collectors.joining(", "));
+    }
+
+    public String memberNamesWithTypeFromConstructor(MethodSource<JavaClassSource> constructor) {
+        return constructor.getParameters().stream()
+                .map(info -> info.toString())
+                .collect(Collectors.joining(", "));
+    }
+
 
 }

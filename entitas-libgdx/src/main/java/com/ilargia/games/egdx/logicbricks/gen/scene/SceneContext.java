@@ -164,8 +164,7 @@ public class SceneContext
 					"You should check if the context already has a GameWorldEntity before setting it or use context.ReplaceGameWorld().");
 		}
 		SceneEntity entity = createEntity();
-		entity.addGameWorld(width, height, metresToPixels,
-				backGroundColor);
+		entity.addGameWorld(width, height, metresToPixels, backGroundColor);
 		return entity;
 	}
 
@@ -173,11 +172,11 @@ public class SceneContext
 			float metresToPixels, Color backGroundColor) {
 		SceneEntity entity = getGameWorldEntity();
 		if (entity == null) {
-			entity = setGameWorld(width, height, metresToPixels
-					, backGroundColor);
+			entity = setGameWorld(width, height, metresToPixels,
+					backGroundColor);
 		} else {
-			entity.replaceGameWorld(width, height, metresToPixels
-					, backGroundColor);
+			entity.replaceGameWorld(width, height, metresToPixels,
+					backGroundColor);
 		}
 		return entity;
 	}

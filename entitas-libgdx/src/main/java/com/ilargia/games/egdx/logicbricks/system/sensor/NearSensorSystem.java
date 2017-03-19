@@ -2,9 +2,6 @@ package com.ilargia.games.egdx.logicbricks.system.sensor;
 
 
 import com.ilargia.games.egdx.api.managers.listener.Collision;
-import com.ilargia.games.entitas.api.system.IExecuteSystem;
-import com.ilargia.games.entitas.group.Group;
-import com.ilargia.games.entitas.matcher.Matcher;
 import com.ilargia.games.egdx.logicbricks.component.sensor.NearSensor;
 import com.ilargia.games.egdx.logicbricks.gen.Entitas;
 import com.ilargia.games.egdx.logicbricks.gen.game.GameContext;
@@ -12,11 +9,11 @@ import com.ilargia.games.egdx.logicbricks.gen.game.GameEntity;
 import com.ilargia.games.egdx.logicbricks.gen.sensor.SensorContext;
 import com.ilargia.games.egdx.logicbricks.gen.sensor.SensorEntity;
 import com.ilargia.games.egdx.logicbricks.gen.sensor.SensorMatcher;
-import com.ilargia.games.egdx.logicbricks.index.GameIndex;
-import com.ilargia.games.egdx.logicbricks.index.SensorIndex;
-import com.ilargia.games.egdx.logicbricks.index.SimpleGameIndex;
+import com.ilargia.games.egdx.logicbricks.index.Indexed;
+import com.ilargia.games.entitas.group.Group;
+import com.ilargia.games.entitas.matcher.Matcher;
 
-public class NearSensorSystem extends SensorSystem implements IExecuteSystem, Collision {
+public class NearSensorSystem extends SensorSystem implements Collision {
     private final SensorContext sensorContex;
     private final Group<SensorEntity> sensorGroup;
     private final GameContext gameContex;
@@ -57,12 +54,12 @@ public class NearSensorSystem extends SensorSystem implements IExecuteSystem, Co
     @Override
     public void processSensorCollision(Integer indexEntityA, Integer indexEntityB, String tagSensorA, boolean collisionSignal) {
         if (indexEntityA != null && indexEntityB != null) {
-            GameEntity entityA = SimpleGameIndex.getGameEntity(gameContex, indexEntityA);
-            GameEntity entityB = SimpleGameIndex.getGameEntity(gameContex, indexEntityB);
+            GameEntity entityA = Indexed.getInteractiveEntity(indexEntityA);
+            GameEntity entityB =  Indexed.getInteractiveEntity(indexEntityB);
             if (entityA != null && entityB != null && tagSensorA != null) {
-                for (SensorEntity entity : SensorIndex.getSensors(sensorContex, entityA)) {
+                for (SensorEntity entity : Indexed.getSensorsEntities(entityA)) {
                     NearSensor sensor = entity.getNearSensor();
-                    if (entityB.getIdentity().tags.contains(sensor.targetTag)) {
+                    if (entityB.getTags().values.contains(sensor.targetTag)) {
                         if (collisionSignal) {
                             if (tagSensorA.equals("NearSensor")) {
                                 sensor.distanceContactList.add(indexEntityB);

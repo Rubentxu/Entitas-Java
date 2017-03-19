@@ -10,7 +10,7 @@ import com.ilargia.games.egdx.logicbricks.gen.sensor.SensorContext;
 import com.ilargia.games.egdx.logicbricks.gen.sensor.SensorEntity;
 import com.ilargia.games.egdx.logicbricks.gen.sensor.SensorMatcher;
 
-public class DelaySensorSystem extends SensorSystem implements IExecuteSystem {
+public class DelaySensorSystem extends SensorSystem {
 
     private Group<SensorEntity> sensorGroup;
 

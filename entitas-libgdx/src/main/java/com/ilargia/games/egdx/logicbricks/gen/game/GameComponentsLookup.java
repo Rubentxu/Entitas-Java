@@ -2,15 +2,13 @@ package com.ilargia.games.egdx.logicbricks.gen.game;
 
 import com.ilargia.games.egdx.logicbricks.component.game.Animations;
 import com.ilargia.games.egdx.logicbricks.component.game.Character;
-import com.ilargia.games.egdx.logicbricks.component.game.CollisionSensorComponents;
-import com.ilargia.games.egdx.logicbricks.component.game.DelaySensorComponents;
 import com.ilargia.games.egdx.logicbricks.component.game.Destroy;
-import com.ilargia.games.egdx.logicbricks.component.game.Identity;
 import com.ilargia.games.egdx.logicbricks.component.game.Interactive;
 import com.ilargia.games.egdx.logicbricks.component.game.Movable;
 import com.ilargia.games.egdx.logicbricks.component.game.OnGround;
 import com.ilargia.games.egdx.logicbricks.component.game.Player;
 import com.ilargia.games.egdx.logicbricks.component.game.RigidBody;
+import com.ilargia.games.egdx.logicbricks.component.game.Tags;
 import com.ilargia.games.egdx.logicbricks.component.game.TextureView;
 
 /**
@@ -22,30 +20,25 @@ public class GameComponentsLookup {
 
 	public static final int Animations = 0;
 	public static final int Character = 1;
-	public static final int CollisionSensorComponents = 2;
-	public static final int DelaySensorComponents = 3;
-	public static final int Destroy = 4;
-	public static final int Identity = 5;
-	public static final int Interactive = 6;
-	public static final int Movable = 7;
-	public static final int OnGround = 8;
-	public static final int Player = 9;
-	public static final int RigidBody = 10;
-	public static final int TextureView = 11;
-	public static final int totalComponents = 12;
+	public static final int Destroy = 2;
+	public static final int Interactive = 3;
+	public static final int Movable = 4;
+	public static final int OnGround = 5;
+	public static final int Player = 6;
+	public static final int RigidBody = 7;
+	public static final int Tags = 8;
+	public static final int TextureView = 9;
+	public static final int totalComponents = 10;
 
 	public static String[] componentNames() {
-		return new String[]{"Animations", "Character",
-				"CollisionSensorComponents", "DelaySensorComponents",
-				"Destroy", "Identity", "Interactive", "Movable", "OnGround",
-				"Player", "RigidBody", "TextureView"};
+		return new String[]{"Animations", "Character", "Destroy",
+				"Interactive", "Movable", "OnGround", "Player", "RigidBody",
+				"Tags", "TextureView"};
 	}
 
 	public static Class[] componentTypes() {
-		return new Class[]{Animations.class, Character.class,
-				CollisionSensorComponents.class, DelaySensorComponents.class,
-				Destroy.class, Identity.class, Interactive.class,
-				Movable.class, OnGround.class, Player.class, RigidBody.class,
-				TextureView.class};
+		return new Class[]{Animations.class, Character.class, Destroy.class,
+				Interactive.class, Movable.class, OnGround.class, Player.class,
+				RigidBody.class, Tags.class, TextureView.class};
 	}
 }

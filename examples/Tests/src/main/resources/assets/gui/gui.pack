@@ -1,0 +1,126 @@
+
+gui.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+touchpad_background
+  rotate: false
+  xy: 1, 67
+  size: 180, 180
+  orig: 180, 180
+  offset: 0, 0
+  index: -1
+tijeras
+  rotate: false
+  xy: 183, 86
+  size: 111, 161
+  orig: 111, 161
+  offset: 0, 0
+  index: -1
+botonCandado
+  rotate: false
+  xy: 296, 119
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+estrella
+  rotate: false
+  xy: 426, 119
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+estrellaZocalo
+  rotate: false
+  xy: 556, 119
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+vidas
+  rotate: false
+  xy: 686, 160
+  size: 100, 87
+  orig: 100, 87
+  offset: 0, 0
+  index: -1
+touchpad_thumb
+  rotate: false
+  xy: 788, 163
+  size: 84, 84
+  orig: 84, 84
+  offset: 0, 0
+  index: -1
+btnMenu
+  rotate: false
+  xy: 1, 1
+  size: 64, 64
+  split: 31, 32, 15, 48
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+btnMenuPress
+  rotate: false
+  xy: 874, 183
+  size: 64, 64
+  split: 31, 32, 15, 48
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+buttonLeft
+  rotate: false
+  xy: 67, 1
+  size: 64, 64
+  split: 16, 18, 0, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+buttonLeftPress
+  rotate: false
+  xy: 940, 183
+  size: 64, 64
+  split: 17, 19, 0, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+buttonRight
+  rotate: false
+  xy: 133, 1
+  size: 64, 64
+  split: 19, 16, 0, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+buttonRightPress
+  rotate: false
+  xy: 199, 20
+  size: 64, 64
+  split: 19, 17, 0, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+buttonUp
+  rotate: false
+  xy: 686, 94
+  size: 64, 64
+  split: 0, 64, 17, 17
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+buttonUpPress
+  rotate: false
+  xy: 752, 94
+  size: 64, 64
+  split: 0, 64, 18, 18
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+debug
+  rotate: false
+  xy: 818, 97
+  size: 64, 64
+  split: 31, 32, 33, 30
+  orig: 64, 64
+  offset: 0, 0
+  index: -1

@@ -26,7 +26,7 @@ public class GameContext extends com.ilargia.games.entitas.Context<GameEntity> {
 		GameEntity entity = getPlayerEntity();
 		if (value != (entity != null)) {
 			if (value) {
-				entity.setPlayer(true);
+				createEntity().setPlayer(true);
 			} else {
 				destroyEntity(entity);
 			}

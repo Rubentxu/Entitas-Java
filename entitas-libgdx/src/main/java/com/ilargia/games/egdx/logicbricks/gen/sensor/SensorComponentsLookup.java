@@ -4,8 +4,10 @@ import com.ilargia.games.egdx.logicbricks.component.sensor.AlwaysSensor;
 import com.ilargia.games.egdx.logicbricks.component.sensor.CollisionSensor;
 import com.ilargia.games.egdx.logicbricks.component.sensor.DelaySensor;
 import com.ilargia.games.egdx.logicbricks.component.sensor.Frequency;
+import com.ilargia.games.egdx.logicbricks.component.sensor.KeyboardSensor;
 import com.ilargia.games.egdx.logicbricks.component.sensor.Link;
 import com.ilargia.games.egdx.logicbricks.component.sensor.Mode;
+import com.ilargia.games.egdx.logicbricks.component.sensor.MouseSensor;
 import com.ilargia.games.egdx.logicbricks.component.sensor.NearSensor;
 import com.ilargia.games.egdx.logicbricks.component.sensor.RadarSensor;
 import com.ilargia.games.egdx.logicbricks.component.sensor.RaySensor;
@@ -21,22 +23,25 @@ public class SensorComponentsLookup {
 	public static final int CollisionSensor = 1;
 	public static final int DelaySensor = 2;
 	public static final int Frequency = 3;
-	public static final int Link = 4;
-	public static final int Mode = 5;
-	public static final int NearSensor = 6;
-	public static final int RadarSensor = 7;
-	public static final int RaySensor = 8;
-	public static final int totalComponents = 9;
+	public static final int KeyboardSensor = 4;
+	public static final int Link = 5;
+	public static final int Mode = 6;
+	public static final int MouseSensor = 7;
+	public static final int NearSensor = 8;
+	public static final int RadarSensor = 9;
+	public static final int RaySensor = 10;
+	public static final int totalComponents = 11;
 
 	public static String[] componentNames() {
 		return new String[]{"AlwaysSensor", "CollisionSensor", "DelaySensor",
-				"Frequency", "Link", "Mode", "NearSensor", "RadarSensor",
-				"RaySensor"};
+				"Frequency", "KeyboardSensor", "Link", "Mode", "MouseSensor",
+				"NearSensor", "RadarSensor", "RaySensor"};
 	}
 
 	public static Class[] componentTypes() {
 		return new Class[]{AlwaysSensor.class, CollisionSensor.class,
-				DelaySensor.class, Frequency.class, Link.class, Mode.class,
-				NearSensor.class, RadarSensor.class, RaySensor.class};
+				DelaySensor.class, Frequency.class, KeyboardSensor.class,
+				Link.class, Mode.class, MouseSensor.class, NearSensor.class,
+				RadarSensor.class, RaySensor.class};
 	}
 }

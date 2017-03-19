@@ -5,24 +5,23 @@ import com.ilargia.games.egdx.logicbricks.component.sensor.Link;
 import com.ilargia.games.egdx.logicbricks.gen.Entitas;
 import com.ilargia.games.egdx.logicbricks.gen.game.GameEntity;
 import com.ilargia.games.egdx.logicbricks.gen.sensor.SensorEntity;
-import com.ilargia.games.egdx.logicbricks.index.SimpleGameIndex;
+import com.ilargia.games.egdx.logicbricks.index.Indexed;
 import com.ilargia.games.egdx.logicbricks.system.sensor.CollisionSensorSystem;
-import com.ilargia.games.egdx.logicbricks.system.sensor.IndexingLinkSensorSystem;
+import com.ilargia.games.egdx.logicbricks.system.sensor.IndexingSystem;
 import com.ilargia.games.entitas.factories.CollectionsFactories;
 import com.ilargia.games.entitas.factories.EntitasCollections;
 import com.ilargia.games.entitas.index.EntityIndex;
-
-
-import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class CollisionSensorSystemTest {
     Entitas entitas;
     private EntitasCollections collections;
     private CollisionSensorSystem collisionSensorSystem;
-    private IndexingLinkSensorSystem linkSensorSystem;
+    private IndexingSystem linkSensorSystem;
     private SensorEntity sensorEntity;
     private SensorEntity sensorEntity2;
     private GameEntity boss;
@@ -35,18 +34,16 @@ public class CollisionSensorSystemTest {
         collections = new EntitasCollections(new CollectionsFactories() {});
         entitas = new Entitas();
         this.collisionSensorSystem = new CollisionSensorSystem(entitas);
-        this.linkSensorSystem = new IndexingLinkSensorSystem(entitas);
-        SimpleGameIndex.createGameEntityIndices(entitas.game);
-        linkSensorSystem.activate();
+        this.linkSensorSystem = new IndexingSystem(entitas);
 
         boss = entitas.game.createEntity()
-                .addIdentity("Enemy","Boss");
+                .addTags("Enemy","Boss");
 
         groundEntity = entitas.game.createEntity()
-                .addIdentity("Ground","Ground");
+                .addTags("Ground","Ground");
 
         playerEntity = entitas.game.createEntity()
-                .addIdentity("Player","Player1");
+                .addTags("Player","Player1");
 
         sensorEntity = entitas.sensor.createEntity()
                 .addCollisionSensor("Boss")
@@ -60,17 +57,12 @@ public class CollisionSensorSystemTest {
                 .addCollisionSensor("Ground")
                 .addLink(boss.getCreationIndex());
 
-        linkSensorSystem.execute(1);
-
-
-
     }
 
 
     @Test
     public void queryTrue() {
-        EntityIndex<SensorEntity, Integer> eIndex = (EntityIndex<SensorEntity, Integer>)entitas.sensor.getEntityIndex("Sensors");
-        EntityIndex<GameEntity, Integer> gameIndex = (EntityIndex<GameEntity, Integer>) entitas.game.getEntityIndex("GameEntities");
+
         collisionSensorSystem.processCollision(playerEntity.getCreationIndex(), boss.getCreationIndex(), true);
         collisionSensorSystem.execute( 0.5F);
         Link link = sensorEntity.getLink();
@@ -79,8 +71,8 @@ public class CollisionSensorSystemTest {
         assertTrue(link.isOpen);
         assertTrue(link.isChanged);
 
-        assertEquals(2, eIndex.getEntities(playerEntity.getCreationIndex()).size());
-        assertEquals( 1, gameIndex.getEntities(sensorEntity.getCreationIndex()).size());
+        assertEquals(2, Indexed.getSensorsEntities(playerEntity).size());
+        assertEquals( 1, Indexed.getEntitiesInSensor(sensorEntity.getCreationIndex()).size());
 
         collisionSensorSystem.execute( 0.5F);
         assertTrue(link.pulse);
@@ -95,8 +87,6 @@ public class CollisionSensorSystemTest {
         sensorEntity3 = entitas.sensor.createEntity()
                 .addCollisionSensor("Ground")
                 .addLink(playerEntity.getCreationIndex());
-        linkSensorSystem.execute(1);
-
 
         assertEquals(3, eIndex.getEntities(playerEntity.getCreationIndex()).size());
         assertEquals(0, gameIndex.getEntities(sensorEntity.getCreationIndex()).size());

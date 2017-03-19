@@ -3,8 +3,9 @@ package com.ilargia.games.egdx.logicbricks.system.sensor;
 import com.ilargia.games.egdx.logicbricks.component.sensor.Frequency;
 import com.ilargia.games.egdx.logicbricks.component.sensor.Link;
 import com.ilargia.games.egdx.logicbricks.gen.sensor.SensorEntity;
+import com.ilargia.games.entitas.api.system.IExecuteSystem;
 
-public abstract class SensorSystem {
+public abstract class SensorSystem implements IExecuteSystem{
 
     public void process(SensorEntity sensor, float deltaTime) {
         Link link = sensor.getLink();

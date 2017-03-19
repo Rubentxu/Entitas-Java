@@ -26,6 +26,11 @@ public class SensorSystemTest {
         collections = new EntitasCollections(new CollectionsFactories(){});
         this.sensorSystem = new SensorSystem() {
             @Override
+            public void execute(float deltaTime) {
+
+            }
+
+            @Override
             protected boolean query(SensorEntity sensor, float deltaTime) {
                 return query;
 

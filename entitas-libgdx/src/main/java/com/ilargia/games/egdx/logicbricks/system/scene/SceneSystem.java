@@ -39,12 +39,12 @@ public class SceneSystem extends ReactiveSystem<GameEntity> implements IInitiali
 
     @Override
     protected Collector<GameEntity> getTrigger(IContext<GameEntity> context) {
-        return context.createCollector(Matcher.AllOf(GameMatcher.Identity(), GameMatcher.RigidBody()));
+        return context.createCollector(Matcher.AllOf(GameMatcher.Tags(), GameMatcher.RigidBody()));
     }
 
     @Override
     protected boolean filter(GameEntity entity) {
-        return entity.hasIdentity() && (!entity.hasTextureView() || !entity.hasRigidBody());
+        return entity.hasTags() && (!entity.hasTextureView() || !entity.hasRigidBody());
     }
 
 

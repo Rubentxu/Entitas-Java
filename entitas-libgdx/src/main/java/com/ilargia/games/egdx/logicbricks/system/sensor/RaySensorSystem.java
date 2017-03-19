@@ -5,9 +5,6 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.World;
-import com.ilargia.games.entitas.api.system.IExecuteSystem;
-import com.ilargia.games.entitas.group.Group;
-import com.ilargia.games.entitas.matcher.Matcher;
 import com.ilargia.games.egdx.logicbricks.component.sensor.Link;
 import com.ilargia.games.egdx.logicbricks.component.sensor.RaySensor;
 import com.ilargia.games.egdx.logicbricks.gen.Entitas;
@@ -16,9 +13,11 @@ import com.ilargia.games.egdx.logicbricks.gen.game.GameEntity;
 import com.ilargia.games.egdx.logicbricks.gen.sensor.SensorContext;
 import com.ilargia.games.egdx.logicbricks.gen.sensor.SensorEntity;
 import com.ilargia.games.egdx.logicbricks.gen.sensor.SensorMatcher;
-import com.ilargia.games.egdx.logicbricks.index.SimpleGameIndex;
+import com.ilargia.games.egdx.logicbricks.index.Indexed;
+import com.ilargia.games.entitas.group.Group;
+import com.ilargia.games.entitas.matcher.Matcher;
 
-public class RaySensorSystem extends SensorSystem implements IExecuteSystem {
+public class RaySensorSystem extends SensorSystem {
     private final SensorContext sensorContex;
     private final Group<SensorEntity> sensorGroup;
     private final GameContext gameContex;
@@ -40,7 +39,8 @@ public class RaySensorSystem extends SensorSystem implements IExecuteSystem {
         Link link = sensorEntity.getLink();
 
         float angle = sensor.axis2D.ordinal() * 90.0f;
-        GameEntity originEntity = SimpleGameIndex.getGameEntity(gameContex, link.targetEntity);
+
+        GameEntity originEntity =  Indexed.getInteractiveEntity(link.targetEntity);
 
         Vector2 point1 = originEntity.getRigidBody().body.getPosition();
         Vector2 point2 = point1.cpy().add(new Vector2((float) MathUtils.cosDeg(angle), MathUtils.sinDeg(angle)).scl(sensor.range));
@@ -60,9 +60,9 @@ public class RaySensorSystem extends SensorSystem implements IExecuteSystem {
     float reportRayFixture (RaySensor sensor, Fixture fixture){
         Integer indexEntity = (Integer) fixture.getBody().getUserData();
         sensor.collisionSignal = false;
-        GameEntity entity = SimpleGameIndex.getGameEntity(gameContex, indexEntity);
+        GameEntity entity = Indexed.getInteractiveEntity(indexEntity);
 
-        if (sensor.targetTag != null && entity.getIdentity().tags.contains(sensor.targetTag)) {
+        if (sensor.targetTag != null && entity.getTags().values.contains(sensor.targetTag)) {
             sensor.rayContactList.add(indexEntity);
             sensor.collisionSignal = true;
         } else if (sensor.targetTag == null ) {

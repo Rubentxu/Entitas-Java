@@ -171,8 +171,6 @@ public class EntityGenerator implements IComponentCodeGenerator {
                             ? memberNamesWithTypeFromConstructor(info.constructores.get(0))
                             : memberNamesWithType(info.memberInfos));
 
-
-
             String typeName = info.typeName ;
             if(info.generics.size()>0) typeName+="<";
             for ( TypeVariableSource<JavaClassSource> generic : info.generics) {
@@ -285,7 +283,7 @@ public class EntityGenerator implements IComponentCodeGenerator {
 
     public String memberNamesWithTypeFromConstructor(MethodSource<JavaClassSource> constructor) {
         return constructor.getParameters().stream()
-                .map(info -> info.getType() + " " + info.getName())
+                .map(info ->info.toString())
                 .collect(Collectors.joining(", "));
     }
 

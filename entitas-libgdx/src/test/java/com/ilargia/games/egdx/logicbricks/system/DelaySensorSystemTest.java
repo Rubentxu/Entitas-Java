@@ -23,7 +23,7 @@ public class DelaySensorSystemTest {
     public void setUp() {
         collections = new EntitasCollections(new CollectionsFactories(){});
         Entitas entitas = new Entitas();
-        this.sensorSystem = new DelaySensorSystem(entitas.sensor);
+        this.sensorSystem = new DelaySensorSystem(entitas);
         entity = entitas.sensor.createEntity();
         entity.addLink(0).addDelaySensor(0.5f,1,false);
 

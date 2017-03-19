@@ -6,10 +6,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.ilargia.games.egdx.api.Engine;
 import com.ilargia.games.egdx.impl.managers.PhysicsManagerGDX;
-import com.ilargia.games.egdx.util.BodyBuilder;
-import com.ilargia.games.entitas.api.IContext;
-import com.ilargia.games.entitas.collector.Collector;
-import com.ilargia.games.entitas.systems.ReactiveSystem;
 import com.ilargia.games.egdx.logicbricks.component.game.RigidBody;
 import com.ilargia.games.egdx.logicbricks.component.sensor.RadarSensor;
 import com.ilargia.games.egdx.logicbricks.gen.Entitas;
@@ -17,7 +13,11 @@ import com.ilargia.games.egdx.logicbricks.gen.game.GameContext;
 import com.ilargia.games.egdx.logicbricks.gen.game.GameEntity;
 import com.ilargia.games.egdx.logicbricks.gen.sensor.SensorEntity;
 import com.ilargia.games.egdx.logicbricks.gen.sensor.SensorMatcher;
-import com.ilargia.games.egdx.logicbricks.index.SimpleGameIndex;
+import com.ilargia.games.egdx.logicbricks.index.Indexed;
+import com.ilargia.games.egdx.util.BodyBuilder;
+import com.ilargia.games.entitas.api.IContext;
+import com.ilargia.games.entitas.collector.Collector;
+import com.ilargia.games.entitas.systems.ReactiveSystem;
 
 import java.util.List;
 
@@ -47,7 +47,7 @@ public class CreateRadarSensorSystem extends ReactiveSystem<SensorEntity> {
         vertices[0] = new Vector2();
 
         for (SensorEntity e : entities) {
-            GameEntity gameEntity = SimpleGameIndex.getGameEntity(gameContext, e.getLink().targetEntity);
+            GameEntity gameEntity =  Indexed.getInteractiveEntity(e.getLink().targetEntity);
             RigidBody rigidBody = gameEntity.getRigidBody();
             RadarSensor radarSensor = e.getRadarSensor();
 

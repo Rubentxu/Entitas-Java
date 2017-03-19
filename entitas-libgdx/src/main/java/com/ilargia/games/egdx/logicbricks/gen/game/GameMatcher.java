@@ -11,15 +11,13 @@ public class GameMatcher {
 
 	private static Matcher _matcherAnimations;
 	private static Matcher _matcherCharacter;
-	private static Matcher _matcherCollisionSensorComponents;
-	private static Matcher _matcherDelaySensorComponents;
 	private static Matcher _matcherDestroy;
-	private static Matcher _matcherIdentity;
 	private static Matcher _matcherInteractive;
 	private static Matcher _matcherMovable;
 	private static Matcher _matcherOnGround;
 	private static Matcher _matcherPlayer;
 	private static Matcher _matcherRigidBody;
+	private static Matcher _matcherTags;
 	private static Matcher _matcherTextureView;
 
 	public static Matcher Animations() {
@@ -42,26 +40,6 @@ public class GameMatcher {
 		return _matcherCharacter;
 	}
 
-	public static Matcher CollisionSensorComponents() {
-		if (_matcherCollisionSensorComponents == null) {
-			Matcher matcher = (Matcher) Matcher
-					.AllOf(GameComponentsLookup.CollisionSensorComponents);
-			matcher.componentNames = GameComponentsLookup.componentNames();
-			_matcherCollisionSensorComponents = matcher;
-		}
-		return _matcherCollisionSensorComponents;
-	}
-
-	public static Matcher DelaySensorComponents() {
-		if (_matcherDelaySensorComponents == null) {
-			Matcher matcher = (Matcher) Matcher
-					.AllOf(GameComponentsLookup.DelaySensorComponents);
-			matcher.componentNames = GameComponentsLookup.componentNames();
-			_matcherDelaySensorComponents = matcher;
-		}
-		return _matcherDelaySensorComponents;
-	}
-
 	public static Matcher Destroy() {
 		if (_matcherDestroy == null) {
 			Matcher matcher = (Matcher) Matcher
@@ -70,16 +48,6 @@ public class GameMatcher {
 			_matcherDestroy = matcher;
 		}
 		return _matcherDestroy;
-	}
-
-	public static Matcher Identity() {
-		if (_matcherIdentity == null) {
-			Matcher matcher = (Matcher) Matcher
-					.AllOf(GameComponentsLookup.Identity);
-			matcher.componentNames = GameComponentsLookup.componentNames();
-			_matcherIdentity = matcher;
-		}
-		return _matcherIdentity;
 	}
 
 	public static Matcher Interactive() {
@@ -130,6 +98,16 @@ public class GameMatcher {
 			_matcherRigidBody = matcher;
 		}
 		return _matcherRigidBody;
+	}
+
+	public static Matcher Tags() {
+		if (_matcherTags == null) {
+			Matcher matcher = (Matcher) Matcher
+					.AllOf(GameComponentsLookup.Tags);
+			matcher.componentNames = GameComponentsLookup.componentNames();
+			_matcherTags = matcher;
+		}
+		return _matcherTags;
 	}
 
 	public static Matcher TextureView() {

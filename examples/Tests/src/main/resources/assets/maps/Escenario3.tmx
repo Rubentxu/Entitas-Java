@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE map SYSTEM "http://mapeditor.org/dtd/1.0/map.dtd">
+<map version="1.0" orientation="orthogonal" width="60" height="20" tilewidth="64" tileheight="64">
+ <properties>
+  <property name="atlas" value="packed.atlas"/>
+  <property name="blended tiles" value=""/>
+  <property name="unitScale" value=".015625"/>
+ </properties>
+ <tileset firstgid="1" name="packed01" tilewidth="64" tileheight="64">
+  <image source="packed.png" width="1024" height="2048"/>
+ </tileset>
+ <layer name="tiles" width="60" height="20">
+  <data encoding="base64">
+   AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAjAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAjAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAjAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAjAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAjAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAjAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAjAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAjAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAjAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAjAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAjAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAjAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAjAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAjAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAjAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAjAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAjAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAjAAAAWQAAAFkAAABYAAAAWAAAAFgAAABYAAAAWAAAAFgAAABYAAAAWAAAAFkAAABYAAAAWQAAAFkAAABYAAAAWAAAAFkAAABZAAAAVQAAAFgAAABZAAAAXAAAAFwAAABcAAAAXAAAAFwAAABcAAAAXAAAAFwAAABcAAAAXAAAAFkAAABZAAAAWQAAAFkAAABZAAAAWQAAAFkAAABYAAAAWQAAAFkAAABZAAAAWQAAAFkAAABZAAAAWAAAAFkAAABZAAAAWAAAAFgAAABZAAAAWQAAAFkAAABYAAAAWAAAAFkAAABZAAAAWQAAAFkAAABZAAAAGgAAABoAAAAZAAAAGgAAABkAAABcAAAAXAAAAFwAAABcAAAAXAAAAFwAAABcAAAAXAAAAFwAAABcAAAAXAAAAFwAAABcAAAAXAAAAFwAAABcAAAAXAAAAFwAAABcAAAAXAAAAFwAAABcAAAAXAAAAFwAAABcAAAAXAAAAFwAAABcAAAAXAAAAFwAAABcAAAAXAAAAFwAAABcAAAAXAAAAFgAAABYAAAAWAAAAFgAAABYAAAAWAAAAFgAAABYAAAAWAAAAFgAAABYAAAAWAAAAFgAAABYAAAAWAAAAFgAAABYAAAAWAAAAFgAAABYAAAA
+  </data>
+ </layer>
+ <objectgroup color="#ff0000" name="Capa de Objetos" width="60" height="20">
+  <object name="suelo" type="object" x="4" y="1156" width="5033" height="57"/>
+  <object name="plataformaMovil2" type="modelObject" x="2048" y="923" width="256" height="64">
+   <properties>
+    <property name="movingPlatformDistX" value="6"/>
+    <property name="movingPlatformDistY" value="8"/>
+    <property name="movingPlatformSpeed" value="4"/>
+    <property name="typeModelObject" value="MovingPlatform"/>
+   </properties>
+  </object>
+  <object name="limites2a" type="object" x="28" y="-104" width="50" height="1248"/>
+  <object name="enemigo" type="modelObject" x="2475" y="1007" width="139" height="148">
+   <properties>
+    <property name="pointX" value="47"/>
+    <property name="pointY" value="3"/>
+    <property name="typeModelObject" value="Enemy"/>
+   </properties>
+  </object>
+  <object name="coin" type="modelObject" x="776" y="1032" width="56" height="60">
+   <properties>
+    <property name="typeItem" value="coin"/>
+    <property name="typeModelObject" value="Item"/>
+   </properties>
+  </object>
+  <object name="coin" type="modelObject" x="864" y="1032" width="56" height="60">
+   <properties>
+    <property name="typeItem" value="coin"/>
+    <property name="typeModelObject" value="Item"/>
+   </properties>
+  </object>
+  <object name="coin" type="modelObject" x="964" y="1032" width="56" height="60">
+   <properties>
+    <property name="typeItem" value="coin"/>
+    <property name="typeModelObject" value="Item"/>
+   </properties>
+  </object>
+  <object type="modelObject" x="268" y="1040" width="64" height="96">
+   <properties>
+    <property name="typeModelObject" value="Hero"/>
+   </properties>
+  </object>
+  <object name="molino" type="modelObject" x="824" y="849" width="56" height="60">
+   <properties>
+    <property name="typeModelObject" value="MillObject"/>
+   </properties>
+  </object>
+  <object name="molino2" type="modelObject" x="1861" y="776" width="56" height="60">
+   <properties>
+    <property name="typeModelObject" value="MillObject"/>
+   </properties>
+  </object>
+  <object name="limites2a" type="object" x="3784" y="-90" width="50" height="1248"/>
+  <object name="coin" type="modelObject" x="1250" y="1030" width="56" height="60">
+   <properties>
+    <property name="typeItem" value="coin"/>
+    <property name="typeModelObject" value="Item"/>
+   </properties>
+  </object>
+  <object name="coin" type="modelObject" x="1062" y="1030" width="56" height="60">
+   <properties>
+    <property name="typeItem" value="coin"/>
+    <property name="typeModelObject" value="Item"/>
+   </properties>
+  </object>
+  <object name="coin" type="modelObject" x="1150" y="1030" width="56" height="60">
+   <properties>
+    <property name="typeItem" value="coin"/>
+    <property name="typeModelObject" value="Item"/>
+   </properties>
+  </object>
+  <object name="coin" type="modelObject" x="2370" y="514" width="56" height="60">
+   <properties>
+    <property name="typeItem" value="coin"/>
+    <property name="typeModelObject" value="Item"/>
+   </properties>
+  </object>
+  <object name="coin" type="modelObject" x="2084" y="516" width="56" height="60">
+   <properties>
+    <property name="typeItem" value="coin"/>
+    <property name="typeModelObject" value="Item"/>
+   </properties>
+  </object>
+  <object name="coin" type="modelObject" x="2272" y="516" width="56" height="60">
+   <properties>
+    <property name="typeItem" value="coin"/>
+    <property name="typeModelObject" value="Item"/>
+   </properties>
+  </object>
+  <object name="coin" type="modelObject" x="2458" y="514" width="56" height="60">
+   <properties>
+    <property name="typeItem" value="coin"/>
+    <property name="typeModelObject" value="Item"/>
+   </properties>
+  </object>
+  <object name="coin" type="modelObject" x="2558" y="514" width="56" height="60">
+   <properties>
+    <property name="typeItem" value="coin"/>
+    <property name="typeModelObject" value="Item"/>
+   </properties>
+  </object>
+  <object name="coin" type="modelObject" x="2172" y="516" width="56" height="60">
+   <properties>
+    <property name="typeItem" value="coin"/>
+    <property name="typeModelObject" value="Item"/>
+   </properties>
+  </object>
+  <object name="coin" type="modelObject" x="2362" y="412" width="56" height="60">
+   <properties>
+    <property name="typeItem" value="coin"/>
+    <property name="typeModelObject" value="Item"/>
+   </properties>
+  </object>
+  <object name="coin" type="modelObject" x="2076" y="414" width="56" height="60">
+   <properties>
+    <property name="typeItem" value="coin"/>
+    <property name="typeModelObject" value="Item"/>
+   </properties>
+  </object>
+  <object name="coin" type="modelObject" x="2264" y="414" width="56" height="60">
+   <properties>
+    <property name="typeItem" value="coin"/>
+    <property name="typeModelObject" value="Item"/>
+   </properties>
+  </object>
+  <object name="coin" type="modelObject" x="2450" y="412" width="56" height="60">
+   <properties>
+    <property name="typeItem" value="coin"/>
+    <property name="typeModelObject" value="Item"/>
+   </properties>
+  </object>
+  <object name="coin" type="modelObject" x="2550" y="412" width="56" height="60">
+   <properties>
+    <property name="typeItem" value="coin"/>
+    <property name="typeModelObject" value="Item"/>
+   </properties>
+  </object>
+  <object name="coin" type="modelObject" x="2164" y="414" width="56" height="60">
+   <properties>
+    <property name="typeItem" value="coin"/>
+    <property name="typeModelObject" value="Item"/>
+   </properties>
+  </object>
+  <object name="coin" type="modelObject" x="2362" y="304" width="56" height="60">
+   <properties>
+    <property name="typeItem" value="coin"/>
+    <property name="typeModelObject" value="Item"/>
+   </properties>
+  </object>
+  <object name="coin" type="modelObject" x="2076" y="306" width="56" height="60">
+   <properties>
+    <property name="typeItem" value="coin"/>
+    <property name="typeModelObject" value="Item"/>
+   </properties>
+  </object>
+  <object name="coin" type="modelObject" x="2264" y="306" width="56" height="60">
+   <properties>
+    <property name="typeItem" value="coin"/>
+    <property name="typeModelObject" value="Item"/>
+   </properties>
+  </object>
+  <object name="coin" type="modelObject" x="2450" y="304" width="56" height="60">
+   <properties>
+    <property name="typeItem" value="coin"/>
+    <property name="typeModelObject" value="Item"/>
+   </properties>
+  </object>
+  <object name="coin" type="modelObject" x="2550" y="304" width="56" height="60">
+   <properties>
+    <property name="typeItem" value="coin"/>
+    <property name="typeModelObject" value="Item"/>
+   </properties>
+  </object>
+  <object name="coin" type="modelObject" x="2164" y="306" width="56" height="60">
+   <properties>
+    <property name="typeItem" value="coin"/>
+    <property name="typeModelObject" value="Item"/>
+   </properties>
+  </object>
+  <object name="coin" type="modelObject" x="2368" y="196" width="56" height="60">
+   <properties>
+    <property name="typeItem" value="coin"/>
+    <property name="typeModelObject" value="Item"/>
+   </properties>
+  </object>
+  <object name="coin" type="modelObject" x="2082" y="198" width="56" height="60">
+   <properties>
+    <property name="typeItem" value="coin"/>
+    <property name="typeModelObject" value="Item"/>
+   </properties>
+  </object>
+  <object name="coin" type="modelObject" x="2270" y="198" width="56" height="60">
+   <properties>
+    <property name="typeItem" value="coin"/>
+    <property name="typeModelObject" value="Item"/>
+   </properties>
+  </object>
+  <object name="coin" type="modelObject" x="2456" y="196" width="56" height="60">
+   <properties>
+    <property name="typeItem" value="coin"/>
+    <property name="typeModelObject" value="Item"/>
+   </properties>
+  </object>
+  <object name="coin" type="modelObject" x="2556" y="196" width="56" height="60">
+   <properties>
+    <property name="typeItem" value="coin"/>
+    <property name="typeModelObject" value="Item"/>
+   </properties>
+  </object>
+  <object name="coin" type="modelObject" x="2170" y="198" width="56" height="60">
+   <properties>
+    <property name="typeItem" value="coin"/>
+    <property name="typeModelObject" value="Item"/>
+   </properties>
+  </object>
+  <object name="checkPoint" type="modelObject" x="3335" y="1088" width="56" height="60">
+   <properties>
+    <property name="typeModelObject" value="CheckPointObject"/>
+   </properties>
+  </object>
+ </objectgroup>
+</map>

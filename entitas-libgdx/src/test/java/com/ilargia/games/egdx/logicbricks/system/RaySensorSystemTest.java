@@ -10,8 +10,7 @@ import com.ilargia.games.egdx.logicbricks.data.Axis2D;
 import com.ilargia.games.egdx.logicbricks.gen.Entitas;
 import com.ilargia.games.egdx.logicbricks.gen.game.GameEntity;
 import com.ilargia.games.egdx.logicbricks.gen.sensor.SensorEntity;
-import com.ilargia.games.egdx.logicbricks.index.SimpleGameIndex;
-import com.ilargia.games.egdx.logicbricks.system.sensor.IndexingLinkSensorSystem;
+import com.ilargia.games.egdx.logicbricks.system.sensor.IndexingSystem;
 import com.ilargia.games.egdx.logicbricks.system.sensor.RaySensorSystem;
 import com.ilargia.games.entitas.factories.CollectionsFactories;
 import com.ilargia.games.entitas.factories.EntitasCollections;
@@ -29,7 +28,7 @@ public class RaySensorSystemTest {
     Entitas entitas;
     private EntitasCollections collections;
     private RaySensorSystem raySensorSystem;
-    private IndexingLinkSensorSystem linkSensorSystem;
+    private IndexingSystem linkSensorSystem;
     private SensorEntity sensorEntity;
     private SensorEntity sensorEntity2;
     private GameEntity boss;
@@ -48,20 +47,18 @@ public class RaySensorSystemTest {
         when(body.getPosition()).thenReturn(new Vector2());
 
         this.raySensorSystem = new RaySensorSystem(entitas, world);
-        this.linkSensorSystem = new IndexingLinkSensorSystem(entitas);
-        SimpleGameIndex.createGameEntityIndices(entitas.game);
-        linkSensorSystem.activate();
+        this.linkSensorSystem = new IndexingSystem(entitas);
 
         boss = entitas.game.createEntity()
-                .addIdentity("Enemy", "Boss")
+                .addTags("Enemy", "Boss")
                 .addRigidBody(body);
 
         groundEntity = entitas.game.createEntity()
-                .addIdentity("Ground", "Ground")
+                .addTags("Ground", "Ground")
                 .addRigidBody(body);
 
         playerEntity = entitas.game.createEntity()
-                .addIdentity("Player", "Player1")
+                .addTags("Player", "Player1")
                 .addRigidBody(body);
 
         sensorEntity = entitas.sensor.createEntity()
@@ -75,9 +72,6 @@ public class RaySensorSystemTest {
         sensorEntity4 = entitas.sensor.createEntity()
                 .addRaySensor("Ground", Axis2D.Xnegative, 1, false)
                 .addLink(boss.getCreationIndex());
-
-        linkSensorSystem.execute(1);
-
 
     }
 

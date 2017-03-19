@@ -13,8 +13,10 @@ public class SensorMatcher {
 	private static Matcher _matcherCollisionSensor;
 	private static Matcher _matcherDelaySensor;
 	private static Matcher _matcherFrequency;
+	private static Matcher _matcherKeyboardSensor;
 	private static Matcher _matcherLink;
 	private static Matcher _matcherMode;
+	private static Matcher _matcherMouseSensor;
 	private static Matcher _matcherNearSensor;
 	private static Matcher _matcherRadarSensor;
 	private static Matcher _matcherRaySensor;
@@ -59,6 +61,16 @@ public class SensorMatcher {
 		return _matcherFrequency;
 	}
 
+	public static Matcher KeyboardSensor() {
+		if (_matcherKeyboardSensor == null) {
+			Matcher matcher = (Matcher) Matcher
+					.AllOf(SensorComponentsLookup.KeyboardSensor);
+			matcher.componentNames = SensorComponentsLookup.componentNames();
+			_matcherKeyboardSensor = matcher;
+		}
+		return _matcherKeyboardSensor;
+	}
+
 	public static Matcher Link() {
 		if (_matcherLink == null) {
 			Matcher matcher = (Matcher) Matcher
@@ -77,6 +89,16 @@ public class SensorMatcher {
 			_matcherMode = matcher;
 		}
 		return _matcherMode;
+	}
+
+	public static Matcher MouseSensor() {
+		if (_matcherMouseSensor == null) {
+			Matcher matcher = (Matcher) Matcher
+					.AllOf(SensorComponentsLookup.MouseSensor);
+			matcher.componentNames = SensorComponentsLookup.componentNames();
+			_matcherMouseSensor = matcher;
+		}
+		return _matcherMouseSensor;
 	}
 
 	public static Matcher NearSensor() {
