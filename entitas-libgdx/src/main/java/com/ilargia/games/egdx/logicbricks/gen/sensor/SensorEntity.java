@@ -16,9 +16,11 @@ import com.ilargia.games.egdx.logicbricks.component.sensor.KeyboardSensor;
 import com.badlogic.gdx.Input;
 import com.ilargia.games.egdx.logicbricks.component.sensor.Link;
 import com.ilargia.games.egdx.logicbricks.component.sensor.Mode;
-import com.ilargia.games.egdx.logicbricks.component.sensor.MouseSensor.MouseEvent;
-import com.ilargia.games.egdx.logicbricks.component.sensor.MouseSensor;
+import com.ilargia.games.egdx.logicbricks.component.sensor.MouseButtonSensor.MouseButton;
+import com.ilargia.games.egdx.logicbricks.component.sensor.MouseButtonSensor;
 import com.badlogic.gdx.math.Vector2;
+import com.ilargia.games.egdx.logicbricks.component.sensor.MouseOverSensor;
+import com.ilargia.games.egdx.logicbricks.component.sensor.MouseWheelSensor;
 import com.ilargia.games.egdx.logicbricks.component.sensor.NearSensor;
 import com.ilargia.games.egdx.logicbricks.component.sensor.RadarSensor;
 import com.ilargia.games.egdx.logicbricks.data.Axis2D;
@@ -280,46 +282,114 @@ public class SensorEntity extends Entity {
 		return this;
 	}
 
-	public MouseSensor getMouseSensor() {
-		return (MouseSensor) getComponent(SensorComponentsLookup.MouseSensor);
+	public MouseButtonSensor getMouseButtonSensor() {
+		return (MouseButtonSensor) getComponent(SensorComponentsLookup.MouseButtonSensor);
 	}
 
-	public boolean hasMouseSensor() {
-		return hasComponent(SensorComponentsLookup.MouseSensor);
+	public boolean hasMouseButtonSensor() {
+		return hasComponent(SensorComponentsLookup.MouseButtonSensor);
 	}
 
-	public SensorEntity addMouseSensor(MouseEvent event, String targetTag) {
-		MouseSensor component = (MouseSensor) recoverComponent(SensorComponentsLookup.MouseSensor);
+	public SensorEntity addMouseButtonSensor(MouseButton event) {
+		MouseButtonSensor component = (MouseButtonSensor) recoverComponent(SensorComponentsLookup.MouseButtonSensor);
 		if (component == null) {
-			component = new MouseSensor(event, targetTag);
+			component = new MouseButtonSensor(event);
 		} else {
 			component.mouseEvent = event;
-			component.targetTag = targetTag;
-			component.positionSignal = new Vector2();
-			component.amountScrollSignal = 0;
 			component.mouseEventSignal = null;
 		}
-		addComponent(SensorComponentsLookup.MouseSensor, component);
+		addComponent(SensorComponentsLookup.MouseButtonSensor, component);
 		return this;
 	}
 
-	public SensorEntity replaceMouseSensor(MouseEvent event, String targetTag) {
-		MouseSensor component = (MouseSensor) recoverComponent(SensorComponentsLookup.MouseSensor);
+	public SensorEntity replaceMouseButtonSensor(MouseButton event) {
+		MouseButtonSensor component = (MouseButtonSensor) recoverComponent(SensorComponentsLookup.MouseButtonSensor);
 		if (component == null) {
-			component = new MouseSensor(event, targetTag);
+			component = new MouseButtonSensor(event);
 		} else {
 			component.mouseEvent = event;
-			component.targetTag = targetTag;
-			component.positionSignal = new Vector2();
-			component.amountScrollSignal = 0;
 			component.mouseEventSignal = null;
 		}
-		replaceComponent(SensorComponentsLookup.MouseSensor, component);
+		replaceComponent(SensorComponentsLookup.MouseButtonSensor, component);
 		return this;
 	}
 
-	public SensorEntity removeMouseSensor() {
-		removeComponent(SensorComponentsLookup.MouseSensor);
+	public SensorEntity removeMouseButtonSensor() {
+		removeComponent(SensorComponentsLookup.MouseButtonSensor);
+		return this;
+	}
+
+	public MouseOverSensor getMouseOverSensor() {
+		return (MouseOverSensor) getComponent(SensorComponentsLookup.MouseOverSensor);
+	}
+
+	public boolean hasMouseOverSensor() {
+		return hasComponent(SensorComponentsLookup.MouseOverSensor);
+	}
+
+	public SensorEntity addMouseOverSensor(String targetTag) {
+		MouseOverSensor component = (MouseOverSensor) recoverComponent(SensorComponentsLookup.MouseOverSensor);
+		if (component == null) {
+			component = new MouseOverSensor(targetTag);
+		} else {
+			component.targetTag = targetTag;
+			component.positionSignal = new Vector2();
+		}
+		addComponent(SensorComponentsLookup.MouseOverSensor, component);
+		return this;
+	}
+
+	public SensorEntity replaceMouseOverSensor(String targetTag) {
+		MouseOverSensor component = (MouseOverSensor) recoverComponent(SensorComponentsLookup.MouseOverSensor);
+		if (component == null) {
+			component = new MouseOverSensor(targetTag);
+		} else {
+			component.targetTag = targetTag;
+			component.positionSignal = new Vector2();
+		}
+		replaceComponent(SensorComponentsLookup.MouseOverSensor, component);
+		return this;
+	}
+
+	public SensorEntity removeMouseOverSensor() {
+		removeComponent(SensorComponentsLookup.MouseOverSensor);
+		return this;
+	}
+
+	public MouseWheelSensor getMouseWheelSensor() {
+		return (MouseWheelSensor) getComponent(SensorComponentsLookup.MouseWheelSensor);
+	}
+
+	public boolean hasMouseWheelSensor() {
+		return hasComponent(SensorComponentsLookup.MouseWheelSensor);
+	}
+
+	public SensorEntity addMouseWheelSensor(int amountScroll,
+			boolean scrollSignal) {
+		MouseWheelSensor component = (MouseWheelSensor) recoverComponent(SensorComponentsLookup.MouseWheelSensor);
+		if (component == null) {
+			component = new MouseWheelSensor();
+		}
+		component.amountScroll = amountScroll;
+		component.scrollSignal = scrollSignal;
+		addComponent(SensorComponentsLookup.MouseWheelSensor, component);
+		return this;
+	}
+
+	public SensorEntity replaceMouseWheelSensor(int amountScroll,
+			boolean scrollSignal) {
+		MouseWheelSensor component = (MouseWheelSensor) recoverComponent(SensorComponentsLookup.MouseWheelSensor);
+		if (component == null) {
+			component = new MouseWheelSensor();
+		}
+		component.amountScroll = amountScroll;
+		component.scrollSignal = scrollSignal;
+		replaceComponent(SensorComponentsLookup.MouseWheelSensor, component);
+		return this;
+	}
+
+	public SensorEntity removeMouseWheelSensor() {
+		removeComponent(SensorComponentsLookup.MouseWheelSensor);
 		return this;
 	}
 

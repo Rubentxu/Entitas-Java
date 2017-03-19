@@ -8,6 +8,7 @@ import com.examples.games.scenes.SceneManagerExamples;
 import com.ilargia.games.egdx.impl.GameStateGDX;
 import com.ilargia.games.egdx.impl.managers.PhysicsManagerGDX;
 import com.ilargia.games.egdx.logicbricks.gen.Entitas;
+import com.ilargia.games.egdx.logicbricks.index.Indexed;
 import com.ilargia.games.egdx.logicbricks.system.game.AnimationSystem;
 import com.ilargia.games.egdx.logicbricks.system.game.RigidBodySystem;
 import com.ilargia.games.egdx.logicbricks.system.render.DebugRendererSystem;
@@ -36,13 +37,13 @@ public class PlatformExampleState extends GameStateGDX {
 
     @Override
     public void initialize() {
+        Indexed.initialize(entitas);
         entitas.scene.setCamera((OrthographicCamera) engine.getManager(SceneManagerExamples.class).getDefaultCamera());
 
         systems.add(new CollisionSensorSystem(entitas))
                 .add(new CreateNearSensorSystem(entitas, engine))
                 .add(new CreateRadarSensorSystem(entitas, engine))
                 .add(new DelaySensorSystem(entitas))
-                .add(new IndexingSystem(entitas))
                 .add(new NearSensorSystem(entitas))
                 .add(new RadarSensorSystem(entitas))
                 .add(new RaySensorSystem(entitas, engine.getManager(PhysicsManagerGDX.class).getPhysics()))

@@ -16,7 +16,9 @@ public class SensorMatcher {
 	private static Matcher _matcherKeyboardSensor;
 	private static Matcher _matcherLink;
 	private static Matcher _matcherMode;
-	private static Matcher _matcherMouseSensor;
+	private static Matcher _matcherMouseButtonSensor;
+	private static Matcher _matcherMouseOverSensor;
+	private static Matcher _matcherMouseWheelSensor;
 	private static Matcher _matcherNearSensor;
 	private static Matcher _matcherRadarSensor;
 	private static Matcher _matcherRaySensor;
@@ -91,14 +93,34 @@ public class SensorMatcher {
 		return _matcherMode;
 	}
 
-	public static Matcher MouseSensor() {
-		if (_matcherMouseSensor == null) {
+	public static Matcher MouseButtonSensor() {
+		if (_matcherMouseButtonSensor == null) {
 			Matcher matcher = (Matcher) Matcher
-					.AllOf(SensorComponentsLookup.MouseSensor);
+					.AllOf(SensorComponentsLookup.MouseButtonSensor);
 			matcher.componentNames = SensorComponentsLookup.componentNames();
-			_matcherMouseSensor = matcher;
+			_matcherMouseButtonSensor = matcher;
 		}
-		return _matcherMouseSensor;
+		return _matcherMouseButtonSensor;
+	}
+
+	public static Matcher MouseOverSensor() {
+		if (_matcherMouseOverSensor == null) {
+			Matcher matcher = (Matcher) Matcher
+					.AllOf(SensorComponentsLookup.MouseOverSensor);
+			matcher.componentNames = SensorComponentsLookup.componentNames();
+			_matcherMouseOverSensor = matcher;
+		}
+		return _matcherMouseOverSensor;
+	}
+
+	public static Matcher MouseWheelSensor() {
+		if (_matcherMouseWheelSensor == null) {
+			Matcher matcher = (Matcher) Matcher
+					.AllOf(SensorComponentsLookup.MouseWheelSensor);
+			matcher.componentNames = SensorComponentsLookup.componentNames();
+			_matcherMouseWheelSensor = matcher;
+		}
+		return _matcherMouseWheelSensor;
 	}
 
 	public static Matcher NearSensor() {

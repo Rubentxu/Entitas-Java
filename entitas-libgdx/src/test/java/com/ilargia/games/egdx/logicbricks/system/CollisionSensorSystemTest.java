@@ -7,10 +7,8 @@ import com.ilargia.games.egdx.logicbricks.gen.game.GameEntity;
 import com.ilargia.games.egdx.logicbricks.gen.sensor.SensorEntity;
 import com.ilargia.games.egdx.logicbricks.index.Indexed;
 import com.ilargia.games.egdx.logicbricks.system.sensor.CollisionSensorSystem;
-import com.ilargia.games.egdx.logicbricks.system.sensor.IndexingSystem;
 import com.ilargia.games.entitas.factories.CollectionsFactories;
 import com.ilargia.games.entitas.factories.EntitasCollections;
-import com.ilargia.games.entitas.index.EntityIndex;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -21,7 +19,6 @@ public class CollisionSensorSystemTest {
     Entitas entitas;
     private EntitasCollections collections;
     private CollisionSensorSystem collisionSensorSystem;
-    private IndexingSystem linkSensorSystem;
     private SensorEntity sensorEntity;
     private SensorEntity sensorEntity2;
     private GameEntity boss;
@@ -34,16 +31,20 @@ public class CollisionSensorSystemTest {
         collections = new EntitasCollections(new CollectionsFactories() {});
         entitas = new Entitas();
         this.collisionSensorSystem = new CollisionSensorSystem(entitas);
-        this.linkSensorSystem = new IndexingSystem(entitas);
+        Indexed.initialize(entitas);
+
 
         boss = entitas.game.createEntity()
-                .addTags("Enemy","Boss");
+                .addTags("Enemy","Boss")
+                .setInteractive(true);
 
         groundEntity = entitas.game.createEntity()
-                .addTags("Ground","Ground");
+                .addTags("Ground","Ground")
+                .setInteractive(true);
 
         playerEntity = entitas.game.createEntity()
-                .addTags("Player","Player1");
+                .addTags("Player","Player1")
+                .setInteractive(true);
 
         sensorEntity = entitas.sensor.createEntity()
                 .addCollisionSensor("Boss")
@@ -72,7 +73,7 @@ public class CollisionSensorSystemTest {
         assertTrue(link.isChanged);
 
         assertEquals(2, Indexed.getSensorsEntities(playerEntity).size());
-        assertEquals( 1, Indexed.getEntitiesInSensor(sensorEntity.getCreationIndex()).size());
+        assertEquals( 1, Indexed.getEntitiesInSensor(sensorEntity).size());
 
         collisionSensorSystem.execute( 0.5F);
         assertTrue(link.pulse);
@@ -88,8 +89,8 @@ public class CollisionSensorSystemTest {
                 .addCollisionSensor("Ground")
                 .addLink(playerEntity.getCreationIndex());
 
-        assertEquals(3, eIndex.getEntities(playerEntity.getCreationIndex()).size());
-        assertEquals(0, gameIndex.getEntities(sensorEntity.getCreationIndex()).size());
+        assertEquals(3, Indexed.getSensorsEntities(playerEntity).size());
+        assertEquals(0, Indexed.getEntitiesInSensor(sensorEntity).size());
 
         collisionSensorSystem.execute( 0.5F);
         assertFalse(link.pulse);
@@ -101,8 +102,8 @@ public class CollisionSensorSystemTest {
         assertFalse(link.pulse);
         assertFalse(link.isOpen);
         assertFalse(link.isChanged);
-        assertEquals(3, eIndex.getEntities(playerEntity.getCreationIndex()).size());
-        assertEquals(0, gameIndex.getEntities(sensorEntity.getCreationIndex()).size());
+        assertEquals(3, Indexed.getSensorsEntities(playerEntity).size());
+        assertEquals(0, Indexed.getEntitiesInSensor(sensorEntity).size());
 
         collisionSensorSystem.execute( 0.5F);
         assertFalse(link.pulse);

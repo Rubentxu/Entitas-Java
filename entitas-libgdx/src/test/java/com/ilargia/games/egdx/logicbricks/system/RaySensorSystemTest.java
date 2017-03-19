@@ -10,7 +10,7 @@ import com.ilargia.games.egdx.logicbricks.data.Axis2D;
 import com.ilargia.games.egdx.logicbricks.gen.Entitas;
 import com.ilargia.games.egdx.logicbricks.gen.game.GameEntity;
 import com.ilargia.games.egdx.logicbricks.gen.sensor.SensorEntity;
-import com.ilargia.games.egdx.logicbricks.system.sensor.IndexingSystem;
+import com.ilargia.games.egdx.logicbricks.index.Indexed;
 import com.ilargia.games.egdx.logicbricks.system.sensor.RaySensorSystem;
 import com.ilargia.games.entitas.factories.CollectionsFactories;
 import com.ilargia.games.entitas.factories.EntitasCollections;
@@ -21,6 +21,7 @@ import org.mockito.Mockito;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 
 
@@ -28,7 +29,6 @@ public class RaySensorSystemTest {
     Entitas entitas;
     private EntitasCollections collections;
     private RaySensorSystem raySensorSystem;
-    private IndexingSystem linkSensorSystem;
     private SensorEntity sensorEntity;
     private SensorEntity sensorEntity2;
     private GameEntity boss;
@@ -47,19 +47,22 @@ public class RaySensorSystemTest {
         when(body.getPosition()).thenReturn(new Vector2());
 
         this.raySensorSystem = new RaySensorSystem(entitas, world);
-        this.linkSensorSystem = new IndexingSystem(entitas);
+        Indexed.initialize(entitas);
 
         boss = entitas.game.createEntity()
                 .addTags("Enemy", "Boss")
-                .addRigidBody(body);
+                .addRigidBody(body)
+                .setInteractive(true);
 
         groundEntity = entitas.game.createEntity()
                 .addTags("Ground", "Ground")
-                .addRigidBody(body);
+                .addRigidBody(body)
+                .setInteractive(true);
 
         playerEntity = entitas.game.createEntity()
                 .addTags("Player", "Player1")
-                .addRigidBody(body);
+                .addRigidBody(body)
+                .setInteractive(true);
 
         sensorEntity = entitas.sensor.createEntity()
                 .addRaySensor("Boss", Axis2D.Xnegative, 1, false)
@@ -78,8 +81,6 @@ public class RaySensorSystemTest {
 
     @Test
     public void queryTrue() {
-        EntityIndex<SensorEntity, Integer> eIndex = (EntityIndex<SensorEntity, Integer>) entitas.sensor.getEntityIndex("Sensors");
-        EntityIndex<GameEntity, Integer> gameIndex = (EntityIndex<GameEntity, Integer>) entitas.game.getEntityIndex("GameEntities");
         world.setIndexEntity(boss.getCreationIndex());
         raySensorSystem.execute(0.5F);
         Link link = sensorEntity.getLink();

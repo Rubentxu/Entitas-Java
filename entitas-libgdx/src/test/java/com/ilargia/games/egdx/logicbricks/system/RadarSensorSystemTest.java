@@ -6,7 +6,7 @@ import com.ilargia.games.egdx.logicbricks.data.Axis2D;
 import com.ilargia.games.egdx.logicbricks.gen.Entitas;
 import com.ilargia.games.egdx.logicbricks.gen.game.GameEntity;
 import com.ilargia.games.egdx.logicbricks.gen.sensor.SensorEntity;
-import com.ilargia.games.egdx.logicbricks.system.sensor.IndexingSystem;
+import com.ilargia.games.egdx.logicbricks.index.Indexed;
 import com.ilargia.games.egdx.logicbricks.system.sensor.RadarSensorSystem;
 import com.ilargia.games.entitas.factories.CollectionsFactories;
 import com.ilargia.games.entitas.factories.EntitasCollections;
@@ -21,7 +21,6 @@ public class RadarSensorSystemTest {
     Entitas entitas;
     private EntitasCollections collections;
     private RadarSensorSystem radarSensorSystem;
-    private IndexingSystem linkSensorSystem;
     private SensorEntity sensorEntity;
     private SensorEntity sensorEntity2;
     private GameEntity boss;
@@ -34,16 +33,19 @@ public class RadarSensorSystemTest {
         collections = new EntitasCollections(new CollectionsFactories() {});
         entitas = new Entitas();
         this.radarSensorSystem = new RadarSensorSystem(entitas);
-        this.linkSensorSystem = new IndexingSystem(entitas);
+        Indexed.initialize(entitas);
 
         boss = entitas.game.createEntity()
-                .addTags("Enemy","Boss");
+                .addTags("Enemy","Boss")
+                .setInteractive(true);
 
         groundEntity = entitas.game.createEntity()
-                .addTags("Ground","Ground");
+                .addTags("Ground","Ground")
+                .setInteractive(true);
 
         playerEntity = entitas.game.createEntity()
-                .addTags("Player","Player1");
+                .addTags("Player","Player1")
+                .setInteractive(true);
 
         sensorEntity = entitas.sensor.createEntity()
                 .addRadarSensor("Boss", Axis2D.Xnegative, 1,1)
@@ -64,8 +66,6 @@ public class RadarSensorSystemTest {
 
     @Test
     public void queryTrue() {
-        EntityIndex<SensorEntity, Integer> eIndex = (EntityIndex<SensorEntity, Integer>)entitas.sensor.getEntityIndex("Sensors");
-        EntityIndex<GameEntity, Integer> gameIndex = (EntityIndex<GameEntity, Integer>) entitas.game.getEntityIndex("GameEntities");
         radarSensorSystem.processSensorCollision(playerEntity.getCreationIndex(), boss.getCreationIndex(), "RadarSensor", true);
         radarSensorSystem.execute( 0.5F);
         Link link = sensorEntity.getLink();
@@ -74,8 +74,8 @@ public class RadarSensorSystemTest {
         assertTrue(link.isOpen);
         assertTrue(link.isChanged);
 
-        assertEquals(2, eIndex.getEntities(playerEntity.getCreationIndex()).size());
-        assertEquals( 1, gameIndex.getEntities(sensorEntity.getCreationIndex()).size());
+        assertEquals(2, Indexed.getSensorsEntities(playerEntity).size());
+        assertEquals( 1, Indexed.getEntitiesInSensor(sensorEntity).size());
 
         radarSensorSystem.execute( 0.5F);
         assertTrue(link.pulse);
@@ -91,8 +91,8 @@ public class RadarSensorSystemTest {
                 .addRadarSensor("Ground", Axis2D.Xnegative, 1,1)
                 .addLink(playerEntity.getCreationIndex());
 
-        assertEquals(3, eIndex.getEntities(playerEntity.getCreationIndex()).size());
-        assertEquals(0, gameIndex.getEntities(sensorEntity.getCreationIndex()).size());
+        assertEquals(3, Indexed.getSensorsEntities(playerEntity).size());
+        assertEquals(0, Indexed.getEntitiesInSensor(sensorEntity).size());
 
         radarSensorSystem.execute( 0.5F);
         assertFalse(link.pulse);
@@ -104,8 +104,8 @@ public class RadarSensorSystemTest {
         assertFalse(link.pulse);
         assertFalse(link.isOpen);
         assertFalse(link.isChanged);
-        assertEquals(3, eIndex.getEntities(playerEntity.getCreationIndex()).size());
-        assertEquals(0, gameIndex.getEntities(sensorEntity.getCreationIndex()).size());
+        assertEquals(3, Indexed.getSensorsEntities(playerEntity).size());
+        assertEquals(0, Indexed.getEntitiesInSensor(sensorEntity).size());
 
         radarSensorSystem.execute( 0.5F);
         assertFalse(link.pulse);

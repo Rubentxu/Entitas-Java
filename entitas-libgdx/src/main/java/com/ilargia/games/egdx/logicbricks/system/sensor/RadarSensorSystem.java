@@ -50,14 +50,16 @@ public class RadarSensorSystem extends SensorSystem implements Collision {
             GameEntity entityB =  Indexed.getInteractiveEntity(indexEntityB);
             if (entityA != null && entityB != null) {
                 for (SensorEntity entity :  Indexed.getSensorsEntities(entityA)) {
-                    RadarSensor radar = entity.getRadarSensor();
-                    if (entityB.getTags().values.contains(radar.targetTag)) {
-                        if (collisionSignal) {
-                            Indexed.addEntityInSensor(entity, entityB);
-                        } else {
-                            Indexed.removeEntityInSensor(entity, entityB);
+                    if(entity.hasRadarSensor()) {
+                        RadarSensor radar = entity.getRadarSensor();
+                        if (entityB.getTags().values.contains(radar.targetTag)) {
+                            if (collisionSignal) {
+                                Indexed.addEntityInSensor(entity, entityB);
+                            } else {
+                                Indexed.removeEntityInSensor(entity, entityB);
+                            }
+                            radar.collisionSignal = collisionSignal;
                         }
-                        radar.collisionSignal = collisionSignal;
                     }
                 }
             }

@@ -53,7 +53,7 @@ public class Entitas implements IContexts {
 	}
 
 	public GameContext createGameContext() {
-		return new GameContext(GameComponentsLookup.totalComponents, 1000,
+		return new GameContext(GameComponentsLookup.totalComponents, 0,
 				new ContextInfo("Game", GameComponentsLookup.componentNames(),
 						GameComponentsLookup.componentTypes()),
 				factoryGameEntity());

@@ -1,8 +1,17 @@
 package com.ilargia.games.egdx.impl;
 
 
+import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.ilargia.games.egdx.api.Engine;
 import com.ilargia.games.egdx.api.managers.Manager;
+import com.ilargia.games.egdx.api.managers.PhysicsManager;
+import com.ilargia.games.egdx.impl.managers.PhysicsManagerGDX;
+import com.ilargia.games.egdx.impl.managers.SceneManagerGDX;
+import com.ilargia.games.egdx.util.BodyBuilder;
 import com.ilargia.games.entitas.api.IContext;
 import com.ilargia.games.entitas.api.IContexts;
 import com.ilargia.games.entitas.factories.CollectionsFactories;
@@ -43,9 +52,25 @@ public class EngineGDX implements Engine, IContexts {
         return this;
     }
 
-
     @Override
     public IContext[] allContexts() {
         return new IContext[0];
     }
+
+    public World getPhysics() {
+        return getManager(PhysicsManagerGDX.class).getPhysics();
+    }
+
+    public BodyBuilder getBodyBuilder() {
+        return getManager(PhysicsManagerGDX.class).getBodyBuilder();
+    }
+
+    public Batch getBatch() {
+        return getManager(SceneManagerGDX.class).getBatch();
+    }
+
+    public Camera getCamera() {
+        return getManager(SceneManagerGDX.class).getDefaultCamera();
+    }
+
 }
