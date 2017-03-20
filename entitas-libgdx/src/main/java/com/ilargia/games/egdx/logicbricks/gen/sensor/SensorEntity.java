@@ -12,14 +12,10 @@ import com.ilargia.games.entitas.factories.EntitasCollections;
 import java.util.Set;
 import com.ilargia.games.egdx.logicbricks.component.sensor.DelaySensor;
 import com.ilargia.games.egdx.logicbricks.component.sensor.Frequency;
-import com.ilargia.games.egdx.logicbricks.component.sensor.KeyboardSensor;
-import com.badlogic.gdx.Input;
 import com.ilargia.games.egdx.logicbricks.component.sensor.Link;
 import com.ilargia.games.egdx.logicbricks.component.sensor.Mode;
-import com.ilargia.games.egdx.logicbricks.component.sensor.MouseButtonSensor.MouseButton;
-import com.ilargia.games.egdx.logicbricks.component.sensor.MouseButtonSensor;
-import com.badlogic.gdx.math.Vector2;
 import com.ilargia.games.egdx.logicbricks.component.sensor.MouseOverSensor;
+import com.badlogic.gdx.math.Vector2;
 import com.ilargia.games.egdx.logicbricks.component.sensor.MouseWheelSensor;
 import com.ilargia.games.egdx.logicbricks.component.sensor.NearSensor;
 import com.ilargia.games.egdx.logicbricks.component.sensor.RadarSensor;
@@ -169,45 +165,6 @@ public class SensorEntity extends Entity {
 		return this;
 	}
 
-	public KeyboardSensor getKeyboardSensor() {
-		return (KeyboardSensor) getComponent(SensorComponentsLookup.KeyboardSensor);
-	}
-
-	public boolean hasKeyboardSensor() {
-		return hasComponent(SensorComponentsLookup.KeyboardSensor);
-	}
-
-	public SensorEntity addKeyboardSensor(int keyCode) {
-		KeyboardSensor component = (KeyboardSensor) recoverComponent(SensorComponentsLookup.KeyboardSensor);
-		if (component == null) {
-			component = new KeyboardSensor(keyCode);
-		} else {
-			component.keyCode = keyCode;
-			component.keysCodeSignal = EntitasCollections
-					.createSet(Integer.class);
-		}
-		addComponent(SensorComponentsLookup.KeyboardSensor, component);
-		return this;
-	}
-
-	public SensorEntity replaceKeyboardSensor(int keyCode) {
-		KeyboardSensor component = (KeyboardSensor) recoverComponent(SensorComponentsLookup.KeyboardSensor);
-		if (component == null) {
-			component = new KeyboardSensor(keyCode);
-		} else {
-			component.keyCode = keyCode;
-			component.keysCodeSignal = EntitasCollections
-					.createSet(Integer.class);
-		}
-		replaceComponent(SensorComponentsLookup.KeyboardSensor, component);
-		return this;
-	}
-
-	public SensorEntity removeKeyboardSensor() {
-		removeComponent(SensorComponentsLookup.KeyboardSensor);
-		return this;
-	}
-
 	public Link getLink() {
 		return (Link) getComponent(SensorComponentsLookup.Link);
 	}
@@ -279,43 +236,6 @@ public class SensorEntity extends Entity {
 
 	public SensorEntity removeMode() {
 		removeComponent(SensorComponentsLookup.Mode);
-		return this;
-	}
-
-	public MouseButtonSensor getMouseButtonSensor() {
-		return (MouseButtonSensor) getComponent(SensorComponentsLookup.MouseButtonSensor);
-	}
-
-	public boolean hasMouseButtonSensor() {
-		return hasComponent(SensorComponentsLookup.MouseButtonSensor);
-	}
-
-	public SensorEntity addMouseButtonSensor(MouseButton event) {
-		MouseButtonSensor component = (MouseButtonSensor) recoverComponent(SensorComponentsLookup.MouseButtonSensor);
-		if (component == null) {
-			component = new MouseButtonSensor(event);
-		} else {
-			component.mouseEvent = event;
-			component.mouseEventSignal = null;
-		}
-		addComponent(SensorComponentsLookup.MouseButtonSensor, component);
-		return this;
-	}
-
-	public SensorEntity replaceMouseButtonSensor(MouseButton event) {
-		MouseButtonSensor component = (MouseButtonSensor) recoverComponent(SensorComponentsLookup.MouseButtonSensor);
-		if (component == null) {
-			component = new MouseButtonSensor(event);
-		} else {
-			component.mouseEvent = event;
-			component.mouseEventSignal = null;
-		}
-		replaceComponent(SensorComponentsLookup.MouseButtonSensor, component);
-		return this;
-	}
-
-	public SensorEntity removeMouseButtonSensor() {
-		removeComponent(SensorComponentsLookup.MouseButtonSensor);
 		return this;
 	}
 

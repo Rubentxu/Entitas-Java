@@ -30,13 +30,16 @@ public class EngineGDX implements Engine, IContexts {
     }
 
     @Override
-    public void dispose() {
+    public void initialize() {
         for (Manager manager : _managers.values()) {
-            manager.dispose();
+            manager.initialize();
         }
-        _managers.clear();
-        _managers = null;
+    }
 
+    @Override
+    public <M extends Manager> Engine addManager(M manager) {
+        _managers.put(manager.getClass(), manager);
+        return this;
     }
 
     @Override
@@ -46,15 +49,18 @@ public class EngineGDX implements Engine, IContexts {
     }
 
     @Override
-    public <M extends Manager> Engine addManager(M manager) {
-        manager.initialize();
-        _managers.put(manager.getClass(), manager);
-        return this;
+    public IContext[] allContexts() {
+        return new IContext[0];
     }
 
     @Override
-    public IContext[] allContexts() {
-        return new IContext[0];
+    public void dispose() {
+        for (Manager manager : _managers.values()) {
+            manager.dispose();
+        }
+        _managers.clear();
+        _managers = null;
+
     }
 
     public World getPhysics() {

@@ -1,6 +1,7 @@
 package com.ilargia.games.egdx.api.managers;
 
-import com.ilargia.games.egdx.api.EntityFactory;
+import com.ilargia.games.egdx.api.factories.EntityFactory;
+import com.ilargia.games.egdx.api.factories.SceneFactory;
 import com.ilargia.games.entitas.Entity;
 
 public interface SceneManager extends Manager {
@@ -16,6 +17,8 @@ public interface SceneManager extends Manager {
     <C> C getDefaultCamera();
 
     <B> B getBatch();
+
+    void addSceneFactory(String name, SceneFactory factory);
 
     void createScene(String scene);
 

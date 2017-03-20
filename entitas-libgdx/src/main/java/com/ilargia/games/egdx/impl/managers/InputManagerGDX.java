@@ -5,25 +5,34 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.ilargia.games.egdx.api.GameController;
 import com.ilargia.games.egdx.api.managers.InputManager;
 import com.ilargia.games.egdx.impl.EngineGDX;
+import com.ilargia.games.egdx.logicbricks.gen.Entitas;
 import com.ilargia.games.entitas.api.EntitasException;
+import com.ilargia.games.entitas.factories.EntitasCollections;
+
+import java.util.List;
 
 public class InputManagerGDX implements InputManager, InputProcessor {
 
     private final EngineGDX engine;
+    private final Entitas entitas;
     public KeyState[] keyStates;
     public TouchState[] touchStates;
+    private List<GameController> controllers;
     private PreferencesManagerGDX preferences;
     private Camera camera;
     private Vector3 worldCoordinates;
     private boolean mouse;
 
-    public InputManagerGDX(EngineGDX engine) {
+    public InputManagerGDX(Entitas entitas, EngineGDX engine) {
         this.engine = engine;
-        keyStates = new KeyState[255];
+        this.entitas = entitas;
+        keyStates = new KeyState[256];
         touchStates = new TouchState[5];
         worldCoordinates = new Vector3(0, 0, 0);
+        controllers = EntitasCollections.createList(InputManagerGDX.class);
      
         switch (Gdx.app.getType()) {
             case Android:
@@ -73,6 +82,11 @@ public class InputManagerGDX implements InputManager, InputProcessor {
     }
 
     @Override
+    public void addController(GameController gameController) {
+        controllers.add(gameController);
+    }
+
+    @Override
     public boolean isKeyPressed(int key) {
         return keyStates[key].pressed;
     }
@@ -119,6 +133,9 @@ public class InputManagerGDX implements InputManager, InputProcessor {
     }
 
     public void update() {
+        for (GameController controller : controllers) {
+            controller.update(this, entitas);
+        }
         //for every keystate, set pressed and released to false.
         for (int i = 0; i < 256; i++) {
             KeyState k = keyStates[i];

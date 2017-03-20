@@ -3,6 +3,7 @@ package com.ilargia.games.egdx.logicbricks.gen.game;
 import com.ilargia.games.egdx.logicbricks.component.game.Animations;
 import com.ilargia.games.egdx.logicbricks.component.game.Character;
 import com.ilargia.games.egdx.logicbricks.component.game.Destroy;
+import com.ilargia.games.egdx.logicbricks.component.game.InputController;
 import com.ilargia.games.egdx.logicbricks.component.game.Interactive;
 import com.ilargia.games.egdx.logicbricks.component.game.Movable;
 import com.ilargia.games.egdx.logicbricks.component.game.OnGround;
@@ -21,24 +22,26 @@ public class GameComponentsLookup {
 	public static final int Animations = 0;
 	public static final int Character = 1;
 	public static final int Destroy = 2;
-	public static final int Interactive = 3;
-	public static final int Movable = 4;
-	public static final int OnGround = 5;
-	public static final int Player = 6;
-	public static final int RigidBody = 7;
-	public static final int Tags = 8;
-	public static final int TextureView = 9;
-	public static final int totalComponents = 10;
+	public static final int InputController = 3;
+	public static final int Interactive = 4;
+	public static final int Movable = 5;
+	public static final int OnGround = 6;
+	public static final int Player = 7;
+	public static final int RigidBody = 8;
+	public static final int Tags = 9;
+	public static final int TextureView = 10;
+	public static final int totalComponents = 11;
 
 	public static String[] componentNames() {
 		return new String[]{"Animations", "Character", "Destroy",
-				"Interactive", "Movable", "OnGround", "Player", "RigidBody",
-				"Tags", "TextureView"};
+				"InputController", "Interactive", "Movable", "OnGround",
+				"Player", "RigidBody", "Tags", "TextureView"};
 	}
 
 	public static Class[] componentTypes() {
 		return new Class[]{Animations.class, Character.class, Destroy.class,
-				Interactive.class, Movable.class, OnGround.class, Player.class,
-				RigidBody.class, Tags.class, TextureView.class};
+				InputController.class, Interactive.class, Movable.class,
+				OnGround.class, Player.class, RigidBody.class, Tags.class,
+				TextureView.class};
 	}
 }

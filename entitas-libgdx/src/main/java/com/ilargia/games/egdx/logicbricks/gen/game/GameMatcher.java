@@ -12,6 +12,7 @@ public class GameMatcher {
 	private static Matcher _matcherAnimations;
 	private static Matcher _matcherCharacter;
 	private static Matcher _matcherDestroy;
+	private static Matcher _matcherInputController;
 	private static Matcher _matcherInteractive;
 	private static Matcher _matcherMovable;
 	private static Matcher _matcherOnGround;
@@ -48,6 +49,16 @@ public class GameMatcher {
 			_matcherDestroy = matcher;
 		}
 		return _matcherDestroy;
+	}
+
+	public static Matcher InputController() {
+		if (_matcherInputController == null) {
+			Matcher matcher = (Matcher) Matcher
+					.AllOf(GameComponentsLookup.InputController);
+			matcher.componentNames = GameComponentsLookup.componentNames();
+			_matcherInputController = matcher;
+		}
+		return _matcherInputController;
 	}
 
 	public static Matcher Interactive() {

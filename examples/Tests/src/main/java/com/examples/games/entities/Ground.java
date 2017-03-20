@@ -1,12 +1,9 @@
 package com.examples.games.entities;
 
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.ilargia.games.egdx.api.Engine;
-import com.ilargia.games.egdx.api.EntityFactory;
+import com.ilargia.games.egdx.api.factories.EntityFactory;
 import com.ilargia.games.egdx.impl.managers.AssetsManagerGDX;
 import com.ilargia.games.egdx.impl.managers.PhysicsManagerGDX;
-import com.ilargia.games.egdx.logicbricks.data.Bounds;
 import com.ilargia.games.egdx.logicbricks.gen.Entitas;
 import com.ilargia.games.egdx.logicbricks.gen.game.GameEntity;
 import com.ilargia.games.egdx.util.BodyBuilder;

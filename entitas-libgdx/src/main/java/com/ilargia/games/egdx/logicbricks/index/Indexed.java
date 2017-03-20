@@ -1,6 +1,5 @@
 package com.ilargia.games.egdx.logicbricks.index;
 
-import com.ilargia.games.egdx.logicbricks.component.sensor.MouseButtonSensor;
 import com.ilargia.games.egdx.logicbricks.gen.Entitas;
 import com.ilargia.games.egdx.logicbricks.gen.actuator.ActuatorEntity;
 import com.ilargia.games.egdx.logicbricks.gen.actuator.ActuatorMatcher;

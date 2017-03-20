@@ -2,19 +2,16 @@ package com.ilargia.games.egdx.logicbricks.gen;
 
 import com.ilargia.games.entitas.Context;
 import com.ilargia.games.entitas.api.*;
-import com.ilargia.games.egdx.logicbricks.gen.input.InputEntity;
 import com.ilargia.games.egdx.logicbricks.gen.game.GameEntity;
 import com.ilargia.games.egdx.logicbricks.gen.gui.GuiEntity;
 import com.ilargia.games.egdx.logicbricks.gen.scene.SceneEntity;
 import com.ilargia.games.egdx.logicbricks.gen.sensor.SensorEntity;
 import com.ilargia.games.egdx.logicbricks.gen.actuator.ActuatorEntity;
-import com.ilargia.games.egdx.logicbricks.gen.input.InputComponentsLookup;
 import com.ilargia.games.egdx.logicbricks.gen.game.GameComponentsLookup;
 import com.ilargia.games.egdx.logicbricks.gen.gui.GuiComponentsLookup;
 import com.ilargia.games.egdx.logicbricks.gen.scene.SceneComponentsLookup;
 import com.ilargia.games.egdx.logicbricks.gen.sensor.SensorComponentsLookup;
 import com.ilargia.games.egdx.logicbricks.gen.actuator.ActuatorComponentsLookup;
-import com.ilargia.games.egdx.logicbricks.gen.input.InputContext;
 import com.ilargia.games.egdx.logicbricks.gen.game.GameContext;
 import com.ilargia.games.egdx.logicbricks.gen.gui.GuiContext;
 import com.ilargia.games.egdx.logicbricks.gen.scene.SceneContext;
@@ -28,7 +25,6 @@ import com.ilargia.games.egdx.logicbricks.gen.actuator.ActuatorContext;
  */
 public class Entitas implements IContexts {
 
-	public InputContext input;
 	public GameContext game;
 	public GuiContext gui;
 	public SceneContext scene;
@@ -36,20 +32,11 @@ public class Entitas implements IContexts {
 	public ActuatorContext actuator;
 
 	public Entitas() {
-		input = createInputContext();
 		game = createGameContext();
 		gui = createGuiContext();
 		scene = createSceneContext();
 		sensor = createSensorContext();
 		actuator = createActuatorContext();
-	}
-
-	public InputContext createInputContext() {
-		return new InputContext(InputComponentsLookup.totalComponents, 0,
-				new ContextInfo("Input",
-						InputComponentsLookup.componentNames(),
-						InputComponentsLookup.componentTypes()),
-				factoryInputEntity());
 	}
 
 	public GameContext createGameContext() {
@@ -92,13 +79,7 @@ public class Entitas implements IContexts {
 
 	@Override
 	public Context[] allContexts() {
-		return new Context[]{input, game, gui, scene, sensor, actuator};
-	}
-
-	public EntityBaseFactory<InputEntity> factoryInputEntity() {
-		return () -> {
-			return new InputEntity();
-		};
+		return new Context[]{game, gui, scene, sensor, actuator};
 	}
 
 	public EntityBaseFactory<GameEntity> factoryGameEntity() {

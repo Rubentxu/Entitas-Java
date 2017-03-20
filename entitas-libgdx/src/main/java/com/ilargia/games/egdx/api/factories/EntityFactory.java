@@ -1,5 +1,6 @@
-package com.ilargia.games.egdx.api;
+package com.ilargia.games.egdx.api.factories;
 
+import com.ilargia.games.egdx.api.Engine;
 import com.ilargia.games.entitas.Entity;
 import com.ilargia.games.entitas.api.IContexts;
 

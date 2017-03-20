@@ -4,14 +4,13 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.examples.games.ExamplesEngine;
 import com.examples.games.entities.Ground;
 import com.examples.games.entities.Mariano;
-import com.examples.games.scenes.SceneManagerExamples;
-import com.examples.games.systems.PlayerControllerSystem;
+import com.examples.games.scenes.SceneExamples;
 import com.ilargia.games.egdx.impl.GameStateGDX;
 import com.ilargia.games.egdx.impl.managers.PhysicsManagerGDX;
+import com.ilargia.games.egdx.impl.managers.SceneManagerGDX;
 import com.ilargia.games.egdx.logicbricks.gen.Entitas;
 import com.ilargia.games.egdx.logicbricks.index.Indexed;
-import com.ilargia.games.egdx.logicbricks.system.game.AnimationSystem;
-import com.ilargia.games.egdx.logicbricks.system.game.RigidBodySystem;
+import com.ilargia.games.egdx.logicbricks.system.game.*;
 import com.ilargia.games.egdx.logicbricks.system.render.DebugRendererSystem;
 import com.ilargia.games.egdx.logicbricks.system.render.TextureRendererSystem;
 import com.ilargia.games.egdx.logicbricks.system.scene.SceneSystem;
@@ -21,7 +20,7 @@ import com.ilargia.games.egdx.logicbricks.system.sensor.*;
 public class PlatformExampleState extends GameStateGDX {
     private final ExamplesEngine engine;
     private final Entitas entitas;
-    private SceneManagerExamples sceneManager;
+    private SceneManagerGDX sceneManager;
 
     public PlatformExampleState(ExamplesEngine engine, Entitas entitas) {
         this.engine = engine;
@@ -31,15 +30,17 @@ public class PlatformExampleState extends GameStateGDX {
 
     @Override
     public void loadResources() {
-        sceneManager = engine.getManager(SceneManagerExamples.class);
+        sceneManager = engine.getManager(SceneManagerGDX.class);
         sceneManager.addEntityFactory("Ground", new Ground());
         sceneManager.addEntityFactory("Mariano", new Mariano());
+        sceneManager.addSceneFactory("Pruebas", new SceneExamples());
+        sceneManager.initialize();
     }
 
     @Override
     public void initialize() {
         Indexed.initialize(entitas);
-        entitas.scene.setCamera((OrthographicCamera) engine.getManager(SceneManagerExamples.class).getDefaultCamera());
+        entitas.scene.setCamera((OrthographicCamera) engine.getManager(SceneManagerGDX.class).getDefaultCamera());
 
         systems.add(new CollisionSensorSystem(entitas))
                 .add(new CreateNearSensorSystem(entitas, engine))
@@ -48,15 +49,14 @@ public class PlatformExampleState extends GameStateGDX {
                 .add(new NearSensorSystem(entitas))
                 .add(new RadarSensorSystem(entitas))
                 .add(new RaySensorSystem(entitas, engine.getManager(PhysicsManagerGDX.class).getPhysics()))
-                .add(new NearSensorSystem(entitas))
-                .add(new KeyboardSensorSystem(entitas))
+                .add(new AddInputControllerSystem(entitas, engine))
+                .add(new InputControllerSystem(engine))
                 .add(new SceneSystem(engine, entitas))
                 .add(new RigidBodySystem(entitas))
                 .add(new AnimationSystem(entitas))
-                .add(new PlayerControllerSystem(entitas))
-                .add(new TextureRendererSystem(entitas, engine.getManager(SceneManagerExamples.class).getBatch()))
+                .add(new TextureRendererSystem(entitas, engine.getManager(SceneManagerGDX.class).getBatch()))
                 .add(new DebugRendererSystem(entitas, engine.getManager(PhysicsManagerGDX.class).getPhysics(),
-                        engine.getManager(SceneManagerExamples.class).getBatch()));
+                        engine.getManager(SceneManagerGDX.class).getBatch()));
 
         sceneManager.createScene("Pruebas");
     }

@@ -27,6 +27,7 @@ public class ExamplesGame extends GameGDX<ExamplesEngine> {
 
     @Override
     public void init() {
+        _engine.initialize();
         ebus.subscribe(this);
     }
 

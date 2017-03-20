@@ -4,11 +4,12 @@ import com.ilargia.games.egdx.api.managers.Manager;
 
 public interface Engine {
 
-    public void dispose();
+    void initialize();
 
-    public <M extends Manager> M getManager(Class<M> clazz);
+    void dispose();
 
-    public <M extends Manager> Engine addManager(M manager);
+    <M extends Manager> Engine addManager(M manager);
 
+    <M extends Manager> M getManager(Class<M> clazz);
 
 }

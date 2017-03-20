@@ -7,21 +7,22 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.utils.Array;
 import com.ilargia.games.egdx.api.Engine;
-import com.ilargia.games.egdx.api.EntityFactory;
+import com.ilargia.games.egdx.api.factories.EntityFactory;
+import com.ilargia.games.egdx.api.managers.LogManager;
 import com.ilargia.games.egdx.impl.managers.AssetsManagerGDX;
+import com.ilargia.games.egdx.impl.managers.LogManagerGDX;
 import com.ilargia.games.egdx.impl.managers.PhysicsManagerGDX;
 import com.ilargia.games.egdx.logicbricks.data.Bounds;
 import com.ilargia.games.egdx.logicbricks.data.StateCharacter;
 import com.ilargia.games.egdx.logicbricks.gen.Entitas;
 import com.ilargia.games.egdx.logicbricks.gen.game.GameEntity;
 import com.ilargia.games.egdx.util.BodyBuilder;
-import com.ilargia.games.entitas.Context;
 import com.ilargia.games.entitas.factories.EntitasCollections;
 
 import java.util.Map;
 
 
-public class Mariano implements EntityFactory<Entitas, GameEntity>{
+public class Mariano implements EntityFactory<Entitas, GameEntity> {
     private String effect = "assets/particles/dust.pfx";
     private String atlas = "assets/animations/sprites.pack";
     private AssetsManagerGDX assetsManager;
@@ -37,7 +38,7 @@ public class Mariano implements EntityFactory<Entitas, GameEntity>{
     @Override
     public GameEntity create(Engine engine, Entitas entitas) {
         PhysicsManagerGDX physics = engine.getManager(PhysicsManagerGDX.class);
-        BodyBuilder bodyBuilder =  physics.getBodyBuilder();
+        BodyBuilder bodyBuilder = physics.getBodyBuilder();
 
         TextureAtlas textureAtlas = assetsManager.getTextureAtlas(atlas);
 
@@ -67,20 +68,14 @@ public class Mariano implements EntityFactory<Entitas, GameEntity>{
                 .addRigidBody(bodyPlayer)
                 .addAnimations(animationStates, animationStates.get("idle"), 0)
                 .addCharacter("Mariano", StateCharacter.IDLE, false)
-                .addMovable(7,8)
-                .addTextureView(null, new Bounds(0.9f,1.15f),false, false,1,1, Color.WHITE);
+                .addMovable(7, 8)
+                .addTextureView(null, new Bounds(0.9f, 1.15f), false, false, 1, 1, Color.WHITE)
+                .addInputController((inputManager,  context) -> {
+                    if(inputManager.isKeyDown(Input.Keys.D)) {
+                        bodyPlayer.applyForceToCenter(15f, 0f,false);
+                    }
+                });
 
-        entitas.sensor.createEntity()
-                .addKeyboardSensor(Input.Keys.DPAD_LEFT)
-                .addLink(entity.getCreationIndex());
-
-        entitas.sensor.createEntity()
-                .addKeyboardSensor(Input.Keys.DPAD_RIGHT)
-                .addLink(entity.getCreationIndex());
-
-        entitas.sensor.createEntity()
-                .addKeyboardSensor(Input.Keys.SPACE)
-                .addLink(entity.getCreationIndex());
 
         return entity;
 

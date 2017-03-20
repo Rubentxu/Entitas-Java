@@ -6,14 +6,14 @@ import box2dLight.RayHandler;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.ilargia.games.egdx.api.EntityFactory;
+import com.ilargia.games.egdx.api.factories.EntityFactory;
+import com.ilargia.games.egdx.api.factories.SceneFactory;
 import com.ilargia.games.egdx.api.managers.SceneManager;
 import com.ilargia.games.egdx.impl.EngineGDX;
 import com.ilargia.games.egdx.logicbricks.gen.Entitas;
 import com.ilargia.games.egdx.util.MapEntityParser;
 import com.ilargia.games.entitas.Entity;
 import com.ilargia.games.entitas.api.EntitasException;
-import com.ilargia.games.entitas.api.IContexts;
 import com.ilargia.games.entitas.factories.EntitasCollections;
 
 import java.util.Map;
@@ -24,6 +24,7 @@ public class SceneManagerGDX implements SceneManager {
     public EngineGDX engine;
     public PhysicsManagerGDX physics;
     public Map<String, EntityFactory> entityFactories;
+    public Map<String, SceneFactory> sceneFactories;
     public RayHandler rayHandler;
     protected Batch batch;
     protected Camera defaultCamera;
@@ -33,6 +34,7 @@ public class SceneManagerGDX implements SceneManager {
         this.engine = engine;
         this.entitas = entitas;
         this.entityFactories = EntitasCollections.createMap(String.class, EntityFactory.class);
+        this.sceneFactories = EntitasCollections.createMap(String.class, SceneFactory.class);
         batch = new SpriteBatch();
         defaultCamera = createCamera("Orthographic");
         mapParser = new MapEntityParser(this);
@@ -58,13 +60,26 @@ public class SceneManagerGDX implements SceneManager {
 
     @Override
     public <TEntity extends Entity> TEntity createEntity(String name) {
-        EntityFactory<IContexts,TEntity> factory = entityFactories.get(name);
+        EntityFactory<Entitas,TEntity> factory = entityFactories.get(name);
         TEntity entity = null;
         if (factory != null) {
             entity = factory.create(engine, entitas);
         }
         return entity;
 
+    }
+
+    @Override
+    public void addSceneFactory(String name, SceneFactory factory) {
+        sceneFactories.put(name, factory);
+    }
+
+    @Override
+    public void createScene(String scene) {
+        SceneFactory<EngineGDX, Entitas> factory = sceneFactories.get(scene);
+        if(factory !=null) {
+            factory.createScene(engine, entitas);
+        }
     }
 
     @Override
@@ -92,13 +107,6 @@ public class SceneManagerGDX implements SceneManager {
     public Batch getBatch() {
         return batch;
     }
-
-
-    @Override
-    public void createScene(String scene) {
-        mapParser.load(scene);
-    }
-
 
     @Override
     public void dispose() {

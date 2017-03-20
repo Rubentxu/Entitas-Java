@@ -11,6 +11,10 @@ import java.util.Map;
 import com.ilargia.games.egdx.logicbricks.component.game.Character;
 import com.ilargia.games.egdx.logicbricks.data.StateCharacter;
 import com.ilargia.games.egdx.logicbricks.component.game.Destroy;
+import com.ilargia.games.egdx.logicbricks.component.game.InputController;
+import com.ilargia.games.egdx.api.GameController;
+import com.ilargia.games.egdx.impl.managers.InputManagerGDX;
+import com.ilargia.games.egdx.logicbricks.gen.Entitas;
 import com.ilargia.games.egdx.logicbricks.component.game.Interactive;
 import com.ilargia.games.egdx.logicbricks.component.game.Movable;
 import com.ilargia.games.egdx.logicbricks.component.game.OnGround;
@@ -132,6 +136,41 @@ public class GameEntity extends Entity {
 				removeComponent(GameComponentsLookup.Destroy);
 			}
 		}
+		return this;
+	}
+
+	public InputController getInputController() {
+		return (InputController) getComponent(GameComponentsLookup.InputController);
+	}
+
+	public boolean hasInputController() {
+		return hasComponent(GameComponentsLookup.InputController);
+	}
+
+	public GameEntity addInputController(GameController controller) {
+		InputController component = (InputController) recoverComponent(GameComponentsLookup.InputController);
+		if (component == null) {
+			component = new InputController(controller);
+		} else {
+			component.controller = controller;
+		}
+		addComponent(GameComponentsLookup.InputController, component);
+		return this;
+	}
+
+	public GameEntity replaceInputController(GameController controller) {
+		InputController component = (InputController) recoverComponent(GameComponentsLookup.InputController);
+		if (component == null) {
+			component = new InputController(controller);
+		} else {
+			component.controller = controller;
+		}
+		replaceComponent(GameComponentsLookup.InputController, component);
+		return this;
+	}
+
+	public GameEntity removeInputController() {
+		removeComponent(GameComponentsLookup.InputController);
 		return this;
 	}
 

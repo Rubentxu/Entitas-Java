@@ -2,7 +2,7 @@ package com.ilargia.games.egdx.impl.managers;
 
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.ilargia.games.egdx.api.GUIFactory;
+import com.ilargia.games.egdx.api.factories.GUIFactory;
 import com.ilargia.games.egdx.api.managers.GUIManager;
 import com.ilargia.games.egdx.impl.EngineGDX;
 import com.ilargia.games.entitas.api.IEntity;

@@ -4,10 +4,8 @@ import com.ilargia.games.egdx.logicbricks.component.sensor.AlwaysSensor;
 import com.ilargia.games.egdx.logicbricks.component.sensor.CollisionSensor;
 import com.ilargia.games.egdx.logicbricks.component.sensor.DelaySensor;
 import com.ilargia.games.egdx.logicbricks.component.sensor.Frequency;
-import com.ilargia.games.egdx.logicbricks.component.sensor.KeyboardSensor;
 import com.ilargia.games.egdx.logicbricks.component.sensor.Link;
 import com.ilargia.games.egdx.logicbricks.component.sensor.Mode;
-import com.ilargia.games.egdx.logicbricks.component.sensor.MouseButtonSensor;
 import com.ilargia.games.egdx.logicbricks.component.sensor.MouseOverSensor;
 import com.ilargia.games.egdx.logicbricks.component.sensor.MouseWheelSensor;
 import com.ilargia.games.egdx.logicbricks.component.sensor.NearSensor;
@@ -25,28 +23,24 @@ public class SensorComponentsLookup {
 	public static final int CollisionSensor = 1;
 	public static final int DelaySensor = 2;
 	public static final int Frequency = 3;
-	public static final int KeyboardSensor = 4;
-	public static final int Link = 5;
-	public static final int Mode = 6;
-	public static final int MouseButtonSensor = 7;
-	public static final int MouseOverSensor = 8;
-	public static final int MouseWheelSensor = 9;
-	public static final int NearSensor = 10;
-	public static final int RadarSensor = 11;
-	public static final int RaySensor = 12;
-	public static final int totalComponents = 13;
+	public static final int Link = 4;
+	public static final int Mode = 5;
+	public static final int MouseOverSensor = 6;
+	public static final int MouseWheelSensor = 7;
+	public static final int NearSensor = 8;
+	public static final int RadarSensor = 9;
+	public static final int RaySensor = 10;
+	public static final int totalComponents = 11;
 
 	public static String[] componentNames() {
 		return new String[]{"AlwaysSensor", "CollisionSensor", "DelaySensor",
-				"Frequency", "KeyboardSensor", "Link", "Mode",
-				"MouseButtonSensor", "MouseOverSensor", "MouseWheelSensor",
-				"NearSensor", "RadarSensor", "RaySensor"};
+				"Frequency", "Link", "Mode", "MouseOverSensor",
+				"MouseWheelSensor", "NearSensor", "RadarSensor", "RaySensor"};
 	}
 
 	public static Class[] componentTypes() {
 		return new Class[]{AlwaysSensor.class, CollisionSensor.class,
-				DelaySensor.class, Frequency.class, KeyboardSensor.class,
-				Link.class, Mode.class, MouseButtonSensor.class,
+				DelaySensor.class, Frequency.class, Link.class, Mode.class,
 				MouseOverSensor.class, MouseWheelSensor.class,
 				NearSensor.class, RadarSensor.class, RaySensor.class};
 	}
