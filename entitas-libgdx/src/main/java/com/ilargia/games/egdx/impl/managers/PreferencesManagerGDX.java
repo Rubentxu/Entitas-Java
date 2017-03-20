@@ -9,11 +9,11 @@ import com.ilargia.games.egdx.api.managers.PreferencesManager;
 public class PreferencesManagerGDX implements PreferencesManager {
 
     public String APP_NAME = "";
-    public String LOG = "";
+    public int LOG_LEVEL = 0;
     public float GAME_HEIGHT = 16.875f; // 1080 / 64 =16.875 px
     public float GAME_WIDTH = 30f;     //  1920 / 64 = 30f px
-    public int VIRTUAL_DEVICE_HEIGHT = 600; // 16.875 x 64 =1080 px
-    public int VIRTUAL_DEVICE_WIDTH = 800;     //  30 x 64 = 1920 px
+    public int VIRTUAL_DEVICE_HEIGHT = 100; // 16.875 x 64 =1080 px
+    public int VIRTUAL_DEVICE_WIDTH = 220;     //  30 x 64 = 1920 px
     // Box2D config
     public float RUNNING_FRAME_DURATION = 0.02f;
     public int VELOCITY_ITERATIONS = 10;
@@ -53,7 +53,6 @@ public class PreferencesManagerGDX implements PreferencesManager {
             TOUCH_PAD_ENABLED = preferences.getBoolean(Constants.PREF_TOUCHPAD_ENABLED, true);
             PROFILE_DATA_FILE = preferences.getString(Constants.PREF_PROFILE_DATA_FILE, "data/profile.game");
             INIT_PROFILE_DATA_FILE = preferences.getString(Constants.PREF_INIT_PROFILE_DATA_FILE, "data/initProfile.game");
-            LOG = APP_NAME;
             GAME_HEIGHT = preferences.getFloat(Constants.PREF_GAME_HEIGHT, 16.875F); // 1080 / 64 =16.875 px
             GAME_WIDTH = preferences.getFloat(Constants.PREF_GAME_WIDTH, 30F); // 1920 / 64 = 30f px
             VIRTUAL_DEVICE_HEIGHT = preferences.getInteger(Constants.PREF_VIRTUAL_DEVICE_HEIGHT, 1080); // 16.875 x 64 =1080 px

@@ -1,5 +1,6 @@
 package com.examples.games.entities;
 
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -61,12 +62,25 @@ public class Mariano implements EntityFactory<Entitas, GameEntity>{
                 .build();
 
         entitas.game.setPlayer(true);
+
         GameEntity entity = entitas.game.getPlayerEntity()
                 .addRigidBody(bodyPlayer)
                 .addAnimations(animationStates, animationStates.get("idle"), 0)
                 .addCharacter("Mariano", StateCharacter.IDLE, false)
                 .addMovable(7,8)
                 .addTextureView(null, new Bounds(0.9f,1.15f),false, false,1,1, Color.WHITE);
+
+        entitas.sensor.createEntity()
+                .addKeyboardSensor(Input.Keys.DPAD_LEFT)
+                .addLink(entity.getCreationIndex());
+
+        entitas.sensor.createEntity()
+                .addKeyboardSensor(Input.Keys.DPAD_RIGHT)
+                .addLink(entity.getCreationIndex());
+
+        entitas.sensor.createEntity()
+                .addKeyboardSensor(Input.Keys.SPACE)
+                .addLink(entity.getCreationIndex());
 
         return entity;
 

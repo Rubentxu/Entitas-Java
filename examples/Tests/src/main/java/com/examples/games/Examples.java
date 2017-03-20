@@ -10,6 +10,9 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Vector2;
 import com.examples.games.scenes.SceneManagerExamples;
 import com.examples.games.states.PlatformExampleState;
+import com.ilargia.games.egdx.api.managers.LogManager;
+import com.ilargia.games.egdx.api.managers.PreferencesManager;
+import com.ilargia.games.egdx.impl.managers.LogManagerGDX;
 import com.examples.games.util.TestFileHandleResolver;
 import com.ilargia.games.egdx.impl.EventBusGDX;
 import com.ilargia.games.egdx.impl.managers.*;
@@ -39,11 +42,13 @@ public class Examples implements ApplicationListener {
         engine = new ExamplesEngine();
         entitas = new Entitas();
 
+        preferencesManager.LOG_LEVEL = LogManager.LOG_DEBUG;
         AssetManager assetsManager = new AssetManager(new TestFileHandleResolver());
         engine.addManager(new AssetsManagerGDX(assetsManager, preferencesManager));
         engine.addManager(new PhysicsManagerGDX(new Vector2(0,-9.8f)));
         engine.addManager(new GUIManagerGDX(new BitmapFont(), null, engine));
         engine.addManager(new SceneManagerExamples(engine, entitas));
+        engine.addManager(new LogManagerGDX(preferencesManager));
         engine.addManager(preferencesManager);
 
         game = new ExamplesGame(engine, new EventBusGDX(new MBassador()));

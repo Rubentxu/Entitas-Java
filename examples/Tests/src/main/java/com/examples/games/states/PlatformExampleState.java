@@ -5,6 +5,7 @@ import com.examples.games.ExamplesEngine;
 import com.examples.games.entities.Ground;
 import com.examples.games.entities.Mariano;
 import com.examples.games.scenes.SceneManagerExamples;
+import com.examples.games.systems.PlayerControllerSystem;
 import com.ilargia.games.egdx.impl.GameStateGDX;
 import com.ilargia.games.egdx.impl.managers.PhysicsManagerGDX;
 import com.ilargia.games.egdx.logicbricks.gen.Entitas;
@@ -48,9 +49,11 @@ public class PlatformExampleState extends GameStateGDX {
                 .add(new RadarSensorSystem(entitas))
                 .add(new RaySensorSystem(entitas, engine.getManager(PhysicsManagerGDX.class).getPhysics()))
                 .add(new NearSensorSystem(entitas))
+                .add(new KeyboardSensorSystem(entitas))
                 .add(new SceneSystem(engine, entitas))
                 .add(new RigidBodySystem(entitas))
                 .add(new AnimationSystem(entitas))
+                .add(new PlayerControllerSystem(entitas))
                 .add(new TextureRendererSystem(entitas, engine.getManager(SceneManagerExamples.class).getBatch()))
                 .add(new DebugRendererSystem(entitas, engine.getManager(PhysicsManagerGDX.class).getPhysics(),
                         engine.getManager(SceneManagerExamples.class).getBatch()));

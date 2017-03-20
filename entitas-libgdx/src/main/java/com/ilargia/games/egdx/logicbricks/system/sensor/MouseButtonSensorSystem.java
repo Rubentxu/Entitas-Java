@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Vector3;
 import com.ilargia.games.egdx.impl.EngineGDX;
+import com.ilargia.games.egdx.impl.managers.InputManagerGDX;
 import com.ilargia.games.egdx.logicbricks.component.sensor.MouseButtonSensor;
 import com.ilargia.games.egdx.logicbricks.gen.Entitas;
 import com.ilargia.games.egdx.logicbricks.gen.sensor.SensorEntity;
@@ -16,11 +17,13 @@ public class MouseButtonSensorSystem extends InputSensorSystem {
     private final Group<SensorEntity> sensorGroup;
     private final Camera camera;
     private Vector3 worldCoordinates;
+    private InputManagerGDX inputManager;
 
     public MouseButtonSensorSystem(Entitas entitas, EngineGDX engine) {
         this.sensorGroup = entitas.sensor.getGroup(Matcher.AllOf(SensorMatcher.MouseButtonSensor(), SensorMatcher.Link()));
         camera = engine.getCamera();
         worldCoordinates = new Vector3(0, 0, 0);
+        inputManager = engine.getManager(InputManagerGDX.class);
 
     }
 

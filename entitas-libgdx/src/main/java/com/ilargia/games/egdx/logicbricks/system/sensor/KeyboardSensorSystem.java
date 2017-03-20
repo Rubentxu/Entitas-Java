@@ -2,6 +2,7 @@ package com.ilargia.games.egdx.logicbricks.system.sensor;
 
 
 import com.badlogic.gdx.Input;
+import com.ilargia.games.egdx.impl.managers.LogManagerGDX;
 import com.ilargia.games.egdx.logicbricks.component.sensor.KeyboardSensor;
 import com.ilargia.games.egdx.logicbricks.gen.Entitas;
 import com.ilargia.games.egdx.logicbricks.gen.sensor.SensorContext;
@@ -25,7 +26,7 @@ public class KeyboardSensorSystem extends InputSensorSystem  {
     protected boolean query(SensorEntity sensorEntity, float deltaTime) {
         boolean isActive = false;
         KeyboardSensor sensor = sensorEntity.getKeyboardSensor();
-
+        LogManagerGDX.debug("KeyboardSensorSystem", "pulse %s Keycode %s", sensorEntity.getLink().pulse, sensor.keyCode);
         if (sensor.keyCode == Input.Keys.UNKNOWN || sensor.keysCodeSignal.contains(sensor.keyCode)) {
             isActive = true;
         }

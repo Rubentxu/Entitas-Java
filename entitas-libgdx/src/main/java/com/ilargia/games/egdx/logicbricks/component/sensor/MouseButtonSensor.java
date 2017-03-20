@@ -5,20 +5,16 @@ import com.ilargia.games.entitas.api.IComponent;
 import com.ilargia.games.entitas.codeGenerator.Component;
 
 @Component(pools = {"Sensor"})
-public class MouseButtonSensor implements IComponent {
-    public enum MouseButton {
-         RIGHT_DOWN, MIDDLE_DOWN, LEFT_DOWN, RIGHT_UP, MIDDLE_UP, LEFT_UP
-    }
-
-    public MouseButton mouseEvent;
+public class MouseButtonSensor implements IComponent {  
+    public int pointer;
+    public boolean pressed;
 
     // Signal Values
-    public MouseButton mouseEventSignal;
     public Vector2 positionSignal;
 
-    public MouseButtonSensor(MouseButton event) {
-        this.mouseEvent = event;
-        this.mouseEventSignal = null;
+    public MouseButtonSensor(int pointer, boolean pressed) {
+        this.pointer = pointer;
+        this.pressed = pressed;
         positionSignal =  new Vector2();
 
     }

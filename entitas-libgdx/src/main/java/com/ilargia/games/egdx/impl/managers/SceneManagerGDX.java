@@ -33,10 +33,6 @@ public class SceneManagerGDX implements SceneManager {
         this.engine = engine;
         this.entitas = entitas;
         this.entityFactories = EntitasCollections.createMap(String.class, EntityFactory.class);
-        if (engine.getManager(PhysicsManagerGDX.class) == null) throw new EntitasException("BaseSceneManager",
-                "BaseSceneManager needs to first load BasePhysicsManager on the engine");
-        physics = engine.getManager(PhysicsManagerGDX.class);
-        rayHandler = new RayHandler(physics.getPhysics());
         batch = new SpriteBatch();
         defaultCamera = createCamera("Orthographic");
         mapParser = new MapEntityParser(this);
@@ -44,6 +40,10 @@ public class SceneManagerGDX implements SceneManager {
 
     @Override
     public void initialize() {
+        if (engine.getManager(PhysicsManagerGDX.class) == null) throw new EntitasException("SceneManagerGDX",
+                "SceneManagerGDX needs load PhysicsManagerGDX on the engine");
+        physics = engine.getManager(PhysicsManagerGDX.class);
+        rayHandler = new RayHandler(physics.getPhysics());
         AssetsManagerGDX assetsManager = engine.getManager(AssetsManagerGDX.class);
         for (EntityFactory factory : entityFactories.values()) {
             factory.loadAssets(engine);

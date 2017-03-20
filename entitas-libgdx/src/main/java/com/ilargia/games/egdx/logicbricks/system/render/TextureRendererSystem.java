@@ -1,17 +1,15 @@
 package com.ilargia.games.egdx.logicbricks.system.render;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.physics.box2d.Body;
-import com.ilargia.games.egdx.logicbricks.gen.game.GameEntity;
 import com.ilargia.games.egdx.logicbricks.component.game.TextureView;
 import com.ilargia.games.egdx.logicbricks.gen.Entitas;
+import com.ilargia.games.egdx.logicbricks.gen.game.GameEntity;
+import com.ilargia.games.egdx.logicbricks.gen.game.GameMatcher;
 import com.ilargia.games.entitas.api.system.IInitializeSystem;
 import com.ilargia.games.entitas.api.system.IRenderSystem;
 import com.ilargia.games.entitas.group.Group;
-import com.ilargia.games.egdx.logicbricks.gen.game.GameMatcher;
 
 
 public class TextureRendererSystem implements IInitializeSystem, IRenderSystem {
