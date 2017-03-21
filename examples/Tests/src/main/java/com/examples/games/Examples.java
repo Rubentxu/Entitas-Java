@@ -8,7 +8,6 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Vector2;
-import com.examples.games.scenes.SceneExamples;
 import com.examples.games.states.PlatformExampleState;
 import com.ilargia.games.egdx.api.managers.LogManager;
 import com.ilargia.games.egdx.impl.managers.LogManagerGDX;

@@ -1,5 +1,6 @@
 package com.ilargia.games.entitas.generators;
 
+import com.ilargia.games.entitas.codeGenerator.generators.ContextGenerator;
 import org.junit.Before;
 import org.junit.Test;
 

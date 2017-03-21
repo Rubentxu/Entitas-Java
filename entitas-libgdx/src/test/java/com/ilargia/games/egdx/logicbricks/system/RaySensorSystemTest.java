@@ -79,7 +79,7 @@ public class RaySensorSystemTest {
     }
 
 
-    @Test
+   // @Test
     public void queryTrue() {
         world.setIndexEntity(boss.getCreationIndex());
         raySensorSystem.execute(0.5F);

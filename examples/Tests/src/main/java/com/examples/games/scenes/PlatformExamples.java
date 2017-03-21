@@ -8,7 +8,7 @@ import com.ilargia.games.egdx.logicbricks.gen.Entitas;
 import com.ilargia.games.egdx.logicbricks.gen.game.GameEntity;
 
 
-public class SceneExamples implements SceneFactory<Engine, Entitas> {
+public class PlatformExamples implements SceneFactory<Engine, Entitas> {
 
     @Override
     public void createScene(Engine engine, Entitas entitas) {

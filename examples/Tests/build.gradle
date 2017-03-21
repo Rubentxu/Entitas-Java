@@ -34,9 +34,6 @@ dependencies {
     compile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
     compile "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
     compile "com.badlogicgames.box2dlights:box2dlights:$box2dlightsVersion"
-    testCompile group: 'junit', name: 'junit', version: '4.11'
-   // testCompile "org.mockito:mockito-core:2.7.14"
-    testCompile fileTree(include: ['mockito-core*.jar'], dir: '../../../lib')
 
 }
 ///home/rubentxu/.gradle/backup/modules-2/files-2.1/com.badlogicgames.box2dlights/box2dlights/1.4/3d77ad5b4164fb32fc67e2446e35911bb0aaf0bd
