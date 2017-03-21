@@ -9,22 +9,12 @@ import com.ilargia.games.entitas.matcher.Matcher;
  */
 public class SceneMatcher {
 
-	private static Matcher _matcherBackground;
 	private static Matcher _matcherCamera;
 	private static Matcher _matcherCatch;
 	private static Matcher _matcherGameWorld;
 	private static Matcher _matcherLight;
+	private static Matcher _matcherParallaxLayer;
 	private static Matcher _matcherTiled;
-
-	public static Matcher Background() {
-		if (_matcherBackground == null) {
-			Matcher matcher = (Matcher) Matcher
-					.AllOf(SceneComponentsLookup.Background);
-			matcher.componentNames = SceneComponentsLookup.componentNames();
-			_matcherBackground = matcher;
-		}
-		return _matcherBackground;
-	}
 
 	public static Matcher Camera() {
 		if (_matcherCamera == null) {
@@ -64,6 +54,16 @@ public class SceneMatcher {
 			_matcherLight = matcher;
 		}
 		return _matcherLight;
+	}
+
+	public static Matcher ParallaxLayer() {
+		if (_matcherParallaxLayer == null) {
+			Matcher matcher = (Matcher) Matcher
+					.AllOf(SceneComponentsLookup.ParallaxLayer);
+			matcher.componentNames = SceneComponentsLookup.componentNames();
+			_matcherParallaxLayer = matcher;
+		}
+		return _matcherParallaxLayer;
 	}
 
 	public static Matcher Tiled() {

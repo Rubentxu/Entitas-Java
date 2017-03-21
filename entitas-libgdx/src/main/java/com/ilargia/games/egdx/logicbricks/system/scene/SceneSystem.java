@@ -20,7 +20,7 @@ public class SceneSystem implements IInitializeSystem, ICleanupSystem {
     private final Engine engine;
     private World physics;
 
-    public SceneSystem(Engine engine, Entitas entitas) {
+    public SceneSystem(Entitas entitas, Engine engine) {
         this.engine = engine;
         this.context = entitas.scene;
     }

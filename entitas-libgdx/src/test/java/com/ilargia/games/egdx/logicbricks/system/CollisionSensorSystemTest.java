@@ -1,6 +1,7 @@
 package com.ilargia.games.egdx.logicbricks.system;
 
 
+import com.ilargia.games.egdx.impl.managers.LogManagerGDX;
 import com.ilargia.games.egdx.logicbricks.component.sensor.Link;
 import com.ilargia.games.egdx.logicbricks.gen.Entitas;
 import com.ilargia.games.egdx.logicbricks.gen.game.GameEntity;
@@ -30,7 +31,7 @@ public class CollisionSensorSystemTest {
     public CollisionSensorSystemTest() {
         collections = new EntitasCollections(new CollectionsFactories() {});
         entitas = new Entitas();
-        this.collisionSensorSystem = new CollisionSensorSystem(entitas);
+        this.collisionSensorSystem = new CollisionSensorSystem(entitas, null);
         Indexed.initialize(entitas);
 
 

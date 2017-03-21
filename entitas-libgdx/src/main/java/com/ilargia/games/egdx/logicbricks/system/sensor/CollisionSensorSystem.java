@@ -49,7 +49,6 @@ public class CollisionSensorSystem extends SensorSystem implements IInitializeSy
 
     @Override
     public void processCollision(Integer indexEntityA, Integer indexEntityB, boolean collisionSignal) {
-        LogManagerGDX.debug("CollisionSensor", "signal %s",collisionSignal);
         if (indexEntityA != null && indexEntityB != null) {
             GameEntity entityA =  Indexed.getInteractiveEntity(indexEntityA);
             GameEntity entityB =  Indexed.getInteractiveEntity(indexEntityB);
@@ -62,7 +61,6 @@ public class CollisionSensorSystem extends SensorSystem implements IInitializeSy
                         } else {
                             Indexed.removeEntityInSensor(entity, entityB);
                         }
-                        LogManagerGDX.debug("CollisionSensor", "tagsB: %s signal %s",entityB.getTags().values, collision.collisionSignal);
                         collision.collisionSignal = collisionSignal;
                     }
                 }

@@ -1,8 +1,6 @@
 package com.ilargia.games.egdx.logicbricks.gen.scene;
 
 import com.ilargia.games.entitas.api.*;
-import com.badlogic.gdx.graphics.Texture;
-import com.ilargia.games.egdx.logicbricks.component.scene.Background;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.ilargia.games.egdx.logicbricks.component.scene.Camera;
 import com.ilargia.games.egdx.logicbricks.component.scene.Catch;
@@ -23,46 +21,6 @@ public class SceneContext
 			ContextInfo contextInfo,
 			EntityBaseFactory<SceneEntity> factoryMethod) {
 		super(totalComponents, startCreationIndex, contextInfo, factoryMethod);
-	}
-
-	public SceneEntity getBackgroundEntity() {
-		return getGroup(SceneMatcher.Background()).getSingleEntity();
-	}
-
-	public Background getBackground() {
-		return getBackgroundEntity().getBackground();
-	}
-
-	public boolean hasBackground() {
-		return getBackgroundEntity() != null;
-	}
-
-	public SceneEntity setBackground(Texture front, Texture middle, Texture back) {
-		if (hasBackground()) {
-			throw new EntitasException(
-					"Could not set Background!" + this
-							+ " already has an entity with Background!",
-					"You should check if the context already has a BackgroundEntity before setting it or use context.ReplaceBackground().");
-		}
-		SceneEntity entity = createEntity();
-		entity.addBackground(front, middle, back);
-		return entity;
-	}
-
-	public SceneEntity replaceBackground(Texture front, Texture middle,
-			Texture back) {
-		SceneEntity entity = getBackgroundEntity();
-		if (entity == null) {
-			entity = setBackground(front, middle, back);
-		} else {
-			entity.replaceBackground(front, middle, back);
-		}
-		return entity;
-	}
-
-	public SceneContext removeBackground() {
-		destroyEntity(getBackgroundEntity());
-		return this;
 	}
 
 	public SceneEntity getCameraEntity() {

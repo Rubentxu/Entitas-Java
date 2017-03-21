@@ -3,15 +3,17 @@ package com.ilargia.games.egdx.logicbricks.gen.scene;
 import com.ilargia.games.entitas.api.*;
 import com.ilargia.games.entitas.Entity;
 import java.util.Stack;
-import com.ilargia.games.egdx.logicbricks.component.scene.Background;
-import com.badlogic.gdx.graphics.Texture;
-import com.ilargia.games.entitas.api.IComponent;
 import com.ilargia.games.egdx.logicbricks.component.scene.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.ilargia.games.entitas.api.IComponent;
 import com.ilargia.games.egdx.logicbricks.component.scene.Catch;
 import com.badlogic.gdx.graphics.Color;
 import com.ilargia.games.egdx.logicbricks.component.scene.GameWorld;
 import com.ilargia.games.egdx.logicbricks.component.scene.Light;
+import com.ilargia.games.egdx.logicbricks.component.scene.ParallaxLayer;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
 import com.ilargia.games.egdx.logicbricks.component.scene.Tiled;
 
 /**
@@ -22,44 +24,6 @@ import com.ilargia.games.egdx.logicbricks.component.scene.Tiled;
 public class SceneEntity extends Entity {
 
 	public SceneEntity() {
-	}
-
-	public Background getBackground() {
-		return (Background) getComponent(SceneComponentsLookup.Background);
-	}
-
-	public boolean hasBackground() {
-		return hasComponent(SceneComponentsLookup.Background);
-	}
-
-	public SceneEntity addBackground(Texture front, Texture middle, Texture back) {
-		Background component = (Background) recoverComponent(SceneComponentsLookup.Background);
-		if (component == null) {
-			component = new Background();
-		}
-		component.front = front;
-		component.middle = middle;
-		component.back = back;
-		addComponent(SceneComponentsLookup.Background, component);
-		return this;
-	}
-
-	public SceneEntity replaceBackground(Texture front, Texture middle,
-			Texture back) {
-		Background component = (Background) recoverComponent(SceneComponentsLookup.Background);
-		if (component == null) {
-			component = new Background();
-		}
-		component.front = front;
-		component.middle = middle;
-		component.back = back;
-		replaceComponent(SceneComponentsLookup.Background, component);
-		return this;
-	}
-
-	public SceneEntity removeBackground() {
-		removeComponent(SceneComponentsLookup.Background);
-		return this;
 	}
 
 	public Camera getCamera() {
@@ -207,6 +171,53 @@ public class SceneEntity extends Entity {
 
 	public SceneEntity removeLight() {
 		removeComponent(SceneComponentsLookup.Light);
+		return this;
+	}
+
+	public ParallaxLayer getParallaxLayer() {
+		return (ParallaxLayer) getComponent(SceneComponentsLookup.ParallaxLayer);
+	}
+
+	public boolean hasParallaxLayer() {
+		return hasComponent(SceneComponentsLookup.ParallaxLayer);
+	}
+
+	public SceneEntity addParallaxLayer(TextureRegion background,
+			Vector2 parallaxRatio, Vector2 startPosition, Vector2 padding) {
+		ParallaxLayer component = (ParallaxLayer) recoverComponent(SceneComponentsLookup.ParallaxLayer);
+		if (component == null) {
+			component = new ParallaxLayer(background, parallaxRatio,
+					startPosition, padding);
+		} else {
+			component.background = background;
+			component.parallaxRatio = parallaxRatio;
+			component.startPosition = startPosition;
+			component.padding = padding;
+			component.layer = 0;
+		}
+		addComponent(SceneComponentsLookup.ParallaxLayer, component);
+		return this;
+	}
+
+	public SceneEntity replaceParallaxLayer(TextureRegion background,
+			Vector2 parallaxRatio, Vector2 startPosition, Vector2 padding) {
+		ParallaxLayer component = (ParallaxLayer) recoverComponent(SceneComponentsLookup.ParallaxLayer);
+		if (component == null) {
+			component = new ParallaxLayer(background, parallaxRatio,
+					startPosition, padding);
+		} else {
+			component.background = background;
+			component.parallaxRatio = parallaxRatio;
+			component.startPosition = startPosition;
+			component.padding = padding;
+			component.layer = 0;
+		}
+		replaceComponent(SceneComponentsLookup.ParallaxLayer, component);
+		return this;
+	}
+
+	public SceneEntity removeParallaxLayer() {
+		removeComponent(SceneComponentsLookup.ParallaxLayer);
 		return this;
 	}
 
