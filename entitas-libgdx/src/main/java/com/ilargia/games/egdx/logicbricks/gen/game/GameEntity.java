@@ -16,9 +16,6 @@ import com.ilargia.games.egdx.api.GameController;
 import com.ilargia.games.egdx.impl.managers.InputManagerGDX;
 import com.ilargia.games.egdx.logicbricks.gen.Entitas;
 import com.ilargia.games.egdx.logicbricks.component.game.Interactive;
-import com.ilargia.games.egdx.logicbricks.component.game.Movable;
-import com.ilargia.games.egdx.logicbricks.component.game.OnGround;
-import com.ilargia.games.egdx.logicbricks.component.game.Player;
 import com.ilargia.games.egdx.logicbricks.component.game.RigidBody;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.ilargia.games.egdx.logicbricks.component.game.Tags;
@@ -38,8 +35,6 @@ public class GameEntity extends Entity {
 
 	public Destroy DestroyComponent = new Destroy();
 	public Interactive InteractiveComponent = new Interactive();
-	public OnGround OnGroundComponent = new OnGround();
-	public Player PlayerComponent = new Player();
 
 	public GameEntity() {
 	}
@@ -185,71 +180,6 @@ public class GameEntity extends Entity {
 						InteractiveComponent);
 			} else {
 				removeComponent(GameComponentsLookup.Interactive);
-			}
-		}
-		return this;
-	}
-
-	public Movable getMovable() {
-		return (Movable) getComponent(GameComponentsLookup.Movable);
-	}
-
-	public boolean hasMovable() {
-		return hasComponent(GameComponentsLookup.Movable);
-	}
-
-	public GameEntity addMovable(float maxVelocity, float jumpForce) {
-		Movable component = (Movable) recoverComponent(GameComponentsLookup.Movable);
-		if (component == null) {
-			component = new Movable();
-		}
-		component.maxVelocity = maxVelocity;
-		component.jumpForce = jumpForce;
-		addComponent(GameComponentsLookup.Movable, component);
-		return this;
-	}
-
-	public GameEntity replaceMovable(float maxVelocity, float jumpForce) {
-		Movable component = (Movable) recoverComponent(GameComponentsLookup.Movable);
-		if (component == null) {
-			component = new Movable();
-		}
-		component.maxVelocity = maxVelocity;
-		component.jumpForce = jumpForce;
-		replaceComponent(GameComponentsLookup.Movable, component);
-		return this;
-	}
-
-	public GameEntity removeMovable() {
-		removeComponent(GameComponentsLookup.Movable);
-		return this;
-	}
-
-	public boolean isOnGround() {
-		return hasComponent(GameComponentsLookup.OnGround);
-	}
-
-	public GameEntity setOnGround(boolean value) {
-		if (value != hasComponent(GameComponentsLookup.OnGround)) {
-			if (value) {
-				addComponent(GameComponentsLookup.OnGround, OnGroundComponent);
-			} else {
-				removeComponent(GameComponentsLookup.OnGround);
-			}
-		}
-		return this;
-	}
-
-	public boolean isPlayer() {
-		return hasComponent(GameComponentsLookup.Player);
-	}
-
-	public GameEntity setPlayer(boolean value) {
-		if (value != hasComponent(GameComponentsLookup.Player)) {
-			if (value) {
-				addComponent(GameComponentsLookup.Player, PlayerComponent);
-			} else {
-				removeComponent(GameComponentsLookup.Player);
 			}
 		}
 		return this;

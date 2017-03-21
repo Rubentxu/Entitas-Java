@@ -4,6 +4,7 @@ import com.ilargia.games.entitas.api.*;
 import com.ilargia.games.entitas.Entity;
 import java.util.Stack;
 import com.ilargia.games.egdx.logicbricks.component.actuator.CameraActuator;
+import com.badlogic.gdx.math.Vector2;
 import com.ilargia.games.entitas.api.IComponent;
 import com.ilargia.games.egdx.logicbricks.component.actuator.CharacterActuator;
 import com.ilargia.games.egdx.logicbricks.data.StateCharacter;
@@ -12,7 +13,6 @@ import com.ilargia.games.egdx.logicbricks.component.actuator.TextureActuator;
 import com.badlogic.gdx.graphics.Color;
 import com.ilargia.games.egdx.logicbricks.data.Bounds;
 import com.ilargia.games.egdx.logicbricks.component.actuator.VelocityActuator;
-import com.badlogic.gdx.math.Vector2;
 
 /**
  * ---------------------------------------------------------------------------
@@ -33,26 +33,28 @@ public class ActuatorEntity extends Entity {
 	}
 
 	public ActuatorEntity addCameraActuator(short height, float damping,
-			String followTagEntity) {
+			Vector2 minDistance, String followTagEntity) {
 		CameraActuator component = (CameraActuator) recoverComponent(ActuatorComponentsLookup.CameraActuator);
 		if (component == null) {
 			component = new CameraActuator();
 		}
 		component.height = height;
 		component.damping = damping;
+		component.minDistance = minDistance;
 		component.followTagEntity = followTagEntity;
 		addComponent(ActuatorComponentsLookup.CameraActuator, component);
 		return this;
 	}
 
 	public ActuatorEntity replaceCameraActuator(short height, float damping,
-			String followTagEntity) {
+			Vector2 minDistance, String followTagEntity) {
 		CameraActuator component = (CameraActuator) recoverComponent(ActuatorComponentsLookup.CameraActuator);
 		if (component == null) {
 			component = new CameraActuator();
 		}
 		component.height = height;
 		component.damping = damping;
+		component.minDistance = minDistance;
 		component.followTagEntity = followTagEntity;
 		replaceComponent(ActuatorComponentsLookup.CameraActuator, component);
 		return this;

@@ -40,6 +40,7 @@ public class TextureRendererSystem implements IInitializeSystem, IRenderSystem {
         for (GameEntity e : groupTextureView.getEntities()) {
             TextureView view = e.getTextureView();
             Body body = e.getRigidBody().body;
+            processTextureFlip(view);
 
             batch.draw(view.texture, body.getPosition().x - view.bounds.extentsX, body.getPosition().y - view.bounds.extentsY,
                     body.getPosition().x, body.getPosition().y, view.bounds.extentsX * 2, view.bounds.extentsY * 2, 1, 1, 0);
@@ -48,5 +49,21 @@ public class TextureRendererSystem implements IInitializeSystem, IRenderSystem {
         batch.end();
     }
 
+
+    private void processTextureFlip(TextureView view) {
+        if ((view.flipX && !view.texture.isFlipX()) || (!view.flipX && view.texture.isFlipX())) {
+            float temp = view.texture.getU();
+            view.texture.setU(view.texture.getU2());
+            view.texture.setU2(temp);
+        }
+
+
+        if ((view.flipY && !view.texture.isFlipY()) || (!view.flipY && view.texture.isFlipY())) {
+            float temp = view.texture.getV();
+            view.texture.setV(view.texture.getV2());
+            view.texture.setV2(temp);
+
+        }
+    }
 
 }

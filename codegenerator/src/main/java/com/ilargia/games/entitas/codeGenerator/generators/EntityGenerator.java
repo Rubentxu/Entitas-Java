@@ -105,9 +105,10 @@ public class EntityGenerator implements IComponentCodeGenerator {
                     typeName += generic.getName();
                 }
                 typeName += ">";
-                methodGET.setBody(String.format("return (%1$s)getComponent(%2$s.%3$s);"
-                        , typeName, CodeGenerator.capitalize(info.contexts.get(0)) + CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG, info.typeName));
+
             }
+            methodGET.setBody(String.format("return (%1$s)getComponent(%2$s.%3$s);"
+                    , typeName, CodeGenerator.capitalize(info.contexts.get(0)) + CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG, info.typeName));
         }
     }
 

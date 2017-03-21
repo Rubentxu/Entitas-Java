@@ -10,7 +10,6 @@ import com.ilargia.games.entitas.codeGenerator.Component;
 public class InputController implements IComponent {
     public GameController<InputManagerGDX, Entitas> controller;
 
-
     public InputController(GameController controller) {
         this.controller = controller;
     }

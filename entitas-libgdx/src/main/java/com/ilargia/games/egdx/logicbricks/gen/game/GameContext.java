@@ -13,24 +13,4 @@ public class GameContext extends com.ilargia.games.entitas.Context<GameEntity> {
 			ContextInfo contextInfo, EntityBaseFactory<GameEntity> factoryMethod) {
 		super(totalComponents, startCreationIndex, contextInfo, factoryMethod);
 	}
-
-	public GameEntity getPlayerEntity() {
-		return getGroup(GameMatcher.Player()).getSingleEntity();
-	}
-
-	public boolean isPlayer() {
-		return getPlayerEntity() != null;
-	}
-
-	public GameContext setPlayer(boolean value) {
-		GameEntity entity = getPlayerEntity();
-		if (value != (entity != null)) {
-			if (value) {
-				createEntity().setPlayer(true);
-			} else {
-				destroyEntity(entity);
-			}
-		}
-		return this;
-	}
 }

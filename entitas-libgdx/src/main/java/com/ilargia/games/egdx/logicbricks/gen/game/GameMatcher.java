@@ -14,9 +14,6 @@ public class GameMatcher {
 	private static Matcher _matcherDestroy;
 	private static Matcher _matcherInputController;
 	private static Matcher _matcherInteractive;
-	private static Matcher _matcherMovable;
-	private static Matcher _matcherOnGround;
-	private static Matcher _matcherPlayer;
 	private static Matcher _matcherRigidBody;
 	private static Matcher _matcherTags;
 	private static Matcher _matcherTextureView;
@@ -69,36 +66,6 @@ public class GameMatcher {
 			_matcherInteractive = matcher;
 		}
 		return _matcherInteractive;
-	}
-
-	public static Matcher Movable() {
-		if (_matcherMovable == null) {
-			Matcher matcher = (Matcher) Matcher
-					.AllOf(GameComponentsLookup.Movable);
-			matcher.componentNames = GameComponentsLookup.componentNames();
-			_matcherMovable = matcher;
-		}
-		return _matcherMovable;
-	}
-
-	public static Matcher OnGround() {
-		if (_matcherOnGround == null) {
-			Matcher matcher = (Matcher) Matcher
-					.AllOf(GameComponentsLookup.OnGround);
-			matcher.componentNames = GameComponentsLookup.componentNames();
-			_matcherOnGround = matcher;
-		}
-		return _matcherOnGround;
-	}
-
-	public static Matcher Player() {
-		if (_matcherPlayer == null) {
-			Matcher matcher = (Matcher) Matcher
-					.AllOf(GameComponentsLookup.Player);
-			matcher.componentNames = GameComponentsLookup.componentNames();
-			_matcherPlayer = matcher;
-		}
-		return _matcherPlayer;
 	}
 
 	public static Matcher RigidBody() {
