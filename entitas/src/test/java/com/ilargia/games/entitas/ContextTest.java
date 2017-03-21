@@ -16,6 +16,7 @@ import com.ilargia.games.entitas.factories.CollectionsFactories;
 import com.ilargia.games.entitas.factories.EntitasCollections;
 import com.ilargia.games.entitas.group.Group;
 import com.ilargia.games.entitas.index.PrimaryEntityIndex;
+import com.ilargia.games.entitas.index.ReactivePrimaryEntityIndex;
 import com.ilargia.games.entitas.utils.TestComponentIds;
 import com.ilargia.games.entitas.utils.TestContext;
 import com.ilargia.games.entitas.utils.TestEntity;
@@ -176,11 +177,11 @@ public class ContextTest {
     public void entityIndexTest() {
         entity.addComponent(TestComponentIds.Position, new Position());
         Group group = context.getGroup(TestMatcher.Position());
-        PrimaryEntityIndex<Entity, String> index = new PrimaryEntityIndex((e, c) -> "positionEntities", group);
+        ReactivePrimaryEntityIndex<Entity, String> index = new ReactivePrimaryEntityIndex((e, c) -> "positionEntities", group);
         context.addEntityIndex("positions", index);
-        index = (PrimaryEntityIndex<Entity, String>) context.getEntityIndex("positions");
+        index = (ReactivePrimaryEntityIndex<Entity, String>) context.getEntityIndex("positions");
         assertNotNull(index);
-        assertTrue(index.hasEntity("positionEntities"));
+        assertNotNull(index.getEntity("positionEntities"));
 
     }
 
@@ -188,7 +189,7 @@ public class ContextTest {
     public void duplicateEntityIndexTest() {
         entity.addComponent(TestComponentIds.Position, new Position());
         Group group = context.getGroup(TestMatcher.Position());
-        PrimaryEntityIndex<Entity, String> index = new PrimaryEntityIndex(group, (e, c) -> new String [] {"positionEntities"});
+        ReactivePrimaryEntityIndex<Entity, String> index = new ReactivePrimaryEntityIndex(group, (e, c) -> new String [] {"positionEntities"});
         context.addEntityIndex("duplicate", index);
         context.addEntityIndex("duplicate", index);
 
@@ -199,11 +200,11 @@ public class ContextTest {
     public void deactivateAndRemoveEntityIndicesTest() {
         entity.addComponent(TestComponentIds.Position, new Position());
         Group group = context.getGroup(TestMatcher.Position());
-        PrimaryEntityIndex<Entity, String> index = new PrimaryEntityIndex((e, c) -> new String[] {"positionEntities"}, group);
+        ReactivePrimaryEntityIndex<Entity, String> index = new ReactivePrimaryEntityIndex((e, c) -> new String[] {"positionEntities"}, group);
         context.addEntityIndex("positions", index);
 
         context.deactivateAndRemoveEntityIndices();
-        index = (PrimaryEntityIndex<Entity, String>) context.getEntityIndex("positions");
+        index = (ReactivePrimaryEntityIndex<Entity, String>) context.getEntityIndex("positions");
 
 
     }

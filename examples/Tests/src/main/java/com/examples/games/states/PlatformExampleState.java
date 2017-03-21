@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.examples.games.ExamplesEngine;
 import com.examples.games.entities.Ground;
 import com.examples.games.entities.Mariano;
-import com.examples.games.scenes.SceneExamples;
+import com.examples.games.scenes.PlatformExamples;
 import com.ilargia.games.egdx.impl.GameStateGDX;
 import com.ilargia.games.egdx.impl.managers.PhysicsManagerGDX;
 import com.ilargia.games.egdx.impl.managers.SceneManagerGDX;
@@ -33,7 +33,7 @@ public class PlatformExampleState extends GameStateGDX {
         sceneManager = engine.getManager(SceneManagerGDX.class);
         sceneManager.addEntityFactory("Ground", new Ground());
         sceneManager.addEntityFactory("Mariano", new Mariano());
-        sceneManager.addSceneFactory("Pruebas", new SceneExamples());
+        sceneManager.addSceneFactory("Pruebas", new PlatformExamples());
         sceneManager.initialize();
     }
 

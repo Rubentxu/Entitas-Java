@@ -34,6 +34,5 @@ dependencies {
     compile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
     compile "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
     compile "com.badlogicgames.box2dlights:box2dlights:$box2dlightsVersion"
-    testCompile group: 'junit', name: 'junit', version: '4.11'
 
 }

@@ -93,20 +93,21 @@ public class EntityGenerator implements IComponentCodeGenerator {
                     .setPublic();
 
             String typeName = info.typeName ;
-            if(info.generics.size()>0) typeName+="<";
-            for ( TypeVariableSource<JavaClassSource> generic : info.generics) {
-                String javaType[] = new String[generic.getBounds().size()];
-                for (int i = 0; i < generic.getBounds().size(); i++) {
-                    javaType[i] = (String) generic.getBounds().get(i).getSimpleName();
+            if(info.generics !=null && info.generics.size()>0) {
+                typeName += "<";
+                for (TypeVariableSource<JavaClassSource> generic : info.generics) {
+                    String javaType[] = new String[generic.getBounds().size()];
+                    for (int i = 0; i < generic.getBounds().size(); i++) {
+                        javaType[i] = (String) generic.getBounds().get(i).getSimpleName();
+                    }
+                    methodGET.addTypeVariable().setName(generic.getName()).setBounds(javaType);
+                    if (typeName.indexOf("<") != typeName.length() - 1) typeName += ",";
+                    typeName += generic.getName();
                 }
-                methodGET.addTypeVariable().setName(generic.getName()).setBounds(javaType);
-                if(typeName.indexOf("<") !=  typeName.length()-1) typeName+= ",";
-                typeName+= generic.getName();
+                typeName += ">";
+                methodGET.setBody(String.format("return (%1$s)getComponent(%2$s.%3$s);"
+                        , typeName, CodeGenerator.capitalize(info.contexts.get(0)) + CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG, info.typeName));
             }
-            if(info.generics.size()>0) typeName+=">";
-            methodGET.setBody(String.format("return (%1$s)getComponent(%2$s.%3$s);"
-                            , typeName, CodeGenerator.capitalize(info.contexts.get(0)) + CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG, info.typeName));
-
         }
     }
 
@@ -172,17 +173,19 @@ public class EntityGenerator implements IComponentCodeGenerator {
                             : memberNamesWithType(info.memberInfos));
 
             String typeName = info.typeName ;
-            if(info.generics.size()>0) typeName+="<";
-            for ( TypeVariableSource<JavaClassSource> generic : info.generics) {
-                String javaType[] = new String[generic.getBounds().size()];
-                for (int i = 0; i < generic.getBounds().size(); i++) {
-                    javaType[i] = (String) generic.getBounds().get(i).getSimpleName();
+            if(info.generics !=null && info.generics.size()>0) {
+                typeName += "<";
+                for (TypeVariableSource<JavaClassSource> generic : info.generics) {
+                    String javaType[] = new String[generic.getBounds().size()];
+                    for (int i = 0; i < generic.getBounds().size(); i++) {
+                        javaType[i] = (String) generic.getBounds().get(i).getSimpleName();
+                    }
+                    addMethod.addTypeVariable().setName(generic.getName()).setBounds(javaType);
+                    if (typeName.indexOf("<") != typeName.length() - 1) typeName += ",";
+                    typeName += generic.getName();
                 }
-                addMethod.addTypeVariable().setName(generic.getName()).setBounds(javaType);
-                if(typeName.indexOf("<") !=  typeName.length()-1) typeName+= ",";
-                typeName+= generic.getName();
+                typeName += ">";
             }
-            if(info.generics.size()>0) typeName+=">";
             String method = "";
 
             if (info.constructores != null && info.constructores.size() > 0) {
@@ -216,18 +219,19 @@ public class EntityGenerator implements IComponentCodeGenerator {
                             : memberNamesWithType(info.memberInfos));
 
             String typeName = info.typeName ;
-            if(info.generics.size()>0) typeName+="<";
-            for ( TypeVariableSource<JavaClassSource> generic : info.generics) {
-                String javaType[] = new String[generic.getBounds().size()];
-                for (int i = 0; i < generic.getBounds().size(); i++) {
-                    javaType[i] = (String) generic.getBounds().get(i).getSimpleName();
+            if(info.generics !=null && info.generics.size()>0) {
+                typeName += "<";
+                for (TypeVariableSource<JavaClassSource> generic : info.generics) {
+                    String javaType[] = new String[generic.getBounds().size()];
+                    for (int i = 0; i < generic.getBounds().size(); i++) {
+                        javaType[i] = (String) generic.getBounds().get(i).getSimpleName();
+                    }
+                    replaceMethod.addTypeVariable().setName(generic.getName()).setBounds(javaType);
+                    if (typeName.indexOf("<") != typeName.length() - 1) typeName += ",";
+                    typeName += generic.getName();
                 }
-                replaceMethod.addTypeVariable().setName(generic.getName()).setBounds(javaType);
-                if(typeName.indexOf("<") !=  typeName.length()-1) typeName+= ",";
-                typeName+= generic.getName();
+               typeName += ">";
             }
-            if(info.generics.size()>0) typeName+=">";
-
             String method;
             if (info.constructores != null && info.constructores.size() > 0) {
                 method = String.format("%2$s component = (%2$s) recoverComponent(%1$s.%5$s);\n if(component == null) { " +

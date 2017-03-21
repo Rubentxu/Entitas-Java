@@ -1,8 +1,7 @@
 package com.ilargia.games.entitas.provider;
 
-
-import com.ilargia.games.entitas.intermediate.ComponentInfo;
-import com.ilargia.games.entitas.providers.TypeReflectionProvider;
+import com.ilargia.games.entitas.codeGenerator.intermediate.ComponentInfo;
+import com.ilargia.games.entitas.codeGenerator.providers.TypeReflectionProvider;
 import org.junit.Before;
 import org.junit.Test;
 
