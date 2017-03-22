@@ -1,6 +1,6 @@
 package com.ilargia.games.egdx.logicbricks.system.render;
 
-import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
@@ -28,7 +28,7 @@ public class DebugRendererSystem implements IInitializeSystem, IRenderSystem {
     private Entitas entitas;
     private ShapeRenderer shapeRenderer;
     private Box2DDebugRenderer debugRenderer;
-    private OrthographicCamera cam;
+    private Camera cam;
 
 
     public DebugRendererSystem(Entitas entitas, World world, Batch batch) {

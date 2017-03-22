@@ -1,5 +1,6 @@
 package com.ilargia.games.egdx.logicbricks.system.render;
 
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
@@ -23,7 +24,7 @@ public class TiledRendererSystem extends ReactiveSystem<SceneEntity> implements 
     private AssetsManagerGDX assetsManager;
     private SceneContext context;
     private OrthogonalTiledMapRenderer tiledRenderer;
-    private OrthographicCamera cam;
+    private Camera cam;
 
     public TiledRendererSystem(Entitas entitas, AssetsManagerGDX assetsManager) {
         super(entitas.scene);
@@ -56,7 +57,7 @@ public class TiledRendererSystem extends ReactiveSystem<SceneEntity> implements 
         Tiled tiled = context.getTiled();
         TiledMap tiledMap = assetsManager.getMap(tiled.tileMapName);
         tiledRenderer.setMap(tiledMap);
-        tiledRenderer.setView(cam);
+        tiledRenderer.setView((OrthographicCamera) cam);
     }
 
     @Override

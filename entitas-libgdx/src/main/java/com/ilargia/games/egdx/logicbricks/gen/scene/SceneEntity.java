@@ -4,16 +4,19 @@ import com.ilargia.games.entitas.api.*;
 import com.ilargia.games.entitas.Entity;
 import java.util.Stack;
 import com.ilargia.games.egdx.logicbricks.component.scene.Camera;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.ilargia.games.entitas.api.IComponent;
 import com.ilargia.games.egdx.logicbricks.component.scene.Catch;
 import com.badlogic.gdx.graphics.Color;
 import com.ilargia.games.egdx.logicbricks.component.scene.GameWorld;
-import com.ilargia.games.egdx.logicbricks.component.scene.Light;
 import com.ilargia.games.egdx.logicbricks.component.scene.ParallaxLayer;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.ilargia.games.egdx.logicbricks.component.scene.PositionalLight;
+import box2dLight.ChainLight;
+import box2dLight.ConeLight;
+import box2dLight.DirectionalLight;
+import box2dLight.PointLight;
 import com.ilargia.games.egdx.logicbricks.component.scene.Tiled;
 
 /**
@@ -34,7 +37,7 @@ public class SceneEntity extends Entity {
 		return hasComponent(SceneComponentsLookup.Camera);
 	}
 
-	public SceneEntity addCamera(OrthographicCamera camera) {
+	public SceneEntity addCamera(com.badlogic.gdx.graphics.Camera camera) {
 		Camera component = (Camera) recoverComponent(SceneComponentsLookup.Camera);
 		if (component == null) {
 			component = new Camera();
@@ -44,7 +47,7 @@ public class SceneEntity extends Entity {
 		return this;
 	}
 
-	public SceneEntity replaceCamera(OrthographicCamera camera) {
+	public SceneEntity replaceCamera(com.badlogic.gdx.graphics.Camera camera) {
 		Camera component = (Camera) recoverComponent(SceneComponentsLookup.Camera);
 		if (component == null) {
 			component = new Camera();
@@ -141,39 +144,6 @@ public class SceneEntity extends Entity {
 		return this;
 	}
 
-	public Light getLight() {
-		return (Light) getComponent(SceneComponentsLookup.Light);
-	}
-
-	public boolean hasLight() {
-		return hasComponent(SceneComponentsLookup.Light);
-	}
-
-	public SceneEntity addLight(box2dLight.Light light) {
-		Light component = (Light) recoverComponent(SceneComponentsLookup.Light);
-		if (component == null) {
-			component = new Light();
-		}
-		component.light = light;
-		addComponent(SceneComponentsLookup.Light, component);
-		return this;
-	}
-
-	public SceneEntity replaceLight(box2dLight.Light light) {
-		Light component = (Light) recoverComponent(SceneComponentsLookup.Light);
-		if (component == null) {
-			component = new Light();
-		}
-		component.light = light;
-		replaceComponent(SceneComponentsLookup.Light, component);
-		return this;
-	}
-
-	public SceneEntity removeLight() {
-		removeComponent(SceneComponentsLookup.Light);
-		return this;
-	}
-
 	public ParallaxLayer getParallaxLayer() {
 		return (ParallaxLayer) getComponent(SceneComponentsLookup.ParallaxLayer);
 	}
@@ -218,6 +188,51 @@ public class SceneEntity extends Entity {
 
 	public SceneEntity removeParallaxLayer() {
 		removeComponent(SceneComponentsLookup.ParallaxLayer);
+		return this;
+	}
+
+	public PositionalLight getPositionalLight() {
+		return (PositionalLight) getComponent(SceneComponentsLookup.PositionalLight);
+	}
+
+	public boolean hasPositionalLight() {
+		return hasComponent(SceneComponentsLookup.PositionalLight);
+	}
+
+	public SceneEntity addPositionalLight(int raysNum, Color color,
+			float distance, Vector2 position) {
+		PositionalLight component = (PositionalLight) recoverComponent(SceneComponentsLookup.PositionalLight);
+		if (component == null) {
+			component = new PositionalLight(raysNum, color, distance, position);
+		} else {
+			component.raysNum = raysNum;
+			component.color = color;
+			component.distance = distance;
+			component.position = position;
+			component.light = null;
+		}
+		addComponent(SceneComponentsLookup.PositionalLight, component);
+		return this;
+	}
+
+	public SceneEntity replacePositionalLight(int raysNum, Color color,
+			float distance, Vector2 position) {
+		PositionalLight component = (PositionalLight) recoverComponent(SceneComponentsLookup.PositionalLight);
+		if (component == null) {
+			component = new PositionalLight(raysNum, color, distance, position);
+		} else {
+			component.raysNum = raysNum;
+			component.color = color;
+			component.distance = distance;
+			component.position = position;
+			component.light = null;
+		}
+		replaceComponent(SceneComponentsLookup.PositionalLight, component);
+		return this;
+	}
+
+	public SceneEntity removePositionalLight() {
+		removeComponent(SceneComponentsLookup.PositionalLight);
 		return this;
 	}
 

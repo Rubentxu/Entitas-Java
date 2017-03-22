@@ -58,7 +58,7 @@ public class PlatformExampleState extends GameStateGDX {
                 .add(new AnimationSystem(entitas))
                 .add(new CameraActuatorSystem(entitas))
                 .add(new BackgroundRenderSystem(entitas, engine))
-                .add(new TextureRendererSystem(entitas, engine.getManager(SceneManagerGDX.class).getBatch()))
+                .add(new TextureRendererSystem(entitas, engine))
                 .add(new DebugRendererSystem(entitas, engine.getManager(PhysicsManagerGDX.class).getPhysics(),
                         engine.getManager(SceneManagerGDX.class).getBatch()));
 

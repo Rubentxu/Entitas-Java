@@ -1,5 +1,6 @@
 package com.examples.games.scenes;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.ilargia.games.egdx.api.Engine;
@@ -21,15 +22,21 @@ public class PlatformExamples implements SceneFactory<Engine, Entitas> {
         assetsManager.finishLoading();
 
 
+//        entitas.scene.createEntity()
+//                .addParallaxLayer(new TextureRegion(assetsManager.getTexture("assets/imagenes/fondos/fondo.jpg"))
+//                        , new Vector2(0.29f,0f),new Vector2(-50, 0),new Vector2(0, 10));
+//        entitas.scene.createEntity()
+//                .addParallaxLayer(new TextureRegion(assetsManager.getTexture("assets/imagenes/fondos/nubes.png"))
+//                        , new Vector2(0.09f,1.0f),new Vector2(0, 10),new Vector2(0, 0));
+//        entitas.scene.createEntity()
+//                .addParallaxLayer(new TextureRegion(assetsManager.getTexture("assets/imagenes/fondos/arboles.png"))
+//                        , new Vector2(0.15f,0),new Vector2(0, 0),new Vector2(0, 20));
+
         entitas.scene.createEntity()
-                .addParallaxLayer(new TextureRegion(assetsManager.getTexture("assets/imagenes/fondos/fondo.jpg"))
-                        , new Vector2(0.29f,0f),new Vector2(0, 0),new Vector2(0, 0));
+                .addPositionalLight(55, Color.GOLD, 45, new Vector2(10,4));
+
         entitas.scene.createEntity()
-                .addParallaxLayer(new TextureRegion(assetsManager.getTexture("assets/imagenes/fondos/nubes.png"))
-                        , new Vector2(0.09f,1.0f),new Vector2(0, 0),new Vector2(0, 0));
-        entitas.scene.createEntity()
-                .addParallaxLayer(new TextureRegion(assetsManager.getTexture("assets/imagenes/fondos/arboles.png"))
-                        , new Vector2(0.15f,0),new Vector2(0, 0),new Vector2(0, 20));
+                .addPositionalLight(25, Color.FOREST, 45, new Vector2(57,9));
 
 
         SceneManagerGDX sceneManager = engine.getManager(SceneManagerGDX.class);

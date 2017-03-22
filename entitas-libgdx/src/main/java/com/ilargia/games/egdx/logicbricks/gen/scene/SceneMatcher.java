@@ -12,8 +12,8 @@ public class SceneMatcher {
 	private static Matcher _matcherCamera;
 	private static Matcher _matcherCatch;
 	private static Matcher _matcherGameWorld;
-	private static Matcher _matcherLight;
 	private static Matcher _matcherParallaxLayer;
+	private static Matcher _matcherPositionalLight;
 	private static Matcher _matcherTiled;
 
 	public static Matcher Camera() {
@@ -46,16 +46,6 @@ public class SceneMatcher {
 		return _matcherGameWorld;
 	}
 
-	public static Matcher Light() {
-		if (_matcherLight == null) {
-			Matcher matcher = (Matcher) Matcher
-					.AllOf(SceneComponentsLookup.Light);
-			matcher.componentNames = SceneComponentsLookup.componentNames();
-			_matcherLight = matcher;
-		}
-		return _matcherLight;
-	}
-
 	public static Matcher ParallaxLayer() {
 		if (_matcherParallaxLayer == null) {
 			Matcher matcher = (Matcher) Matcher
@@ -64,6 +54,16 @@ public class SceneMatcher {
 			_matcherParallaxLayer = matcher;
 		}
 		return _matcherParallaxLayer;
+	}
+
+	public static Matcher PositionalLight() {
+		if (_matcherPositionalLight == null) {
+			Matcher matcher = (Matcher) Matcher
+					.AllOf(SceneComponentsLookup.PositionalLight);
+			matcher.componentNames = SceneComponentsLookup.componentNames();
+			_matcherPositionalLight = matcher;
+		}
+		return _matcherPositionalLight;
 	}
 
 	public static Matcher Tiled() {

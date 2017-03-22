@@ -3,8 +3,8 @@ package com.ilargia.games.egdx.logicbricks.gen.scene;
 import com.ilargia.games.egdx.logicbricks.component.scene.Camera;
 import com.ilargia.games.egdx.logicbricks.component.scene.Catch;
 import com.ilargia.games.egdx.logicbricks.component.scene.GameWorld;
-import com.ilargia.games.egdx.logicbricks.component.scene.Light;
 import com.ilargia.games.egdx.logicbricks.component.scene.ParallaxLayer;
+import com.ilargia.games.egdx.logicbricks.component.scene.PositionalLight;
 import com.ilargia.games.egdx.logicbricks.component.scene.Tiled;
 
 /**
@@ -17,18 +17,18 @@ public class SceneComponentsLookup {
 	public static final int Camera = 0;
 	public static final int Catch = 1;
 	public static final int GameWorld = 2;
-	public static final int Light = 3;
-	public static final int ParallaxLayer = 4;
+	public static final int ParallaxLayer = 3;
+	public static final int PositionalLight = 4;
 	public static final int Tiled = 5;
 	public static final int totalComponents = 6;
 
 	public static String[] componentNames() {
-		return new String[]{"Camera", "Catch", "GameWorld", "Light",
-				"ParallaxLayer", "Tiled"};
+		return new String[]{"Camera", "Catch", "GameWorld", "ParallaxLayer",
+				"PositionalLight", "Tiled"};
 	}
 
 	public static Class[] componentTypes() {
 		return new Class[]{Camera.class, Catch.class, GameWorld.class,
-				Light.class, ParallaxLayer.class, Tiled.class};
+				ParallaxLayer.class, PositionalLight.class, Tiled.class};
 	}
 }

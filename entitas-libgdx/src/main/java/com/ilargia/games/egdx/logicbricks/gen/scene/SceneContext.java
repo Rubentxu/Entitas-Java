@@ -1,7 +1,6 @@
 package com.ilargia.games.egdx.logicbricks.gen.scene;
 
 import com.ilargia.games.entitas.api.*;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.ilargia.games.egdx.logicbricks.component.scene.Camera;
 import com.ilargia.games.egdx.logicbricks.component.scene.Catch;
 import com.badlogic.gdx.graphics.Color;
@@ -35,7 +34,7 @@ public class SceneContext
 		return getCameraEntity() != null;
 	}
 
-	public SceneEntity setCamera(OrthographicCamera camera) {
+	public SceneEntity setCamera(com.badlogic.gdx.graphics.Camera camera) {
 		if (hasCamera()) {
 			throw new EntitasException(
 					"Could not set Camera!" + this
@@ -47,7 +46,7 @@ public class SceneContext
 		return entity;
 	}
 
-	public SceneEntity replaceCamera(OrthographicCamera camera) {
+	public SceneEntity replaceCamera(com.badlogic.gdx.graphics.Camera camera) {
 		SceneEntity entity = getCameraEntity();
 		if (entity == null) {
 			entity = setCamera(camera);

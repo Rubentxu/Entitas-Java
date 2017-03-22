@@ -7,13 +7,16 @@ import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.ilargia.games.egdx.api.factories.EntityFactory;
+import com.ilargia.games.egdx.api.factories.LightFactory;
 import com.ilargia.games.egdx.api.factories.SceneFactory;
 import com.ilargia.games.egdx.api.managers.SceneManager;
 import com.ilargia.games.egdx.impl.EngineGDX;
+import com.ilargia.games.egdx.logicbricks.component.scene.PositionalLight;
 import com.ilargia.games.egdx.logicbricks.gen.Entitas;
 import com.ilargia.games.egdx.util.MapEntityParser;
 import com.ilargia.games.entitas.Entity;
 import com.ilargia.games.entitas.api.EntitasException;
+import com.ilargia.games.entitas.api.IComponent;
 import com.ilargia.games.entitas.factories.EntitasCollections;
 
 import java.util.Map;
@@ -25,6 +28,7 @@ public class SceneManagerGDX implements SceneManager {
     public PhysicsManagerGDX physics;
     public Map<String, EntityFactory> entityFactories;
     public Map<String, SceneFactory> sceneFactories;
+    public Map<Class<?>, LightFactory<SceneManagerGDX,IComponent,? extends Light>> ligthFactories;
     public RayHandler rayHandler;
     protected Batch batch;
     protected Camera defaultCamera;
@@ -35,6 +39,7 @@ public class SceneManagerGDX implements SceneManager {
         this.entitas = entitas;
         this.entityFactories = EntitasCollections.createMap(String.class, EntityFactory.class);
         this.sceneFactories = EntitasCollections.createMap(String.class, SceneFactory.class);
+        this.ligthFactories = EntitasCollections.createMap(String.class, LightFactory.class);
         batch = new SpriteBatch();
         defaultCamera = createCamera("Orthographic");
         mapParser = new MapEntityParser(this);
@@ -51,6 +56,12 @@ public class SceneManagerGDX implements SceneManager {
             factory.loadAssets(engine);
         }
         assetsManager.finishLoading();
+
+        addLightFactory(PointLight.class,(SceneManager sceneManager, IComponent c)-> {
+            PositionalLight component = (PositionalLight) c;
+            return new PointLight(rayHandler, component.raysNum, component.color, component.distance, component.position.x,
+                    component.position.y);
+        });
     }
 
     @Override
@@ -75,6 +86,11 @@ public class SceneManagerGDX implements SceneManager {
     }
 
     @Override
+    public <L> void addLightFactory(Class<L> type, LightFactory factory) {
+        ligthFactories.put(type, factory);
+    }
+
+    @Override
     public void createScene(String scene) {
         SceneFactory<EngineGDX, Entitas> factory = sceneFactories.get(scene);
         if(factory !=null) {
@@ -83,11 +99,12 @@ public class SceneManagerGDX implements SceneManager {
     }
 
     @Override
-    public Light createLight(String type, int raysNum, int distance, int colorRGBA) {
-        Light light = null;
-        if (type.equals("PointLight"))
-            light = new PointLight(rayHandler, raysNum, new Color(colorRGBA), distance, 0, 0);
-        return light;
+    public <C extends IComponent, L> L createLight(Class<L> type, C lightComponent) {
+        LightFactory<SceneManagerGDX, IComponent, ? extends Light> factory = ligthFactories.get(type);
+        if(factory !=null) {
+            return (L) factory.createLigth(this, lightComponent);
+        }
+        return null;
     }
 
     @Override

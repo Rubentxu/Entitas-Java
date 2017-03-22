@@ -20,12 +20,10 @@ import com.ilargia.games.entitas.matcher.Matcher;
 public class RaySensorSystem extends SensorSystem {
     private final SensorContext sensorContex;
     private final Group<SensorEntity> sensorGroup;
-    private final GameContext gameContex;
     private final World physics;
 
     public RaySensorSystem(Entitas entitas, World physisc) {
         this.sensorContex = entitas.sensor;
-        this.gameContex = entitas.game;
         this.physics = physisc;
         this.sensorGroup = sensorContex.getGroup(Matcher.AllOf(SensorMatcher.RaySensor(), SensorMatcher.Link()));
 
