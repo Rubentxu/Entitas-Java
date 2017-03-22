@@ -12,12 +12,22 @@ public class PreferencesManagerGDX implements PreferencesManager {
     public int LOG_LEVEL = 0;
     public float GAME_HEIGHT = 16.875f; // 1080 / 64 =16.875 px
     public float GAME_WIDTH = 30f;     //  1920 / 64 = 30f px
-    public int VIRTUAL_DEVICE_WIDTH = 220;     //  30 x 64 = 1920 px
-    public int VIRTUAL_DEVICE_HEIGHT = 100; // 16.875 x 64 =1080 px
+    public int VIRTUAL_DEVICE_WIDTH = 800;     //  30 x 64 = 1920 px
+    public int VIRTUAL_DEVICE_HEIGHT = 600; // 16.875 x 64 =1080 px
     // Box2D config
     public float RUNNING_FRAME_DURATION = 0.02f;
     public int VELOCITY_ITERATIONS = 10;
     public int POSITION_ITERATIONS = 8;
+
+    //Box2DLight
+    public boolean GAMMA_CORRECTION = false;     // enable or disable gamma correction
+    public boolean USE_DIFFUSE_LIGHT = false;       // enable or disable diffused lighting
+    public boolean BLUR = true;           // enabled or disable blur
+    public int BLUR_NUM = 2;           // set number of gaussian blur passes
+    public boolean SHADOWS = true;        // enable or disable shadow
+    public boolean CULLING = true;        // enable or disable culling
+    public float AMBIENT_LIGHT = 0.9f;
+
     // Preferences
     public boolean SOUND = false;
     public boolean MUSIC = false;
@@ -41,6 +51,10 @@ public class PreferencesManagerGDX implements PreferencesManager {
     }
 
     @Override
+    public void initialize() { }
+
+
+    @Override
     public void load() {
         if(preferences != null) {
             APP_NAME = preferences.getString(Constants.PREFS_NAME, "TEST_GAME");
@@ -60,6 +74,16 @@ public class PreferencesManagerGDX implements PreferencesManager {
             RUNNING_FRAME_DURATION = preferences.getFloat(Constants.PREF_RUNNING_FRAME_DURATION, 0.02F); //  30 x 64 = 1920 px
             VELOCITY_ITERATIONS = preferences.getInteger(Constants.PREF_VELOCITY_ITERATIONS, 10); //  30 x 64 = 1920 px
             POSITION_ITERATIONS = preferences.getInteger(Constants.PREF_POSITION_ITERATIONS, 8); //  30 x 64 = 1920 px
+
+            //Box2DLigth
+            GAMMA_CORRECTION = preferences.getBoolean(Constants.PREF_GAMMA_CORRECTION, true);
+            USE_DIFFUSE_LIGHT = preferences.getBoolean(Constants.PREF_USE_DIFFUSE_LIGHT, false);
+            BLUR = preferences.getBoolean(Constants.PREF_BLUR, true);
+            BLUR_NUM = preferences.getInteger(Constants.PREF_BLUR_NUM, 1);
+            SHADOWS = preferences.getBoolean(Constants.PREF_SHADOWS, true);
+            CULLING = preferences.getBoolean(Constants.PREF_CULLING, true);
+            AMBIENT_LIGHT = preferences.getFloat(Constants.PREF_AMBIENT_LIGHT, 0.9F);
+
         }
     }
 
@@ -74,11 +98,6 @@ public class PreferencesManagerGDX implements PreferencesManager {
             preferences.flush();
             load();
         }
-    }
-
-    @Override
-    public void initialize() {
-
     }
 
     @Override
@@ -105,6 +124,15 @@ public class PreferencesManagerGDX implements PreferencesManager {
         public static final String PREF_RUNNING_FRAME_DURATION = "pref.running.frame.duration";
         public static final String PREF_VELOCITY_ITERATIONS = "pref.box2d.velocity.iterations";
         public static final String PREF_POSITION_ITERATIONS = "pref.box2d.position.iterations";
+
+        //Box2DLigth
+        public static final String PREF_GAMMA_CORRECTION = "pref.box2d.ligth.gamma.correction";     // enable or disable gamma correction
+        public static final String PREF_USE_DIFFUSE_LIGHT = "pref.box2d.ligth.use.diffuse.ligth";       // enable or disable diffused lighting
+        public static final String PREF_BLUR = "pref.box2d.ligth.blur";           // enabled or disable blur
+        public static final String PREF_BLUR_NUM = "pref.box2d.ligth.blur.num";           // set number of gaussian blur passes
+        public static final String PREF_SHADOWS = "pref.box2d.ligth.shadows";        // enable or disable shadow
+        public static final String PREF_CULLING = "pref.box2d.ligth.culling";        // enable or disable culling
+        public static final String PREF_AMBIENT_LIGHT = "pref.box2d.ligth";
 
 
     }

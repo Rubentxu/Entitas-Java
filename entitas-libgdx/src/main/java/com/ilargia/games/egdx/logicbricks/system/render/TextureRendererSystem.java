@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.ilargia.games.egdx.impl.EngineGDX;
 import com.ilargia.games.egdx.impl.managers.LogManagerGDX;
+import com.ilargia.games.egdx.impl.managers.PreferencesManagerGDX;
 import com.ilargia.games.egdx.impl.managers.SceneManagerGDX;
 import com.ilargia.games.egdx.logicbricks.component.game.TextureView;
 import com.ilargia.games.egdx.logicbricks.gen.Entitas;
@@ -39,7 +40,6 @@ public class TextureRendererSystem implements IInitializeSystem, IRenderSystem {
         this.groupTextureView = entitas.game.getGroup(GameMatcher.TextureView());
         this.rayHandler =  engine.getManager(SceneManagerGDX.class).rayHandler;
 
-
     }
 
     @Override
@@ -47,7 +47,8 @@ public class TextureRendererSystem implements IInitializeSystem, IRenderSystem {
         cam.update();
 
         batch.setProjectionMatrix(cam.combined);
-
+        rayHandler.setCombinedMatrix(cam);
+        rayHandler.updateAndRender();
         batch.begin();
 
         for (GameEntity e : groupTextureView.getEntities()) {
@@ -62,8 +63,7 @@ public class TextureRendererSystem implements IInitializeSystem, IRenderSystem {
 
         batch.end();
 
-        rayHandler.setCombinedMatrix(cam);
-        rayHandler.updateAndRender();
+
     }
 
 

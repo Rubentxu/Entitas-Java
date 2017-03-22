@@ -6,6 +6,8 @@ import box2dLight.RayHandler;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.World;
 import com.ilargia.games.egdx.api.factories.EntityFactory;
 import com.ilargia.games.egdx.api.factories.LightFactory;
 import com.ilargia.games.egdx.api.factories.SceneFactory;
@@ -50,7 +52,17 @@ public class SceneManagerGDX implements SceneManager {
         if (engine.getManager(PhysicsManagerGDX.class) == null) throw new EntitasException("SceneManagerGDX",
                 "SceneManagerGDX needs load PhysicsManagerGDX on the engine");
         physics = engine.getManager(PhysicsManagerGDX.class);
-        rayHandler = new RayHandler(physics.getPhysics());
+        rayHandler = new RayHandler(new World(new Vector2(),true));
+        PreferencesManagerGDX preferences = engine.getManager(PreferencesManagerGDX.class);
+        rayHandler.setAmbientLight(preferences.AMBIENT_LIGHT);
+        rayHandler.setBlur(preferences.BLUR);
+        rayHandler.setCulling(preferences.CULLING);
+        rayHandler.setGammaCorrection(preferences.GAMMA_CORRECTION);
+        rayHandler.setBlurNum(preferences.BLUR_NUM);
+        rayHandler.setShadows(preferences.SHADOWS);
+        rayHandler.useDiffuseLight(preferences.USE_DIFFUSE_LIGHT);
+        //rayHandler.update();
+
         AssetsManagerGDX assetsManager = engine.getManager(AssetsManagerGDX.class);
         for (EntityFactory factory : entityFactories.values()) {
             factory.loadAssets(engine);

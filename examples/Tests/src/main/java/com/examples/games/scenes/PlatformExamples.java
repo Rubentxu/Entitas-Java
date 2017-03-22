@@ -22,15 +22,15 @@ public class PlatformExamples implements SceneFactory<Engine, Entitas> {
         assetsManager.finishLoading();
 
 
-//        entitas.scene.createEntity()
-//                .addParallaxLayer(new TextureRegion(assetsManager.getTexture("assets/imagenes/fondos/fondo.jpg"))
-//                        , new Vector2(0.29f,0f),new Vector2(-50, 0),new Vector2(0, 10));
-//        entitas.scene.createEntity()
-//                .addParallaxLayer(new TextureRegion(assetsManager.getTexture("assets/imagenes/fondos/nubes.png"))
-//                        , new Vector2(0.09f,1.0f),new Vector2(0, 10),new Vector2(0, 0));
-//        entitas.scene.createEntity()
-//                .addParallaxLayer(new TextureRegion(assetsManager.getTexture("assets/imagenes/fondos/arboles.png"))
-//                        , new Vector2(0.15f,0),new Vector2(0, 0),new Vector2(0, 20));
+        entitas.scene.createEntity()
+                .addParallaxLayer(new TextureRegion(assetsManager.getTexture("assets/imagenes/fondos/fondo.jpg"))
+                        , new Vector2(0.7f,0f),new Vector2(0, 1),new Vector2(0, 0));
+        entitas.scene.createEntity()
+                .addParallaxLayer(new TextureRegion(assetsManager.getTexture("assets/imagenes/fondos/nubes.png"))
+                        , new Vector2(0.5f,1.0f),new Vector2(0, 10),new Vector2(0, 0));
+        entitas.scene.createEntity()
+                .addParallaxLayer(new TextureRegion(assetsManager.getTexture("assets/imagenes/fondos/arboles.png"))
+                        , new Vector2(0.9f,0),new Vector2(0, -0.4f),new Vector2(0, 0));
 
         entitas.scene.createEntity()
                 .addPositionalLight(55, Color.GOLD, 45, new Vector2(10,4));
