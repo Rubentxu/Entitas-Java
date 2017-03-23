@@ -21,7 +21,6 @@ public class InputManagerGDX implements InputManager, InputProcessor {
     public KeyState[] keyStates;
     public TouchState[] touchStates;
     private List<GameController> controllers;
-    private PreferencesManagerGDX preferences;
     private Camera camera;
     private Vector3 worldCoordinates;
     private boolean mouse;
@@ -57,7 +56,6 @@ public class InputManagerGDX implements InputManager, InputProcessor {
     public void initialize() {
         if (engine.getManager(PhysicsManagerGDX.class) == null) throw new EntitasException("InputManagerGDX",
                 "InputManagerGDX needs load PreferencesManagerGDX on the engine");
-        preferences = engine.getManager(PreferencesManagerGDX.class);
         camera = engine.getCamera();
 
         Gdx.input.setInputProcessor(this);
@@ -74,11 +72,11 @@ public class InputManagerGDX implements InputManager, InputProcessor {
     }
 
     private int coordinateX(int screenX) {
-        return (int) (screenX - preferences.GAME_WIDTH / 2);
+        return (int) (screenX);
     }
 
     private int coordinateY(int screenY) {
-        return (int) (preferences.GAME_HEIGHT / 2 - screenY);
+        return (int) screenY;
     }
 
     @Override
@@ -179,7 +177,7 @@ public class InputManagerGDX implements InputManager, InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-
+        LogManagerGDX.debug("InputManager", "touchDown pointer %d, button %d, isMouse %s" , pointer, button, mouse);
         //get altered coordinates
         worldCoordinates = new Vector3(screenX, screenY, 0);
         camera.unproject(worldCoordinates);
@@ -202,13 +200,14 @@ public class InputManagerGDX implements InputManager, InputProcessor {
 
 
         }
+        LogManagerGDX.debug("InputManager", "touchStates pointer %s" , touchStates[indexPointer]);
         return false;
 
     }
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-
+        LogManagerGDX.debug("InputManager", "touchUp pointer %d, button %d, isMouse %s" , pointer, button, mouse);
         int indexPointer = (mouse) ? button : pointer;
         //set the state of all touch state events
         if (indexPointer < touchStates.length) {
@@ -282,6 +281,15 @@ public class InputManagerGDX implements InputManager, InputProcessor {
         public boolean pressed = false;
         public boolean down = false;
         public boolean released = false;
+
+        @Override
+        public String toString() {
+            return "InputState{" +
+                    "pressed=" + pressed +
+                    ", down=" + down +
+                    ", released=" + released +
+                    '}';
+        }
     }
 
     public class KeyState extends InputState {
@@ -307,6 +315,17 @@ public class InputManagerGDX implements InputManager, InputProcessor {
             coordinates = new Vector2(coord_x, coord_y);
             lastPosition = new Vector2(0, 0);
             displacement = new Vector2(lastPosition.x, lastPosition.y);
+        }
+
+        @Override
+        public String toString() {
+            return "TouchState{" +
+                    "pointer=" + pointer +
+                    ", coordinates=" + coordinates +
+                    ", lastPosition=" + lastPosition +
+                    ", displacement=" + displacement +
+                    "InputState=" + super.toString()+
+                    '}';
         }
     }
 

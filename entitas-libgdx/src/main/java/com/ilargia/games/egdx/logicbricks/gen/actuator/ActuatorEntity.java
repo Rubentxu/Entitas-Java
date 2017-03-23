@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.ilargia.games.entitas.api.IComponent;
 import com.ilargia.games.egdx.logicbricks.component.actuator.CharacterActuator;
 import com.ilargia.games.egdx.logicbricks.data.StateCharacter;
+import com.ilargia.games.egdx.logicbricks.component.actuator.DropActuator;
 import com.ilargia.games.egdx.logicbricks.component.actuator.Link;
 import com.ilargia.games.egdx.logicbricks.component.actuator.TextureActuator;
 import com.badlogic.gdx.graphics.Color;
@@ -101,6 +102,41 @@ public class ActuatorEntity extends Entity {
 
 	public ActuatorEntity removeCharacterActuator() {
 		removeComponent(ActuatorComponentsLookup.CharacterActuator);
+		return this;
+	}
+
+	public DropActuator getDropActuator() {
+		return (DropActuator) getComponent(ActuatorComponentsLookup.DropActuator);
+	}
+
+	public boolean hasDropActuator() {
+		return hasComponent(ActuatorComponentsLookup.DropActuator);
+	}
+
+	public ActuatorEntity addDropActuator(String target, float maxForce) {
+		DropActuator component = (DropActuator) recoverComponent(ActuatorComponentsLookup.DropActuator);
+		if (component == null) {
+			component = new DropActuator();
+		}
+		component.target = target;
+		component.maxForce = maxForce;
+		addComponent(ActuatorComponentsLookup.DropActuator, component);
+		return this;
+	}
+
+	public ActuatorEntity replaceDropActuator(String target, float maxForce) {
+		DropActuator component = (DropActuator) recoverComponent(ActuatorComponentsLookup.DropActuator);
+		if (component == null) {
+			component = new DropActuator();
+		}
+		component.target = target;
+		component.maxForce = maxForce;
+		replaceComponent(ActuatorComponentsLookup.DropActuator, component);
+		return this;
+	}
+
+	public ActuatorEntity removeDropActuator() {
+		removeComponent(ActuatorComponentsLookup.DropActuator);
 		return this;
 	}
 

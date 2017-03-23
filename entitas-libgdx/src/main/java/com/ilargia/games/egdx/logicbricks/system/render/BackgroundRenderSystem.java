@@ -32,7 +32,6 @@ public class BackgroundRenderSystem implements IInitializeSystem, IRenderSystem 
 
     @Override
     public void initialize() {
-        PreferencesManagerGDX preferences = engine.getManager(PreferencesManagerGDX.class);
         camera = engine.getManager(SceneManagerGDX.class).getDefaultCamera();
         batch = engine.getManager(SceneManagerGDX.class).getBatch();
 
@@ -44,8 +43,10 @@ public class BackgroundRenderSystem implements IInitializeSystem, IRenderSystem 
         this.camera.position.add(speed.x * delta, speed.y * delta, 0);
         for (SceneEntity entity : group.getEntities()) {
             ParallaxLayer layer = entity.getParallaxLayer();
+
             batch.setProjectionMatrix(camera.projection);
             batch.begin();
+
             float textureWidth = layer.background.getRegionWidth()/64;
             float textureHeight = layer.background.getRegionHeight()/64;
             float currentX = -camera.position.x * layer.parallaxRatio.x % (textureWidth + layer.padding.x);
@@ -65,6 +66,7 @@ public class BackgroundRenderSystem implements IInitializeSystem, IRenderSystem 
                 } while (currentY < camera.viewportHeight);
                 currentX += (textureWidth + layer.padding.x);
             } while (currentX < camera.viewportWidth);
+
             batch.end();
 
 
@@ -72,9 +74,7 @@ public class BackgroundRenderSystem implements IInitializeSystem, IRenderSystem 
     }
 
     public void render(ParallaxLayer layer, float xPosition, float yPosition, float width, float height) {
-
         batch.draw(layer.background, xPosition, yPosition, width, height);
-
 
     }
 

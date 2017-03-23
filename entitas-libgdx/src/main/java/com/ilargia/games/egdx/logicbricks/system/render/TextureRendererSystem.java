@@ -25,7 +25,6 @@ public class TextureRendererSystem implements IInitializeSystem, IRenderSystem {
     private OrthographicCamera cam;
     private Batch batch;
     private Group<GameEntity> groupTextureView;
-    private RayHandler rayHandler;
 
     public TextureRendererSystem(Entitas entitas, EngineGDX engine) {
         this.batch = engine.getBatch();
@@ -38,19 +37,14 @@ public class TextureRendererSystem implements IInitializeSystem, IRenderSystem {
     public void initialize() {
         this.cam = (OrthographicCamera) entitas.scene.getCamera().camera;
         this.groupTextureView = entitas.game.getGroup(GameMatcher.TextureView());
-        this.rayHandler =  engine.getManager(SceneManagerGDX.class).rayHandler;
 
     }
 
     @Override
     public void render() {
-        cam.update();
 
         batch.setProjectionMatrix(cam.combined);
-        rayHandler.setCombinedMatrix(cam);
-        rayHandler.updateAndRender();
         batch.begin();
-
         for (GameEntity e : groupTextureView.getEntities()) {
             TextureView view = e.getTextureView();
             Body body = e.getRigidBody().body;
@@ -60,9 +54,7 @@ public class TextureRendererSystem implements IInitializeSystem, IRenderSystem {
                     body.getPosition().x, body.getPosition().y, view.bounds.extentsX * 2, view.bounds.extentsY * 2, 1, 1, 0);
 
         }
-
         batch.end();
-
 
     }
 

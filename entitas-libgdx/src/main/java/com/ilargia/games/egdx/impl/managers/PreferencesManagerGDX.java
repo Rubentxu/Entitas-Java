@@ -14,10 +14,16 @@ public class PreferencesManagerGDX implements PreferencesManager {
     public float GAME_WIDTH = 30f;     //  1920 / 64 = 30f px
     public int VIRTUAL_DEVICE_WIDTH = 220;     //  30 x 64 = 1920 px
     public int VIRTUAL_DEVICE_HEIGHT = 100; // 16.875 x 64 =1080 px
+
+
     // Box2D config
-    public float RUNNING_FRAME_DURATION = 0.02f;
-    public int VELOCITY_ITERATIONS = 10;
-    public int POSITION_ITERATIONS = 8;
+    public int MAX_FPS = 30;
+    public int MIN_FPS = 15;
+    public float TIME_STEP = 1f / MAX_FPS;
+    public float MAX_STEPS = 1f + MAX_FPS / MIN_FPS;
+    public float MAX_TIME_PER_FRAME = TIME_STEP * MAX_STEPS;
+    public int VELOCITY_ITERATIONS = 6;
+    public int POSITION_ITERATIONS = 2;
 
     //Box2DLight
     public boolean GAMMA_CORRECTION = true;     // enable or disable gamma correction
@@ -26,7 +32,7 @@ public class PreferencesManagerGDX implements PreferencesManager {
     public int BLUR_NUM = 4;           // set number of gaussian blur passes
     public boolean SHADOWS = false;        // enable or disable shadow
     public boolean CULLING = true;        // enable or disable culling
-    public float AMBIENT_LIGHT = 0.9f;
+    public float AMBIENT_LIGHT = 0;
 
     // Preferences
     public boolean SOUND = false;
@@ -71,7 +77,8 @@ public class PreferencesManagerGDX implements PreferencesManager {
             GAME_WIDTH = preferences.getFloat(Constants.PREF_GAME_WIDTH, 30F); // 1920 / 64 = 30f px
             VIRTUAL_DEVICE_HEIGHT = preferences.getInteger(Constants.PREF_VIRTUAL_DEVICE_HEIGHT, 1080); // 16.875 x 64 =1080 px
             VIRTUAL_DEVICE_WIDTH = preferences.getInteger(Constants.PREF_VIRTUAL_DEVICE_WIDTH, 1920); //  30 x 64 = 1920 px
-            RUNNING_FRAME_DURATION = preferences.getFloat(Constants.PREF_RUNNING_FRAME_DURATION, 0.02F); //  30 x 64 = 1920 px
+            MAX_FPS = preferences.getInteger(Constants.PREF_MAX_FPS, 30);
+            MIN_FPS = preferences.getInteger(Constants.PREF_MIN_FPS, 15);
             VELOCITY_ITERATIONS = preferences.getInteger(Constants.PREF_VELOCITY_ITERATIONS, 10); //  30 x 64 = 1920 px
             POSITION_ITERATIONS = preferences.getInteger(Constants.PREF_POSITION_ITERATIONS, 8); //  30 x 64 = 1920 px
 
@@ -121,7 +128,8 @@ public class PreferencesManagerGDX implements PreferencesManager {
         public static final String PREF_VIRTUAL_DEVICE_HEIGHT = "pref.virtual.device.heigh";
         public static final String PREF_VIRTUAL_DEVICE_WIDTH = "pref.virtual.device.width";
         // Box2D config
-        public static final String PREF_RUNNING_FRAME_DURATION = "pref.running.frame.duration";
+        public static final String PREF_MAX_FPS = "pref.max.fps";
+        public static final String PREF_MIN_FPS = "pref.min.fps";
         public static final String PREF_VELOCITY_ITERATIONS = "pref.box2d.velocity.iterations";
         public static final String PREF_POSITION_ITERATIONS = "pref.box2d.position.iterations";
 

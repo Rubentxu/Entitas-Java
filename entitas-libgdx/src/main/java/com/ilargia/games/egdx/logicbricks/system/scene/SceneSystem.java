@@ -17,6 +17,7 @@ import com.ilargia.games.egdx.logicbricks.gen.Entitas;
 import com.ilargia.games.egdx.logicbricks.gen.scene.SceneContext;
 import com.ilargia.games.egdx.logicbricks.gen.scene.SceneEntity;
 import com.ilargia.games.egdx.logicbricks.gen.scene.SceneMatcher;
+import com.ilargia.games.egdx.logicbricks.system.render.LigthRendererSystem;
 import com.ilargia.games.entitas.api.IContext;
 import com.ilargia.games.entitas.api.system.ICleanupSystem;
 import com.ilargia.games.entitas.api.system.IInitializeSystem;
@@ -28,13 +29,13 @@ import java.util.List;
 
 public class SceneSystem extends ReactiveSystem<SceneEntity> implements IInitializeSystem, ICleanupSystem {
 
-    public static int BOX2D_VELOCITY_ITERATIONS;
-    public static int BOX2D_POSITION_ITERATIONS;
     private final SceneContext context;
     private final Engine engine;
     private World physics;
     private SceneManagerGDX sceneManager;
     private OrthographicCamera camera;
+    private float physicsTimeLeft;
+    private PreferencesManagerGDX preferences;
 
     public SceneSystem(Entitas entitas, Engine engine) {
         super(entitas.scene);
@@ -46,10 +47,8 @@ public class SceneSystem extends ReactiveSystem<SceneEntity> implements IInitial
     @Override
     public void initialize() {
         this.physics = engine.getManager(PhysicsManagerGDX.class).getPhysics();
-        PreferencesManagerGDX preferences = engine.getManager(PreferencesManagerGDX.class);
+        preferences = engine.getManager(PreferencesManagerGDX.class);
         sceneManager = engine.getManager(SceneManagerGDX.class);
-        BOX2D_VELOCITY_ITERATIONS = preferences.VELOCITY_ITERATIONS;
-        BOX2D_POSITION_ITERATIONS = preferences.POSITION_ITERATIONS;
         context.setGameWorld(preferences.GAME_WIDTH, preferences.GAME_HEIGHT, 64, Color.BLUE);
 
         camera = (OrthographicCamera) context.getCamera().camera;
@@ -95,7 +94,8 @@ public class SceneSystem extends ReactiveSystem<SceneEntity> implements IInitial
 
     @Override
     public void cleanup() {
-        physics.step(Gdx.graphics.getDeltaTime(), BOX2D_VELOCITY_ITERATIONS, BOX2D_POSITION_ITERATIONS);
+        physics.step(Gdx.graphics.getDeltaTime(), preferences.VELOCITY_ITERATIONS, preferences.POSITION_ITERATIONS);
+
     }
 
 }
