@@ -9,12 +9,55 @@ import com.ilargia.games.entitas.matcher.Matcher;
  */
 public class SceneMatcher {
 
+	private static Matcher _matcherCChainLight;
+	private static Matcher _matcherCConeLight;
+	private static Matcher _matcherCDirectionalLight;
+	private static Matcher _matcherCPointLight;
 	private static Matcher _matcherCamera;
 	private static Matcher _matcherCatch;
 	private static Matcher _matcherGameWorld;
 	private static Matcher _matcherParallaxLayer;
-	private static Matcher _matcherPositionalLight;
 	private static Matcher _matcherTiled;
+
+	public static Matcher CChainLight() {
+		if (_matcherCChainLight == null) {
+			Matcher matcher = (Matcher) Matcher
+					.AllOf(SceneComponentsLookup.CChainLight);
+			matcher.componentNames = SceneComponentsLookup.componentNames();
+			_matcherCChainLight = matcher;
+		}
+		return _matcherCChainLight;
+	}
+
+	public static Matcher CConeLight() {
+		if (_matcherCConeLight == null) {
+			Matcher matcher = (Matcher) Matcher
+					.AllOf(SceneComponentsLookup.CConeLight);
+			matcher.componentNames = SceneComponentsLookup.componentNames();
+			_matcherCConeLight = matcher;
+		}
+		return _matcherCConeLight;
+	}
+
+	public static Matcher CDirectionalLight() {
+		if (_matcherCDirectionalLight == null) {
+			Matcher matcher = (Matcher) Matcher
+					.AllOf(SceneComponentsLookup.CDirectionalLight);
+			matcher.componentNames = SceneComponentsLookup.componentNames();
+			_matcherCDirectionalLight = matcher;
+		}
+		return _matcherCDirectionalLight;
+	}
+
+	public static Matcher CPointLight() {
+		if (_matcherCPointLight == null) {
+			Matcher matcher = (Matcher) Matcher
+					.AllOf(SceneComponentsLookup.CPointLight);
+			matcher.componentNames = SceneComponentsLookup.componentNames();
+			_matcherCPointLight = matcher;
+		}
+		return _matcherCPointLight;
+	}
 
 	public static Matcher Camera() {
 		if (_matcherCamera == null) {
@@ -54,16 +97,6 @@ public class SceneMatcher {
 			_matcherParallaxLayer = matcher;
 		}
 		return _matcherParallaxLayer;
-	}
-
-	public static Matcher PositionalLight() {
-		if (_matcherPositionalLight == null) {
-			Matcher matcher = (Matcher) Matcher
-					.AllOf(SceneComponentsLookup.PositionalLight);
-			matcher.componentNames = SceneComponentsLookup.componentNames();
-			_matcherPositionalLight = matcher;
-		}
-		return _matcherPositionalLight;
 	}
 
 	public static Matcher Tiled() {

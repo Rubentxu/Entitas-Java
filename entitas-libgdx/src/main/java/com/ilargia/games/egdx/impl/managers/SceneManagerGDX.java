@@ -1,19 +1,18 @@
 package com.ilargia.games.egdx.impl.managers;
 
-import box2dLight.Light;
-import box2dLight.PointLight;
-import box2dLight.RayHandler;
+import box2dLight.*;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.World;
 import com.ilargia.games.egdx.api.factories.EntityFactory;
 import com.ilargia.games.egdx.api.factories.LightFactory;
 import com.ilargia.games.egdx.api.factories.SceneFactory;
 import com.ilargia.games.egdx.api.managers.SceneManager;
 import com.ilargia.games.egdx.impl.EngineGDX;
-import com.ilargia.games.egdx.logicbricks.component.scene.PositionalLight;
+import com.ilargia.games.egdx.logicbricks.component.scene.CChainLight;
+import com.ilargia.games.egdx.logicbricks.component.scene.CConeLight;
+import com.ilargia.games.egdx.logicbricks.component.scene.CDirectionalLight;
+import com.ilargia.games.egdx.logicbricks.component.scene.CPointLight;
 import com.ilargia.games.egdx.logicbricks.gen.Entitas;
 import com.ilargia.games.egdx.util.MapEntityParser;
 import com.ilargia.games.entitas.Entity;
@@ -52,7 +51,7 @@ public class SceneManagerGDX implements SceneManager {
         if (engine.getManager(PhysicsManagerGDX.class) == null) throw new EntitasException("SceneManagerGDX",
                 "SceneManagerGDX needs load PhysicsManagerGDX on the engine");
         physics = engine.getManager(PhysicsManagerGDX.class);
-        rayHandler = new RayHandler(new World(new Vector2(),true));
+        rayHandler = new RayHandler(physics.getPhysics());
         PreferencesManagerGDX preferences = engine.getManager(PreferencesManagerGDX.class);
         rayHandler.setAmbientLight(preferences.AMBIENT_LIGHT);
         rayHandler.setBlur(preferences.BLUR);
@@ -70,9 +69,29 @@ public class SceneManagerGDX implements SceneManager {
         assetsManager.finishLoading();
 
         addLightFactory(PointLight.class,(SceneManager sceneManager, IComponent c)-> {
-            PositionalLight component = (PositionalLight) c;
+            CPointLight component = (CPointLight) c;
             return new PointLight(rayHandler, component.raysNum, component.color, component.distance, component.position.x,
                     component.position.y);
+        });
+
+        addLightFactory(DirectionalLight.class,(SceneManager sceneManager, IComponent c)-> {
+            LogManagerGDX.debug("SceneManager", "create directional ligth");
+            CDirectionalLight component = (CDirectionalLight) c;
+            return new DirectionalLight(rayHandler, component.raysNum, component.color, component.direcction);
+        });
+
+        addLightFactory(ChainLight.class,(SceneManager sceneManager, IComponent c)-> {
+            LogManagerGDX.debug("SceneManager", "create ChainLight");
+            CChainLight component = (CChainLight) c;
+            return new ChainLight(rayHandler, component.raysNum, component.color, component.distance, component.rayDirecction,
+                    component.chain);
+        });
+
+        addLightFactory(ConeLight.class,(SceneManager sceneManager, IComponent c)-> {
+            LogManagerGDX.debug("SceneManager", "create ConeLight");
+            CConeLight component = (CConeLight) c;
+            return new ConeLight(rayHandler, component.raysNum, component.color, component.distance, component.position.x,
+                    component.position.y, component.directionDegree, component.coneDegree);
         });
     }
 

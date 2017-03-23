@@ -3,20 +3,23 @@ package com.ilargia.games.egdx.logicbricks.gen.scene;
 import com.ilargia.games.entitas.api.*;
 import com.ilargia.games.entitas.Entity;
 import java.util.Stack;
-import com.ilargia.games.egdx.logicbricks.component.scene.Camera;
-import com.ilargia.games.entitas.api.IComponent;
-import com.ilargia.games.egdx.logicbricks.component.scene.Catch;
+import com.ilargia.games.egdx.logicbricks.component.scene.CChainLight;
+import box2dLight.ChainLight;
+import box2dLight.PointLight;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.math.Vector2;
+import com.ilargia.games.entitas.api.IComponent;
+import com.ilargia.games.egdx.logicbricks.component.scene.CConeLight;
+import box2dLight.ConeLight;
+import com.ilargia.games.egdx.logicbricks.component.scene.CDirectionalLight;
+import box2dLight.DirectionalLight;
+import com.ilargia.games.egdx.logicbricks.component.scene.CPointLight;
+import com.ilargia.games.egdx.logicbricks.component.scene.Camera;
+import com.ilargia.games.egdx.logicbricks.component.scene.Catch;
 import com.ilargia.games.egdx.logicbricks.component.scene.GameWorld;
 import com.ilargia.games.egdx.logicbricks.component.scene.ParallaxLayer;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Vector2;
-import com.ilargia.games.egdx.logicbricks.component.scene.PositionalLight;
-import box2dLight.ChainLight;
-import box2dLight.ConeLight;
-import box2dLight.DirectionalLight;
-import box2dLight.PointLight;
 import com.ilargia.games.egdx.logicbricks.component.scene.Tiled;
 
 /**
@@ -27,6 +30,195 @@ import com.ilargia.games.egdx.logicbricks.component.scene.Tiled;
 public class SceneEntity extends Entity {
 
 	public SceneEntity() {
+	}
+
+	public CChainLight getCChainLight() {
+		return (CChainLight) getComponent(SceneComponentsLookup.CChainLight);
+	}
+
+	public boolean hasCChainLight() {
+		return hasComponent(SceneComponentsLookup.CChainLight);
+	}
+
+	public SceneEntity addCChainLight(int raysNum, Color color, float distance,
+			int rayDirecction, float[] chain) {
+		CChainLight component = (CChainLight) recoverComponent(SceneComponentsLookup.CChainLight);
+		if (component == null) {
+			component = new CChainLight(raysNum, color, distance,
+					rayDirecction, chain);
+		} else {
+			component.raysNum = raysNum;
+			component.color = color;
+			component.distance = distance;
+			component.rayDirecction = rayDirecction;
+			component.chain = chain;
+			component.light = null;
+		}
+		addComponent(SceneComponentsLookup.CChainLight, component);
+		return this;
+	}
+
+	public SceneEntity replaceCChainLight(int raysNum, Color color,
+			float distance, int rayDirecction, float[] chain) {
+		CChainLight component = (CChainLight) recoverComponent(SceneComponentsLookup.CChainLight);
+		if (component == null) {
+			component = new CChainLight(raysNum, color, distance,
+					rayDirecction, chain);
+		} else {
+			component.raysNum = raysNum;
+			component.color = color;
+			component.distance = distance;
+			component.rayDirecction = rayDirecction;
+			component.chain = chain;
+			component.light = null;
+		}
+		replaceComponent(SceneComponentsLookup.CChainLight, component);
+		return this;
+	}
+
+	public SceneEntity removeCChainLight() {
+		removeComponent(SceneComponentsLookup.CChainLight);
+		return this;
+	}
+
+	public CConeLight getCConeLight() {
+		return (CConeLight) getComponent(SceneComponentsLookup.CConeLight);
+	}
+
+	public boolean hasCConeLight() {
+		return hasComponent(SceneComponentsLookup.CConeLight);
+	}
+
+	public SceneEntity addCConeLight(int raysNum, Color color, float distance,
+			Vector2 position, float directionDegree, float coneDegree) {
+		CConeLight component = (CConeLight) recoverComponent(SceneComponentsLookup.CConeLight);
+		if (component == null) {
+			component = new CConeLight(raysNum, color, distance, position,
+					directionDegree, coneDegree);
+		} else {
+			component.raysNum = raysNum;
+			component.color = color;
+			component.distance = distance;
+			component.position = position;
+			component.directionDegree = directionDegree;
+			component.coneDegree = coneDegree;
+			component.light = null;
+		}
+		addComponent(SceneComponentsLookup.CConeLight, component);
+		return this;
+	}
+
+	public SceneEntity replaceCConeLight(int raysNum, Color color,
+			float distance, Vector2 position, float directionDegree,
+			float coneDegree) {
+		CConeLight component = (CConeLight) recoverComponent(SceneComponentsLookup.CConeLight);
+		if (component == null) {
+			component = new CConeLight(raysNum, color, distance, position,
+					directionDegree, coneDegree);
+		} else {
+			component.raysNum = raysNum;
+			component.color = color;
+			component.distance = distance;
+			component.position = position;
+			component.directionDegree = directionDegree;
+			component.coneDegree = coneDegree;
+			component.light = null;
+		}
+		replaceComponent(SceneComponentsLookup.CConeLight, component);
+		return this;
+	}
+
+	public SceneEntity removeCConeLight() {
+		removeComponent(SceneComponentsLookup.CConeLight);
+		return this;
+	}
+
+	public CDirectionalLight getCDirectionalLight() {
+		return (CDirectionalLight) getComponent(SceneComponentsLookup.CDirectionalLight);
+	}
+
+	public boolean hasCDirectionalLight() {
+		return hasComponent(SceneComponentsLookup.CDirectionalLight);
+	}
+
+	public SceneEntity addCDirectionalLight(int raysNum, Color color,
+			float direcction) {
+		CDirectionalLight component = (CDirectionalLight) recoverComponent(SceneComponentsLookup.CDirectionalLight);
+		if (component == null) {
+			component = new CDirectionalLight(raysNum, color, direcction);
+		} else {
+			component.raysNum = raysNum;
+			component.color = color;
+			component.direcction = direcction;
+			component.light = null;
+		}
+		addComponent(SceneComponentsLookup.CDirectionalLight, component);
+		return this;
+	}
+
+	public SceneEntity replaceCDirectionalLight(int raysNum, Color color,
+			float direcction) {
+		CDirectionalLight component = (CDirectionalLight) recoverComponent(SceneComponentsLookup.CDirectionalLight);
+		if (component == null) {
+			component = new CDirectionalLight(raysNum, color, direcction);
+		} else {
+			component.raysNum = raysNum;
+			component.color = color;
+			component.direcction = direcction;
+			component.light = null;
+		}
+		replaceComponent(SceneComponentsLookup.CDirectionalLight, component);
+		return this;
+	}
+
+	public SceneEntity removeCDirectionalLight() {
+		removeComponent(SceneComponentsLookup.CDirectionalLight);
+		return this;
+	}
+
+	public CPointLight getCPointLight() {
+		return (CPointLight) getComponent(SceneComponentsLookup.CPointLight);
+	}
+
+	public boolean hasCPointLight() {
+		return hasComponent(SceneComponentsLookup.CPointLight);
+	}
+
+	public SceneEntity addCPointLight(int raysNum, Color color, float distance,
+			Vector2 position) {
+		CPointLight component = (CPointLight) recoverComponent(SceneComponentsLookup.CPointLight);
+		if (component == null) {
+			component = new CPointLight(raysNum, color, distance, position);
+		} else {
+			component.raysNum = raysNum;
+			component.color = color;
+			component.distance = distance;
+			component.position = position;
+			component.light = null;
+		}
+		addComponent(SceneComponentsLookup.CPointLight, component);
+		return this;
+	}
+
+	public SceneEntity replaceCPointLight(int raysNum, Color color,
+			float distance, Vector2 position) {
+		CPointLight component = (CPointLight) recoverComponent(SceneComponentsLookup.CPointLight);
+		if (component == null) {
+			component = new CPointLight(raysNum, color, distance, position);
+		} else {
+			component.raysNum = raysNum;
+			component.color = color;
+			component.distance = distance;
+			component.position = position;
+			component.light = null;
+		}
+		replaceComponent(SceneComponentsLookup.CPointLight, component);
+		return this;
+	}
+
+	public SceneEntity removeCPointLight() {
+		removeComponent(SceneComponentsLookup.CPointLight);
+		return this;
 	}
 
 	public Camera getCamera() {
@@ -188,51 +380,6 @@ public class SceneEntity extends Entity {
 
 	public SceneEntity removeParallaxLayer() {
 		removeComponent(SceneComponentsLookup.ParallaxLayer);
-		return this;
-	}
-
-	public PositionalLight getPositionalLight() {
-		return (PositionalLight) getComponent(SceneComponentsLookup.PositionalLight);
-	}
-
-	public boolean hasPositionalLight() {
-		return hasComponent(SceneComponentsLookup.PositionalLight);
-	}
-
-	public SceneEntity addPositionalLight(int raysNum, Color color,
-			float distance, Vector2 position) {
-		PositionalLight component = (PositionalLight) recoverComponent(SceneComponentsLookup.PositionalLight);
-		if (component == null) {
-			component = new PositionalLight(raysNum, color, distance, position);
-		} else {
-			component.raysNum = raysNum;
-			component.color = color;
-			component.distance = distance;
-			component.position = position;
-			component.light = null;
-		}
-		addComponent(SceneComponentsLookup.PositionalLight, component);
-		return this;
-	}
-
-	public SceneEntity replacePositionalLight(int raysNum, Color color,
-			float distance, Vector2 position) {
-		PositionalLight component = (PositionalLight) recoverComponent(SceneComponentsLookup.PositionalLight);
-		if (component == null) {
-			component = new PositionalLight(raysNum, color, distance, position);
-		} else {
-			component.raysNum = raysNum;
-			component.color = color;
-			component.distance = distance;
-			component.position = position;
-			component.light = null;
-		}
-		replaceComponent(SceneComponentsLookup.PositionalLight, component);
-		return this;
-	}
-
-	public SceneEntity removePositionalLight() {
-		removeComponent(SceneComponentsLookup.PositionalLight);
 		return this;
 	}
 
