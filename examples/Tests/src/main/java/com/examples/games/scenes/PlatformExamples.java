@@ -38,11 +38,11 @@ public class PlatformExamples implements SceneFactory<Engine, Entitas> {
 //        entitas.scene.createEntity()
 //                .addCChainLight(25, Color.FOREST, 180, 145, new float[]{-5, 0, 0, 0, 0, 0,30,12});
 
-        entitas.scene.createEntity()
-                .addCDirectionalLight(84, Color.SKY, 225);
+//        entitas.scene.createEntity()
+//                .addCDirectionalLight(84, Color.SKY, 270);
 
         entitas.scene.createEntity()
-                .addCConeLight(35, Color.GOLDENROD, 40, new Vector2(16,13),220, 60);
+                .addCConeLight(35, Color.GREEN, 40, new Vector2(16,13),250, 60);
 
 
         SceneManagerGDX sceneManager = engine.getManager(SceneManagerGDX.class);
@@ -52,7 +52,7 @@ public class PlatformExamples implements SceneFactory<Engine, Entitas> {
         GameEntity mariano = sceneManager.createEntity("Mariano");
         mariano.getRigidBody().body.setTransform(10, 6, 0);
 
-        entitas.actuator.createEntity()
-                .addDropActuator("",1000);
+        entitas.actuator.setDragActuator(ground.getCreationIndex(), false, 1000);
+
     }
 }

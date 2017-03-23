@@ -120,9 +120,9 @@ public class Mariano implements EntityFactory<Entitas, GameEntity> {
                 .addCollisionSensor("Ground")
                 .addLink(entity.getCreationIndex());
 
-        entitas.actuator.createEntity()
-                .addCameraActuator((short) 0.3f, 0.08f, new Vector2(6, 1), "Mariano")
-                .addLink(entity.getCreationIndex());
+//        entitas.actuator.createEntity()
+//                .addCameraActuator((short) 0.3f, 0.08f, new Vector2(6, 1), "Mariano")
+//                .addLink(entity.getCreationIndex());
 
         return entity;
 

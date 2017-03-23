@@ -5,25 +5,38 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.physics.box2d.Fixture;
+import com.badlogic.gdx.physics.box2d.QueryCallback;
+import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.physics.box2d.joints.MouseJoint;
+import com.badlogic.gdx.physics.box2d.joints.MouseJointDef;
 import com.ilargia.games.egdx.api.GameController;
 import com.ilargia.games.egdx.api.managers.InputManager;
 import com.ilargia.games.egdx.impl.EngineGDX;
+import com.ilargia.games.egdx.logicbricks.component.actuator.DragActuator;
 import com.ilargia.games.egdx.logicbricks.gen.Entitas;
+import com.ilargia.games.egdx.logicbricks.gen.game.GameEntity;
+import com.ilargia.games.egdx.logicbricks.index.Indexed;
 import com.ilargia.games.entitas.api.EntitasException;
 import com.ilargia.games.entitas.factories.EntitasCollections;
 
 import java.util.List;
+import java.util.Set;
 
 public class InputManagerGDX implements InputManager, InputProcessor {
 
     private final EngineGDX engine;
     private final Entitas entitas;
-    public KeyState[] keyStates;
-    public TouchState[] touchStates;
+    private KeyState[] keyStates;
+    private TouchState[] touchStates;
     private List<GameController> controllers;
     private Camera camera;
     private Vector3 worldCoordinates;
+    private Vector2 tmp2 = new Vector2();
     private boolean mouse;
+    private World physics;
+    private MouseJointDef jointDef;
+    private DragActuator dragActuator;
 
     public InputManagerGDX(Entitas entitas, EngineGDX engine) {
         this.engine = engine;
@@ -32,7 +45,7 @@ public class InputManagerGDX implements InputManager, InputProcessor {
         touchStates = new TouchState[5];
         worldCoordinates = new Vector3(0, 0, 0);
         controllers = EntitasCollections.createList(InputManagerGDX.class);
-     
+
         switch (Gdx.app.getType()) {
             case Android:
                 mouse = false;
@@ -56,8 +69,8 @@ public class InputManagerGDX implements InputManager, InputProcessor {
     public void initialize() {
         if (engine.getManager(PhysicsManagerGDX.class) == null) throw new EntitasException("InputManagerGDX",
                 "InputManagerGDX needs load PreferencesManagerGDX on the engine");
-        camera = engine.getCamera();
-
+        this.camera = engine.getCamera();
+        this.physics = engine.getPhysics();
         Gdx.input.setInputProcessor(this);
         //create the initial state of every key on the keyboard.
         //There are 256 keys available which are all represented as integers.
@@ -148,6 +161,14 @@ public class InputManagerGDX implements InputManager, InputProcessor {
             t.displacement.x = 0;
             t.displacement.y = 0;
         }
+
+        if(entitas.actuator.hasDragActuator() && jointDef == null) {
+            this.dragActuator = entitas.actuator.getDragActuator();
+            jointDef = new MouseJointDef();
+            jointDef.bodyA = Indexed.getInteractiveEntity(dragActuator.targetEntity).getRigidBody().body;
+            jointDef.collideConnected = dragActuator.collideConnected;
+            jointDef.maxForce = dragActuator.maxForce;
+        }
     }
 
     @Override
@@ -177,9 +198,8 @@ public class InputManagerGDX implements InputManager, InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        LogManagerGDX.debug("InputManager", "touchDown pointer %d, button %d, isMouse %s" , pointer, button, mouse);
         //get altered coordinates
-        worldCoordinates = new Vector3(screenX, screenY, 0);
+        worldCoordinates.set(screenX, screenY, 0);
         camera.unproject(worldCoordinates);
         int coord_x = coordinateX((int) worldCoordinates.x);
         int coord_y = coordinateY((int) worldCoordinates.y);
@@ -197,21 +217,22 @@ public class InputManagerGDX implements InputManager, InputProcessor {
             //recording last position for displacement values
             t.lastPosition.x = coord_x;
             t.lastPosition.y = coord_y;
+            if(entitas.actuator.hasDragActuator()) physics.QueryAABB(t.queryCallback, worldCoordinates.x, worldCoordinates.y,
+                    worldCoordinates.x, worldCoordinates.y);
 
 
         }
-        LogManagerGDX.debug("InputManager", "touchStates pointer %s" , touchStates[indexPointer]);
         return false;
 
     }
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        LogManagerGDX.debug("InputManager", "touchUp pointer %d, button %d, isMouse %s" , pointer, button, mouse);
+
         int indexPointer = (mouse) ? button : pointer;
         //set the state of all touch state events
         if (indexPointer < touchStates.length) {
-            worldCoordinates = new Vector3(screenX, screenY, 0);
+            worldCoordinates.set(screenX, screenY, 0);
             camera.unproject(worldCoordinates);
             int coord_x = coordinateX((int) worldCoordinates.x);
             int coord_y = coordinateY((int) worldCoordinates.y);
@@ -221,6 +242,10 @@ public class InputManagerGDX implements InputManager, InputProcessor {
             t.released = true;
             t.coordinates.x = coord_x;
             t.coordinates.y = coord_y;
+            if(entitas.actuator.hasDragActuator() && t.joint != null) {
+                physics.destroyJoint(t.joint);
+                t.joint = null;
+            }
 
         }
         return false;
@@ -229,21 +254,22 @@ public class InputManagerGDX implements InputManager, InputProcessor {
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
+        worldCoordinates.set(screenX, screenY, 0);
+        camera.unproject(worldCoordinates);
 
-        if(!mouse) dragged(screenX, screenY, pointer);
+        if(!mouse) dragged(pointer);
         else {
             for (int i = 0; i < touchStates.length; i++) {
-                if(touchStates[i].down) dragged(screenX, screenY, i);
+                if(touchStates[i].down) dragged(i);
             }
         }
         return false;
 
     }
 
-    public void dragged(int screenX, int screenY, int pointer) {
+    public void dragged(int pointer) {
         //get altered coordinates
-        worldCoordinates = new Vector3(screenX, screenY, 0);
-        camera.unproject(worldCoordinates);
+        LogManagerGDX.debug("InputManager", "touchUp pointer %d, isMouse %s" , pointer, mouse);
         int coord_x = coordinateX((int) worldCoordinates.x);
         int coord_y = coordinateY((int) worldCoordinates.y);
 
@@ -258,6 +284,10 @@ public class InputManagerGDX implements InputManager, InputProcessor {
         //store the current position into last position for next frame.
         t.lastPosition.x = coord_x;
         t.lastPosition.y = coord_y;
+        if(entitas.actuator.hasDragActuator() && t.joint != null) {
+            t.joint.setTarget(tmp2.set(worldCoordinates.x, worldCoordinates.y));
+
+        }
 
     }
 
@@ -307,14 +337,26 @@ public class InputManagerGDX implements InputManager, InputProcessor {
         //coordinates of this finger/mouse
         public Vector2 coordinates;
         //track the displacement of this finger/mouse
-        private Vector2 lastPosition;
+        public Vector2 lastPosition;
         public Vector2 displacement;
+        private MouseJoint joint;
+
+        private QueryCallback queryCallback = fixture -> {
+            if (!fixture.testPoint(coordinates.x, coordinates.y))
+                return true;
+
+            jointDef.bodyB = fixture.getBody();
+            jointDef.target.set(coordinates.x, coordinates.y);
+            joint = (MouseJoint) physics.createJoint(jointDef);
+            return false;
+        };
 
         public TouchState(int coord_x, int coord_y, int pointer) {
             this.pointer = pointer;
             coordinates = new Vector2(coord_x, coord_y);
             lastPosition = new Vector2(0, 0);
             displacement = new Vector2(lastPosition.x, lastPosition.y);
+
         }
 
         @Override

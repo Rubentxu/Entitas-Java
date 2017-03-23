@@ -5,9 +5,10 @@ import com.ilargia.games.egdx.logicbricks.data.StateCharacter;
 import com.ilargia.games.entitas.api.IComponent;
 import com.ilargia.games.entitas.codeGenerator.Component;
 
-@Component(pools = {"Actuator"})
-public class DropActuator implements IComponent {
-    public String target;
+@Component(pools = {"Actuator"}, isSingleEntity = true)
+public class DragActuator implements IComponent {
+    public int targetEntity;
+    public boolean collideConnected ;
     public float maxForce;
 
 }

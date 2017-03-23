@@ -11,12 +11,8 @@ import com.ilargia.games.egdx.impl.managers.SceneManagerGDX;
 import com.ilargia.games.egdx.logicbricks.gen.Entitas;
 import com.ilargia.games.egdx.logicbricks.index.Indexed;
 import com.ilargia.games.egdx.logicbricks.system.actuator.CameraActuatorSystem;
-import com.ilargia.games.egdx.logicbricks.system.actuator.DropActuatorSystem;
 import com.ilargia.games.egdx.logicbricks.system.game.*;
-import com.ilargia.games.egdx.logicbricks.system.render.BackgroundRenderSystem;
-import com.ilargia.games.egdx.logicbricks.system.render.DebugRendererSystem;
-import com.ilargia.games.egdx.logicbricks.system.render.LigthRendererSystem;
-import com.ilargia.games.egdx.logicbricks.system.render.TextureRendererSystem;
+import com.ilargia.games.egdx.logicbricks.system.render.*;
 import com.ilargia.games.egdx.logicbricks.system.scene.SceneSystem;
 import com.ilargia.games.egdx.logicbricks.system.sensor.*;
 
@@ -59,7 +55,6 @@ public class PlatformExampleState extends GameStateGDX {
                 .add(new RigidBodySystem(entitas))
                 .add(new AnimationSystem(entitas))
                 .add(new CameraActuatorSystem(entitas))
-                .add(new DropActuatorSystem(entitas, engine))
                 .add(new LigthRendererSystem(entitas, engine))
                 .add(new BackgroundRenderSystem(entitas, engine))
                 .add(new TextureRendererSystem(entitas, engine))

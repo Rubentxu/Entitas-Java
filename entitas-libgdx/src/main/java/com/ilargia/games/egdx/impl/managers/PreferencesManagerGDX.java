@@ -3,6 +3,7 @@ package com.ilargia.games.egdx.impl.managers;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.MathUtils;
 import com.ilargia.games.egdx.api.managers.PreferencesManager;
 
@@ -12,8 +13,8 @@ public class PreferencesManagerGDX implements PreferencesManager {
     public int LOG_LEVEL = 0;
     public float GAME_HEIGHT = 16.875f; // 1080 / 64 =16.875 px
     public float GAME_WIDTH = 30f;     //  1920 / 64 = 30f px
-    public int VIRTUAL_DEVICE_WIDTH = 220;     //  30 x 64 = 1920 px
-    public int VIRTUAL_DEVICE_HEIGHT = 100; // 16.875 x 64 =1080 px
+    public int VIRTUAL_DEVICE_WIDTH = 800;     //  30 x 64 = 1920 px
+    public int VIRTUAL_DEVICE_HEIGHT = 600; // 16.875 x 64 =1080 px
 
 
     // Box2D config
@@ -22,17 +23,17 @@ public class PreferencesManagerGDX implements PreferencesManager {
     public float TIME_STEP = 1f / MAX_FPS;
     public float MAX_STEPS = 1f + MAX_FPS / MIN_FPS;
     public float MAX_TIME_PER_FRAME = TIME_STEP * MAX_STEPS;
-    public int VELOCITY_ITERATIONS = 6;
-    public int POSITION_ITERATIONS = 2;
+    public int VELOCITY_ITERATIONS = 10;
+    public int POSITION_ITERATIONS = 6;
 
     //Box2DLight
-    public boolean GAMMA_CORRECTION = true;     // enable or disable gamma correction
+    public boolean GAMMA_CORRECTION = false;     // enable or disable gamma correction
     public boolean USE_DIFFUSE_LIGHT = false;       // enable or disable diffused lighting
     public boolean BLUR = true;           // enabled or disable blur
-    public int BLUR_NUM = 4;           // set number of gaussian blur passes
-    public boolean SHADOWS = false;        // enable or disable shadow
+    public int BLUR_NUM = 5;           // set number of gaussian blur passes
+    public boolean SHADOWS = true;        // enable or disable shadow
     public boolean CULLING = true;        // enable or disable culling
-    public float AMBIENT_LIGHT = 0;
+    public Color AMBIENT_LIGHT = Color.CLEAR;
 
     // Preferences
     public boolean SOUND = false;
@@ -89,7 +90,7 @@ public class PreferencesManagerGDX implements PreferencesManager {
             BLUR_NUM = preferences.getInteger(Constants.PREF_BLUR_NUM, 1);
             SHADOWS = preferences.getBoolean(Constants.PREF_SHADOWS, true);
             CULLING = preferences.getBoolean(Constants.PREF_CULLING, true);
-            AMBIENT_LIGHT = preferences.getFloat(Constants.PREF_AMBIENT_LIGHT, 0.9F);
+           // AMBIENT_LIGHT = preferences.get(Constants.PREF_AMBIENT_LIGHT, 0.9F);
 
         }
     }

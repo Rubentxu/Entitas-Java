@@ -8,7 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.ilargia.games.entitas.api.IComponent;
 import com.ilargia.games.egdx.logicbricks.component.actuator.CharacterActuator;
 import com.ilargia.games.egdx.logicbricks.data.StateCharacter;
-import com.ilargia.games.egdx.logicbricks.component.actuator.DropActuator;
+import com.ilargia.games.egdx.logicbricks.component.actuator.DragActuator;
 import com.ilargia.games.egdx.logicbricks.component.actuator.Link;
 import com.ilargia.games.egdx.logicbricks.component.actuator.TextureActuator;
 import com.badlogic.gdx.graphics.Color;
@@ -105,38 +105,42 @@ public class ActuatorEntity extends Entity {
 		return this;
 	}
 
-	public DropActuator getDropActuator() {
-		return (DropActuator) getComponent(ActuatorComponentsLookup.DropActuator);
+	public DragActuator getDragActuator() {
+		return (DragActuator) getComponent(ActuatorComponentsLookup.DragActuator);
 	}
 
-	public boolean hasDropActuator() {
-		return hasComponent(ActuatorComponentsLookup.DropActuator);
+	public boolean hasDragActuator() {
+		return hasComponent(ActuatorComponentsLookup.DragActuator);
 	}
 
-	public ActuatorEntity addDropActuator(String target, float maxForce) {
-		DropActuator component = (DropActuator) recoverComponent(ActuatorComponentsLookup.DropActuator);
+	public ActuatorEntity addDragActuator(int targetEntity,
+			boolean collideConnected, float maxForce) {
+		DragActuator component = (DragActuator) recoverComponent(ActuatorComponentsLookup.DragActuator);
 		if (component == null) {
-			component = new DropActuator();
+			component = new DragActuator();
 		}
-		component.target = target;
+		component.targetEntity = targetEntity;
+		component.collideConnected = collideConnected;
 		component.maxForce = maxForce;
-		addComponent(ActuatorComponentsLookup.DropActuator, component);
+		addComponent(ActuatorComponentsLookup.DragActuator, component);
 		return this;
 	}
 
-	public ActuatorEntity replaceDropActuator(String target, float maxForce) {
-		DropActuator component = (DropActuator) recoverComponent(ActuatorComponentsLookup.DropActuator);
+	public ActuatorEntity replaceDragActuator(int targetEntity,
+			boolean collideConnected, float maxForce) {
+		DragActuator component = (DragActuator) recoverComponent(ActuatorComponentsLookup.DragActuator);
 		if (component == null) {
-			component = new DropActuator();
+			component = new DragActuator();
 		}
-		component.target = target;
+		component.targetEntity = targetEntity;
+		component.collideConnected = collideConnected;
 		component.maxForce = maxForce;
-		replaceComponent(ActuatorComponentsLookup.DropActuator, component);
+		replaceComponent(ActuatorComponentsLookup.DragActuator, component);
 		return this;
 	}
 
-	public ActuatorEntity removeDropActuator() {
-		removeComponent(ActuatorComponentsLookup.DropActuator);
+	public ActuatorEntity removeDragActuator() {
+		removeComponent(ActuatorComponentsLookup.DragActuator);
 		return this;
 	}
 
