@@ -1,9 +1,9 @@
 package com.ilargia.games.egdx.logicbricks.gen.actuator;
 
 import com.ilargia.games.egdx.logicbricks.component.actuator.CameraActuator;
-import com.ilargia.games.egdx.logicbricks.component.actuator.CharacterActuator;
 import com.ilargia.games.egdx.logicbricks.component.actuator.DragActuator;
 import com.ilargia.games.egdx.logicbricks.component.actuator.Link;
+import com.ilargia.games.egdx.logicbricks.component.actuator.ParticleEffectActuator;
 import com.ilargia.games.egdx.logicbricks.component.actuator.TextureActuator;
 import com.ilargia.games.egdx.logicbricks.component.actuator.VelocityActuator;
 
@@ -15,21 +15,21 @@ import com.ilargia.games.egdx.logicbricks.component.actuator.VelocityActuator;
 public class ActuatorComponentsLookup {
 
 	public static final int CameraActuator = 0;
-	public static final int CharacterActuator = 1;
-	public static final int DragActuator = 2;
-	public static final int Link = 3;
+	public static final int DragActuator = 1;
+	public static final int Link = 2;
+	public static final int ParticleEffectActuator = 3;
 	public static final int TextureActuator = 4;
 	public static final int VelocityActuator = 5;
 	public static final int totalComponents = 6;
 
 	public static String[] componentNames() {
-		return new String[]{"CameraActuator", "CharacterActuator",
-				"DragActuator", "Link", "TextureActuator", "VelocityActuator"};
+		return new String[]{"CameraActuator", "DragActuator", "Link",
+				"ParticleEffectActuator", "TextureActuator", "VelocityActuator"};
 	}
 
 	public static Class[] componentTypes() {
-		return new Class[]{CameraActuator.class, CharacterActuator.class,
-				DragActuator.class, Link.class, TextureActuator.class,
-				VelocityActuator.class};
+		return new Class[]{CameraActuator.class, DragActuator.class,
+				Link.class, ParticleEffectActuator.class,
+				TextureActuator.class, VelocityActuator.class};
 	}
 }

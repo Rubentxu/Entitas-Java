@@ -11,4 +11,11 @@ public class DragActuator implements IComponent {
     public boolean collideConnected ;
     public float maxForce;
 
+    public DragActuator(int targetEntity, boolean collideConnected, float maxForce) {
+        this.targetEntity = targetEntity;
+        this.collideConnected = collideConnected;
+        this.maxForce = maxForce;
+    }
+
+
 }

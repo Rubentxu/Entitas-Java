@@ -47,7 +47,7 @@ public class CreateRadarSensorSystem extends ReactiveSystem<SensorEntity> {
         vertices[0] = new Vector2();
 
         for (SensorEntity e : entities) {
-            GameEntity gameEntity =  Indexed.getInteractiveEntity(e.getLink().targetEntity);
+            GameEntity gameEntity =  Indexed.getInteractiveEntity(e.getLink().ownerEntity);
             RigidBody rigidBody = gameEntity.getRigidBody();
             RadarSensor radarSensor = e.getRadarSensor();
 

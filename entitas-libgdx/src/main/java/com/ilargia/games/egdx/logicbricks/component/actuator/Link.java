@@ -6,16 +6,14 @@ import com.ilargia.games.entitas.codeGenerator.Component;
 
 @Component(pools = {"Actuator"})
 public class Link implements IComponent {
-    public int targetEntity;
+    public String nameReference;
+    public int ownerEntity;
     public boolean isOpen;
-    public boolean isChanged;
-    public boolean pulse;
 
-    public Link(int targetEntity) {
-        this.targetEntity = targetEntity;
-        this.isOpen = false;
-        this.isChanged = false;
-        this.pulse = false;
+    public Link(int ownerEntity, String nameReference, boolean isOpen) {
+        this.nameReference = nameReference;
+        this.ownerEntity = ownerEntity;
+        this.isOpen = isOpen;
 
     }
 

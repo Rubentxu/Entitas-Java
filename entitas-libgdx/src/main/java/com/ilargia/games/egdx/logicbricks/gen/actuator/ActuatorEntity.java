@@ -4,16 +4,25 @@ import com.ilargia.games.entitas.api.*;
 import com.ilargia.games.entitas.Entity;
 import java.util.Stack;
 import com.ilargia.games.egdx.logicbricks.component.actuator.CameraActuator;
-import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.physics.box2d.Transform;
+import com.ilargia.games.egdx.logicbricks.component.game.RigidBody;
+import com.ilargia.games.egdx.logicbricks.data.interfaces.Actuator;
+import com.ilargia.games.egdx.logicbricks.gen.game.GameEntity;
+import com.ilargia.games.egdx.logicbricks.index.Indexed;
 import com.ilargia.games.entitas.api.IComponent;
-import com.ilargia.games.egdx.logicbricks.component.actuator.CharacterActuator;
-import com.ilargia.games.egdx.logicbricks.data.StateCharacter;
 import com.ilargia.games.egdx.logicbricks.component.actuator.DragActuator;
+import com.ilargia.games.egdx.logicbricks.data.StateCharacter;
 import com.ilargia.games.egdx.logicbricks.component.actuator.Link;
+import com.ilargia.games.egdx.logicbricks.component.actuator.ParticleEffectActuator;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.ilargia.games.egdx.logicbricks.component.actuator.TextureActuator;
 import com.badlogic.gdx.graphics.Color;
+import com.ilargia.games.egdx.logicbricks.component.game.TextureView;
 import com.ilargia.games.egdx.logicbricks.data.Bounds;
 import com.ilargia.games.egdx.logicbricks.component.actuator.VelocityActuator;
+import com.badlogic.gdx.math.Vector2;
 
 /**
  * ---------------------------------------------------------------------------
@@ -33,75 +42,58 @@ public class ActuatorEntity extends Entity {
 		return hasComponent(ActuatorComponentsLookup.CameraActuator);
 	}
 
-	public ActuatorEntity addCameraActuator(short height, float damping,
-			Vector2 minDistance, String followTagEntity) {
+	public ActuatorEntity addCameraActuator(Camera camera, short height,
+			float damping, float minDistanceX, float minDistanceY,
+			String followTagEntity) {
 		CameraActuator component = (CameraActuator) recoverComponent(ActuatorComponentsLookup.CameraActuator);
 		if (component == null) {
-			component = new CameraActuator();
+			component = new CameraActuator(camera, height, damping,
+					minDistanceX, minDistanceY, followTagEntity);
+		} else {
+			component.actuator = (indexOwner) -> {
+				GameEntity followEntity = Indexed.getTagEntity(followTagEntity);
+				if (followEntity != null) {
+					RigidBody rc = followEntity.getRigidBody();
+					Transform transform = rc.body.getTransform();
+					Vector3 position = camera.position;
+					position.x += (transform.getPosition().x + minDistanceX - position.x)
+							* damping;
+					position.y += (transform.getPosition().y + minDistanceY - position.y)
+							* height;
+				}
+			};
 		}
-		component.height = height;
-		component.damping = damping;
-		component.minDistance = minDistance;
-		component.followTagEntity = followTagEntity;
 		addComponent(ActuatorComponentsLookup.CameraActuator, component);
 		return this;
 	}
 
-	public ActuatorEntity replaceCameraActuator(short height, float damping,
-			Vector2 minDistance, String followTagEntity) {
+	public ActuatorEntity replaceCameraActuator(Camera camera, short height,
+			float damping, float minDistanceX, float minDistanceY,
+			String followTagEntity) {
 		CameraActuator component = (CameraActuator) recoverComponent(ActuatorComponentsLookup.CameraActuator);
 		if (component == null) {
-			component = new CameraActuator();
+			component = new CameraActuator(camera, height, damping,
+					minDistanceX, minDistanceY, followTagEntity);
+		} else {
+			component.actuator = (indexOwner) -> {
+				GameEntity followEntity = Indexed.getTagEntity(followTagEntity);
+				if (followEntity != null) {
+					RigidBody rc = followEntity.getRigidBody();
+					Transform transform = rc.body.getTransform();
+					Vector3 position = camera.position;
+					position.x += (transform.getPosition().x + minDistanceX - position.x)
+							* damping;
+					position.y += (transform.getPosition().y + minDistanceY - position.y)
+							* height;
+				}
+			};
 		}
-		component.height = height;
-		component.damping = damping;
-		component.minDistance = minDistance;
-		component.followTagEntity = followTagEntity;
 		replaceComponent(ActuatorComponentsLookup.CameraActuator, component);
 		return this;
 	}
 
 	public ActuatorEntity removeCameraActuator() {
 		removeComponent(ActuatorComponentsLookup.CameraActuator);
-		return this;
-	}
-
-	public CharacterActuator getCharacterActuator() {
-		return (CharacterActuator) getComponent(ActuatorComponentsLookup.CharacterActuator);
-	}
-
-	public boolean hasCharacterActuator() {
-		return hasComponent(ActuatorComponentsLookup.CharacterActuator);
-	}
-
-	public ActuatorEntity addCharacterActuator(String target,
-			StateCharacter newState, boolean facingLeft) {
-		CharacterActuator component = (CharacterActuator) recoverComponent(ActuatorComponentsLookup.CharacterActuator);
-		if (component == null) {
-			component = new CharacterActuator();
-		}
-		component.target = target;
-		component.newState = newState;
-		component.facingLeft = facingLeft;
-		addComponent(ActuatorComponentsLookup.CharacterActuator, component);
-		return this;
-	}
-
-	public ActuatorEntity replaceCharacterActuator(String target,
-			StateCharacter newState, boolean facingLeft) {
-		CharacterActuator component = (CharacterActuator) recoverComponent(ActuatorComponentsLookup.CharacterActuator);
-		if (component == null) {
-			component = new CharacterActuator();
-		}
-		component.target = target;
-		component.newState = newState;
-		component.facingLeft = facingLeft;
-		replaceComponent(ActuatorComponentsLookup.CharacterActuator, component);
-		return this;
-	}
-
-	public ActuatorEntity removeCharacterActuator() {
-		removeComponent(ActuatorComponentsLookup.CharacterActuator);
 		return this;
 	}
 
@@ -117,11 +109,13 @@ public class ActuatorEntity extends Entity {
 			boolean collideConnected, float maxForce) {
 		DragActuator component = (DragActuator) recoverComponent(ActuatorComponentsLookup.DragActuator);
 		if (component == null) {
-			component = new DragActuator();
+			component = new DragActuator(targetEntity, collideConnected,
+					maxForce);
+		} else {
+			component.targetEntity = targetEntity;
+			component.collideConnected = collideConnected;
+			component.maxForce = maxForce;
 		}
-		component.targetEntity = targetEntity;
-		component.collideConnected = collideConnected;
-		component.maxForce = maxForce;
 		addComponent(ActuatorComponentsLookup.DragActuator, component);
 		return this;
 	}
@@ -130,11 +124,13 @@ public class ActuatorEntity extends Entity {
 			boolean collideConnected, float maxForce) {
 		DragActuator component = (DragActuator) recoverComponent(ActuatorComponentsLookup.DragActuator);
 		if (component == null) {
-			component = new DragActuator();
+			component = new DragActuator(targetEntity, collideConnected,
+					maxForce);
+		} else {
+			component.targetEntity = targetEntity;
+			component.collideConnected = collideConnected;
+			component.maxForce = maxForce;
 		}
-		component.targetEntity = targetEntity;
-		component.collideConnected = collideConnected;
-		component.maxForce = maxForce;
 		replaceComponent(ActuatorComponentsLookup.DragActuator, component);
 		return this;
 	}
@@ -152,29 +148,29 @@ public class ActuatorEntity extends Entity {
 		return hasComponent(ActuatorComponentsLookup.Link);
 	}
 
-	public ActuatorEntity addLink(int targetEntity) {
+	public ActuatorEntity addLink(int ownerEntity, String nameReference,
+			boolean isOpen) {
 		Link component = (Link) recoverComponent(ActuatorComponentsLookup.Link);
 		if (component == null) {
-			component = new Link(targetEntity);
+			component = new Link(ownerEntity, nameReference, isOpen);
 		} else {
-			component.targetEntity = targetEntity;
-			component.isOpen = false;
-			component.isChanged = false;
-			component.pulse = false;
+			component.nameReference = nameReference;
+			component.ownerEntity = ownerEntity;
+			component.isOpen = isOpen;
 		}
 		addComponent(ActuatorComponentsLookup.Link, component);
 		return this;
 	}
 
-	public ActuatorEntity replaceLink(int targetEntity) {
+	public ActuatorEntity replaceLink(int ownerEntity, String nameReference,
+			boolean isOpen) {
 		Link component = (Link) recoverComponent(ActuatorComponentsLookup.Link);
 		if (component == null) {
-			component = new Link(targetEntity);
+			component = new Link(ownerEntity, nameReference, isOpen);
 		} else {
-			component.targetEntity = targetEntity;
-			component.isOpen = false;
-			component.isChanged = false;
-			component.pulse = false;
+			component.nameReference = nameReference;
+			component.ownerEntity = ownerEntity;
+			component.isOpen = isOpen;
 		}
 		replaceComponent(ActuatorComponentsLookup.Link, component);
 		return this;
@@ -182,6 +178,44 @@ public class ActuatorEntity extends Entity {
 
 	public ActuatorEntity removeLink() {
 		removeComponent(ActuatorComponentsLookup.Link);
+		return this;
+	}
+
+	public ParticleEffectActuator getParticleEffectActuator() {
+		return (ParticleEffectActuator) getComponent(ActuatorComponentsLookup.ParticleEffectActuator);
+	}
+
+	public boolean hasParticleEffectActuator() {
+		return hasComponent(ActuatorComponentsLookup.ParticleEffectActuator);
+	}
+
+	public ActuatorEntity addParticleEffectActuator(ParticleEffect effect,
+			boolean autoStart) {
+		ParticleEffectActuator component = (ParticleEffectActuator) recoverComponent(ActuatorComponentsLookup.ParticleEffectActuator);
+		if (component == null) {
+			component = new ParticleEffectActuator();
+		}
+		component.effect = effect;
+		component.autoStart = autoStart;
+		addComponent(ActuatorComponentsLookup.ParticleEffectActuator, component);
+		return this;
+	}
+
+	public ActuatorEntity replaceParticleEffectActuator(ParticleEffect effect,
+			boolean autoStart) {
+		ParticleEffectActuator component = (ParticleEffectActuator) recoverComponent(ActuatorComponentsLookup.ParticleEffectActuator);
+		if (component == null) {
+			component = new ParticleEffectActuator();
+		}
+		component.effect = effect;
+		component.autoStart = autoStart;
+		replaceComponent(ActuatorComponentsLookup.ParticleEffectActuator,
+				component);
+		return this;
+	}
+
+	public ActuatorEntity removeParticleEffectActuator() {
+		removeComponent(ActuatorComponentsLookup.ParticleEffectActuator);
 		return this;
 	}
 
@@ -193,34 +227,52 @@ public class ActuatorEntity extends Entity {
 		return hasComponent(ActuatorComponentsLookup.TextureActuator);
 	}
 
-	public ActuatorEntity addTextureActuator(String target, Bounds bounds,
-			int opacity, Boolean flipX, Boolean flipY, Color tint) {
+	public ActuatorEntity addTextureActuator(Bounds bounds, int opacity,
+			Boolean flipX, Boolean flipY, Color tint) {
 		TextureActuator component = (TextureActuator) recoverComponent(ActuatorComponentsLookup.TextureActuator);
 		if (component == null) {
-			component = new TextureActuator();
+			component = new TextureActuator(bounds, opacity, flipX, flipY, tint);
+		} else {
+			component.actuator = (indexOwner) -> {
+				GameEntity owner = Indexed.getInteractiveEntity(indexOwner);
+				TextureView view = owner.getTextureView();
+				if (bounds != null)
+					view.bounds = bounds;
+				if (flipX != null)
+					view.flipX = flipX;
+				if (flipY != null)
+					view.flipY = flipY;
+				if (opacity != -1)
+					view.opacity = opacity;
+				if (tint != null)
+					view.tint = tint;
+			};
 		}
-		component.target = target;
-		component.bounds = bounds;
-		component.opacity = opacity;
-		component.flipX = flipX;
-		component.flipY = flipY;
-		component.tint = tint;
 		addComponent(ActuatorComponentsLookup.TextureActuator, component);
 		return this;
 	}
 
-	public ActuatorEntity replaceTextureActuator(String target, Bounds bounds,
-			int opacity, Boolean flipX, Boolean flipY, Color tint) {
+	public ActuatorEntity replaceTextureActuator(Bounds bounds, int opacity,
+			Boolean flipX, Boolean flipY, Color tint) {
 		TextureActuator component = (TextureActuator) recoverComponent(ActuatorComponentsLookup.TextureActuator);
 		if (component == null) {
-			component = new TextureActuator();
+			component = new TextureActuator(bounds, opacity, flipX, flipY, tint);
+		} else {
+			component.actuator = (indexOwner) -> {
+				GameEntity owner = Indexed.getInteractiveEntity(indexOwner);
+				TextureView view = owner.getTextureView();
+				if (bounds != null)
+					view.bounds = bounds;
+				if (flipX != null)
+					view.flipX = flipX;
+				if (flipY != null)
+					view.flipY = flipY;
+				if (opacity != -1)
+					view.opacity = opacity;
+				if (tint != null)
+					view.tint = tint;
+			};
 		}
-		component.target = target;
-		component.bounds = bounds;
-		component.opacity = opacity;
-		component.flipX = flipX;
-		component.flipY = flipY;
-		component.tint = tint;
 		replaceComponent(ActuatorComponentsLookup.TextureActuator, component);
 		return this;
 	}
@@ -238,28 +290,36 @@ public class ActuatorEntity extends Entity {
 		return hasComponent(ActuatorComponentsLookup.VelocityActuator);
 	}
 
-	public ActuatorEntity addVelocityActuator(String target, Vector2 velocity,
+	public ActuatorEntity addVelocityActuator(Vector2 velocity,
 			float angularVelocity) {
 		VelocityActuator component = (VelocityActuator) recoverComponent(ActuatorComponentsLookup.VelocityActuator);
 		if (component == null) {
-			component = new VelocityActuator();
+			component = new VelocityActuator(velocity, angularVelocity);
+		} else {
+			component.actuator = (indexOwner) -> {
+				GameEntity owner = Indexed.getInteractiveEntity(indexOwner);
+				RigidBody rigidBody = owner.getRigidBody();
+				rigidBody.body.setLinearVelocity(velocity);
+				rigidBody.body.setAngularVelocity(angularVelocity);
+			};
 		}
-		component.target = target;
-		component.velocity = velocity;
-		component.angularVelocity = angularVelocity;
 		addComponent(ActuatorComponentsLookup.VelocityActuator, component);
 		return this;
 	}
 
-	public ActuatorEntity replaceVelocityActuator(String target,
-			Vector2 velocity, float angularVelocity) {
+	public ActuatorEntity replaceVelocityActuator(Vector2 velocity,
+			float angularVelocity) {
 		VelocityActuator component = (VelocityActuator) recoverComponent(ActuatorComponentsLookup.VelocityActuator);
 		if (component == null) {
-			component = new VelocityActuator();
+			component = new VelocityActuator(velocity, angularVelocity);
+		} else {
+			component.actuator = (indexOwner) -> {
+				GameEntity owner = Indexed.getInteractiveEntity(indexOwner);
+				RigidBody rigidBody = owner.getRigidBody();
+				rigidBody.body.setLinearVelocity(velocity);
+				rigidBody.body.setAngularVelocity(angularVelocity);
+			};
 		}
-		component.target = target;
-		component.velocity = velocity;
-		component.angularVelocity = angularVelocity;
 		replaceComponent(ActuatorComponentsLookup.VelocityActuator, component);
 		return this;
 	}

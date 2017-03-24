@@ -8,7 +8,6 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.ilargia.games.egdx.logicbricks.component.sensor.Link;
 import com.ilargia.games.egdx.logicbricks.component.sensor.RaySensor;
 import com.ilargia.games.egdx.logicbricks.gen.Entitas;
-import com.ilargia.games.egdx.logicbricks.gen.game.GameContext;
 import com.ilargia.games.egdx.logicbricks.gen.game.GameEntity;
 import com.ilargia.games.egdx.logicbricks.gen.sensor.SensorContext;
 import com.ilargia.games.egdx.logicbricks.gen.sensor.SensorEntity;
@@ -38,7 +37,7 @@ public class RaySensorSystem extends SensorSystem {
 
         float angle = sensor.axis2D.ordinal() * 90.0f;
 
-        GameEntity originEntity =  Indexed.getInteractiveEntity(link.targetEntity);
+        GameEntity originEntity =  Indexed.getInteractiveEntity(link.ownerEntity);
 
         Vector2 point1 = originEntity.getRigidBody().body.getPosition();
         Vector2 point2 = point1.cpy().add(new Vector2((float) MathUtils.cosDeg(angle), MathUtils.sinDeg(angle)).scl(sensor.range));

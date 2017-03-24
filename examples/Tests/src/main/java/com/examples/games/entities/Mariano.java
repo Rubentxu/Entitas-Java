@@ -12,6 +12,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.utils.Array;
 import com.ilargia.games.egdx.api.Engine;
 import com.ilargia.games.egdx.api.factories.EntityFactory;
+import com.ilargia.games.egdx.impl.EngineGDX;
 import com.ilargia.games.egdx.impl.managers.AssetsManagerGDX;
 import com.ilargia.games.egdx.impl.managers.PhysicsManagerGDX;
 import com.ilargia.games.egdx.logicbricks.data.Bounds;
@@ -23,7 +24,6 @@ import com.ilargia.games.egdx.util.BodyBuilder;
 import com.ilargia.games.entitas.factories.EntitasCollections;
 
 import java.util.Map;
-import java.util.Set;
 
 
 public class Mariano implements EntityFactory<Entitas, GameEntity> {
@@ -74,12 +74,10 @@ public class Mariano implements EntityFactory<Entitas, GameEntity> {
                 .addTextureView(null, new Bounds(0.9f, 1.15f), false, false, 1, 1, Color.WHITE)
                 .addInputController((inputManager, context) -> {
                     boolean isGround = false;
-                    Set<SensorEntity> sensors = Indexed.getSensorsEntities(entity);
-                    for (SensorEntity sensor : sensors) {
-                        if (sensor.hasCollisionSensor() && sensor.getCollisionSensor().collisionSignal)
-                            isGround = true;
+                    SensorEntity sensor = Indexed.getSensorsEntity(entity, "CollisionGround");
+                    if (sensor.getCollisionSensor().collisionSignal)
+                        isGround = true;
 
-                    }
 
                     Vector2 impulse = new Vector2();
                     if (inputManager.isKeyDown(Input.Keys.D)) {
@@ -116,13 +114,13 @@ public class Mariano implements EntityFactory<Entitas, GameEntity> {
 
                 });
 
-        SensorEntity collisionGroundSensor = entitas.sensor.createEntity()
+        entitas.sensor.createEntity()
                 .addCollisionSensor("Ground")
-                .addLink(entity.getCreationIndex());
+                .addLink(entity.getCreationIndex(), "CollisionGround");
 
-//        entitas.actuator.createEntity()
-//                .addCameraActuator((short) 0.3f, 0.08f, new Vector2(6, 1), "Mariano")
-//                .addLink(entity.getCreationIndex());
+        entitas.actuator.createEntity()
+                .addCameraActuator(((EngineGDX) engine).getCamera(), (short) 0.3f, 0.08f, 6, 1, "Mariano")
+                .addLink(entity.getCreationIndex(), "CameraActuator", true);
 
         return entity;
 

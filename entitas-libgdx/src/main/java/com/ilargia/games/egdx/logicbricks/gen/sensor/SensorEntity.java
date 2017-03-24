@@ -173,12 +173,13 @@ public class SensorEntity extends Entity {
 		return hasComponent(SensorComponentsLookup.Link);
 	}
 
-	public SensorEntity addLink(int targetEntity) {
+	public SensorEntity addLink(int ownerEntity, String nameReference) {
 		Link component = (Link) recoverComponent(SensorComponentsLookup.Link);
 		if (component == null) {
-			component = new Link(targetEntity);
+			component = new Link(ownerEntity, nameReference);
 		} else {
-			component.targetEntity = targetEntity;
+			component.ownerEntity = ownerEntity;
+			component.nameReference = nameReference;
 			component.isOpen = false;
 			component.isChanged = false;
 			component.pulse = false;
@@ -187,12 +188,13 @@ public class SensorEntity extends Entity {
 		return this;
 	}
 
-	public SensorEntity replaceLink(int targetEntity) {
+	public SensorEntity replaceLink(int ownerEntity, String nameReference) {
 		Link component = (Link) recoverComponent(SensorComponentsLookup.Link);
 		if (component == null) {
-			component = new Link(targetEntity);
+			component = new Link(ownerEntity, nameReference);
 		} else {
-			component.targetEntity = targetEntity;
+			component.ownerEntity = ownerEntity;
+			component.nameReference = nameReference;
 			component.isOpen = false;
 			component.isChanged = false;
 			component.pulse = false;

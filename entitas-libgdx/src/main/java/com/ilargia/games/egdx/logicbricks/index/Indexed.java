@@ -22,16 +22,19 @@ public class Indexed {
     public static final String TagEntityIndex = "TagEntityIndex";
 
     private static Entitas _entitas;
+    private static KeyIndex index;
+
 
     public static void initialize(Entitas entitas) {
         _entitas = entitas;
+         index = new KeyIndex(-1,null);
         // GameEntity contains Sensors entities
-        _entitas.sensor.addEntityIndex(Indexed.SensorsEntitiesIndex,  new ReactiveEntityIndex<SensorEntity, Integer>(
-                ((e, c) -> e.getLink().targetEntity), _entitas.sensor.getGroup(SensorMatcher.Link())));
+        _entitas.sensor.addEntityIndex(Indexed.SensorsEntitiesIndex,  new ReactivePrimaryEntityIndex<SensorEntity, KeyIndex>(
+                ((e, c) -> new KeyIndex(e.getLink().ownerEntity,e.getLink().nameReference)), _entitas.sensor.getGroup(SensorMatcher.Link())));
 
         // GameEntity contains Actuator entities
-        _entitas.actuator.addEntityIndex(Indexed.ActuatorsEntitiesIndex,  new ReactiveEntityIndex<ActuatorEntity, Integer>(
-                ((e, c) -> e.getLink().targetEntity), _entitas.actuator.getGroup(ActuatorMatcher.Link())));
+        _entitas.actuator.addEntityIndex(Indexed.ActuatorsEntitiesIndex,  new ReactiveEntityIndex<ActuatorEntity, KeyIndex>(
+                ((e, c) -> new KeyIndex(e.getLink().ownerEntity,e.getLink().nameReference)), _entitas.actuator.getGroup(ActuatorMatcher.Link())));
 
         // Interactive GameEntity index
         _entitas.game.addEntityIndex(Indexed.InteractiveEntityIndex,  new ReactivePrimaryEntityIndex<GameEntity, Integer>(
@@ -64,14 +67,14 @@ public class Indexed {
         eIndex.removeEntity(entity.getCreationIndex(), gameEntity);
     }
 
-    public static Set<SensorEntity> getSensorsEntities(GameEntity entity) {
-        ReactiveEntityIndex<SensorEntity, Integer> eIndex = (ReactiveEntityIndex<SensorEntity, Integer>) _entitas.sensor.getEntityIndex(SensorsEntitiesIndex);
-        return eIndex.getEntities(entity.getCreationIndex());
+    public static SensorEntity getSensorsEntity(GameEntity entity, String nameSensor) {
+        ReactivePrimaryEntityIndex<SensorEntity, KeyIndex> eIndex = (ReactivePrimaryEntityIndex<SensorEntity, KeyIndex>) _entitas.sensor.getEntityIndex(SensorsEntitiesIndex);
+        return eIndex.getEntity(index.setIndex(entity.getCreationIndex(),nameSensor));
     }
 
-    public static Set<ActuatorEntity> getActuatorEntities( GameEntity entity) {
-        ReactiveEntityIndex<ActuatorEntity, Integer> eIndex = (ReactiveEntityIndex<ActuatorEntity, Integer>) _entitas.sensor.getEntityIndex(ActuatorsEntitiesIndex);
-        return eIndex.getEntities(entity.getCreationIndex());
+    public static ActuatorEntity getActuatorEntity( GameEntity entity, String nameSensor) {
+        ReactivePrimaryEntityIndex<ActuatorEntity, KeyIndex> eIndex = (ReactivePrimaryEntityIndex<ActuatorEntity, KeyIndex>) _entitas.sensor.getEntityIndex(ActuatorsEntitiesIndex);
+        return eIndex.getEntity(index.setIndex(entity.getCreationIndex(),nameSensor));
     }
 
     public static GameEntity getInteractiveEntity(Integer indexEntity) {

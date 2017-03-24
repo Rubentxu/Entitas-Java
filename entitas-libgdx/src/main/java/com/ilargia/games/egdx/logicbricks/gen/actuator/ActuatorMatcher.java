@@ -10,9 +10,9 @@ import com.ilargia.games.entitas.matcher.Matcher;
 public class ActuatorMatcher {
 
 	private static Matcher _matcherCameraActuator;
-	private static Matcher _matcherCharacterActuator;
 	private static Matcher _matcherDragActuator;
 	private static Matcher _matcherLink;
+	private static Matcher _matcherParticleEffectActuator;
 	private static Matcher _matcherTextureActuator;
 	private static Matcher _matcherVelocityActuator;
 
@@ -24,16 +24,6 @@ public class ActuatorMatcher {
 			_matcherCameraActuator = matcher;
 		}
 		return _matcherCameraActuator;
-	}
-
-	public static Matcher CharacterActuator() {
-		if (_matcherCharacterActuator == null) {
-			Matcher matcher = (Matcher) Matcher
-					.AllOf(ActuatorComponentsLookup.CharacterActuator);
-			matcher.componentNames = ActuatorComponentsLookup.componentNames();
-			_matcherCharacterActuator = matcher;
-		}
-		return _matcherCharacterActuator;
 	}
 
 	public static Matcher DragActuator() {
@@ -54,6 +44,16 @@ public class ActuatorMatcher {
 			_matcherLink = matcher;
 		}
 		return _matcherLink;
+	}
+
+	public static Matcher ParticleEffectActuator() {
+		if (_matcherParticleEffectActuator == null) {
+			Matcher matcher = (Matcher) Matcher
+					.AllOf(ActuatorComponentsLookup.ParticleEffectActuator);
+			matcher.componentNames = ActuatorComponentsLookup.componentNames();
+			_matcherParticleEffectActuator = matcher;
+		}
+		return _matcherParticleEffectActuator;
 	}
 
 	public static Matcher TextureActuator() {

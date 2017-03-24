@@ -57,7 +57,7 @@ public class NearSensorSystem extends SensorSystem implements Collision {
             GameEntity entityA = Indexed.getInteractiveEntity(indexEntityA);
             GameEntity entityB =  Indexed.getInteractiveEntity(indexEntityB);
             if (entityA != null && entityB != null && tagSensorA != null) {
-                for (SensorEntity entity : Indexed.getSensorsEntities(entityA)) {
+                for (SensorEntity entity : sensorGroup.getEntities()) {
                     NearSensor sensor = entity.getNearSensor();
                     if (entityB.getTags().values.contains(sensor.targetTag)) {
                         if (collisionSignal) {

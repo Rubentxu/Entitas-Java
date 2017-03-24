@@ -42,7 +42,7 @@ public class CreateNearSensorSystem extends ReactiveSystem<SensorEntity> {
     @Override
     protected void execute(List<SensorEntity> entities) {
         for (SensorEntity e : entities) {
-            GameEntity gameEntity =  Indexed.getInteractiveEntity(e.getLink().targetEntity);
+            GameEntity gameEntity =  Indexed.getInteractiveEntity(e.getLink().ownerEntity);
             RigidBody rigidBody = gameEntity.getRigidBody();
             NearSensor nearSensor = e.getNearSensor();
 

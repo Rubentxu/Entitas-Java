@@ -6,13 +6,15 @@ import com.ilargia.games.entitas.codeGenerator.Component;
 
 @Component(pools = {"Sensor"})
 public class Link implements IComponent {
-    public int targetEntity;
+    public int ownerEntity;
     public boolean isOpen;
     public boolean isChanged;
     public boolean pulse;
+    public String nameReference;
 
-    public Link(int targetEntity) {
-        this.targetEntity = targetEntity;
+    public Link(int ownerEntity, String nameReference) {
+        this.ownerEntity = ownerEntity;
+        this.nameReference = nameReference;
         this.isOpen = false;
         this.isChanged = false;
         this.pulse = false;
