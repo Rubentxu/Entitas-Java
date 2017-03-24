@@ -28,6 +28,14 @@ public class AssetsManagerGDX implements TextureManager<Texture, TextureAtlas>, 
             assetManager.load(fileName, id);
     }
 
+    public synchronized <T> void load(String fileName, Class<T> type) {
+        assetManager.load(fileName, type);
+    }
+
+    public synchronized <T> T get(String fileName, Class<T> type){
+        return assetManager.get(fileName, type);
+    }
+
     public TiledMap getMap(String name) {
         return assetManager.get(name);
     }

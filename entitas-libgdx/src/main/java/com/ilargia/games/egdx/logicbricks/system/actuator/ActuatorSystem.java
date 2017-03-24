@@ -2,6 +2,7 @@ package com.ilargia.games.egdx.logicbricks.system.actuator;
 
 
 import com.ilargia.games.egdx.logicbricks.component.actuator.CameraActuator;
+import com.ilargia.games.egdx.logicbricks.component.actuator.ParticleEffectActuator;
 import com.ilargia.games.egdx.logicbricks.component.actuator.TextureActuator;
 import com.ilargia.games.egdx.logicbricks.component.actuator.VelocityActuator;
 import com.ilargia.games.egdx.logicbricks.gen.actuator.ActuatorContext;
@@ -16,12 +17,14 @@ public class ActuatorSystem implements IExecuteSystem {
     private final Group<ActuatorEntity> groupVelocity;
     private final Group<ActuatorEntity> groupTexture;
     private final Group<ActuatorEntity> groupCamera;
+    private final Group<ActuatorEntity> groupEffect;
 
     public ActuatorSystem(Entitas entitas) {
         ActuatorContext context = entitas.actuator;
         this.groupTexture = context.getGroup(ActuatorMatcher.TextureActuator());;
         this.groupVelocity = context.getGroup(ActuatorMatcher.VelocityActuator());
         this.groupCamera = context.getGroup(ActuatorMatcher.CameraActuator());
+        this.groupEffect = context.getGroup(ActuatorMatcher.ParticleEffectActuator());
     }
 
     @Override
@@ -45,6 +48,13 @@ public class ActuatorSystem implements IExecuteSystem {
             if(e.getLink().isOpen) {
                 CameraActuator cameraActuator = e.getCameraActuator();
                 cameraActuator.actuator.execute(e.getLink().ownerEntity);
+            }
+        }
+
+        for (ActuatorEntity e : groupEffect.getEntities()) {
+            if(e.getLink().isOpen) {
+                ParticleEffectActuator effectActuator = e.getParticleEffectActuator();
+                effectActuator.actuator.execute(e.getLink().ownerEntity);
             }
         }
 

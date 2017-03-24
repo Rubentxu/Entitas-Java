@@ -45,6 +45,7 @@ public class Mariano implements EntityFactory<Entitas, GameEntity> {
         BodyBuilder bodyBuilder = physics.getBodyBuilder();
 
         TextureAtlas textureAtlas = assetsManager.getTextureAtlas(atlas);
+        ParticleEffect dustEffect = assetsManager.get(effect, ParticleEffect.class);
 
         Array<TextureAtlas.AtlasRegion> heroWalking = textureAtlas.findRegions("Andando");
         Array<TextureAtlas.AtlasRegion> heroJump = textureAtlas.findRegions("Saltando");
@@ -121,6 +122,10 @@ public class Mariano implements EntityFactory<Entitas, GameEntity> {
         entitas.actuator.createEntity()
                 .addCameraActuator(((EngineGDX) engine).getCamera(), (short) 0.3f, 0.08f, 6, 1, "Mariano")
                 .addLink(entity.getCreationIndex(), "CameraActuator", true);
+
+        entitas.actuator.createEntity()
+                .addParticleEffectActuator(dustEffect,true,-1,-1)
+                .addLink(entity.getCreationIndex(), "EffectActuator", true);
 
         return entity;
 

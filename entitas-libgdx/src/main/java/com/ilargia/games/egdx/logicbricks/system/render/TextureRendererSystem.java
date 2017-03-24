@@ -9,8 +9,11 @@ import com.ilargia.games.egdx.impl.EngineGDX;
 import com.ilargia.games.egdx.impl.managers.LogManagerGDX;
 import com.ilargia.games.egdx.impl.managers.PreferencesManagerGDX;
 import com.ilargia.games.egdx.impl.managers.SceneManagerGDX;
+import com.ilargia.games.egdx.logicbricks.component.actuator.ParticleEffectActuator;
 import com.ilargia.games.egdx.logicbricks.component.game.TextureView;
 import com.ilargia.games.egdx.logicbricks.gen.Entitas;
+import com.ilargia.games.egdx.logicbricks.gen.actuator.ActuatorEntity;
+import com.ilargia.games.egdx.logicbricks.gen.actuator.ActuatorMatcher;
 import com.ilargia.games.egdx.logicbricks.gen.game.GameEntity;
 import com.ilargia.games.egdx.logicbricks.gen.game.GameMatcher;
 import com.ilargia.games.entitas.api.system.IInitializeSystem;
@@ -25,6 +28,7 @@ public class TextureRendererSystem implements IInitializeSystem, IRenderSystem {
     private OrthographicCamera cam;
     private Batch batch;
     private Group<GameEntity> groupTextureView;
+    private Group<ActuatorEntity> groupEffect;
 
     public TextureRendererSystem(Entitas entitas, EngineGDX engine) {
         this.batch = engine.getBatch();
@@ -37,7 +41,7 @@ public class TextureRendererSystem implements IInitializeSystem, IRenderSystem {
     public void initialize() {
         this.cam = (OrthographicCamera) entitas.scene.getCamera().camera;
         this.groupTextureView = entitas.game.getGroup(GameMatcher.TextureView());
-
+        this.groupEffect = entitas.actuator.getGroup(ActuatorMatcher.ParticleEffectActuator());
     }
 
     @Override
@@ -53,6 +57,12 @@ public class TextureRendererSystem implements IInitializeSystem, IRenderSystem {
             batch.draw(view.texture, body.getPosition().x - view.bounds.extentsX, body.getPosition().y - view.bounds.extentsY,
                     body.getPosition().x, body.getPosition().y, view.bounds.extentsX * 2, view.bounds.extentsY * 2, 1, 1, 0);
 
+        }
+        for (ActuatorEntity e : groupEffect.getEntities()) {
+            if(e.getLink().isOpen) {
+                ParticleEffectActuator effectActuator = e.getParticleEffectActuator();
+                effectActuator.particleEffect.draw(batch);
+            }
         }
         batch.end();
 

@@ -3,12 +3,12 @@ package com.ilargia.games.egdx.logicbricks.component.actuator;
 
 import com.badlogic.gdx.graphics.Color;
 import com.ilargia.games.egdx.logicbricks.component.game.TextureView;
+import com.ilargia.games.egdx.logicbricks.data.Bounds;
 import com.ilargia.games.egdx.logicbricks.data.interfaces.Actuator;
 import com.ilargia.games.egdx.logicbricks.gen.game.GameEntity;
 import com.ilargia.games.egdx.logicbricks.index.Indexed;
 import com.ilargia.games.entitas.api.IComponent;
 import com.ilargia.games.entitas.codeGenerator.Component;
-import com.ilargia.games.egdx.logicbricks.data.Bounds;
 
 @Component(pools = {"Actuator"})
 public class TextureActuator implements IComponent {

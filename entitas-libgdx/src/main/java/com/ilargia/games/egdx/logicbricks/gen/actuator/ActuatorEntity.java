@@ -16,6 +16,7 @@ import com.ilargia.games.egdx.logicbricks.component.actuator.DragActuator;
 import com.ilargia.games.egdx.logicbricks.data.StateCharacter;
 import com.ilargia.games.egdx.logicbricks.component.actuator.Link;
 import com.ilargia.games.egdx.logicbricks.component.actuator.ParticleEffectActuator;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.ilargia.games.egdx.logicbricks.component.actuator.TextureActuator;
 import com.badlogic.gdx.graphics.Color;
@@ -190,25 +191,47 @@ public class ActuatorEntity extends Entity {
 	}
 
 	public ActuatorEntity addParticleEffectActuator(ParticleEffect effect,
-			boolean autoStart) {
+			boolean autoStart, float locaPosX, float locaPosY) {
 		ParticleEffectActuator component = (ParticleEffectActuator) recoverComponent(ActuatorComponentsLookup.ParticleEffectActuator);
 		if (component == null) {
-			component = new ParticleEffectActuator();
+			component = new ParticleEffectActuator(effect, autoStart, locaPosX,
+					locaPosY);
+		} else {
+			component.particleEffect = effect;
+			component.actuator = (indexOwner) -> {
+				GameEntity owner = Indexed.getInteractiveEntity(indexOwner);
+				RigidBody rc = owner.getRigidBody();
+				Transform transform = rc.body.getTransform();
+				effect.setPosition(transform.getPosition().x + locaPosX,
+						transform.getPosition().y + locaPosY);
+				effect.update(Gdx.graphics.getDeltaTime());
+				if (autoStart && effect.isComplete())
+					effect.start();
+			};
 		}
-		component.effect = effect;
-		component.autoStart = autoStart;
 		addComponent(ActuatorComponentsLookup.ParticleEffectActuator, component);
 		return this;
 	}
 
 	public ActuatorEntity replaceParticleEffectActuator(ParticleEffect effect,
-			boolean autoStart) {
+			boolean autoStart, float locaPosX, float locaPosY) {
 		ParticleEffectActuator component = (ParticleEffectActuator) recoverComponent(ActuatorComponentsLookup.ParticleEffectActuator);
 		if (component == null) {
-			component = new ParticleEffectActuator();
+			component = new ParticleEffectActuator(effect, autoStart, locaPosX,
+					locaPosY);
+		} else {
+			component.particleEffect = effect;
+			component.actuator = (indexOwner) -> {
+				GameEntity owner = Indexed.getInteractiveEntity(indexOwner);
+				RigidBody rc = owner.getRigidBody();
+				Transform transform = rc.body.getTransform();
+				effect.setPosition(transform.getPosition().x + locaPosX,
+						transform.getPosition().y + locaPosY);
+				effect.update(Gdx.graphics.getDeltaTime());
+				if (autoStart && effect.isComplete())
+					effect.start();
+			};
 		}
-		component.effect = effect;
-		component.autoStart = autoStart;
 		replaceComponent(ActuatorComponentsLookup.ParticleEffectActuator,
 				component);
 		return this;
