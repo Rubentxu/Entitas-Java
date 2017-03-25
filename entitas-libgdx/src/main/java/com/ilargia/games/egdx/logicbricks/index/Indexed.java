@@ -68,13 +68,21 @@ public class Indexed {
     }
 
     public static SensorEntity getSensorsEntity(GameEntity entity, String nameSensor) {
+       return getSensorsEntity(entity.getCreationIndex(),nameSensor);
+    }
+
+    public static SensorEntity getSensorsEntity(int indexGameEntity, String nameSensor) {
         ReactivePrimaryEntityIndex<SensorEntity, KeyIndex> eIndex = (ReactivePrimaryEntityIndex<SensorEntity, KeyIndex>) _entitas.sensor.getEntityIndex(SensorsEntitiesIndex);
-        return eIndex.getEntity(index.setIndex(entity.getCreationIndex(),nameSensor));
+        return eIndex.getEntity(index.setIndex(indexGameEntity,nameSensor));
     }
 
     public static ActuatorEntity getActuatorEntity( GameEntity entity, String nameSensor) {
+        return getActuatorEntity(entity.getCreationIndex(),nameSensor);
+    }
+
+    public static ActuatorEntity getActuatorEntity( int indexGameEntity, String nameSensor) {
         ReactivePrimaryEntityIndex<ActuatorEntity, KeyIndex> eIndex = (ReactivePrimaryEntityIndex<ActuatorEntity, KeyIndex>) _entitas.sensor.getEntityIndex(ActuatorsEntitiesIndex);
-        return eIndex.getEntity(index.setIndex(entity.getCreationIndex(),nameSensor));
+        return eIndex.getEntity(index.setIndex(indexGameEntity,nameSensor));
     }
 
     public static GameEntity getInteractiveEntity(Integer indexEntity) {

@@ -1,7 +1,11 @@
 package com.ilargia.games.egdx.logicbricks.system.sensor;
 
 
+import com.badlogic.gdx.physics.box2d.Body;
+import com.ilargia.games.egdx.api.Engine;
 import com.ilargia.games.egdx.api.managers.listener.Collision;
+import com.ilargia.games.egdx.impl.managers.LogManagerGDX;
+import com.ilargia.games.egdx.impl.managers.PhysicsManagerGDX;
 import com.ilargia.games.egdx.logicbricks.component.sensor.NearSensor;
 import com.ilargia.games.egdx.logicbricks.gen.Entitas;
 import com.ilargia.games.egdx.logicbricks.gen.game.GameContext;
@@ -10,19 +14,24 @@ import com.ilargia.games.egdx.logicbricks.gen.sensor.SensorContext;
 import com.ilargia.games.egdx.logicbricks.gen.sensor.SensorEntity;
 import com.ilargia.games.egdx.logicbricks.gen.sensor.SensorMatcher;
 import com.ilargia.games.egdx.logicbricks.index.Indexed;
+import com.ilargia.games.entitas.api.system.IInitializeSystem;
 import com.ilargia.games.entitas.group.Group;
 import com.ilargia.games.entitas.matcher.Matcher;
 
-public class NearSensorSystem extends SensorSystem implements Collision {
-    private final SensorContext sensorContex;
+public class NearSensorSystem extends SensorSystem implements Collision, IInitializeSystem {
+
     private final Group<SensorEntity> sensorGroup;
-    private final GameContext gameContex;
+    private final Engine engine;
 
-    public NearSensorSystem(Entitas entitas) {
-        this.sensorContex = entitas.sensor;
-        this.gameContex = entitas.game;
-        this.sensorGroup = sensorContex.getGroup(Matcher.AllOf(SensorMatcher.NearSensor(), SensorMatcher.Link()));
+    public NearSensorSystem(Entitas entitas, Engine engine) {
+        this.engine = engine;
+        this.sensorGroup = entitas.sensor.getGroup(Matcher.AllOf(SensorMatcher.NearSensor(), SensorMatcher.Link()));
 
+    }
+
+    @Override
+    public void initialize() {
+        engine.getManager(PhysicsManagerGDX.class).addListener(this);
     }
 
     @Override
@@ -53,16 +62,22 @@ public class NearSensorSystem extends SensorSystem implements Collision {
 
     @Override
     public void processSensorCollision(Integer indexEntityA, Integer indexEntityB, String tagSensorA, boolean collisionSignal) {
-        if (indexEntityA != null && indexEntityB != null) {
+        if (indexEntityA != null && indexEntityB != null && tagSensorA != null) {
             GameEntity entityA = Indexed.getInteractiveEntity(indexEntityA);
             GameEntity entityB =  Indexed.getInteractiveEntity(indexEntityB);
             if (entityA != null && entityB != null && tagSensorA != null) {
                 for (SensorEntity entity : sensorGroup.getEntities()) {
                     NearSensor sensor = entity.getNearSensor();
-                    if (entityB.getTags().values.contains(sensor.targetTag)) {
+                    if (sensor.targetTag !=null ||entityB.getTags().values.contains(sensor.targetTag)) {
                         if (collisionSignal) {
                             if (tagSensorA.equals("NearSensor")) {
                                 sensor.distanceContactList.add(indexEntityB);
+                                if(entity.getLink().nameReference.contains("RadialGravity")) {
+                                    Body body = entityB.getRigidBody().body;
+                                    body.setGravityScale(0);
+                                    body.resetMassData();
+                                }
+
                             } else if (tagSensorA.equals("ResetNearSensor")) {
                                 sensor.resetDistanceContactList.add(indexEntityB);
                             }
@@ -70,6 +85,11 @@ public class NearSensorSystem extends SensorSystem implements Collision {
                         } else {
                             if (tagSensorA.equals("NearSensor")) {
                                 sensor.distanceContactList.remove(indexEntityB);
+                                if(entity.getLink().nameReference.contains("RadialGravity")) {
+                                    Body body = entityB.getRigidBody().body;
+                                    body.setGravityScale(1);
+                                    body.resetMassData();
+                                }
                             } else if (tagSensorA.equals("ResetNearSensor")) {
                                 sensor.resetDistanceContactList.remove(indexEntityB);
                             }

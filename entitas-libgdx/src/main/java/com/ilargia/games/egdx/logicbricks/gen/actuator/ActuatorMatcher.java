@@ -13,6 +13,7 @@ public class ActuatorMatcher {
 	private static Matcher _matcherDragActuator;
 	private static Matcher _matcherLink;
 	private static Matcher _matcherParticleEffectActuator;
+	private static Matcher _matcherRadialGravityActuator;
 	private static Matcher _matcherTextureActuator;
 	private static Matcher _matcherVelocityActuator;
 
@@ -54,6 +55,16 @@ public class ActuatorMatcher {
 			_matcherParticleEffectActuator = matcher;
 		}
 		return _matcherParticleEffectActuator;
+	}
+
+	public static Matcher RadialGravityActuator() {
+		if (_matcherRadialGravityActuator == null) {
+			Matcher matcher = (Matcher) Matcher
+					.AllOf(ActuatorComponentsLookup.RadialGravityActuator);
+			matcher.componentNames = ActuatorComponentsLookup.componentNames();
+			_matcherRadialGravityActuator = matcher;
+		}
+		return _matcherRadialGravityActuator;
 	}
 
 	public static Matcher TextureActuator() {

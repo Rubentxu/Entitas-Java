@@ -2,6 +2,7 @@ package com.examples.games.states;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.examples.games.ExamplesEngine;
+import com.examples.games.entities.Box;
 import com.examples.games.entities.Ground;
 import com.examples.games.entities.Mariano;
 import com.examples.games.scenes.PlatformExamples;
@@ -11,6 +12,8 @@ import com.ilargia.games.egdx.impl.managers.SceneManagerGDX;
 import com.ilargia.games.egdx.logicbricks.gen.Entitas;
 import com.ilargia.games.egdx.logicbricks.index.Indexed;
 import com.ilargia.games.egdx.logicbricks.system.actuator.ActuatorSystem;
+import com.ilargia.games.egdx.logicbricks.system.actuator.CreateRadialGravityActuatorSystem;
+import com.ilargia.games.egdx.logicbricks.system.actuator.RadialGravityActuatorSystem;
 import com.ilargia.games.egdx.logicbricks.system.game.AddInputControllerSystem;
 import com.ilargia.games.egdx.logicbricks.system.game.AnimationSystem;
 import com.ilargia.games.egdx.logicbricks.system.game.InputControllerSystem;
@@ -39,6 +42,7 @@ public class PlatformExampleState extends GameStateGDX {
         sceneManager = engine.getManager(SceneManagerGDX.class);
         sceneManager.addEntityFactory("Ground", new Ground());
         sceneManager.addEntityFactory("Mariano", new Mariano());
+        sceneManager.addEntityFactory("Box", new Box());
         sceneManager.addSceneFactory("Pruebas", new PlatformExamples());
         sceneManager.initialize();
     }
@@ -52,8 +56,8 @@ public class PlatformExampleState extends GameStateGDX {
                 .add(new CreateNearSensorSystem(entitas, engine))
                 .add(new CreateRadarSensorSystem(entitas, engine))
                 .add(new DelaySensorSystem(entitas))
-                .add(new NearSensorSystem(entitas))
-                .add(new RadarSensorSystem(entitas))
+                .add(new NearSensorSystem(entitas, engine))
+                .add(new RadarSensorSystem(entitas, engine))
                 .add(new RaySensorSystem(entitas, engine.getManager(PhysicsManagerGDX.class).getPhysics()))
                 .add(new AddInputControllerSystem(entitas, engine))
                 .add(new InputControllerSystem(engine))
@@ -61,6 +65,8 @@ public class PlatformExampleState extends GameStateGDX {
                 .add(new RigidBodySystem(entitas))
                 .add(new AnimationSystem(entitas))
                 .add(new ActuatorSystem(entitas))
+                .add(new CreateRadialGravityActuatorSystem(entitas, engine))
+                .add(new RadialGravityActuatorSystem(entitas))
                 .add(new LigthRendererSystem(entitas, engine))
                 .add(new BackgroundRenderSystem(entitas, engine))
                 .add(new TextureRendererSystem(entitas, engine))

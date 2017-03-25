@@ -6,12 +6,11 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.ilargia.games.egdx.api.managers.PhysicsManager;
 import com.ilargia.games.egdx.api.managers.listener.Collision;
 import com.ilargia.games.egdx.util.BodyBuilder;
-import com.ilargia.games.entitas.api.IEntity;
 import com.ilargia.games.entitas.factories.EntitasCollections;
 
 import java.util.Set;
 
-public class PhysicsManagerGDX implements PhysicsManager<World,Collision>, ContactListener {
+public class PhysicsManagerGDX implements PhysicsManager<World, Collision>, ContactListener {
     private World physics;
     private BodyBuilder bodyBuilder;
     private Set<Collision> collisionListeners;
@@ -30,7 +29,7 @@ public class PhysicsManagerGDX implements PhysicsManager<World,Collision>, Conta
 
     @Override
     public void addListener(Collision listener) {
-       collisionListeners.add(listener);
+        collisionListeners.add(listener);
     }
 
     @Override
@@ -51,46 +50,46 @@ public class PhysicsManagerGDX implements PhysicsManager<World,Collision>, Conta
 
     @Override
     public void beginContact(Contact contact) {
-        if(contact.getFixtureA().isSensor()) {
+        if (contact.getFixtureA().isSensor() || contact.getFixtureB().isSensor()) {
             String tagSensorA = (String) contact.getFixtureA().getUserData();
             String tagSensorB = (String) contact.getFixtureB().getUserData();
             Integer dataA = (Integer) contact.getFixtureA().getBody().getUserData();
             Integer dataB = (Integer) contact.getFixtureB().getBody().getUserData();
             for (Collision listener : collisionListeners) {
-                listener.processSensorCollision(dataA, dataB, tagSensorA,true);
-                listener.processSensorCollision(dataB, dataA, tagSensorB,true);
+                listener.processSensorCollision(dataA, dataB, tagSensorA, true);
+                listener.processSensorCollision(dataB, dataA, tagSensorB, true);
 
             }
-        } else {
-            Integer dataA = (Integer) contact.getFixtureA().getBody().getUserData();
-            Integer dataB = (Integer) contact.getFixtureB().getBody().getUserData();
-            for (Collision listener : collisionListeners) {
-                listener.processCollision(dataA, dataB, true);
-                listener.processCollision(dataB, dataA, true);
-            }
         }
+        Integer dataA = (Integer) contact.getFixtureA().getBody().getUserData();
+        Integer dataB = (Integer) contact.getFixtureB().getBody().getUserData();
+        for (Collision listener : collisionListeners) {
+            listener.processCollision(dataA, dataB, true);
+            listener.processCollision(dataB, dataA, true);
+        }
+
     }
 
     @Override
     public void endContact(Contact contact) {
-        if(contact.getFixtureA().isSensor()) {
+        if (contact.getFixtureA().isSensor() || contact.getFixtureB().isSensor()) {
             String tagSensorA = (String) contact.getFixtureA().getUserData();
             String tagSensorB = (String) contact.getFixtureB().getUserData();
             Integer dataA = (Integer) contact.getFixtureA().getBody().getUserData();
             Integer dataB = (Integer) contact.getFixtureB().getBody().getUserData();
             for (Collision listener : collisionListeners) {
-                listener.processSensorCollision(dataA, dataB, tagSensorA,false);
-                listener.processSensorCollision(dataB, dataA, tagSensorB,false);
+                listener.processSensorCollision(dataA, dataB, tagSensorA, false);
+                listener.processSensorCollision(dataB, dataA, tagSensorB, false);
 
             }
-        } else {
+        }
             Integer dataA = (Integer) contact.getFixtureA().getBody().getUserData();
             Integer dataB = (Integer) contact.getFixtureB().getBody().getUserData();
             for (Collision listener : collisionListeners) {
                 listener.processCollision(dataA, dataB, false);
                 listener.processCollision(dataB, dataA, false);
             }
-        }
+
 
     }
 

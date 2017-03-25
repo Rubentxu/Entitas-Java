@@ -127,6 +127,7 @@ public class Mariano implements EntityFactory<Entitas, GameEntity> {
                 .addParticleEffectActuator(dustEffect,true,-1,-1)
                 .addLink(entity.getCreationIndex(), "EffectActuator", true);
 
+
         return entity;
 
     }

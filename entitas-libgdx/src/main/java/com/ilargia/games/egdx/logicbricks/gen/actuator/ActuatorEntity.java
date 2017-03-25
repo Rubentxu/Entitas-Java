@@ -18,12 +18,15 @@ import com.ilargia.games.egdx.logicbricks.component.actuator.Link;
 import com.ilargia.games.egdx.logicbricks.component.actuator.ParticleEffectActuator;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
+import com.ilargia.games.egdx.logicbricks.component.actuator.RadialGravityActuator;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.ilargia.games.egdx.logicbricks.gen.sensor.SensorContext;
 import com.ilargia.games.egdx.logicbricks.component.actuator.TextureActuator;
 import com.badlogic.gdx.graphics.Color;
 import com.ilargia.games.egdx.logicbricks.component.game.TextureView;
 import com.ilargia.games.egdx.logicbricks.data.Bounds;
 import com.ilargia.games.egdx.logicbricks.component.actuator.VelocityActuator;
-import com.badlogic.gdx.math.Vector2;
 
 /**
  * ---------------------------------------------------------------------------
@@ -239,6 +242,50 @@ public class ActuatorEntity extends Entity {
 
 	public ActuatorEntity removeParticleEffectActuator() {
 		removeComponent(ActuatorComponentsLookup.ParticleEffectActuator);
+		return this;
+	}
+
+	public RadialGravityActuator getRadialGravityActuator() {
+		return (RadialGravityActuator) getComponent(ActuatorComponentsLookup.RadialGravityActuator);
+	}
+
+	public boolean hasRadialGravityActuator() {
+		return hasComponent(ActuatorComponentsLookup.RadialGravityActuator);
+	}
+
+	public ActuatorEntity addRadialGravityActuator(float gravity, float radius,
+			float gravityFactor) {
+		RadialGravityActuator component = (RadialGravityActuator) recoverComponent(ActuatorComponentsLookup.RadialGravityActuator);
+		if (component == null) {
+			component = new RadialGravityActuator(gravity, radius,
+					gravityFactor);
+		} else {
+			component.gravity = gravity;
+			component.radius = radius;
+			component.gravityFactor = gravityFactor;
+		}
+		addComponent(ActuatorComponentsLookup.RadialGravityActuator, component);
+		return this;
+	}
+
+	public ActuatorEntity replaceRadialGravityActuator(float gravity,
+			float radius, float gravityFactor) {
+		RadialGravityActuator component = (RadialGravityActuator) recoverComponent(ActuatorComponentsLookup.RadialGravityActuator);
+		if (component == null) {
+			component = new RadialGravityActuator(gravity, radius,
+					gravityFactor);
+		} else {
+			component.gravity = gravity;
+			component.radius = radius;
+			component.gravityFactor = gravityFactor;
+		}
+		replaceComponent(ActuatorComponentsLookup.RadialGravityActuator,
+				component);
+		return this;
+	}
+
+	public ActuatorEntity removeRadialGravityActuator() {
+		removeComponent(ActuatorComponentsLookup.RadialGravityActuator);
 		return this;
 	}
 

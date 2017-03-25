@@ -9,6 +9,7 @@ import com.ilargia.games.egdx.impl.managers.AssetsManagerGDX;
 import com.ilargia.games.egdx.impl.managers.SceneManagerGDX;
 import com.ilargia.games.egdx.logicbricks.gen.Entitas;
 import com.ilargia.games.egdx.logicbricks.gen.game.GameEntity;
+import com.ilargia.games.entitas.Entity;
 
 
 public class PlatformExamples implements SceneFactory<Engine, Entitas> {
@@ -51,6 +52,12 @@ public class PlatformExamples implements SceneFactory<Engine, Entitas> {
 
         GameEntity mariano = sceneManager.createEntity("Mariano");
         mariano.getRigidBody().body.setTransform(10, 6, 0);
+
+        GameEntity box1 = sceneManager.createEntity("Box");
+        box1.getRigidBody().body.setTransform(20,7,0);
+
+//        GameEntity box2 = sceneManager.createEntity("Box");
+//        box2.getRigidBody().body.setTransform(-20,7,0);
 
         entitas.actuator.setDragActuator(ground.getCreationIndex(), false, 1000);
 
