@@ -2,10 +2,10 @@ package com.ilargia.games.egdx.logicbricks.system.game;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.ilargia.games.egdx.logicbricks.component.game.Animations;
+import com.ilargia.games.egdx.logicbricks.data.AnimationsView;
 import com.ilargia.games.egdx.logicbricks.gen.game.GameEntity;
 import com.ilargia.games.egdx.logicbricks.gen.game.GameMatcher;
-import com.ilargia.games.egdx.logicbricks.component.game.TextureView;
+import com.ilargia.games.egdx.logicbricks.data.TextureView;
 import com.ilargia.games.egdx.logicbricks.gen.Entitas;
 import com.ilargia.games.entitas.api.system.IExecuteSystem;
 import com.ilargia.games.entitas.group.Group;
@@ -24,7 +24,7 @@ public class AnimationSystem implements IExecuteSystem {
     public void execute(float deltaTime) {
 
         for (GameEntity e : _groupAnimation.getEntities()) {
-            Animations animations = e.getAnimations();
+            AnimationsView animations = e.getAnimations();
             TextureView view = e.getTextureView();
             animations.time += deltaTime;
 

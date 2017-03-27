@@ -1,30 +1,23 @@
 package com.ilargia.games.egdx.logicbricks.gen.actuator;
 
-import com.ilargia.games.entitas.api.*;
 import com.ilargia.games.entitas.Entity;
-import java.util.Stack;
 import com.ilargia.games.egdx.logicbricks.component.actuator.CameraActuator;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Transform;
-import com.ilargia.games.egdx.logicbricks.component.game.RigidBody;
-import com.ilargia.games.egdx.logicbricks.data.interfaces.Actuator;
+import com.ilargia.games.egdx.logicbricks.data.RigidBody;
 import com.ilargia.games.egdx.logicbricks.gen.game.GameEntity;
 import com.ilargia.games.egdx.logicbricks.index.Indexed;
-import com.ilargia.games.entitas.api.IComponent;
 import com.ilargia.games.egdx.logicbricks.component.actuator.DragActuator;
-import com.ilargia.games.egdx.logicbricks.data.StateCharacter;
 import com.ilargia.games.egdx.logicbricks.component.actuator.Link;
 import com.ilargia.games.egdx.logicbricks.component.actuator.ParticleEffectActuator;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.ilargia.games.egdx.logicbricks.component.actuator.RadialGravityActuator;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.ilargia.games.egdx.logicbricks.gen.sensor.SensorContext;
 import com.ilargia.games.egdx.logicbricks.component.actuator.TextureActuator;
 import com.badlogic.gdx.graphics.Color;
-import com.ilargia.games.egdx.logicbricks.component.game.TextureView;
+import com.ilargia.games.egdx.logicbricks.data.TextureView;
 import com.ilargia.games.egdx.logicbricks.data.Bounds;
 import com.ilargia.games.egdx.logicbricks.component.actuator.VelocityActuator;
 

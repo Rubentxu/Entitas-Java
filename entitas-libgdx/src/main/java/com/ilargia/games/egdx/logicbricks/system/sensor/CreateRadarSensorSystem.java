@@ -6,7 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.ilargia.games.egdx.api.Engine;
 import com.ilargia.games.egdx.impl.managers.PhysicsManagerGDX;
-import com.ilargia.games.egdx.logicbricks.component.game.RigidBody;
+import com.ilargia.games.egdx.logicbricks.data.RigidBody;
 import com.ilargia.games.egdx.logicbricks.component.sensor.RadarSensor;
 import com.ilargia.games.egdx.logicbricks.gen.Entitas;
 import com.ilargia.games.egdx.logicbricks.gen.game.GameContext;

@@ -1,17 +1,12 @@
 package com.ilargia.games.egdx.logicbricks.system.render;
 
-import box2dLight.RayHandler;
-import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.ilargia.games.egdx.impl.EngineGDX;
-import com.ilargia.games.egdx.impl.managers.LogManagerGDX;
-import com.ilargia.games.egdx.impl.managers.PreferencesManagerGDX;
-import com.ilargia.games.egdx.impl.managers.SceneManagerGDX;
 import com.ilargia.games.egdx.logicbricks.component.actuator.ParticleEffectActuator;
-import com.ilargia.games.egdx.logicbricks.component.game.TextureView;
+import com.ilargia.games.egdx.logicbricks.data.TextureView;
 import com.ilargia.games.egdx.logicbricks.gen.Entitas;
 import com.ilargia.games.egdx.logicbricks.gen.actuator.ActuatorEntity;
 import com.ilargia.games.egdx.logicbricks.gen.actuator.ActuatorMatcher;

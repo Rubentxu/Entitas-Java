@@ -1,28 +1,22 @@
 package com.ilargia.games.egdx.logicbricks.gen.game;
 
-import com.ilargia.games.entitas.api.*;
 import com.ilargia.games.entitas.Entity;
-import java.util.Stack;
-import com.ilargia.games.egdx.logicbricks.component.game.Animations;
+import com.ilargia.games.egdx.logicbricks.data.AnimationsView;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.ilargia.games.entitas.api.IComponent;
+
 import java.util.Map;
 import com.ilargia.games.egdx.logicbricks.component.game.Character;
 import com.ilargia.games.egdx.logicbricks.data.StateCharacter;
 import com.ilargia.games.egdx.logicbricks.component.game.Destroy;
 import com.ilargia.games.egdx.logicbricks.component.game.InputController;
 import com.ilargia.games.egdx.api.GameController;
-import com.ilargia.games.egdx.impl.managers.InputManagerGDX;
-import com.ilargia.games.egdx.logicbricks.gen.Entitas;
 import com.ilargia.games.egdx.logicbricks.component.game.Interactive;
-import com.ilargia.games.egdx.logicbricks.component.game.RigidBody;
+import com.ilargia.games.egdx.logicbricks.data.RigidBody;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.ilargia.games.egdx.logicbricks.component.game.Tags;
-import com.ilargia.games.egdx.logicbricks.component.sensor.CollisionSensor;
 import com.ilargia.games.entitas.factories.EntitasCollections;
-import java.util.Set;
-import com.ilargia.games.egdx.logicbricks.component.game.TextureView;
+import com.ilargia.games.egdx.logicbricks.data.TextureView;
 import com.badlogic.gdx.graphics.Color;
 import com.ilargia.games.egdx.logicbricks.data.Bounds;
 
@@ -39,8 +33,8 @@ public class GameEntity extends Entity {
 	public GameEntity() {
 	}
 
-	public Animations getAnimations() {
-		return (Animations) getComponent(GameComponentsLookup.Animations);
+	public AnimationsView getAnimations() {
+		return (AnimationsView) getComponent(GameComponentsLookup.Animations);
 	}
 
 	public boolean hasAnimations() {
@@ -50,9 +44,9 @@ public class GameEntity extends Entity {
 	public GameEntity addAnimations(
 			Map<String, Animation<TextureRegion>> animationStates,
 			Animation<TextureRegion> currentAnimation, float time) {
-		Animations component = (Animations) recoverComponent(GameComponentsLookup.Animations);
+		AnimationsView component = (AnimationsView) recoverComponent(GameComponentsLookup.Animations);
 		if (component == null) {
-			component = new Animations();
+			component = new AnimationsView();
 		}
 		component.animationStates = animationStates;
 		component.currentAnimation = currentAnimation;
@@ -64,9 +58,9 @@ public class GameEntity extends Entity {
 	public GameEntity replaceAnimations(
 			Map<String, Animation<TextureRegion>> animationStates,
 			Animation<TextureRegion> currentAnimation, float time) {
-		Animations component = (Animations) recoverComponent(GameComponentsLookup.Animations);
+		AnimationsView component = (AnimationsView) recoverComponent(GameComponentsLookup.Animations);
 		if (component == null) {
-			component = new Animations();
+			component = new AnimationsView();
 		}
 		component.animationStates = animationStates;
 		component.currentAnimation = currentAnimation;
@@ -227,11 +221,12 @@ public class GameEntity extends Entity {
 	}
 
 	public GameEntity addTags(String... values) {
+		if(!hasTags())
 		Tags component = (Tags) recoverComponent(GameComponentsLookup.Tags);
 		if (component == null) {
 			component = new Tags(values);
 		} else {
-			if (component.values == null) {
+			if (component.values. == null) {
 				component.values = EntitasCollections.createSet(String.class);
 			} else {
 				component.values.clear();

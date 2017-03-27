@@ -1,13 +1,13 @@
 package com.ilargia.games.egdx.logicbricks.gen.game;
 
-import com.ilargia.games.egdx.logicbricks.component.game.Animations;
+import com.ilargia.games.egdx.logicbricks.data.AnimationsView;
 import com.ilargia.games.egdx.logicbricks.component.game.Character;
 import com.ilargia.games.egdx.logicbricks.component.game.Destroy;
 import com.ilargia.games.egdx.logicbricks.component.game.InputController;
 import com.ilargia.games.egdx.logicbricks.component.game.Interactive;
-import com.ilargia.games.egdx.logicbricks.component.game.RigidBody;
+import com.ilargia.games.egdx.logicbricks.data.RigidBody;
 import com.ilargia.games.egdx.logicbricks.component.game.Tags;
-import com.ilargia.games.egdx.logicbricks.component.game.TextureView;
+import com.ilargia.games.egdx.logicbricks.data.TextureView;
 
 /**
  * ---------------------------------------------------------------------------
@@ -33,7 +33,7 @@ public class GameComponentsLookup {
 	}
 
 	public static Class[] componentTypes() {
-		return new Class[]{Animations.class, Character.class, Destroy.class,
+		return new Class[]{AnimationsView.class, Character.class, Destroy.class,
 				InputController.class, Interactive.class, RigidBody.class,
 				Tags.class, TextureView.class};
 	}

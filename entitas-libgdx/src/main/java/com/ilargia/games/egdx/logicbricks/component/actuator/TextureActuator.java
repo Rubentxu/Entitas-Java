@@ -2,7 +2,7 @@ package com.ilargia.games.egdx.logicbricks.component.actuator;
 
 
 import com.badlogic.gdx.graphics.Color;
-import com.ilargia.games.egdx.logicbricks.component.game.TextureView;
+import com.ilargia.games.egdx.logicbricks.data.TextureView;
 import com.ilargia.games.egdx.logicbricks.data.Bounds;
 import com.ilargia.games.egdx.logicbricks.data.interfaces.Actuator;
 import com.ilargia.games.egdx.logicbricks.gen.game.GameEntity;

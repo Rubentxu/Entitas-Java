@@ -4,7 +4,7 @@ package com.ilargia.games.egdx.logicbricks.component.actuator;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.physics.box2d.Transform;
-import com.ilargia.games.egdx.logicbricks.component.game.RigidBody;
+import com.ilargia.games.egdx.logicbricks.data.RigidBody;
 import com.ilargia.games.egdx.logicbricks.data.interfaces.Actuator;
 import com.ilargia.games.egdx.logicbricks.gen.game.GameEntity;
 import com.ilargia.games.egdx.logicbricks.index.Indexed;
