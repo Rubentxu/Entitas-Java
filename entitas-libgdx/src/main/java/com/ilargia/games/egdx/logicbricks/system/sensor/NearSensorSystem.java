@@ -2,15 +2,13 @@ package com.ilargia.games.egdx.logicbricks.system.sensor;
 
 
 import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.Fixture;
 import com.ilargia.games.egdx.api.Engine;
 import com.ilargia.games.egdx.api.managers.listener.Collision;
-import com.ilargia.games.egdx.impl.managers.LogManagerGDX;
 import com.ilargia.games.egdx.impl.managers.PhysicsManagerGDX;
 import com.ilargia.games.egdx.logicbricks.component.sensor.NearSensor;
 import com.ilargia.games.egdx.logicbricks.gen.Entitas;
-import com.ilargia.games.egdx.logicbricks.gen.game.GameContext;
 import com.ilargia.games.egdx.logicbricks.gen.game.GameEntity;
-import com.ilargia.games.egdx.logicbricks.gen.sensor.SensorContext;
 import com.ilargia.games.egdx.logicbricks.gen.sensor.SensorEntity;
 import com.ilargia.games.egdx.logicbricks.gen.sensor.SensorMatcher;
 import com.ilargia.games.egdx.logicbricks.index.Indexed;
@@ -18,7 +16,7 @@ import com.ilargia.games.entitas.api.system.IInitializeSystem;
 import com.ilargia.games.entitas.group.Group;
 import com.ilargia.games.entitas.matcher.Matcher;
 
-public class NearSensorSystem extends SensorSystem implements Collision, IInitializeSystem {
+public class NearSensorSystem extends SensorSystem implements Collision<Fixture>, IInitializeSystem {
 
     private final Group<SensorEntity> sensorGroup;
     private final Engine engine;
@@ -61,45 +59,53 @@ public class NearSensorSystem extends SensorSystem implements Collision, IInitia
     }
 
     @Override
-    public void processSensorCollision(Integer indexEntityA, Integer indexEntityB, String tagSensorA, boolean collisionSignal) {
-        if (indexEntityA != null && indexEntityB != null && tagSensorA != null) {
-            GameEntity entityA = Indexed.getInteractiveEntity(indexEntityA);
-            GameEntity entityB =  Indexed.getInteractiveEntity(indexEntityB);
-            if (entityA != null && entityB != null && tagSensorA != null) {
-                for (SensorEntity entity : sensorGroup.getEntities()) {
-                    NearSensor sensor = entity.getNearSensor();
-                    if (sensor.targetTag !=null ||entityB.getTags().values.contains(sensor.targetTag)) {
-                        if (collisionSignal) {
-                            if (tagSensorA.equals("NearSensor")) {
-                                sensor.distanceContactList.add(indexEntityB);
-                                if(entity.getLink().nameReference.contains("RadialGravity")) {
-                                    Body body = entityB.getRigidBody().body;
-                                    body.setGravityScale(0);
-                                    body.resetMassData();
+    public void processCollision(Fixture colliderA, Fixture colliderB, boolean collisionSignal) {
+        if (colliderA.isSensor() && !colliderB.isSensor()) {
+            Integer indexEntityA = (Integer) colliderA.getBody().getUserData();
+            Integer indexEntityB = (Integer) colliderB.getBody().getUserData();
+            String tagSensorA = (String) colliderA.getUserData();
+            Body bodyB = colliderB.getBody();
+
+            for (Fixture fixture : bodyB.getFixtureList()) {
+                if(fixture.isSensor()) return;
+            }
+
+            if (indexEntityA != null && indexEntityB != null && tagSensorA != null) {
+                GameEntity entityA = Indexed.getInteractiveEntity(indexEntityA);
+                GameEntity entityB = Indexed.getInteractiveEntity(indexEntityB);
+                if (entityA != null && entityB != null && tagSensorA != null) {
+                    for (SensorEntity entity : sensorGroup.getEntities()) {
+                        NearSensor sensor = entity.getNearSensor();
+                        if (sensor.targetTag != null || entityB.getTags().values.contains(sensor.targetTag)) {
+                            if (collisionSignal) {
+                                if (tagSensorA.equals("NearSensor")) {
+                                    sensor.distanceContactList.add(indexEntityB);
+                                    if (entity.getLink().nameReference.contains("RadialGravity")) {
+                                        bodyB.setGravityScale(0);
+                                        bodyB.resetMassData();
+                                    }
+
+                                } else if (tagSensorA.equals("ResetNearSensor")) {
+                                    sensor.resetDistanceContactList.add(indexEntityB);
                                 }
 
-                            } else if (tagSensorA.equals("ResetNearSensor")) {
-                                sensor.resetDistanceContactList.add(indexEntityB);
+                            } else {
+                                if (tagSensorA.equals("NearSensor")) {
+                                    sensor.distanceContactList.remove(indexEntityB);
+                                    if (entity.getLink().nameReference.contains("RadialGravity")) {
+                                        bodyB.setGravityScale(1);
+                                        bodyB.resetMassData();
+                                    }
+                                } else if (tagSensorA.equals("ResetNearSensor")) {
+                                    sensor.resetDistanceContactList.remove(indexEntityB);
+                                }
                             }
 
-                        } else {
-                            if (tagSensorA.equals("NearSensor")) {
-                                sensor.distanceContactList.remove(indexEntityB);
-                                if(entity.getLink().nameReference.contains("RadialGravity")) {
-                                    Body body = entityB.getRigidBody().body;
-                                    body.setGravityScale(1);
-                                    body.resetMassData();
-                                }
-                            } else if (tagSensorA.equals("ResetNearSensor")) {
-                                sensor.resetDistanceContactList.remove(indexEntityB);
-                            }
                         }
-
                     }
                 }
             }
         }
     }
-
 }
 

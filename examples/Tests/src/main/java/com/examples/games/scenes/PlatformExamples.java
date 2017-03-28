@@ -54,10 +54,12 @@ public class PlatformExamples implements SceneFactory<Engine, Entitas> {
         mariano.getRigidBody().body.setTransform(10, 6, 0);
 
         GameEntity box1 = sceneManager.createEntity("Box");
+        box1.addTags("Box");
         box1.getRigidBody().body.setTransform(20,7,0);
 
-//        GameEntity box2 = sceneManager.createEntity("Box");
-//        box2.getRigidBody().body.setTransform(-20,7,0);
+        GameEntity box2 = sceneManager.createEntity("Box");
+        box2.addTags("Box2");
+        box2.getRigidBody().body.setTransform(25,7,0);
 
         entitas.actuator.setDragActuator(ground.getCreationIndex(), false, 1000);
 

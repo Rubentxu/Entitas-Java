@@ -32,7 +32,7 @@ public class Box implements EntityFactory<Entitas, GameEntity> {
         float height =  MathUtils.random(0.4f, 1f);
 
 
-        GameEntity entity = entitas.game.createEntity().addTags("Box")
+        GameEntity entity = entitas.game.createEntity()
                 .setInteractive(true)
                 .addRigidBody(bodyBuilder.fixture(bodyBuilder.fixtureDefBuilder
                         .boxShape(width, height)
