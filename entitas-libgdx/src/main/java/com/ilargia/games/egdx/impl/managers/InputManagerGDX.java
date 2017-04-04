@@ -339,7 +339,7 @@ public class InputManagerGDX implements InputManager, InputProcessor {
         //track the displacement of this finger/mouse
         public Vector2 lastPosition;
         public Vector2 displacement;
-        private MouseJoint joint;
+        public MouseJoint joint;
 
         private QueryCallback queryCallback = fixture -> {
             if (!fixture.testPoint(coordinates.x, coordinates.y))

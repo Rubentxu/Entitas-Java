@@ -12,12 +12,12 @@ public class TextureView implements IComponent {
     public Bounds bounds;
     public boolean flipX;
     public boolean flipY;
-    public int opacity;
+    public float opacity;
     public int layer;
     public Color tint;
 
     public TextureView(TextureRegion texture, Bounds bounds, boolean flipX, boolean flipY,
-                       int opacity, int layer, Color tint) {
+                       float opacity, int layer, Color tint) {
         this.texture = texture;
         this.bounds = bounds;
         this.flipX = flipX;

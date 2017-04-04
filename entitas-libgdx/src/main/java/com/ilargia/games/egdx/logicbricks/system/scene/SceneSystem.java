@@ -75,19 +75,15 @@ public class SceneSystem extends ReactiveSystem<SceneEntity> implements IInitial
         for (SceneEntity entity : entities) {
             if(entity.hasCPointLight()) {
                 sceneManager.createLight(PointLight.class, entity.getCPointLight());
-                LogManagerGDX.debug("SceneSystem", "create positional ligth, num entities: %d", entities.size());
             }
             if(entity.hasCDirectionalLight()) {
                 sceneManager.createLight(DirectionalLight.class, entity.getCDirectionalLight());
-                LogManagerGDX.debug("SceneSystem", "create directional ligth");
             }
             if(entity.hasCChainLight()) {
                 sceneManager.createLight(ChainLight.class, entity.getCChainLight());
-                LogManagerGDX.debug("SceneSystem", "create chained ligth");
             }
             if(entity.hasCConeLight()) {
                 sceneManager.createLight(ConeLight.class, entity.getCConeLight());
-                LogManagerGDX.debug("SceneSystem", "create cone ligth");
             }
         }
     }

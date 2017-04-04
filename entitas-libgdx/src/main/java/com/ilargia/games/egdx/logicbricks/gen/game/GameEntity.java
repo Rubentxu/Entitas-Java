@@ -276,7 +276,7 @@ public class GameEntity extends Entity {
 	}
 
 	public GameEntity addTextureView(TextureRegion texture, Bounds bounds,
-			boolean flipX, boolean flipY, int opacity, int layer, Color tint) {
+			boolean flipX, boolean flipY, float opacity, int layer, Color tint) {
 		TextureView component = (TextureView) recoverComponent(GameComponentsLookup.TextureView);
 		if (component == null) {
 			component = new TextureView(texture, bounds, flipX, flipY, opacity,
@@ -295,7 +295,7 @@ public class GameEntity extends Entity {
 	}
 
 	public GameEntity replaceTextureView(TextureRegion texture, Bounds bounds,
-			boolean flipX, boolean flipY, int opacity, int layer, Color tint) {
+			boolean flipX, boolean flipY, float opacity, int layer, Color tint) {
 		TextureView component = (TextureView) recoverComponent(GameComponentsLookup.TextureView);
 		if (component == null) {
 			component = new TextureView(texture, bounds, flipX, flipY, opacity,
