@@ -90,7 +90,7 @@ public class SceneSystem extends ReactiveSystem<SceneEntity> implements IInitial
 
     @Override
     public void cleanup() {
-        physics.step(Gdx.graphics.getDeltaTime(), preferences.VELOCITY_ITERATIONS, preferences.POSITION_ITERATIONS);
+
 
     }
 

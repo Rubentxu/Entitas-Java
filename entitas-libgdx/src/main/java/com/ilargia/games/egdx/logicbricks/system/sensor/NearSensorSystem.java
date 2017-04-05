@@ -75,32 +75,34 @@ public class NearSensorSystem extends SensorSystem implements Collision<Fixture>
                 GameEntity entityB = Indexed.getInteractiveEntity(indexEntityB);
                 if (entityA != null && entityB != null && tagSensorA != null) {
                     for (SensorEntity entity : sensorGroup.getEntities()) {
-                        NearSensor sensor = entity.getNearSensor();
-                        if (sensor.targetTag != null || entityB.getTags().values.contains(sensor.targetTag)) {
-                            if (collisionSignal) {
-                                if (tagSensorA.equals("NearSensor")) {
-                                    sensor.distanceContactList.add(indexEntityB);
-                                    if (entity.getLink().nameReference.contains("RadialGravity")) {
-                                        bodyB.setGravityScale(0);
-                                        bodyB.resetMassData();
+                        if (entity.getLink().ownerEntity == indexEntityA) {
+                            NearSensor sensor = entity.getNearSensor();
+                            if (sensor.targetTag != null && entityB.getTags().values.contains(sensor.targetTag)) {
+                                if (collisionSignal) {
+                                    if (tagSensorA.equals("NearSensor")) {
+                                        sensor.distanceContactList.add(indexEntityB);
+                                        if (entity.getLink().nameReference.contains("RadialGravity")) {
+                                            bodyB.setGravityScale(0);
+                                            bodyB.resetMassData();
+                                        }
+
+                                    } else if (tagSensorA.equals("ResetNearSensor")) {
+                                        sensor.resetDistanceContactList.add(indexEntityB);
                                     }
 
-                                } else if (tagSensorA.equals("ResetNearSensor")) {
-                                    sensor.resetDistanceContactList.add(indexEntityB);
+                                } else {
+                                    if (tagSensorA.equals("NearSensor")) {
+                                        sensor.distanceContactList.remove(indexEntityB);
+                                        if (entity.getLink().nameReference.contains("RadialGravity")) {
+                                            bodyB.setGravityScale(1);
+                                            bodyB.resetMassData();
+                                        }
+                                    } else if (tagSensorA.equals("ResetNearSensor")) {
+                                        sensor.resetDistanceContactList.remove(indexEntityB);
+                                    }
                                 }
 
-                            } else {
-                                if (tagSensorA.equals("NearSensor")) {
-                                    sensor.distanceContactList.remove(indexEntityB);
-                                    if (entity.getLink().nameReference.contains("RadialGravity")) {
-                                        bodyB.setGravityScale(1);
-                                        bodyB.resetMassData();
-                                    }
-                                } else if (tagSensorA.equals("ResetNearSensor")) {
-                                    sensor.resetDistanceContactList.remove(indexEntityB);
-                                }
                             }
-
                         }
                     }
                 }

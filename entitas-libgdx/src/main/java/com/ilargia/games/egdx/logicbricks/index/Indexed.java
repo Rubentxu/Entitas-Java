@@ -1,5 +1,8 @@
 package com.ilargia.games.egdx.logicbricks.index;
 
+import com.ilargia.games.egdx.logicbricks.component.actuator.*;
+import com.ilargia.games.egdx.logicbricks.component.sensor.*;
+import com.ilargia.games.egdx.logicbricks.component.sensor.Link;
 import com.ilargia.games.egdx.logicbricks.gen.Entitas;
 import com.ilargia.games.egdx.logicbricks.gen.actuator.ActuatorEntity;
 import com.ilargia.games.egdx.logicbricks.gen.actuator.ActuatorMatcher;
@@ -8,7 +11,6 @@ import com.ilargia.games.entitas.index.EntityIndex;
 import com.ilargia.games.egdx.logicbricks.gen.game.GameEntity;
 import com.ilargia.games.egdx.logicbricks.gen.game.GameMatcher;
 import com.ilargia.games.egdx.logicbricks.gen.sensor.SensorEntity;
-import com.ilargia.games.entitas.index.ReactiveEntityIndex;
 import com.ilargia.games.entitas.index.ReactivePrimaryEntityIndex;
 import com.ilargia.games.entitas.matcher.Matcher;
 
@@ -16,8 +18,8 @@ import java.util.Set;
 
 public class Indexed {
     public static final String GameEntitiesInSensorIndex = "GameEntitiesInSensorIndex";
-    public static final String SensorsEntitiesIndex = "SensorsEntitiesIndex";
-    public static final String ActuatorsEntitiesIndex = "ActuatorsEntitiesIndex";
+    public static final String SensorsEntityIndex = "SensorsEntityIndex";
+    public static final String ActuatorsEntityIndex = "ActuatorsEntityIndex";
     public static final String InteractiveEntityIndex = "InteractiveEntityIndex";
     public static final String TagEntityIndex = "TagEntityIndex";
 
@@ -29,12 +31,24 @@ public class Indexed {
         _entitas = entitas;
          index = new KeyIndex(-1,null);
         // GameEntity contains Sensors entities
-        _entitas.sensor.addEntityIndex(Indexed.SensorsEntitiesIndex,  new ReactivePrimaryEntityIndex<SensorEntity, KeyIndex>(
-                ((e, c) -> new KeyIndex(e.getLink().ownerEntity,e.getLink().nameReference)), _entitas.sensor.getGroup(SensorMatcher.Link())));
+        _entitas.sensor.addEntityIndex(Indexed.SensorsEntityIndex,  new ReactivePrimaryEntityIndex<SensorEntity, KeyIndex>(
+                ((e, c) -> {
+                    if(c != null) {
+                        Link link= (Link) c;
+                        return new KeyIndex(link.ownerEntity,link.nameReference);
+                    }
+                    return new KeyIndex(e.getLink().ownerEntity, e.getLink().nameReference);
+                }), _entitas.sensor.getGroup(SensorMatcher.Link())));
 
         // GameEntity contains Actuator entities
-        _entitas.actuator.addEntityIndex(Indexed.ActuatorsEntitiesIndex,  new ReactiveEntityIndex<ActuatorEntity, KeyIndex>(
-                ((e, c) -> new KeyIndex(e.getLink().ownerEntity,e.getLink().nameReference)), _entitas.actuator.getGroup(ActuatorMatcher.Link())));
+        _entitas.actuator.addEntityIndex(Indexed.ActuatorsEntityIndex,  new ReactivePrimaryEntityIndex<ActuatorEntity, KeyIndex>(
+                ((e, c) -> {
+                    if(c != null) {
+                        com.ilargia.games.egdx.logicbricks.component.actuator.Link link= (com.ilargia.games.egdx.logicbricks.component.actuator.Link) c;
+                        return new KeyIndex(link.ownerEntity, link.nameReference);
+                    }
+                    return new KeyIndex(e.getLink().ownerEntity, e.getLink().nameReference);
+                }), _entitas.actuator.getGroup(ActuatorMatcher.Link())));
 
         // Interactive GameEntity index
         _entitas.game.addEntityIndex(Indexed.InteractiveEntityIndex,  new ReactivePrimaryEntityIndex<GameEntity, Integer>(
@@ -72,17 +86,17 @@ public class Indexed {
     }
 
     public static SensorEntity getSensorsEntity(int indexGameEntity, String nameSensor) {
-        ReactivePrimaryEntityIndex<SensorEntity, KeyIndex> eIndex = (ReactivePrimaryEntityIndex<SensorEntity, KeyIndex>) _entitas.sensor.getEntityIndex(SensorsEntitiesIndex);
+        ReactivePrimaryEntityIndex<SensorEntity, KeyIndex> eIndex = (ReactivePrimaryEntityIndex<SensorEntity, KeyIndex>) _entitas.sensor.getEntityIndex(SensorsEntityIndex);
         return eIndex.getEntity(index.setIndex(indexGameEntity,nameSensor));
     }
 
-    public static ActuatorEntity getActuatorEntity( GameEntity entity, String nameSensor) {
-        return getActuatorEntity(entity.getCreationIndex(),nameSensor);
+    public static ActuatorEntity getActuatorEntity( GameEntity entity, String nameActuator) {
+        return getActuatorEntity(entity.getCreationIndex(),nameActuator);
     }
 
-    public static ActuatorEntity getActuatorEntity( int indexGameEntity, String nameSensor) {
-        ReactivePrimaryEntityIndex<ActuatorEntity, KeyIndex> eIndex = (ReactivePrimaryEntityIndex<ActuatorEntity, KeyIndex>) _entitas.sensor.getEntityIndex(ActuatorsEntitiesIndex);
-        return eIndex.getEntity(index.setIndex(indexGameEntity,nameSensor));
+    public static ActuatorEntity getActuatorEntity( int indexGameEntity, String nameActuator) {
+        ReactivePrimaryEntityIndex<ActuatorEntity, KeyIndex> eIndex = (ReactivePrimaryEntityIndex<ActuatorEntity, KeyIndex>) _entitas.sensor.getEntityIndex(ActuatorsEntityIndex);
+        return eIndex.getEntity(index.setIndex(indexGameEntity,nameActuator));
     }
 
     public static GameEntity getInteractiveEntity(Integer indexEntity) {

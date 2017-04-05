@@ -5,6 +5,7 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.QueryCallback;
 import com.badlogic.gdx.physics.box2d.World;
@@ -217,7 +218,7 @@ public class InputManagerGDX implements InputManager, InputProcessor {
             //recording last position for displacement values
             t.lastPosition.x = coord_x;
             t.lastPosition.y = coord_y;
-            if(entitas.actuator.hasDragActuator()) physics.QueryAABB(t.queryCallback, worldCoordinates.x, worldCoordinates.y,
+            physics.QueryAABB(t.queryCallback, worldCoordinates.x, worldCoordinates.y,
                     worldCoordinates.x, worldCoordinates.y);
 
 
@@ -242,7 +243,7 @@ public class InputManagerGDX implements InputManager, InputProcessor {
             t.released = true;
             t.coordinates.x = coord_x;
             t.coordinates.y = coord_y;
-            if(entitas.actuator.hasDragActuator() && t.joint != null) {
+            if(t.joint != null) {
                 physics.destroyJoint(t.joint);
                 t.joint = null;
             }
@@ -269,7 +270,6 @@ public class InputManagerGDX implements InputManager, InputProcessor {
 
     public void dragged(int pointer) {
         //get altered coordinates
-        LogManagerGDX.debug("InputManager", "touchUp pointer %d, isMouse %s" , pointer, mouse);
         int coord_x = coordinateX((int) worldCoordinates.x);
         int coord_y = coordinateY((int) worldCoordinates.y);
 
@@ -284,7 +284,7 @@ public class InputManagerGDX implements InputManager, InputProcessor {
         //store the current position into last position for next frame.
         t.lastPosition.x = coord_x;
         t.lastPosition.y = coord_y;
-        if(entitas.actuator.hasDragActuator() && t.joint != null) {
+        if(t.joint != null) {
             t.joint.setTarget(tmp2.set(worldCoordinates.x, worldCoordinates.y));
 
         }
