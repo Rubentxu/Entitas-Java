@@ -66,15 +66,15 @@ public class RaySensorSystemTest {
 
         sensorEntity = entitas.sensor.createEntity()
                 .addRaySensor("Boss", Axis2D.Xnegative, 1, false)
-                .addLink(playerEntity.getCreationIndex());
+                .addLink(playerEntity.getCreationIndex(),"");
 
         sensorEntity2 = entitas.sensor.createEntity()
                 .addRaySensor("Ground", Axis2D.Xnegative, 1, false)
-                .addLink(playerEntity.getCreationIndex());
+                .addLink(playerEntity.getCreationIndex(),"");
 
         sensorEntity4 = entitas.sensor.createEntity()
                 .addRaySensor("Ground", Axis2D.Xnegative, 1, false)
-                .addLink(boss.getCreationIndex());
+                .addLink(boss.getCreationIndex(),"");
 
     }
 

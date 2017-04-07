@@ -34,7 +34,7 @@ public class NearSensorSystemTest {
     public NearSensorSystemTest() {
         collections = new EntitasCollections(new CollectionsFactories() {});
         entitas = new Entitas();
-        this.nearSensorSystem = new NearSensorSystem(entitas);
+        this.nearSensorSystem = new NearSensorSystem(entitas, engine);
         Indexed.initialize(entitas);
 
         boss = entitas.game.createEntity()
@@ -51,19 +51,19 @@ public class NearSensorSystemTest {
 
         sensorEntity = entitas.sensor.createEntity()
                 .addNearSensor("Boss", 1, 1)
-                .addLink(playerEntity.getCreationIndex());
+                .addLink(playerEntity.getCreationIndex(),"");
 
         sensorEntity2 = entitas.sensor.createEntity()
                 .addNearSensor("Ground", 1, 1)
-                .addLink(playerEntity.getCreationIndex());
+                .addLink(playerEntity.getCreationIndex(),"");
 
         sensorEntity3 = entitas.sensor.createEntity()
                 .addCollisionSensor("Ground")
-                .addLink(boss.getCreationIndex());
+                .addLink(boss.getCreationIndex(),"");
 
         sensorEntity4 = entitas.sensor.createEntity()
                 .addCollisionSensor("Player")
-                .addLink(boss.getCreationIndex());
+                .addLink(boss.getCreationIndex(),"");
 
     }
 
