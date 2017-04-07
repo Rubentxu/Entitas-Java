@@ -153,6 +153,7 @@ public class InputManagerGDX implements InputManager, InputProcessor {
         }
     }
 
+    @Override
     public void update(float deltaTime) {
 
         //for every keystate, set pressed and released to false.

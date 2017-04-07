@@ -20,6 +20,7 @@ public abstract class GameGDX<E extends Engine> implements Game<E> {
 
     @Override
     public void update(float deltaTime) {
+        _engine.update(deltaTime);
         _states.peek().update(deltaTime);
         _states.peek().render();
     }

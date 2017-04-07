@@ -7,8 +7,10 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.ilargia.games.egdx.api.Engine;
+import com.ilargia.games.egdx.api.managers.InputManager;
 import com.ilargia.games.egdx.api.managers.Manager;
 import com.ilargia.games.egdx.api.managers.PhysicsManager;
+import com.ilargia.games.egdx.impl.managers.InputManagerGDX;
 import com.ilargia.games.egdx.impl.managers.PhysicsManagerGDX;
 import com.ilargia.games.egdx.impl.managers.SceneManagerGDX;
 import com.ilargia.games.egdx.util.BodyBuilder;
@@ -23,6 +25,8 @@ public class EngineGDX implements Engine, IContexts {
 
     private final EntitasCollections collectionsImpl;
     public Map<Class<? extends Manager>, Manager> _managers;
+    public InputManagerGDX inputManager;
+
 
     public EngineGDX(CollectionsFactories factories) {
         collectionsImpl = new EntitasCollections(factories);
@@ -34,17 +38,33 @@ public class EngineGDX implements Engine, IContexts {
         for (Manager manager : _managers.values()) {
             manager.initialize();
         }
+        inputManager.initialize();
+    }
+
+    @Override
+    public void update(float deltaTime) {
+        inputManager.update(deltaTime);
     }
 
     @Override
     public <M extends Manager> Engine addManager(M manager) {
-        _managers.put(manager.getClass(), manager);
+        if(manager instanceof InputManagerGDX) {
+            inputManager = (InputManagerGDX) manager;
+        } else {
+            _managers.put(manager.getClass(), manager);
+        }
+
         return this;
     }
 
     @Override
     public <M extends Manager> M getManager(Class<M> clazz) {
-        return (M) _managers.get(clazz);
+        if(clazz.equals(InputManagerGDX.class)) {
+            return (M) inputManager;
+        } else {
+            return (M) _managers.get(clazz);
+        }
+
 
     }
 

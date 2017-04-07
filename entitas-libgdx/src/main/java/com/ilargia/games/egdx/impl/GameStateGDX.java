@@ -22,6 +22,7 @@ public abstract class GameStateGDX implements GameState {
 
     @Override
     public void update(float deltaTime) {
+
         systems.execute(deltaTime);
     }
 

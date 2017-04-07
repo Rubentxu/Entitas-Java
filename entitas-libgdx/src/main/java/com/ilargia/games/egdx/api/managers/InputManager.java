@@ -20,5 +20,7 @@ public interface InputManager extends Manager {
 
     public boolean isTouchReleased(int pointer);
 
+    public void update(float deltaTime);
+
 
 }
