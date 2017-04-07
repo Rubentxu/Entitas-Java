@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.QueryCallback;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.physics.box2d.joints.MouseJoint;
@@ -20,30 +20,31 @@ import com.ilargia.games.entitas.factories.EntitasCollections;
 
 import java.util.List;
 
-public class InputManagerGDX implements InputManager, InputProcessor {
-
-    public enum InputButton { Left, Right, Middle }
+public class InputManagerGDX implements InputManager<Vector2>, InputProcessor {
 
     private final EngineGDX engine;
     private final Entitas entitas;
-    private KeyState[] keyStates;
-    private PointerState[] touchStates;
     private List<GameController> controllers;
     private Camera camera;
     private boolean mouse;
+    private DragActuator dragActuator;
+    private InputStateData inputStateData;
     private World physics;
     private MouseJointDef jointDef;
-    private DragActuator dragActuator;
+    public MouseJoint []joints;
 
+    private QueryCallback queryCallback = fixture -> {
+        for (InputStateData.PointerState pointerState : inputStateData.pointerStates) {
+            testPoint(fixture, pointerState);
+        }
+        return false;
+    };
     // Mouse Properties
-    public InputButton button;
     public int scrollDelta;
 
     public InputManagerGDX(Entitas entitas, EngineGDX engine) {
         this.engine = engine;
         this.entitas = entitas;
-        keyStates = new KeyState[256];
-        touchStates = new PointerState[5];
 
         controllers = EntitasCollections.createList(InputManagerGDX.class);
 
@@ -71,17 +72,9 @@ public class InputManagerGDX implements InputManager, InputProcessor {
         if (engine.getManager(PhysicsManagerGDX.class) == null) throw new EntitasException("InputManagerGDX",
                 "InputManagerGDX needs load PreferencesManagerGDX on the engine");
         this.camera = engine.getCamera();
-        this.physics = engine.getPhysics();
         Gdx.input.setInputProcessor(this);
-        //create the initial state of every key on the keyboard.
-        //There are 256 keys available which are all represented as integers.
-        for (int i = 0; i < 256; i++) {
-            keyStates[i] = new KeyState(i);
-        }
-
-        for (int i = 0; i < 5; i++) {
-            touchStates[i] = new PointerState(0, 0, i);
-        }
+        joints =  new MouseJoint[5];
+        inputStateData = new InputStateData();
 
     }
 
@@ -92,62 +85,53 @@ public class InputManagerGDX implements InputManager, InputProcessor {
 
     @Override
     public boolean isKeyPressed(int key) {
-        return keyStates[key].pressed;
+        return inputStateData.keyStates[key].pressed;
     }
 
     @Override
     public boolean isKeyDown(int key) {
-        return keyStates[key].down;
+        return inputStateData.keyStates[key].down;
     }
 
     @Override
     public boolean isKeyReleased(int key) {
-        return keyStates[key].released;
+        return inputStateData.keyStates[key].released;
     }
 
     @Override
     public boolean isTouchPressed(int pointer) {
-        return touchStates[pointer].pressed;
+        return inputStateData.pointerStates[pointer].pressed;
     }
 
     @Override
     public boolean isTouchDown(int pointer) {
-        return touchStates[pointer].down;
+        return inputStateData.pointerStates[pointer].down;
     }
 
     @Override
     public boolean isTouchReleased(int pointer) {
-        return touchStates[pointer].released;
+        return inputStateData.pointerStates[pointer].released;
     }
 
+    @Override
     public Vector2 touchCoordinates(int pointer) {
-        return touchStates[pointer].coordinates;
+        return inputStateData.pointerStates[pointer].coordinates;
     }
 
+    @Override
     public Vector2 touchDisplacement(int pointer) {
-        return touchStates[pointer].displacement;
+        return inputStateData.pointerStates[pointer].displacement;
     }
 
-    public InputButton getMouseButton(int pointer) {
-        switch (pointer) {
-            case 0:
-                return InputButton.Left;
-            case 1:
-                return InputButton.Middle;
-            case 2:
-                return InputButton.Right;
-            default:
-                return InputButton.Left;
-        }
-    }
-
+    @Override
     public int getScrollDelta() {
         return scrollDelta;
     }
 
-    public PointerState getTouchState(int pointer) {
-        if (touchStates.length > pointer) {
-            return touchStates[pointer];
+    @Override
+    public InputStateData.PointerState getTouchState(int pointer) {
+        if (inputStateData.pointerStates.length > pointer) {
+            return inputStateData.pointerStates[pointer];
         } else {
             return null;
         }
@@ -155,24 +139,21 @@ public class InputManagerGDX implements InputManager, InputProcessor {
 
     @Override
     public void update(float deltaTime) {
-
         //for every keystate, set pressed and released to false.
         for (int i = 0; i < 256; i++) {
-            KeyState k = keyStates[i];
+            InputStateData.KeyState k = inputStateData.keyStates[i];
             k.pressed = false;
             k.released = false;
         }
 
-        for (int i = 0; i < touchStates.length; i++) {
-            PointerState t = touchStates[i];
+        for (int i = 0; i < inputStateData.pointerStates.length; i++) {
+            InputStateData.PointerState t = inputStateData.pointerStates[i];
             if(t.down && !t.pressed) t.clickTime += deltaTime;
             t.pressed = false;
             t.released = false;
             t.displacement.x = 0;
             t.displacement.y = 0;
         }
-
-
 
         if(entitas.actuator.hasDragActuator() && jointDef == null) {
             this.dragActuator = entitas.actuator.getDragActuator();
@@ -189,11 +170,9 @@ public class InputManagerGDX implements InputManager, InputProcessor {
 
     @Override
     public boolean keyDown(int keycode) {
-        //this function only gets called once when an event is fired. (even if this key is being held down)
-
         //I need to store the state of the key being held down as well as pressed
-        keyStates[keycode].pressed = true;
-        keyStates[keycode].down = true;
+        inputStateData.keyStates[keycode].pressed = true;
+        inputStateData.keyStates[keycode].down = true;
 
         //every overridden method needs a return value. I won't be utilizing this but it can be used for error handling.
         return false;
@@ -202,8 +181,8 @@ public class InputManagerGDX implements InputManager, InputProcessor {
     @Override
     public boolean keyUp(int keycode) {
         //the key was released, I need to set it's down state to false and released state to true
-        keyStates[keycode].down = false;
-        keyStates[keycode].released = true;
+        inputStateData.keyStates[keycode].down = false;
+        inputStateData.keyStates[keycode].released = true;
         return false;
     }
 
@@ -214,11 +193,10 @@ public class InputManagerGDX implements InputManager, InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-
         int indexPointer = (mouse) ? button : pointer;
         //set the state of all touch state events
-        if (indexPointer < touchStates.length) {
-            PointerState t = touchStates[indexPointer];
+        if (indexPointer < inputStateData.pointerStates.length) {
+            InputStateData.PointerState t = inputStateData.pointerStates[indexPointer];
             t.down = true;
             t.pressed = true;
 
@@ -233,8 +211,7 @@ public class InputManagerGDX implements InputManager, InputProcessor {
             t.coordinates.x = t.worldCoordinates.x;
             t.coordinates.y = t.worldCoordinates.y;
 
-            physics.QueryAABB(t.queryCallback, t.coordinates.x, t.coordinates.y, t.coordinates.x, t.coordinates.y);
-
+            physics.QueryAABB(queryCallback, t.coordinates.x, t.coordinates.y, t.coordinates.x, t.coordinates.y);
 
         }
         return false;
@@ -245,8 +222,8 @@ public class InputManagerGDX implements InputManager, InputProcessor {
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
         int indexPointer = (mouse) ? button : pointer;
         //set the state of all touch state events
-        if (indexPointer < touchStates.length) {
-            PointerState t = touchStates[indexPointer];
+        if (indexPointer < inputStateData.pointerStates.length) {
+            InputStateData.PointerState t = inputStateData.pointerStates[indexPointer];
             t.worldCoordinates.set(screenX, screenY, 0);
             camera.unproject(t.worldCoordinates);
 
@@ -255,9 +232,9 @@ public class InputManagerGDX implements InputManager, InputProcessor {
             t.clickTime = 0;
             t.coordinates.x = t.worldCoordinates.x;
             t.coordinates.y = t.worldCoordinates.y;
-            if(t.joint != null) {
-                physics.destroyJoint(t.joint);
-                t.joint = null;
+            if(joints[indexPointer] != null) {
+                physics.destroyJoint(joints[indexPointer]);
+                joints[indexPointer] = null;
             }
 
         }
@@ -269,8 +246,8 @@ public class InputManagerGDX implements InputManager, InputProcessor {
     public boolean touchDragged(int screenX, int screenY, int pointer) {
         if(!mouse) dragged(screenX, screenY, pointer);
         else {
-            for (int i = 0; i < touchStates.length; i++) {
-                if(touchStates[i].down) dragged(screenX, screenY, i);
+            for (int i = 0; i < inputStateData.pointerStates.length; i++) {
+                if(inputStateData.pointerStates[i].down) dragged(screenX, screenY, i);
             }
         }
         return false;
@@ -279,7 +256,7 @@ public class InputManagerGDX implements InputManager, InputProcessor {
 
     public void dragged(int screenX, int screenY, int pointer) {
 
-        PointerState t = touchStates[pointer];
+        InputStateData.PointerState t = inputStateData.pointerStates[pointer];
         //get altered coordinates
         t.worldCoordinates.set(screenX, screenY, 0);
         camera.unproject(t.worldCoordinates);
@@ -293,10 +270,20 @@ public class InputManagerGDX implements InputManager, InputProcessor {
         //store the current position into last position for next frame.
         t.lastPosition.x = t.coordinates.x;
         t.lastPosition.y = t.coordinates.y;
-        if(t.joint != null) {
-            t.joint.setTarget(t.coordinates);
+        if(joints[pointer] != null) {
+            joints[pointer].setTarget(t.coordinates);
 
         }
+
+    }
+
+    private void testPoint(Fixture fixture, InputStateData.PointerState pointerState) {
+        if (!fixture.testPoint(pointerState.coordinates.x, pointerState.coordinates.y))
+            return;
+
+        jointDef.bodyB = fixture.getBody();
+        jointDef.target.set(pointerState.coordinates.x, pointerState.coordinates.y);
+        joints[pointerState.pointer] = (MouseJoint) physics.createJoint(jointDef);
 
     }
 
@@ -311,76 +298,9 @@ public class InputManagerGDX implements InputManager, InputProcessor {
         return false;
     }
 
-
     @Override
     public void dispose() {
 
     }
-
-    public class InputState {
-        public boolean pressed = false;
-        public boolean down = false;
-        public boolean released = false;
-        public boolean notChanged = false;
-
-    }
-
-    public class KeyState extends InputState {
-        //the keyboard key of this object represented as an integer.
-        public int key;
-
-        public KeyState(int key) {
-            this.key = key;
-        }
-    }
-
-    public class PointerState extends InputState {
-        //keep track of which finger this object belongs to
-        public final int pointer;
-        //coordinates of this finger/mouse
-        public Vector3 worldCoordinates;
-        public Vector2 coordinates;
-        //track the displacement of this finger/mouse
-        public Vector2 lastPosition;
-        public Vector2 displacement;
-        public float clickTime; // The last time a click event was sent out (used for double-clicks)
-        public int clickCount; // Number of clicks in a row. 2 for a double-click for example.
-        public MouseJoint joint;
-
-        public PointerState(int coord_x, int coord_y, int pointer) {
-            this.pointer = pointer;
-            worldCoordinates = new Vector3(0, 0, 0);
-            coordinates = new Vector2(coord_x, coord_y);
-            lastPosition = new Vector2(0, 0);
-            displacement = new Vector2(lastPosition.x, lastPosition.y);
-            clickTime = 0.0f;
-            clickCount = 0;
-
-        }
-
-        private QueryCallback queryCallback = fixture -> {
-            if (!fixture.testPoint(coordinates.x, coordinates.y))
-                return true;
-
-            jointDef.bodyB = fixture.getBody();
-            jointDef.target.set(coordinates.x, coordinates.y);
-            joint = (MouseJoint) physics.createJoint(jointDef);
-            return false;
-        };
-
-        @Override
-        public String toString() {
-            return "TouchState{" +
-                    "pointer=" + pointer +
-                    ", coordinates=" + coordinates +
-                    ", lastPosition=" + lastPosition +
-                    ", displacement=" + displacement +
-                    "InputState=" + super.toString()+
-                    '}';
-        }
-
-    }
-
-
 
 }
