@@ -52,7 +52,7 @@ public class SceneSystem extends ReactiveSystem<SceneEntity> implements IInitial
         context.setGameWorld(preferences.GAME_WIDTH, preferences.GAME_HEIGHT, 64, Color.BLUE);
 
         camera = (OrthographicCamera) context.getCamera().camera;
-        camera.position.set(preferences.GAME_WIDTH / 2, preferences.GAME_HEIGHT / 2, 0);
+        camera.position.set(preferences.GAME_WIDTH / 2, preferences.GAME_HEIGHT  /2 +4, 0);
         camera.viewportWidth = preferences.GAME_WIDTH;
         camera.viewportHeight = preferences.GAME_HEIGHT;
 

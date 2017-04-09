@@ -2,6 +2,7 @@ package com.ilargia.games.egdx.logicbricks.system.render;
 
 import box2dLight.RayHandler;
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.MathUtils;
@@ -55,7 +56,8 @@ public class TextureRendererSystem implements IInitializeSystem, IRenderSystem {
             Body body = e.getRigidBody().body;
             processTextureFlip(view);
 
-
+            batch.setColor(1f,1f,1f,1f);
+            if(view.opacity< 1 ) batch.setColor(1f, 1f, 1f, view.opacity);
             batch.draw(view.texture, body.getPosition().x - view.bounds.extentsX, body.getPosition().y - view.bounds.extentsY,
                     view.bounds.extentsX, view.bounds.extentsY, view.bounds.extentsX * 2, view.bounds.extentsY * 2, 1, 1,
                     MathUtils.radiansToDegrees * body.getTransform().getRotation());

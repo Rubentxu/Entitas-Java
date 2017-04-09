@@ -3,6 +3,7 @@ package com.ilargia.games.egdx.logicbricks.gen.game;
 import com.ilargia.games.egdx.logicbricks.component.game.Animations;
 import com.ilargia.games.egdx.logicbricks.component.game.Character;
 import com.ilargia.games.egdx.logicbricks.component.game.Destroy;
+import com.ilargia.games.egdx.logicbricks.component.game.Draggable;
 import com.ilargia.games.egdx.logicbricks.component.game.InputController;
 import com.ilargia.games.egdx.logicbricks.component.game.Interactive;
 import com.ilargia.games.egdx.logicbricks.component.game.RigidBody;
@@ -19,22 +20,23 @@ public class GameComponentsLookup {
 	public static final int Animations = 0;
 	public static final int Character = 1;
 	public static final int Destroy = 2;
-	public static final int InputController = 3;
-	public static final int Interactive = 4;
-	public static final int RigidBody = 5;
-	public static final int Tags = 6;
-	public static final int TextureView = 7;
-	public static final int totalComponents = 8;
+	public static final int Draggable = 3;
+	public static final int InputController = 4;
+	public static final int Interactive = 5;
+	public static final int RigidBody = 6;
+	public static final int Tags = 7;
+	public static final int TextureView = 8;
+	public static final int totalComponents = 9;
 
 	public static String[] componentNames() {
-		return new String[]{"Animations", "Character", "Destroy",
+		return new String[]{"Animations", "Character", "Destroy", "Draggable",
 				"InputController", "Interactive", "RigidBody", "Tags",
 				"TextureView"};
 	}
 
 	public static Class[] componentTypes() {
 		return new Class[]{Animations.class, Character.class, Destroy.class,
-				InputController.class, Interactive.class, RigidBody.class,
-				Tags.class, TextureView.class};
+				Draggable.class, InputController.class, Interactive.class,
+				RigidBody.class, Tags.class, TextureView.class};
 	}
 }

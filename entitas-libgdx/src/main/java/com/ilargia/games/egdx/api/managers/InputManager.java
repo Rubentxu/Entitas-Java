@@ -1,6 +1,7 @@
 package com.ilargia.games.egdx.api.managers;
 
 import com.ilargia.games.egdx.api.GameController;
+import com.ilargia.games.egdx.api.managers.data.PointerState;
 import com.ilargia.games.egdx.impl.managers.InputStateData;
 
 public interface InputManager<Coordinates> extends Manager {
@@ -38,7 +39,7 @@ public interface InputManager<Coordinates> extends Manager {
         }
     }
 
-    public InputStateData.PointerState getTouchState(int pointer);
+    public PointerState getTouchState(int pointer);
 
     public int getScrollDelta();
 

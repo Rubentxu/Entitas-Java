@@ -5,15 +5,12 @@ import com.ilargia.games.entitas.api.IComponent;
 import com.ilargia.games.entitas.codeGenerator.Component;
 
 @Component(pools = {"Sensor"})
-public class MouseOverSensor implements IComponent {
+public class PointerOverSensor implements IComponent {
+    public int pointer;
     public String targetTag;
-    // Signal Values
-    public Vector2 positionSignal;
 
-
-    public MouseOverSensor(String targetTag) {
+    public PointerOverSensor(int pointer, String targetTag) {
         this.targetTag = targetTag;
-        this.positionSignal =  new Vector2();
 
     }
 

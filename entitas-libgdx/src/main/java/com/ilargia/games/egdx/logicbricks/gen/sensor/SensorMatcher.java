@@ -15,9 +15,9 @@ public class SensorMatcher {
 	private static Matcher _matcherFrequency;
 	private static Matcher _matcherLink;
 	private static Matcher _matcherMode;
-	private static Matcher _matcherMouseOverSensor;
 	private static Matcher _matcherMouseWheelSensor;
 	private static Matcher _matcherNearSensor;
+	private static Matcher _matcherPointerOverSensor;
 	private static Matcher _matcherRadarSensor;
 	private static Matcher _matcherRaySensor;
 
@@ -81,16 +81,6 @@ public class SensorMatcher {
 		return _matcherMode;
 	}
 
-	public static Matcher MouseOverSensor() {
-		if (_matcherMouseOverSensor == null) {
-			Matcher matcher = (Matcher) Matcher
-					.AllOf(SensorComponentsLookup.MouseOverSensor);
-			matcher.componentNames = SensorComponentsLookup.componentNames();
-			_matcherMouseOverSensor = matcher;
-		}
-		return _matcherMouseOverSensor;
-	}
-
 	public static Matcher MouseWheelSensor() {
 		if (_matcherMouseWheelSensor == null) {
 			Matcher matcher = (Matcher) Matcher
@@ -109,6 +99,16 @@ public class SensorMatcher {
 			_matcherNearSensor = matcher;
 		}
 		return _matcherNearSensor;
+	}
+
+	public static Matcher PointerOverSensor() {
+		if (_matcherPointerOverSensor == null) {
+			Matcher matcher = (Matcher) Matcher
+					.AllOf(SensorComponentsLookup.PointerOverSensor);
+			matcher.componentNames = SensorComponentsLookup.componentNames();
+			_matcherPointerOverSensor = matcher;
+		}
+		return _matcherPointerOverSensor;
 	}
 
 	public static Matcher RadarSensor() {

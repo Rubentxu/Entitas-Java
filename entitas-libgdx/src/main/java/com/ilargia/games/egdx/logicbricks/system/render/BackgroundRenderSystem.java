@@ -40,7 +40,7 @@ public class BackgroundRenderSystem implements IInitializeSystem, IRenderSystem 
     @Override
     public void render() {
         float delta = Gdx.graphics.getDeltaTime();
-        this.camera.position.add(speed.x * delta, speed.y * delta, 0);
+       // this.camera.position.add(speed.x * delta, speed.y * delta, 0);
         for (SceneEntity entity : group.getEntities()) {
             ParallaxLayer layer = entity.getParallaxLayer();
 

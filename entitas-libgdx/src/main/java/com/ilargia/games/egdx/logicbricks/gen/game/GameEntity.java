@@ -11,6 +11,7 @@ import java.util.Map;
 import com.ilargia.games.egdx.logicbricks.component.game.Character;
 import com.ilargia.games.egdx.logicbricks.data.StateCharacter;
 import com.ilargia.games.egdx.logicbricks.component.game.Destroy;
+import com.ilargia.games.egdx.logicbricks.component.game.Draggable;
 import com.ilargia.games.egdx.logicbricks.component.game.InputController;
 import com.ilargia.games.egdx.api.GameController;
 import com.ilargia.games.egdx.impl.managers.InputManagerGDX;
@@ -34,6 +35,7 @@ import com.ilargia.games.egdx.logicbricks.data.Bounds;
 public class GameEntity extends Entity {
 
 	public Destroy DestroyComponent = new Destroy();
+	public Draggable DraggableComponent = new Draggable();
 	public Interactive InteractiveComponent = new Interactive();
 
 	public GameEntity() {
@@ -129,6 +131,21 @@ public class GameEntity extends Entity {
 				addComponent(GameComponentsLookup.Destroy, DestroyComponent);
 			} else {
 				removeComponent(GameComponentsLookup.Destroy);
+			}
+		}
+		return this;
+	}
+
+	public boolean isDraggable() {
+		return hasComponent(GameComponentsLookup.Draggable);
+	}
+
+	public GameEntity setDraggable(boolean value) {
+		if (value != hasComponent(GameComponentsLookup.Draggable)) {
+			if (value) {
+				addComponent(GameComponentsLookup.Draggable, DraggableComponent);
+			} else {
+				removeComponent(GameComponentsLookup.Draggable);
 			}
 		}
 		return this;

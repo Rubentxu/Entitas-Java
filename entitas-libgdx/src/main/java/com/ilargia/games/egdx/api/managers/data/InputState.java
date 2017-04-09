@@ -1,4 +1,4 @@
-package com.ilargia.games.egdx.impl.managers;
+package com.ilargia.games.egdx.api.managers.data;
 
 
 public class InputState {

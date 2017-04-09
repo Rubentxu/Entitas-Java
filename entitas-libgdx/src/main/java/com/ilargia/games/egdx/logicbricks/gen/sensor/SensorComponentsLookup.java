@@ -6,9 +6,9 @@ import com.ilargia.games.egdx.logicbricks.component.sensor.DelaySensor;
 import com.ilargia.games.egdx.logicbricks.component.sensor.Frequency;
 import com.ilargia.games.egdx.logicbricks.component.sensor.Link;
 import com.ilargia.games.egdx.logicbricks.component.sensor.Mode;
-import com.ilargia.games.egdx.logicbricks.component.sensor.MouseOverSensor;
 import com.ilargia.games.egdx.logicbricks.component.sensor.MouseWheelSensor;
 import com.ilargia.games.egdx.logicbricks.component.sensor.NearSensor;
+import com.ilargia.games.egdx.logicbricks.component.sensor.PointerOverSensor;
 import com.ilargia.games.egdx.logicbricks.component.sensor.RadarSensor;
 import com.ilargia.games.egdx.logicbricks.component.sensor.RaySensor;
 
@@ -25,23 +25,23 @@ public class SensorComponentsLookup {
 	public static final int Frequency = 3;
 	public static final int Link = 4;
 	public static final int Mode = 5;
-	public static final int MouseOverSensor = 6;
-	public static final int MouseWheelSensor = 7;
-	public static final int NearSensor = 8;
+	public static final int MouseWheelSensor = 6;
+	public static final int NearSensor = 7;
+	public static final int PointerOverSensor = 8;
 	public static final int RadarSensor = 9;
 	public static final int RaySensor = 10;
 	public static final int totalComponents = 11;
 
 	public static String[] componentNames() {
 		return new String[]{"AlwaysSensor", "CollisionSensor", "DelaySensor",
-				"Frequency", "Link", "Mode", "MouseOverSensor",
-				"MouseWheelSensor", "NearSensor", "RadarSensor", "RaySensor"};
+				"Frequency", "Link", "Mode", "MouseWheelSensor", "NearSensor",
+				"PointerOverSensor", "RadarSensor", "RaySensor"};
 	}
 
 	public static Class[] componentTypes() {
 		return new Class[]{AlwaysSensor.class, CollisionSensor.class,
 				DelaySensor.class, Frequency.class, Link.class, Mode.class,
-				MouseOverSensor.class, MouseWheelSensor.class,
-				NearSensor.class, RadarSensor.class, RaySensor.class};
+				MouseWheelSensor.class, NearSensor.class,
+				PointerOverSensor.class, RadarSensor.class, RaySensor.class};
 	}
 }

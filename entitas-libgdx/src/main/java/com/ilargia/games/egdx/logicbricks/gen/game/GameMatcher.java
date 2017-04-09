@@ -12,6 +12,7 @@ public class GameMatcher {
 	private static Matcher _matcherAnimations;
 	private static Matcher _matcherCharacter;
 	private static Matcher _matcherDestroy;
+	private static Matcher _matcherDraggable;
 	private static Matcher _matcherInputController;
 	private static Matcher _matcherInteractive;
 	private static Matcher _matcherRigidBody;
@@ -46,6 +47,16 @@ public class GameMatcher {
 			_matcherDestroy = matcher;
 		}
 		return _matcherDestroy;
+	}
+
+	public static Matcher Draggable() {
+		if (_matcherDraggable == null) {
+			Matcher matcher = (Matcher) Matcher
+					.AllOf(GameComponentsLookup.Draggable);
+			matcher.componentNames = GameComponentsLookup.componentNames();
+			_matcherDraggable = matcher;
+		}
+		return _matcherDraggable;
 	}
 
 	public static Matcher InputController() {

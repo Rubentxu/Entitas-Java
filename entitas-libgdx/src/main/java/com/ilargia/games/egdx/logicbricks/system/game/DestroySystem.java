@@ -75,9 +75,9 @@ public class DestroySystem extends ReactiveSystem<GameEntity> implements IInitia
         physics.step(Gdx.graphics.getDeltaTime(), preferences.VELOCITY_ITERATIONS, preferences.POSITION_ITERATIONS);
         for (Body removeBody : removeBodies) {
             for (int i = 0; i < 5; i++) {
-                if(inputManager.getTouchState(i).joint != null) {
-                    physics.destroyJoint(inputManager.getTouchState(i).joint);
-                    inputManager.getTouchState(i).joint = null;
+                if(inputManager.joints[i] != null) {
+                    physics.destroyJoint(inputManager.joints[i]);
+                    inputManager.joints[i] = null;
                 }
 
             }

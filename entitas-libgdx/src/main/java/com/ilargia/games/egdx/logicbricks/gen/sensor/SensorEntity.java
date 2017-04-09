@@ -14,10 +14,10 @@ import com.ilargia.games.egdx.logicbricks.component.sensor.DelaySensor;
 import com.ilargia.games.egdx.logicbricks.component.sensor.Frequency;
 import com.ilargia.games.egdx.logicbricks.component.sensor.Link;
 import com.ilargia.games.egdx.logicbricks.component.sensor.Mode;
-import com.ilargia.games.egdx.logicbricks.component.sensor.MouseOverSensor;
-import com.badlogic.gdx.math.Vector2;
 import com.ilargia.games.egdx.logicbricks.component.sensor.MouseWheelSensor;
+import com.badlogic.gdx.math.Vector2;
 import com.ilargia.games.egdx.logicbricks.component.sensor.NearSensor;
+import com.ilargia.games.egdx.logicbricks.component.sensor.PointerOverSensor;
 import com.ilargia.games.egdx.logicbricks.component.sensor.RadarSensor;
 import com.ilargia.games.egdx.logicbricks.data.Axis2D;
 import com.ilargia.games.egdx.logicbricks.component.sensor.RaySensor;
@@ -241,43 +241,6 @@ public class SensorEntity extends Entity {
 		return this;
 	}
 
-	public MouseOverSensor getMouseOverSensor() {
-		return (MouseOverSensor) getComponent(SensorComponentsLookup.MouseOverSensor);
-	}
-
-	public boolean hasMouseOverSensor() {
-		return hasComponent(SensorComponentsLookup.MouseOverSensor);
-	}
-
-	public SensorEntity addMouseOverSensor(String targetTag) {
-		MouseOverSensor component = (MouseOverSensor) recoverComponent(SensorComponentsLookup.MouseOverSensor);
-		if (component == null) {
-			component = new MouseOverSensor(targetTag);
-		} else {
-			component.targetTag = targetTag;
-			component.positionSignal = new Vector2();
-		}
-		addComponent(SensorComponentsLookup.MouseOverSensor, component);
-		return this;
-	}
-
-	public SensorEntity replaceMouseOverSensor(String targetTag) {
-		MouseOverSensor component = (MouseOverSensor) recoverComponent(SensorComponentsLookup.MouseOverSensor);
-		if (component == null) {
-			component = new MouseOverSensor(targetTag);
-		} else {
-			component.targetTag = targetTag;
-			component.positionSignal = new Vector2();
-		}
-		replaceComponent(SensorComponentsLookup.MouseOverSensor, component);
-		return this;
-	}
-
-	public SensorEntity removeMouseOverSensor() {
-		removeComponent(SensorComponentsLookup.MouseOverSensor);
-		return this;
-	}
-
 	public MouseWheelSensor getMouseWheelSensor() {
 		return (MouseWheelSensor) getComponent(SensorComponentsLookup.MouseWheelSensor);
 	}
@@ -361,6 +324,41 @@ public class SensorEntity extends Entity {
 
 	public SensorEntity removeNearSensor() {
 		removeComponent(SensorComponentsLookup.NearSensor);
+		return this;
+	}
+
+	public PointerOverSensor getPointerOverSensor() {
+		return (PointerOverSensor) getComponent(SensorComponentsLookup.PointerOverSensor);
+	}
+
+	public boolean hasPointerOverSensor() {
+		return hasComponent(SensorComponentsLookup.PointerOverSensor);
+	}
+
+	public SensorEntity addPointerOverSensor(int pointer, String targetTag) {
+		PointerOverSensor component = (PointerOverSensor) recoverComponent(SensorComponentsLookup.PointerOverSensor);
+		if (component == null) {
+			component = new PointerOverSensor(pointer, targetTag);
+		} else {
+			component.targetTag = targetTag;
+		}
+		addComponent(SensorComponentsLookup.PointerOverSensor, component);
+		return this;
+	}
+
+	public SensorEntity replacePointerOverSensor(int pointer, String targetTag) {
+		PointerOverSensor component = (PointerOverSensor) recoverComponent(SensorComponentsLookup.PointerOverSensor);
+		if (component == null) {
+			component = new PointerOverSensor(pointer, targetTag);
+		} else {
+			component.targetTag = targetTag;
+		}
+		replaceComponent(SensorComponentsLookup.PointerOverSensor, component);
+		return this;
+	}
+
+	public SensorEntity removePointerOverSensor() {
+		removeComponent(SensorComponentsLookup.PointerOverSensor);
 		return this;
 	}
 

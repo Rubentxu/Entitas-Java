@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.QueryCallback;
 import com.badlogic.gdx.physics.box2d.World;
@@ -11,9 +12,12 @@ import com.badlogic.gdx.physics.box2d.joints.MouseJoint;
 import com.badlogic.gdx.physics.box2d.joints.MouseJointDef;
 import com.ilargia.games.egdx.api.GameController;
 import com.ilargia.games.egdx.api.managers.InputManager;
+import com.ilargia.games.egdx.api.managers.data.KeyState;
+import com.ilargia.games.egdx.api.managers.data.PointerState;
 import com.ilargia.games.egdx.impl.EngineGDX;
 import com.ilargia.games.egdx.logicbricks.component.actuator.DragActuator;
 import com.ilargia.games.egdx.logicbricks.gen.Entitas;
+import com.ilargia.games.egdx.logicbricks.gen.game.GameEntity;
 import com.ilargia.games.egdx.logicbricks.index.Indexed;
 import com.ilargia.games.entitas.api.EntitasException;
 import com.ilargia.games.entitas.factories.EntitasCollections;
@@ -33,12 +37,6 @@ public class InputManagerGDX implements InputManager<Vector2>, InputProcessor {
     private MouseJointDef jointDef;
     public MouseJoint []joints;
 
-    private QueryCallback queryCallback = fixture -> {
-        for (InputStateData.PointerState pointerState : inputStateData.pointerStates) {
-            testPoint(fixture, pointerState);
-        }
-        return false;
-    };
     // Mouse Properties
     public int scrollDelta;
 
@@ -66,12 +64,31 @@ public class InputManagerGDX implements InputManager<Vector2>, InputProcessor {
         }
     }
 
+    private QueryCallback queryCallback = fixture -> {
+        for (PointerState pointerState : inputStateData.pointerStates) {
+            testPoint(fixture, pointerState);
+        }
+        return false;
+    };
+
+    private void testPoint(Fixture fixture, PointerState<Vector2,Vector3> pointerState) {
+        if (!fixture.testPoint(pointerState.coordinates.x, pointerState.coordinates.y))
+            return;
+        Integer index = (Integer) fixture.getBody().getUserData();
+        GameEntity entity =  Indexed.getInteractiveEntity(index);
+        if(entity.isDraggable()) {
+            jointDef.bodyB = fixture.getBody();
+            jointDef.target.set(pointerState.coordinates.x, pointerState.coordinates.y);
+            joints[pointerState.pointer] = (MouseJoint) physics.createJoint(jointDef);
+        }
+    }
 
     @Override
     public void initialize() {
         if (engine.getManager(PhysicsManagerGDX.class) == null) throw new EntitasException("InputManagerGDX",
                 "InputManagerGDX needs load PreferencesManagerGDX on the engine");
         this.camera = engine.getCamera();
+        this.physics = engine.getPhysics();
         Gdx.input.setInputProcessor(this);
         joints =  new MouseJoint[5];
         inputStateData = new InputStateData();
@@ -129,11 +146,11 @@ public class InputManagerGDX implements InputManager<Vector2>, InputProcessor {
     }
 
     @Override
-    public InputStateData.PointerState getTouchState(int pointer) {
+    public PointerState getTouchState(int pointer) {
         if (inputStateData.pointerStates.length > pointer) {
             return inputStateData.pointerStates[pointer];
         } else {
-            return null;
+            return inputStateData.pointerStates[0];
         }
     }
 
@@ -141,13 +158,13 @@ public class InputManagerGDX implements InputManager<Vector2>, InputProcessor {
     public void update(float deltaTime) {
         //for every keystate, set pressed and released to false.
         for (int i = 0; i < 256; i++) {
-            InputStateData.KeyState k = inputStateData.keyStates[i];
+            KeyState k = inputStateData.keyStates[i];
             k.pressed = false;
             k.released = false;
         }
 
         for (int i = 0; i < inputStateData.pointerStates.length; i++) {
-            InputStateData.PointerState t = inputStateData.pointerStates[i];
+            PointerState<Vector2, Vector3> t = inputStateData.pointerStates[i];
             if(t.down && !t.pressed) t.clickTime += deltaTime;
             t.pressed = false;
             t.released = false;
@@ -196,7 +213,7 @@ public class InputManagerGDX implements InputManager<Vector2>, InputProcessor {
         int indexPointer = (mouse) ? button : pointer;
         //set the state of all touch state events
         if (indexPointer < inputStateData.pointerStates.length) {
-            InputStateData.PointerState t = inputStateData.pointerStates[indexPointer];
+            PointerState<Vector2,Vector3> t = inputStateData.pointerStates[indexPointer];
             t.down = true;
             t.pressed = true;
 
@@ -223,7 +240,7 @@ public class InputManagerGDX implements InputManager<Vector2>, InputProcessor {
         int indexPointer = (mouse) ? button : pointer;
         //set the state of all touch state events
         if (indexPointer < inputStateData.pointerStates.length) {
-            InputStateData.PointerState t = inputStateData.pointerStates[indexPointer];
+            PointerState<Vector2, Vector3> t = inputStateData.pointerStates[indexPointer];
             t.worldCoordinates.set(screenX, screenY, 0);
             camera.unproject(t.worldCoordinates);
 
@@ -256,7 +273,7 @@ public class InputManagerGDX implements InputManager<Vector2>, InputProcessor {
 
     public void dragged(int screenX, int screenY, int pointer) {
 
-        InputStateData.PointerState t = inputStateData.pointerStates[pointer];
+        PointerState<Vector2,Vector3> t = inputStateData.pointerStates[pointer];
         //get altered coordinates
         t.worldCoordinates.set(screenX, screenY, 0);
         camera.unproject(t.worldCoordinates);
@@ -277,15 +294,6 @@ public class InputManagerGDX implements InputManager<Vector2>, InputProcessor {
 
     }
 
-    private void testPoint(Fixture fixture, InputStateData.PointerState pointerState) {
-        if (!fixture.testPoint(pointerState.coordinates.x, pointerState.coordinates.y))
-            return;
-
-        jointDef.bodyB = fixture.getBody();
-        jointDef.target.set(pointerState.coordinates.x, pointerState.coordinates.y);
-        joints[pointerState.pointer] = (MouseJoint) physics.createJoint(jointDef);
-
-    }
 
     @Override
     public boolean mouseMoved(int i, int i1) {
