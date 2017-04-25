@@ -14,7 +14,6 @@ import com.ilargia.games.egdx.logicbricks.index.Indexed;
 import com.ilargia.games.egdx.logicbricks.system.sensor.RaySensorSystem;
 import com.ilargia.games.entitas.factories.CollectionsFactories;
 import com.ilargia.games.entitas.factories.EntitasCollections;
-import com.ilargia.games.entitas.index.EntityIndex;
 import org.junit.Test;
 import org.mockito.Mockito;
 

@@ -16,7 +16,6 @@ import com.ilargia.games.egdx.logicbricks.system.actuator.CreateRadialGravityAct
 import com.ilargia.games.egdx.logicbricks.system.actuator.RadialGravityActuatorSystem;
 import com.ilargia.games.egdx.logicbricks.system.game.AddInputControllerSystem;
 import com.ilargia.games.egdx.logicbricks.system.game.AnimationSystem;
-import com.ilargia.games.egdx.logicbricks.system.game.InputControllerSystem;
 import com.ilargia.games.egdx.logicbricks.system.game.RigidBodySystem;
 import com.ilargia.games.egdx.logicbricks.system.render.BackgroundRenderSystem;
 import com.ilargia.games.egdx.logicbricks.system.render.DebugRendererSystem;
@@ -60,7 +59,6 @@ public class PlatformExampleState extends GameStateGDX {
                 .add(new RadarSensorSystem(entitas, engine))
                 .add(new RaySensorSystem(entitas, engine.getManager(PhysicsManagerGDX.class).getPhysics()))
                 .add(new AddInputControllerSystem(entitas, engine))
-                .add(new InputControllerSystem(engine))
                 .add(new SceneSystem(entitas, engine))
                 .add(new RigidBodySystem(entitas))
                 .add(new AnimationSystem(entitas))
