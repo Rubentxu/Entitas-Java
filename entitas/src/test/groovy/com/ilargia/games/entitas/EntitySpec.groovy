@@ -40,11 +40,9 @@ class EntitySpec extends Specification {
             entity.addComponent(TestComponentIds.Position, new Position(100,100))
             entity.addComponent(TestComponentIds.View,  new View(1))
 
-        when: 'cuando le preguntamos si tiene el componente #ComponenteName con id: #idComponente'                          // 4
-            def response = entity.hasComponent(idComponente)
+        expect: 'cuando le preguntamos si tiene el componente #ComponenteName con id: #idComponente'                          // 4
+            entity.hasComponent(idComponente) == result
 
-        then: 'la entidad responde #result'              // 5
-            response
         cleanup:
             entity.removeComponent(TestComponentIds.Position)
             entity.removeComponent(TestComponentIds.View)
