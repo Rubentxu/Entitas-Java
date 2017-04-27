@@ -6,18 +6,15 @@ archivesBaseName = 'Entitas-Java'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
-
 dependencies {
     testCompile(
             'junit:junit:4.12',
             'org.codehaus.groovy:groovy-all:2.4.10',
             'org.spockframework:spock-core:1.1-groovy-2.4-rc-4'
-
     )
-//    testRuntime(
-//            'com.athaydes:spock-reports:1.3.0'
-//    )
+    testRuntime 'com.athaydes:spock-reports:1.3.0'
     testRuntime "cglib:cglib-nodep:3.2.4"          // allows mocking of classes (in addition to interfaces)
-    testRuntime "org.objenesis:objenesis:2.5.1"    // allows mocking of classes without default constructor (together with CGLIB)
+    testRuntime "org.objenesis:objenesis:2.5.1"
+    // allows mocking of classes without default constructor (together with CGLIB)
 
 }
