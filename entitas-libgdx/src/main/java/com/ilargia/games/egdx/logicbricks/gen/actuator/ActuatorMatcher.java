@@ -12,6 +12,7 @@ public class ActuatorMatcher {
 	private static Matcher _matcherCameraActuator;
 	private static Matcher _matcherDragActuator;
 	private static Matcher _matcherLink;
+	private static Matcher _matcherName;
 	private static Matcher _matcherParticleEffectActuator;
 	private static Matcher _matcherRadialGravityActuator;
 	private static Matcher _matcherTextureActuator;
@@ -45,6 +46,16 @@ public class ActuatorMatcher {
 			_matcherLink = matcher;
 		}
 		return _matcherLink;
+	}
+
+	public static Matcher Name() {
+		if (_matcherName == null) {
+			Matcher matcher = (Matcher) Matcher
+					.AllOf(ActuatorComponentsLookup.Name);
+			matcher.componentNames = ActuatorComponentsLookup.componentNames();
+			_matcherName = matcher;
+		}
+		return _matcherName;
 	}
 
 	public static Matcher ParticleEffectActuator() {

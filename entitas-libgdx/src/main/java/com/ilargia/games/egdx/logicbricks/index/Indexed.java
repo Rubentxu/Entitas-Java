@@ -11,6 +11,7 @@ import com.ilargia.games.entitas.index.EntityIndex;
 import com.ilargia.games.egdx.logicbricks.gen.game.GameEntity;
 import com.ilargia.games.egdx.logicbricks.gen.game.GameMatcher;
 import com.ilargia.games.egdx.logicbricks.gen.sensor.SensorEntity;
+import com.ilargia.games.entitas.index.ReactiveEntityIndex;
 import com.ilargia.games.entitas.index.ReactivePrimaryEntityIndex;
 import com.ilargia.games.entitas.matcher.Matcher;
 
@@ -33,21 +34,13 @@ public class Indexed {
         // GameEntity contains Sensors entities
         _entitas.sensor.addEntityIndex(Indexed.SensorsEntityIndex,  new ReactivePrimaryEntityIndex<SensorEntity, KeyIndex>(
                 ((e, c) -> {
-                    if(c != null) {
-                        Link link= (Link) c;
-                        return new KeyIndex(link.ownerEntity,link.nameReference);
-                    }
-                    return new KeyIndex(e.getLink().ownerEntity, e.getLink().nameReference);
+                    return new KeyIndex(e.getLink().ownerEntity, e.getName().nameReference);
                 }), _entitas.sensor.getGroup(SensorMatcher.Link())));
 
         // GameEntity contains Actuator entities
         _entitas.actuator.addEntityIndex(Indexed.ActuatorsEntityIndex,  new ReactivePrimaryEntityIndex<ActuatorEntity, KeyIndex>(
                 ((e, c) -> {
-                    if(c != null) {
-                        com.ilargia.games.egdx.logicbricks.component.actuator.Link link= (com.ilargia.games.egdx.logicbricks.component.actuator.Link) c;
-                        return new KeyIndex(link.ownerEntity, link.nameReference);
-                    }
-                    return new KeyIndex(e.getLink().ownerEntity, e.getLink().nameReference);
+                    return new KeyIndex(e.getLink().ownerEntity, e.getName().nameReference);
                 }), _entitas.actuator.getGroup(ActuatorMatcher.Link())));
 
         // Interactive GameEntity index
@@ -55,7 +48,7 @@ public class Indexed {
                 ((e, c) -> e.getCreationIndex()), _entitas.game.getGroup(GameMatcher.Interactive())));
 
         // Tags GameEntity index
-        _entitas.game.addEntityIndex(Indexed.TagEntityIndex, new ReactivePrimaryEntityIndex<GameEntity, String>(
+        _entitas.game.addEntityIndex(Indexed.TagEntityIndex, new ReactiveEntityIndex<GameEntity, String>(
                 _entitas.game.getGroup(Matcher.AllOf(GameMatcher.Tags(),GameMatcher.Interactive())),
                 ((e, c) -> e.getTags().values.toArray(new String[0]))));
 
@@ -104,9 +97,9 @@ public class Indexed {
         return eIndex.getEntity(indexEntity);
     }
 
-    public static GameEntity getTagEntity(String tag) {
-        ReactivePrimaryEntityIndex<GameEntity, String> eIndex = (ReactivePrimaryEntityIndex<GameEntity, String>) _entitas.game.getEntityIndex(TagEntityIndex);
-        return eIndex.getEntity(tag);
+    public static Set<GameEntity> getTagEntities(String tag) {
+        ReactiveEntityIndex<GameEntity, String> eIndex = (ReactiveEntityIndex<GameEntity, String>) _entitas.game.getEntityIndex(TagEntityIndex);
+        return eIndex.getEntities(tag);
     }
 
 

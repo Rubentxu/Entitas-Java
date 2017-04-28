@@ -81,7 +81,7 @@ public class NearSensorSystem extends SensorSystem implements Collision<Fixture>
                                 if (collisionSignal) {
                                     if (tagSensorA.equals("NearSensor")) {
                                         sensor.distanceContactList.add(indexEntityB);
-                                        if (entity.getLink().nameReference.contains("RadialGravity")) {
+                                        if (entity.getName().nameReference.contains("RadialGravity")) {
                                             bodyB.setGravityScale(0);
                                             bodyB.resetMassData();
                                         }
@@ -93,7 +93,7 @@ public class NearSensorSystem extends SensorSystem implements Collision<Fixture>
                                 } else {
                                     if (tagSensorA.equals("NearSensor")) {
                                         sensor.distanceContactList.remove(indexEntityB);
-                                        if (entity.getLink().nameReference.contains("RadialGravity")) {
+                                        if (entity.getName().nameReference.contains("RadialGravity")) {
                                             bodyB.setGravityScale(1);
                                             bodyB.resetMassData();
                                         }

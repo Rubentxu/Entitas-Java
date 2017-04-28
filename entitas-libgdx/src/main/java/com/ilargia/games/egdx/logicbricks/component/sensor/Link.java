@@ -10,11 +10,9 @@ public class Link implements IComponent {
     public boolean isOpen;
     public boolean isChanged;
     public boolean pulse;
-    public String nameReference;
 
-    public Link(int ownerEntity, String nameReference) {
+    public Link(int ownerEntity) {
         this.ownerEntity = ownerEntity;
-        this.nameReference = nameReference;
         this.isOpen = false;
         this.isChanged = false;
         this.pulse = false;

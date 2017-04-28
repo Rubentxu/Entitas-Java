@@ -11,6 +11,8 @@ import com.ilargia.games.egdx.logicbricks.index.Indexed;
 import com.ilargia.games.entitas.api.IComponent;
 import com.ilargia.games.entitas.codeGenerator.Component;
 
+import java.util.Set;
+
 
 @Component(pools = {"Actuator"})
 public class CameraActuator implements IComponent {
@@ -18,8 +20,8 @@ public class CameraActuator implements IComponent {
 
     public CameraActuator(Camera camera, short height, float damping, float minDistanceX, float minDistanceY, String followTagEntity) {
         this.actuator = (indexOwner) -> {
-            GameEntity followEntity = Indexed.getTagEntity(followTagEntity);
-            if (followEntity != null) {
+            Set<GameEntity> followEntities = Indexed.getTagEntities(followTagEntity);
+            for (GameEntity followEntity : followEntities) {
                 RigidBody rc = followEntity.getRigidBody();
                 Transform transform = rc.body.getTransform();
                 Vector3 position = camera.position;

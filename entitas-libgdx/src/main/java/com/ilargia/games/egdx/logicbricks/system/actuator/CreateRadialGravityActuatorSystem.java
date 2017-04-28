@@ -43,7 +43,8 @@ public class CreateRadialGravityActuatorSystem extends ReactiveSystem<ActuatorEn
             GameEntity owner = Indexed.getInteractiveEntity(e.getLink().ownerEntity);
             entitas.sensor.createEntity()
                     .addNearSensor("",actuator.radius, 0)
-                    .addLink(owner.getCreationIndex(), "RadialGravitySensor");
+                    .addLink(owner.getCreationIndex())
+                    .addName("RadialGravitySensor");
 
 
         }

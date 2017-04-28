@@ -1,7 +1,6 @@
 package com.ilargia.games.egdx.logicbricks.system.sensor;
 
 
-import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -19,6 +18,8 @@ import com.ilargia.games.egdx.logicbricks.index.Indexed;
 import com.ilargia.games.entitas.api.system.IInitializeSystem;
 import com.ilargia.games.entitas.group.Group;
 import com.ilargia.games.entitas.matcher.Matcher;
+
+import java.util.Set;
 
 public class PointerOverSensorSystem extends SensorSystem implements IInitializeSystem {
     private Group<SensorEntity> sensorGroup;
@@ -56,8 +57,8 @@ public class PointerOverSensorSystem extends SensorSystem implements IInitialize
     private boolean isOver(PointerOverSensor sensor, int pointer) {
         PointerState<Vector2, Vector3> touchState = inputManager.getTouchState(pointer);
         if (touchState.down) {
-            GameEntity target = Indexed.getTagEntity(sensor.targetTag);
-            if (target != null) {
+            Set<GameEntity> targets = Indexed.getTagEntities(sensor.targetTag);
+            for (GameEntity target : targets) {
                 TextureView view = target.getTextureView();
                 RigidBody rigidBody = target.getRigidBody();
                 if (view != null && rigidBody != null) {

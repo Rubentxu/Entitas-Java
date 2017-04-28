@@ -16,6 +16,7 @@ public class SensorMatcher {
 	private static Matcher _matcherLink;
 	private static Matcher _matcherMode;
 	private static Matcher _matcherMouseWheelSensor;
+	private static Matcher _matcherName;
 	private static Matcher _matcherNearSensor;
 	private static Matcher _matcherPointerOverSensor;
 	private static Matcher _matcherRadarSensor;
@@ -89,6 +90,16 @@ public class SensorMatcher {
 			_matcherMouseWheelSensor = matcher;
 		}
 		return _matcherMouseWheelSensor;
+	}
+
+	public static Matcher Name() {
+		if (_matcherName == null) {
+			Matcher matcher = (Matcher) Matcher
+					.AllOf(SensorComponentsLookup.Name);
+			matcher.componentNames = SensorComponentsLookup.componentNames();
+			_matcherName = matcher;
+		}
+		return _matcherName;
 	}
 
 	public static Matcher NearSensor() {

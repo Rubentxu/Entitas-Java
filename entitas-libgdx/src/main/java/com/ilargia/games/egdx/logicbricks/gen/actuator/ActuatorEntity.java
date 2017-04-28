@@ -12,8 +12,10 @@ import com.ilargia.games.egdx.logicbricks.data.interfaces.Actuator;
 import com.ilargia.games.egdx.logicbricks.gen.game.GameEntity;
 import com.ilargia.games.egdx.logicbricks.index.Indexed;
 import com.ilargia.games.entitas.api.IComponent;
+import java.util.Set;
 import com.ilargia.games.egdx.logicbricks.component.actuator.DragActuator;
 import com.ilargia.games.egdx.logicbricks.component.actuator.Link;
+import com.ilargia.games.egdx.logicbricks.component.actuator.Name;
 import com.ilargia.games.egdx.logicbricks.component.actuator.ParticleEffectActuator;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
@@ -54,8 +56,9 @@ public class ActuatorEntity extends Entity {
 					minDistanceX, minDistanceY, followTagEntity);
 		} else {
 			component.actuator = (indexOwner) -> {
-				GameEntity followEntity = Indexed.getTagEntity(followTagEntity);
-				if (followEntity != null) {
+				Set<GameEntity> followEntities = Indexed
+						.getTagEntities(followTagEntity);
+				for (GameEntity followEntity : followEntities) {
 					RigidBody rc = followEntity.getRigidBody();
 					Transform transform = rc.body.getTransform();
 					Vector3 position = camera.position;
@@ -79,8 +82,9 @@ public class ActuatorEntity extends Entity {
 					minDistanceX, minDistanceY, followTagEntity);
 		} else {
 			component.actuator = (indexOwner) -> {
-				GameEntity followEntity = Indexed.getTagEntity(followTagEntity);
-				if (followEntity != null) {
+				Set<GameEntity> followEntities = Indexed
+						.getTagEntities(followTagEntity);
+				for (GameEntity followEntity : followEntities) {
 					RigidBody rc = followEntity.getRigidBody();
 					Transform transform = rc.body.getTransform();
 					Vector3 position = camera.position;
@@ -151,13 +155,11 @@ public class ActuatorEntity extends Entity {
 		return hasComponent(ActuatorComponentsLookup.Link);
 	}
 
-	public ActuatorEntity addLink(int ownerEntity, String nameReference,
-			boolean isOpen) {
+	public ActuatorEntity addLink(int ownerEntity, boolean isOpen) {
 		Link component = (Link) recoverComponent(ActuatorComponentsLookup.Link);
 		if (component == null) {
-			component = new Link(ownerEntity, nameReference, isOpen);
+			component = new Link(ownerEntity, isOpen);
 		} else {
-			component.nameReference = nameReference;
 			component.ownerEntity = ownerEntity;
 			component.isOpen = isOpen;
 		}
@@ -165,13 +167,11 @@ public class ActuatorEntity extends Entity {
 		return this;
 	}
 
-	public ActuatorEntity replaceLink(int ownerEntity, String nameReference,
-			boolean isOpen) {
+	public ActuatorEntity replaceLink(int ownerEntity, boolean isOpen) {
 		Link component = (Link) recoverComponent(ActuatorComponentsLookup.Link);
 		if (component == null) {
-			component = new Link(ownerEntity, nameReference, isOpen);
+			component = new Link(ownerEntity, isOpen);
 		} else {
-			component.nameReference = nameReference;
 			component.ownerEntity = ownerEntity;
 			component.isOpen = isOpen;
 		}
@@ -181,6 +181,41 @@ public class ActuatorEntity extends Entity {
 
 	public ActuatorEntity removeLink() {
 		removeComponent(ActuatorComponentsLookup.Link);
+		return this;
+	}
+
+	public Name getName() {
+		return (Name) getComponent(ActuatorComponentsLookup.Name);
+	}
+
+	public boolean hasName() {
+		return hasComponent(ActuatorComponentsLookup.Name);
+	}
+
+	public ActuatorEntity addName(String nameReference) {
+		Name component = (Name) recoverComponent(ActuatorComponentsLookup.Name);
+		if (component == null) {
+			component = new Name(nameReference);
+		} else {
+			component.nameReference = nameReference;
+		}
+		addComponent(ActuatorComponentsLookup.Name, component);
+		return this;
+	}
+
+	public ActuatorEntity replaceName(String nameReference) {
+		Name component = (Name) recoverComponent(ActuatorComponentsLookup.Name);
+		if (component == null) {
+			component = new Name(nameReference);
+		} else {
+			component.nameReference = nameReference;
+		}
+		replaceComponent(ActuatorComponentsLookup.Name, component);
+		return this;
+	}
+
+	public ActuatorEntity removeName() {
+		removeComponent(ActuatorComponentsLookup.Name);
 		return this;
 	}
 
