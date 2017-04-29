@@ -89,7 +89,6 @@ public class InputManagerGDX implements InputManager<Vector2>, InputProcessor {
                 "InputManagerGDX needs load PreferencesManagerGDX on the engine");
         this.camera = engine.getCamera();
         this.physics = engine.getPhysics();
-        Gdx.input.setInputProcessor(this);
         joints =  new MouseJoint[5];
         inputStateData = new InputStateData();
 

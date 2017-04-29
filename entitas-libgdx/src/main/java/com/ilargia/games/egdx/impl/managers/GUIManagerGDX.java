@@ -1,31 +1,39 @@
 package com.ilargia.games.egdx.impl.managers;
 
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.ilargia.games.egdx.api.factories.GUIFactory;
 import com.ilargia.games.egdx.api.managers.GUIManager;
 import com.ilargia.games.egdx.impl.EngineGDX;
-import com.ilargia.games.entitas.api.IEntity;
 import com.ilargia.games.entitas.factories.EntitasCollections;
 
 import java.util.Map;
 
-public class GUIManagerGDX implements GUIManager<AssetsManagerGDX> {
+public class GUIManagerGDX implements GUIManager<AssetsManagerGDX,Actor> {
     public EngineGDX engine;
     protected Map<String, GUIFactory> guiFactories;
     protected BitmapFont defaultFont;
     protected Skin skin;
+    protected Stage stage;
 
-    public GUIManagerGDX(BitmapFont defaultFont, Skin skin, EngineGDX engine) {
+    public GUIManagerGDX(Viewport viewport, BitmapFont defaultFont, Skin skin, EngineGDX engine) {
         this.guiFactories = EntitasCollections.createMap(String.class, GUIFactory.class);
         this.defaultFont = defaultFont;
         this.skin = skin;
         this.engine = engine;
+        stage = new Stage(viewport);
+
     }
 
-    @Override
     public Skin getSkin() {
         return skin;
+    }
+
+    public Stage getStage() {
+        return stage;
     }
 
 
@@ -35,13 +43,13 @@ public class GUIManagerGDX implements GUIManager<AssetsManagerGDX> {
     }
 
     @Override
-    public <TEntity extends IEntity> TEntity createGUIElement(String name, float posX, float posY) {
-        GUIFactory<TEntity> factory = guiFactories.get(name);
-        TEntity entity = null;
+    public Actor createGUIElement(String name) {
+        GUIFactory<Actor,GUIManagerGDX> factory = guiFactories.get(name);
+        Actor element = null;
         if (factory != null) {
-            entity = factory.create(engine);
+            element = factory.create(this);
         }
-        return entity;
+        return element;
     }
 
 

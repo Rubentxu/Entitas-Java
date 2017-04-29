@@ -5,12 +5,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.ilargia.games.egdx.api.factories.GUIFactory;
 import com.ilargia.games.entitas.api.IEntity;
 
-public interface GUIManager<A> extends Manager {
-
-    Skin getSkin();
+public interface GUIManager<A,T> extends Manager {
 
     void addGUIFactory(String name, GUIFactory factory);
 
-    <TEntity extends IEntity> TEntity createGUIElement(String name, float posX, float posY);
+    T createGUIElement(String name);
 
 }
