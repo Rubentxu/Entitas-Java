@@ -16,7 +16,6 @@ import com.ilargia.games.egdx.logicbricks.component.sensor.Link;
 import com.ilargia.games.egdx.logicbricks.component.sensor.Mode;
 import com.ilargia.games.egdx.logicbricks.component.sensor.MouseWheelSensor;
 import com.badlogic.gdx.math.Vector2;
-import com.ilargia.games.egdx.logicbricks.component.sensor.Name;
 import com.ilargia.games.egdx.logicbricks.component.sensor.NearSensor;
 import com.ilargia.games.egdx.logicbricks.component.sensor.PointerOverSensor;
 import com.ilargia.games.egdx.logicbricks.component.sensor.RadarSensor;
@@ -174,11 +173,12 @@ public class SensorEntity extends Entity {
 		return hasComponent(SensorComponentsLookup.Link);
 	}
 
-	public SensorEntity addLink(int ownerEntity) {
+	public SensorEntity addLink(String sensorReference, int ownerEntity) {
 		Link component = (Link) recoverComponent(SensorComponentsLookup.Link);
 		if (component == null) {
-			component = new Link(ownerEntity);
+			component = new Link(sensorReference, ownerEntity);
 		} else {
+			component.sensorReference = sensorReference;
 			component.ownerEntity = ownerEntity;
 			component.isOpen = false;
 			component.isChanged = false;
@@ -188,11 +188,12 @@ public class SensorEntity extends Entity {
 		return this;
 	}
 
-	public SensorEntity replaceLink(int ownerEntity) {
+	public SensorEntity replaceLink(String sensorReference, int ownerEntity) {
 		Link component = (Link) recoverComponent(SensorComponentsLookup.Link);
 		if (component == null) {
-			component = new Link(ownerEntity);
+			component = new Link(sensorReference, ownerEntity);
 		} else {
+			component.sensorReference = sensorReference;
 			component.ownerEntity = ownerEntity;
 			component.isOpen = false;
 			component.isChanged = false;
@@ -274,41 +275,6 @@ public class SensorEntity extends Entity {
 
 	public SensorEntity removeMouseWheelSensor() {
 		removeComponent(SensorComponentsLookup.MouseWheelSensor);
-		return this;
-	}
-
-	public Name getName() {
-		return (Name) getComponent(SensorComponentsLookup.Name);
-	}
-
-	public boolean hasName() {
-		return hasComponent(SensorComponentsLookup.Name);
-	}
-
-	public SensorEntity addName(String nameReference) {
-		Name component = (Name) recoverComponent(SensorComponentsLookup.Name);
-		if (component == null) {
-			component = new Name(nameReference);
-		} else {
-			component.nameReference = nameReference;
-		}
-		addComponent(SensorComponentsLookup.Name, component);
-		return this;
-	}
-
-	public SensorEntity replaceName(String nameReference) {
-		Name component = (Name) recoverComponent(SensorComponentsLookup.Name);
-		if (component == null) {
-			component = new Name(nameReference);
-		} else {
-			component.nameReference = nameReference;
-		}
-		replaceComponent(SensorComponentsLookup.Name, component);
-		return this;
-	}
-
-	public SensorEntity removeName() {
-		removeComponent(SensorComponentsLookup.Name);
 		return this;
 	}
 

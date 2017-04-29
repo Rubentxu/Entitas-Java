@@ -3,12 +3,15 @@ package com.ilargia.games.egdx.logicbricks.gen.scene;
 import com.ilargia.games.entitas.api.*;
 import com.ilargia.games.entitas.Entity;
 import java.util.Stack;
+import com.ilargia.games.egdx.logicbricks.component.scene.Background;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
+import com.ilargia.games.egdx.logicbricks.data.Bounds;
+import com.ilargia.games.entitas.api.IComponent;
 import com.ilargia.games.egdx.logicbricks.component.scene.CChainLight;
 import box2dLight.ChainLight;
 import box2dLight.PointLight;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.math.Vector2;
-import com.ilargia.games.entitas.api.IComponent;
 import com.ilargia.games.egdx.logicbricks.component.scene.CConeLight;
 import box2dLight.ConeLight;
 import com.ilargia.games.egdx.logicbricks.component.scene.CDirectionalLight;
@@ -16,10 +19,11 @@ import box2dLight.DirectionalLight;
 import com.ilargia.games.egdx.logicbricks.component.scene.CPointLight;
 import com.ilargia.games.egdx.logicbricks.component.scene.Camera;
 import com.ilargia.games.egdx.logicbricks.component.scene.Catch;
+import com.ilargia.games.egdx.logicbricks.component.scene.GUI;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.ilargia.games.egdx.logicbricks.component.scene.GameWorld;
 import com.ilargia.games.egdx.logicbricks.component.scene.ParallaxLayer;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.ilargia.games.egdx.logicbricks.component.scene.Tiled;
 
 /**
@@ -30,6 +34,41 @@ import com.ilargia.games.egdx.logicbricks.component.scene.Tiled;
 public class SceneEntity extends Entity {
 
 	public SceneEntity() {
+	}
+
+	public Background getBackground() {
+		return (Background) getComponent(SceneComponentsLookup.Background);
+	}
+
+	public boolean hasBackground() {
+		return hasComponent(SceneComponentsLookup.Background);
+	}
+
+	public SceneEntity addBackground(TextureRegion image) {
+		Background component = (Background) recoverComponent(SceneComponentsLookup.Background);
+		if (component == null) {
+			component = new Background(image);
+		} else {
+			component.image = image;
+		}
+		addComponent(SceneComponentsLookup.Background, component);
+		return this;
+	}
+
+	public SceneEntity replaceBackground(TextureRegion image) {
+		Background component = (Background) recoverComponent(SceneComponentsLookup.Background);
+		if (component == null) {
+			component = new Background(image);
+		} else {
+			component.image = image;
+		}
+		replaceComponent(SceneComponentsLookup.Background, component);
+		return this;
+	}
+
+	public SceneEntity removeBackground() {
+		removeComponent(SceneComponentsLookup.Background);
+		return this;
 	}
 
 	public CChainLight getCChainLight() {
@@ -286,6 +325,39 @@ public class SceneEntity extends Entity {
 
 	public SceneEntity removeCatch() {
 		removeComponent(SceneComponentsLookup.Catch);
+		return this;
+	}
+
+	public GUI getGUI() {
+		return (GUI) getComponent(SceneComponentsLookup.GUI);
+	}
+
+	public boolean hasGUI() {
+		return hasComponent(SceneComponentsLookup.GUI);
+	}
+
+	public SceneEntity addGUI(Stage stage) {
+		GUI component = (GUI) recoverComponent(SceneComponentsLookup.GUI);
+		if (component == null) {
+			component = new GUI();
+		}
+		component.stage = stage;
+		addComponent(SceneComponentsLookup.GUI, component);
+		return this;
+	}
+
+	public SceneEntity replaceGUI(Stage stage) {
+		GUI component = (GUI) recoverComponent(SceneComponentsLookup.GUI);
+		if (component == null) {
+			component = new GUI();
+		}
+		component.stage = stage;
+		replaceComponent(SceneComponentsLookup.GUI, component);
+		return this;
+	}
+
+	public SceneEntity removeGUI() {
+		removeComponent(SceneComponentsLookup.GUI);
 		return this;
 	}
 

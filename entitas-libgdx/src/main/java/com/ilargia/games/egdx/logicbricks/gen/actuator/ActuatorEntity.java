@@ -155,11 +155,13 @@ public class ActuatorEntity extends Entity {
 		return hasComponent(ActuatorComponentsLookup.Link);
 	}
 
-	public ActuatorEntity addLink(int ownerEntity, boolean isOpen) {
+	public ActuatorEntity addLink(String actuatorReference, int ownerEntity,
+			boolean isOpen) {
 		Link component = (Link) recoverComponent(ActuatorComponentsLookup.Link);
 		if (component == null) {
-			component = new Link(ownerEntity, isOpen);
+			component = new Link(actuatorReference, ownerEntity, isOpen);
 		} else {
+			component.actuatorReference = actuatorReference;
 			component.ownerEntity = ownerEntity;
 			component.isOpen = isOpen;
 		}
@@ -167,11 +169,13 @@ public class ActuatorEntity extends Entity {
 		return this;
 	}
 
-	public ActuatorEntity replaceLink(int ownerEntity, boolean isOpen) {
+	public ActuatorEntity replaceLink(String actuatorReference,
+			int ownerEntity, boolean isOpen) {
 		Link component = (Link) recoverComponent(ActuatorComponentsLookup.Link);
 		if (component == null) {
-			component = new Link(ownerEntity, isOpen);
+			component = new Link(actuatorReference, ownerEntity, isOpen);
 		} else {
+			component.actuatorReference = actuatorReference;
 			component.ownerEntity = ownerEntity;
 			component.isOpen = isOpen;
 		}

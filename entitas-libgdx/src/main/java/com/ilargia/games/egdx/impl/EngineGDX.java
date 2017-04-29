@@ -47,6 +47,7 @@ public class EngineGDX implements Engine, IContexts {
         InputMultiplexer inputMultiplexer = new InputMultiplexer();
         inputMultiplexer.addProcessor(inputManager);
         inputMultiplexer.addProcessor(guiManagerGDX.getStage());
+        Gdx.input.setInputProcessor(inputMultiplexer);
 
     }
 

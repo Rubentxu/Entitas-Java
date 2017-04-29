@@ -7,7 +7,6 @@ import com.ilargia.games.egdx.logicbricks.component.sensor.Frequency;
 import com.ilargia.games.egdx.logicbricks.component.sensor.Link;
 import com.ilargia.games.egdx.logicbricks.component.sensor.Mode;
 import com.ilargia.games.egdx.logicbricks.component.sensor.MouseWheelSensor;
-import com.ilargia.games.egdx.logicbricks.component.sensor.Name;
 import com.ilargia.games.egdx.logicbricks.component.sensor.NearSensor;
 import com.ilargia.games.egdx.logicbricks.component.sensor.PointerOverSensor;
 import com.ilargia.games.egdx.logicbricks.component.sensor.RadarSensor;
@@ -27,23 +26,22 @@ public class SensorComponentsLookup {
 	public static final int Link = 4;
 	public static final int Mode = 5;
 	public static final int MouseWheelSensor = 6;
-	public static final int Name = 7;
-	public static final int NearSensor = 8;
-	public static final int PointerOverSensor = 9;
-	public static final int RadarSensor = 10;
-	public static final int RaySensor = 11;
-	public static final int totalComponents = 12;
+	public static final int NearSensor = 7;
+	public static final int PointerOverSensor = 8;
+	public static final int RadarSensor = 9;
+	public static final int RaySensor = 10;
+	public static final int totalComponents = 11;
 
 	public static String[] componentNames() {
 		return new String[]{"AlwaysSensor", "CollisionSensor", "DelaySensor",
-				"Frequency", "Link", "Mode", "MouseWheelSensor", "Name",
-				"NearSensor", "PointerOverSensor", "RadarSensor", "RaySensor"};
+				"Frequency", "Link", "Mode", "MouseWheelSensor", "NearSensor",
+				"PointerOverSensor", "RadarSensor", "RaySensor"};
 	}
 
 	public static Class[] componentTypes() {
 		return new Class[]{AlwaysSensor.class, CollisionSensor.class,
 				DelaySensor.class, Frequency.class, Link.class, Mode.class,
-				MouseWheelSensor.class, Name.class, NearSensor.class,
+				MouseWheelSensor.class, NearSensor.class,
 				PointerOverSensor.class, RadarSensor.class, RaySensor.class};
 	}
 }

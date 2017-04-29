@@ -3,6 +3,8 @@ package com.ilargia.games.egdx.logicbricks.gen.scene;
 import com.ilargia.games.entitas.api.*;
 import com.ilargia.games.egdx.logicbricks.component.scene.Camera;
 import com.ilargia.games.egdx.logicbricks.component.scene.Catch;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.ilargia.games.egdx.logicbricks.component.scene.GUI;
 import com.badlogic.gdx.graphics.Color;
 import com.ilargia.games.egdx.logicbricks.component.scene.GameWorld;
 import com.ilargia.games.egdx.logicbricks.component.scene.Tiled;
@@ -97,6 +99,45 @@ public class SceneContext
 
 	public SceneContext removeCatch() {
 		destroyEntity(getCatchEntity());
+		return this;
+	}
+
+	public SceneEntity getGUIEntity() {
+		return getGroup(SceneMatcher.GUI()).getSingleEntity();
+	}
+
+	public GUI getGUI() {
+		return getGUIEntity().getGUI();
+	}
+
+	public boolean hasGUI() {
+		return getGUIEntity() != null;
+	}
+
+	public SceneEntity setGUI(Stage stage) {
+		if (hasGUI()) {
+			throw new EntitasException(
+					"Could not set GUI!" + this
+							+ " already has an entity with GUI!",
+					"You should check if the context already has a GUIEntity before setting it or use context.ReplaceGUI().");
+		}
+		SceneEntity entity = createEntity();
+		entity.addGUI(stage);
+		return entity;
+	}
+
+	public SceneEntity replaceGUI(Stage stage) {
+		SceneEntity entity = getGUIEntity();
+		if (entity == null) {
+			entity = setGUI(stage);
+		} else {
+			entity.replaceGUI(stage);
+		}
+		return entity;
+	}
+
+	public SceneContext removeGUI() {
+		destroyEntity(getGUIEntity());
 		return this;
 	}
 

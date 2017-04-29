@@ -34,13 +34,20 @@ public class Indexed {
         // GameEntity contains Sensors entities
         _entitas.sensor.addEntityIndex(Indexed.SensorsEntityIndex,  new ReactivePrimaryEntityIndex<SensorEntity, KeyIndex>(
                 ((e, c) -> {
-                    return new KeyIndex(e.getLink().ownerEntity, e.getName().nameReference);
+                    if(c != null) {
+                        Link link= (Link) c;
+                        return new KeyIndex(link.ownerEntity,link.sensorReference);
+                    }
+                    return new KeyIndex(e.getLink().ownerEntity, e.getLink().sensorReference);
                 }), _entitas.sensor.getGroup(SensorMatcher.Link())));
-
         // GameEntity contains Actuator entities
         _entitas.actuator.addEntityIndex(Indexed.ActuatorsEntityIndex,  new ReactivePrimaryEntityIndex<ActuatorEntity, KeyIndex>(
                 ((e, c) -> {
-                    return new KeyIndex(e.getLink().ownerEntity, e.getName().nameReference);
+                    if(c != null) {
+                        com.ilargia.games.egdx.logicbricks.component.actuator.Link link= (com.ilargia.games.egdx.logicbricks.component.actuator.Link) c;
+                        return new KeyIndex(link.ownerEntity, link.actuatorReference);
+                    }
+                    return new KeyIndex(e.getLink().ownerEntity, e.getLink().actuatorReference);
                 }), _entitas.actuator.getGroup(ActuatorMatcher.Link())));
 
         // Interactive GameEntity index
