@@ -1,6 +1,8 @@
 package com.ilargia.games.egdx.impl.managers;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -12,22 +14,22 @@ import com.ilargia.games.entitas.factories.EntitasCollections;
 
 import java.util.Map;
 
-public class GUIManagerGDX implements GUIManager<AssetsManagerGDX,Actor> {
+public class GUIManagerGDX implements GUIManager<Actor,Skin, TextureAtlas> {
     public EngineGDX engine;
     protected Map<String, GUIFactory> guiFactories;
     protected BitmapFont defaultFont;
     protected Skin skin;
     protected Stage stage;
 
-    public GUIManagerGDX(Viewport viewport, BitmapFont defaultFont, Skin skin, EngineGDX engine) {
+    public GUIManagerGDX(Viewport viewport, BitmapFont defaultFont, EngineGDX engine) {
         this.guiFactories = EntitasCollections.createMap(String.class, GUIFactory.class);
         this.defaultFont = defaultFont;
-        this.skin = skin;
         this.engine = engine;
         stage = new Stage(viewport);
 
     }
 
+    @Override
     public Skin getSkin() {
         return skin;
     }
@@ -36,6 +38,12 @@ public class GUIManagerGDX implements GUIManager<AssetsManagerGDX,Actor> {
         return stage;
     }
 
+
+    @Override
+    public Skin createSkin(String skinName, TextureAtlas atlas) {
+        this.skin = new Skin(Gdx.files.internal(skinName), atlas);
+        return skin;
+    }
 
     @Override
     public void addGUIFactory(String name, GUIFactory factory) {
