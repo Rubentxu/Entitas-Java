@@ -217,7 +217,7 @@ public class Entity implements IEntity {
 
     @Override
     public boolean hasComponent(int index) {
-        if(index < _components.length )
+        if (index < _components.length)
             return _components[index] != null;
         else
             return false;
@@ -429,9 +429,11 @@ public class Entity implements IEntity {
     @Override
     public String toString() {
         return "Entity{" +
-                "_creationIndex=" + _creationIndex +
-                ", _isEnabled=" + _isEnabled +
-                ", _contextInfo=" + _contextInfo +
+                "creationIndex=" + _creationIndex +
+                ", isEnabled=" + _isEnabled +
+                ", contextName=" + _contextInfo.contextName +
+                ", components=" + _components +
+                ", componentIndicesCache=" + _componentIndicesCache +
                 '}';
     }
 
