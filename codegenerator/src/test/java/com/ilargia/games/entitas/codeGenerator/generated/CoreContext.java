@@ -1,6 +1,8 @@
 package com.ilargia.games.entitas.codeGenerator.generated;
 
 import com.ilargia.games.entitas.api.*;
+import com.ilargia.games.entitas.api.entitas.EntitasException;
+import com.ilargia.games.entitas.api.entitas.EntityBaseFactory;
 import com.ilargia.games.entitas.codeGenerator.components.Ball;
 
 /**
@@ -12,7 +14,7 @@ public class CoreContext extends com.ilargia.games.entitas.Context<CoreEntity> {
 
 	public CoreContext(int totalComponents, int startCreationIndex,
 			ContextInfo contextInfo, EntityBaseFactory<CoreEntity> factoryMethod) {
-		super(totalComponents, startCreationIndex, contextInfo, factoryMethod);
+		super(totalComponents, startCreationIndex, contextInfo, factoryMethod, null);
 	}
 
 	public CoreEntity getBallEntity() {

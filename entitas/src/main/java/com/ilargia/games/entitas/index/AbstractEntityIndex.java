@@ -2,12 +2,14 @@ package com.ilargia.games.entitas.index;
 
 import com.ilargia.games.entitas.Entity;
 import com.ilargia.games.entitas.api.IComponent;
-import com.ilargia.games.entitas.api.IEntityIndex;
+import com.ilargia.games.entitas.api.entitas.IEntityIndex;
 import com.ilargia.games.entitas.api.IGroup;
 import com.ilargia.games.entitas.api.events.GroupChanged;
 import com.ilargia.games.entitas.group.Group;
 
-public abstract class AbstractReactiveEntityIndex<TEntity extends Entity, TKey> implements IEntityIndex {
+public abstract class AbstractEntityIndex<TEntity extends Entity, TKey> implements IEntityIndex {
+
+    private String _name;
     public interface Func<TEntity, IComponent, TKey> {
         TKey getKey(TEntity entity, IComponent component);
     }
@@ -39,19 +41,25 @@ public abstract class AbstractReactiveEntityIndex<TEntity extends Entity, TKey> 
     };
 
 
-    protected AbstractReactiveEntityIndex(Func<TEntity, IComponent, TKey> key, IGroup<TEntity> group) {
+    protected AbstractEntityIndex(String name, Func<TEntity, IComponent, TKey> key, IGroup<TEntity> group) {
+        _name = name;
         _group = (Group<TEntity>) group;
         _key = key;
         _isSingleKey = true;
 
     }
 
-    protected AbstractReactiveEntityIndex(IGroup<TEntity> group, Func<TEntity, IComponent, TKey[]> keys) {
+    protected AbstractEntityIndex(String name, IGroup<TEntity> group, Func<TEntity, IComponent, TKey[]> keys) {
+        _name = name;
         _group = (Group<TEntity>) group;
         _keys = keys;
         _isSingleKey = false;
     }
 
+    @Override
+    public String getName() {
+        return _name;
+    }
 
     @Override
     public void activate() {
@@ -66,6 +74,11 @@ public abstract class AbstractReactiveEntityIndex<TEntity extends Entity, TKey> 
         _group.OnEntityRemoved.remove(onEntityRemoved);
         clear();
 
+    }
+
+    @Override
+    public String toString() {
+        return _name;
     }
 
     protected void indexEntities(IGroup<TEntity> group) {

@@ -1,5 +1,6 @@
 package com.ilargia.games.entitas.api;
 
+import com.ilargia.games.entitas.api.entitas.IEntity;
 import com.ilargia.games.entitas.api.events.GroupChanged;
 import com.ilargia.games.entitas.api.matcher.IMatcher;
 

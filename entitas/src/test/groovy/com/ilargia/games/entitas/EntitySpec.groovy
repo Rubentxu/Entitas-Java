@@ -30,7 +30,7 @@ class EntitySpec extends Specification {
 
     def setupSpec() {
         entity.initialize(0, 10, _componentPools, new ContextInfo("Test", TestComponentIds.componentNames(),
-                TestComponentIds.componentTypes()))
+                TestComponentIds.componentTypes()), null)
         entity.clearEventsListener()
         entity.reactivate(0)
 
@@ -106,7 +106,7 @@ class EntitySpec extends Specification {
 
     def 'Necesito poder desactivar una entidad para poder reusarla en el futuro'() {
         when: 'cuando destruimos la entidad'
-        entity.destroy()
+        entity.internalDestroy();
 
         then: 'isEnabled = false'
         entity.isEnabled() == false
@@ -133,7 +133,7 @@ class EntitySpec extends Specification {
         thrown EntityAlreadyHasComponentException
 
         when: 'destruimos la entidad y le agregamos otro componente'
-        entity.destroy()
+        entity.internalDestroy()
         entity.addComponent(TestComponentIds.Position, new Position(100, 100))
 
         then: 'nos devuelve una excepcion EntityIsNotEnabledException'
@@ -161,7 +161,7 @@ class EntitySpec extends Specification {
         thrown EntityDoesNotHaveComponentException
 
         when: 'cuando destruimos la entidad y le eliminamos otro componente'
-        entity.destroy()
+        entity.internalDestroy()
         entity.removeComponent(TestComponentIds.Position)
 
         then: 'nos devuelve una excepcion EntityIsNotEnabledException'
@@ -189,7 +189,7 @@ class EntitySpec extends Specification {
         ((Position) entity.getComponent(TestComponentIds.Position)).y == 150
 
         when: 'destruimos la entidad y reemplazamos el componente Position'
-        entity.destroy()
+        entity.internalDestroy()
         entity.replaceComponent(TestComponentIds.Position, new Position(150, 150))
 
         then: 'nos devuelve una excepcion EntityIsNotEnabledException'

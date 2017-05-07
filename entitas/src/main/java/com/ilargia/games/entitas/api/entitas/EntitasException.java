@@ -1,4 +1,4 @@
-package com.ilargia.games.entitas.api;
+package com.ilargia.games.entitas.api.entitas;
 
 public class EntitasException extends RuntimeException {
 

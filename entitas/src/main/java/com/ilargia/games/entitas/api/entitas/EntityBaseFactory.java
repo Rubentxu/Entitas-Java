@@ -1,6 +1,4 @@
-package com.ilargia.games.entitas.api;
-
-import java.util.Stack;
+package com.ilargia.games.entitas.api.entitas;
 
 @FunctionalInterface
 public interface EntityBaseFactory<E extends IEntity> {

@@ -3,14 +3,14 @@ package com.ilargia.games.entitas.systems;
 import com.ilargia.games.entitas.Entity;
 import com.ilargia.games.entitas.api.IContext;
 import com.ilargia.games.entitas.api.system.IReactiveSystem;
-import com.ilargia.games.entitas.collector.Collector;
+import com.ilargia.games.entitas.collector.ICollector;
 import com.ilargia.games.entitas.factories.EntitasCollections;
 
 import java.util.List;
 
 public abstract class ReactiveSystem<TEntity extends Entity> implements IReactiveSystem {
 
-    protected Collector<TEntity> _collector;
+    protected ICollector<TEntity> _collector;
     protected List<TEntity> _buffer;
     protected String _toStringCache;
 
@@ -19,12 +19,12 @@ public abstract class ReactiveSystem<TEntity extends Entity> implements IReactiv
         _buffer = EntitasCollections.createList(Entity.class);
     }
 
-    protected ReactiveSystem(Collector<TEntity> collector) {
+    protected ReactiveSystem(ICollector<TEntity> collector) {
         _collector = collector;
         _buffer = EntitasCollections.createList(Entity.class);
     }
 
-    protected abstract Collector<TEntity> getTrigger(IContext<TEntity> context);
+    protected abstract ICollector<TEntity> getTrigger(IContext<TEntity> context);
 
     protected abstract boolean filter(TEntity entity);
 
@@ -43,8 +43,8 @@ public abstract class ReactiveSystem<TEntity extends Entity> implements IReactiv
     }
 
     public void execute(float deltatime) {
-        if (_collector._collectedEntities.size() != 0) {
-            for (TEntity e : _collector._collectedEntities) {
+        if (_collector.getCount() != 0) {
+            for (TEntity e : _collector.collectedEntities()) {
                 if (filter(e)) {
                     e.retain(this);
                     _buffer.add(e);
@@ -62,11 +62,10 @@ public abstract class ReactiveSystem<TEntity extends Entity> implements IReactiv
         }
     }
 
-
     @Override
     public String toString() {
         return "ReactiveSystem{" +
-                "_collector=" + _collector +
+                "_collectors=" + _collector +
                 ", _buffer=" + _buffer +
                 ", _toStringCache='" + _toStringCache + '\'' +
                 '}';

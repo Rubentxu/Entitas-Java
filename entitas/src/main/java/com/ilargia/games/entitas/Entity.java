@@ -3,10 +3,11 @@ package com.ilargia.games.entitas;
 
 import com.ilargia.games.entitas.api.ContextInfo;
 import com.ilargia.games.entitas.api.IComponent;
-import com.ilargia.games.entitas.api.IEntity;
+import com.ilargia.games.entitas.api.entitas.IAERC;
+import com.ilargia.games.entitas.api.entitas.IEntity;
 import com.ilargia.games.entitas.api.events.EntityComponentChanged;
 import com.ilargia.games.entitas.api.events.EntityComponentReplaced;
-import com.ilargia.games.entitas.api.events.EntityReleased;
+import com.ilargia.games.entitas.api.events.EntityEvent;
 import com.ilargia.games.entitas.caching.EntitasCache;
 import com.ilargia.games.entitas.exceptions.*;
 import com.ilargia.games.entitas.factories.EntitasCollections;
@@ -21,9 +22,10 @@ public class Entity implements IEntity {
     public Set<EntityComponentChanged> OnComponentAdded = EntitasCollections.createSet(EntityComponentChanged.class);
     public Set<EntityComponentChanged> OnComponentRemoved = EntitasCollections.createSet(EntityComponentChanged.class);
     public Set<EntityComponentReplaced> OnComponentReplaced = EntitasCollections.createSet(EntityComponentReplaced.class);
-    public Set<EntityReleased> OnEntityReleased = EntitasCollections.createSet(EntityReleased.class);
+    public Set<EntityEvent> OnEntityReleased = EntitasCollections.createSet(EntityEvent.class);
+    public Set<EntityEvent> OnDestroyEntity = EntitasCollections.createSet(EntityEvent.class);
 
-    private Set<Object> owners; //ObjectOpenHashSet
+
     private int _creationIndex;
     private boolean _isEnabled;
     private IComponent[] _components;
@@ -32,10 +34,11 @@ public class Entity implements IEntity {
     private int[] _componentIndicesCache;
     private int _totalComponents;
     private ContextInfo _contextInfo;
+    private IAERC aerc;
 
-    public Entity() {
-        owners = EntitasCollections.createSet(Object.class);
-
+    @Override
+    public IAERC getAERC() {
+        return aerc;
     }
 
     @Override
@@ -64,7 +67,7 @@ public class Entity implements IEntity {
     }
 
     @Override
-    public void initialize(int creationIndex, int totalComponents, Stack<IComponent>[] componentPools, ContextInfo contextInfo) {
+    public void initialize(int creationIndex, int totalComponents, Stack<IComponent>[] componentPools, ContextInfo contextInfo, IAERC aerc) {
         reactivate(creationIndex);
 
         _totalComponents = totalComponents;
@@ -76,6 +79,7 @@ public class Entity implements IEntity {
         } else {
             _contextInfo = createDefaultContextInfo();
         }
+        this.aerc = (aerc==null)? new SafeAERC(this): aerc;
 
     }
 
@@ -304,30 +308,20 @@ public class Entity implements IEntity {
     }
 
     @Override
-    public Set<Object> owners() {
-        return owners;
-    }
-
-    @Override
     public int retainCount() {
-        return owners.size();
+        return aerc.retainCount();
     }
 
     @Override
     public void retain(Object owner) {
-        if (!owners.add(owner)) {
-            throw new EntityIsAlreadyRetainedByOwnerException(owner);
-        }
+        aerc.retain(owner);
 
     }
 
     @Override
     public void release(Object owner) {
-        if (!owners.remove(owner)) {
-            throw new EntityIsNotRetainedByOwnerException(owner);
-        }
-
-        if (owners.size() == 0) {
+        aerc.release(owner);
+        if (aerc.retainCount() == 0) {
             notifyEntityReleased();
         }
 
@@ -335,17 +329,25 @@ public class Entity implements IEntity {
 
     @Override
     public void destroy() {
+        if (!_isEnabled) {
+            throw new EntityIsNotEnabledException("Cannot destroy " + this + "!");
+        }
+        notifyDestroyEntity();
+
+    }
+
+    @Override
+    public void internalDestroy() {
         removeAllComponents();
         _isEnabled = false;
         clearEventsListener();
     }
 
-
     public void clearEventsListener() {
         if (OnComponentAdded != null) OnComponentAdded.clear();
         if (OnComponentRemoved != null) OnComponentRemoved.clear();
         if (OnComponentReplaced != null) OnComponentReplaced.clear();
-
+        if (OnDestroyEntity != null) OnDestroyEntity.clear();
 
     }
 
@@ -374,11 +376,18 @@ public class Entity implements IEntity {
         OnComponentReplaced.add(listener);
     }
 
-    public void OnEntityReleased(EntityReleased listener) {
+    public void OnEntityReleased(EntityEvent listener) {
         if (OnEntityReleased != null) {
-            OnEntityReleased = EntitasCollections.createSet(EntityReleased.class);
+            OnEntityReleased = EntitasCollections.createSet(EntityEvent.class);
         }
         OnEntityReleased.add(listener);
+    }
+
+    public void OnDestroyEntity(EntityEvent listener) {
+        if (OnDestroyEntity != null) {
+            OnDestroyEntity = EntitasCollections.createSet(EntityEvent.class);
+        }
+        OnDestroyEntity.add(listener);
     }
 
     public void notifyComponentAdded(int index, IComponent component) {
@@ -407,12 +416,19 @@ public class Entity implements IEntity {
 
     public void notifyEntityReleased() {
         if (OnEntityReleased != null) {
-            for (EntityReleased listener : OnEntityReleased) {
+            for (EntityEvent listener : OnEntityReleased) {
                 listener.released(this);
             }
         }
     }
 
+    public void notifyDestroyEntity() {
+        if (OnDestroyEntity != null) {
+            for (EntityEvent listener : OnDestroyEntity) {
+                listener.released(this);
+            }
+        }
+    }
 
     @Override
     public boolean equals(Object o) {

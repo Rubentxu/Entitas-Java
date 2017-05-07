@@ -1,6 +1,7 @@
 package com.ilargia.games.egdx.logicbricks.gen.sensor;
 
 import com.ilargia.games.entitas.api.*;
+import com.ilargia.games.entitas.api.entitas.EntityBaseFactory;
 
 /**
  * ---------------------------------------------------------------------------
@@ -14,6 +15,6 @@ public class SensorContext
 	public SensorContext(int totalComponents, int startCreationIndex,
 			ContextInfo contextInfo,
 			EntityBaseFactory<SensorEntity> factoryMethod) {
-		super(totalComponents, startCreationIndex, contextInfo, factoryMethod);
+		super(totalComponents, startCreationIndex, contextInfo, factoryMethod, null);
 	}
 }

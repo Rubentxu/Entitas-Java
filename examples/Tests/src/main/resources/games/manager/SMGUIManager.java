@@ -12,7 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.ilargia.games.entitas.egdx.api.GUIFactory;
 import com.ilargia.games.entitas.egdx.base.managers.BaseAssetsManager;
 import com.ilargia.games.entitas.egdx.base.managers.BaseGUIManager;
-import com.ilargia.games.entitas.api.IEntity;
+import com.ilargia.games.entitas.api.entitas.IEntity;
 
 public class SMGUIManager extends BaseGUIManager {
 

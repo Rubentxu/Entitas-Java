@@ -1,7 +1,7 @@
 package com.ilargia.games.entitas.collector;
 
 import com.ilargia.games.entitas.api.IComponent;
-import com.ilargia.games.entitas.api.IEntity;
+import com.ilargia.games.entitas.api.entitas.IEntity;
 import com.ilargia.games.entitas.api.IGroup;
 import com.ilargia.games.entitas.api.events.GroupChanged;
 import com.ilargia.games.entitas.group.GroupEvent;
@@ -12,7 +12,7 @@ import com.ilargia.games.entitas.group.Group;
 import java.util.Arrays;
 import java.util.Set;
 
-public class Collector<TEntity extends IEntity> {
+public class Collector<TEntity extends IEntity> implements ICollector{
 
     public Set<TEntity> _collectedEntities; //ObjectOpenHashSet
     GroupChanged<TEntity> _addEntityCache;
@@ -45,6 +45,12 @@ public class Collector<TEntity extends IEntity> {
         activate();
     }
 
+    @Override
+    public int getCount() {
+        return _collectedEntities.size();
+    }
+
+    @Override
     public void activate() {
         for (int i = 0; i < _groups.length; i++) {
             Group group = (Group) _groups[i];
@@ -65,6 +71,7 @@ public class Collector<TEntity extends IEntity> {
         }
     }
 
+    @Override
     public void deactivate() {
         for (int i = 0; i < _groups.length; i++) {
             Group group = (Group) _groups[i];
@@ -75,12 +82,18 @@ public class Collector<TEntity extends IEntity> {
         clearCollectedEntities();
     }
 
+    @Override
     public void clearCollectedEntities() {
         for (IEntity entity : _collectedEntities) {
             entity.release(this);
         }
         _collectedEntities.clear();
 
+    }
+
+    @Override
+    public Set collectedEntities() {
+        return _collectedEntities;
     }
 
     void addEntity(IGroup<TEntity> group, TEntity entity, int index, IComponent component) {

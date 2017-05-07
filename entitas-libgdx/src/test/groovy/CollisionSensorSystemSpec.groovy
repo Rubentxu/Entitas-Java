@@ -34,13 +34,13 @@ class CollisionSensorSystemSpec extends Specification {
     @Shared GameEntity enemy = entitas.game.createEntity().addTags("Enemy","Boss").setInteractive(true)
 
     @Shared GameEntity ground = entitas.game.createEntity().addTags("Ground").setInteractive(true)
-    @Shared SensorEntity collisionEnemy = entitas.sensor.createEntity().addCollisionSensor("Boss").addLink(player.getCreationIndex()).addName("Boss")
-    @Shared SensorEntity collisionGround = entitas.sensor.createEntity().addCollisionSensor("Ground").addLink(player.getCreationIndex()).addName("Ground")
+    @Shared SensorEntity collisionEnemy = entitas.sensor.createEntity().addCollisionSensor("Boss").addLink("Boss", player.getCreationIndex())
+    @Shared SensorEntity collisionGround = entitas.sensor.createEntity().addCollisionSensor("Ground").addLink("Ground", player.getCreationIndex())
 
 
     void 'Detectar la colision de un elemento "objetivo" del escenario'() {            // 2
         given: 'un sensor de collision por defecto'                    // 3
-        SensorEntity collisionEnemy = entitas.sensor.createEntity().addCollisionSensor("Boss").addLink(player.getCreationIndex()).addName("Boss")
+        SensorEntity collisionEnemy = entitas.sensor.createEntity().addCollisionSensor("Boss").addLink("Boss",player.getCreationIndex())
 
         when: //'provocamos la colision con su objetivo'                          // 4
         //collisionSensorSystem.processCollision(player.getCreationIndex(), enemy.getCreationIndex(), true);

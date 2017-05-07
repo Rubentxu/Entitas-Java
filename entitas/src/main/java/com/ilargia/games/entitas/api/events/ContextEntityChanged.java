@@ -1,7 +1,7 @@
 package com.ilargia.games.entitas.api.events;
 
 import com.ilargia.games.entitas.api.IContext;
-import com.ilargia.games.entitas.api.IEntity;
+import com.ilargia.games.entitas.api.entitas.IEntity;
 
 @FunctionalInterface
 public interface ContextEntityChanged {

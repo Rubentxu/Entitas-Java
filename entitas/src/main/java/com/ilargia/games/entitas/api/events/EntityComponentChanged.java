@@ -2,7 +2,7 @@ package com.ilargia.games.entitas.api.events;
 
 
 import com.ilargia.games.entitas.api.IComponent;
-import com.ilargia.games.entitas.api.IEntity;
+import com.ilargia.games.entitas.api.entitas.IEntity;
 
 @FunctionalInterface
 public interface EntityComponentChanged<TEntity extends IEntity> {

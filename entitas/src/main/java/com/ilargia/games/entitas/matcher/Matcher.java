@@ -1,6 +1,6 @@
 package com.ilargia.games.entitas.matcher;
 
-import com.ilargia.games.entitas.api.IEntity;
+import com.ilargia.games.entitas.api.entitas.IEntity;
 import com.ilargia.games.entitas.api.matcher.IAllOfMatcher;
 import com.ilargia.games.entitas.api.matcher.IAnyOfMatcher;
 import com.ilargia.games.entitas.api.matcher.IMatcher;

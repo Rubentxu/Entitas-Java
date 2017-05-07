@@ -2,7 +2,7 @@ package com.ilargia.games.entitas.generated;
 
 import com.ilargia.games.entitas.Context;
 import com.ilargia.games.entitas.api.ContextInfo;
-import com.ilargia.games.entitas.api.EntityBaseFactory;
+import com.ilargia.games.entitas.api.entitas.EntityBaseFactory;
 
 /**
  * ---------------------------------------------------------------------------

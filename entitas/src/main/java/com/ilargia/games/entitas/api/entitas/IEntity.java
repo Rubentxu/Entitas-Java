@@ -1,9 +1,14 @@
-package com.ilargia.games.entitas.api;
+package com.ilargia.games.entitas.api.entitas;
+
+import com.ilargia.games.entitas.api.ContextInfo;
+import com.ilargia.games.entitas.api.IComponent;
 
 import java.util.Set;
 import java.util.Stack;
 
-public interface IEntity {
+public interface IEntity extends IAERC {
+
+    IAERC getAERC();
 
     int getTotalComponents();
 
@@ -15,7 +20,7 @@ public interface IEntity {
 
     ContextInfo contextInfo();
 
-    void initialize(int creationIndex, int totalComponents, Stack<IComponent>[] componentPools, ContextInfo contextInfo);
+    void initialize(int creationIndex, int totalComponents, Stack<IComponent>[] componentPools, ContextInfo contextInfo, IAERC aerc);
 
     void reactivate(int creationIndex);
 
@@ -45,8 +50,6 @@ public interface IEntity {
 
     <T> T createComponent(int index);
 
-    Set<Object> owners();
-
     int retainCount();
 
     void retain(Object owner);
@@ -54,6 +57,8 @@ public interface IEntity {
     void release(Object owner);
 
     void destroy();
+
+    void internalDestroy();
 
 
 }

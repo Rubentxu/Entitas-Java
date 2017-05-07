@@ -2,6 +2,8 @@ package com.ilargia.games.egdx.logicbricks.gen.actuator;
 
 import com.ilargia.games.entitas.api.*;
 import com.ilargia.games.egdx.logicbricks.component.actuator.DragActuator;
+import com.ilargia.games.entitas.api.entitas.EntitasException;
+import com.ilargia.games.entitas.api.entitas.EntityBaseFactory;
 
 /**
  * ---------------------------------------------------------------------------
@@ -15,7 +17,7 @@ public class ActuatorContext
 	public ActuatorContext(int totalComponents, int startCreationIndex,
 			ContextInfo contextInfo,
 			EntityBaseFactory<ActuatorEntity> factoryMethod) {
-		super(totalComponents, startCreationIndex, contextInfo, factoryMethod);
+		super(totalComponents, startCreationIndex, contextInfo, factoryMethod,null);
 	}
 
 	public ActuatorEntity getDragActuatorEntity() {

@@ -1,21 +1,14 @@
 package com.ilargia.games.egdx.logicbricks.gen.sensor;
 
-import com.ilargia.games.entitas.api.*;
 import com.ilargia.games.entitas.Entity;
-import java.util.Stack;
 import com.ilargia.games.egdx.logicbricks.component.sensor.AlwaysSensor;
-import com.ilargia.games.entitas.api.IComponent;
 import com.ilargia.games.egdx.logicbricks.component.sensor.CollisionSensor;
-import com.badlogic.gdx.physics.box2d.Contact;
-import com.ilargia.games.entitas.api.IEntity;
 import com.ilargia.games.entitas.factories.EntitasCollections;
-import java.util.Set;
 import com.ilargia.games.egdx.logicbricks.component.sensor.DelaySensor;
 import com.ilargia.games.egdx.logicbricks.component.sensor.Frequency;
 import com.ilargia.games.egdx.logicbricks.component.sensor.Link;
 import com.ilargia.games.egdx.logicbricks.component.sensor.Mode;
 import com.ilargia.games.egdx.logicbricks.component.sensor.MouseWheelSensor;
-import com.badlogic.gdx.math.Vector2;
 import com.ilargia.games.egdx.logicbricks.component.sensor.NearSensor;
 import com.ilargia.games.egdx.logicbricks.component.sensor.PointerOverSensor;
 import com.ilargia.games.egdx.logicbricks.component.sensor.RadarSensor;

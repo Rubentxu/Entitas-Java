@@ -1,6 +1,6 @@
 package com.ilargia.games.entitas.api.matcher;
 
-import com.ilargia.games.entitas.api.IEntity;
+import com.ilargia.games.entitas.api.entitas.IEntity;
 
 public interface IAllOfMatcher<TEntity extends IEntity> extends IAnyOfMatcher<TEntity> {
 

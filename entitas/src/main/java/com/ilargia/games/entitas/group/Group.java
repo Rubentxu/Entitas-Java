@@ -1,13 +1,13 @@
 package com.ilargia.games.entitas.group;
 
-import com.ilargia.games.entitas.Entity;
 import com.ilargia.games.entitas.api.IComponent;
-import com.ilargia.games.entitas.api.IEntity;
+import com.ilargia.games.entitas.api.entitas.IEntity;
 import com.ilargia.games.entitas.api.IGroup;
 import com.ilargia.games.entitas.api.events.GroupChanged;
 import com.ilargia.games.entitas.api.events.GroupUpdated;
 import com.ilargia.games.entitas.api.matcher.IMatcher;
 import com.ilargia.games.entitas.collector.Collector;
+import com.ilargia.games.entitas.collector.ICollector;
 import com.ilargia.games.entitas.exceptions.GroupSingleEntityException;
 import com.ilargia.games.entitas.factories.EntitasCollections;
 
@@ -33,7 +33,7 @@ public class Group<TEntity extends IEntity> implements IGroup<TEntity> {
 
     }
 
-    public Collector<TEntity> createCollector(GroupEvent groupEvent) {
+    public ICollector<TEntity> createCollector(GroupEvent groupEvent) {
         return new Collector<TEntity>(this, groupEvent);
     }
 

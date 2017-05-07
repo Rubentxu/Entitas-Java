@@ -1,6 +1,10 @@
 package com.ilargia.games.entitas;
 
 import com.ilargia.games.entitas.api.*;
+import com.ilargia.games.entitas.api.entitas.EntityBaseFactory;
+import com.ilargia.games.entitas.api.entitas.IAERC;
+import com.ilargia.games.entitas.api.entitas.IEntity;
+import com.ilargia.games.entitas.api.entitas.IEntityIndex;
 import com.ilargia.games.entitas.api.events.*;
 import com.ilargia.games.entitas.api.matcher.IMatcher;
 import com.ilargia.games.entitas.caching.EntitasCache;
@@ -9,9 +13,11 @@ import com.ilargia.games.entitas.group.GroupEvent;
 import com.ilargia.games.entitas.exceptions.*;
 import com.ilargia.games.entitas.factories.EntitasCollections;
 import com.ilargia.games.entitas.group.Group;
+import com.ilargia.games.entitas.index.AbstractEntityIndex;
 
 import java.lang.reflect.Array;
 import java.util.*;
+import java.util.function.Function;
 
 public class Context<TEntity extends Entity> implements IContext<TEntity> {
 
@@ -27,8 +33,8 @@ public class Context<TEntity extends Entity> implements IContext<TEntity> {
     protected List<Group<TEntity>>[] _groupsForIndex; // ObjectArrayList
     protected EntityComponentChanged<TEntity> _cachedEntityChanged;
     protected EntityComponentReplaced<TEntity> _cachedComponentReplaced;
-    protected EntityReleased<TEntity> _cachedEntityReleased;
-    private UUID id = UUID.randomUUID();
+    protected EntityEvent<TEntity> _cachedEntityReleased;
+    protected EntityEvent<TEntity> _cachedDestroyEntity;
     private int _creationIndex;
     private Set<TEntity> _entities; //ObjectOpenHashSet
     private Stack<TEntity> _reusableEntities;
@@ -38,10 +44,11 @@ public class Context<TEntity extends Entity> implements IContext<TEntity> {
     private EntityBaseFactory<TEntity> _factoryEntiy;
     private ContextInfo _contextInfo;
     private Stack<IComponent>[] _componentPools;
+    private Function<TEntity, IAERC> _aercFactory;
 
 
     public Context(int totalComponents, int startCreationIndex, ContextInfo contexInfo,
-                   EntityBaseFactory<TEntity> factoryMethod) {
+                   EntityBaseFactory<TEntity> factoryMethod, Function<TEntity, IAERC> aercFactory) {
         _totalComponents = totalComponents;
         _creationIndex = startCreationIndex;
         _factoryEntiy = factoryMethod;
@@ -55,6 +62,8 @@ public class Context<TEntity extends Entity> implements IContext<TEntity> {
         } else {
             _contextInfo = createDefaultContextInfo();
         }
+
+        _aercFactory = aercFactory == null? (entity)-> new SafeAERC(entity) : aercFactory;
 
         _groupsForIndex = new List[_totalComponents];
         _componentPools = new Stack[totalComponents];
@@ -75,6 +84,10 @@ public class Context<TEntity extends Entity> implements IContext<TEntity> {
 
         _cachedEntityReleased = (final TEntity e) -> {
             onEntityReleased(e);
+        };
+
+        _cachedDestroyEntity = (final TEntity e) -> {
+            onDestroyEntity(e);
         };
         entityType = (Class<TEntity>) _factoryEntiy.create().getClass();
 
@@ -99,7 +112,7 @@ public class Context<TEntity extends Entity> implements IContext<TEntity> {
             ent.reactivate(_creationIndex++);
         } else {
             ent = _factoryEntiy.create();
-            ent.initialize(_creationIndex++, _totalComponents, _componentPools, _contextInfo);
+            ent.initialize(_creationIndex++, _totalComponents, _componentPools, _contextInfo, _aercFactory.apply(ent));
         }
 
         _entities.add((TEntity) ent);
@@ -110,11 +123,14 @@ public class Context<TEntity extends Entity> implements IContext<TEntity> {
         entity.OnComponentRemoved(_cachedEntityChanged);
         entity.OnComponentReplaced(_cachedComponentReplaced);
         entity.OnEntityReleased(_cachedEntityReleased);
+        entity.OnDestroyEntity(_cachedDestroyEntity);
+
         notifyEntityCreated(ent);
 
         return ent;
 
     }
+
 
     @Override
     public void destroyEntity(TEntity entity) {
@@ -125,7 +141,7 @@ public class Context<TEntity extends Entity> implements IContext<TEntity> {
         _entitiesCache = null;
         notifyEntityWillBeDestroyed(entity);
 
-        entity.destroy();
+        entity.internalDestroy();
 
         notifyEntityDestroyed(entity);
 
@@ -145,7 +161,7 @@ public class Context<TEntity extends Entity> implements IContext<TEntity> {
     @Override
     public void destroyAllEntities() {
         for (TEntity entity : getEntities()) {
-            destroyEntity(entity);
+            entity.destroy();
         }
         _entities.clear();
 
@@ -311,6 +327,10 @@ public class Context<TEntity extends Entity> implements IContext<TEntity> {
         entity.removeAllOnEntityReleasedHandlers();
         _retainedEntities.remove(entity);
         _reusableEntities.push(entity);
+    }
+
+    void onDestroyEntity(IEntity entity) {
+        destroyEntity((TEntity)entity);
     }
 
     @Override

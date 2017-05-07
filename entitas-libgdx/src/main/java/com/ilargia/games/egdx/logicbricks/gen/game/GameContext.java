@@ -1,6 +1,7 @@
 package com.ilargia.games.egdx.logicbricks.gen.game;
 
 import com.ilargia.games.entitas.api.*;
+import com.ilargia.games.entitas.api.entitas.EntityBaseFactory;
 
 /**
  * ---------------------------------------------------------------------------
@@ -11,6 +12,6 @@ public class GameContext extends com.ilargia.games.entitas.Context<GameEntity> {
 
 	public GameContext(int totalComponents, int startCreationIndex,
 			ContextInfo contextInfo, EntityBaseFactory<GameEntity> factoryMethod) {
-		super(totalComponents, startCreationIndex, contextInfo, factoryMethod);
+		super(totalComponents, startCreationIndex, contextInfo, factoryMethod, null);
 	}
 }

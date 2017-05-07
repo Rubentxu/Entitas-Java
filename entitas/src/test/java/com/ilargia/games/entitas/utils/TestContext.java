@@ -1,7 +1,7 @@
 package com.ilargia.games.entitas.utils;
 
 import com.ilargia.games.entitas.api.ContextInfo;
-import com.ilargia.games.entitas.api.EntityBaseFactory;
+import com.ilargia.games.entitas.api.entitas.EntityBaseFactory;
 
 /**
  * ---------------------------------------------------------------------------
@@ -12,7 +12,7 @@ public class TestContext extends com.ilargia.games.entitas.Context<TestEntity> {
 
     public TestContext(int totalComponents, int startCreationIndex,
                        ContextInfo contextInfo, EntityBaseFactory<TestEntity> factoryMethod) {
-        super(totalComponents, startCreationIndex, contextInfo, factoryMethod);
+        super(totalComponents, startCreationIndex, contextInfo, factoryMethod, null);
     }
 
     public TestEntity getPlayerEntity() {

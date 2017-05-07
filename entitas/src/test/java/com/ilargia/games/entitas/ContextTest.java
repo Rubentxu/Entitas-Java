@@ -1,10 +1,10 @@
 package com.ilargia.games.entitas;
 
 import com.ilargia.games.entitas.api.ContextInfo;
-import com.ilargia.games.entitas.api.EntityBaseFactory;
+import com.ilargia.games.entitas.api.entitas.EntityBaseFactory;
 import com.ilargia.games.entitas.api.IComponent;
 import com.ilargia.games.entitas.api.IContext;
-import com.ilargia.games.entitas.api.IEntity;
+import com.ilargia.games.entitas.api.entitas.IEntity;
 import com.ilargia.games.entitas.api.IGroup;
 import com.ilargia.games.entitas.collector.Collector;
 import com.ilargia.games.entitas.components.Position;
@@ -16,7 +16,6 @@ import com.ilargia.games.entitas.factories.CollectionsFactories;
 import com.ilargia.games.entitas.factories.EntitasCollections;
 import com.ilargia.games.entitas.group.Group;
 import com.ilargia.games.entitas.index.PrimaryEntityIndex;
-import com.ilargia.games.entitas.index.ReactivePrimaryEntityIndex;
 import com.ilargia.games.entitas.utils.TestComponentIds;
 import com.ilargia.games.entitas.utils.TestContext;
 import com.ilargia.games.entitas.utils.TestEntity;
@@ -130,15 +129,14 @@ public class ContextTest {
     @Test(expected = ContextStillHasRetainedEntitiesException.class)
     public void PoolStillHasRetainedEntitiesExceptionTest() {
         entity.retain(new Object());
+        context.destroyEntity(entity);
         context.destroyAllEntities();
-
-
     }
 
     @Test(expected = ContextDoesNotContainEntityException.class)
     public void entityIsNotRetainedByOwnerExceptionTest() {
         TestEntity entity2 = new TestEntity();
-        entity2.initialize(0, 100, null, null);
+        entity2.initialize(0, 100, null, null, null);
         context.destroyEntity(entity2);
 
     }
@@ -177,9 +175,9 @@ public class ContextTest {
     public void entityIndexTest() {
         entity.addComponent(TestComponentIds.Position, new Position());
         Group group = context.getGroup(TestMatcher.Position());
-        ReactivePrimaryEntityIndex<Entity, String> index = new ReactivePrimaryEntityIndex((e, c) -> "positionEntities", group);
+        PrimaryEntityIndex<Entity, String> index = new PrimaryEntityIndex("", (e, c) -> "positionEntities", group);
         context.addEntityIndex("positions", index);
-        index = (ReactivePrimaryEntityIndex<Entity, String>) context.getEntityIndex("positions");
+        index = (PrimaryEntityIndex<Entity, String>) context.getEntityIndex("positions");
         assertNotNull(index);
         assertNotNull(index.getEntity("positionEntities"));
 
@@ -189,7 +187,7 @@ public class ContextTest {
     public void duplicateEntityIndexTest() {
         entity.addComponent(TestComponentIds.Position, new Position());
         Group group = context.getGroup(TestMatcher.Position());
-        ReactivePrimaryEntityIndex<Entity, String> index = new ReactivePrimaryEntityIndex(group, (e, c) -> new String [] {"positionEntities"});
+        PrimaryEntityIndex<Entity, String> index = new PrimaryEntityIndex("", group, (e, c) -> new String [] {"positionEntities"});
         context.addEntityIndex("duplicate", index);
         context.addEntityIndex("duplicate", index);
 
@@ -200,11 +198,11 @@ public class ContextTest {
     public void deactivateAndRemoveEntityIndicesTest() {
         entity.addComponent(TestComponentIds.Position, new Position());
         Group group = context.getGroup(TestMatcher.Position());
-        ReactivePrimaryEntityIndex<Entity, String> index = new ReactivePrimaryEntityIndex((e, c) -> new String[] {"positionEntities"}, group);
+        PrimaryEntityIndex<Entity, String> index = new PrimaryEntityIndex("", (e, c) -> new String[] {"positionEntities"}, group);
         context.addEntityIndex("positions", index);
 
         context.deactivateAndRemoveEntityIndices();
-        index = (ReactivePrimaryEntityIndex<Entity, String>) context.getEntityIndex("positions");
+        index = (PrimaryEntityIndex<Entity, String>) context.getEntityIndex("positions");
 
 
     }

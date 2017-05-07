@@ -1,8 +1,8 @@
 package com.ilargia.games.entitas.codeGenerator.generated;
 
-import java.util.Stack;
 import com.ilargia.games.entitas.Context;
 import com.ilargia.games.entitas.api.*;
+import com.ilargia.games.entitas.api.entitas.EntityBaseFactory;
 
 /**
  * ---------------------------------------------------------------------------

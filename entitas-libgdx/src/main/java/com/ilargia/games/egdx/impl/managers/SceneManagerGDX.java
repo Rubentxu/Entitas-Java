@@ -16,7 +16,7 @@ import com.ilargia.games.egdx.logicbricks.component.scene.CPointLight;
 import com.ilargia.games.egdx.logicbricks.gen.Entitas;
 import com.ilargia.games.egdx.util.MapEntityParser;
 import com.ilargia.games.entitas.Entity;
-import com.ilargia.games.entitas.api.EntitasException;
+import com.ilargia.games.entitas.api.entitas.EntitasException;
 import com.ilargia.games.entitas.api.IComponent;
 import com.ilargia.games.entitas.factories.EntitasCollections;
 

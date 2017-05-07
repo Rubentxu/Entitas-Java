@@ -1,4 +1,4 @@
-package com.ilargia.games.entitas.interfaces;
+package com.ilargia.games.entitas.api.system;
 
 import com.ilargia.games.entitas.matcher.TriggerOnEvent;
 

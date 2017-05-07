@@ -2,20 +2,40 @@ package com.ilargia.games.entitas.index;
 
 
 import com.ilargia.games.entitas.Entity;
-import com.ilargia.games.entitas.api.*;
-import com.ilargia.games.entitas.exceptions.EntityIndexException;
+import com.ilargia.games.entitas.SafeAERC;
+import com.ilargia.games.entitas.api.IComponent;
+import com.ilargia.games.entitas.api.entitas.IEntity;
+import com.ilargia.games.entitas.api.IGroup;
 import com.ilargia.games.entitas.factories.EntitasCollections;
 
 import java.util.Map;
 import java.util.Set;
 
-public class EntityIndex<TEntity extends Entity, TKey> implements IEntityIndex {
+public class EntityIndex<TEntity extends Entity, TKey> extends AbstractEntityIndex<TEntity, TKey> {
 
     private Map<TKey, Set<TEntity>> _index; // Object2ObjectArrayMap<ObjectOpenHashSet
 
-    public EntityIndex() {
+    public EntityIndex(String name, Func<TEntity, IComponent, TKey> key, IGroup<TEntity> group) {
+        super(name, key, group);
         _index = EntitasCollections.createMap(Object.class, Entity.class); //Object2ObjectArrayMap
+        activate();
+    }
 
+    public EntityIndex(String name, IGroup<TEntity> group, Func<TEntity, IComponent, TKey[]> keys)  {
+        super(name, group, keys);
+        _index = EntitasCollections.createMap(Object.class, Entity.class); //Object2ObjectArrayMap
+        activate();
+    }
+
+    @Override
+    public String getName() {
+        return null;
+    }
+
+    @Override
+    public void activate() {
+        super.activate();
+        indexEntities(_group);
     }
 
     public Set<TEntity> getEntities(TKey key) {
@@ -28,35 +48,49 @@ public class EntityIndex<TEntity extends Entity, TKey> implements IEntityIndex {
 
     }
 
-    public void addEntity(TKey tKey, TEntity entity) {
-        getEntities(tKey).add(entity);
-        if(!entity.owners().contains(this)) {
-            entity.retain(this);
-        }
-    }
-
-    public void removeEntity(TKey tKey, TEntity entity) {
-        getEntities(tKey).remove(entity);
-        if(entity.owners().contains(this)) {
-            entity.release(this);
-        }
-    }
-
     @Override
-    public void activate() {
-
-    }
-
-    @Override
-    public void deactivate() {
+    public void clear() {
         for (Set<TEntity> entities : _index.values()) {
             for (IEntity entity : entities) {
-                if(entity.owners().contains(this)) {
+                SafeAERC safeAerc = (SafeAERC) entity.getAERC() ;
+                if (safeAerc != null) {
+                    if (safeAerc.owners().contains(this)) {
+                        entity.release(this);
+                    }
+                } else {
                     entity.release(this);
                 }
             }
         }
         _index.clear();
+
+    }
+
+    @Override
+    public void addEntity(TKey tKey, TEntity entity) {
+        getEntities(tKey).add(entity);
+        SafeAERC safeAerc = (SafeAERC) entity.getAERC() ;
+        if (safeAerc != null) {
+            if (!safeAerc.owners().contains(this)) {
+                entity.retain(this);
+            }
+        } else {
+            entity.retain(this);
+        }
+
+    }
+
+    @Override
+    public void removeEntity(TKey tKey, TEntity entity) {
+        getEntities(tKey).remove(entity);
+        SafeAERC safeAerc = (SafeAERC) entity.getAERC() ;
+        if (safeAerc != null) {
+            if (safeAerc.owners().contains(this)) {
+                entity.release(this);
+            }
+        } else {
+            entity.release(this);
+        }
     }
 
 }

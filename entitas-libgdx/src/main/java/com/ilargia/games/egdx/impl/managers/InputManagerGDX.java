@@ -19,7 +19,7 @@ import com.ilargia.games.egdx.logicbricks.component.actuator.DragActuator;
 import com.ilargia.games.egdx.logicbricks.gen.Entitas;
 import com.ilargia.games.egdx.logicbricks.gen.game.GameEntity;
 import com.ilargia.games.egdx.logicbricks.index.Indexed;
-import com.ilargia.games.entitas.api.EntitasException;
+import com.ilargia.games.entitas.api.entitas.EntitasException;
 import com.ilargia.games.entitas.factories.EntitasCollections;
 
 import java.util.List;

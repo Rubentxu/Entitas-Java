@@ -8,6 +8,8 @@ import com.ilargia.games.egdx.logicbricks.component.scene.GUI;
 import com.badlogic.gdx.graphics.Color;
 import com.ilargia.games.egdx.logicbricks.component.scene.GameWorld;
 import com.ilargia.games.egdx.logicbricks.component.scene.Tiled;
+import com.ilargia.games.entitas.api.entitas.EntitasException;
+import com.ilargia.games.entitas.api.entitas.EntityBaseFactory;
 
 /**
  * ---------------------------------------------------------------------------
@@ -21,7 +23,7 @@ public class SceneContext
 	public SceneContext(int totalComponents, int startCreationIndex,
 			ContextInfo contextInfo,
 			EntityBaseFactory<SceneEntity> factoryMethod) {
-		super(totalComponents, startCreationIndex, contextInfo, factoryMethod);
+		super(totalComponents, startCreationIndex, contextInfo, factoryMethod, null);
 	}
 
 	public SceneEntity getCameraEntity() {

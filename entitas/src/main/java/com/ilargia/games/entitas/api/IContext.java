@@ -1,6 +1,8 @@
 package com.ilargia.games.entitas.api;
 
 
+import com.ilargia.games.entitas.api.entitas.IEntity;
+import com.ilargia.games.entitas.api.entitas.IEntityIndex;
 import com.ilargia.games.entitas.api.matcher.IMatcher;
 import com.ilargia.games.entitas.collector.Collector;
 import com.ilargia.games.entitas.group.GroupEvent;
@@ -11,6 +13,7 @@ public interface IContext<TEntity extends IEntity> {
 
     TEntity createEntity();
 
+    @Deprecated
     void destroyEntity(TEntity entity);
 
     boolean hasEntity(TEntity entity);

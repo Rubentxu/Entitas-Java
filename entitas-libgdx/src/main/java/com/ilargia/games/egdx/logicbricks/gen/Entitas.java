@@ -17,6 +17,7 @@ import com.ilargia.games.egdx.logicbricks.gen.gui.GuiContext;
 import com.ilargia.games.egdx.logicbricks.gen.scene.SceneContext;
 import com.ilargia.games.egdx.logicbricks.gen.sensor.SensorContext;
 import com.ilargia.games.egdx.logicbricks.gen.actuator.ActuatorContext;
+import com.ilargia.games.entitas.api.entitas.EntityBaseFactory;
 
 /**
  * ---------------------------------------------------------------------------

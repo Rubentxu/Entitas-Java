@@ -41,7 +41,7 @@ public class GroupTest {
 
         entity = new TestEntity();
         entity.initialize(0,10, new Stack[10], new ContextInfo("Test", TestComponentIds.componentNames(),
-                TestComponentIds.componentTypes()));
+                TestComponentIds.componentTypes()), null);
         entity.clearEventsListener();
         entity.reactivate(0);
         entity.addComponent(TestComponentIds.Position, new Position(100, 100));

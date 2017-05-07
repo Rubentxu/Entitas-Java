@@ -2,6 +2,8 @@ package com.ilargia.games.egdx.logicbricks.gen.gui;
 
 import com.ilargia.games.entitas.api.*;
 import com.ilargia.games.egdx.logicbricks.component.gui.Score;
+import com.ilargia.games.entitas.api.entitas.EntitasException;
+import com.ilargia.games.entitas.api.entitas.EntityBaseFactory;
 
 /**
  * ---------------------------------------------------------------------------
@@ -12,7 +14,7 @@ public class GuiContext extends com.ilargia.games.entitas.Context<GuiEntity> {
 
 	public GuiContext(int totalComponents, int startCreationIndex,
 			ContextInfo contextInfo, EntityBaseFactory<GuiEntity> factoryMethod) {
-		super(totalComponents, startCreationIndex, contextInfo, factoryMethod);
+		super(totalComponents, startCreationIndex, contextInfo, factoryMethod, null);
 	}
 
 	public GuiEntity getScoreEntity() {

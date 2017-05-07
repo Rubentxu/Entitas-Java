@@ -1,6 +1,7 @@
 package com.ilargia.games.entitas.codeGenerator.generated;
 
 import com.ilargia.games.entitas.api.*;
+import com.ilargia.games.entitas.api.entitas.EntityBaseFactory;
 
 /**
  * ---------------------------------------------------------------------------
@@ -11,6 +12,6 @@ public class OtroContext extends com.ilargia.games.entitas.Context<OtroEntity> {
 
 	public OtroContext(int totalComponents, int startCreationIndex,
 			ContextInfo contextInfo, EntityBaseFactory<OtroEntity> factoryMethod) {
-		super(totalComponents, startCreationIndex, contextInfo, factoryMethod);
+		super(totalComponents, startCreationIndex, contextInfo, factoryMethod, null);
 	}
 }
