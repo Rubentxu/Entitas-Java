@@ -163,13 +163,6 @@ public class ContextTest {
         assertEquals(1, group.getEntities().length);
     }
 
-    @Test
-    public void clearGroupsTest() {
-        entity.addComponent(TestComponentIds.Position, new Position());
-        Group group = context.getGroup(TestMatcher.Position());
-        context.clearGroups();
-
-    }
 
     @Test
     public void entityIndexTest() {
@@ -190,20 +183,6 @@ public class ContextTest {
         PrimaryEntityIndex<Entity, String> index = new PrimaryEntityIndex("", group, (e, c) -> new String [] {"positionEntities"});
         context.addEntityIndex("duplicate", index);
         context.addEntityIndex("duplicate", index);
-
-    }
-
-
-    @Test(expected = ContextEntityIndexDoesNotExistException.class)
-    public void deactivateAndRemoveEntityIndicesTest() {
-        entity.addComponent(TestComponentIds.Position, new Position());
-        Group group = context.getGroup(TestMatcher.Position());
-        PrimaryEntityIndex<Entity, String> index = new PrimaryEntityIndex("", (e, c) -> new String[] {"positionEntities"}, group);
-        context.addEntityIndex("positions", index);
-
-        context.deactivateAndRemoveEntityIndices();
-        index = (PrimaryEntityIndex<Entity, String>) context.getEntityIndex("positions");
-
 
     }
 
