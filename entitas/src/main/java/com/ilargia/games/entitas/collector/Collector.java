@@ -14,12 +14,12 @@ import java.util.Set;
 
 public class Collector<TEntity extends IEntity> implements ICollector{
 
-    public Set<TEntity> _collectedEntities; //ObjectOpenHashSet
+    private Set<TEntity> _collectedEntities; //ObjectOpenHashSet
+    private IGroup<TEntity>[] _groups;
+    private GroupEvent[] _groupEvents;
     GroupChanged<TEntity> _addEntityCache;
     String _toStringCache;
     StringBuilder _toStringBuilder;
-    private IGroup<TEntity>[] _groups;
-    private GroupEvent[] _groupEvents;
 
 
     public Collector(IGroup<TEntity> group, GroupEvent eventType) {
@@ -43,6 +43,11 @@ public class Collector<TEntity extends IEntity> implements ICollector{
             addEntity(group, entity, index, component);
         };
         activate();
+    }
+
+    @Override
+    public Set collectedEntities() {
+        return _collectedEntities;
     }
 
     @Override
@@ -89,11 +94,6 @@ public class Collector<TEntity extends IEntity> implements ICollector{
         }
         _collectedEntities.clear();
 
-    }
-
-    @Override
-    public Set collectedEntities() {
-        return _collectedEntities;
     }
 
     void addEntity(IGroup<TEntity> group, TEntity entity, int index, IComponent component) {

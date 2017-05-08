@@ -13,7 +13,7 @@ import com.ilargia.games.entitas.group.GroupEvent;
 import com.ilargia.games.entitas.exceptions.*;
 import com.ilargia.games.entitas.factories.EntitasCollections;
 import com.ilargia.games.entitas.group.Group;
-import com.ilargia.games.entitas.index.AbstractEntityIndex;
+import com.ilargia.games.entitas.collector.TriggerOnEvent;
 
 import java.lang.reflect.Array;
 import java.util.*;
@@ -28,7 +28,7 @@ public class Context<TEntity extends Entity> implements IContext<TEntity> {
     public Set<ContextEntityChanged> OnEntityWillBeDestroyed = EntitasCollections.createSet(ContextEntityChanged.class);
     public Set<ContextEntityChanged> OnEntityDestroyed = EntitasCollections.createSet(ContextEntityChanged.class);
     public Set<ContextGroupChanged> OnGroupCreated = EntitasCollections.createSet(ContextGroupChanged.class);
-    public Set<ContextGroupChanged> OnGroupCleared = EntitasCollections.createSet(ContextGroupChanged.class);
+
     protected Map<IMatcher, Group<TEntity>> _groups; //Object2ObjectArrayMap
     protected List<Group<TEntity>>[] _groupsForIndex; // ObjectArrayList
     protected EntityComponentChanged<TEntity> _cachedEntityChanged;
@@ -194,7 +194,6 @@ public class Context<TEntity extends Entity> implements IContext<TEntity> {
     @Override
     public Group<TEntity> getGroup(IMatcher matcher) {
 
-
         if (!_groups.containsKey(matcher)) {
             Group<TEntity> group = new Group(matcher, entityType);
             for (TEntity entity : getEntities()) {
@@ -216,22 +215,6 @@ public class Context<TEntity extends Entity> implements IContext<TEntity> {
     }
 
     @Override
-    public void clearGroups() {
-        for (Group<TEntity> group : _groups.values()) {
-            group.removeAllEventHandlers();
-            for (IEntity entity : group.getEntities()) {
-                entity.release(group);
-            }
-            notifyGroupCleared(group);
-        }
-        _groups.clear();
-
-        for (int i = 0; i < _groupsForIndex.length; i++) {
-            _groupsForIndex[i] = null;
-        }
-    }
-
-    @Override
     public void addEntityIndex(String name, IEntityIndex entityIndex) {
         if (_entityIndices.containsKey(name)) {
             throw new ContextEntityIndexDoesAlreadyExistException(this, name);
@@ -249,13 +232,6 @@ public class Context<TEntity extends Entity> implements IContext<TEntity> {
 
     }
 
-    @Override
-    public void deactivateAndRemoveEntityIndices() {
-        for (IEntityIndex entityIndex : _entityIndices.values()) {
-            entityIndex.deactivate();
-        }
-        _entityIndices.clear();
-    }
 
     @Override
     public void resetCreationIndex() {
@@ -279,7 +255,6 @@ public class Context<TEntity extends Entity> implements IContext<TEntity> {
 
     @Override
     public void reset() {
-        clearGroups();
         destroyAllEntities();
         resetCreationIndex();
         clearEventsListener();
@@ -374,30 +349,28 @@ public class Context<TEntity extends Entity> implements IContext<TEntity> {
         return new Collector(getGroup(matcher), groupEvent);
     }
 
-//    @Override
-//    public Collector createEntityCollector(Context[] contexts, IMatcher matcher) {
-//        return createEntityCollector(contexts, matcher, GroupEvent.Added);
+
+//    public Collector createCollector(Context context, IMatcher matcher) {
+//        return context.createCollector()llector(new TriggerOnEvent(matcher, GroupEvent.Added));
 //    }
-//
-//    @Override
-//    public Collector createEntityCollector(Context[] contexts, IMatcher matcher, GroupEvent eventType) {
-//        Group[] groups = new Group[contexts.length];
-//        GroupEvent[] eventTypes = new GroupEvent[contexts.length];
-//
-//        for (int i = 0; i < contexts.length; i++) {
-//            groups[i] = contexts[i].getGroup(matcher);
-//            eventTypes[i] = eventType;
-//        }
-//
-//        return new Collector(groups, eventTypes);
-//    }
+
+
+    public Collector<TEntity> createCollector(Context context, TriggerOnEvent<TEntity>[] triggers) {
+        Group[] groups = new Group[triggers.length];
+        GroupEvent[] groupEvents = new GroupEvent[triggers.length];
+
+        for (int i = 0; i < triggers.length; i++) {
+            groups[i] = context.getGroup(triggers[i].matcher);
+            groupEvents[i] = triggers[i].groupEvent;
+        }
+        return new Collector(groups, groupEvents);
+    }
 
     public void clearEventsListener() {
         if (OnEntityCreated != null) OnEntityCreated.clear();
         if (OnEntityWillBeDestroyed != null) OnEntityWillBeDestroyed.clear();
         if (OnEntityDestroyed != null) OnEntityDestroyed.clear();
         if (OnGroupCreated != null) OnGroupCreated.clear();
-        if (OnGroupCleared != null) OnGroupCleared.clear();
 
     }
 
@@ -429,12 +402,6 @@ public class Context<TEntity extends Entity> implements IContext<TEntity> {
         OnGroupCreated.add(listener);
     }
 
-    public void OnGroupCleared(ContextGroupChanged listener) {
-        if (OnGroupCleared != null) {
-            OnGroupCleared = EntitasCollections.createSet(ContextGroupChanged.class);
-        }
-        OnGroupCleared.add(listener);
-    }
 
     public void notifyEntityCreated(IEntity entity) {
         if (OnEntityCreated != null) {
@@ -471,14 +438,6 @@ public class Context<TEntity extends Entity> implements IContext<TEntity> {
         }
     }
 
-
-    public void notifyGroupCleared(IGroup group) {
-        if (OnGroupCleared != null) {
-            for (ContextGroupChanged listener : OnGroupCleared) {
-                listener.changed(this, group);
-            }
-        }
-    }
 
 //    @Override
 //    public boolean equals(Object o) {

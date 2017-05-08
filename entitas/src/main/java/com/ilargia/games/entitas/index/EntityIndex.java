@@ -28,11 +28,6 @@ public class EntityIndex<TEntity extends Entity, TKey> extends AbstractEntityInd
     }
 
     @Override
-    public String getName() {
-        return null;
-    }
-
-    @Override
     public void activate() {
         super.activate();
         indexEntities(_group);

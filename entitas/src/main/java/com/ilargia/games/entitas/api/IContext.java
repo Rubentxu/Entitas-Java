@@ -36,13 +36,9 @@ public interface IContext<TEntity extends IEntity> {
 
     void destroyAllEntities();
 
-    void clearGroups();
-
     void addEntityIndex(String name, IEntityIndex entityIndex);
 
     IEntityIndex getEntityIndex(String name);
-
-    void deactivateAndRemoveEntityIndices();
 
     void resetCreationIndex();
 
@@ -58,7 +54,7 @@ public interface IContext<TEntity extends IEntity> {
 
 //    Collector createEntityCollector(Context[] contexts, IMatcher matcher);
 //
-//    Collector createEntityCollector(Context[] contexts, IMatcher matcher, GroupEvent eventType);
+//    Collector createEntityCollector(Context[] contexts, IMatcher matcher, GroupEvent groupEvent);
 
 
 }

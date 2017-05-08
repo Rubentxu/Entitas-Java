@@ -8,8 +8,6 @@ import java.util.Stack;
 
 public interface IEntity extends IAERC {
 
-    IAERC getAERC();
-
     int getTotalComponents();
 
     int getCreationIndex();
@@ -19,6 +17,8 @@ public interface IEntity extends IAERC {
     Stack<IComponent>[] componentPools();
 
     ContextInfo contextInfo();
+
+    IAERC getAERC();
 
     void initialize(int creationIndex, int totalComponents, Stack<IComponent>[] componentPools, ContextInfo contextInfo, IAERC aerc);
 
@@ -50,15 +50,11 @@ public interface IEntity extends IAERC {
 
     <T> T createComponent(int index);
 
-    int retainCount();
-
-    void retain(Object owner);
-
-    void release(Object owner);
-
     void destroy();
 
     void internalDestroy();
+
+    void removeAllOnEntityReleasedHandlers();
 
 
 }

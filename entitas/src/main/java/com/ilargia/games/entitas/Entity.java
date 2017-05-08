@@ -28,13 +28,15 @@ public class Entity implements IEntity {
 
     private int _creationIndex;
     private boolean _isEnabled;
+    private int _totalComponents;
     private IComponent[] _components;
     private Stack<IComponent>[] _componentPools;
-    private IComponent[] _componentsCache;
-    private int[] _componentIndicesCache;
-    private int _totalComponents;
     private ContextInfo _contextInfo;
     private IAERC aerc;
+
+    private IComponent[] _componentsCache;
+    private int[] _componentIndicesCache;
+
 
     @Override
     public IAERC getAERC() {
@@ -58,7 +60,7 @@ public class Entity implements IEntity {
 
     @Override
     public Stack<IComponent>[] componentPools() {
-        return new Stack[0];
+        return _componentPools;
     }
 
     @Override
@@ -338,8 +340,8 @@ public class Entity implements IEntity {
 
     @Override
     public void internalDestroy() {
-        removeAllComponents();
         _isEnabled = false;
+        removeAllComponents();
         clearEventsListener();
     }
 
