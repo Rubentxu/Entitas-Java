@@ -340,9 +340,9 @@ public class Entity implements IEntity {
 
     @Override
     public void internalDestroy() {
-        _isEnabled = false;
         removeAllComponents();
         clearEventsListener();
+        _isEnabled = false;
     }
 
     public void clearEventsListener() {
