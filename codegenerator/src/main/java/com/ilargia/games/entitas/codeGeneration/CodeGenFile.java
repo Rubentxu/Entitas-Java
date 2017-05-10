@@ -1,4 +1,4 @@
-package com.ilargia.games.entitas.codeGenerator.intermediate;
+package com.ilargia.games.entitas.codeGeneration;
 
 import org.jboss.forge.roaster.model.source.JavaClassSource;
 

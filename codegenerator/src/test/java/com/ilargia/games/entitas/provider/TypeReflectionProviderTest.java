@@ -1,6 +1,6 @@
 package com.ilargia.games.entitas.provider;
 
-import com.ilargia.games.entitas.codeGenerator.intermediate.ComponentInfo;
+import com.ilargia.games.entitas.codeGenerator.data.ComponentInfo;
 import com.ilargia.games.entitas.codeGenerator.providers.TypeReflectionProvider;
 import org.junit.Before;
 import org.junit.Test;
@@ -14,7 +14,7 @@ public class TypeReflectionProviderTest {
 
     @Before
     public void setUp() throws Exception {
-        provider = new TypeReflectionProvider("src/test/java/com/ilargia/games/entitas/codeGenerator/component");
+        provider = new TypeReflectionProvider("src/test/java/com/ilargia/games/entitas/codeGenerators/component");
 
     }
 

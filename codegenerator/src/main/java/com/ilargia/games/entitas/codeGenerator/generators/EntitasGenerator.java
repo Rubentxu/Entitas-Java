@@ -1,9 +1,9 @@
 package com.ilargia.games.entitas.codeGenerator.generators;
 
 
-import com.ilargia.games.entitas.codeGenerator.CodeGenerator;
+import com.ilargia.games.entitas.codeGenerator.CodeGeneratorOld;
 import com.ilargia.games.entitas.codeGenerator.interfaces.IComponentCodeGenerator;
-import com.ilargia.games.entitas.codeGenerator.intermediate.ComponentInfo;
+import com.ilargia.games.entitas.codeGenerator.data.ComponentInfo;
 import org.jboss.forge.roaster.Roaster;
 import org.jboss.forge.roaster.model.source.JavaClassSource;
 
@@ -11,14 +11,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 public class EntitasGenerator implements IComponentCodeGenerator {
 
 
     @Override
     public List<JavaClassSource> generate(List<ComponentInfo> infos, String pkgDestiny) {
-        Map<String, List<ComponentInfo>> mapContextsComponents = CodeGenerator.generateMap(infos);
+        Map<String, List<ComponentInfo>> mapContextsComponents = CodeGeneratorOld.generateMap(infos);
 
         List<JavaClassSource> result = new ArrayList<>();
         JavaClassSource source = generateEntitas(mapContextsComponents.keySet(), pkgDestiny);
@@ -46,9 +45,9 @@ public class EntitasGenerator implements IComponentCodeGenerator {
 
     private void createContextsMethod(JavaClassSource javaClass, Set<String> contextNames) {
         contextNames.forEach((contextName) -> {
-            String createMethodName = String.format("create%1$sContext", CodeGenerator.capitalize(contextName));
+            String createMethodName = String.format("create%1$sContext", CodeGeneratorOld.capitalize(contextName));
             String body = String.format("return new %1$sContext(%2$s.totalComponents, 0, new ContextInfo(\"%1$s\", %2$s.componentNames(), %2$s.componentTypes()), factory%1$sEntity());",
-                    contextName, CodeGenerator.capitalize(contextName) + CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG);
+                    contextName, CodeGeneratorOld.capitalize(contextName) + CodeGeneratorOld.DEFAULT_COMPONENT_LOOKUP_TAG);
             javaClass.addMethod()
                     .setPublic()
                     .setName(createMethodName)
@@ -77,7 +76,7 @@ public class EntitasGenerator implements IComponentCodeGenerator {
 
     private void createMethodConstructor(JavaClassSource javaClass, Set<String> contextNames) {
         String setAllContexts = contextNames.stream().reduce("\n", (acc, contextName) ->
-                acc + "    " + contextName.toLowerCase() + " = create" + CodeGenerator.capitalize(contextName) + "Context();\n "
+                acc + "    " + contextName.toLowerCase() + " = create" + CodeGeneratorOld.capitalize(contextName) + "Context();\n "
         );
 
 

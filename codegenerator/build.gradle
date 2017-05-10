@@ -9,7 +9,7 @@ configurations {
 }
 
 task(codeGenerator, dependsOn: 'classes', type: JavaExec) {
-    main = 'com.ilargia.games.entitas.codeGenerator.CodeGeneratorApp'
+    main = 'com.ilargia.games.entitas.codeGenerators.CodeGeneratorApp'
     classpath = sourceSets.main.runtimeClasspath
     args 'dirComponents dirDestino'
     standardInput = System.in
@@ -23,7 +23,7 @@ jar {
     manifest {
         attributes 'Implementation-Title': 'CodeGenerator fatJar',
                 'Implementation-Version': version,
-                'Main-Class': 'com.ilargia.games.entitas.codeGenerator.CodeGeneratorApp'
+                'Main-Class': 'com.ilargia.games.entitas.codeGenerators.CodeGeneratorApp'
     }
     dependsOn configurations.runtime
     from {
@@ -34,9 +34,9 @@ jar {
 }
 
 dependencies {
+    compile project(":entitas")
     compile group: 'org.jboss.forge.roaster', name: 'roaster-api', version: '2.19.1.Final'
     compile group: 'org.jboss.forge.roaster', name: 'roaster-jdt', version: '2.19.1.Final'
     testCompile "com.badlogicgames.gdx:gdx:$gdxVersion"
-    testCompile project(":entitas")
     testCompile group: 'junit', name: 'junit', version: '4.11'
 }

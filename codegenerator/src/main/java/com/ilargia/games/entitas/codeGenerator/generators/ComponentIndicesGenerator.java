@@ -1,9 +1,9 @@
 package com.ilargia.games.entitas.codeGenerator.generators;
 
 
-import com.ilargia.games.entitas.codeGenerator.CodeGenerator;
+import com.ilargia.games.entitas.codeGenerator.CodeGeneratorOld;
 import com.ilargia.games.entitas.codeGenerator.interfaces.IComponentCodeGenerator;
-import com.ilargia.games.entitas.codeGenerator.intermediate.ComponentInfo;
+import com.ilargia.games.entitas.codeGenerator.data.ComponentInfo;
 import org.jboss.forge.roaster.Roaster;
 import org.jboss.forge.roaster.model.source.JavaClassSource;
 import org.jboss.forge.roaster.model.source.JavaInterfaceSource;
@@ -18,7 +18,7 @@ public class ComponentIndicesGenerator implements IComponentCodeGenerator {
 
     @Override
     public List<JavaClassSource> generate(List<ComponentInfo> componentInfos, String pkgDestiny) {
-        Map<String, List<ComponentInfo>> mapPoolsComponents = CodeGenerator.generateMap(componentInfos);
+        Map<String, List<ComponentInfo>> mapPoolsComponents = CodeGeneratorOld.generateMap(componentInfos);
 
 
         return (List) mapPoolsComponents.keySet().stream()
@@ -29,7 +29,7 @@ public class ComponentIndicesGenerator implements IComponentCodeGenerator {
 
     private JavaClassSource generateIndicesLookup(String poolName, List<ComponentInfo> componentInfos, String pkgDestiny) {
         JavaClassSource javaClass = Roaster.parse(JavaClassSource.class, String.format("public class %1$s {}",
-                CodeGenerator.capitalize(poolName) + CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG));
+                CodeGeneratorOld.capitalize(poolName) + CodeGeneratorOld.DEFAULT_COMPONENT_LOOKUP_TAG));
 
 //        if(componentInfos.size() > 0 && componentInfos.get(0).subDir !=null) {
 //            pkgDestiny+= "."+componentInfos.get(0).subDir;

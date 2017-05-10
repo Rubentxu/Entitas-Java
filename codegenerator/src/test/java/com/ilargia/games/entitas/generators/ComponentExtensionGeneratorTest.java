@@ -1,7 +1,7 @@
 package com.ilargia.games.entitas.generators;
 
 import com.ilargia.games.entitas.codeGenerator.generators.EntityGenerator;
-import com.ilargia.games.entitas.codeGenerator.intermediate.ComponentInfo;
+import com.ilargia.games.entitas.codeGenerator.data.ComponentInfo;
 import org.jboss.forge.roaster.Roaster;
 import org.jboss.forge.roaster.model.source.FieldSource;
 import org.jboss.forge.roaster.model.source.JavaClassSource;

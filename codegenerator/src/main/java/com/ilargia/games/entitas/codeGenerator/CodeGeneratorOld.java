@@ -1,16 +1,18 @@
 package com.ilargia.games.entitas.codeGenerator;
 
 
+import com.ilargia.games.entitas.codeGeneration.interfaces.ICodeGenerator;
+import com.ilargia.games.entitas.codeGeneration.interfaces.ICodeGeneratorDataProvider;
 import com.ilargia.games.entitas.codeGenerator.interfaces.*;
-import com.ilargia.games.entitas.codeGenerator.intermediate.CodeGenFile;
-import com.ilargia.games.entitas.codeGenerator.intermediate.ComponentInfo;
+import com.ilargia.games.entitas.codeGeneration.CodeGenFile;
+import com.ilargia.games.entitas.codeGenerator.data.ComponentInfo;
 import org.jboss.forge.roaster.model.source.JavaClassSource;
 import org.jboss.forge.roaster.model.source.JavaDocSource;
 
 import java.io.*;
 import java.util.*;
 
-public class CodeGenerator {
+public class CodeGeneratorOld {
 
     public static final String COMPONENT_SUFFIX = "Component";
     public static final String DEFAULT_COMPONENT_LOOKUP_TAG = "ComponentsLookup";

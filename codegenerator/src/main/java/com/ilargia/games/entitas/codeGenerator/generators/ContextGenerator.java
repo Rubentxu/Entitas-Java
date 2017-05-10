@@ -1,9 +1,9 @@
 package com.ilargia.games.entitas.codeGenerator.generators;
 
 
-import com.ilargia.games.entitas.codeGenerator.CodeGenerator;
+import com.ilargia.games.entitas.codeGenerator.CodeGeneratorOld;
 import com.ilargia.games.entitas.codeGenerator.interfaces.IComponentCodeGenerator;
-import com.ilargia.games.entitas.codeGenerator.intermediate.ComponentInfo;
+import com.ilargia.games.entitas.codeGenerator.data.ComponentInfo;
 import org.jboss.forge.roaster.Roaster;
 import org.jboss.forge.roaster.model.source.FieldSource;
 import org.jboss.forge.roaster.model.source.JavaClassSource;
@@ -19,7 +19,7 @@ public class ContextGenerator implements IComponentCodeGenerator {
 
     @Override
     public List<JavaClassSource> generate(List<ComponentInfo> infos, String pkgDestiny) {
-        Map<String, List<ComponentInfo>> mapContextsComponents = CodeGenerator.generateMap(infos);
+        Map<String, List<ComponentInfo>> mapContextsComponents = CodeGeneratorOld.generateMap(infos);
 
         List<JavaClassSource> result = new ArrayList<>();
 
@@ -87,7 +87,7 @@ public class ContextGenerator implements IComponentCodeGenerator {
                 .setReturnType(contextName + "Entity")
                 .setPublic()
                 .setBody(String.format("return getGroup(%1$sMatcher.%2$s()).getSingleEntity();"
-                        , CodeGenerator.capitalize(info.contexts.get(0)), info.typeName));
+                        , CodeGeneratorOld.capitalize(info.contexts.get(0)), info.typeName));
 
         if (!info.isSingletonComponent) {
             source.addMethod()

@@ -1,8 +1,8 @@
 package com.ilargia.games.entitas.codeGenerator;
 
 import com.ilargia.games.entitas.codeGenerator.generators.*;
-import com.ilargia.games.entitas.codeGenerator.interfaces.ICodeGenerator;
-import com.ilargia.games.entitas.codeGenerator.intermediate.CodeGenFile;
+import com.ilargia.games.entitas.codeGeneration.interfaces.ICodeGenerator;
+import com.ilargia.games.entitas.codeGeneration.CodeGenFile;
 import com.ilargia.games.entitas.codeGenerator.providers.TypeReflectionProvider;
 import javafx.application.Application;
 import javafx.concurrent.Task;
@@ -189,7 +189,7 @@ public class CodeGeneratorApp extends Application implements Initializable {
                 codeGenerators.add(new EntitasGenerator());
 
                 TypeReflectionProvider provider = new TypeReflectionProvider(fieldComponentFolder.getText());
-                CodeGenerator generator = new CodeGenerator();
+                CodeGeneratorOld generator = new CodeGeneratorOld();
                 return generator.generate(provider, fieldGeneratedFolder.getText(), codeGenerators);
             }
         };

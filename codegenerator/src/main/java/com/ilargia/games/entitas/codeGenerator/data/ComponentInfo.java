@@ -1,6 +1,6 @@
-package com.ilargia.games.entitas.codeGenerator.intermediate;
+package com.ilargia.games.entitas.codeGenerator.data;
 
-import com.ilargia.games.entitas.codeGenerator.CodeGenerator;
+import com.ilargia.games.entitas.codeGenerator.CodeGeneratorOld;
 import org.jboss.forge.roaster.model.source.*;
 
 import java.util.List;
@@ -43,9 +43,9 @@ public class ComponentInfo {
         this.generateIndex = generateIndex;
         this.hideInBlueprintInspector = hideInBlueprintInspector;
         this.typeName = typeName;
-        this.nameComponent = (typeName.contains(CodeGenerator.COMPONENT_SUFFIX))
+        this.nameComponent = (typeName.contains(CodeGeneratorOld.COMPONENT_SUFFIX))
                 ? typeName
-                : typeName + CodeGenerator.COMPONENT_SUFFIX;
+                : typeName + CodeGeneratorOld.COMPONENT_SUFFIX;
 
         isSingletonComponent = memberInfos == null || memberInfos.size() == 0;
         this.constructores = constructores;

@@ -1,11 +1,11 @@
 package com.ilargia.games.entitas.codeGenerator.generators;
 
 
-import com.ilargia.games.entitas.codeGenerator.CodeGenerator;
+import com.ilargia.games.entitas.codeGeneration.interfaces.ICodeGenerator;
+import com.ilargia.games.entitas.codeGenerator.CodeGeneratorOld;
 import com.ilargia.games.entitas.codeGenerator.interfaces.IComponentCodeGenerator;
-import com.ilargia.games.entitas.codeGenerator.intermediate.ComponentInfo;
+import com.ilargia.games.entitas.codeGenerator.data.ComponentInfo;
 import org.jboss.forge.roaster.Roaster;
-import org.jboss.forge.roaster.model.JavaType;
 import org.jboss.forge.roaster.model.source.*;
 
 import java.util.ArrayList;
@@ -13,12 +13,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class EntityGenerator implements IComponentCodeGenerator {
+public class EntityGenerator implements IComponentCodeGenerator, ICodeGenerator {
 
 
     @Override
     public List<JavaClassSource> generate(List<ComponentInfo> infos, String pkgDestiny) {
-        Map<String, List<ComponentInfo>> mapContextsComponents = CodeGenerator.generateMap(infos);
+        Map<String, List<ComponentInfo>> mapContextsComponents = CodeGeneratorOld.generateMap(infos);
         List<JavaClassSource> result = new ArrayList<>();
 
         result.addAll((List) mapContextsComponents.keySet().stream()
@@ -81,7 +81,7 @@ public class EntityGenerator implements IComponentCodeGenerator {
 
         if (info.isSingletonComponent) {
             source.addField()
-                    .setName(info.typeName + CodeGenerator.COMPONENT_SUFFIX)
+                    .setName(info.typeName + CodeGeneratorOld.COMPONENT_SUFFIX)
                     .setType(info.typeName)
                     .setLiteralInitializer(String.format("new %1$s();", info.typeName))
                     .setPublic();
@@ -108,7 +108,7 @@ public class EntityGenerator implements IComponentCodeGenerator {
 
             }
             methodGET.setBody(String.format("return (%1$s)getComponent(%2$s.%3$s);"
-                    , typeName, CodeGenerator.capitalize(info.contexts.get(0)) + CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG, info.typeName));
+                    , typeName, CodeGeneratorOld.capitalize(info.contexts.get(0)) + CodeGeneratorOld.DEFAULT_COMPONENT_LOOKUP_TAG, info.typeName));
         }
     }
 
@@ -121,7 +121,7 @@ public class EntityGenerator implements IComponentCodeGenerator {
                     .setReturnType("boolean")
                     .setPublic()
                     .setBody(String.format("return hasComponent(%1$s.%2$s);",
-                            CodeGenerator.capitalize(info.contexts.get(0)) + CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG,
+                            CodeGeneratorOld.capitalize(info.contexts.get(0)) + CodeGeneratorOld.DEFAULT_COMPONENT_LOOKUP_TAG,
                             info.typeName));
 
             source.addMethod()
@@ -135,7 +135,7 @@ public class EntityGenerator implements IComponentCodeGenerator {
                                     "                    } else {\n" +
                                     "                        removeComponent(%1$s.%2$s);\n" +
                                     "                    }\n" +
-                                    "                }\n return this;", CodeGenerator.capitalize(info.contexts.get(0)) + CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG,
+                                    "                }\n return this;", CodeGeneratorOld.capitalize(info.contexts.get(0)) + CodeGeneratorOld.DEFAULT_COMPONENT_LOOKUP_TAG,
                             info.typeName, info.nameComponent));
 
 
@@ -145,7 +145,7 @@ public class EntityGenerator implements IComponentCodeGenerator {
                     .setReturnType("boolean")
                     .setPublic()
                     .setBody(String.format("return hasComponent(%1$s.%2$s);",
-                            CodeGenerator.capitalize(info.contexts.get(0)) + CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG,
+                            CodeGeneratorOld.capitalize(info.contexts.get(0)) + CodeGeneratorOld.DEFAULT_COMPONENT_LOOKUP_TAG,
                             info.typeName));
 
         }
@@ -155,7 +155,7 @@ public class EntityGenerator implements IComponentCodeGenerator {
     public void addImportClass(ComponentInfo componentInfo, JavaClassSource source) {
         if (componentInfo.imports != null) {
             for (Import imp : componentInfo.imports) {
-                if (!imp.getQualifiedName().equals("com.ilargia.games.entitas.codeGenerator.Component")) {
+                if (!imp.getQualifiedName().equals("com.ilargia.games.entitas.codeGenerators.Component")) {
                     source.addImport(imp);
                 }
             }
@@ -192,14 +192,14 @@ public class EntityGenerator implements IComponentCodeGenerator {
             if (info.constructores != null && info.constructores.size() > 0) {
                 method = String.format("%2$s component = (%2$s) recoverComponent(%1$s.%5$s);\n if(component == null) { " +
                                 "component = new %2$s(%4$s);\n } else {\n%3$s\n} addComponent(%1$s.%5$s, component);\n return this;",
-                        CodeGenerator.capitalize(info.contexts.get(0)) + CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG,
+                        CodeGeneratorOld.capitalize(info.contexts.get(0)) + CodeGeneratorOld.DEFAULT_COMPONENT_LOOKUP_TAG,
                         typeName, bodyFromConstructor(info.constructores.get(0)), memberNamesFromConstructor(info.constructores.get(0))
                         ,info.typeName);
 
             } else {
                 method = String.format("%2$s component = (%2$s) recoverComponent(%1$s.%2$s);\n if(component == null) { " +
                                 "component = new %2$s();\n } \n%3$s\n addComponent(%1$s.%2$s, component);\n return this;",
-                        CodeGenerator.capitalize(info.contexts.get(0)) + CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG,
+                        CodeGeneratorOld.capitalize(info.contexts.get(0)) + CodeGeneratorOld.DEFAULT_COMPONENT_LOOKUP_TAG,
                         typeName, memberAssignments(info.memberInfos),info.typeName);
             }
             addMethod.setBody(method);
@@ -237,13 +237,13 @@ public class EntityGenerator implements IComponentCodeGenerator {
             if (info.constructores != null && info.constructores.size() > 0) {
                 method = String.format("%2$s component = (%2$s) recoverComponent(%1$s.%5$s);\n if(component == null) { " +
                                 "component = new %2$s(%4$s);\n } else {\n%3$s\n} replaceComponent(%1$s.%5$s, component);\n return this;"
-                        , CodeGenerator.capitalize(info.contexts.get(0)) + CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG,
+                        , CodeGeneratorOld.capitalize(info.contexts.get(0)) + CodeGeneratorOld.DEFAULT_COMPONENT_LOOKUP_TAG,
                         typeName, bodyFromConstructor(info.constructores.get(0)), memberNamesFromConstructor(info.constructores.get(0))
                         ,info.typeName);
             } else {
                 method = String.format("%2$s component = (%2$s) recoverComponent(%1$s.%2$s);\n if(component == null) { " +
                                 "component = new %2$s();\n} %3$s\n replaceComponent(%1$s.%2$s, component);\n return this;",
-                        CodeGenerator.capitalize(info.contexts.get(0)) + CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG,
+                        CodeGeneratorOld.capitalize(info.contexts.get(0)) + CodeGeneratorOld.DEFAULT_COMPONENT_LOOKUP_TAG,
                         typeName, memberAssignments(info.memberInfos),info.typeName);
             }
             replaceMethod.setBody(method);
@@ -259,7 +259,7 @@ public class EntityGenerator implements IComponentCodeGenerator {
                     .setReturnType(contextName + "Entity")
                     .setPublic()
                     .setBody(String.format(method,
-                            CodeGenerator.capitalize(info.contexts.get(0)) + CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG,
+                            CodeGeneratorOld.capitalize(info.contexts.get(0)) + CodeGeneratorOld.DEFAULT_COMPONENT_LOOKUP_TAG,
                             info.typeName));
 
 
@@ -310,7 +310,7 @@ public class EntityGenerator implements IComponentCodeGenerator {
 
     private JavaClassSource generateMatchers(String contextName, List<ComponentInfo> componentInfos, String pkgDestiny) {
         JavaClassSource javaClass = Roaster.parse(JavaClassSource.class, String.format("public class %1$s {}",
-                CodeGenerator.capitalize(contextName) + "Matcher"));
+                CodeGeneratorOld.capitalize(contextName) + "Matcher"));
         javaClass.setPackage(pkgDestiny);
         //javaClass.addImport("com.ilargia.games.entitas.interfaces.IMatcher");
         javaClass.addImport("com.ilargia.games.entitas.matcher.Matcher");
@@ -346,7 +346,7 @@ public class EntityGenerator implements IComponentCodeGenerator {
                 .setReturnType("Matcher")
                 .setPublic()
                 .setStatic(true)
-                .setBody(String.format(body, CodeGenerator.capitalize(contextName) + CodeGenerator.DEFAULT_COMPONENT_LOOKUP_TAG,
+                .setBody(String.format(body, CodeGeneratorOld.capitalize(contextName) + CodeGeneratorOld.DEFAULT_COMPONENT_LOOKUP_TAG,
                         info.typeName));
 
     }
