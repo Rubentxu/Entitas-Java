@@ -5,18 +5,20 @@ import com.ilargia.games.entitas.api.IComponent;
 import com.ilargia.games.entitas.codeGeneration.CodeGeneratorData;
 import com.ilargia.games.entitas.codeGeneration.codeGenerator.CodeGeneratorConfig;
 import com.ilargia.games.entitas.codeGeneration.interfaces.ICodeGeneratorDataProvider;
+import com.ilargia.games.entitas.codeGeneration.plugins.data.MemberData;
 import com.ilargia.games.entitas.codeGeneration.plugins.data.MethodData;
 import com.ilargia.games.entitas.codeGeneration.plugins.dataProviders.components.providers.ContextsComponentDataProvider;
 import com.ilargia.games.entitas.codeGenerator.interfaces.configuration.IConfigurable;
+import org.jboss.forge.roaster.model.source.AnnotationSource;
 import org.jboss.forge.roaster.model.source.FieldSource;
 import org.jboss.forge.roaster.model.source.JavaClassSource;
-import com.ilargia.games.entitas.index.AbstractEntityIndex;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
-import java.util.function.Function;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
-import static java.awt.SystemColor.info;
 
 public class EntityIndexDataProvider implements ICodeGeneratorDataProvider, IConfigurable {
 
@@ -75,32 +77,80 @@ public class EntityIndexDataProvider implements ICodeGeneratorDataProvider, ICon
 
     @Override
     public List<CodeGeneratorData> getData() {
-        _types.stream()
+        List<CodeGeneratorData> entityIndexData = _types.stream()
+                .filter(type -> !type.isAbstract())
+                .filter(type -> type.hasAnnotation("CustomEntityIndex"))
+                .map(type -> createCustomEntityIndexData(type))
+                .collect(Collectors.toList());
+
+
+        List<CodeGeneratorData> customEntityIndexData = _types.stream()
                 .filter(type -> !type.isAbstract())
                 .filter(type -> type.hasInterface(IComponent.class))
-                .collect(Collectors.toMap(Function.identity(), JavaClassSource::getFields))
-                .forEach((k ,v) ->  createEntityIndexData(k, v));
-        return null;
+                .map(type -> createEntityIndexData(type, type.getFields()))
+                .collect(Collectors.toList());
+
+
+        entityIndexData.addAll(customEntityIndexData);
+        return entityIndexData;
     }
 
     private EntityIndexData createEntityIndexData(JavaClassSource type, List<FieldSource<JavaClassSource>> infos) {
         EntityIndexData data = new EntityIndexData();
 
-        info = infos.stream()
-                .filter(i -> i.hasAnnotation("AbstractEntityIndex");
-        var attribute = (AbstractEntityIndexAttribute)info.attributes.Single(attr => attr.attribute is AbstractEntityIndexAttribute).attribute;
+        FieldSource<JavaClassSource> info = infos.stream()
+                .filter(i -> i.hasAnnotation("EntityIndex"))
+                .collect(singletonCollector());
 
-        setEntityIndexType(data, getEntityIndexType(attribute));
+        setEntityIndexType(data, info.getAnnotation("EntityIndex").getStringValue());
         isCustom(data, false);
         setEntityIndexName(data, type.getCanonicalName());
-        setKeyType(data, info.type.ToCompilableString());
+        setKeyType(data, info.getType().getName());
         setComponentType(data, type.getCanonicalName());
-        setMemberName(data, info.);
+        setMemberName(data, info.getName());
         setContextNames(data, _contextsComponentDataProvider.getContextNamesOrDefault(type));
 
         return data;
     }
 
+    EntityIndexData createCustomEntityIndexData(JavaClassSource type) {
+        EntityIndexData data = new EntityIndexData();
+
+        AnnotationSource attribute = type.getAnnotation("CustomEntityIndex");
+
+        setEntityIndexType(data, type.getName());
+        isCustom(data, true);
+        setEntityIndexName(data, type.getCanonicalName());
+
+        setContextNames(data, Arrays.asList(attribute.getStringArrayValue()));
+
+        List<MethodData> getMethods = type.getMethods().stream()
+                .filter(m -> m.isPublic())
+                .filter(m -> m.hasAnnotation("EntityIndexGetMethod"))
+                .map(m ->  new MethodData(m.getReturnType(), m.getName(),
+                        m.getParameters().stream().map(p-> new MemberData(p.getType(),p.getName(), null)).collect(Collectors.toList()),
+                        m.getAnnotation("EntityIndexGetMethod")
+                        ))
+                .collect(Collectors.toList());
+
+        setCustomMethods(data, getMethods);
+        return data;
+
+    }
+
+    public static <T> Collector<T, List<T>, T> singletonCollector() {
+        return Collector.of(
+                ArrayList::new,
+                List::add,
+                (left, right) -> { left.addAll(right); return left; },
+                list -> {
+                    if (list.size() != 1) {
+                        list.clear();
+                    }
+                    return list.get(0);
+                }
+        );
+    }
 
     public static String getEntityIndexType(EntityIndexData data) {
         return (String)data.get(ENTITY_INDEX_TYPE);
@@ -118,11 +168,11 @@ public class EntityIndexDataProvider implements ICodeGeneratorDataProvider, ICon
         data.put(ENTITY_INDEX_IS_CUSTOM, isCustom);
     }
 
-    public static MethodData[] getCustomMethods(EntityIndexData data) {
-        return (MethodData[])data.get(ENTITY_INDEX_CUSTOM_METHODS);
+    public static List<MethodData> getCustomMethods(EntityIndexData data) {
+        return (List<MethodData>)data.get(ENTITY_INDEX_CUSTOM_METHODS);
     }
 
-    public static void setCustomMethods(EntityIndexData data, MethodData[] methods) {
+    public static void setCustomMethods(EntityIndexData data, List<MethodData> methods) {
         data.put(ENTITY_INDEX_CUSTOM_METHODS, methods);
     }
 
