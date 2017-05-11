@@ -16,7 +16,7 @@ public class MemberDataComponentDataProvider implements IComponentDataProvider {
     public void provide(JavaClassSource type, ComponentData data) {
        List<MemberData> memberDatas = type.getFields().stream()
                 .filter(field -> field.isPublic())
-                .map(field -> new MemberData(field.getType(), field.getName()))
+                .map(field -> new MemberData(field.getType(), field.getName(), field.getAnnotation("generateIndex")))
                 .collect(Collectors.toList());
 
         setMemberData(data, memberDatas);
