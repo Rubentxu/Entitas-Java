@@ -3,6 +3,8 @@ package com.ilargia.games.entitas.codeGeneration.plugins.postProcessors;
 
 import com.ilargia.games.entitas.codeGeneration.CodeGenFile;
 import com.ilargia.games.entitas.codeGeneration.interfaces.ICodeGenFilePostProcessor;
+import org.jboss.forge.roaster.model.source.JavaClassSource;
+import org.jboss.forge.roaster.model.source.JavaDocSource;
 
 import java.util.List;
 
@@ -16,7 +18,7 @@ public class AddFileHeaderPostProcessor implements ICodeGenFilePostProcessor {
                     "//     Changes to this file may cause incorrect behavior and will be lost if" +
                     "//     the code is regenerated." +
                     "// </auto-generated>" +
-                    "//------------------------------------------------------------------------------"
+                    "//------------------------------------------------------------------------------";
 
 
     @Override
@@ -42,10 +44,10 @@ public class AddFileHeaderPostProcessor implements ICodeGenFilePostProcessor {
     @Override
     public List<CodeGenFile> postProcess(List<CodeGenFile> files) {
         for (CodeGenFile file : files) {
-            file.fileContent.ja = String.format(AUTO_GENERATED_HEADER_FORMAT, file.generatorName) + file.fileContent;
+            JavaDocSource<JavaClassSource> javaDoc = file.fileContent.getJavaDoc();
+            javaDoc.setFullText(String.format(AUTO_GENERATED_HEADER_FORMAT, file.generatorName));
+
         }
-
-
         return files;
     }
 
