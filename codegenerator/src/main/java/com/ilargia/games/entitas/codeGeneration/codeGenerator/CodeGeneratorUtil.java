@@ -1,15 +1,16 @@
 package com.ilargia.games.entitas.codeGeneration.codeGenerator;
 
 
-import com.ilargia.games.entitas.codeGenerator.configuration.Preferences;
 import com.ilargia.games.entitas.codeGeneration.interfaces.ICodeGenFilePostProcessor;
 import com.ilargia.games.entitas.codeGeneration.interfaces.ICodeGenerator;
 import com.ilargia.games.entitas.codeGeneration.interfaces.ICodeGeneratorDataProvider;
 import com.ilargia.games.entitas.codeGeneration.interfaces.ICodeGeneratorInterface;
+import com.ilargia.games.entitas.codeGenerator.configuration.Preferences;
 import com.ilargia.games.entitas.codeGenerator.interfaces.configuration.IConfigurable;
 
 import java.lang.reflect.Modifier;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -144,14 +145,15 @@ public class CodeGeneratorUtil {
 
     }
 
-    public static List<IConfigurable> getConfigurables(List<ICodeGeneratorDataProvider> dataProviders, List<ICodeGenerator> codeGenerators,
-                                                       List<ICodeGenFilePostProcessor> postProcessors) {        ;
+    public static Map<String, String> getConfigurables(List<ICodeGeneratorDataProvider> dataProviders, List<ICodeGenerator> codeGenerators,
+                                                       List<ICodeGenFilePostProcessor> postProcessors) {
         return Stream.concat(Stream.concat(dataProviders.stream(), codeGenerators.stream()), postProcessors.stream())
                 .filter(d -> d.getClass().isAssignableFrom(IConfigurable.class))
                 .map(d -> (IConfigurable) d)
-                .collect(Collectors.toList());
-
+                .map(instance -> instance.getDefaultProperties())
+                .flatMap(prop -> prop.<String, String>entrySet().stream())
+                .collect(Collectors.toMap(e -> (String) e.getKey(), e -> (String) e.getValue()))
+                .;
     }
-
 
 }

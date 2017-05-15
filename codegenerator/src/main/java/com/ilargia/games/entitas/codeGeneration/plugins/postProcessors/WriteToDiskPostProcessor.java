@@ -5,8 +5,6 @@ import com.ilargia.games.entitas.codeGeneration.CodeGenFile;
 import com.ilargia.games.entitas.codeGeneration.interfaces.ICodeGenFilePostProcessor;
 import com.ilargia.games.entitas.codeGeneration.plugins.config.TargetDirectoryConfig;
 import com.ilargia.games.entitas.codeGenerator.interfaces.configuration.IConfigurable;
-import org.jboss.forge.roaster._shade.org.eclipse.core.runtime.IPath;
-import org.jboss.forge.roaster._shade.org.eclipse.core.runtime.Path;
 import org.jboss.forge.roaster.model.source.JavaClassSource;
 
 import java.io.*;
@@ -50,11 +48,11 @@ public class WriteToDiskPostProcessor implements ICodeGenFilePostProcessor , ICo
     @Override
     public List<CodeGenFile> postProcess(List<CodeGenFile> files) {
         for (CodeGenFile file : files) {
-            IPath targetDir = Path.fromPortableString(_targetDirectoryConfig.targetDirectory());
-            if (!targetDir.toFile().exists()) {
-                targetDir.toFile().mkdir();
-            }
-            File.WriteAllText(fileName, file.fileContent);
+//            IPath targetDir = Path.fromPortableString(_targetDirectoryConfig.targetDirectory());
+//            if (!targetDir.toFile().exists()) {
+//                targetDir.toFile().mkdir();
+//            }
+            createFile(file.fileName, _targetDirectoryConfig.targetDirectory(), file.fileContent.toString());
         }
         return files;
     }
