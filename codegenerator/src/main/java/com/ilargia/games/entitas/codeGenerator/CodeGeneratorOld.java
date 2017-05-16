@@ -79,31 +79,31 @@ public class CodeGeneratorOld {
         ArrayList<CodeGenFile> generatedFiles = new ArrayList<CodeGenFile>();
         List<JavaClassSource> files = new ArrayList<>();
 
-        if (sourcePackage.isPresent()) {
-            for (ICodeGenerator generator : codeGenerators) {
-                if (generator instanceof IContextCodeGenerator) {
-                    for (JavaClassSource javaClassSource : ((IContextCodeGenerator) generator).generate(provider.poolNames(), sourcePackage.get())) {
-                        files.add(javaClassSource);
-                        generatedFiles.add(new CodeGenFile(javaClassSource.getCanonicalName(), javaClassSource, generator.getClass().getName()));
-                    }
-
-                }
-                if (generator instanceof IComponentCodeGenerator) {
-                    for (JavaClassSource javaClassSource : ((IComponentCodeGenerator) generator).generate(provider.componentInfos(), sourcePackage.get())) {
-                        files.add(javaClassSource);
-                        generatedFiles.add(new CodeGenFile(javaClassSource.getCanonicalName(), javaClassSource, generator.getClass().getName()));
-                    }
-
-                }
-                if (generator instanceof IBlueprintsCodeGenerator) {
-                    for (JavaClassSource javaClassSource : ((IBlueprintsCodeGenerator) generator).generate(provider.blueprintNames(), sourcePackage.get())) {
-                        files.add(javaClassSource);
-                        generatedFiles.add(new CodeGenFile(javaClassSource.getCanonicalName(), javaClassSource, generator.getClass().getName()));
-                    }
-
-                }
-            }
-        }
+//        if (sourcePackage.isPresent()) {
+//            for (ICodeGenerator generator : codeGenerators) {
+//                if (generator instanceof IContextCodeGenerator) {
+//                    for (JavaClassSource javaClassSource : ((IContextCodeGenerator) generator).generate(provider.poolNames(), sourcePackage.get())) {
+//                        files.add(javaClassSource);
+//                        generatedFiles.add(new CodeGenFile(javaClassSource.getCanonicalName(), javaClassSource, generator.getClass().getName()));
+//                    }
+//
+//                }
+//                if (generator instanceof IComponentCodeGenerator) {
+//                    for (JavaClassSource javaClassSource : ((IComponentCodeGenerator) generator).generate(provider.componentInfos(), sourcePackage.get())) {
+//                        files.add(javaClassSource);
+//                        generatedFiles.add(new CodeGenFile(javaClassSource.getCanonicalName(), javaClassSource, generator.getClass().getName()));
+//                    }
+//
+//                }
+//                if (generator instanceof IBlueprintsCodeGenerator) {
+//                    for (JavaClassSource javaClassSource : ((IBlueprintsCodeGenerator) generator).generate(provider.blueprintNames(), sourcePackage.get())) {
+//                        files.add(javaClassSource);
+//                        generatedFiles.add(new CodeGenFile(javaClassSource.getCanonicalName(), javaClassSource, generator.getClass().getName()));
+//                    }
+//
+//                }
+//            }
+//        }
 
         CodeGenFile entitas = generatedFiles.get(generatedFiles.size() - 1);
         for (CodeGenFile generatedFile : generatedFiles) {

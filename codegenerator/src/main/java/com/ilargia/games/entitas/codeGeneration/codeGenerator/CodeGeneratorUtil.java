@@ -152,8 +152,7 @@ public class CodeGeneratorUtil {
                 .map(d -> (IConfigurable) d)
                 .map(instance -> instance.getDefaultProperties())
                 .flatMap(prop -> prop.<String, String>entrySet().stream())
-                .collect(Collectors.toMap(e -> (String) e.getKey(), e -> (String) e.getValue()))
-                .;
+                .collect(Collectors.toMap(e -> (String) e.getKey(), e -> (String) e.getValue()));
     }
 
 }

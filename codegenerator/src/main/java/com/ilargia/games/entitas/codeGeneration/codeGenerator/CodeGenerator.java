@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class CodeGenerator {
+    @FunctionalInterface
     public interface GeneratorProgress {
         public void exec(String title, String info, float progress);
     }

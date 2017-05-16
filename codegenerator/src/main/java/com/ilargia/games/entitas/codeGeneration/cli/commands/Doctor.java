@@ -25,7 +25,7 @@ public class Doctor extends AbstractCommand{
 
         if (assertProperties()) {
 
-            new Status().Run(args);
+            new Status().run(args);
 
             System.out.println("Dry Run");
 

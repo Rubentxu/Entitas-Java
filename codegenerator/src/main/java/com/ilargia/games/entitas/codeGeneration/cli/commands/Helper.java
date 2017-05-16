@@ -1,26 +1,33 @@
 package com.ilargia.games.entitas.codeGeneration.cli.commands;
 
 
+import com.ilargia.games.entitas.codeGeneration.codeGenerator.CodeGeneratorUtil;
 import com.ilargia.games.entitas.codeGenerator.configuration.Preferences;
-
 import java.io.Console;
 import java.util.List;
 import java.util.Properties;
 import java.util.Scanner;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class Helper {
+    @FunctionalInterface
+    public interface  Action<T> {
+        void apply(T param);
 
-    public static List<String> getUnusedKeys(List<String> requiredKeys, Properties properties) {
+    }
+
+    public static List<String> getUnusedKeys(Set<Object> requiredKeys, Properties properties) {
         return properties.keySet().stream()
                 .filter(key -> !requiredKeys.contains(key))
                 .map(String.class::cast)
                 .collect(Collectors.toList());
     }
 
-    public static List<String> getMissingKeys(List<String> requiredKeys, Properties properties) {
+    public static List<String> getMissingKeys(Set<Object> requiredKeys, Properties properties) {
         return requiredKeys.stream()
                 .filter(key -> !properties.containsKey(key))
+                .map(p -> (String) p)
                 .collect(Collectors.toList());
     }
 
@@ -38,49 +45,48 @@ public class Helper {
 
     public static void forceAddKey(String message, String key, String value, Properties properties) {
         System.out.println(message + ": '" + key + "'");
-        Console.ReadKey(true);
+        //Console.ReadKey(true);
         properties.setProperty(key, value);
         Preferences.saveProperties(properties);
         System.out.println("Added: " + key);
     }
 
-    public static void AddKey(String question, String key, String value, Properties properties) {
+    public static void addKey(String question, String key, String value, Properties properties) {
         System.out.println(question + ": '" + key + "' ? (y / n)");
-        if (GetUserDecision()) {
-            properties[key] = value;
-            Preferences.SaveProperties(properties);
-            fabl.Info("Added: " + key);
+        if (getUserDecision("yes", "no")) {
+            properties.setProperty(key, value);
+            Preferences.saveProperties(properties);
+            System.out.println("Added: " + key);
         }
     }
 
-    public static void RemoveKey(String question, String key, Properties properties) {
-        fabl.Warn(question + ": '" + key + "' ? (y / n)");
-        if (GetUserDecision()) {
-            properties.RemoveProperty(key);
-            Preferences.SaveProperties(properties);
-            fabl.Warn("Removed: " + key);
+    public static void removeKey(String question, String key, Properties properties) {
+        System.out.println(question + ": '" + key + "' ? (y / n)");
+        if (getUserDecision("yes", "no")) {
+            properties.remove(key);
+            Preferences.saveProperties(properties);
+            System.out.println("Removed: " + key);
         }
     }
 
-    public static void RemoveValue(String question, String value, List<String> values, Action<List<String>> updateAction, Properties properties) {
-        fabl.Warn(question + ": '" + value + "' ? (y / n)");
-        if (GetUserDecision()) {
-            var valueList = values.ToList();
-            valueList.Remove(value);
-            updateAction(valueList.ToArray());
-            Preferences.SaveProperties(properties);
-            fabl.Warn("Removed: " + value);
+    public static void removeValue(String question, String value, List<String> valueList, Action<List<String>> updateAction, Properties properties) {
+        System.out.println(question + ": '" + value + "' ? (y / n)");
+        if (getUserDecision("yes", "no")) {
+            valueList.remove(value);
+            updateAction.apply(valueList);
+            Preferences.saveProperties(properties);
+            System.out.println("Removed: " + value);
         }
     }
 
-    public static void AddValue(String question, String value, List<String> values, Action<List<String>> updateAction, Properties properties) {
-        fabl.Info(question + ": '" + value + "' ? (y / n)");
-        if (GetUserDecision()) {
-            var valueList = values.ToList();
-            valueList.Add(value);
-            updateAction(CodeGeneratorUtil.GetOrderedNames(valueList.ToArray()));
-            Preferences.SaveProperties(properties);
-            fabl.Info("Added: " + value);
+    public static void addValue(String question, String value, List<String> valueList, Action<List<String>> updateAction, Properties properties) {
+        System.out.println(question + ": '" + value + "' ? (y / n)");
+        if (getUserDecision("yes", "no")) {
+            valueList.add(value);
+            updateAction.apply(CodeGeneratorUtil.getOrderedNames(valueList));
+            Preferences.saveProperties(properties);
+            System.out.println("Added: " + value);
         }
     }
+
 }
