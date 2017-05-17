@@ -24,8 +24,8 @@ public class EditConfig extends AbstractCommand{
         System.out.println("Entitas Code Generator version " + 1);
 
         if (assertProperties()) {
-            System.out.println("Opening " + Preferences.PATH);
-           // System.diagnostics.Process.Start(Preferences.PATH);
+            System.out.println("Opening " + Preferences.PATH_PROPERTIES);
+           // System.diagnostics.Process.Start(Preferences.PATH_PROPERTIES);
         }
     }
 }

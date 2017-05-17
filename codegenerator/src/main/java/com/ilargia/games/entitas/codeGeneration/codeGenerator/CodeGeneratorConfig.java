@@ -3,6 +3,7 @@ package com.ilargia.games.entitas.codeGeneration.codeGenerator;
 import com.ilargia.games.entitas.codeGenerator.configuration.AbstractConfigurableConfig;
 
 import java.util.List;
+import java.util.Properties;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -16,6 +17,9 @@ public class CodeGeneratorConfig extends AbstractConfigurableConfig {
     static String CODE_GENERATORS_KEY = "Entitas.CodeGeneration.CodeGenerator.CodeGenerators";
     static String POST_PROCESSORS_KEY = "Entitas.CodeGeneration.CodeGenerator.PostProcessors";
 
+    public CodeGeneratorConfig(Properties properties) {
+        super(properties);
+    }
 
 
     public List<String> getSearchPaths() {

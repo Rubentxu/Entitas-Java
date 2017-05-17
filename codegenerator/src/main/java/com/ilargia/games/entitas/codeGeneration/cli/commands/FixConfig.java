@@ -102,7 +102,7 @@ public class FixConfig extends AbstractCommand {
 
         for (String key : unavailableDataProviders) {
             if (!askedRemoveKeys.contains(key)) {
-                Helper.removeValue("Remove unavailable data provider", key, config.getDataProviders(),
+                Helper.removeValue("Remove unavailable source provider", key, config.getDataProviders(),
                         values -> config.setDataProviders(values), properties);
                 askedRemoveKeys.add(key);
                 changed = true;
@@ -129,7 +129,7 @@ public class FixConfig extends AbstractCommand {
 
         for (String key : availableDataProviders) {
             if (!askedAddKeys.contains(key)) {
-                Helper.addValue("Add available data provider", key, config.getDataProviders(),
+                Helper.addValue("Add available source provider", key, config.getDataProviders(),
                         values -> config.setDataProviders(values), properties);
                 askedAddKeys.add(key);
                 changed = true;

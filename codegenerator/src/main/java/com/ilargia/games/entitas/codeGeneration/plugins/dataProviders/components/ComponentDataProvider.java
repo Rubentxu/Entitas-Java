@@ -2,9 +2,9 @@ package com.ilargia.games.entitas.codeGeneration.plugins.dataProviders.component
 
 import com.ilargia.games.entitas.api.IComponent;
 import com.ilargia.games.entitas.codeGeneration.CodeGeneratorData;
+import com.ilargia.games.entitas.codeGeneration.SourceDataFile;
 import com.ilargia.games.entitas.codeGeneration.codeGenerator.CodeGeneratorConfig;
 import com.ilargia.games.entitas.codeGeneration.interfaces.ICodeGeneratorDataProvider;
-import com.ilargia.games.entitas.codeGeneration.plugins.data.MemberData;
 import com.ilargia.games.entitas.codeGeneration.plugins.dataProviders.components.providers.*;
 import com.ilargia.games.entitas.codeGenerator.interfaces.configuration.IConfigurable;
 import org.jboss.forge.roaster.model.source.JavaClassSource;
@@ -15,24 +15,21 @@ import java.util.stream.Stream;
 
 public class ComponentDataProvider implements ICodeGeneratorDataProvider, IConfigurable {
 
-    List<JavaClassSource> _types;
+    List<SourceDataFile> _sources;
     List<IComponentDataProvider> _dataProviders;
-    private CodeGeneratorConfig _codeGeneratorConfig = new CodeGeneratorConfig();
+    private CodeGeneratorConfig _codeGeneratorConfig;
     //    private AssembliesConfig _assembliesConfig = new AssembliesConfig();
     private ContextsComponentDataProvider _contextsComponentDataProvider = new ContextsComponentDataProvider();
 
 
-    public ComponentDataProvider() {
-        this(null);
+    public ComponentDataProvider(List<SourceDataFile> sources) {
+        this(sources, getComponentDataProviders());
     }
 
-    public ComponentDataProvider(List<JavaClassSource> types) {
-        this(types, getComponentDataProviders());
-    }
-
-    protected ComponentDataProvider(List<JavaClassSource> types, List<IComponentDataProvider> dataProviders) {
-        _types = types;
+    protected ComponentDataProvider(List<SourceDataFile> types, List<IComponentDataProvider> dataProviders) {
+        _sources = types;
         _dataProviders = dataProviders;
+        _codeGeneratorConfig = new CodeGeneratorConfig(getDefaultProperties());
     }
 
     @Override
@@ -91,60 +88,48 @@ public class ComponentDataProvider implements ICodeGeneratorDataProvider, IConfi
     @Override
     public List<CodeGeneratorData> getData() {
 
-        List<ComponentData> dataFromComponents = _types.stream()
-                .filter(type -> type.hasInterface(IComponent.class))
-                .filter(type -> !type.isAbstract())
-                .map(type -> createDataForComponent(type))
+        List<SourceDataFile> dataFromComponents = _sources.stream()
+                .filter(s -> s.fileContent.hasInterface(IComponent.class))
+                .filter(s -> !s.fileContent.isAbstract())
+                .map(s -> createDataForComponent(s))
                 .collect(Collectors.toList());
 
-        List<ComponentData> dataFromNonComponents = _types.stream()
-                .filter(type -> type.hasInterface(IComponent.class))
-                .filter(type -> hasContexts(type))
-                .map(type -> createDataForNonComponent(type))
-                .reduce(new ArrayList<ComponentData>(), (a, b) -> {
+        List<SourceDataFile> dataFromNonComponents = _sources.stream()
+                .filter(s -> s.fileContent.hasInterface(IComponent.class))
+                .filter(s -> hasContexts(s))
+
+                .reduce(new ArrayList<SourceDataFile>(), (a, b) -> {
                     a.addAll(b);
                     return a;
                 });
 
         List<String> generatedComponentsLookup = dataFromNonComponents.stream()
-                .map(data -> data.getFullTypeName())
+                .map(data -> data.fileContent.getCanonicalName())
                 .collect(Collectors.toList());
 
         return Stream.concat(dataFromComponents.stream()
-                        .filter(data -> !generatedComponentsLookup.contains(data.getFullTypeName())),
+                        .filter(data -> !generatedComponentsLookup.contains(data.fileContent.getCanonicalName())),
                 dataFromNonComponents.stream()).collect(Collectors.toList());
 
 
     }
 
-    private boolean hasContexts(JavaClassSource type) {
-        return _contextsComponentDataProvider.getContextNames(type).size() != 0;
+    private boolean hasContexts(SourceDataFile sourceData) {
+        return _contextsComponentDataProvider.extractContextNames(sourceData.fileContent).size() != 0;
     }
 
-    private ComponentData createDataForComponent(JavaClassSource type) {
-        ComponentData data = new ComponentData();
+    private SourceDataFile createDataForComponent(SourceDataFile data) {
         for (IComponentDataProvider dataProvider : _dataProviders) {
-            dataProvider.provide(type, data);
+            dataProvider.provide(data);
         }
         return data;
     }
 
-    List<ComponentData> createDataForNonComponent(JavaClassSource type) {
-        return getComponentNames(type).stream()
-                .map(componentName -> {
-                    ComponentData data = createDataForComponent(type);
-                    data.setFullTypeName(componentName);
-                    data.setMemberData(new ArrayList<MemberData>() {{
-                        add(new MemberData(type.getFields().get(0).getType(), "value", null));
-                    }});
-                    return data;
-                }).collect(Collectors.toList());
 
-    }
 
-    List<String> getComponentNames(JavaClassSource type) {
-        if (type.hasAnnotation("CustomComponentName")) {
-            return Arrays.asList(type.getAnnotation("CustomComponentName").getStringArrayValue("componentNames"));
+    List<String> getComponentNames(SourceDataFile data) {
+        if (data.fileContent.hasAnnotation("CustomComponentName")) {
+            return Arrays.asList(data.fileContent.getAnnotation("CustomComponentName").getStringArrayValue("componentNames"));
 
         } else {
             return new ArrayList<>();
@@ -156,7 +141,10 @@ public class ComponentDataProvider implements ICodeGeneratorDataProvider, IConfi
         return new ArrayList<IComponentDataProvider>() {{
             add(new ComponentTypeComponentDataProvider());
             add(new MemberDataComponentDataProvider());
+            add(new ConstructorDataComponentDataProvider());
+            add(new EnumsDataComponentDataProvider());
             add(new ContextsComponentDataProvider());
+            add(new GenericsDataComponentDataProvider());
             add(new IsUniqueComponentDataProvider());
             add(new ShouldGenerateComponentComponentDataProvider());
 

@@ -11,15 +11,15 @@ public class ComponentTypeComponentDataProvider implements IComponentDataProvide
     public static String COMPONENT_FULL_TYPE_NAME = "component_fullTypeName";
 
     @Override
-    public void provide(JavaClassSource type, ComponentData data) {
-        setFullTypeName(data, type.getCanonicalName());
+    public void provide(SourceDataFile data) {
+        setFullTypeName(data, data.source.getCanonicalName());
     }
 
-    public static List<String> getFullTypeName(ComponentData data) {
+    public static List<String> getFullTypeName(SourceDataFile data) {
         return (List<String>) data.get(COMPONENT_FULL_TYPE_NAME);
     }
 
-    public static void setFullTypeName(ComponentData data, String fullTypeName) {
+    public static void setFullTypeName(SourceDataFile data, String fullTypeName) {
         data.put(COMPONENT_FULL_TYPE_NAME, fullTypeName);
     }
 }

@@ -28,34 +28,34 @@ public class ContextsComponentDataProvider implements IComponentDataProvider, IC
     }
 
     @Override
-    public void provide(JavaClassSource type, ComponentData data) {
-        List<String> contextNames = getContextNamesOrDefault(type);
+    public void provide(SourceDataFile data) {
+        List<String> contextNames = getContextNamesOrDefault(data.source);
         setContextNames(data, contextNames);
     }
 
-    public List<String> getContextNames(JavaClassSource type) {
+    public List<String> extractContextNames(JavaClassSource type) {
         AnnotationSource<JavaClassSource> annotation = type.getAnnotation("Component");
         if (annotation != null) {
-            List<String> poolNames = (annotation.toString().contains("pools"))
-                    ? Arrays.asList(annotation.getStringArrayValue("pools"))
+            return (annotation.toString().contains("contexts"))
+                    ? Arrays.asList(annotation.getStringArrayValue("contexts"))
                     : null;
         }
         return new ArrayList<>();
     }
 
     public List<String> getContextNamesOrDefault(JavaClassSource type) {
-        List<String> contextNames = getContextNames(type);
+        List<String> contextNames = extractContextNames(type);
         if (contextNames.size() == 0) {
             contextNames = _contextNamesConfig.getContextNames();
         }
         return contextNames;
     }
 
-    public static List<String> getContextNames(ComponentData data) {
+    public static List<String> getContextNames(SourceDataFile data) {
         return (List<String>) data.get(COMPONENT_CONTEXTS);
     }
 
-    public static void setContextNames(ComponentData data, List<String> contextNames) {
+    public static void setContextNames(SourceDataFile data, List<String> contextNames) {
         data.put(COMPONENT_CONTEXTS, contextNames);
     }
 

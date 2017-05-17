@@ -36,7 +36,7 @@ public class NewConfig extends AbstractCommand {
 
         Path currentRelativePath = Paths.get("");
         String currentDir = currentRelativePath.toAbsolutePath().toString();
-        File path = new File(currentDir + "/" + Preferences.PATH);
+        File path = new File(currentDir + "/" + Preferences.PATH_PROPERTIES);
 
         if (isForce(Arrays.asList(args)) || !path.exists()) {
             CodeGeneratorConfig defaultConfig = new CodeGeneratorConfig();

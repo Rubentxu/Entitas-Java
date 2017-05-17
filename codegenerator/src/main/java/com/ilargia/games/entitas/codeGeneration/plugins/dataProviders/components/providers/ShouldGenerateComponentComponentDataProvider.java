@@ -13,29 +13,29 @@ public class ShouldGenerateComponentComponentDataProvider implements IComponentD
 
 
     @Override
-    public void provide(JavaClassSource type, ComponentData data) {
-        boolean shouldGenerateComponent = !type.hasInterface(IComponent.class);
+    public void provide(SourceDataFile data) {
+        boolean shouldGenerateComponent = !data.source.hasInterface(IComponent.class);
         shouldGenerateComponent(data, shouldGenerateComponent);
 
         if (shouldGenerateComponent) {
-            setObjectType(data, type.getQualifiedName());
+            setObjectType(data, data.source.getQualifiedName());
         }
 
     }
 
-    public static boolean shouldGenerateComponent(ComponentData data) {
+    public static boolean shouldGenerateComponent(SourceDataFile data) {
         return (boolean) data.get(COMPONENT_GENERATE_COMPONENT);
     }
 
-    public static void shouldGenerateComponent(ComponentData data, boolean generate) {
+    public static void shouldGenerateComponent(SourceDataFile data, boolean generate) {
         data.put(COMPONENT_GENERATE_COMPONENT, generate);
     }
 
-    public static String getObjectType(ComponentData data) {
+    public static String getObjectType(SourceDataFile data) {
         return (String) data.get(COMPONENT_OBJECT_TYPE);
     }
 
-    public static void setObjectType(ComponentData data, String type) {
+    public static void setObjectType(SourceDataFile data, String type) {
         data.put(COMPONENT_OBJECT_TYPE, type);
     }
 

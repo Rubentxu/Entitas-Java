@@ -13,8 +13,8 @@ public class MemberDataComponentDataProvider implements IComponentDataProvider {
     public static String COMPONENT_MEMBER_INFOS = "component_memberInfos";
 
     @Override
-    public void provide(JavaClassSource type, ComponentData data) {
-       List<MemberData> memberDatas = type.getFields().stream()
+    public void provide(SourceDataFile data) {
+       List<MemberData> memberDatas = data.source.getFields().stream()
                 .filter(field -> field.isPublic())
                 .map(field -> new MemberData(field.getType(), field.getName(), field.getAnnotation("generateIndex")))
                 .collect(Collectors.toList());
@@ -22,11 +22,11 @@ public class MemberDataComponentDataProvider implements IComponentDataProvider {
         setMemberData(data, memberDatas);
     }
 
-    public static  List<MemberData> getMemberData(ComponentData data) {
+    public static  List<MemberData> getMemberData(SourceDataFile data) {
         return (List<MemberData>) data.get(COMPONENT_MEMBER_INFOS);
     }
 
-    public static void setMemberData(ComponentData data, List<MemberData> memberInfos) {
+    public static void setMemberData(SourceDataFile data, List<MemberData> memberInfos) {
         data.put(COMPONENT_MEMBER_INFOS, memberInfos);
     }
 }

@@ -9,8 +9,8 @@ public class AbstractConfigurableConfig implements IConfigurable{
 
     protected Properties properties;
 
-    public AbstractConfigurableConfig() {
-        this.properties = new Properties();
+    public AbstractConfigurableConfig(Properties properties) {
+        this.properties = properties;
     }
 
     @Override

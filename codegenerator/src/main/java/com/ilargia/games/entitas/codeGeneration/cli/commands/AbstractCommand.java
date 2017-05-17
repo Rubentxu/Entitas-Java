@@ -16,7 +16,7 @@ public abstract class AbstractCommand implements ICommand{
         InputStream input = null;
 
         try {
-            input = new FileInputStream(Preferences.PATH);
+            input = new FileInputStream(Preferences.PATH_PROPERTIES);
             prop.load(input);
 
         } finally {
@@ -32,11 +32,11 @@ public abstract class AbstractCommand implements ICommand{
     }
 
     protected boolean assertProperties() {
-        if (Path.fromPortableString(Preferences.PATH).toFile().exists()) {
+        if (Path.fromPortableString(Preferences.PATH_PROPERTIES).toFile().exists()) {
             return true;
         }
 
-        System.out.printf("Warn: Couldn't find " + Preferences.PATH);
+        System.out.printf("Warn: Couldn't find " + Preferences.PATH_PROPERTIES);
         System.out.printf("Info: Run 'entitas new' to create Entitas.properties with default values");
 
         return false;

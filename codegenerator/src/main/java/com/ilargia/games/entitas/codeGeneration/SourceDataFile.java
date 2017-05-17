@@ -2,7 +2,7 @@ package com.ilargia.games.entitas.codeGeneration;
 
 import org.jboss.forge.roaster.model.source.JavaClassSource;
 
-public class CodeGenFile {
+public class SourceDataFile extends CodeGeneratorData {
 
     public String fileName;
     public String projectDir;
@@ -10,7 +10,7 @@ public class CodeGenFile {
     public JavaClassSource fileContent;
 
 
-    public CodeGenFile(String fileName, String projectDir, String subDir, JavaClassSource fileContent) {
+    public SourceDataFile(String fileName, String projectDir, String subDir, JavaClassSource fileContent) {
         this.fileName = fileName;
         this.projectDir = projectDir;
         this.subDir = subDir;

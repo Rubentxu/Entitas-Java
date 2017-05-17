@@ -5,19 +5,21 @@ import java.util.Properties;
 
 public class Preferences {
 
-    public static String PATH = "Entitas.properties";
+    public static String PROJECT_PATH = "./";
+    public static String SOURCE_PATH = "src/main/java/";
+    public static String PATH_PROPERTIES = "Entitas.properties";
     private static Properties prop = new Properties();
     private static InputStream input = null;
     private static OutputStream output = null;
 
 
     public static boolean hasProperties() {
-        return new File(PATH).exists();
+        return new File(PROJECT_PATH + "/" + PATH_PROPERTIES).exists();
     }
 
     public static Properties loadProperties() {
         try {
-            prop.load(new FileInputStream(PATH));
+            prop.load(new FileInputStream(PROJECT_PATH + "/" + PATH_PROPERTIES));
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
@@ -34,7 +36,7 @@ public class Preferences {
 
     public static void saveProperties(Properties properties) {
         try {
-            properties.store(new FileOutputStream(PATH), null);
+            properties.store(new FileOutputStream(PROJECT_PATH + "/" + PATH_PROPERTIES), null);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
