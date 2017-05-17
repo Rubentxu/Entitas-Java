@@ -7,7 +7,6 @@ import com.ilargia.games.entitas.codeGeneration.interfaces.ICodeGeneratorDataPro
 import com.ilargia.games.entitas.codeGeneration.plugins.dataProviders.components.ComponentDataProvider;
 import com.ilargia.games.entitas.codeGenerator.CodeGeneratorOld;
 import com.ilargia.games.entitas.codeGenerator.configuration.Preferences;
-import com.ilargia.games.entitas.codeGenerator.data.ComponentInfo;
 import com.ilargia.games.entitas.codeGenerator.generators.*;
 import com.ilargia.games.entitas.codeGenerator.providers.TypeReflectionProvider;
 import javafx.application.Application;
@@ -207,17 +206,19 @@ public class CodeGeneratorJFX extends Application implements Initializable {
     }
 
     public static Map<String, List<File>> readFileComponents(String pathComponents) {
-        Map<String, List<File>> recursiveList = new HashMap(){{put("",new ArrayList<>());}};
+        Map<String, List<File>> recursiveList = new HashMap() {{
+            put("", new ArrayList<>());
+        }};
         File d = new File(pathComponents);
 
         if (d.isDirectory()) {
             for (File listFile : d.listFiles()) {
                 if (listFile.isDirectory()) {
                     List<File> listSubDir = Arrays.asList(listFile.listFiles());
-                    if(listSubDir.size() > 0) {
+                    if (listSubDir.size() > 0) {
                         Path path = Paths.get(listSubDir.get(0).getAbsolutePath());
                         String subDir = path.getName(path.getNameCount() - 2).toString();
-                        recursiveList.put(subDir, listSubDir );
+                        recursiveList.put(subDir, listSubDir);
                     }
 
                 } else {
@@ -234,7 +235,7 @@ public class CodeGeneratorJFX extends Application implements Initializable {
         List<SourceDataFile> sources = new ArrayList<>();
         Map<String, List<File>> mapFiles = readFileComponents(path);
         mapFiles.forEach((subDir, files) -> {
-                sources.addAll(files.stream()
+            sources.addAll(files.stream()
                     .map((file) -> {
                         try {
                             return Roaster.parse(JavaClassSource.class, file);
@@ -243,7 +244,7 @@ public class CodeGeneratorJFX extends Application implements Initializable {
                         }
                     }).filter((source) -> source != null)
                     .filter((source) -> source.getInterfaces().toString().matches(".*\\bIComponent\\b.*"))
-                    .map((source) -> new SourceDataFile(source.getName(),null, subDir, source))
+                    .map((source) -> new SourceDataFile(source.getName(), null, subDir, source))
                     .collect(Collectors.toList()));
         });
     }
@@ -254,21 +255,25 @@ public class CodeGeneratorJFX extends Application implements Initializable {
         CodeGeneratorConfig config = new CodeGeneratorConfig(Preferences.loadProperties());
 
         var codeGenerator = new CodeGenerator(
-                getEnabled<ICodeGeneratorDataProvider>(config.dataProviders),
-                getEnabled<ICodeGenerator>(config.codeGenerators),
-                getEnabled<ICodeGenFilePostProcessor>(config.postProcessors)
+                getEnabled < ICodeGeneratorDataProvider > (config.dataProviders),
+                getEnabled < ICodeGenerator > (config.codeGenerators),
+                getEnabled < ICodeGenFilePostProcessor > (config.postProcessors)
         );
 
         var dryFiles = codeGenerator.DryRun();
         var sloc = dryFiles
-                .Select(file => file.fileContent.ToUnixLineEndings())
-                .Sum(content => content.Split(new [] { '\n' }, StringSplitOptions.RemoveEmptyEntries).Length);
+                .Select(file = > file.fileContent.ToUnixLineEndings())
+                .Sum(content = > content.Split(new[]{
+            '\n'
+        },StringSplitOptions.RemoveEmptyEntries).Length);
 
         var files = codeGenerator.Generate();
-        var totalGeneratedFiles = files.Select(file => file.fileName).Distinct().Count();
+        var totalGeneratedFiles = files.Select(file = > file.fileName).Distinct().Count();
         var loc = files
-                .Select(file => file.fileContent.ToUnixLineEndings())
-                .Sum(content => content.Split(new [] { '\n' }).Length);
+                .Select(file = > file.fileContent.ToUnixLineEndings())
+                .Sum(content = > content.Split(new[]{
+            '\n'
+        }).Length);
 
         foreach(var file in files) {
             Debug.Log(file.generatorName + ": " + file.fileName);
@@ -279,16 +284,18 @@ public class CodeGeneratorJFX extends Application implements Initializable {
         AssetDatabase.Refresh();
     }
 
-    static List<ICodeGeneratorDataProvider> getGeneratorDataProvider(String[] types, ) {
+    static List<ICodeGeneratorDataProvider> getGeneratorDataProvider(String[] types,) {
         return new ArrayList<>({{
                 add(new ComponentDataProvider())
         }})
     }
 
-    public static Type[] GetTypes<T>() {
+    public static Type[] GetTypes<T>()
+
+    {
         return Assembly.GetAssembly(typeof(T)).GetTypes()
-                .Where(type => type.ImplementsInterface<T>())
-                .OrderBy(type => type.FullName)
+                .Where(type = > type.ImplementsInterface < T > ())
+                .OrderBy(type = > type.FullName)
                 .ToArray();
     }
 }

@@ -3,7 +3,7 @@ package com.ilargia.games.entitas.codeGeneration.cli.commands;
 
 import com.ilargia.games.entitas.codeGeneration.codeGenerator.CodeGeneratorUtil;
 
-public class Doctor extends AbstractCommand{
+public class Doctor extends AbstractCommand {
     @Override
     public String trigger() {
         return "doctor";

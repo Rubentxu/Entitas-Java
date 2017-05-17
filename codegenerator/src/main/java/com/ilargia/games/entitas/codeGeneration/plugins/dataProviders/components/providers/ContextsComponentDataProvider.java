@@ -1,8 +1,8 @@
 package com.ilargia.games.entitas.codeGeneration.plugins.dataProviders.components.providers;
 
 
+import com.ilargia.games.entitas.codeGeneration.SourceDataFile;
 import com.ilargia.games.entitas.codeGeneration.plugins.config.ContextNamesConfig;
-import com.ilargia.games.entitas.codeGeneration.plugins.dataProviders.components.ComponentData;
 import com.ilargia.games.entitas.codeGenerator.interfaces.configuration.IConfigurable;
 import org.jboss.forge.roaster.model.source.AnnotationSource;
 import org.jboss.forge.roaster.model.source.JavaClassSource;
@@ -29,7 +29,7 @@ public class ContextsComponentDataProvider implements IComponentDataProvider, IC
 
     @Override
     public void provide(SourceDataFile data) {
-        List<String> contextNames = getContextNamesOrDefault(data.source);
+        List<String> contextNames = getContextNamesOrDefault(data.fileContent);
         setContextNames(data, contextNames);
     }
 

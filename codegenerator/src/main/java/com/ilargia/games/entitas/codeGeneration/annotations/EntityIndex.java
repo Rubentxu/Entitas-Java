@@ -8,7 +8,7 @@ import static java.lang.annotation.ElementType.*;
 
 
 @Retention(RetentionPolicy.SOURCE)
-@Target({ TYPE, FIELD, METHOD })
+@Target({TYPE, FIELD, METHOD})
 public @interface EntityIndex {
 
     EntityIndexType type() default EntityIndexType.ENTITY_INDEX;

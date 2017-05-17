@@ -1,11 +1,11 @@
 package com.ilargia.games.entitas.codeGeneration.codeGenerator;
 
 
+import com.ilargia.games.entitas.codeGeneration.CodeGenFile;
+import com.ilargia.games.entitas.codeGeneration.CodeGeneratorData;
 import com.ilargia.games.entitas.codeGeneration.interfaces.ICodeGenFilePostProcessor;
 import com.ilargia.games.entitas.codeGeneration.interfaces.ICodeGenerator;
 import com.ilargia.games.entitas.codeGeneration.interfaces.ICodeGeneratorDataProvider;
-import com.ilargia.games.entitas.codeGeneration.CodeGenFile;
-import com.ilargia.games.entitas.codeGeneration.CodeGeneratorData;
 
 import java.util.ArrayList;
 import java.util.List;

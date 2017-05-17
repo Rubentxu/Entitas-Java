@@ -8,10 +8,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-public abstract class AbstractCommand implements ICommand{
+public abstract class AbstractCommand implements ICommand {
 
 
-    protected Properties loadProperties()  throws Exception{
+    protected Properties loadProperties() throws Exception {
         Properties prop = new Properties();
         InputStream input = null;
 

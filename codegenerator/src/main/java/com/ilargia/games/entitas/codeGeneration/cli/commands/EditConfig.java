@@ -3,7 +3,7 @@ package com.ilargia.games.entitas.codeGeneration.cli.commands;
 
 import com.ilargia.games.entitas.codeGenerator.configuration.Preferences;
 
-public class EditConfig extends AbstractCommand{
+public class EditConfig extends AbstractCommand {
     @Override
     public String trigger() {
         return "edit";
@@ -25,7 +25,7 @@ public class EditConfig extends AbstractCommand{
 
         if (assertProperties()) {
             System.out.println("Opening " + Preferences.PATH_PROPERTIES);
-           // System.diagnostics.Process.Start(Preferences.PATH_PROPERTIES);
+            // System.diagnostics.Process.Start(Preferences.PATH_PROPERTIES);
         }
     }
 }

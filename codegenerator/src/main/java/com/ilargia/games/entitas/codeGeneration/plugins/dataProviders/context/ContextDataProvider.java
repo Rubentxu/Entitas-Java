@@ -48,7 +48,7 @@ public class ContextDataProvider implements ICodeGeneratorDataProvider, IConfigu
     @Override
     public List<CodeGeneratorData> getData() {
         return _contextNamesConfig.getContextNames().stream()
-                .map(name-> {
+                .map(name -> {
                     ContextData data = new ContextData();
                     setContextName(data, name);
                     return data;
@@ -56,7 +56,7 @@ public class ContextDataProvider implements ICodeGeneratorDataProvider, IConfigu
     }
 
     public static String getContextName(ContextData data) {
-        return (String)data.get(CONTEXT_NAME);
+        return (String) data.get(CONTEXT_NAME);
     }
 
     public static void setContextName(ContextData data, String contextName) {

@@ -3,8 +3,6 @@ package com.ilargia.games.entitas.codeGeneration.plugins.postProcessors;
 
 import com.ilargia.games.entitas.codeGeneration.CodeGenFile;
 import com.ilargia.games.entitas.codeGeneration.interfaces.ICodeGenFilePostProcessor;
-import org.jboss.forge.roaster.model.source.JavaClassSource;
-import org.jboss.forge.roaster.model.source.JavaDocSource;
 
 import java.util.List;
 

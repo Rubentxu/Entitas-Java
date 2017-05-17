@@ -12,6 +12,7 @@ import com.ilargia.games.entitas.codeGenerator.interfaces.configuration.IConfigu
 import org.jboss.forge.roaster.model.source.AnnotationSource;
 import org.jboss.forge.roaster.model.source.FieldSource;
 import org.jboss.forge.roaster.model.source.JavaClassSource;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -43,7 +44,7 @@ public class EntityIndexDataProvider implements ICodeGeneratorDataProvider, ICon
     public EntityIndexDataProvider(List<JavaClassSource> types) {
         _types = types;
     }
-    
+
     @Override
     public String getName() {
         return "Entity Index";
@@ -127,10 +128,10 @@ public class EntityIndexDataProvider implements ICodeGeneratorDataProvider, ICon
         List<MethodData> getMethods = type.getMethods().stream()
                 .filter(m -> m.isPublic())
                 .filter(m -> m.hasAnnotation("EntityIndexGetMethod"))
-                .map(m ->  new MethodData(m.getReturnType(), m.getName(),
-                        m.getParameters().stream().map(p-> new MemberData(p.getType(),p.getName(), null)).collect(Collectors.toList()),
+                .map(m -> new MethodData(m.getReturnType(), m.getName(),
+                        m.getParameters().stream().map(p -> new MemberData(p.getType(), p.getName(), null)).collect(Collectors.toList()),
                         m.getAnnotation("EntityIndexGetMethod")
-                        ))
+                ))
                 .collect(Collectors.toList());
 
         setCustomMethods(data, getMethods);
@@ -142,7 +143,10 @@ public class EntityIndexDataProvider implements ICodeGeneratorDataProvider, ICon
         return Collector.of(
                 ArrayList::new,
                 List::add,
-                (left, right) -> { left.addAll(right); return left; },
+                (left, right) -> {
+                    left.addAll(right);
+                    return left;
+                },
                 list -> {
                     if (list.size() != 1) {
                         list.clear();
@@ -153,7 +157,7 @@ public class EntityIndexDataProvider implements ICodeGeneratorDataProvider, ICon
     }
 
     public static String getEntityIndexType(EntityIndexData data) {
-        return (String)data.get(ENTITY_INDEX_TYPE);
+        return (String) data.get(ENTITY_INDEX_TYPE);
     }
 
     public static void setEntityIndexType(EntityIndexData data, String type) {
@@ -161,7 +165,7 @@ public class EntityIndexDataProvider implements ICodeGeneratorDataProvider, ICon
     }
 
     public static boolean isCustom(EntityIndexData data) {
-        return (boolean)data.get(ENTITY_INDEX_IS_CUSTOM);
+        return (boolean) data.get(ENTITY_INDEX_IS_CUSTOM);
     }
 
     public static void isCustom(EntityIndexData data, boolean isCustom) {
@@ -169,7 +173,7 @@ public class EntityIndexDataProvider implements ICodeGeneratorDataProvider, ICon
     }
 
     public static List<MethodData> getCustomMethods(EntityIndexData data) {
-        return (List<MethodData>)data.get(ENTITY_INDEX_CUSTOM_METHODS);
+        return (List<MethodData>) data.get(ENTITY_INDEX_CUSTOM_METHODS);
     }
 
     public static void setCustomMethods(EntityIndexData data, List<MethodData> methods) {
@@ -177,7 +181,7 @@ public class EntityIndexDataProvider implements ICodeGeneratorDataProvider, ICon
     }
 
     public static String getEntityIndexName(EntityIndexData data) {
-        return (String)data.get(ENTITY_INDEX_NAME);
+        return (String) data.get(ENTITY_INDEX_NAME);
     }
 
     public static void setEntityIndexName(EntityIndexData data, String name) {
@@ -185,7 +189,7 @@ public class EntityIndexDataProvider implements ICodeGeneratorDataProvider, ICon
     }
 
     public static List<String> getContextNames(EntityIndexData data) {
-        return (List<String>)data.get(ENTITY_INDEX_CONTEXT_NAMES);
+        return (List<String>) data.get(ENTITY_INDEX_CONTEXT_NAMES);
     }
 
     public static void setContextNames(EntityIndexData data, List<String> contextNames) {
@@ -193,7 +197,7 @@ public class EntityIndexDataProvider implements ICodeGeneratorDataProvider, ICon
     }
 
     public static String getKeyType(EntityIndexData data) {
-        return (String)data.get(ENTITY_INDEX_KEY_TYPE);
+        return (String) data.get(ENTITY_INDEX_KEY_TYPE);
     }
 
     public static void setKeyType(EntityIndexData data, String type) {
@@ -201,7 +205,7 @@ public class EntityIndexDataProvider implements ICodeGeneratorDataProvider, ICon
     }
 
     public static String getComponentType(EntityIndexData data) {
-        return (String)data.get(ENTITY_INDEX_COMPONENT_TYPE);
+        return (String) data.get(ENTITY_INDEX_COMPONENT_TYPE);
     }
 
     public static void setComponentType(EntityIndexData data, String type) {
@@ -209,7 +213,7 @@ public class EntityIndexDataProvider implements ICodeGeneratorDataProvider, ICon
     }
 
     public static String getMemberName(EntityIndexData data) {
-        return (String)data.get(ENTITY_INDEX_MEMBER_NAME);
+        return (String) data.get(ENTITY_INDEX_MEMBER_NAME);
     }
 
     public static void setMemberName(EntityIndexData data, String memberName) {

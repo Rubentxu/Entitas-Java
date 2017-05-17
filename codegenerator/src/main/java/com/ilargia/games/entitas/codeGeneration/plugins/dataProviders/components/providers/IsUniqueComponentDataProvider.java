@@ -1,21 +1,19 @@
 package com.ilargia.games.entitas.codeGeneration.plugins.dataProviders.components.providers;
 
 
-import com.ilargia.games.entitas.codeGeneration.plugins.dataProviders.components.ComponentData;
+import com.ilargia.games.entitas.codeGeneration.SourceDataFile;
 import org.jboss.forge.roaster.model.source.AnnotationSource;
 import org.jboss.forge.roaster.model.source.JavaClassSource;
 
-import java.util.Arrays;
-import java.util.List;
 
-public class IsUniqueComponentDataProvider implements IComponentDataProvider{
+public class IsUniqueComponentDataProvider implements IComponentDataProvider {
 
 
     public static String COMPONENT_IS_UNIQUE = "component_isUnique";
 
     @Override
     public void provide(SourceDataFile data) {
-        AnnotationSource<JavaClassSource> annotation = data.source.getAnnotation("IsUnique");
+        AnnotationSource<JavaClassSource> annotation = data.fileContent.getAnnotation("IsUnique");
         if (annotation != null) {
             setIsUnique(data, true);
         }

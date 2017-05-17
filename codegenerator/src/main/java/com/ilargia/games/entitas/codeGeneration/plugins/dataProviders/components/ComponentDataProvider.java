@@ -7,7 +7,6 @@ import com.ilargia.games.entitas.codeGeneration.codeGenerator.CodeGeneratorConfi
 import com.ilargia.games.entitas.codeGeneration.interfaces.ICodeGeneratorDataProvider;
 import com.ilargia.games.entitas.codeGeneration.plugins.dataProviders.components.providers.*;
 import com.ilargia.games.entitas.codeGenerator.interfaces.configuration.IConfigurable;
-import org.jboss.forge.roaster.model.source.JavaClassSource;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -97,11 +96,7 @@ public class ComponentDataProvider implements ICodeGeneratorDataProvider, IConfi
         List<SourceDataFile> dataFromNonComponents = _sources.stream()
                 .filter(s -> s.fileContent.hasInterface(IComponent.class))
                 .filter(s -> hasContexts(s))
-
-                .reduce(new ArrayList<SourceDataFile>(), (a, b) -> {
-                    a.addAll(b);
-                    return a;
-                });
+                .collect(Collectors.toList());
 
         List<String> generatedComponentsLookup = dataFromNonComponents.stream()
                 .map(data -> data.fileContent.getCanonicalName())
@@ -124,7 +119,6 @@ public class ComponentDataProvider implements ICodeGeneratorDataProvider, IConfi
         }
         return data;
     }
-
 
 
     List<String> getComponentNames(SourceDataFile data) {

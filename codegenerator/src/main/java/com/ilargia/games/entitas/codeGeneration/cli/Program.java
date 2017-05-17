@@ -22,9 +22,9 @@ public class Program {
         }};
     }
 
-    public static void main(String [] args) {
+    public static void main(String[] args) {
         List<ICommand> commands = getCommands().stream()
-                .sorted((a, b)-> a.trigger().compareTo(b.trigger()))
+                .sorted((a, b) -> a.trigger().compareTo(b.trigger()))
                 .collect(Collectors.toList());
 
         if (args == null || args.length == 0) {
@@ -53,28 +53,28 @@ public class Program {
 
     static void printException(Exception ex, List<String> args) {
 
-            if (isVerbose(args)) {
-                System.out.println(ex.toString());
-            } else {
-                System.out.println(ex.getMessage());
-            }
+        if (isVerbose(args)) {
+            System.out.println(ex.toString());
+        } else {
+            System.out.println(ex.getMessage());
+        }
 
     }
 
     static void printUsage(List<ICommand> commands) {
         int pad = commands.stream()
                 .max(Comparator.comparingInt(value -> value.example().length()))
-                .map(o-> o.example().length())
+                .map(o -> o.example().length())
                 .get();
         List<String> commandList = commands.stream()
                 .map(c -> c.example() + " - " + c.description())
                 .collect(Collectors.toList());
 
-        commandList.add(String.format("%1$-"+pad+"s", "[-v]", " - verbose output"));
-        commandList.add(String.format("%1$-"+pad+"s", "[-s]", " - silent output (errors only)"));
+        commandList.add(String.format("%1$-" + pad + "s", "[-v]", " - verbose output"));
+        commandList.add(String.format("%1$-" + pad + "s", "[-s]", " - silent output (errors only)"));
 
 
-        System.out.println("Entitas Code Generator version 1" );
+        System.out.println("Entitas Code Generator version 1");
         System.out.println(String.format("usage:\n{0}", String.join("\n", commandList)));
     }
 

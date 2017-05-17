@@ -7,7 +7,7 @@ import java.lang.annotation.Target;
 import static java.lang.annotation.ElementType.*;
 
 @Retention(RetentionPolicy.SOURCE)
-@Target({ TYPE, FIELD, METHOD })
+@Target({TYPE, FIELD, METHOD})
 public @interface CustomEntityIndex {
 
     Class contextType();

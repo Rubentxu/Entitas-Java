@@ -4,7 +4,7 @@ package com.ilargia.games.entitas.codeGeneration.cli.commands;
 import com.ilargia.games.entitas.codeGeneration.codeGenerator.CodeGenerator;
 import com.ilargia.games.entitas.codeGeneration.codeGenerator.CodeGeneratorUtil;
 
-public class DryRun extends AbstractCommand{
+public class DryRun extends AbstractCommand {
     @Override
     public String trigger() {
         return "dry";
@@ -28,7 +28,7 @@ public class DryRun extends AbstractCommand{
             CodeGenerator codeGenerator = CodeGeneratorUtil.codeGeneratorFromProperties();
 
             codeGenerator.OnProgress = (title, info, progress) -> {
-                int p = (int)(progress * 100);
+                int p = (int) (progress * 100);
                 System.out.println(String.format("{0}: {1} ({2}%)", title, info, p));
             };
 

@@ -18,6 +18,6 @@ public class MethodData {
         this.returnType = returnType;
         this.methodName = methodName;
         this.parameters = parameters;
-        this.annotation =  annotation;
+        this.annotation = annotation;
     }
 }

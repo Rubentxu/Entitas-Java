@@ -1,12 +1,10 @@
 package com.ilargia.games.entitas.codeGeneration.plugins.dataProviders.components.providers;
 
 import com.ilargia.games.entitas.api.IComponent;
-import com.ilargia.games.entitas.codeGeneration.plugins.dataProviders.components.ComponentData;
-import org.jboss.forge.roaster.model.source.JavaClassSource;
+import com.ilargia.games.entitas.codeGeneration.SourceDataFile;
 
 
 public class ShouldGenerateComponentComponentDataProvider implements IComponentDataProvider {
-
 
     public static String COMPONENT_GENERATE_COMPONENT = "component_generateComponent";
     public static String COMPONENT_OBJECT_TYPE = "component_objectType";
@@ -14,11 +12,11 @@ public class ShouldGenerateComponentComponentDataProvider implements IComponentD
 
     @Override
     public void provide(SourceDataFile data) {
-        boolean shouldGenerateComponent = !data.source.hasInterface(IComponent.class);
+        boolean shouldGenerateComponent = !data.fileContent.hasInterface(IComponent.class);
         shouldGenerateComponent(data, shouldGenerateComponent);
 
         if (shouldGenerateComponent) {
-            setObjectType(data, data.source.getQualifiedName());
+            setObjectType(data, data.fileContent.getQualifiedName());
         }
 
     }

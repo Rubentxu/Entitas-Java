@@ -1,11 +1,10 @@
 package com.ilargia.games.entitas.codeGeneration.plugins.dataProviders.components.providers;
 
-import com.ilargia.games.entitas.codeGeneration.plugins.dataProviders.components.ComponentData;
+import com.ilargia.games.entitas.codeGeneration.SourceDataFile;
 import org.jboss.forge.roaster.model.source.JavaClassSource;
 import org.jboss.forge.roaster.model.source.TypeVariableSource;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 public class GenericsDataComponentDataProvider implements IComponentDataProvider {
@@ -14,11 +13,11 @@ public class GenericsDataComponentDataProvider implements IComponentDataProvider
 
     @Override
     public void provide(SourceDataFile data) {
-        List<TypeVariableSource<JavaClassSource>> generics = data.source.getOrigin().getTypeVariables();
+        List<TypeVariableSource<JavaClassSource>> generics = data.fileContent.getOrigin().getTypeVariables();
         setGenericsData(data, generics);
     }
 
-    public static  List<String> getGenericsData(SourceDataFile data) {
+    public static List<String> getGenericsData(SourceDataFile data) {
         return (List<String>) data.get(GENERIC_DATA_INFOS);
     }
 

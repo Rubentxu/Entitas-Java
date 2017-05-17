@@ -11,7 +11,7 @@ import java.io.*;
 import java.util.List;
 import java.util.Properties;
 
-public class WriteToDiskPostProcessor implements ICodeGenFilePostProcessor , IConfigurable {
+public class WriteToDiskPostProcessor implements ICodeGenFilePostProcessor, IConfigurable {
 
     TargetDirectoryConfig _targetDirectoryConfig = new TargetDirectoryConfig();
 
@@ -57,13 +57,13 @@ public class WriteToDiskPostProcessor implements ICodeGenFilePostProcessor , ICo
         return files;
     }
 
-    public static void toFile(JavaClassSource javaClass, File targetDir)  {
+    public static void toFile(JavaClassSource javaClass, File targetDir) {
         File f = targetDir;
         String[] parts = javaClass.getPackage().split("\\.");
 
         try {
-            if(!targetDir.getAbsolutePath().endsWith(parts[parts.length-1])) {
-                f = new File(f, parts[parts.length-1]);
+            if (!targetDir.getAbsolutePath().endsWith(parts[parts.length - 1])) {
+                f = new File(f, parts[parts.length - 1]);
                 createParentDirs(f);
             }
             f = new File(f, javaClass.getName() + ".java");
@@ -90,11 +90,11 @@ public class WriteToDiskPostProcessor implements ICodeGenFilePostProcessor , ICo
     }
 
 
-    public static void write(File file , String content) {
+    public static void write(File file, String content) {
         try (Writer writer = new BufferedWriter(new OutputStreamWriter(
                 new FileOutputStream(file.getAbsolutePath()), "utf-8"))) {
             writer.write(content);
-        }catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
             System.exit(-1);
         }
@@ -103,7 +103,7 @@ public class WriteToDiskPostProcessor implements ICodeGenFilePostProcessor , ICo
     public void createFile(String className, String path, String content) {
         try {
             File file = new File(path + "/" + className + ".java");
-            if(!file.getParentFile().exists()) file.getParentFile().mkdirs();
+            if (!file.getParentFile().exists()) file.getParentFile().mkdirs();
             FileWriter fw = new FileWriter(file.getAbsoluteFile());
             BufferedWriter bw = new BufferedWriter(fw);
             bw.write(content);

@@ -6,7 +6,7 @@ import com.ilargia.games.entitas.codeGeneration.CodeGeneratorData;
 
 import java.util.List;
 
-public interface ICodeGenerator extends ICodeGeneratorInterface{
+public interface ICodeGenerator extends ICodeGeneratorInterface {
 
     List<CodeGenFile> generate(List<CodeGeneratorData> data);
 }

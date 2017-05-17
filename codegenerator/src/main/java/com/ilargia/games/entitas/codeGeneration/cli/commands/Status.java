@@ -50,7 +50,7 @@ public class Status extends AbstractCommand {
                     configurables = CodeGeneratorUtil.getConfigurables(
                             CodeGeneratorUtil.getUsed(types, config.getDataProviders(), ICodeGeneratorDataProvider.class),
                             CodeGeneratorUtil.getUsed(types, config.getCodeGenerators(), ICodeGenerator.class),
-                    CodeGeneratorUtil.getUsed(types, config.getPostProcessors(),ICodeGenFilePostProcessor.class)
+                            CodeGeneratorUtil.getUsed(types, config.getPostProcessors(), ICodeGenFilePostProcessor.class)
                     );
 
                 } catch (Exception ex) {
@@ -71,23 +71,28 @@ public class Status extends AbstractCommand {
     }
 
     static void printKeyStatus(Set<Object> requiredKeys, Properties properties) {
-        foreach (var key in Helper.GetUnusedKeys(requiredKeys, properties)) {
+        foreach(var key in Helper.GetUnusedKeys(requiredKeys, properties)) {
             fabl.Info("Unused key: " + key);
         }
 
-        foreach (var key in Helper.GetMissingKeys(requiredKeys, properties)) {
+        foreach(var key in Helper.GetMissingKeys(requiredKeys, properties)) {
             fabl.Warn("Missing key: " + key);
         }
     }
 
     static void printPluginStatus(Type[] types, CodeGeneratorConfig config) {
-        var unavailableDataProviders = CodeGeneratorUtil.GetUnavailable<ICodeGeneratorDataProvider>(types, config.dataProviders);
-        var unavailableCodeGenerators = CodeGeneratorUtil.GetUnavailable<ICodeGenerator>(types, config.codeGenerators);
-        var unavailablePostProcessors = CodeGeneratorUtil.GetUnavailable<ICodeGenFilePostProcessor>(types, config.postProcessors);
+        var unavailableDataProviders = CodeGeneratorUtil.GetUnavailable < ICodeGeneratorDataProvider > (types, config.
+        dataProviders);
+        var unavailableCodeGenerators = CodeGeneratorUtil.GetUnavailable < ICodeGenerator > (types, config.
+        codeGenerators);
+        var unavailablePostProcessors = CodeGeneratorUtil.GetUnavailable < ICodeGenFilePostProcessor > (types, config.
+        postProcessors);
 
-        var availableDataProviders = CodeGeneratorUtil.GetAvailable<ICodeGeneratorDataProvider>(types, config.dataProviders);
-        var availableCodeGenerators = CodeGeneratorUtil.GetAvailable<ICodeGenerator>(types, config.codeGenerators);
-        var availablePostProcessors = CodeGeneratorUtil.GetAvailable<ICodeGenFilePostProcessor>(types, config.postProcessors);
+        var availableDataProviders = CodeGeneratorUtil.GetAvailable < ICodeGeneratorDataProvider > (types, config.
+        dataProviders);
+        var availableCodeGenerators = CodeGeneratorUtil.GetAvailable < ICodeGenerator > (types, config.codeGenerators);
+        var availablePostProcessors = CodeGeneratorUtil.GetAvailable < ICodeGenFilePostProcessor > (types, config.
+        postProcessors);
 
         printUnavailable(unavailableDataProviders);
         printUnavailable(unavailableCodeGenerators);
@@ -99,13 +104,13 @@ public class Status extends AbstractCommand {
     }
 
     static void printUnavailable(string[] names) {
-        foreach (var name in names) {
+        foreach(var name in names) {
             fabl.Warn("Unavailable: " + name);
         }
     }
 
     static void printAvailable(string[] names) {
-        foreach (var name in names) {
+        foreach(var name in names) {
             fabl.Info("Available: " + name);
         }
     }

@@ -1,7 +1,6 @@
 package com.ilargia.games.entitas.codeGeneration.plugins.dataProviders.components.providers;
 
-import com.ilargia.games.entitas.codeGeneration.plugins.dataProviders.components.ComponentData;
-import org.jboss.forge.roaster.model.source.JavaClassSource;
+import com.ilargia.games.entitas.codeGeneration.SourceDataFile;
 
 import java.util.List;
 
@@ -12,7 +11,7 @@ public class ComponentTypeComponentDataProvider implements IComponentDataProvide
 
     @Override
     public void provide(SourceDataFile data) {
-        setFullTypeName(data, data.source.getCanonicalName());
+        setFullTypeName(data, data.fileContent.getCanonicalName());
     }
 
     public static List<String> getFullTypeName(SourceDataFile data) {

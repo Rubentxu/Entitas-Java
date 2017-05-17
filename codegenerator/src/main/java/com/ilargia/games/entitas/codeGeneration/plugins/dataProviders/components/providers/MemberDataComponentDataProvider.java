@@ -1,8 +1,7 @@
 package com.ilargia.games.entitas.codeGeneration.plugins.dataProviders.components.providers;
 
+import com.ilargia.games.entitas.codeGeneration.SourceDataFile;
 import com.ilargia.games.entitas.codeGeneration.plugins.data.MemberData;
-import com.ilargia.games.entitas.codeGeneration.plugins.dataProviders.components.ComponentData;
-import org.jboss.forge.roaster.model.source.JavaClassSource;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -14,7 +13,7 @@ public class MemberDataComponentDataProvider implements IComponentDataProvider {
 
     @Override
     public void provide(SourceDataFile data) {
-       List<MemberData> memberDatas = data.source.getFields().stream()
+        List<MemberData> memberDatas = data.fileContent.getFields().stream()
                 .filter(field -> field.isPublic())
                 .map(field -> new MemberData(field.getType(), field.getName(), field.getAnnotation("generateIndex")))
                 .collect(Collectors.toList());
@@ -22,7 +21,7 @@ public class MemberDataComponentDataProvider implements IComponentDataProvider {
         setMemberData(data, memberDatas);
     }
 
-    public static  List<MemberData> getMemberData(SourceDataFile data) {
+    public static List<MemberData> getMemberData(SourceDataFile data) {
         return (List<MemberData>) data.get(COMPONENT_MEMBER_INFOS);
     }
 

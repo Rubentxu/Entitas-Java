@@ -3,6 +3,7 @@ package com.ilargia.games.entitas.codeGeneration.cli.commands;
 
 import com.ilargia.games.entitas.codeGeneration.codeGenerator.CodeGeneratorUtil;
 import com.ilargia.games.entitas.codeGenerator.configuration.Preferences;
+
 import java.io.Console;
 import java.util.List;
 import java.util.Properties;
@@ -12,7 +13,7 @@ import java.util.stream.Collectors;
 
 public class Helper {
     @FunctionalInterface
-    public interface  Action<T> {
+    public interface Action<T> {
         void apply(T param);
 
     }
@@ -31,14 +32,14 @@ public class Helper {
                 .collect(Collectors.toList());
     }
 
-    public static boolean getUserDecision(String accept, String cancel ) {
-        String key="";
+    public static boolean getUserDecision(String accept, String cancel) {
+        String key = "";
         Console console = System.console();
         Scanner scanIn = new Scanner(System.in);
         do {
             key = scanIn.nextLine();
 
-        } while(!key.equals(accept) && !key.equals(cancel));
+        } while (!key.equals(accept) && !key.equals(cancel));
         scanIn.close();
         return key == accept;
     }
