@@ -1,8 +1,8 @@
 package com.ilargia.games.entitas.codeGeneration.cli.commands;
 
 
-import com.ilargia.games.entitas.codeGeneration.codeGenerator.CodeGenerator;
-import com.ilargia.games.entitas.codeGeneration.codeGenerator.CodeGeneratorUtil;
+import com.ilargia.games.entitas.codeGeneration.CodeGenerator;
+import com.ilargia.games.entitas.codeGeneration.CodeGeneratorUtil;
 
 public class DryRun extends AbstractCommand {
     @Override

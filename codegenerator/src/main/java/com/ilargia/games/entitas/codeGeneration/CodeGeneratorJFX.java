@@ -1,12 +1,14 @@
 package com.ilargia.games.entitas.codeGeneration;
 
-import com.ilargia.games.entitas.codeGeneration.codeGenerator.CodeGenerator;
-import com.ilargia.games.entitas.codeGeneration.codeGenerator.CodeGeneratorConfig;
+import com.ilargia.games.entitas.codeGeneration.config.CodeGeneratorConfig;
 import com.ilargia.games.entitas.codeGeneration.interfaces.ICodeGenerator;
-import com.ilargia.games.entitas.codeGeneration.interfaces.ICodeGeneratorDataProvider;
-import com.ilargia.games.entitas.codeGeneration.plugins.dataProviders.components.ComponentDataProvider;
+import com.ilargia.games.entitas.codeGeneration.interfaces.ICodeDataProvider;
+import com.ilargia.games.entitas.codeGeneration.dataProviders.components.ComponentDataProvider;
+import com.ilargia.games.entitas.codeGeneration.data.CodeGenFile;
+import com.ilargia.games.entitas.codeGeneration.data.SourceDataFile;
+import com.ilargia.games.entitas.codeGeneration.data.StoreCodeGenerator;
 import com.ilargia.games.entitas.codeGenerator.CodeGeneratorOld;
-import com.ilargia.games.entitas.codeGenerator.configuration.Preferences;
+import com.ilargia.games.entitas.codeGeneration.config.Preferences;
 import com.ilargia.games.entitas.codeGenerator.generators.*;
 import com.ilargia.games.entitas.codeGenerator.providers.TypeReflectionProvider;
 import javafx.application.Application;
@@ -22,7 +24,6 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import org.jboss.forge.roaster.Roaster;
 import org.jboss.forge.roaster.model.source.JavaClassSource;
-import sun.security.util.Length;
 
 import java.io.*;
 import java.net.URL;
@@ -35,6 +36,7 @@ public class CodeGeneratorJFX extends Application implements Initializable {
 
     private StoreCodeGenerator storeCodeGenerator;
     public Stage stage;
+    public String path;
     @FXML
     ProgressIndicator progress;
     @FXML
@@ -250,52 +252,52 @@ public class CodeGeneratorJFX extends Application implements Initializable {
     }
 
 
-    public static void generate() {
-
-        CodeGeneratorConfig config = new CodeGeneratorConfig(Preferences.loadProperties());
-
-        var codeGenerator = new CodeGenerator(
-                getEnabled < ICodeGeneratorDataProvider > (config.dataProviders),
-                getEnabled < ICodeGenerator > (config.codeGenerators),
-                getEnabled < ICodeGenFilePostProcessor > (config.postProcessors)
-        );
-
-        var dryFiles = codeGenerator.DryRun();
-        var sloc = dryFiles
-                .Select(file = > file.fileContent.ToUnixLineEndings())
-                .Sum(content = > content.Split(new[]{
-            '\n'
-        },StringSplitOptions.RemoveEmptyEntries).Length);
-
-        var files = codeGenerator.Generate();
-        var totalGeneratedFiles = files.Select(file = > file.fileName).Distinct().Count();
-        var loc = files
-                .Select(file = > file.fileContent.ToUnixLineEndings())
-                .Sum(content = > content.Split(new[]{
-            '\n'
-        }).Length);
-
-        foreach(var file in files) {
-            Debug.Log(file.generatorName + ": " + file.fileName);
-        }
-
-        Debug.Log("Generated " + totalGeneratedFiles + " files (" + sloc + " sloc, " + loc + " loc)");
-
-        AssetDatabase.Refresh();
-    }
-
-    static List<ICodeGeneratorDataProvider> getGeneratorDataProvider(String[] types,) {
-        return new ArrayList<>({{
-                add(new ComponentDataProvider())
-        }})
-    }
-
-    public static Type[] GetTypes<T>()
-
-    {
-        return Assembly.GetAssembly(typeof(T)).GetTypes()
-                .Where(type = > type.ImplementsInterface < T > ())
-                .OrderBy(type = > type.FullName)
-                .ToArray();
-    }
+//    public static void generate() {
+//
+//        CodeGeneratorConfig config = new CodeGeneratorConfig(Preferences.loadProperties());
+//
+//        var codeGenerator = new CodeGenerator(
+//                getEnabled < ICodeDataProvider > (config.dataProviders),
+//                getEnabled < ICodeGenerator > (config.codeGenerators),
+//                getEnabled < ICodeGenFilePostProcessor > (config.postProcessors)
+//        );
+//
+//        var dryFiles = codeGenerator.DryRun();
+//        var sloc = dryFiles
+//                .Select(file = > file.source.ToUnixLineEndings())
+//                .Sum(content = > content.Split(new[]{
+//            '\n'
+//        },StringSplitOptions.RemoveEmptyEntries).Length);
+//
+//        var files = codeGenerator.Generate();
+//        var totalGeneratedFiles = files.Select(file = > file.fileName).Distinct().Count();
+//        var loc = files
+//                .Select(file = > file.source.ToUnixLineEndings())
+//                .Sum(content = > content.Split(new[]{
+//            '\n'
+//        }).Length);
+//
+//        foreach(var file in files) {
+//            Debug.Log(file.generatorName + ": " + file.fileName);
+//        }
+//
+//        Debug.Log("Generated " + totalGeneratedFiles + " files (" + sloc + " sloc, " + loc + " loc)");
+//
+//        AssetDatabase.Refresh();
+//    }
+//
+//    static List<ICodeDataProvider> getGeneratorDataProvider(String[] types,) {
+//        return new ArrayList<>({{
+//                add(new ComponentDataProvider())
+//        }})
+//    }
+//
+//    public static Type[] GetTypes<T>()
+//
+//    {
+//        return Assembly.GetAssembly(typeof(T)).GetTypes()
+//                .Where(type = > type.ImplementsInterface < T > ())
+//                .OrderBy(type = > type.FullName)
+//                .ToArray();
+//    }
 }

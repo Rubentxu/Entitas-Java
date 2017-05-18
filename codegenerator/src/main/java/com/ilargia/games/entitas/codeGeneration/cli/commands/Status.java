@@ -1,11 +1,11 @@
 package com.ilargia.games.entitas.codeGeneration.cli.commands;
 
 
-import com.ilargia.games.entitas.codeGeneration.codeGenerator.CodeGeneratorConfig;
-import com.ilargia.games.entitas.codeGeneration.codeGenerator.CodeGeneratorUtil;
+import com.ilargia.games.entitas.codeGeneration.config.CodeGeneratorConfig;
+import com.ilargia.games.entitas.codeGeneration.CodeGeneratorUtil;
 import com.ilargia.games.entitas.codeGeneration.interfaces.ICodeGenFilePostProcessor;
 import com.ilargia.games.entitas.codeGeneration.interfaces.ICodeGenerator;
-import com.ilargia.games.entitas.codeGeneration.interfaces.ICodeGeneratorDataProvider;
+import com.ilargia.games.entitas.codeGeneration.interfaces.ICodeDataProvider;
 
 import java.util.List;
 import java.util.Map;
@@ -48,7 +48,7 @@ public class Status extends AbstractCommand {
                 try {
                     types = CodeGeneratorUtil.loadTypesFromPlugins(properties);
                     configurables = CodeGeneratorUtil.getConfigurables(
-                            CodeGeneratorUtil.getUsed(types, config.getDataProviders(), ICodeGeneratorDataProvider.class),
+                            CodeGeneratorUtil.getUsed(types, config.getDataProviders(), ICodeDataProvider.class),
                             CodeGeneratorUtil.getUsed(types, config.getCodeGenerators(), ICodeGenerator.class),
                             CodeGeneratorUtil.getUsed(types, config.getPostProcessors(), ICodeGenFilePostProcessor.class)
                     );
@@ -81,14 +81,14 @@ public class Status extends AbstractCommand {
     }
 
     static void printPluginStatus(Type[] types, CodeGeneratorConfig config) {
-        var unavailableDataProviders = CodeGeneratorUtil.GetUnavailable < ICodeGeneratorDataProvider > (types, config.
+        var unavailableDataProviders = CodeGeneratorUtil.GetUnavailable < ICodeDataProvider > (types, config.
         dataProviders);
         var unavailableCodeGenerators = CodeGeneratorUtil.GetUnavailable < ICodeGenerator > (types, config.
         codeGenerators);
         var unavailablePostProcessors = CodeGeneratorUtil.GetUnavailable < ICodeGenFilePostProcessor > (types, config.
         postProcessors);
 
-        var availableDataProviders = CodeGeneratorUtil.GetAvailable < ICodeGeneratorDataProvider > (types, config.
+        var availableDataProviders = CodeGeneratorUtil.GetAvailable < ICodeDataProvider > (types, config.
         dataProviders);
         var availableCodeGenerators = CodeGeneratorUtil.GetAvailable < ICodeGenerator > (types, config.codeGenerators);
         var availablePostProcessors = CodeGeneratorUtil.GetAvailable < ICodeGenFilePostProcessor > (types, config.

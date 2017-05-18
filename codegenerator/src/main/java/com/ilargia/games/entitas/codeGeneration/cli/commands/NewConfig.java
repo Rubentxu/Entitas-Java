@@ -1,8 +1,8 @@
 package com.ilargia.games.entitas.codeGeneration.cli.commands;
 
 
-import com.ilargia.games.entitas.codeGeneration.codeGenerator.CodeGeneratorConfig;
-import com.ilargia.games.entitas.codeGenerator.configuration.Preferences;
+import com.ilargia.games.entitas.codeGeneration.config.CodeGeneratorConfig;
+import com.ilargia.games.entitas.codeGeneration.config.Preferences;
 
 import java.io.File;
 import java.io.FileOutputStream;

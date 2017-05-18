@@ -1,7 +1,7 @@
 package com.ilargia.games.entitas.codeGeneration.cli.commands;
 
 
-import com.ilargia.games.entitas.codeGenerator.configuration.Preferences;
+import com.ilargia.games.entitas.codeGeneration.config.Preferences;
 
 public class EditConfig extends AbstractCommand {
     @Override

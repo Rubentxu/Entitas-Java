@@ -1,6 +1,7 @@
 package com.ilargia.games.entitas.codeGeneration.cli.commands;
 
-import com.ilargia.games.entitas.codeGenerator.configuration.Preferences;
+import com.ilargia.games.entitas.codeGeneration.config.Preferences;
+import com.ilargia.games.entitas.codeGeneration.interfaces.ICommand;
 import org.jboss.forge.roaster._shade.org.eclipse.core.runtime.Path;
 
 import java.io.FileInputStream;

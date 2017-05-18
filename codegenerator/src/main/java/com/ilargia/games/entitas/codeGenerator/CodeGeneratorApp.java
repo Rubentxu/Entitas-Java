@@ -2,7 +2,7 @@ package com.ilargia.games.entitas.codeGenerator;
 
 import com.ilargia.games.entitas.codeGenerator.generators.*;
 import com.ilargia.games.entitas.codeGeneration.interfaces.ICodeGenerator;
-import com.ilargia.games.entitas.codeGeneration.CodeGenFile;
+import com.ilargia.games.entitas.codeGeneration.data.CodeGenFile;
 import com.ilargia.games.entitas.codeGenerator.providers.TypeReflectionProvider;
 import javafx.application.Application;
 import javafx.concurrent.Task;

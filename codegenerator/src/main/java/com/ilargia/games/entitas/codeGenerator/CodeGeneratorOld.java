@@ -2,9 +2,8 @@ package com.ilargia.games.entitas.codeGenerator;
 
 
 import com.ilargia.games.entitas.codeGeneration.interfaces.ICodeGenerator;
-import com.ilargia.games.entitas.codeGeneration.interfaces.ICodeGeneratorDataProvider;
-import com.ilargia.games.entitas.codeGenerator.interfaces.*;
-import com.ilargia.games.entitas.codeGeneration.CodeGenFile;
+import com.ilargia.games.entitas.codeGeneration.interfaces.ICodeDataProvider;
+import com.ilargia.games.entitas.codeGeneration.data.CodeGenFile;
 import com.ilargia.games.entitas.codeGenerator.data.ComponentInfo;
 import org.jboss.forge.roaster.model.source.JavaClassSource;
 import org.jboss.forge.roaster.model.source.JavaDocSource;
@@ -62,7 +61,7 @@ public class CodeGeneratorOld {
     }
 
 
-    public List<CodeGenFile> generate(ICodeGeneratorDataProvider provider, String destinyDirectory, List<ICodeGenerator> codeGenerators) {
+    public List<CodeGenFile> generate(ICodeDataProvider provider, String destinyDirectory, List<ICodeGenerator> codeGenerators) {
 
         List<String> scrDir = new ArrayList<String>() {{
             add("main/java");
@@ -80,7 +79,7 @@ public class CodeGeneratorOld {
         List<JavaClassSource> files = new ArrayList<>();
 
 //        if (sourcePackage.isPresent()) {
-//            for (ICodeGenerator generator : codeGenerators) {
+//            for (ICodeGenerator generator : generators) {
 //                if (generator instanceof IContextCodeGenerator) {
 //                    for (JavaClassSource javaClassSource : ((IContextCodeGenerator) generator).generate(provider.poolNames(), sourcePackage.get())) {
 //                        files.add(javaClassSource);

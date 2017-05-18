@@ -1,6 +1,6 @@
 package com.ilargia.games.entitas.codeGeneration.interfaces;
 
-import com.ilargia.games.entitas.codeGeneration.CodeGenFile;
+import com.ilargia.games.entitas.codeGeneration.data.CodeGenFile;
 
 import java.util.List;
 

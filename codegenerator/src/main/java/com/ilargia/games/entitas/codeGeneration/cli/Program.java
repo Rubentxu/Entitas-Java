@@ -1,6 +1,7 @@
 package com.ilargia.games.entitas.codeGeneration.cli;
 
 import com.ilargia.games.entitas.codeGeneration.cli.commands.*;
+import com.ilargia.games.entitas.codeGeneration.interfaces.ICommand;
 
 import java.util.*;
 import java.util.stream.Collectors;

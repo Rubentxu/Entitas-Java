@@ -1,7 +1,7 @@
 package com.ilargia.games.entitas.codeGeneration.cli.commands;
 
 
-import com.ilargia.games.entitas.codeGeneration.codeGenerator.CodeGeneratorUtil;
+import com.ilargia.games.entitas.codeGeneration.CodeGeneratorUtil;
 
 public class Doctor extends AbstractCommand {
     @Override

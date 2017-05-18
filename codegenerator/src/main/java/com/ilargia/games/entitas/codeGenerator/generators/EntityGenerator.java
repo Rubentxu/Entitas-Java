@@ -155,7 +155,7 @@ public class EntityGenerator implements IComponentCodeGenerator, ICodeGenerator 
     public void addImportClass(ComponentInfo componentInfo, JavaClassSource source) {
         if (componentInfo.imports != null) {
             for (Import imp : componentInfo.imports) {
-                if (!imp.getQualifiedName().equals("com.ilargia.games.entitas.codeGenerators.Component")) {
+                if (!imp.getQualifiedName().equals("com.ilargia.games.entitas.generators.Component")) {
                     source.addImport(imp);
                 }
             }
