@@ -12,6 +12,8 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
+import static org.jboss.forge.roaster._shade.org.eclipse.jdt.internal.compiler.parser.Parser.name;
+
 public class Status extends AbstractCommand {
     @Override
     public String trigger() {
@@ -71,28 +73,25 @@ public class Status extends AbstractCommand {
     }
 
     static void printKeyStatus(Set<Object> requiredKeys, Properties properties) {
-        foreach(var key in Helper.GetUnusedKeys(requiredKeys, properties)) {
-            fabl.Info("Unused key: " + key);
+        for (String key : Helper.getUnusedKeys(requiredKeys, properties)) {
+            System.out.println("Unused key: " + key);
         }
 
-        foreach(var key in Helper.GetMissingKeys(requiredKeys, properties)) {
-            fabl.Warn("Missing key: " + key);
+        for (String key : Helper.getMissingKeys(requiredKeys, properties)) {
+            System.out.println("Missing key: " + key);
         }
     }
 
-    static void printPluginStatus(Type[] types, CodeGeneratorConfig config) {
-        var unavailableDataProviders = CodeGeneratorUtil.GetUnavailable < ICodeDataProvider > (types, config.
-        dataProviders);
-        var unavailableCodeGenerators = CodeGeneratorUtil.GetUnavailable < ICodeGenerator > (types, config.
-        codeGenerators);
-        var unavailablePostProcessors = CodeGeneratorUtil.GetUnavailable < ICodeGenFilePostProcessor > (types, config.
-        postProcessors);
+    static void printPluginStatus(List<Class> types, CodeGeneratorConfig config) {
+        List<String> unavailableDataProviders = CodeGeneratorUtil.getUnavailable(types, config.getDataProviders(), ICodeDataProvider.class);
 
-        var availableDataProviders = CodeGeneratorUtil.GetAvailable < ICodeDataProvider > (types, config.
-        dataProviders);
-        var availableCodeGenerators = CodeGeneratorUtil.GetAvailable < ICodeGenerator > (types, config.codeGenerators);
-        var availablePostProcessors = CodeGeneratorUtil.GetAvailable < ICodeGenFilePostProcessor > (types, config.
-        postProcessors);
+        List<String> unavailableCodeGenerators = CodeGeneratorUtil.getUnavailable(types, config.getCodeGenerators(), ICodeGenerator.class);
+        List<String> unavailablePostProcessors = CodeGeneratorUtil.getUnavailable(types, config.getPostProcessors(), ICodeGenFilePostProcessor.class);
+
+        List<String> availableDataProviders = CodeGeneratorUtil.getAvailable(types, config.getDataProviders(), ICodeDataProvider.class);
+        List<String> availableCodeGenerators = CodeGeneratorUtil.getAvailable(types, config.getCodeGenerators(), ICodeGenerator.class);
+        List<String> availablePostProcessors = CodeGeneratorUtil.getAvailable(types, config.getPostProcessors(), ICodeGenFilePostProcessor.class);
+
 
         printUnavailable(unavailableDataProviders);
         printUnavailable(unavailableCodeGenerators);
@@ -103,15 +102,15 @@ public class Status extends AbstractCommand {
         printAvailable(availablePostProcessors);
     }
 
-    static void printUnavailable(string[] names) {
-        foreach(var name in names) {
-            fabl.Warn("Unavailable: " + name);
+    static void printUnavailable(List<String> names) {
+        for(String name : names) {
+            System.out.println("Unavailable: " + name);
         }
     }
 
-    static void printAvailable(string[] names) {
-        foreach(var name in names) {
-            fabl.Info("Available: " + name);
+    static void printAvailable(List<String> names) {
+        for(String name : names) {
+            System.out.println("Available: " + name);
         }
     }
 }

@@ -17,8 +17,8 @@ public class GenericsDataProvider implements IComponentDataProvider {
         setGenericsData(data, generics);
     }
 
-    public static List<String> getGenericsData(SourceDataFile data) {
-        return (List<String>) data.get(GENERIC_DATA_INFOS);
+    public static List<TypeVariableSource<JavaClassSource>> getGenericsData(SourceDataFile data) {
+        return (List<TypeVariableSource<JavaClassSource>>) data.get(GENERIC_DATA_INFOS);
     }
 
     public static void setGenericsData(SourceDataFile data, List<TypeVariableSource<JavaClassSource>> generics) {

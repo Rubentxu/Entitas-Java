@@ -37,6 +37,7 @@ dependencies {
     compile project(":entitas")
     compile group: 'org.jboss.forge.roaster', name: 'roaster-api', version: '2.19.1.Final'
     compile group: 'org.jboss.forge.roaster', name: 'roaster-jdt', version: '2.19.1.Final'
+    compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.5'
     testCompile "com.badlogicgames.gdx:gdx:$gdxVersion"
     testCompile group: 'junit', name: 'junit', version: '4.11'
 }

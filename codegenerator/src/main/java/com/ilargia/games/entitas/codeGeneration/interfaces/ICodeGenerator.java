@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface ICodeGenerator extends ICodeGeneratorInterface {
 
-    List<CodeGenFile> generate(List<SourceDataFile> data);
+    List<CodeGenFile> generate(List<SourceDataFile> data, String pkgDestiny);
 }
