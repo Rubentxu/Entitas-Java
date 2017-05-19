@@ -1,4 +1,5 @@
 apply plugin: 'java'
+apply plugin: 'groovy'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -8,30 +9,30 @@ configurations {
     compile.extendsFrom provided
 }
 
-task(codeGenerator, dependsOn: 'classes', type: JavaExec) {
-    main = 'com.ilargia.games.entitas.generators.CodeGeneratorApp'
-    classpath = sourceSets.main.runtimeClasspath
-    args 'dirComponents dirDestino'
-    standardInput = System.in
-    //workingDir = project.assetsDir
-    ignoreExitValue = true
-
-}
-
-jar {
-    baseName = 'CodeGenerator'
-    manifest {
-        attributes 'Implementation-Title': 'CodeGenerator fatJar',
-                'Implementation-Version': version,
-                'Main-Class': 'com.ilargia.games.entitas.generators.CodeGeneratorApp'
-    }
-    dependsOn configurations.runtime
-    from {
-        (configurations.compile).collect {
-            it.isDirectory() ? it : zipTree(it)
-        }
-    }
-}
+//task(codeGenerator, dependsOn: 'classes', type: JavaExec) {
+//    main = 'com.ilargia.games.entitas.generators.CodeGeneratorApp'
+//    classpath = sourceSets.main.runtimeClasspath
+//    args 'dirComponents dirDestino'
+//    standardInput = System.in
+//    //workingDir = project.assetsDir
+//    ignoreExitValue = true
+//
+//}
+//
+//jar {
+//    baseName = 'CodeGenerator'
+//    manifest {
+//        attributes 'Implementation-Title': 'CodeGenerator fatJar',
+//                'Implementation-Version': version,
+//                'Main-Class': 'com.ilargia.games.entitas.generators.CodeGeneratorApp'
+//    }
+//    dependsOn configurations.runtime
+//    from {
+//        (configurations.compile).collect {
+//            it.isDirectory() ? it : zipTree(it)
+//        }
+//    }
+//}
 
 dependencies {
     compile project(":entitas")
@@ -39,5 +40,12 @@ dependencies {
     compile group: 'org.jboss.forge.roaster', name: 'roaster-jdt', version: '2.19.1.Final'
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.5'
     testCompile "com.badlogicgames.gdx:gdx:$gdxVersion"
-    testCompile group: 'junit', name: 'junit', version: '4.11'
+    testCompile(
+            'junit:junit:4.12',
+            'org.codehaus.groovy:groovy-all:2.4.10',
+            'org.spockframework:spock-core:1.1-groovy-2.4-rc-4'
+    )
+    testRuntime 'com.athaydes:spock-reports:1.3.0'
+    testRuntime "cglib:cglib-nodep:3.2.4"          // allows mocking of classes (in addition to interfaces)
+    testRuntime "org.objenesis:objenesis:2.5.1"
 }

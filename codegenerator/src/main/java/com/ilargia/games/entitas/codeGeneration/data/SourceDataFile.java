@@ -6,14 +6,14 @@ import java.util.HashMap;
 public class SourceDataFile extends HashMap<String, Object> {
 
     public String fileName;
-    public String projectDir;
+    public String componentsDir;
     public String subDir;
     public JavaClassSource source;
 
 
-    public SourceDataFile(String fileName, String projectDir, String subDir, JavaClassSource fileContent) {
+    public SourceDataFile(String fileName, String componentsDir, String subDir, JavaClassSource fileContent) {
         this.fileName = fileName;
-        this.projectDir = projectDir;
+        this.componentsDir = componentsDir;
         this.subDir = subDir;
         this.source = fileContent;
 

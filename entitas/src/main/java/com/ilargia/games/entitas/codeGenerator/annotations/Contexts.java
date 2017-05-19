@@ -7,8 +7,8 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.SOURCE)
 @Target(ElementType.TYPE)
-public @interface Context {
+public @interface Contexts {
 
-    String name() default "";
+    String[] name() default {"Core"};
 
 }

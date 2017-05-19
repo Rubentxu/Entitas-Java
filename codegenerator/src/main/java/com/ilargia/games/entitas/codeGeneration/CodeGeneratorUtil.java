@@ -21,7 +21,7 @@ public class CodeGeneratorUtil {
     public static CodeGenerator codeGeneratorFromProperties() {
         Properties properties = Preferences.loadProperties();
 
-        CodeGeneratorConfig config = new CodeGeneratorConfig(properties);
+        CodeGeneratorConfig config = new CodeGeneratorConfig();
         config.configure(properties);
 
         List<Class> types = loadTypesFromPlugins(properties);
@@ -75,7 +75,7 @@ public class CodeGeneratorUtil {
     }
 
     public static List<Class> loadTypesFromPlugins(Properties properties) {
-        CodeGeneratorConfig config = new CodeGeneratorConfig(properties);
+        CodeGeneratorConfig config = new CodeGeneratorConfig();
         config.configure(properties);
 
         return config.getPlugins().stream()

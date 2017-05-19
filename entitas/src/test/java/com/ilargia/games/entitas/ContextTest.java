@@ -10,7 +10,6 @@ import com.ilargia.games.entitas.collector.Collector;
 import com.ilargia.games.entitas.components.Position;
 import com.ilargia.games.entitas.exceptions.ContextDoesNotContainEntityException;
 import com.ilargia.games.entitas.exceptions.ContextEntityIndexDoesAlreadyExistException;
-import com.ilargia.games.entitas.exceptions.ContextEntityIndexDoesNotExistException;
 import com.ilargia.games.entitas.exceptions.ContextStillHasRetainedEntitiesException;
 import com.ilargia.games.entitas.factories.CollectionsFactories;
 import com.ilargia.games.entitas.factories.EntitasCollections;
