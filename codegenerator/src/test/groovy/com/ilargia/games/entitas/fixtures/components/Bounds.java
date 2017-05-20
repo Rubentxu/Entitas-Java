@@ -3,8 +3,9 @@ package com.ilargia.games.entitas.fixtures.components;
 import com.badlogic.gdx.math.Rectangle;
 import com.ilargia.games.entitas.api.IComponent;
 import com.ilargia.games.entitas.codeGenerator.Component;
+import com.ilargia.games.entitas.codeGenerator.annotations.Contexts;
 
-@Component(pools = {"Core"})
+@Contexts(names = {"Game"})
 public class Bounds implements IComponent {
     public Rectangle rectangle;
     public Tag tag;

@@ -6,7 +6,7 @@ import com.ilargia.games.entitas.codeGenerator.annotations.Contexts;
 import com.ilargia.games.entitas.codeGenerator.annotations.Unique;
 
 @Unique
-@Contexts(name = {"Core"})
+@Contexts(names = {"Game"})
 public class Ball implements IComponent {
     public boolean resetBall;
 

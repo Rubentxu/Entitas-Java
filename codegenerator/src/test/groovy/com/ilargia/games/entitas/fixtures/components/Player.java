@@ -2,8 +2,9 @@ package com.ilargia.games.entitas.fixtures.components;
 
 import com.ilargia.games.entitas.api.IComponent;
 import com.ilargia.games.entitas.codeGenerator.Component;
+import com.ilargia.games.entitas.codeGenerator.annotations.Contexts;
 
-@Component(pools = {"Core", "Otro"})
+@Contexts(names = {"Input", "Core"})
 public class Player implements IComponent {
     public ID id;
 

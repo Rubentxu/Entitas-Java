@@ -1,16 +1,9 @@
 package com.ilargia.games.entitas.codeGeneration;
 
-import com.ilargia.games.entitas.codeGeneration.config.CodeGeneratorConfig;
-import com.ilargia.games.entitas.codeGeneration.interfaces.ICodeGenerator;
-import com.ilargia.games.entitas.codeGeneration.interfaces.ICodeDataProvider;
-import com.ilargia.games.entitas.codeGeneration.dataProviders.components.ComponentDataProvider;
 import com.ilargia.games.entitas.codeGeneration.data.CodeGenFile;
 import com.ilargia.games.entitas.codeGeneration.data.SourceDataFile;
 import com.ilargia.games.entitas.codeGeneration.data.StoreCodeGenerator;
-import com.ilargia.games.entitas.codeGenerator.CodeGeneratorOld;
-import com.ilargia.games.entitas.codeGeneration.config.Preferences;
-import com.ilargia.games.entitas.codeGenerator.generators.*;
-import com.ilargia.games.entitas.codeGenerator.providers.TypeReflectionProvider;
+import com.ilargia.games.entitas.codeGeneration.interfaces.ICodeGenerator;
 import javafx.application.Application;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
@@ -184,19 +177,20 @@ public class CodeGeneratorJFX extends Application implements Initializable {
             protected List<CodeGenFile> call() throws Exception {
                 List<ICodeGenerator> codeGenerators = new ArrayList<>();
 
-                if (componentsGenerator.isSelected())
-                    codeGenerators.add(new EntityGenerator());
-                if (componentIndicesGenerator.isSelected())
-                    codeGenerators.add(new ComponentIndicesGenerator());
-                if (contextsGenerator.isSelected())
-                    codeGenerators.add(new ContextGenerator());
-
-                codeGenerators.add(new MatcherGenerator());
-                codeGenerators.add(new EntitasGenerator());
-
-                TypeReflectionProvider provider = new TypeReflectionProvider(fieldComponentFolder.getText());
-                CodeGeneratorOld generator = new CodeGeneratorOld();
-                return generator.generate(provider, fieldGeneratedFolder.getText(), codeGenerators);
+//                if (componentsGenerator.isSelected())
+//                    codeGenerators.add(new EntityGenerator());
+//                if (componentIndicesGenerator.isSelected())
+//                    codeGenerators.add(new ComponentIndicesGenerator());
+//                if (contextsGenerator.isSelected())
+//                    codeGenerators.add(new ContextGenerator());
+//
+//                codeGenerators.add(new MatcherGenerator());
+//                codeGenerators.add(new EntitasGenerator());
+//
+//                TypeReflectionProvider provider = new TypeReflectionProvider(fieldComponentFolder.getText());
+//                CodeGeneratorOld generator = new CodeGeneratorOld();
+//                return generator.generate(provider, fieldGeneratedFolder.getText(), codeGenerators);
+                return null;
             }
         };
 

@@ -17,6 +17,18 @@ public class CodeGeneratorConfig extends AbstractConfigurableConfig {
     static String CODE_GENERATORS_KEY = "Entitas.CodeGeneration.CodeGenerator.CodeGenerators";
     static String POST_PROCESSORS_KEY = "Entitas.CodeGeneration.CodeGenerator.PostProcessors";
 
+    @Override
+    public Properties getDefaultProperties() {
+        properties.setProperty(SEARCH_PATHS_KEY, "");
+        properties.setProperty(PLUGINS_PATHS_KEY, "Entitas.CodeGeneration.Plugins, Entitas.VisualDebugging.CodeGeneration.Plugins");
+        properties.setProperty(DATA_PROVIDERS_KEY, "");
+        properties.setProperty(CODE_GENERATORS_KEY, "");
+        properties.setProperty(POST_PROCESSORS_KEY, "");
+
+        return properties;
+    }
+
+
     public List<String> getSearchPaths() {
         return Pattern.compile(",")
                 .splitAsStream(properties.getProperty(SEARCH_PATHS_KEY))

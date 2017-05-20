@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="707.0" prefWidth="560.0" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ilargia.games.entitas.visual.VisualDebbuger">
+    <children>
+        <AnchorPane blendMode="MULTIPLY" layoutX="4.0" layoutY="70.0" prefHeight="323.0" prefWidth="552.0" style="-fx-background-color: #6e8fa8;">
+         <children>
+              <Label fx:id="beanNames" layoutX="34.0" layoutY="37.0" prefHeight="26.0" prefWidth="146.0" text="Entity" textFill="#e0e2e4" underline="true">
+                  <font>
+                      <Font name="System Bold" size="18.0" />
+                  </font>
+              </Label>
+         </children></AnchorPane>
+        <TextField fx:id="fieldComponentFolder" layoutX="181.0" layoutY="407.0" prefHeight="25.0" prefWidth="361.0" />
+        <Button layoutX="25.0" layoutY="407.0" onAction="#handleComponentsFolder" prefHeight="25.0" prefWidth="146.0" text="Components Folder" />
+        <Button layoutX="24.0" layoutY="446.0" onAction="#handleGeneratedFolder" prefHeight="25.0" prefWidth="146.0" text="Generated Folder" />
+        <TextField fx:id="fieldGeneratedFolder" layoutX="180.0" layoutY="446.0" prefHeight="25.0" prefWidth="361.0" />
+        <Button fx:id="btnGenerate" layoutX="237.0" layoutY="488.0" mnemonicParsing="false" onAction="#handleGenerate" prefHeight="33.0" prefWidth="104.0" text="Generate" textAlignment="CENTER" />
+        <ImageView id="progress" disable="true" fitHeight="66.0" fitWidth="164.0" pickOnBounds="true" preserveRatio="true" smooth="false">
+            <image>
+                <Image url="@img/EntitasJavaLOGO.png" />
+            </image>
+        </ImageView>
+          <Label layoutX="114.0" text="Visual Debbuger" textAlignment="CENTER" textFill="#1d346b" underline="true">
+              <font>
+                  <Font name="System Bold" size="45.0" />
+              </font>
+          </Label>
+    </children>
+</AnchorPane>

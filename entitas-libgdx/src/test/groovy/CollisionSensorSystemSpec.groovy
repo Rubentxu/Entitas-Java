@@ -24,7 +24,7 @@ Para que pueda usar esta informacion en la logica de mi juego.
 to read
 _______________________
 """)
-
+@groovy.transform.TypeChecked
 class CollisionSensorSystemSpec extends Specification {
 
     @Shared EngineGDX engine = new EngineGDX(new CollectionsFactories(){})

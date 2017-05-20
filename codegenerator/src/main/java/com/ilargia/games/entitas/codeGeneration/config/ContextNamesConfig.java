@@ -11,7 +11,7 @@ public class ContextNamesConfig extends AbstractConfigurableConfig {
 
     @Override
     public Properties getDefaultProperties() {
-        properties.setProperty(CONTEXTS_KEY, "Game, Input");
+        properties.setProperty(CONTEXTS_KEY, "Core");
         return properties;
     }
 

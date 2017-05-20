@@ -7,7 +7,6 @@ import com.ilargia.games.entitas.codeGeneration.data.StoreCodeGenerator;
 import com.ilargia.games.entitas.codeGeneration.dataProviders.components.providers.ShouldGenerateMethodsDataProvider;
 import com.ilargia.games.entitas.codeGeneration.interfaces.ICodeGenerator;
 import com.ilargia.games.entitas.codeGeneration.interfaces.IConfigurable;
-import com.ilargia.games.entitas.codeGenerator.CodeGeneratorOld;
 import org.apache.commons.lang3.text.WordUtils;
 import org.jboss.forge.roaster.Roaster;
 import org.jboss.forge.roaster.model.source.*;
@@ -152,7 +151,7 @@ public class ComponentEntityGenerator implements ICodeGenerator, IConfigurable {
 
         if (data.source.getFields().size() == 0) {
             gen.addField()
-                    .setName(data.source.getName() + CodeGeneratorOld.COMPONENT_SUFFIX)
+                    .setName(data.source.getName() + COMPONENT_SUFFIX)
                     .setType(data.source.getName())
                     .setLiteralInitializer(String.format("new %1$s();", data.source.getName()))
                     .setPublic();

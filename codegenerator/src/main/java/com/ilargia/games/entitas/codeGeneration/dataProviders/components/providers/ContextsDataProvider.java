@@ -19,7 +19,7 @@ public class ContextsDataProvider implements IComponentDataProvider, IConfigurab
 
     @Override
     public Properties getDefaultProperties() {
-        return null;
+        return _contextNamesConfig.getDefaultProperties();
     }
 
     @Override
@@ -34,10 +34,10 @@ public class ContextsDataProvider implements IComponentDataProvider, IConfigurab
     }
 
     public List<String> extractContextNames(JavaClassSource type) {
-        AnnotationSource<JavaClassSource> annotation = type.getAnnotation("Component");
+        AnnotationSource<JavaClassSource> annotation = type.getAnnotation("Contexts");
         if (annotation != null) {
-            return (annotation.toString().contains("contexts"))
-                    ? Arrays.asList(annotation.getStringArrayValue("contexts"))
+            return (annotation.toString().contains("names"))
+                    ? Arrays.asList(annotation.getStringArrayValue("names"))
                     : null;
         }
         return new ArrayList<>();

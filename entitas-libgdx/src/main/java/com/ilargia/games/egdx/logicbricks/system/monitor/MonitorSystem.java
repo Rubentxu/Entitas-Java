@@ -35,7 +35,7 @@ public class MonitorSystem implements IInitializeSystem {
 
     @Override
     public void initialize() {
-        JmxServer jmxServer = new JmxServer(8000);
+        JmxServer jmxServer = new JmxServer(1313);
 
         try {
             jmxServer.start();

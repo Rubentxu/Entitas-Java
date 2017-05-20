@@ -9,6 +9,6 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 public @interface Contexts {
 
-    String[] name() default {"Core"};
+    String[] names() default {"Core"};
 
 }

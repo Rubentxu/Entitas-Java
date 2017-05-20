@@ -1,6 +1,7 @@
 package com.ilargia.games.entitas.codeGeneration.dataProviders.components;
 
 import com.ilargia.games.entitas.api.IComponent;
+import com.ilargia.games.entitas.codeGeneration.config.AbstractConfigurableConfig;
 import com.ilargia.games.entitas.codeGeneration.data.SourceDataFile;
 import com.ilargia.games.entitas.codeGeneration.config.CodeGeneratorConfig;
 import com.ilargia.games.entitas.codeGeneration.interfaces.ICodeDataProvider;
@@ -10,7 +11,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class ComponentDataProvider implements ICodeDataProvider, IConfigurable {
+public class ComponentDataProvider extends AbstractConfigurableConfig implements ICodeDataProvider {
 
     List<SourceDataFile> _sources;
     List<IComponentDataProvider> _dataProviders;
@@ -23,8 +24,8 @@ public class ComponentDataProvider implements ICodeDataProvider, IConfigurable {
         this(sources, getComponentDataProviders());
     }
 
-    protected ComponentDataProvider(List<SourceDataFile> types, List<IComponentDataProvider> dataProviders) {
-        _sources = types;
+    protected ComponentDataProvider(List<SourceDataFile> sources, List<IComponentDataProvider> dataProviders) {
+        _sources = sources;
         _dataProviders = dataProviders;
         _codeGeneratorConfig = new CodeGeneratorConfig();
     }
@@ -61,25 +62,28 @@ public class ComponentDataProvider implements ICodeDataProvider, IConfigurable {
 
     @Override
     public Properties getDefaultProperties() {
+        _codeGeneratorConfig.configure(properties);
         return _dataProviders.stream()
-                .filter(p -> p.getClass().isAssignableFrom(IConfigurable.class))
+                .filter(p -> p instanceof IConfigurable)
                 .map(p -> (IConfigurable) p)
                 .map(p -> p.getDefaultProperties())
-                .reduce(new Properties(), (a, b) -> {
+                .reduce(properties, (a, b) -> {
                     a.putAll(propertiesToMap(b));
                     return a;
                 });
+
     }
 
     @Override
     public void configure(Properties properties) {
+        super.configure(properties);
         _codeGeneratorConfig.configure(properties);
         _dataProviders.stream()
-                .filter(p -> p.getClass().isAssignableFrom(IConfigurable.class))
+                .filter(p -> p instanceof IConfigurable)
                 .map(p -> (IConfigurable) p)
                 .forEach(p -> p.configure(properties));
 
-        _contextsComponentDataProvider.configure(properties);
+       // _contextsComponentDataProvider.configure(properties);
     }
 
     @Override

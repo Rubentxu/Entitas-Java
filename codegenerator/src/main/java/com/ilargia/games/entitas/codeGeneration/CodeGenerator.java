@@ -93,7 +93,7 @@ public class CodeGenerator {
                 OnProgress.exec(messagePrefix + "Creating files", generator.getName(), (float) progress / total);
             }
 
-            files.addAll(generator.generate(data));
+            files.addAll(generator.generate(data,null));
         }
 
 
