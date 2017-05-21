@@ -8,8 +8,6 @@ import com.ilargia.games.entitas.codeGenerator.annotations.Contexts;
 public class Player implements IComponent {
     public ID id;
 
-    ;
-
     public Player(ID id) {
         this.id = id;
     }

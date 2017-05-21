@@ -14,8 +14,8 @@ public class ComponentTypeDataProvider implements IComponentDataProvider {
         setFullTypeName(data, data.source.getCanonicalName());
     }
 
-    public static List<String> getFullTypeName(SourceDataFile data) {
-        return (List<String>) data.get(COMPONENT_FULL_TYPE_NAME);
+    public static String getFullTypeName(SourceDataFile data) {
+        return (String) data.get(COMPONENT_FULL_TYPE_NAME);
     }
 
     public static void setFullTypeName(SourceDataFile data, String fullTypeName) {

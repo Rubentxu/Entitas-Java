@@ -6,7 +6,7 @@ import com.ilargia.games.entitas.codeGenerator.Component;
 import com.ilargia.games.entitas.codeGenerator.annotations.Contexts;
 
 @Contexts(names = {"Game", "Core"})
-public class Score implements IComponent {
+public class Score  {
     public int value;
 
     public Score(int value) {

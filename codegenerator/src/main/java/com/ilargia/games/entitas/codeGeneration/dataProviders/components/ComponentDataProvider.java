@@ -96,8 +96,9 @@ public class ComponentDataProvider extends AbstractConfigurableConfig implements
                 .collect(Collectors.toList());
 
         List<SourceDataFile> dataFromNonComponents = _sources.stream()
-                .filter(s -> s.source.hasInterface(IComponent.class))
+                .filter(s -> !s.source.hasInterface(IComponent.class))
                 .filter(s -> hasContexts(s))
+                .map(s -> createDataForComponent(s))
                 .collect(Collectors.toList());
 
         List<String> generatedComponentsLookup = dataFromNonComponents.stream()
@@ -143,6 +144,7 @@ public class ComponentDataProvider extends AbstractConfigurableConfig implements
             add(new GenericsDataProvider());
             add(new IsUniqueDataProvider());
             add(new ShouldGenerateComponentDataProvider());
+            add(new ShouldGenerateMethodsDataProvider());
 
         }};
     }

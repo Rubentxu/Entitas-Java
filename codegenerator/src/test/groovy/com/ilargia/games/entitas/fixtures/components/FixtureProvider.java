@@ -65,7 +65,7 @@ public class FixtureProvider  {
                                 return null;
                             }
                         }).filter((source) -> source != null)
-                        .filter((source) -> source.getInterfaces().toString().matches(".*\\bIComponent\\b.*"))
+                       // .filter((source) -> source.getInterfaces().toString().matches(".*\\bIComponent\\b.*"))
                         .map((source) -> createSourceDataFile(source, subDir))
                         .filter(info -> info != null)
                         .collect(Collectors.toList()));

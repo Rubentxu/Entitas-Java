@@ -7,18 +7,25 @@ import spock.lang.Narrative
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Title
+
+import static com.ilargia.games.entitas.codeGeneration.dataProviders.components.providers.ComponentTypeDataProvider.getFullTypeName
 import static com.ilargia.games.entitas.codeGeneration.dataProviders.components.providers.ContextsDataProvider.getContextNames
+import static com.ilargia.games.entitas.codeGeneration.dataProviders.components.providers.EnumsDataProvider.getEnumData
+import static com.ilargia.games.entitas.codeGeneration.dataProviders.components.providers.ShouldGenerateComponentDataProvider.shouldGenerateComponent
+import static com.ilargia.games.entitas.codeGeneration.dataProviders.components.providers.ConstructorDataProvider.getConstructorData
+import static com.ilargia.games.entitas.codeGeneration.dataProviders.components.providers.IsUniqueDataProvider.isUnique
+import static com.ilargia.games.entitas.codeGeneration.dataProviders.components.providers.MemberDataProvider.getMemberData
 
 @Narrative("""
 Como usuario de la aplicacion
-Quiero poder tener obtener del fichero de configuración, los datos referentes para configurar los proveedores de datos
+Quiero poder obtener los datos necesarios de los proveedores de datos
 Para que pueda usarse en la generacion del codigo.
 """)
-@Title(""" ComponentDataProvider se encargara de aprovisionar estos datos de configuarcion""")
+@Title(""" """)
 @groovy.transform.TypeChecked
 class ComponentDataProviderSpec extends Specification {
 
-    static String CONTEXTS_KEY = "Entitas.CodeGeneration.Plugins.Contexts";
+    String CONTEXTS_KEY = "Entitas.CodeGeneration.Plugins.Contexts";
 
     @Shared
     FixtureProvider fixtures = new FixtureProvider("src/test/groovy/com/ilargia/games/entitas/fixtures/components")
@@ -41,6 +48,10 @@ class ComponentDataProviderSpec extends Specification {
         Properties prop2 = componentDataProvider.getDefaultProperties()
 
         then: 'el resultado de los nombres de contextos debe ser `Core`'
+        componentDataProvider.gePriority() == 0
+        componentDataProvider.getName() == "Component"
+        componentDataProvider.isEnableByDefault() == true
+        componentDataProvider.runInDryMode() == true
         prop == prop2
         prop.getProperty(CONTEXTS_KEY) == "Core"
     }
@@ -57,12 +68,22 @@ class ComponentDataProviderSpec extends Specification {
 
         then:
         datas.size() == 6
-        getContextNames(datas.get(0)).get(0).equals("Core")
-        getContextNames(datas.get(1)).get(0).equals("Game")
-        getContextNames(datas.get(2)).get(0).equals("Game")
-        getContextNames(datas.get(3)).get(0).equals("Input")
-        getContextNames(datas.get(4)).get(0).equals("Game")
-        getContextNames(datas.get(5)).get(0).equals("Input")
+        getContextNames(datas.get(id)).get(id2).equals(result)
+        getFullTypeName(datas.get(id)).contains(result2)
+        getEnumData(datas.get(id)) == result7
+        isUnique(datas.get(id)) == result3
+        shouldGenerateComponent(datas.get(id)) == result4
+        getConstructorData(datas.get(id)).size() == result5
+        getMemberData(datas.get(id)).size() == result6
+
+        where: 'la Propiedad: #ContextName para el id: #id  result: #result'
+          id  |   id2 ||  result  | result2   |  result3  |   result4  |   result5   |   result6   | result7
+          0   |   0   ||  "Game"  | "Ball"    |   true    |    false   |     2       |     1       |  []
+          1   |   0   ||  "Game"  | "Bounds"  |   false   |    false   |     2       |     2       |  ["com.ilargia.games.entitas.fixtures.components.Bounds.Tag"]
+          2   |   0   ||  "Core"  | "Motion"  |   false   |    false   |     1       |     1       |  []
+          3   |   0   ||  "Input" | "Player"  |   false   |    false   |     1       |     1       |  ["com.ilargia.games.entitas.fixtures.components.Player.ID"]
+          4   |   0   ||  "Input" | "View"    |   false   |    false   |     1       |     1       |  []
+          5   |   0   ||  "Game"  | "Score"   |   false   |    true    |     1       |     1       |  []
 
     }
 }
