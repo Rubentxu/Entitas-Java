@@ -5,11 +5,12 @@ import ilargia.entitas.codeGeneration.data.SourceDataFile;
 import ilargia.entitas.codeGeneration.interfaces.ICodeDataProvider;
 import ilargia.entitas.codeGeneration.interfaces.IConfigurable;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
 
 
-public class ContextDataProvider implements ICodeDataProvider, IConfigurable {
+public class ContextDataProvider implements ICodeDataProvider<HashMap<String,Object>>, IConfigurable {
 
     public static String CONTEXT_NAME = "context_name";
     private ContextNamesConfig _contextNamesConfig = new ContextNamesConfig();
@@ -43,7 +44,7 @@ public class ContextDataProvider implements ICodeDataProvider, IConfigurable {
 
     @Override
     public Properties getDefaultProperties() {
-        return null;
+        return _contextNamesConfig.getDefaultProperties();
     }
 
     @Override
@@ -52,9 +53,11 @@ public class ContextDataProvider implements ICodeDataProvider, IConfigurable {
     }
 
     @Override
-    public List<SourceDataFile> getData() {
-       sourceDataFiles.stream()
-                .forEach(data -> _contextNamesConfig.getContextNames().stream().forEach(name -> setContextName(data, name)));
+    public List<HashMap<String,Object>> getData() {
+        _contextNamesConfig.getContextNames().stream().forEach(name ->
+                sourceDataFiles.stream().forEach(data ->  {
+                    setContextName(data, name);
+                }));
         return  sourceDataFiles;
     }
 
