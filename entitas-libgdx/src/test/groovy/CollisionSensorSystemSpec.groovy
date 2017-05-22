@@ -4,16 +4,12 @@ import com.ilargia.games.egdx.impl.EngineGDX
 import com.ilargia.games.egdx.logicbricks.gen.Entitas
 import com.ilargia.games.egdx.logicbricks.gen.game.GameEntity
 import com.ilargia.games.egdx.logicbricks.gen.sensor.SensorEntity
-import com.ilargia.games.egdx.logicbricks.index.Indexed
 import com.ilargia.games.egdx.logicbricks.system.sensor.CollisionSensorSystem
-import com.ilargia.games.entitas.factories.CollectionsFactories
+import ilargia.entitas.factories.CollectionsFactories
 import spock.lang.Narrative
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Title
-import sun.management.Sensor
-import com.ilargia.games.egdx.logicbricks.index.Indexed;
-
 
 @Narrative("""
 Como usuario

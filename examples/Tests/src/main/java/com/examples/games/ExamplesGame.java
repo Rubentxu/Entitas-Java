@@ -3,11 +3,11 @@ package com.examples.games;
 import com.badlogic.gdx.math.Interpolation;
 
 import com.examples.games.states.PlatformExampleState;
-import com.ilargia.games.egdx.api.ChangeStateCommand;
-import com.ilargia.games.egdx.api.EventBus;
-import com.ilargia.games.egdx.impl.GameGDX;
-import com.ilargia.games.egdx.impl.managers.SceneManagerGDX;
-import com.ilargia.games.egdx.transitions.SlideTransition;
+import ilargia.egdx.api.ChangeStateCommand;
+import ilargia.egdx.api.EventBus;
+import ilargia.egdx.impl.GameGDX;
+import ilargia.egdx.impl.managers.SceneManagerGDX;
+import ilargia.egdx.transitions.SlideTransition;
 import net.engio.mbassy.listener.Handler;
 
 public class ExamplesGame extends GameGDX<ExamplesEngine> {

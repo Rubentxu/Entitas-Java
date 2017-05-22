@@ -9,12 +9,11 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Vector2;
 import com.examples.games.states.PlatformExampleState;
-import com.ilargia.games.egdx.api.managers.LogManager;
-import com.ilargia.games.egdx.impl.managers.LogManagerGDX;
+import ilargia.egdx.api.managers.LogManager;
+import ilargia.egdx.impl.managers.*;
 import com.examples.games.util.TestFileHandleResolver;
-import com.ilargia.games.egdx.impl.EventBusGDX;
-import com.ilargia.games.egdx.impl.managers.*;
-import com.ilargia.games.egdx.logicbricks.gen.Entitas;
+import ilargia.egdx.impl.EventBusGDX;
+import ilargia.egdx.logicbricks.gen.Entitas;
 import net.engio.mbassy.bus.MBassador;
 
 

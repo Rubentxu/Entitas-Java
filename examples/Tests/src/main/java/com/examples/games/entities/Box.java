@@ -4,14 +4,14 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.ilargia.games.egdx.api.Engine;
-import com.ilargia.games.egdx.api.factories.EntityFactory;
-import com.ilargia.games.egdx.impl.managers.AssetsManagerGDX;
-import com.ilargia.games.egdx.impl.managers.PhysicsManagerGDX;
-import com.ilargia.games.egdx.logicbricks.data.Bounds;
-import com.ilargia.games.egdx.logicbricks.gen.Entitas;
-import com.ilargia.games.egdx.logicbricks.gen.game.GameEntity;
-import com.ilargia.games.egdx.util.BodyBuilder;
+import ilargia.egdx.api.Engine;
+import ilargia.egdx.api.factories.EntityFactory;
+import ilargia.egdx.impl.managers.AssetsManagerGDX;
+import ilargia.egdx.impl.managers.PhysicsManagerGDX;
+import ilargia.egdx.logicbricks.data.Bounds;
+import ilargia.egdx.logicbricks.gen.Entitas;
+import ilargia.egdx.logicbricks.gen.game.GameEntity;
+import ilargia.egdx.util.BodyBuilder;
 
 
 public class Box implements EntityFactory<Entitas, GameEntity> {

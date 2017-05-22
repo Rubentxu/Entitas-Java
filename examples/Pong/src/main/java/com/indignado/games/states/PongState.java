@@ -13,7 +13,6 @@ import com.ilargia.games.entitas.core.Entitas;
 import com.ilargia.games.entitas.egdx.base.BaseGameState;
 import com.ilargia.games.entitas.egdx.base.managers.BaseGUIManager;
 import com.ilargia.games.entitas.egdx.base.managers.BaseSceneManager;
-import com.ilargia.games.entitas.systems.*;
 
 
 public class PongState extends BaseGameState {

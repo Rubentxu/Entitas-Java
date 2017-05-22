@@ -5,9 +5,9 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.ilargia.games.entitas.egdx.api.Engine;
 import com.ilargia.games.entitas.egdx.api.EntityFactory;
 import com.ilargia.games.entitas.egdx.base.managers.BasePhysicsManager;
-import com.ilargia.games.egdx.util.BodyBuilder;
-import com.ilargia.games.egdx.util.FixtureDefBuilder;
-import com.ilargia.games.entitas.Context;
+import ilargia.egdx.util.BodyBuilder;
+import ilargia.egdx.util.FixtureDefBuilder;
+import ilargia.entitas.Context;
 import com.indignado.games.states.game.gen.GameContext;
 import com.indignado.games.states.game.gen.GameEntity;
 

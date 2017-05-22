@@ -3,13 +3,12 @@ package com.examples.games.scenes;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-import com.ilargia.games.egdx.api.Engine;
-import com.ilargia.games.egdx.api.factories.SceneFactory;
-import com.ilargia.games.egdx.impl.managers.AssetsManagerGDX;
-import com.ilargia.games.egdx.impl.managers.SceneManagerGDX;
-import com.ilargia.games.egdx.logicbricks.gen.Entitas;
-import com.ilargia.games.egdx.logicbricks.gen.game.GameEntity;
-import com.ilargia.games.entitas.Entity;
+import ilargia.egdx.api.Engine;
+import ilargia.egdx.api.factories.SceneFactory;
+import ilargia.egdx.impl.managers.AssetsManagerGDX;
+import ilargia.egdx.impl.managers.SceneManagerGDX;
+import ilargia.egdx.logicbricks.gen.Entitas;
+import ilargia.egdx.logicbricks.gen.game.GameEntity;
 
 
 public class PlatformExamples implements SceneFactory<Engine, Entitas> {

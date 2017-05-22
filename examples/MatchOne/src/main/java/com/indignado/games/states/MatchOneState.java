@@ -12,7 +12,6 @@ import com.ilargia.games.entitas.egdx.base.managers.BaseSceneManager;
 import com.ilargia.games.entitas.egdx.base.util.BodyBuilder;
 
 import com.ilargia.games.entitas.core.Entitas;
-import com.ilargia.games.entitas.systems.*;
 
 public class MatchOneState extends BaseGameState {
     private String Blocker = "assets/textures/Blocker.png";
