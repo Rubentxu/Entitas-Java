@@ -12,7 +12,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class ComponentDataProvider extends AbstractConfigurableConfig implements ICodeDataProvider<SourceDataFile> {
+public class ComponentDataProvider extends AbstractConfigurableConfig implements ICodeDataProvider<Object, SourceDataFile> {
 
     List<SourceDataFile> _sources;
     List<IComponentDataProvider> _dataProviders;
