@@ -8,19 +8,13 @@ import ilargia.entitas.codeGeneration.interfaces.IConfigurable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
+import java.util.stream.Collectors;
 
 
-public class ContextDataProvider implements ICodeDataProvider<String, HashMap<String,String>>, IConfigurable {
+public class ContextDataProvider implements ICodeDataProvider<String, HashMap<String, String>>, IConfigurable {
 
     public static String CONTEXT_NAME = "context_name";
     private ContextNamesConfig _contextNamesConfig = new ContextNamesConfig();
-    List<SourceDataFile> sourceDataFiles;
-
-
-    public ContextDataProvider(List<SourceDataFile> datas) {
-        sourceDataFiles = datas;
-    }
-
 
     @Override
     public String getName() {
@@ -53,19 +47,20 @@ public class ContextDataProvider implements ICodeDataProvider<String, HashMap<St
     }
 
     @Override
-    public List<HashMap<String,String>> getData() {
-        _contextNamesConfig.getContextNames().stream().forEach(name ->
-                sourceDataFiles.stream().forEach(data ->  {
-                    setContextName(data, name);
-                }));
-        return  sourceDataFiles;
+    public List<HashMap<String, String>> getData() {
+        return _contextNamesConfig.getContextNames().stream()
+                .map(contextName -> {
+                    HashMap<String, String> data = new HashMap<>();
+                    setContextName(data, contextName);
+                    return data;
+                }).collect(Collectors.toList());
     }
 
-    public static String getContextName(SourceDataFile data) {
-        return (String) data.get(CONTEXT_NAME);
+    public static String getContextName(HashMap<String, String> data) {
+        return data.get(CONTEXT_NAME);
     }
 
-    public static void setContextName(SourceDataFile data, String contextName) {
+    public static void setContextName(HashMap<String, String> data, String contextName) {
         data.put(CONTEXT_NAME, contextName);
     }
 

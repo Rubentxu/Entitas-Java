@@ -63,7 +63,7 @@ public class EntityIndexDataProvider implements ICodeDataProvider, IConfigurable
 
     @Override
     public Properties getDefaultProperties() {
-        return null;
+        return  _contextsComponentDataProvider.getDefaultProperties();
     }
 
     @Override
@@ -76,8 +76,8 @@ public class EntityIndexDataProvider implements ICodeDataProvider, IConfigurable
     public List<SourceDataFile> getData() {
         List<SourceDataFile> entityIndexData = sourceDataFiles.stream()
                 .filter(s -> !s.source.isAbstract())
-                .filter(s -> s.source.hasAnnotation("CustomEntityIndex"))
-                .map(s -> createCustomEntityIndexData(s))
+                .filter(s -> s.source.hasInterface("IComponent"))
+                .map(s -> createEntityIndexData(s, s.source.getFields()))
                 .collect(Collectors.toList());
 
 
@@ -93,7 +93,6 @@ public class EntityIndexDataProvider implements ICodeDataProvider, IConfigurable
     }
 
     private SourceDataFile createEntityIndexData(SourceDataFile data, List<FieldSource<JavaClassSource>> infos) {
-
 
         FieldSource<JavaClassSource> info = infos.stream()
                 .filter(i -> i.hasAnnotation("EntityIndex"))
