@@ -1,6 +1,3 @@
-group 'com.ilargia.games'
-version '0.3.0'
-
 apply plugin: 'java'
 
 sourceCompatibility = 1.8
@@ -11,7 +8,7 @@ repositories {
 
 dependencies {
     compile project(":entitas")
-    compile project(":entitas-libgdx")
+    compile project(":entitas-gdx")
     compile "com.badlogicgames.gdx:gdx:$gdxVersion"
     compile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
     compile "com.badlogicgames.box2dlights:box2dlights:$box2dlightsVersion"

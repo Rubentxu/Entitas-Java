@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Properties;
 
 
-public class ContextDataProvider implements ICodeDataProvider<HashMap<String,Object>>, IConfigurable {
+public class ContextDataProvider implements ICodeDataProvider<String, HashMap<String,String>>, IConfigurable {
 
     public static String CONTEXT_NAME = "context_name";
     private ContextNamesConfig _contextNamesConfig = new ContextNamesConfig();
@@ -53,7 +53,7 @@ public class ContextDataProvider implements ICodeDataProvider<HashMap<String,Obj
     }
 
     @Override
-    public List<HashMap<String,Object>> getData() {
+    public List<HashMap<String,String>> getData() {
         _contextNamesConfig.getContextNames().stream().forEach(name ->
                 sourceDataFiles.stream().forEach(data ->  {
                     setContextName(data, name);

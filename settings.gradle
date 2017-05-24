@@ -1,3 +1,2 @@
-include 'entitas', 'codegenerator', 'entitas-libgdx', /*'examples:Pong', 'examples:MatchOne',*/ 'examples:Tests'
-include 'Entitas-VisualDebugger'
+include 'entitas', 'codegenerator', 'entitas-gdx', /*'examples:Pong', 'examples:MatchOne',*/ 'examples:Tests', 'debugger'
 

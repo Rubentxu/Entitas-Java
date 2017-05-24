@@ -1,7 +1,7 @@
 apply plugin: 'java'
 apply plugin: 'groovy'
 
-archivesBaseName = 'Entitas-libGDX'
+archivesBaseName = 'Entitas-GDX'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
