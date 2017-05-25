@@ -2,9 +2,11 @@ package ilargia.entitas.fixtures.components;
 
 import ilargia.entitas.api.IComponent;
 import ilargia.entitas.codeGenerator.annotations.Contexts;
+import ilargia.entitas.codeGenerator.annotations.EntityIndex;
 
 @Contexts(names = {"Input", "Core"})
 public class Player implements IComponent {
+    @EntityIndex
     public ID id;
 
     public Player(ID id) {

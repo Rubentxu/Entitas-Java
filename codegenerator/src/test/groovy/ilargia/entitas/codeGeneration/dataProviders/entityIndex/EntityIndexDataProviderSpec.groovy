@@ -2,8 +2,6 @@ package ilargia.entitas.codeGeneration.dataProviders.entityIndex
 
 import groovy.transform.TypeCheckingMode
 import ilargia.entitas.codeGeneration.data.SourceDataFile
-import ilargia.entitas.codeGeneration.dataProviders.components.ComponentDataProvider
-import ilargia.entitas.codeGeneration.dataProviders.context.ContextDataProvider
 import ilargia.entitas.fixtures.components.FixtureProvider
 import spock.lang.Narrative
 import spock.lang.Shared
@@ -64,25 +62,20 @@ class EntityIndexDataProviderSpec extends Specification {
         List<SourceDataFile> datas = entityIndexDataProvider.getData()
 
         then:
-        datas.size() == 6
-        getEntityIndexType(datas.get(id)).get(id2).equals(result)
-        getFullTypeName(datas.get(id)).contains(result2)
-        isUnique(datas.get(id)) == result3
-        shouldGenerateComponent(datas.get(id)) == result4
-        getConstructorData(datas.get(id)).size() == result5
-        getMemberData(datas.get(id)).size() == result6
-        getGenericsData(datas.get(id)).size() == result7
-        shouldGenerateMethods(datas.get(id)) == result8
-        getEnumData(datas.get(id)) == result9
+        datas.size() == 1
+        getEntityIndexType(datas.get(id)).equals(result)
+        isCustom(datas.get(id)).equals(result2)
+        getEntityIndexName(datas.get(id)).contains(result3)
+        getKeyType(datas.get(id)).contains(result4)
+        getComponentType(datas.get(id)).contains(result5)
+        getMemberName(datas.get(id)).contains(result6)
+        getContextNames(datas.get(id)).size() == result7
+
 
         where: 'la Propiedad: #ContextName para el id: #id  result: #result'
-        id  |   id2 ||  result  | result2   |  result3  |   result4  |   result5   |   result6   |   result7   |   result8  | result9
-        0   |   0   ||  "Game"  | "Ball"    |   true    |    false   |     2       |     1       |    0        |     true   |   []
-        1   |   0   ||  "Game"  | "Bounds"  |   false   |    false   |     2       |     2       |    0        |     true   |   ["ilargia.entitas.fixtures.components.Bounds.Tag"]
-        2   |   0   ||  "Core"  | "Motion"  |   false   |    false   |     1       |     1       |    0        |     true   |   []
-        3   |   0   ||  "Input" | "Player"  |   false   |    false   |     1       |     1       |    0        |     true   |   ["ilargia.entitas.fixtures.components.Player.ID"]
-        4   |   0   ||  "Game"  | "Score"   |   false   |    true    |     1       |     1       |    0        |     true   |   []
-        5   |   0   ||  "Input" | "View"    |   false   |    false   |     1       |     1       |    1        |     false  |   []
+        id  ||  result        | result2   |  result3    |   result4  |   result5   |   result6   |   result7
+        0   || "EntityIndex"  | false     |   "Player"  |    "ID"    |   "Player"  |     "id"    |    2
+       // 1   ||  "Game"  | "Bounds"  |   false   |    false   |     2       |     2       |    0        |     true   |   ["ilargia.entitas.fixtures.components.Bounds.Tag"]
 
     }
 }

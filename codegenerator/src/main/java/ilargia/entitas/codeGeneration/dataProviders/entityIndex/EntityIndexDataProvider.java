@@ -9,6 +9,9 @@ import ilargia.entitas.codeGeneration.data.MemberData;
 import ilargia.entitas.codeGeneration.data.MethodData;
 import ilargia.entitas.codeGeneration.dataProviders.components.providers.ContextsDataProvider;
 import ilargia.entitas.codeGeneration.interfaces.IConfigurable;
+import ilargia.entitas.codeGenerator.annotations.CustomEntityIndex;
+import ilargia.entitas.codeGenerator.annotations.EntityIndex;
+import ilargia.entitas.codeGenerator.annotations.EntityIndexGetMethod;
 import org.jboss.forge.roaster.model.source.AnnotationSource;
 import org.jboss.forge.roaster.model.source.FieldSource;
 import org.jboss.forge.roaster.model.source.JavaClassSource;
@@ -76,17 +79,17 @@ public class EntityIndexDataProvider implements ICodeDataProvider, IConfigurable
     public List<SourceDataFile> getData() {
         List<SourceDataFile> entityIndexData = sourceDataFiles.stream()
                 .filter(s -> !s.source.isAbstract())
-                .filter(s -> s.source.hasInterface("IComponent"))
+                .filter(s -> s.source.hasInterface(IComponent.class))
+                .filter(s -> s.source.getFields().stream().anyMatch(f-> f.hasAnnotation(EntityIndex.class)))
                 .map(s -> createEntityIndexData(s, s.source.getFields()))
                 .collect(Collectors.toList());
-
 
         List<SourceDataFile> customEntityIndexData = sourceDataFiles.stream()
                 .filter(s -> !s.source.isAbstract())
                 .filter(s -> s.source.hasInterface(IComponent.class))
-                .map(s -> createEntityIndexData(s, s.source.getFields()))
+                .filter(s -> s.source.hasAnnotation(CustomEntityIndex.class))
+                .map(s -> createCustomEntityIndexData(s))
                 .collect(Collectors.toList());
-
 
         entityIndexData.addAll(customEntityIndexData);
         return entityIndexData;
@@ -95,11 +98,11 @@ public class EntityIndexDataProvider implements ICodeDataProvider, IConfigurable
     private SourceDataFile createEntityIndexData(SourceDataFile data, List<FieldSource<JavaClassSource>> infos) {
 
         FieldSource<JavaClassSource> info = infos.stream()
-                .filter(i -> i.hasAnnotation("EntityIndex"))
+                .filter(i -> i.hasAnnotation(EntityIndex.class))
                 .collect(singletonCollector());
 
-        setEntityIndexType(data, info.getAnnotation("EntityIndex").getStringValue());
-        isCustom(data, false);
+        setEntityIndexType(data, info.getAnnotation(EntityIndex.class).getName());
+        isCustom(data,false);
         setEntityIndexName(data, data.source.getCanonicalName());
         setKeyType(data, info.getType().getName());
         setComponentType(data, data.source.getCanonicalName());
@@ -111,7 +114,7 @@ public class EntityIndexDataProvider implements ICodeDataProvider, IConfigurable
 
     SourceDataFile createCustomEntityIndexData(SourceDataFile data) {
 
-        AnnotationSource attribute = data.source.getAnnotation("CustomEntityIndex");
+        AnnotationSource attribute = data.source.getAnnotation(CustomEntityIndex.class);
 
         setEntityIndexType(data, data.source.getName());
         isCustom(data, true);
@@ -121,10 +124,10 @@ public class EntityIndexDataProvider implements ICodeDataProvider, IConfigurable
 
         List<MethodData> getMethods = data.source.getMethods().stream()
                 .filter(m -> m.isPublic())
-                .filter(m -> m.hasAnnotation("EntityIndexGetMethod"))
+                .filter(m -> m.hasAnnotation(EntityIndexGetMethod.class))
                 .map(m -> new MethodData(m.getReturnType(), m.getName(),
-                        m.getParameters().stream().map(p -> new MemberData(p.getType(), p.getName(), null)).collect(Collectors.toList()),
-                        m.getAnnotation("EntityIndexGetMethod")
+                        m.getParameters().stream().map(p -> new MemberData(p.getType(), p.getName(), p.getAnnotations().get(0))).collect(Collectors.toList()),
+                        m.getAnnotation(EntityIndexGetMethod.class)
                 ))
                 .collect(Collectors.toList());
 
