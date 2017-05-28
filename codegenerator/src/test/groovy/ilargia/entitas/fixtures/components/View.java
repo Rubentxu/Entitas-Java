@@ -6,7 +6,7 @@ import ilargia.entitas.codeGenerator.annotations.Contexts;
 import ilargia.entitas.codeGenerator.annotations.DontGenerate;
 
 @DontGenerate
-@Contexts(names = { "Input"})
+@Contexts(names = { "Input", "Test"})
 public class View <T> implements IComponent {
     public T shape;
 

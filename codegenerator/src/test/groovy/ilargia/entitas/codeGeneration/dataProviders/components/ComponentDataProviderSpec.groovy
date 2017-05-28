@@ -69,7 +69,7 @@ class ComponentDataProviderSpec extends Specification {
         List<SourceDataFile> datas = componentDataProvider.getData()
 
         then:
-        datas.size() == 6
+        datas.size() == 9
         getContextNames(datas.get(id)).get(id2).equals(result)
         getFullTypeName(datas.get(id)).contains(result2)
         isUnique(datas.get(id)) == result3
@@ -81,13 +81,16 @@ class ComponentDataProviderSpec extends Specification {
         getEnumData(datas.get(id)) == result9
 
         where: 'la Propiedad: #ContextName para el id: #id  result: #result'
-          id  |   id2 ||  result  | result2   |  result3  |   result4  |   result5   |   result6   |   result7   |   result8  | result9
-          0   |   0   ||  "Game"  | "Ball"    |   true    |    false   |     2       |     1       |    0        |     true   |   []
-          1   |   0   ||  "Game"  | "Bounds"  |   false   |    false   |     2       |     2       |    0        |     true   |   ["ilargia.entitas.fixtures.components.Bounds.Tag"]
-          2   |   0   ||  "Core"  | "Motion"  |   false   |    false   |     1       |     1       |    0        |     true   |   []
-          3   |   0   ||  "Input" | "Player"  |   false   |    false   |     1       |     1       |    0        |     true   |   ["ilargia.entitas.fixtures.components.Player.ID"]
-          4   |   0   ||  "Game"  | "Score"   |   false   |    true    |     1       |     1       |    0        |     true   |   []
-          5   |   0   ||  "Input" | "View"    |   false   |    false   |     1       |     1       |    1        |     false  |   []
+          id  |   id2 ||  result  | result2      |  result3  |   result4  |   result5   |   result6   |   result7   |   result8  | result9
+          0   |   0   ||  "Game"  | "Ball"       |   true    |    false   |     2       |     1       |    0        |     true   |   []
+          1   |   0   ||  "Game"  | "Bounds"     |   false   |    false   |     2       |     2       |    0        |     true   |   ["ilargia.entitas.fixtures.components.dir.Bounds.Tag"]
+          2   |   0   ||  "Core"  |"Interactive" |   false   |    false   |     0       |     0       |    0        |     true   |   []
+          3   |   0   ||  "Test"  | "Motion"     |   false   |    false   |     1       |     1       |    0        |     true   |   []
+          4   |   0   ||  "Input" | "Player"     |   false   |    false   |     1       |     1       |    0        |     true   |   ["ilargia.entitas.fixtures.components.dir2.Player.ID"]
+          5   |   0   ||  "Core"  | "Position"   |   false   |    false   |     2       |     2       |    0        |     true   |   []
+          6   |   0   ||  "Game"  | "Score"      |   false   |    true    |     1       |     1       |    0        |     true   |   []
+          7   |   0   ||  "Core"  | "Size"       |   false   |    false   |     1       |     2       |    0        |     true   |   []
+          8   |   0   ||  "Input" | "View"       |   false   |    false   |     1       |     1       |    1        |     false  |   []
 
     }
 }

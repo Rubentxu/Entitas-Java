@@ -1,4 +1,4 @@
-package ilargia.entitas.fixtures.components;
+package ilargia.entitas.fixtures.components.dir;
 
 import com.badlogic.gdx.math.Rectangle;
 import ilargia.entitas.api.IComponent;

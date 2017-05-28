@@ -74,8 +74,8 @@ class EntityIndexDataProviderSpec extends Specification {
 
         where: 'la Propiedad: #ContextName para el id: #id  result: #result'
         id  ||  result        | result2   |  result3    |   result4  |   result5   |   result6   |   result7
-        0   || "EntityIndex"  | false     |   "Player"  |    "ID"    |   "Player"  |     "id"    |    2
-       // 1   ||  "Game"  | "Bounds"  |   false   |    false   |     2       |     2       |    0        |     true   |   ["ilargia.entitas.fixtures.components.Bounds.Tag"]
+        0   || "EntityIndex"  | false     |   "Player"  |    "ID"    |   "Player"  |     "id"    |    3
+       // 1   ||  "Game"  | "Bounds"  |   false   |    false   |     2       |     2       |    0        |     true   |   ["ilargia.entitas.fixtures.components.dir.Bounds.Tag"]
 
     }
 }

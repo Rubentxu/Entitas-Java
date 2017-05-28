@@ -114,13 +114,13 @@ public class EntityIndexDataProvider implements ICodeDataProvider, IConfigurable
 
     SourceDataFile createCustomEntityIndexData(SourceDataFile data) {
 
-        AnnotationSource attribute = data.source.getAnnotation(CustomEntityIndex.class);
+        AnnotationSource annotation = data.source.getAnnotation(CustomEntityIndex.class);
 
         setEntityIndexType(data, data.source.getName());
         isCustom(data, true);
         setEntityIndexName(data, data.source.getCanonicalName());
 
-        setContextNames(data, Arrays.asList(attribute.getStringArrayValue()));
+        setContextNames(data, Arrays.asList(annotation.getStringValue()));
 
         List<MethodData> getMethods = data.source.getMethods().stream()
                 .filter(m -> m.isPublic())

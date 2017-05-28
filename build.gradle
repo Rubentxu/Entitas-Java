@@ -28,10 +28,10 @@ allprojects {
     repositories {
         mavenLocal()
         maven { url "http://jcenter.bintray.com" }
-        maven { url "http://10.190.16.139" }
-        maven { url "http://10.190.16.139/content/repositories/Maven_Releases" }
-//        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
-//        maven { url "https://oss.sonatype.org/content/repositories/releases/" }
+//        maven { url "http://10.190.16.139" }
+//        maven { url "http://10.190.16.139/content/repositories/Maven_Releases" }
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+        maven { url "https://oss.sonatype.org/content/repositories/releases/" }
         mavenCentral()
 
     }
