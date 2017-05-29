@@ -4,7 +4,7 @@ import groovy.transform.TypeCheckingMode
 import ilargia.entitas.codeGeneration.config.TargetDirectoryConfig
 import ilargia.entitas.codeGeneration.data.CodeGenFile
 import ilargia.entitas.codeGeneration.data.SourceDataFile
-import ilargia.entitas.fixtures.components.FixtureProvider
+import ilargia.entitas.fixtures.FixtureProvider
 import org.jboss.forge.roaster.model.source.JavaClassSource
 import spock.lang.Narrative
 import spock.lang.Shared

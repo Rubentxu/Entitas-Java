@@ -1,7 +1,7 @@
 package ilargia.entitas.codeGeneration.dataProviders.components
 
 import ilargia.entitas.codeGeneration.data.SourceDataFile
-import ilargia.entitas.fixtures.components.FixtureProvider
+import ilargia.entitas.fixtures.FixtureProvider
 import groovy.transform.TypeCheckingMode
 import spock.lang.Narrative
 import spock.lang.Shared
@@ -30,7 +30,7 @@ class ComponentDataProviderSpec extends Specification {
     String CONTEXTS_KEY = "Entitas.CodeGeneration.Plugins.Contexts";
 
     @Shared
-    FixtureProvider fixtures = new FixtureProvider("src/test/groovy/ilargia/entitas/fixtures/components")
+    FixtureProvider fixtures = new FixtureProvider("src/test/java/ilargia/entitas/fixtures/components")
     @Shared
     ComponentDataProvider componentDataProvider
 

@@ -1,10 +1,9 @@
-package ilargia.entitas.fixtures.components;
+package ilargia.entitas.fixtures;
 
 
 import ilargia.entitas.codeGeneration.data.SourceDataFile;
 import org.jboss.forge.roaster.Roaster;
 import org.jboss.forge.roaster.model.source.*;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
