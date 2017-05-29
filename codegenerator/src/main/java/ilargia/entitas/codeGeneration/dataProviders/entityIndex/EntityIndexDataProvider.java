@@ -40,8 +40,8 @@ public class EntityIndexDataProvider implements ICodeDataProvider, IConfigurable
 
     List<SourceDataFile> sourceDataFiles;
 
-    public EntityIndexDataProvider(List<SourceDataFile> types) {
-        sourceDataFiles = types;
+    public EntityIndexDataProvider(List<SourceDataFile> sourceDataFiles) {
+        this.sourceDataFiles = sourceDataFiles;
     }
 
     @Override
@@ -66,7 +66,7 @@ public class EntityIndexDataProvider implements ICodeDataProvider, IConfigurable
 
     @Override
     public Properties getDefaultProperties() {
-        return  _contextsComponentDataProvider.getDefaultProperties();
+        return _contextsComponentDataProvider.getDefaultProperties();
     }
 
     @Override
@@ -80,13 +80,12 @@ public class EntityIndexDataProvider implements ICodeDataProvider, IConfigurable
         List<SourceDataFile> entityIndexData = sourceDataFiles.stream()
                 .filter(s -> !s.source.isAbstract())
                 .filter(s -> s.source.hasInterface(IComponent.class))
-                .filter(s -> s.source.getFields().stream().anyMatch(f-> f.hasAnnotation(EntityIndex.class)))
+                .filter(s -> s.source.getFields().stream().anyMatch(f -> f.hasAnnotation(EntityIndex.class)))
                 .map(s -> createEntityIndexData(s, s.source.getFields()))
                 .collect(Collectors.toList());
 
         List<SourceDataFile> customEntityIndexData = sourceDataFiles.stream()
                 .filter(s -> !s.source.isAbstract())
-                .filter(s -> s.source.hasInterface(IComponent.class))
                 .filter(s -> s.source.hasAnnotation(CustomEntityIndex.class))
                 .map(s -> createCustomEntityIndexData(s))
                 .collect(Collectors.toList());
@@ -102,7 +101,7 @@ public class EntityIndexDataProvider implements ICodeDataProvider, IConfigurable
                 .collect(singletonCollector());
 
         setEntityIndexType(data, info.getAnnotation(EntityIndex.class).getName());
-        isCustom(data,false);
+        isCustom(data, false);
         setEntityIndexName(data, data.source.getCanonicalName());
         setKeyType(data, info.getType().getName());
         setComponentType(data, data.source.getCanonicalName());
@@ -126,7 +125,8 @@ public class EntityIndexDataProvider implements ICodeDataProvider, IConfigurable
                 .filter(m -> m.isPublic())
                 .filter(m -> m.hasAnnotation(EntityIndexGetMethod.class))
                 .map(m -> new MethodData(m.getReturnType(), m.getName(),
-                        m.getParameters().stream().map(p -> new MemberData(p.getType(), p.getName(), p.getAnnotations().get(0))).collect(Collectors.toList()),
+                        m.getParameters().stream().map(p -> new MemberData(p.getType(), p.getName(),
+                                p.getAnnotations().size() > 0 ? p.getAnnotations().get(0) : null)).collect(Collectors.toList()),
                         m.getAnnotation(EntityIndexGetMethod.class)
                 ))
                 .collect(Collectors.toList());
@@ -154,7 +154,8 @@ public class EntityIndexDataProvider implements ICodeDataProvider, IConfigurable
     }
 
     public static String getEntityIndexType(SourceDataFile data) {
-        return (String) data.get(ENTITY_INDEX_TYPE);
+            if(data.containsKey(ENTITY_INDEX_TYPE)) return (String) data.get(ENTITY_INDEX_TYPE);
+            return "";
     }
 
     public static void setEntityIndexType(SourceDataFile data, String type) {
@@ -162,7 +163,8 @@ public class EntityIndexDataProvider implements ICodeDataProvider, IConfigurable
     }
 
     public static boolean isCustom(SourceDataFile data) {
-        return (boolean) data.get(ENTITY_INDEX_IS_CUSTOM);
+        if(data.containsKey(ENTITY_INDEX_IS_CUSTOM)) return (boolean) data.get(ENTITY_INDEX_IS_CUSTOM);
+        return false;
     }
 
     public static void isCustom(SourceDataFile data, boolean isCustom) {
@@ -170,7 +172,8 @@ public class EntityIndexDataProvider implements ICodeDataProvider, IConfigurable
     }
 
     public static List<MethodData> getCustomMethods(SourceDataFile data) {
-        return (List<MethodData>) data.get(ENTITY_INDEX_CUSTOM_METHODS);
+        if(data.containsKey(ENTITY_INDEX_CUSTOM_METHODS)) return (List<MethodData>) data.get(ENTITY_INDEX_CUSTOM_METHODS);
+        return new ArrayList<>();
     }
 
     public static void setCustomMethods(SourceDataFile data, List<MethodData> methods) {
@@ -178,7 +181,8 @@ public class EntityIndexDataProvider implements ICodeDataProvider, IConfigurable
     }
 
     public static String getEntityIndexName(SourceDataFile data) {
-        return (String) data.get(ENTITY_INDEX_NAME);
+        if(data.containsKey(ENTITY_INDEX_NAME)) return (String) data.get(ENTITY_INDEX_NAME);
+        return "";
     }
 
     public static void setEntityIndexName(SourceDataFile data, String name) {
@@ -186,7 +190,8 @@ public class EntityIndexDataProvider implements ICodeDataProvider, IConfigurable
     }
 
     public static List<String> getContextNames(SourceDataFile data) {
-        return (List<String>) data.get(ENTITY_INDEX_CONTEXT_NAMES);
+        if(data.containsKey(ENTITY_INDEX_CONTEXT_NAMES)) return (List<String>) data.get(ENTITY_INDEX_CONTEXT_NAMES);
+        return new ArrayList<>();
     }
 
     public static void setContextNames(SourceDataFile data, List<String> contextNames) {
@@ -194,7 +199,8 @@ public class EntityIndexDataProvider implements ICodeDataProvider, IConfigurable
     }
 
     public static String getKeyType(SourceDataFile data) {
-        return (String) data.get(ENTITY_INDEX_KEY_TYPE);
+        if(data.containsKey(ENTITY_INDEX_KEY_TYPE)) return (String) data.get(ENTITY_INDEX_KEY_TYPE);
+        return "";
     }
 
     public static void setKeyType(SourceDataFile data, String type) {
@@ -202,7 +208,8 @@ public class EntityIndexDataProvider implements ICodeDataProvider, IConfigurable
     }
 
     public static String getComponentType(SourceDataFile data) {
-        return (String) data.get(ENTITY_INDEX_COMPONENT_TYPE);
+        if(data.containsKey(ENTITY_INDEX_COMPONENT_TYPE)) return (String) data.get(ENTITY_INDEX_COMPONENT_TYPE);
+        return "";
     }
 
     public static void setComponentType(SourceDataFile data, String type) {
@@ -210,7 +217,8 @@ public class EntityIndexDataProvider implements ICodeDataProvider, IConfigurable
     }
 
     public static String getMemberName(SourceDataFile data) {
-        return (String) data.get(ENTITY_INDEX_MEMBER_NAME);
+        if(data.containsKey(ENTITY_INDEX_MEMBER_NAME)) return (String) data.get(ENTITY_INDEX_MEMBER_NAME);
+        return "";
     }
 
     public static void setMemberName(SourceDataFile data, String memberName) {

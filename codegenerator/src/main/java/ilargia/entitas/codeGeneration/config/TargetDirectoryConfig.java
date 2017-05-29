@@ -4,7 +4,7 @@ package ilargia.entitas.codeGeneration.config;
 import java.util.Properties;
 
 public class TargetDirectoryConfig extends AbstractConfigurableConfig {
-    static String TARGET_DIRECTORY_KEY = "Entitas.CodeGeneration.Plugins.TargetDirectory";
+    public static String TARGET_DIRECTORY_KEY = "Entitas.CodeGeneration.Plugins.TargetDirectory";
 
     @Override
     public Properties getDefaultProperties() {

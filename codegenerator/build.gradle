@@ -1,36 +1,20 @@
 apply plugin: 'java'
 apply plugin: 'groovy'
+apply plugin: 'maven'
+
+group = 'ilargia.entitas.gradle'
+version '0.3.0'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
-
-//task(codeGenerator, dependsOn: 'classes', type: JavaExec) {
-//    main = 'com.ilargia.games.entitas.generators.CodeGeneratorApp'
-//    classpath = sourceSets.main.runtimeClasspath
-//    args 'dirComponents dirDestino'
-//    standardInput = System.in
-//    //workingDir = project.assetsDir
-//    ignoreExitValue = true
-//
-//}
-//
-//jar {
-//    baseName = 'CodeGenerator'
-//    manifest {
-//        attributes 'Implementation-Title': 'CodeGenerator fatJar',
-//                'Implementation-Version': version,
-//                'Main-Class': 'com.ilargia.games.entitas.generators.CodeGeneratorApp'
-//    }
-//    dependsOn configurations.runtime
-//    from {
-//        (configurations.compile).collect {
-//            it.isDirectory() ? it : zipTree(it)
-//        }
-//    }
-//}
+repositories {
+    mavenCentral()
+    mavenLocal()
+}
 
 dependencies {
+    compile gradleApi()
     compile project(":entitas")
     compile group: 'org.jboss.forge.roaster', name: 'roaster-api', version: '2.19.1.Final'
     compile group: 'org.jboss.forge.roaster', name: 'roaster-jdt', version: '2.19.1.Final'

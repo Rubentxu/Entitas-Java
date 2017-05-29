@@ -89,8 +89,9 @@ class ComponentDataProviderSpec extends Specification {
           4   |   0   ||  "Input" | "Player"     |   false   |    false   |     1       |     1       |    0        |     true   |   ["ilargia.entitas.fixtures.components.dir2.Player.ID"]
           5   |   0   ||  "Core"  | "Position"   |   false   |    false   |     2       |     2       |    0        |     true   |   []
           6   |   0   ||  "Game"  | "Score"      |   false   |    true    |     1       |     1       |    0        |     true   |   []
-          7   |   0   ||  "Core"  | "Size"       |   false   |    false   |     1       |     2       |    0        |     true   |   []
+          7   |   0   ||  "Test"  | "Size"       |   false   |    false   |     1       |     2       |    0        |     true   |   []
           8   |   0   ||  "Input" | "View"       |   false   |    false   |     1       |     1       |    1        |     false  |   []
+
 
     }
 }
