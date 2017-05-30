@@ -1,10 +1,11 @@
+package ilargia.egdx.logicbricks;
 
 
-import com.ilargia.games.egdx.impl.EngineGDX
-import com.ilargia.games.egdx.logicbricks.gen.Entitas
-import com.ilargia.games.egdx.logicbricks.gen.game.GameEntity
-import com.ilargia.games.egdx.logicbricks.gen.sensor.SensorEntity
-import com.ilargia.games.egdx.logicbricks.system.sensor.CollisionSensorSystem
+import ilargia.egdx.impl.EngineGDX
+import ilargia.egdx.logicbricks.gen.Entitas
+import ilargia.egdx.logicbricks.gen.game.GameEntity
+import ilargia.egdx.logicbricks.gen.sensor.SensorEntity
+import ilargia.egdx.logicbricks.system.sensor.CollisionSensorSystem
 import ilargia.entitas.factories.CollectionsFactories
 import spock.lang.Narrative
 import spock.lang.Shared
@@ -25,7 +26,7 @@ class CollisionSensorSystemSpec extends Specification {
 
     @Shared EngineGDX engine = new EngineGDX(new CollectionsFactories(){})
     @Shared Entitas entitas = new Entitas()
-    @Shared def collisionSensorSystem = new CollisionSensorSystem(entitas, null);
+    @Shared CollisionSensorSystem collisionSensorSystem = new CollisionSensorSystem(entitas, null);
     @Shared GameEntity player = entitas.game.createEntity().addTags("Player","Player1").setInteractive(true)
     @Shared GameEntity enemy = entitas.game.createEntity().addTags("Enemy","Boss").setInteractive(true)
 
@@ -41,8 +42,9 @@ class CollisionSensorSystemSpec extends Specification {
         when: //'provocamos la colision con su objetivo'                          // 4
         //collisionSensorSystem.processCollision(player.getCreationIndex(), enemy.getCreationIndex(), true);
         collisionSensorSystem.execute( 0.5F);
+        boolean result = collisionEnemy.link.pulse;
 
         then: 'el pulso del sensor cambia a un valor positivo'              // 5
-            !collisionEnemy.getLink().pulse
+            !result
     }
 }

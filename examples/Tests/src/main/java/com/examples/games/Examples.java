@@ -8,6 +8,7 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.examples.games.states.PlatformExampleState;
 import ilargia.egdx.api.managers.LogManager;
 import ilargia.egdx.impl.managers.*;
@@ -43,7 +44,7 @@ public class Examples implements ApplicationListener {
         AssetManager assetsManager = new AssetManager(new TestFileHandleResolver());
         engine.addManager(new AssetsManagerGDX(assetsManager, preferencesManager));
         engine.addManager(new PhysicsManagerGDX(new Vector2(0,-9.8f)));
-        engine.addManager(new GUIManagerGDX(new BitmapFont(), null, engine));
+        engine.addManager(new GUIManagerGDX(new ScreenViewport(),new BitmapFont(), engine));
         engine.addManager(new SceneManagerGDX(engine, entitas));
         engine.addManager(new LogManagerGDX(preferencesManager));
         engine.addManager(new InputManagerGDX(entitas, engine));

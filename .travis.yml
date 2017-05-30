@@ -6,18 +6,18 @@ jdk:
 install: true
 
 script:
-   ilargia.entitas.gradle entitas:build
+   gradle entitas:build
 
 before_cache:
-  - rm -f  $HOME/.ilargia.entitas.gradle/caches/modules-2/modules-2.lock
-  - rm -fr $HOME/.ilargia.entitas.gradle/caches/*/plugin-resolution/
+  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
 cache:
   directories:
-    - $HOME/.ilargia.entitas.gradle/caches/
-    - $HOME/.ilargia.entitas.gradle/wrapper/
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/
 after_success:
       - bash <(curl -s https://codecov.io/bash)
 test:
     post:
-        - if [ -e ./gradlew ]; then ./gradlew jacocoTestReport;else ilargia.entitas.gradle jacocoTestReport;fi
+        - if [ -e ./gradlew ]; then ./gradlew jacocoTestReport;else gradle jacocoTestReport;fi
         - bash <(curl -s https://codecov.io/bash) -t uuid-repo-token

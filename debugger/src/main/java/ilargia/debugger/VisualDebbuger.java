@@ -154,9 +154,9 @@ public class VisualDebbuger extends Application implements Initializable {
 
     @FXML
     public void handleGenerate(ActionEvent actionEvent) throws IOException {
-        result.setText("");
-
-        result.setText("Generating...");
+//        result.setText("");
+//
+//        result.setText("Generating...");
 
         if (props != null) saveProperties();
 

@@ -1,5 +1,6 @@
 package ilargia.egdx.logicbricks.index;
 
+import ilargia.egdx.logicbricks.component.actuator.Link;
 import ilargia.egdx.logicbricks.gen.Entitas;
 import ilargia.egdx.logicbricks.gen.actuator.ActuatorEntity;
 import ilargia.egdx.logicbricks.gen.actuator.ActuatorMatcher;

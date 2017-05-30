@@ -6,13 +6,10 @@ import ilargia.entitas.codeGeneration.config.TargetPackageConfig
 import ilargia.entitas.codeGeneration.data.CodeGenFile
 import ilargia.entitas.codeGeneration.data.SourceDataFile
 import ilargia.entitas.fixtures.FixtureProvider
-import org.jboss.forge.roaster.model.source.JavaClassSource
 import spock.lang.Narrative
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Title
-import sun.plugin.com.JavaClass
-
 
 @Narrative("""
 Como usuario de la aplicacion
