@@ -13,7 +13,7 @@ public class MemberDataProvider implements IComponentDataProvider {
 
     @Override
     public void provide(SourceDataFile data) {
-        List<MemberData> memberDatas = data.source.getFields().stream()
+        List<MemberData> memberDatas = data.getFileContent().getFields().stream()
                 .filter(field -> field.isPublic())
                 .map(field -> new MemberData(field.getType(), field.getName(), field.getAnnotation("generateIndex")))
                 .collect(Collectors.toList());

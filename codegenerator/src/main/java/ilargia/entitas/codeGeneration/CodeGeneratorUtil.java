@@ -9,6 +9,10 @@ import ilargia.entitas.codeGeneration.interfaces.ICodeGeneratorInterface;
 import ilargia.entitas.codeGeneration.config.Preferences;
 import ilargia.entitas.codeGeneration.interfaces.IConfigurable;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.lang.reflect.Modifier;
 import java.util.List;
 import java.util.Map;
@@ -156,4 +160,15 @@ public class CodeGeneratorUtil {
                 .collect(Collectors.toMap(e -> (String) e.getKey(), e -> (String) e.getValue()));
     }
 
+    public void writeFile(File file, String content) {
+        try {
+            if (!file.getParentFile().exists()) file.getParentFile().mkdirs();
+            FileWriter fw = new FileWriter(file.getAbsoluteFile());
+            BufferedWriter bw = new BufferedWriter(fw);
+            bw.write(content);
+            bw.close();
+        } catch (IOException e) {
+            System.out.println("Unable to create file " + file.getName());
+        }
+    }
 }

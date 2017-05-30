@@ -14,7 +14,7 @@ public class ConstructorDataProvider implements IComponentDataProvider {
 
     @Override
     public void provide(SourceDataFile data) {
-        List<MethodSource<JavaClassSource>> contructores = data.source.getMethods().stream()
+        List<MethodSource<JavaClassSource>> contructores = data.getFileContent().getMethods().stream()
                 .filter(method -> method.isPublic())
                 .filter(method -> method.isConstructor())
 //                .filter(method -> method.getParameters().size() > 0)

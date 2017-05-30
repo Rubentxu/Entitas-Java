@@ -78,15 +78,15 @@ public class EntityIndexDataProvider implements ICodeDataProvider, IConfigurable
     @Override
     public List<SourceDataFile> getData() {
         List<SourceDataFile> entityIndexData = sourceDataFiles.stream()
-                .filter(s -> !s.source.isAbstract())
-                .filter(s -> s.source.hasInterface(IComponent.class))
-                .filter(s -> s.source.getFields().stream().anyMatch(f -> f.hasAnnotation(EntityIndex.class)))
-                .map(s -> createEntityIndexData(s, s.source.getFields()))
+                .filter(s -> !s.getFileContent().isAbstract())
+                .filter(s -> s.getFileContent().hasInterface(IComponent.class))
+                .filter(s -> s.getFileContent().getFields().stream().anyMatch(f -> f.hasAnnotation(EntityIndex.class)))
+                .map(s -> createEntityIndexData(s, s.getFileContent().getFields()))
                 .collect(Collectors.toList());
 
         List<SourceDataFile> customEntityIndexData = sourceDataFiles.stream()
-                .filter(s -> !s.source.isAbstract())
-                .filter(s -> s.source.hasAnnotation(CustomEntityIndex.class))
+                .filter(s -> !s.getFileContent().isAbstract())
+                .filter(s -> s.getFileContent().hasAnnotation(CustomEntityIndex.class))
                 .map(s -> createCustomEntityIndexData(s))
                 .collect(Collectors.toList());
 
@@ -102,26 +102,26 @@ public class EntityIndexDataProvider implements ICodeDataProvider, IConfigurable
 
         setEntityIndexType(data, info.getAnnotation(EntityIndex.class).getName());
         isCustom(data, false);
-        setEntityIndexName(data, data.source.getCanonicalName());
+        setEntityIndexName(data, data.getFileContent().getCanonicalName());
         setKeyType(data, info.getType().getName());
-        setComponentType(data, data.source.getCanonicalName());
+        setComponentType(data, data.getFileContent().getCanonicalName());
         setMemberName(data, info.getName());
-        setContextNames(data, _contextsComponentDataProvider.getContextNamesOrDefault(data.source));
+        setContextNames(data, _contextsComponentDataProvider.getContextNamesOrDefault(data.getFileContent()));
 
         return data;
     }
 
     SourceDataFile createCustomEntityIndexData(SourceDataFile data) {
 
-        AnnotationSource annotation = data.source.getAnnotation(CustomEntityIndex.class);
+        AnnotationSource annotation = data.getFileContent().getAnnotation(CustomEntityIndex.class);
 
-        setEntityIndexType(data, data.source.getName());
+        setEntityIndexType(data, data.getFileContent().getName());
         isCustom(data, true);
-        setEntityIndexName(data, data.source.getCanonicalName());
+        setEntityIndexName(data, data.getFileContent().getCanonicalName());
 
         setContextNames(data, Arrays.asList(annotation.getStringValue()));
 
-        List<MethodData> getMethods = data.source.getMethods().stream()
+        List<MethodData> getMethods = data.getFileContent().getMethods().stream()
                 .filter(m -> m.isPublic())
                 .filter(m -> m.hasAnnotation(EntityIndexGetMethod.class))
                 .map(m -> new MethodData(m.getReturnType(), m.getName(),

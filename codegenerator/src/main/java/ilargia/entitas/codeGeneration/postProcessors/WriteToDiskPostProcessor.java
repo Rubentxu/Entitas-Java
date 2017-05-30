@@ -1,28 +1,38 @@
 package ilargia.entitas.codeGeneration.postProcessors;
 
 
+import ilargia.entitas.codeGeneration.CodeGeneratorUtil;
 import ilargia.entitas.codeGeneration.data.CodeGenFile;
+import ilargia.entitas.codeGeneration.data.SourceDataFile;
 import ilargia.entitas.codeGeneration.interfaces.ICodeGenFilePostProcessor;
-import ilargia.entitas.codeGeneration.config.TargetDirectoryConfig;
+import ilargia.entitas.codeGeneration.config.TargetPackageConfig;
 import ilargia.entitas.codeGeneration.interfaces.IConfigurable;
 import org.jboss.forge.roaster.model.source.JavaClassSource;
 
 import java.io.*;
 import java.util.List;
 import java.util.Properties;
+import java.util.stream.Collectors;
 
 public class WriteToDiskPostProcessor implements ICodeGenFilePostProcessor, IConfigurable {
 
-    TargetDirectoryConfig _targetDirectoryConfig = new TargetDirectoryConfig();
+    private CodeGeneratorUtil codeGeneratorUtil;
+    private final TargetPackageConfig targetPackageConfig;
+
+    public WriteToDiskPostProcessor(CodeGeneratorUtil codeGeneratorUtil) {
+        this.codeGeneratorUtil = codeGeneratorUtil;
+        targetPackageConfig = new TargetPackageConfig();
+    }
+
 
     @Override
     public Properties getDefaultProperties() {
-        return _targetDirectoryConfig.getDefaultProperties();
+        return targetPackageConfig.getDefaultProperties();
     }
 
     @Override
     public void configure(Properties properties) {
-        _targetDirectoryConfig.configure(properties);
+        targetPackageConfig.configure(properties);
     }
 
     @Override
@@ -47,74 +57,27 @@ public class WriteToDiskPostProcessor implements ICodeGenFilePostProcessor, ICon
 
     @Override
     public List<CodeGenFile> postProcess(List<CodeGenFile> files) {
-        for (CodeGenFile file : files) {
-//            IPath targetDir = Path.fromPortableString(_targetDirectoryConfig.targetDirectory());
-//            if (!targetDir.toFile().exists()) {
-//                targetDir.toFile().mkdir();
-//            }
-            createFile(file.fileName, _targetDirectoryConfig.targetDirectory(), file.fileContent.toString());
-        }
+        files.stream().forEach(f -> createFile(f.getFileName(), f.getSubDir(), f.getFileContent()));
         return files;
-    }
-
-    public static void toFile(JavaClassSource javaClass, File targetDir) {
-        File f = targetDir;
-        String[] parts = javaClass.getPackage().split("\\.");
-
-        try {
-            if (!targetDir.getAbsolutePath().endsWith(parts[parts.length - 1])) {
-                f = new File(f, parts[parts.length - 1]);
-                createParentDirs(f);
-            }
-            f = new File(f, javaClass.getName() + ".java");
-            write(f, javaClass.toString());
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
     }
 
-    public static void createParentDirs(File file) throws IOException {
-        if (file != null) {
-            File parent = file.getCanonicalFile();
-            if (parent == null) {
-                return;
-            }
-            parent.mkdirs();
+    public File createFile(String className, String subDir, JavaClassSource content) {
+        String targetPackage = targetPackageConfig.targetPackage();
+        String finalPackage = subDir.equals("") ?
+                String.format("%s", targetPackage) :
+                String.format("%s.%s", targetPackage, subDir);
+        content.setPackage(finalPackage);
 
-            if (parent.mkdirs() && !parent.isDirectory()) {
-                throw new IOException("Unable to create parent directories of " + file);
-            }
-        }
+        String pathPackage = targetPackage.replace(".", "/");
+        String pathFile = subDir.equals("") ?
+                String.format("%s/%s.java", pathPackage, className) :
+                String.format("%s/%s/%s.java", pathPackage, subDir, className);
+
+        File file = new File(pathFile);
+        codeGeneratorUtil.writeFile(file, content.toString());
+        return file;
     }
 
-
-    public static void write(File file, String content) {
-        try (Writer writer = new BufferedWriter(new OutputStreamWriter(
-                new FileOutputStream(file.getAbsolutePath()), "utf-8"))) {
-            writer.write(content);
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.exit(-1);
-        }
-    }
-
-    public void createFile(String className, String path, String content) {
-        try {
-            File file = new File(path + "/" + className + ".java");
-            if (!file.getParentFile().exists()) file.getParentFile().mkdirs();
-            FileWriter fw = new FileWriter(file.getAbsoluteFile());
-            BufferedWriter bw = new BufferedWriter(fw);
-            bw.write(content);
-            bw.close();
-        } catch (IOException e) {
-            System.out.println("Unable to create file " + className);
-        }
-    }
-
-    public static String getPathFromPackageName(String packageName) {
-        return packageName.replace(".", "/");
-    }
 
 }

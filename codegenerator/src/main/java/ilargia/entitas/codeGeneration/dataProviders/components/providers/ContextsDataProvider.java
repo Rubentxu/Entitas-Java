@@ -29,7 +29,7 @@ public class ContextsDataProvider implements IComponentDataProvider, IConfigurab
 
     @Override
     public void provide(SourceDataFile data) {
-        List<String> contextNames = getContextNamesOrDefault(data.source);
+        List<String> contextNames = getContextNamesOrDefault(data.getFileContent());
         setContextNames(data, contextNames);
     }
 

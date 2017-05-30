@@ -5,18 +5,33 @@ import java.util.HashMap;
 
 public class SourceDataFile extends HashMap<String, Object> {
 
-    public String fileName;
-    public String componentsDir;
-    public String subDir;
-    public JavaClassSource source;
+    private String fileName;
+    private String componentsDir;
+    private String subDir;
+    private JavaClassSource fileContent;
 
 
     public SourceDataFile(String fileName, String componentsDir, String subDir, JavaClassSource fileContent) {
         this.fileName = fileName;
         this.componentsDir = componentsDir;
         this.subDir = subDir;
-        this.source = fileContent;
+        this.fileContent = fileContent;
 
     }
 
+    public String getFileName() {
+        return fileName;
+    }
+
+    public String getComponentsDir() {
+        return componentsDir;
+    }
+
+    public String getSubDir() {
+        return subDir;
+    }
+
+    public JavaClassSource getFileContent() {
+        return fileContent;
+    }
 }

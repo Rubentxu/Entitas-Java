@@ -9,7 +9,7 @@ public class ComponentTypeDataProvider implements IComponentDataProvider {
 
     @Override
     public void provide(SourceDataFile data) {
-        setFullTypeName(data, data.source.getCanonicalName());
+        setFullTypeName(data, data.getFileContent().getCanonicalName());
     }
 
     public static String getFullTypeName(SourceDataFile data) {
