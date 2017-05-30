@@ -8,10 +8,19 @@ version '0.3.0'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
+println  "Root project:   "+ project.rootProject;
+println  "Name:   "+ project.name;
+println  "  rootDir:      "+ project.rootDir;
+println  "  projectDir:   "+ project.projectDir;
+println  "  path:   "+ project.path;
+println  "  state:   "+ project.state;
+println  "  sourcedir:   "+ project.sourceSets.main.java.srcDirs;
+
 repositories {
     mavenCentral()
     mavenLocal()
 }
+
 
 dependencies {
     compile gradleApi()
@@ -21,6 +30,7 @@ dependencies {
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.5'
     testCompile "com.badlogicgames.gdx:gdx:$gdxVersion"
 
+    testCompile gradleTestKit()
     testCompile  'junit:junit:4.12'
     testCompile ( 'org.spockframework:spock-core:1.1-groovy-2.4-rc-4') {
         exclude module: "junit-dep"
@@ -30,3 +40,4 @@ dependencies {
     testRuntime "cglib:cglib-nodep:3.2.4"          // allows mocking of classes (in addition to interfaces)
     testRuntime "org.objenesis:objenesis:2.5.1"
 }
+
