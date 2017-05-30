@@ -73,7 +73,7 @@ public class ComponentEntityGenerator implements ICodeGenerator, IConfigurable {
 
     public static Map<String, List<SourceDataFile>> generateMap(List<SourceDataFile> datas) {
         Map<String, List<SourceDataFile>> contextComponents = new HashMap<>();
-        datas.sort((c1, c2) -> c1.source.getName().compareTo(c2.source.getName()));
+        datas.sort((c1, c2) -> c1.getFileContent().getName().compareTo(c2.getFileContent().getName()));
 
         for (SourceDataFile data : datas) {
             for (String contextName : ContextsDataProvider.getContextNames(data)) {
@@ -107,7 +107,7 @@ public class ComponentEntityGenerator implements ICodeGenerator, IConfigurable {
     private CodeGenFile generateEntity(SourceDataFile data, String pkgDestiny, String contextName) {
 
         JavaClassSource gen = Roaster.parse(JavaClassSource.class,
-                String.format("public class %1$sEntity extends Entity {}", data.source.getName()));
+                String.format("public class %1$sEntity extends Entity {}", data.getFileContent().getName()));
 
 //        if (infos.size() > 0 && !pkgDestiny.endsWith(infos.get(0).directory)) {
 //            pkgDestiny += "." + infos.get(0).directory;
@@ -145,26 +145,26 @@ public class ComponentEntityGenerator implements ICodeGenerator, IConfigurable {
     }
 
     private void createGetMethods(String contextName, SourceDataFile data, JavaClassSource gen) {
-        gen.addImport(data.source.getCanonicalName());
+        gen.addImport(data.getFileContent().getCanonicalName());
 
         String method = "";
 
-        if (data.source.getFields().size() == 0) {
+        if (data.getFileContent().getFields().size() == 0) {
             gen.addField()
-                    .setName(data.source.getName() + COMPONENT_SUFFIX)
-                    .setType(data.source.getName())
-                    .setLiteralInitializer(String.format("new %1$s();", data.source.getName()))
+                    .setName(data.getFileContent().getName() + COMPONENT_SUFFIX)
+                    .setType(data.getFileContent().getName())
+                    .setLiteralInitializer(String.format("new %1$s();", data.getFileContent().getName()))
                     .setPublic();
 
         } else {
             MethodSource<JavaClassSource> methodGET = gen.addMethod()
-                    .setName(String.format("get%1$s", data.source.getName()))
-                    .setReturnType(data.source.getName())
+                    .setName(String.format("get%1$s", data.getFileContent().getName()))
+                    .setReturnType(data.getFileContent().getName())
                     .setPublic();
 
 
-            String typeName = data.source.getName();
-            List<TypeVariableSource<JavaClassSource>> generics = data.source.getOrigin().getTypeVariables();
+            String typeName = data.getFileContent().getName();
+            List<TypeVariableSource<JavaClassSource>> generics = data.getFileContent().getOrigin().getTypeVariables();
             if (generics != null && generics.size() > 0) {
                 typeName += "<";
                 for (TypeVariableSource<JavaClassSource> generic : generics) {
@@ -180,24 +180,24 @@ public class ComponentEntityGenerator implements ICodeGenerator, IConfigurable {
 
             }
             methodGET.setBody(String.format("return (%1$s)getComponent(%2$s.%3$s);"
-                    , gen.getName(), WordUtils.capitalize(contextName) + DEFAULT_COMPONENT_LOOKUP_TAG, data.source.getName()));
+                    , gen.getName(), WordUtils.capitalize(contextName) + DEFAULT_COMPONENT_LOOKUP_TAG, data.getFileContent().getName()));
         }
     }
 
     private void createHasMethods(String contextName, SourceDataFile data, JavaClassSource gen) {
-        gen.addImport(data.source.getCanonicalName());
+        gen.addImport(data.getFileContent().getCanonicalName());
 
-        if (data.source.getFields().size() == 0) {
+        if (data.getFileContent().getFields().size() == 0) {
             gen.addMethod()
-                    .setName(String.format("is%1$s", data.source.getName()))
+                    .setName(String.format("is%1$s", data.getFileContent().getName()))
                     .setReturnType("boolean")
                     .setPublic()
                     .setBody(String.format("return hasComponent(%1$s.%2$s);",
                             WordUtils.capitalize(contextName) + DEFAULT_COMPONENT_LOOKUP_TAG,
-                            data.source.getName()));
+                            data.getFileContent().getName()));
 
             gen.addMethod()
-                    .setName(String.format("set%1$s", data.source.getName()))
+                    .setName(String.format("set%1$s", data.getFileContent().getName()))
                     .setReturnType(contextName + "Entity")
                     .setPublic()
                     .setParameters("boolean value")
@@ -208,25 +208,25 @@ public class ComponentEntityGenerator implements ICodeGenerator, IConfigurable {
                                     "                        removeComponent(%1$s.%2$s);\n" +
                                     "                    }\n" +
                                     "                }\n return this;", WordUtils.capitalize(contextName) + DEFAULT_COMPONENT_LOOKUP_TAG,
-                            data.source.getName(), nameComponent(data.source.getName())));
+                            data.getFileContent().getName(), nameComponent(data.getFileContent().getName())));
 
 
         } else {
             gen.addMethod()
-                    .setName(String.format("has%1$s", data.source.getName()))
+                    .setName(String.format("has%1$s", data.getFileContent().getName()))
                     .setReturnType("boolean")
                     .setPublic()
                     .setBody(String.format("return hasComponent(%1$s.%2$s);",
                             WordUtils.capitalize(contextName) + DEFAULT_COMPONENT_LOOKUP_TAG,
-                            data.source.getName()));
+                            data.getFileContent().getName()));
 
         }
     }
 
 
     public void createImports(SourceDataFile data, JavaClassSource source) {
-        if (data.source.getImports() != null) {
-            for (Import imp : data.source.getImports()) {
+        if (data.getFileContent().getImports() != null) {
+            for (Import imp : data.getFileContent().getImports()) {
                 if (!imp.getQualifiedName().equals("com.ilargia.games.entitas.generators.Component")) {
                     source.addImport(imp);
                 }
@@ -235,19 +235,19 @@ public class ComponentEntityGenerator implements ICodeGenerator, IConfigurable {
     }
 
     private void createAddMethods(String contextName, SourceDataFile data, JavaClassSource source) {
-        if (data.source.getFields().size() != 0) {
+        if (data.getFileContent().getFields().size() != 0) {
 
             List<MethodSource<JavaClassSource>> constructores = getConstructorData(data);
 
             MethodSource<JavaClassSource> addMethod = source.addMethod()
-                    .setName(String.format("add%1$s", data.source.getName()))
+                    .setName(String.format("add%1$s", data.getFileContent().getName()))
                     .setReturnType(contextName + "Entity")
                     .setPublic()
                     .setParameters(constructores != null && constructores.size() > 0
                             ? memberNamesWithTypeFromConstructor(constructores.get(0))
                             : memberNamesWithType(getMemberData(data)));
 
-            String typeName = data.source.getName();
+            String typeName = data.getFileContent().getName();
             List<TypeVariableSource<JavaClassSource>> generics = getGenericsData(data);
 
             if (generics != null && generics.size() > 0) {
@@ -270,13 +270,13 @@ public class ComponentEntityGenerator implements ICodeGenerator, IConfigurable {
                                 "component = new %2$s(%4$s);\n } else {\n%3$s\n} addComponent(%1$s.%5$s, component);\n return this;",
                         WordUtils.capitalize(contextName) + DEFAULT_COMPONENT_LOOKUP_TAG,
                         source.getName(), bodyFromConstructor(constructores.get(0)), memberNamesFromConstructor(constructores.get(0))
-                        , data.source.getName());
+                        , data.getFileContent().getName());
 
             } else {
                 method = String.format("%2$s component = (%2$s) recoverComponent(%1$s.%2$s);\n if(component == null) { " +
                                 "component = new %2$s();\n } \n%3$s\n addComponent(%1$s.%2$s, component);\n return this;",
                         WordUtils.capitalize(contextName) + DEFAULT_COMPONENT_LOOKUP_TAG,
-                        source.getName(), memberAssignments(getMemberData(data)), data.source.getName());
+                        source.getName(), memberAssignments(getMemberData(data)), data.getFileContent().getName());
             }
             addMethod.setBody(method);
 
@@ -285,18 +285,18 @@ public class ComponentEntityGenerator implements ICodeGenerator, IConfigurable {
 
 
     private void createReplaceMethods(String contextName, SourceDataFile data, JavaClassSource source) {
-        if (data.source.getFields().size() != 0) {
+        if (data.getFileContent().getFields().size() != 0) {
             List<MethodSource<JavaClassSource>> constructores = getConstructorData(data);
 
             MethodSource<JavaClassSource> replaceMethod = source.addMethod()
-                    .setName(String.format("replace%1$s", data.source.getName()))
+                    .setName(String.format("replace%1$s", data.getFileContent().getName()))
                     .setReturnType(contextName + "Entity")
                     .setPublic()
                     .setParameters(constructores != null && constructores.size() > 0
                             ? memberNamesWithTypeFromConstructor(constructores.get(0))
                             : memberNamesWithType(getMemberData(data)));
 
-            String typeName = data.source.getName();
+            String typeName = data.getFileContent().getName();
             List<TypeVariableSource<JavaClassSource>> generics = getGenericsData(data);
 
             if (generics != null && generics.size() > 0) {
@@ -318,12 +318,12 @@ public class ComponentEntityGenerator implements ICodeGenerator, IConfigurable {
                                 "component = new %2$s(%4$s);\n } else {\n%3$s\n} replaceComponent(%1$s.%5$s, component);\n return this;"
                         , WordUtils.capitalize(contextName) + DEFAULT_COMPONENT_LOOKUP_TAG,
                         source.getName(), bodyFromConstructor(constructores.get(0)), memberNamesFromConstructor(constructores.get(0))
-                        , data.source.getName());
+                        , data.getFileContent().getName());
             } else {
                 method = String.format("%2$s component = (%2$s) recoverComponent(%1$s.%2$s);\n if(component == null) { " +
                                 "component = new %2$s();\n} %3$s\n replaceComponent(%1$s.%2$s, component);\n return this;",
                         WordUtils.capitalize(contextName) + DEFAULT_COMPONENT_LOOKUP_TAG,
-                        source.getName(), memberAssignments(getMemberData(data)), data.source.getName());
+                        source.getName(), memberAssignments(getMemberData(data)), data.getFileContent().getName());
             }
             replaceMethod.setBody(method);
 
@@ -331,15 +331,15 @@ public class ComponentEntityGenerator implements ICodeGenerator, IConfigurable {
     }
 
     private void createRemoveMethods(String contextName, SourceDataFile data, JavaClassSource source) {
-        if (data.source.getFields().size() != 0) {
+        if (data.getFileContent().getFields().size() != 0) {
             String method = "removeComponent(%1$s.%2$s);return this;";
             source.addMethod()
-                    .setName(String.format("remove%1$s", data.source.getName()))
+                    .setName(String.format("remove%1$s", data.getFileContent().getName()))
                     .setReturnType(contextName + "Entity")
                     .setPublic()
                     .setBody(String.format(method,
                             WordUtils.capitalize(contextName) + DEFAULT_COMPONENT_LOOKUP_TAG,
-                            data.source.getName()));
+                            data.getFileContent().getName()));
 
 
         }
@@ -405,7 +405,7 @@ public class ComponentEntityGenerator implements ICodeGenerator, IConfigurable {
 
     private JavaClassSource addMatcher(String contextName, SourceDataFile info, JavaClassSource javaClass) {
         javaClass.addField()
-                .setName("_matcher" + info.source.getName())
+                .setName("_matcher" + info.getFileContent().getName())
                 .setType("Matcher")
                 .setPrivate()
                 .setStatic(true);
@@ -421,12 +421,12 @@ public class ComponentEntityGenerator implements ICodeGenerator, IConfigurable {
                 "return _matcher%2$s;";
 
         javaClass.addMethod()
-                .setName(info.source.getName())
+                .setName(info.getFileContent().getName())
                 .setReturnType("Matcher")
                 .setPublic()
                 .setStatic(true)
                 .setBody(String.format(body, WordUtils.capitalize(contextName) + DEFAULT_COMPONENT_LOOKUP_TAG,
-                        info.source.getName()));
+                        info.getFileContent().getName()));
 
     }
 

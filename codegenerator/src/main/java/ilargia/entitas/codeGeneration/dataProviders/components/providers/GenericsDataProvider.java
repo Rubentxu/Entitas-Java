@@ -13,7 +13,7 @@ public class GenericsDataProvider implements IComponentDataProvider {
 
     @Override
     public void provide(SourceDataFile data) {
-        List<TypeVariableSource<JavaClassSource>> generics = data.source.getOrigin().getTypeVariables();
+        List<TypeVariableSource<JavaClassSource>> generics = data.getFileContent().getOrigin().getTypeVariables();
         setGenericsData(data, generics);
     }
 

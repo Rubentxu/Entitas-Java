@@ -44,8 +44,8 @@ public class AddFileHeaderPostProcessor implements ICodeGenFilePostProcessor {
     @Override
     public List<CodeGenFile> postProcess(List<CodeGenFile> files) {
         for (CodeGenFile file : files) {
-            JavaDocSource<JavaClassSource> javaDoc = file.fileContent.getJavaDoc();
-            javaDoc.setFullText(String.format(AUTO_GENERATED_HEADER_FORMAT, file.fileName));
+            JavaDocSource<JavaClassSource> javaDoc = file.getFileContent().getJavaDoc();
+            javaDoc.setFullText(String.format(AUTO_GENERATED_HEADER_FORMAT, file.getFileName()));
 
         }
         return files;

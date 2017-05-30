@@ -32,7 +32,7 @@ public class ConsoleWriteLinePostProcessor implements ICodeGenFilePostProcessor 
     @Override
     public List<CodeGenFile> postProcess(List<CodeGenFile> files) {
         for (CodeGenFile file : files) {
-            System.out.println(String.format("%s - %s", file.fileName, file.fileName));
+            System.out.println(String.format("%s - %s", file.getFileName(), file.getFileName()));
         }
         return files;
     }

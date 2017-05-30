@@ -12,7 +12,7 @@ public class EnumsDataProvider implements IComponentDataProvider {
 
     @Override
     public void provide(SourceDataFile data) {
-        List<String> enums = data.source.getNestedTypes().stream()
+        List<String> enums = data.getFileContent().getNestedTypes().stream()
                 .filter(method -> method.isPublic())
                 .filter(method -> method.isEnum())
                 .map(method -> method.getCanonicalName())

@@ -12,11 +12,11 @@ public class ShouldGenerateComponentDataProvider implements IComponentDataProvid
 
     @Override
     public void provide(SourceDataFile data) {
-        boolean shouldGenerateComponent = !data.source.hasInterface(IComponent.class);
+        boolean shouldGenerateComponent = !data.getFileContent().hasInterface(IComponent.class);
         shouldGenerateComponent(data, shouldGenerateComponent);
 
         if (shouldGenerateComponent) {
-            setObjectType(data, data.source.getQualifiedName());
+            setObjectType(data, data.getFileContent().getQualifiedName());
         }
 
     }

@@ -91,32 +91,32 @@ public class ComponentDataProvider extends AbstractConfigurableConfig implements
     public List<SourceDataFile> getData() {
 
         List<SourceDataFile> dataFromComponents = _sources.stream()
-                .filter(s -> s.source.hasInterface(IComponent.class))
-                .filter(s -> !s.source.isAbstract())
+                .filter(s -> s.getFileContent().hasInterface(IComponent.class))
+                .filter(s -> !s.getFileContent().isAbstract())
                 .map(s -> createDataForComponent(s))
                 .collect(Collectors.toList());
 
         List<SourceDataFile> dataFromNonComponents = _sources.stream()
-                .filter(s -> !s.source.hasInterface(IComponent.class))
+                .filter(s -> !s.getFileContent().hasInterface(IComponent.class))
                 .filter(s -> hasContexts(s))
                 .map(s -> createDataForComponent(s))
                 .collect(Collectors.toList());
 
         List<String> generatedComponentsLookup = dataFromNonComponents.stream()
-                .map(data -> data.source.getCanonicalName())
+                .map(data -> data.getFileContent().getCanonicalName())
                 .collect(Collectors.toList());
 
         return Stream.concat(dataFromComponents.stream()
-                        .filter(data -> !generatedComponentsLookup.contains(data.source.getCanonicalName())),
+                        .filter(data -> !generatedComponentsLookup.contains(data.getFileContent().getCanonicalName())),
                 dataFromNonComponents.stream())
-                .sorted((a, b)-> a.fileName.compareTo(b.fileName))
+                .sorted((a, b)-> a.getFileName().compareTo(b.getFileName()))
                 .collect(Collectors.toList());
 
 
     }
 
     private boolean hasContexts(SourceDataFile sourceData) {
-        return _contextsComponentDataProvider.extractContextNames(sourceData.source).size() != 0;
+        return _contextsComponentDataProvider.extractContextNames(sourceData.getFileContent()).size() != 0;
     }
 
     private SourceDataFile createDataForComponent(SourceDataFile data) {
@@ -128,8 +128,8 @@ public class ComponentDataProvider extends AbstractConfigurableConfig implements
 
 
     List<String> getComponentNames(SourceDataFile data) {
-        if (data.source.hasAnnotation("CustomComponentName")) {
-            return Arrays.asList(data.source.getAnnotation("CustomComponentName").getStringArrayValue("componentNames"));
+        if (data.getFileContent().hasAnnotation("CustomComponentName")) {
+            return Arrays.asList(data.getFileContent().getAnnotation("CustomComponentName").getStringArrayValue("componentNames"));
 
         } else {
             return new ArrayList<>();

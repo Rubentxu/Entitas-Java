@@ -4,10 +4,10 @@ import org.jboss.forge.roaster.model.source.JavaClassSource;
 
 public class CodeGenFile {
 
-    public String fileName;
-    public String projectDir;
-    public String subDir;
-    public JavaClassSource fileContent;
+    private String fileName;
+    private String projectDir;
+    private String subDir;
+    private JavaClassSource fileContent;
 
 
     public CodeGenFile(String fileName, String projectDir, String subDir, JavaClassSource fileContent) {
@@ -18,4 +18,19 @@ public class CodeGenFile {
 
     }
 
+    public String getFileName() {
+        return fileName;
+    }
+
+    public String getProjectDir() {
+        return projectDir;
+    }
+
+    public String getSubDir() {
+        return subDir;
+    }
+
+    public JavaClassSource getFileContent() {
+        return fileContent;
+    }
 }

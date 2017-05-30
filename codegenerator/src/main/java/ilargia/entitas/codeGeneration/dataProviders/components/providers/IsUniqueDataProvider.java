@@ -13,7 +13,7 @@ public class IsUniqueDataProvider implements IComponentDataProvider {
 
     @Override
     public void provide(SourceDataFile data) {
-        AnnotationSource<JavaClassSource> annotation = data.source.getAnnotation("Unique");
+        AnnotationSource<JavaClassSource> annotation = data.getFileContent().getAnnotation("Unique");
         if (annotation != null) {
             setIsUnique(data, true);
         } else {
