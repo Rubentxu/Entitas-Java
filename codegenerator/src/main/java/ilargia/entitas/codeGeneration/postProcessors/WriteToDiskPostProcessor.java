@@ -2,11 +2,13 @@ package ilargia.entitas.codeGeneration.postProcessors;
 
 
 import ilargia.entitas.codeGeneration.CodeGeneratorUtil;
+import ilargia.entitas.codeGeneration.config.ProjectConfig;
 import ilargia.entitas.codeGeneration.data.CodeGenFile;
 import ilargia.entitas.codeGeneration.data.SourceDataFile;
 import ilargia.entitas.codeGeneration.interfaces.ICodeGenFilePostProcessor;
 import ilargia.entitas.codeGeneration.config.TargetPackageConfig;
 import ilargia.entitas.codeGeneration.interfaces.IConfigurable;
+import org.gradle.api.Project;
 import org.jboss.forge.roaster.model.source.JavaClassSource;
 
 import java.io.*;
@@ -18,10 +20,12 @@ public class WriteToDiskPostProcessor implements ICodeGenFilePostProcessor, ICon
 
     private CodeGeneratorUtil codeGeneratorUtil;
     private final TargetPackageConfig targetPackageConfig;
+    private final ProjectConfig projectConfig;
 
-    public WriteToDiskPostProcessor(CodeGeneratorUtil codeGeneratorUtil) {
+    public WriteToDiskPostProcessor(CodeGeneratorUtil codeGeneratorUtil, Project project) {
         this.codeGeneratorUtil = codeGeneratorUtil;
         targetPackageConfig = new TargetPackageConfig();
+        projectConfig = new ProjectConfig(project);
     }
 
 
@@ -71,8 +75,8 @@ public class WriteToDiskPostProcessor implements ICodeGenFilePostProcessor, ICon
 
         String pathPackage = targetPackage.replace(".", "/");
         String pathFile = subDir.equals("") ?
-                String.format("%s/%s.java", pathPackage, className) :
-                String.format("%s/%s/%s.java", pathPackage, subDir, className);
+                String.format("%s/%s/%s.java", projectConfig.getFirtsSrcDir(), pathPackage, className) :
+                String.format("%s/%s/%s/%s.java", projectConfig.getFirtsSrcDir(), pathPackage, subDir, className);
 
         File file = new File(pathFile);
         codeGeneratorUtil.writeFile(file, content.toString());

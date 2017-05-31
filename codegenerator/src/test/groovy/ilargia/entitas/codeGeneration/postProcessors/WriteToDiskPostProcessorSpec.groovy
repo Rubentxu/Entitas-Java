@@ -6,6 +6,9 @@ import ilargia.entitas.codeGeneration.config.TargetPackageConfig
 import ilargia.entitas.codeGeneration.data.CodeGenFile
 import ilargia.entitas.codeGeneration.data.SourceDataFile
 import ilargia.entitas.fixtures.FixtureProvider
+import org.gradle.api.Project
+import org.gradle.api.plugins.JavaPlugin
+import org.gradle.testfixtures.ProjectBuilder
 import spock.lang.Narrative
 import spock.lang.Shared
 import spock.lang.Specification
@@ -35,7 +38,9 @@ class WriteToDiskPostProcessorSpec extends Specification {
 
     def setupSpec() {
         codeGeneratorUtil = Mock(CodeGeneratorUtil)
-        postProcessor = new WriteToDiskPostProcessor(codeGeneratorUtil)
+        Project project = ProjectBuilder.builder().build()
+        JavaPlugin plugin = project.getPlugins().apply(JavaPlugin.class)
+        postProcessor = new WriteToDiskPostProcessor(codeGeneratorUtil, project)
         fixtures = new FixtureProvider("src/test/java/ilargia/entitas/fixtures/components")
         dataFiles = fixtures.getSourceDataFiles()
         genFiles = new ArrayList<>()
@@ -77,6 +82,7 @@ class WriteToDiskPostProcessorSpec extends Specification {
         File file = postProcessor.createFile( genFiles.get(0).fileName, genFiles.get(0).subDir, genFiles.get(0).fileContent);
 
         then:
+        println file.getCanonicalPath()
         file.getName().contains('CustomIndex.java')
         file.getCanonicalPath().contains('CustomIndex.java')
 
