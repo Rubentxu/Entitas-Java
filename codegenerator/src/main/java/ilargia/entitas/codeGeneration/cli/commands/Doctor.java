@@ -29,9 +29,9 @@ public class Doctor extends AbstractCommand {
 
             System.out.println("Dry Run");
 
-            CodeGeneratorUtil
-                    .codeGeneratorFromProperties()
-                    .dryRun();
+//            CodeGeneratorUtil
+//                    .codeGeneratorFromProperties()
+//                    .dryRun();
 
         }
     }

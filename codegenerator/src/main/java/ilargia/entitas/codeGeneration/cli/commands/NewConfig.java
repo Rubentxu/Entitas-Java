@@ -1,9 +1,8 @@
 package ilargia.entitas.codeGeneration.cli.commands;
 
 
-import ilargia.entitas.codeGeneration.config.CodeGeneratorConfig;
-import ilargia.entitas.codeGeneration.config.Preferences;
 import ilargia.entitas.codeGeneration.cli.ArgsExtension;
+import ilargia.entitas.codeGeneration.config.CodeGeneratorConfig;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -35,7 +34,7 @@ public class NewConfig extends AbstractCommand {
 
         Path currentRelativePath = Paths.get("");
         String currentDir = currentRelativePath.toAbsolutePath().toString();
-        File path = new File(currentDir + "/" + Preferences.PATH_PROPERTIES);
+        File path = new File(currentDir + "/"/* + Preferences.PATH_PROPERTIES*/);
 
         if (ArgsExtension.isForce(Arrays.asList(args)) || !path.exists()) {
             CodeGeneratorConfig defaultConfig = new CodeGeneratorConfig();

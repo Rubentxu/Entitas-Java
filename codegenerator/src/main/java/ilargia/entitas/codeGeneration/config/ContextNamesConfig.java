@@ -7,11 +7,11 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class ContextNamesConfig extends AbstractConfigurableConfig {
-    static String CONTEXTS_KEY = "Entitas.CodeGeneration.Plugins.Contexts";
+    static String CONTEXTS_KEY = "Entitas.CodeGeneration.Contexts";
 
     @Override
     public Properties getDefaultProperties() {
-        properties.setProperty(CONTEXTS_KEY, "Core");
+        if (!properties.containsKey(CONTEXTS_KEY)) properties.setProperty(CONTEXTS_KEY, "Core");
         return properties;
     }
 

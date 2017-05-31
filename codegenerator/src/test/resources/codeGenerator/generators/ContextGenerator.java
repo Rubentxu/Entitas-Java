@@ -2,8 +2,8 @@ package com.ilargia.games.entitas.codeGenerator.generators;
 
 
 import com.ilargia.games.entitas.codeGenerator.CodeGeneratorOld;
-import com.ilargia.games.entitas.codeGenerator.interfaces.IComponentCodeGenerator;
 import com.ilargia.games.entitas.codeGenerator.data.ComponentInfo;
+import com.ilargia.games.entitas.codeGenerator.interfaces.IComponentCodeGenerator;
 import org.jboss.forge.roaster.Roaster;
 import org.jboss.forge.roaster.model.source.FieldSource;
 import org.jboss.forge.roaster.model.source.JavaClassSource;
@@ -178,7 +178,7 @@ public class ContextGenerator implements IComponentCodeGenerator {
                                     "           entity.replace%1$s(%2$s);" +
                                     "         }" +
                                     "         return entity;"
-                            , info.typeName,  info.constructores != null && info.constructores.size() > 0
+                            , info.typeName, info.constructores != null && info.constructores.size() > 0
                                     ? memberNamesFromConstructor(info.constructores.get(0))
                                     : memberNames(info.memberInfos)
                             , contextName));

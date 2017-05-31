@@ -1,8 +1,6 @@
 package ilargia.entitas.codeGeneration.cli.commands;
 
 
-import ilargia.entitas.codeGeneration.config.Preferences;
-
 public class EditConfig extends AbstractCommand {
     @Override
     public String trigger() {
@@ -24,7 +22,7 @@ public class EditConfig extends AbstractCommand {
         System.out.println("Entitas Code Generator version " + 1);
 
         if (assertProperties()) {
-            System.out.println("Opening " + Preferences.PATH_PROPERTIES);
+
             // System.diagnostics.Process.Start(Preferences.PATH_PROPERTIES);
         }
     }

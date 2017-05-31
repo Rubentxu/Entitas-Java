@@ -4,10 +4,10 @@ import ilargia.entitas.codeGeneration.data.CodeGenFile;
 import ilargia.entitas.codeGeneration.data.MemberData;
 import ilargia.entitas.codeGeneration.data.SourceDataFile;
 import ilargia.entitas.codeGeneration.data.StoreCodeGenerator;
+import ilargia.entitas.codeGeneration.dataProviders.components.providers.ContextsDataProvider;
 import ilargia.entitas.codeGeneration.dataProviders.components.providers.ShouldGenerateMethodsDataProvider;
 import ilargia.entitas.codeGeneration.interfaces.ICodeGenerator;
 import ilargia.entitas.codeGeneration.interfaces.IConfigurable;
-import ilargia.entitas.codeGeneration.dataProviders.components.providers.ContextsDataProvider;
 import org.apache.commons.lang3.text.WordUtils;
 import org.jboss.forge.roaster.Roaster;
 import org.jboss.forge.roaster.model.source.*;
@@ -23,11 +23,36 @@ public class ComponentEntityGenerator implements ICodeGenerator, IConfigurable {
 
     public static final String COMPONENT_SUFFIX = "Component";
     public static final String DEFAULT_COMPONENT_LOOKUP_TAG = "ComponentsLookup";
-    
+
     private final StoreCodeGenerator generatedFiles;
 
     public ComponentEntityGenerator(StoreCodeGenerator generatedFiles) {
         this.generatedFiles = generatedFiles;
+    }
+
+    public static Map<String, List<SourceDataFile>> generateMap(List<SourceDataFile> datas) {
+        Map<String, List<SourceDataFile>> contextComponents = new HashMap<>();
+        datas.sort((c1, c2) -> c1.getFileContent().getName().compareTo(c2.getFileContent().getName()));
+
+        for (SourceDataFile data : datas) {
+            for (String contextName : ContextsDataProvider.getContextNames(data)) {
+                if (!contextComponents.containsKey(contextName)) {
+                    contextComponents.put(contextName, new ArrayList<>());
+                }
+                List<SourceDataFile> list = contextComponents.get(contextName);
+                list.add(data);
+            }
+        }
+
+//        for (List<SourceDataFile> infos : contextComponents.values()) {
+//            int index = 0;
+//            for (ComponentInfo info : infos) {
+//                info.index = index++;
+//                info.totalComponents = infos.size();
+//            }
+//        }
+        return contextComponents;
+
     }
 
     @Override
@@ -66,33 +91,8 @@ public class ComponentEntityGenerator implements ICodeGenerator, IConfigurable {
 
         return mapContextsComponents.keySet().stream()
                 .map(contextName -> generateEntities(mapContextsComponents.get(contextName), pkgDestiny, contextName))
-                .flatMap(list-> list.stream())
+                .flatMap(list -> list.stream())
                 .collect(Collectors.toList());
-
-    }
-
-    public static Map<String, List<SourceDataFile>> generateMap(List<SourceDataFile> datas) {
-        Map<String, List<SourceDataFile>> contextComponents = new HashMap<>();
-        datas.sort((c1, c2) -> c1.getFileContent().getName().compareTo(c2.getFileContent().getName()));
-
-        for (SourceDataFile data : datas) {
-            for (String contextName : ContextsDataProvider.getContextNames(data)) {
-                if (!contextComponents.containsKey(contextName)) {
-                    contextComponents.put(contextName, new ArrayList<>());
-                }
-                List<SourceDataFile> list = contextComponents.get(contextName);
-                list.add(data);
-            }
-        }
-
-//        for (List<SourceDataFile> infos : contextComponents.values()) {
-//            int index = 0;
-//            for (ComponentInfo info : infos) {
-//                info.index = index++;
-//                info.totalComponents = infos.size();
-//            }
-//        }
-        return contextComponents;
 
     }
 
@@ -130,7 +130,7 @@ public class ComponentEntityGenerator implements ICodeGenerator, IConfigurable {
 
 
         //System.out.println(Roaster.format(entityClass.toString()));
-        return new CodeGenFile(gen.getName(),null,null, gen);
+        return new CodeGenFile(gen.getName(), null, null, gen);
     }
 
 

@@ -2,8 +2,8 @@ package com.ilargia.games.entitas.codeGenerator.generators;
 
 
 import com.ilargia.games.entitas.codeGenerator.CodeGeneratorOld;
-import com.ilargia.games.entitas.codeGenerator.interfaces.IComponentCodeGenerator;
 import com.ilargia.games.entitas.codeGenerator.data.ComponentInfo;
+import com.ilargia.games.entitas.codeGenerator.interfaces.IComponentCodeGenerator;
 import org.jboss.forge.roaster.Roaster;
 import org.jboss.forge.roaster.model.source.JavaClassSource;
 
@@ -21,7 +21,7 @@ public class EntitasGenerator implements IComponentCodeGenerator {
 
         List<JavaClassSource> result = new ArrayList<>();
         JavaClassSource source = generateEntitas(mapContextsComponents.keySet(), pkgDestiny);
-        mapContextsComponents.forEach((context, lista)-> {
+        mapContextsComponents.forEach((context, lista) -> {
             String fullTypename = lista.get(0).fullTypeName;
         });
         result.add(source);

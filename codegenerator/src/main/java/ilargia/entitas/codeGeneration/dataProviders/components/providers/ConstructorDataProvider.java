@@ -12,6 +12,14 @@ public class ConstructorDataProvider implements IComponentDataProvider {
 
     public static String CONSTRUCTOR_INFOS = "constructorInfos";
 
+    public static List<MethodSource<JavaClassSource>> getConstructorData(SourceDataFile data) {
+        return (List<MethodSource<JavaClassSource>>) data.get(CONSTRUCTOR_INFOS);
+    }
+
+    public static void setConstructorData(SourceDataFile data, List<MethodSource<JavaClassSource>> contructores) {
+        data.put(CONSTRUCTOR_INFOS, contructores);
+    }
+
     @Override
     public void provide(SourceDataFile data) {
         List<MethodSource<JavaClassSource>> contructores = data.getFileContent().getMethods().stream()
@@ -20,14 +28,6 @@ public class ConstructorDataProvider implements IComponentDataProvider {
 //                .filter(method -> method.getParameters().size() > 0)
                 .collect(Collectors.toList());
         setConstructorData(data, contructores);
-    }
-
-    public static List<MethodSource<JavaClassSource>> getConstructorData(SourceDataFile data) {
-        return (List<MethodSource<JavaClassSource>>) data.get(CONSTRUCTOR_INFOS);
-    }
-
-    public static void setConstructorData(SourceDataFile data, List<MethodSource<JavaClassSource>> contructores) {
-        data.put(CONSTRUCTOR_INFOS, contructores);
     }
 
 }

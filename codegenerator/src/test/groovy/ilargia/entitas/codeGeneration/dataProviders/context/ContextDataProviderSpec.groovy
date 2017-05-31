@@ -30,7 +30,7 @@ class ContextDataProviderSpec extends Specification {
     @groovy.transform.TypeChecked(TypeCheckingMode.SKIP)
     void 'Consultamos al proveedor ContextDataProvider por los contextos extraidos de la configuracion'() {
         given:
-        Properties prop =  new Properties()
+        Properties prop = new Properties()
         contextDataProvider.configure(prop)
 
         when:

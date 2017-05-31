@@ -35,7 +35,6 @@ class WriteToDiskPostProcessorSpec extends Specification {
     List<SourceDataFile> dataFiles
 
 
-
     def setupSpec() {
         codeGeneratorUtil = Mock(CodeGeneratorUtil)
         Project project = ProjectBuilder.builder().build()
@@ -73,19 +72,18 @@ class WriteToDiskPostProcessorSpec extends Specification {
         Properties prop = new Properties()
         postProcessor.configure(prop)
         postProcessor.getDefaultProperties()
-        for(SourceDataFile df : dataFiles) {
+        for (SourceDataFile df : dataFiles) {
             CodeGenFile codeGenFile = new CodeGenFile(df.getFileName(), "", df.getSubDir(), df.getFileContent())
             genFiles.add(codeGenFile)
         }
 
         when:
-        File file = postProcessor.createFile( genFiles.get(0).fileName, genFiles.get(0).subDir, genFiles.get(0).fileContent);
+        File file = postProcessor.createFile(genFiles.get(0).fileName, genFiles.get(0).subDir, genFiles.get(0).fileContent);
 
         then:
         println file.getCanonicalPath()
         file.getName().contains('CustomIndex.java')
         file.getCanonicalPath().contains('CustomIndex.java')
-
 
 
     }

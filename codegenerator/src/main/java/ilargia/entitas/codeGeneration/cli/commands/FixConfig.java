@@ -1,63 +1,15 @@
 package ilargia.entitas.codeGeneration.cli.commands;
 
 
-import ilargia.entitas.codeGeneration.config.CodeGeneratorConfig;
 import ilargia.entitas.codeGeneration.CodeGeneratorUtil;
+import ilargia.entitas.codeGeneration.config.CodeGeneratorConfig;
+import ilargia.entitas.codeGeneration.interfaces.ICodeDataProvider;
 import ilargia.entitas.codeGeneration.interfaces.ICodeGenFilePostProcessor;
 import ilargia.entitas.codeGeneration.interfaces.ICodeGenerator;
-import ilargia.entitas.codeGeneration.interfaces.ICodeDataProvider;
 
 import java.util.*;
 
 public class FixConfig extends AbstractCommand {
-    @Override
-    public String trigger() {
-        return "fix";
-    }
-
-    @Override
-    public String description() {
-        return "Adds missing or removes unused keys interactively";
-    }
-
-    @Override
-    public String example() {
-        return "entitas fix";
-    }
-
-    @Override
-    public void run(String[] args) {
-        System.out.println("Entitas Code Generator version " + 1);
-
-        if (assertProperties()) {
-            try {
-                Properties properties = loadProperties();
-
-                CodeGeneratorConfig config = new CodeGeneratorConfig();
-                config.configure(properties);
-
-                forceAddKeys(config.getDefaultProperties(), properties);
-
-                List<Class> Classs = null;
-
-                try {
-                    Classs = CodeGeneratorUtil.loadTypesFromPlugins(properties);
-                    getConfigurables(Classs, config);
-                } catch (Exception ex) {
-                    throw ex;
-                }
-
-                Set<String> askedRemoveKeys = new HashSet<String>();
-                Set<String> askedAddKeys = new HashSet<String>();
-                while (fix(askedRemoveKeys, askedAddKeys, Classs, config, properties)) {
-                }
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
     static Map<String, String> getConfigurables(List<Class> Classs, CodeGeneratorConfig config) {
         return CodeGeneratorUtil.getConfigurables(
                 CodeGeneratorUtil.getUsed(Classs, config.getDataProviders(), ICodeDataProvider.class),
@@ -163,6 +115,54 @@ public class FixConfig extends AbstractCommand {
             if (!askedRemoveKeys.contains(key)) {
                 Helper.removeKey("Remove unused key", key, properties);
                 askedRemoveKeys.add(key);
+            }
+        }
+    }
+
+    @Override
+    public String trigger() {
+        return "fix";
+    }
+
+    @Override
+    public String description() {
+        return "Adds missing or removes unused keys interactively";
+    }
+
+    @Override
+    public String example() {
+        return "entitas fix";
+    }
+
+    @Override
+    public void run(String[] args) {
+        System.out.println("Entitas Code Generator version " + 1);
+
+        if (assertProperties()) {
+            try {
+                Properties properties = null;//loadProperties();
+
+                CodeGeneratorConfig config = new CodeGeneratorConfig();
+                config.configure(properties);
+
+                forceAddKeys(config.getDefaultProperties(), properties);
+
+                List<Class> Classs = null;
+
+                try {
+                    Classs = CodeGeneratorUtil.loadTypesFromPlugins(properties);
+                    getConfigurables(Classs, config);
+                } catch (Exception ex) {
+                    throw ex;
+                }
+
+                Set<String> askedRemoveKeys = new HashSet<String>();
+                Set<String> askedAddKeys = new HashSet<String>();
+                while (fix(askedRemoveKeys, askedAddKeys, Classs, config, properties)) {
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     }

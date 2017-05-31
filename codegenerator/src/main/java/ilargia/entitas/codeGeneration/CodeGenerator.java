@@ -3,27 +3,20 @@ package ilargia.entitas.codeGeneration;
 
 import ilargia.entitas.codeGeneration.data.CodeGenFile;
 import ilargia.entitas.codeGeneration.data.SourceDataFile;
+import ilargia.entitas.codeGeneration.interfaces.ICodeDataProvider;
 import ilargia.entitas.codeGeneration.interfaces.ICodeGenFilePostProcessor;
 import ilargia.entitas.codeGeneration.interfaces.ICodeGenerator;
-import ilargia.entitas.codeGeneration.interfaces.ICodeDataProvider;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class CodeGenerator {
-    @FunctionalInterface
-    public interface GeneratorProgress {
-        public void exec(String title, String info, float progress);
-    }
-
     public GeneratorProgress OnProgress;
-
+    boolean _cancel;
     private List<ICodeDataProvider> _dataProviders;
     private List<ICodeGenerator> _codeGenerators;
     private List<ICodeGenFilePostProcessor> _postProcessors;
-
-    boolean _cancel;
 
     public CodeGenerator(List<ICodeDataProvider> dataProviders,
                          List<ICodeGenerator> codeGenerators,
@@ -93,7 +86,7 @@ public class CodeGenerator {
                 OnProgress.exec(messagePrefix + "Creating files", generator.getName(), (float) progress / total);
             }
 
-            files.addAll(generator.generate(data,null));
+            files.addAll(generator.generate(data, null));
         }
 
 
@@ -115,6 +108,11 @@ public class CodeGenerator {
 
     public void Cancel() {
         _cancel = true;
+    }
+
+    @FunctionalInterface
+    public interface GeneratorProgress {
+        public void exec(String title, String info, float progress);
     }
 
 }

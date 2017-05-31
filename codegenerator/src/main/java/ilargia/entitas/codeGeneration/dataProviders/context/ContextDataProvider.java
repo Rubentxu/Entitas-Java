@@ -1,7 +1,6 @@
 package ilargia.entitas.codeGeneration.dataProviders.context;
 
 import ilargia.entitas.codeGeneration.config.ContextNamesConfig;
-import ilargia.entitas.codeGeneration.data.SourceDataFile;
 import ilargia.entitas.codeGeneration.interfaces.ICodeDataProvider;
 import ilargia.entitas.codeGeneration.interfaces.IConfigurable;
 
@@ -15,6 +14,14 @@ public class ContextDataProvider implements ICodeDataProvider<String, HashMap<St
 
     public static String CONTEXT_NAME = "context_name";
     private ContextNamesConfig _contextNamesConfig = new ContextNamesConfig();
+
+    public static String getContextName(HashMap<String, String> data) {
+        return data.get(CONTEXT_NAME);
+    }
+
+    public static void setContextName(HashMap<String, String> data, String contextName) {
+        data.put(CONTEXT_NAME, contextName);
+    }
 
     @Override
     public String getName() {
@@ -54,14 +61,6 @@ public class ContextDataProvider implements ICodeDataProvider<String, HashMap<St
                     setContextName(data, contextName);
                     return data;
                 }).collect(Collectors.toList());
-    }
-
-    public static String getContextName(HashMap<String, String> data) {
-        return data.get(CONTEXT_NAME);
-    }
-
-    public static void setContextName(HashMap<String, String> data, String contextName) {
-        data.put(CONTEXT_NAME, contextName);
     }
 
 }

@@ -2,12 +2,7 @@ package ilargia.entitas.codeGeneration;
 
 
 import ilargia.entitas.codeGeneration.config.CodeGeneratorConfig;
-import ilargia.entitas.codeGeneration.interfaces.ICodeGenFilePostProcessor;
-import ilargia.entitas.codeGeneration.interfaces.ICodeGenerator;
-import ilargia.entitas.codeGeneration.interfaces.ICodeDataProvider;
-import ilargia.entitas.codeGeneration.interfaces.ICodeGeneratorInterface;
-import ilargia.entitas.codeGeneration.config.Preferences;
-import ilargia.entitas.codeGeneration.interfaces.IConfigurable;
+import ilargia.entitas.codeGeneration.interfaces.*;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -22,26 +17,7 @@ import java.util.stream.Stream;
 
 public class CodeGeneratorUtil {
 
-    public static CodeGenerator codeGeneratorFromProperties() {
-        Properties properties = Preferences.loadProperties();
-
-        CodeGeneratorConfig config = new CodeGeneratorConfig();
-        config.configure(properties);
-
-        List<Class> types = loadTypesFromPlugins(properties);
-
-        List<ICodeDataProvider> dataProviders = getEnabledInstances(types, config.getDataProviders(), ICodeDataProvider.class);
-        List<ICodeGenerator> codeGenerators = getEnabledInstances(types, config.getCodeGenerators(), ICodeGenerator.class);
-        List<ICodeGenFilePostProcessor> postProcessors = getEnabledInstances(types, config.getPostProcessors(), ICodeGenFilePostProcessor.class);
-
-        configure(dataProviders, properties);
-        configure(codeGenerators, properties);
-        configure(postProcessors, properties);
-
-        return new CodeGenerator(dataProviders, codeGenerators, postProcessors);
-    }
-
-    static <T extends ICodeGeneratorInterface> void configure(List<T> plugins, Properties properties) {
+    public static <T extends ICodeGeneratorInterface> void configure(List<T> plugins, Properties properties) {
         plugins.stream()
                 .filter(p -> p instanceof IConfigurable)
                 .map(p -> (IConfigurable) p)
@@ -153,7 +129,7 @@ public class CodeGeneratorUtil {
     public static Map<String, String> getConfigurables(List<ICodeDataProvider> dataProviders, List<ICodeGenerator> codeGenerators,
                                                        List<ICodeGenFilePostProcessor> postProcessors) {
         return Stream.concat(Stream.concat(dataProviders.stream(), codeGenerators.stream()), postProcessors.stream())
-                .filter(d -> d.getClass().isAssignableFrom(IConfigurable.class))
+                .filter(d -> d instanceof IConfigurable)
                 .map(d -> (IConfigurable) d)
                 .map(instance -> instance.getDefaultProperties())
                 .flatMap(prop -> prop.<String, String>entrySet().stream())

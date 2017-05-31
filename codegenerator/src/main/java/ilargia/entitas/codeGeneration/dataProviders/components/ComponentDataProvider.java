@@ -2,8 +2,8 @@ package ilargia.entitas.codeGeneration.dataProviders.components;
 
 import ilargia.entitas.api.IComponent;
 import ilargia.entitas.codeGeneration.config.AbstractConfigurableConfig;
-import ilargia.entitas.codeGeneration.data.SourceDataFile;
 import ilargia.entitas.codeGeneration.config.CodeGeneratorConfig;
+import ilargia.entitas.codeGeneration.data.SourceDataFile;
 import ilargia.entitas.codeGeneration.dataProviders.components.providers.*;
 import ilargia.entitas.codeGeneration.interfaces.ICodeDataProvider;
 import ilargia.entitas.codeGeneration.interfaces.IConfigurable;
@@ -31,6 +31,31 @@ public class ComponentDataProvider extends AbstractConfigurableConfig implements
         _codeGeneratorConfig = new CodeGeneratorConfig();
     }
 
+    public static Map<String, String> propertiesToMap(Properties props) {
+        HashMap<String, String> hm = new HashMap<String, String>();
+        Enumeration<Object> e = props.keys();
+        while (e.hasMoreElements()) {
+            String s = (String) e.nextElement();
+            hm.put(s, props.getProperty(s));
+        }
+        return hm;
+    }
+
+    static List<IComponentDataProvider> getComponentDataProviders() {
+        return new ArrayList<IComponentDataProvider>() {{
+            add(new ComponentTypeDataProvider());
+            add(new MemberDataProvider());
+            add(new ConstructorDataProvider());
+            add(new EnumsDataProvider());
+            add(new ContextsDataProvider());
+            add(new GenericsDataProvider());
+            add(new IsUniqueDataProvider());
+            add(new ShouldGenerateComponentDataProvider());
+            add(new ShouldGenerateMethodsDataProvider());
+
+        }};
+    }
+
     @Override
     public String getName() {
         return "Component";
@@ -49,16 +74,6 @@ public class ComponentDataProvider extends AbstractConfigurableConfig implements
     @Override
     public boolean runInDryMode() {
         return true;
-    }
-
-    public static Map<String, String> propertiesToMap(Properties props) {
-        HashMap<String, String> hm = new HashMap<String, String>();
-        Enumeration<Object> e = props.keys();
-        while (e.hasMoreElements()) {
-            String s = (String) e.nextElement();
-            hm.put(s, props.getProperty(s));
-        }
-        return hm;
     }
 
     @Override
@@ -84,7 +99,7 @@ public class ComponentDataProvider extends AbstractConfigurableConfig implements
                 .map(p -> (IConfigurable) p)
                 .forEach(p -> p.configure(properties));
 
-       // _contextsComponentDataProvider.configure(properties);
+        // _contextsComponentDataProvider.configure(properties);
     }
 
     @Override
@@ -109,7 +124,7 @@ public class ComponentDataProvider extends AbstractConfigurableConfig implements
         return Stream.concat(dataFromComponents.stream()
                         .filter(data -> !generatedComponentsLookup.contains(data.getFileContent().getCanonicalName())),
                 dataFromNonComponents.stream())
-                .sorted((a, b)-> a.getFileName().compareTo(b.getFileName()))
+                .sorted((a, b) -> a.getFileName().compareTo(b.getFileName()))
                 .collect(Collectors.toList());
 
 
@@ -126,7 +141,6 @@ public class ComponentDataProvider extends AbstractConfigurableConfig implements
         return data;
     }
 
-
     List<String> getComponentNames(SourceDataFile data) {
         if (data.getFileContent().hasAnnotation("CustomComponentName")) {
             return Arrays.asList(data.getFileContent().getAnnotation("CustomComponentName").getStringArrayValue("componentNames"));
@@ -135,20 +149,5 @@ public class ComponentDataProvider extends AbstractConfigurableConfig implements
             return new ArrayList<>();
         }
 
-    }
-
-    static List<IComponentDataProvider> getComponentDataProviders() {
-        return new ArrayList<IComponentDataProvider>() {{
-            add(new ComponentTypeDataProvider());
-            add(new MemberDataProvider());
-            add(new ConstructorDataProvider());
-            add(new EnumsDataProvider());
-            add(new ContextsDataProvider());
-            add(new GenericsDataProvider());
-            add(new IsUniqueDataProvider());
-            add(new ShouldGenerateComponentDataProvider());
-            add(new ShouldGenerateMethodsDataProvider());
-
-        }};
     }
 }

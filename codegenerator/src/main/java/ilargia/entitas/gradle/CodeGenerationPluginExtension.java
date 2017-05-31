@@ -2,13 +2,13 @@ package ilargia.entitas.gradle;
 
 
 public class CodeGenerationPluginExtension {
-    private String configCodeGen = "Entitas.properties";
+    private String configFile = "Entitas.properties";
 
-    public String getConfigCodeGen() {
-        return configCodeGen;
+    public String getConfigFile() {
+        return configFile;
     }
 
-    public void setConfigCodeGen(String configCodeGen) {
-        this.configCodeGen = configCodeGen;
+    public void setConfigFile(String configFile) {
+        this.configFile = configFile;
     }
 }

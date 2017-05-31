@@ -26,14 +26,15 @@ public class CustomIndex extends EntityIndex<TestEntity, IntVector2> {
                     Position position = c instanceof Position ? (Position) c : e.getPosition();
                     Size size = c instanceof Size ? (Size) c : e.getSize();
                     _cachedList.clear();
-                    for(int x = (int) position.x; x < position.x + size.width; x++) {
+                    for (int x = (int) position.x; x < position.x + size.width; x++) {
                         for (int y = (int) position.y; y < position.y - size.height; y++) {
-                            _cachedList.add(new IntVector2(x,y));
+                            _cachedList.add(new IntVector2(x, y));
                         }
                     }
                     return _cachedList.toArray(new IntVector2[0]);
                 });
     }
+
     @EntityIndexGetMethod
     public Set<TestEntity> getEntitiesWithPosition(IntVector2 position) {
         return getEntities(position);

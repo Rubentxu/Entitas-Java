@@ -25,7 +25,7 @@ public class DryRun extends AbstractCommand {
         System.out.println("Entitas Code Generator version " + 1);
 
         if (assertProperties()) {
-            CodeGenerator codeGenerator = CodeGeneratorUtil.codeGeneratorFromProperties();
+            CodeGenerator codeGenerator = null; //CodeGeneratorUtil.codeGeneratorFromProperties();
 
             codeGenerator.OnProgress = (title, info, progress) -> {
                 int p = (int) (progress * 100);

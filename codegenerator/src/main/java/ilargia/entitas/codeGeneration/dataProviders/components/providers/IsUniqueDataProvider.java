@@ -11,6 +11,14 @@ public class IsUniqueDataProvider implements IComponentDataProvider {
 
     public static String COMPONENT_IS_UNIQUE = "component_isUnique";
 
+    public static boolean isUnique(SourceDataFile data) {
+        return (boolean) data.get(COMPONENT_IS_UNIQUE);
+    }
+
+    public static void setIsUnique(SourceDataFile data, boolean isUnique) {
+        data.put(COMPONENT_IS_UNIQUE, isUnique);
+    }
+
     @Override
     public void provide(SourceDataFile data) {
         AnnotationSource<JavaClassSource> annotation = data.getFileContent().getAnnotation("Unique");
@@ -20,14 +28,6 @@ public class IsUniqueDataProvider implements IComponentDataProvider {
             setIsUnique(data, false);
         }
 
-    }
-
-    public static boolean isUnique(SourceDataFile data) {
-        return (boolean) data.get(COMPONENT_IS_UNIQUE);
-    }
-
-    public static void setIsUnique(SourceDataFile data, boolean isUnique) {
-        data.put(COMPONENT_IS_UNIQUE, isUnique);
     }
 
 }

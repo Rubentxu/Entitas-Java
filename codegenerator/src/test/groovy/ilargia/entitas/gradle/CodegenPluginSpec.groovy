@@ -2,9 +2,6 @@ package ilargia.entitas.gradle
 
 import org.gradle.api.Project
 import org.gradle.api.Task
-import org.gradle.api.file.SourceDirectorySet
-import org.gradle.api.plugins.JavaPlugin
-import org.gradle.api.plugins.JavaPluginConvention
 import org.gradle.testfixtures.ProjectBuilder
 import spock.lang.Specification
 
@@ -47,23 +44,9 @@ class CodegenPluginSpec extends Specification {
         CodeGenerationPluginExtension ext = project.getExtensions().getByName("EntitasSetting") as CodeGenerationPluginExtension
 
         then:
-        ext.getProperties().get("configCodeGen") == "Entitas.properties"
+        ext.getProperties().get("configFile") == "Entitas.properties"
 
     }
-
-    void 'Queremos comprobar que se obtienen datos del plugin java'() {
-        given:
-        Project project = ProjectBuilder.builder().build()
-        project.getPlugins().apply 'java'
-
-        when:
-        JavaPlugin ext = project.getExtensions().getByName("sourcesSets") as JavaPlugin
-
-        then:
-        ext.getProperties().get("configCodeGen") == "Entitas.properties"
-
-    }
-
 
 
 }

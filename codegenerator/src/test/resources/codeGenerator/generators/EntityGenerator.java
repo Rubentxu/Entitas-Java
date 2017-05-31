@@ -1,10 +1,10 @@
 package com.ilargia.games.entitas.codeGenerator.generators;
 
 
-import ilargia.entitas.codeGeneration.interfaces.ICodeGenerator;
 import com.ilargia.games.entitas.codeGenerator.CodeGeneratorOld;
-import com.ilargia.games.entitas.codeGenerator.interfaces.IComponentCodeGenerator;
 import com.ilargia.games.entitas.codeGenerator.data.ComponentInfo;
+import com.ilargia.games.entitas.codeGenerator.interfaces.IComponentCodeGenerator;
+import ilargia.entitas.codeGeneration.interfaces.ICodeGenerator;
 import org.jboss.forge.roaster.Roaster;
 import org.jboss.forge.roaster.model.source.*;
 
@@ -92,8 +92,8 @@ public class EntityGenerator implements IComponentCodeGenerator, ICodeGenerator 
                     .setReturnType(info.typeName)
                     .setPublic();
 
-            String typeName = info.typeName ;
-            if(info.generics !=null && info.generics.size()>0) {
+            String typeName = info.typeName;
+            if (info.generics != null && info.generics.size() > 0) {
                 typeName += "<";
                 for (TypeVariableSource<JavaClassSource> generic : info.generics) {
                     String javaType[] = new String[generic.getBounds().size()];
@@ -173,8 +173,8 @@ public class EntityGenerator implements IComponentCodeGenerator, ICodeGenerator 
                             ? memberNamesWithTypeFromConstructor(info.constructores.get(0))
                             : memberNamesWithType(info.memberInfos));
 
-            String typeName = info.typeName ;
-            if(info.generics !=null && info.generics.size()>0) {
+            String typeName = info.typeName;
+            if (info.generics != null && info.generics.size() > 0) {
                 typeName += "<";
                 for (TypeVariableSource<JavaClassSource> generic : info.generics) {
                     String javaType[] = new String[generic.getBounds().size()];
@@ -194,13 +194,13 @@ public class EntityGenerator implements IComponentCodeGenerator, ICodeGenerator 
                                 "component = new %2$s(%4$s);\n } else {\n%3$s\n} addComponent(%1$s.%5$s, component);\n return this;",
                         CodeGeneratorOld.capitalize(info.contexts.get(0)) + CodeGeneratorOld.DEFAULT_COMPONENT_LOOKUP_TAG,
                         typeName, bodyFromConstructor(info.constructores.get(0)), memberNamesFromConstructor(info.constructores.get(0))
-                        ,info.typeName);
+                        , info.typeName);
 
             } else {
                 method = String.format("%2$s component = (%2$s) recoverComponent(%1$s.%2$s);\n if(component == null) { " +
                                 "component = new %2$s();\n } \n%3$s\n addComponent(%1$s.%2$s, component);\n return this;",
                         CodeGeneratorOld.capitalize(info.contexts.get(0)) + CodeGeneratorOld.DEFAULT_COMPONENT_LOOKUP_TAG,
-                        typeName, memberAssignments(info.memberInfos),info.typeName);
+                        typeName, memberAssignments(info.memberInfos), info.typeName);
             }
             addMethod.setBody(method);
 
@@ -219,8 +219,8 @@ public class EntityGenerator implements IComponentCodeGenerator, ICodeGenerator 
                             ? memberNamesWithTypeFromConstructor(info.constructores.get(0))
                             : memberNamesWithType(info.memberInfos));
 
-            String typeName = info.typeName ;
-            if(info.generics !=null && info.generics.size()>0) {
+            String typeName = info.typeName;
+            if (info.generics != null && info.generics.size() > 0) {
                 typeName += "<";
                 for (TypeVariableSource<JavaClassSource> generic : info.generics) {
                     String javaType[] = new String[generic.getBounds().size()];
@@ -231,7 +231,7 @@ public class EntityGenerator implements IComponentCodeGenerator, ICodeGenerator 
                     if (typeName.indexOf("<") != typeName.length() - 1) typeName += ",";
                     typeName += generic.getName();
                 }
-               typeName += ">";
+                typeName += ">";
             }
             String method;
             if (info.constructores != null && info.constructores.size() > 0) {
@@ -239,12 +239,12 @@ public class EntityGenerator implements IComponentCodeGenerator, ICodeGenerator 
                                 "component = new %2$s(%4$s);\n } else {\n%3$s\n} replaceComponent(%1$s.%5$s, component);\n return this;"
                         , CodeGeneratorOld.capitalize(info.contexts.get(0)) + CodeGeneratorOld.DEFAULT_COMPONENT_LOOKUP_TAG,
                         typeName, bodyFromConstructor(info.constructores.get(0)), memberNamesFromConstructor(info.constructores.get(0))
-                        ,info.typeName);
+                        , info.typeName);
             } else {
                 method = String.format("%2$s component = (%2$s) recoverComponent(%1$s.%2$s);\n if(component == null) { " +
                                 "component = new %2$s();\n} %3$s\n replaceComponent(%1$s.%2$s, component);\n return this;",
                         CodeGeneratorOld.capitalize(info.contexts.get(0)) + CodeGeneratorOld.DEFAULT_COMPONENT_LOOKUP_TAG,
-                        typeName, memberAssignments(info.memberInfos),info.typeName);
+                        typeName, memberAssignments(info.memberInfos), info.typeName);
             }
             replaceMethod.setBody(method);
 
@@ -288,7 +288,7 @@ public class EntityGenerator implements IComponentCodeGenerator, ICodeGenerator 
 
     public String memberNamesWithTypeFromConstructor(MethodSource<JavaClassSource> constructor) {
         return constructor.getParameters().stream()
-                .map(info ->info.toString())
+                .map(info -> info.toString())
                 .collect(Collectors.joining(", "));
     }
 

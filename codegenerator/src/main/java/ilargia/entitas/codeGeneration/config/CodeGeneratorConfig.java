@@ -7,41 +7,21 @@ import java.util.stream.Collectors;
 
 public class CodeGeneratorConfig extends AbstractConfigurableConfig {
 
-
-    static String SEARCH_PATHS_KEY = "Entitas.CodeGeneration.CodeGenerator.SearchPaths";
-    static String PLUGINS_PATHS_KEY = "Entitas.CodeGeneration.CodeGenerator.Plugins";
-
-    static String DATA_PROVIDERS_KEY = "Entitas.CodeGeneration.CodeGenerator.DataProviders";
-    static String CODE_GENERATORS_KEY = "Entitas.CodeGeneration.CodeGenerator.CodeGenerators";
-    static String POST_PROCESSORS_KEY = "Entitas.CodeGeneration.CodeGenerator.PostProcessors";
+    static String PLUGINS_PATHS_KEY = "Entitas.CodeGeneration.Plugins";
+    static String DATA_PROVIDERS_KEY = "Entitas.CodeGeneration.DataProviders";
+    static String CODE_GENERATORS_KEY = "Entitas.CodeGeneration.CodeGenerators";
+    static String POST_PROCESSORS_KEY = "Entitas.CodeGeneration.PostProcessors";
 
     @Override
     public Properties getDefaultProperties() {
-        properties.setProperty(SEARCH_PATHS_KEY, "");
-        properties.setProperty(PLUGINS_PATHS_KEY, "Entitas.CodeGeneration.Plugins, Entitas.VisualDebugging.CodeGeneration.Plugins");
-        properties.setProperty(DATA_PROVIDERS_KEY, "");
-        properties.setProperty(CODE_GENERATORS_KEY, "");
-        properties.setProperty(POST_PROCESSORS_KEY, "");
+        if(!properties.containsKey(PLUGINS_PATHS_KEY)) properties.setProperty(PLUGINS_PATHS_KEY, "");
+        if(!properties.containsKey(DATA_PROVIDERS_KEY)) properties.setProperty(DATA_PROVIDERS_KEY, "");
+        if(!properties.containsKey(CODE_GENERATORS_KEY)) properties.setProperty(CODE_GENERATORS_KEY, "");
+        if(properties.containsKey(POST_PROCESSORS_KEY)) properties.setProperty(POST_PROCESSORS_KEY, "");
 
         return properties;
     }
 
-
-    public List<String> getSearchPaths() {
-        return Pattern.compile(",")
-                .splitAsStream(properties.getProperty(SEARCH_PATHS_KEY))
-                .sorted()
-                .collect(Collectors.toList());
-
-    }
-
-    public void setSearchPaths(List<String> searchPaths) {
-        String values = searchPaths.stream()
-                .sorted()
-                .collect(Collectors.joining(","));
-
-        properties.setProperty(SEARCH_PATHS_KEY, values);
-    }
 
     public List<String> getPlugins() {
         return Pattern.compile(",")

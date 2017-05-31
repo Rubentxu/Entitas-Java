@@ -1,6 +1,7 @@
 package ilargia.entitas.codeGeneration.data;
 
 import org.jboss.forge.roaster.model.source.JavaClassSource;
+
 import java.util.HashMap;
 
 public class SourceDataFile extends HashMap<String, Object> {

@@ -1,8 +1,8 @@
 package com.ilargia.games.entitas.codeGenerator;
 
-import ilargia.entitas.codeGeneration.interfaces.ICodeGenerator;
-import ilargia.entitas.codeGeneration.data.CodeGenFile;
 import com.ilargia.games.entitas.codeGenerator.providers.TypeReflectionProvider;
+import ilargia.entitas.codeGeneration.data.CodeGenFile;
+import ilargia.entitas.codeGeneration.interfaces.ICodeGenerator;
 import javafx.application.Application;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
@@ -11,20 +11,11 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.ProgressIndicator;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;

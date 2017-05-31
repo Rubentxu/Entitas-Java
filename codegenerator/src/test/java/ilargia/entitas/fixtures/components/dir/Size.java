@@ -3,7 +3,7 @@ package ilargia.entitas.fixtures.components.dir;
 import ilargia.entitas.api.IComponent;
 import ilargia.entitas.codeGenerator.annotations.Contexts;
 
-@Contexts(names = { "Test"})
+@Contexts(names = {"Test"})
 public class Size implements IComponent {
     public int width;
     public int height;

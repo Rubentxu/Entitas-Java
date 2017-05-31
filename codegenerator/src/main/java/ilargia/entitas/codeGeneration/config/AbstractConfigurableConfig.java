@@ -9,7 +9,7 @@ public class AbstractConfigurableConfig implements IConfigurable {
 
     protected Properties properties;
 
-     @Override
+    @Override
     public Properties getDefaultProperties() {
         return properties;
     }

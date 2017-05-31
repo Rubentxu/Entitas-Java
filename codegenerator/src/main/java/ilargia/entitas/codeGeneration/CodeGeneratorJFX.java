@@ -27,13 +27,13 @@ import java.util.stream.Collectors;
 
 public class CodeGeneratorJFX extends Application implements Initializable {
 
-    private StoreCodeGenerator storeCodeGenerator;
     public Stage stage;
     public String path;
     @FXML
     ProgressIndicator progress;
     @FXML
     Label result;
+    private StoreCodeGenerator storeCodeGenerator;
     @FXML
     private CheckBox componentIndicesGenerator;
     @FXML
@@ -57,6 +57,32 @@ public class CodeGeneratorJFX extends Application implements Initializable {
 
     }
 
+    public static Map<String, List<File>> readFileComponents(String pathComponents) {
+        Map<String, List<File>> recursiveList = new HashMap() {{
+            put("", new ArrayList<>());
+        }};
+        File d = new File(pathComponents);
+
+        if (d.isDirectory()) {
+            for (File listFile : d.listFiles()) {
+                if (listFile.isDirectory()) {
+                    List<File> listSubDir = Arrays.asList(listFile.listFiles());
+                    if (listSubDir.size() > 0) {
+                        Path path = Paths.get(listSubDir.get(0).getAbsolutePath());
+                        String subDir = path.getName(path.getNameCount() - 2).toString();
+                        recursiveList.put(subDir, listSubDir);
+                    }
+
+                } else {
+                    recursiveList.get("").add(listFile);
+                }
+            }
+
+        }
+        return recursiveList;
+
+    }
+
     @Override
     public void start(Stage primaryStage) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("EntitasGenerator.fxml"));
@@ -69,7 +95,6 @@ public class CodeGeneratorJFX extends Application implements Initializable {
         stage = primaryStage;
 
     }
-
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -198,32 +223,6 @@ public class CodeGeneratorJFX extends Application implements Initializable {
         loadingThread.setDaemon(true);
         loadingThread.start();
 
-
-    }
-
-    public static Map<String, List<File>> readFileComponents(String pathComponents) {
-        Map<String, List<File>> recursiveList = new HashMap() {{
-            put("", new ArrayList<>());
-        }};
-        File d = new File(pathComponents);
-
-        if (d.isDirectory()) {
-            for (File listFile : d.listFiles()) {
-                if (listFile.isDirectory()) {
-                    List<File> listSubDir = Arrays.asList(listFile.listFiles());
-                    if (listSubDir.size() > 0) {
-                        Path path = Paths.get(listSubDir.get(0).getAbsolutePath());
-                        String subDir = path.getName(path.getNameCount() - 2).toString();
-                        recursiveList.put(subDir, listSubDir);
-                    }
-
-                } else {
-                    recursiveList.get("").add(listFile);
-                }
-            }
-
-        }
-        return recursiveList;
 
     }
 

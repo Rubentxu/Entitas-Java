@@ -1,8 +1,8 @@
 package com.ilargia.games.entitas.codeGenerator.providers;
 
 
-import ilargia.entitas.codeGeneration.interfaces.ICodeDataProvider;
 import com.ilargia.games.entitas.codeGenerator.data.ComponentInfo;
+import ilargia.entitas.codeGeneration.interfaces.ICodeDataProvider;
 import org.jboss.forge.roaster.Roaster;
 import org.jboss.forge.roaster.model.source.*;
 
@@ -29,17 +29,19 @@ public class TypeReflectionProvider implements ICodeDataProvider {
     }
 
     public static Map<String, List<File>> readFileComponents(String pathname) {
-        Map<String, List<File>> recursiveList = new HashMap(){{put("",new ArrayList<>());}};
+        Map<String, List<File>> recursiveList = new HashMap() {{
+            put("", new ArrayList<>());
+        }};
         File d = new File(pathname);
 
         if (d.isDirectory()) {
             for (File listFile : d.listFiles()) {
                 if (listFile.isDirectory()) {
                     List<File> listSubDir = Arrays.asList(listFile.listFiles());
-                    if(listSubDir.size() > 0) {
+                    if (listSubDir.size() > 0) {
                         Path path = Paths.get(listSubDir.get(0).getAbsolutePath());
                         String subDir = path.getName(path.getNameCount() - 2).toString();
-                        recursiveList.put(subDir, listSubDir );
+                        recursiveList.put(subDir, listSubDir);
                     }
 
                 } else {

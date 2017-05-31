@@ -1,18 +1,24 @@
 package ilargia.entitas.gradle;
 
 
+import ilargia.entitas.codeGeneration.CodeGenerator;
+import ilargia.entitas.codeGeneration.config.EntitasGradleProject;
+import ilargia.entitas.codeGeneration.config.ProjectPreferences;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.tasks.TaskAction;
 
 public class CodeGenerationTask extends DefaultTask {
+    ProjectPreferences entitasProject;
+
+    public CodeGenerationTask() {
+
+    }
+
     @TaskAction
     public void run() {
-        CodeGenerationPluginExtension extension = getProject().getExtensions().findByType(CodeGenerationPluginExtension.class);
-        if (extension == null) {
-            extension = new CodeGenerationPluginExtension();
-        }
+        entitasProject = new EntitasGradleProject(getProject());
+        CodeGenerator codeGenerator = entitasProject.getCodeGenerator();
+        codeGenerator.generate();
 
-        String config = extension.getConfigCodeGen();
-        System.out.println(config);
     }
 }

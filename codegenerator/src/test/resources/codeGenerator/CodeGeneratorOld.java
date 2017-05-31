@@ -1,10 +1,10 @@
 package com.ilargia.games.entitas.codeGenerator;
 
 
-import ilargia.entitas.codeGeneration.interfaces.ICodeGenerator;
-import ilargia.entitas.codeGeneration.interfaces.ICodeDataProvider;
-import ilargia.entitas.codeGeneration.data.CodeGenFile;
 import com.ilargia.games.entitas.codeGenerator.data.ComponentInfo;
+import ilargia.entitas.codeGeneration.data.CodeGenFile;
+import ilargia.entitas.codeGeneration.interfaces.ICodeDataProvider;
+import ilargia.entitas.codeGeneration.interfaces.ICodeGenerator;
 import org.jboss.forge.roaster.model.source.JavaClassSource;
 import org.jboss.forge.roaster.model.source.JavaDocSource;
 
@@ -60,6 +60,47 @@ public class CodeGeneratorOld {
 
     }
 
+    public static void toFile(JavaClassSource javaClass, File srcFolder) {
+        File f = srcFolder;
+        String[] parts = javaClass.getPackage().split("\\.");
+
+        try {
+            if (!srcFolder.getAbsolutePath().endsWith(parts[parts.length - 1])) {
+                f = new File(f, parts[parts.length - 1]);
+                createParentDirs(f);
+            }
+            f = new File(f, javaClass.getName() + ".java");
+            write(f, javaClass.toString());
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public static void createParentDirs(File file) throws IOException {
+        if (file != null) {
+            File parent = file.getCanonicalFile();
+            if (parent == null) {
+                return;
+            }
+            parent.mkdirs();
+
+            if (parent.mkdirs() && !parent.isDirectory()) {
+                throw new IOException("Unable to create parent directories of " + file);
+            }
+        }
+    }
+
+    public static void write(File file, String content) {
+        try (Writer writer = new BufferedWriter(new OutputStreamWriter(
+                new FileOutputStream(file.getAbsolutePath()), "utf-8"))) {
+            writer.write(content);
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.exit(-1);
+        }
+    }
 
     public List<CodeGenFile> generate(ICodeDataProvider provider, String destinyDirectory, List<ICodeGenerator> codeGenerators) {
 
@@ -106,7 +147,7 @@ public class CodeGeneratorOld {
 
         CodeGenFile entitas = generatedFiles.get(generatedFiles.size() - 1);
         for (CodeGenFile generatedFile : generatedFiles) {
-            if(!generatedFile.fileName.endsWith("Matcher") && !entitas.fileContent.getPackage().equals(generatedFile.fileContent.getPackage())) {
+            if (!generatedFile.fileName.endsWith("Matcher") && !entitas.fileContent.getPackage().equals(generatedFile.fileContent.getPackage())) {
                 entitas.fileContent.addImport(generatedFile.fileName);
             }
         }
@@ -128,49 +169,6 @@ public class CodeGeneratorOld {
 
         });
 
-    }
-
-    public static void toFile(JavaClassSource javaClass, File srcFolder)  {
-        File f = srcFolder;
-        String[] parts = javaClass.getPackage().split("\\.");
-
-        try {
-        if(!srcFolder.getAbsolutePath().endsWith(parts[parts.length-1])) {
-            f = new File(f, parts[parts.length-1]);
-            createParentDirs(f);
-        }
-        f = new File(f, javaClass.getName() + ".java");
-        write(f, javaClass.toString());
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    public static void createParentDirs(File file) throws IOException {
-        if (file != null) {
-            File parent = file.getCanonicalFile();
-            if (parent == null) {
-                return;
-            }
-            parent.mkdirs();
-
-            if (parent.mkdirs() && !parent.isDirectory()) {
-                throw new IOException("Unable to create parent directories of " + file);
-            }
-        }
-    }
-
-
-    public static void write(File file , String content) {
-        try (Writer writer = new BufferedWriter(new OutputStreamWriter(
-                new FileOutputStream(file.getAbsolutePath()), "utf-8"))) {
-            writer.write(content);
-        }catch (IOException e) {
-            e.printStackTrace();
-            System.exit(-1);
-        }
     }
 }
 

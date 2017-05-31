@@ -2,8 +2,8 @@ package com.ilargia.games.entitas.codeGenerator.generators;
 
 
 import com.ilargia.games.entitas.codeGenerator.CodeGeneratorOld;
-import com.ilargia.games.entitas.codeGenerator.interfaces.IComponentCodeGenerator;
 import com.ilargia.games.entitas.codeGenerator.data.ComponentInfo;
+import com.ilargia.games.entitas.codeGenerator.interfaces.IComponentCodeGenerator;
 import org.jboss.forge.roaster.Roaster;
 import org.jboss.forge.roaster.model.source.JavaClassSource;
 
@@ -31,8 +31,8 @@ public class MatcherGenerator implements IComponentCodeGenerator {
     private JavaClassSource generateMatchers(String contextName, List<ComponentInfo> componentInfos, String pkgDestiny) {
         JavaClassSource javaClass = Roaster.parse(JavaClassSource.class, String.format("public class %1$s {}",
                 CodeGeneratorOld.capitalize(contextName) + "Matcher"));
-        if(componentInfos.size() > 0 && !pkgDestiny.endsWith(componentInfos.get(0).subDir)) {
-            pkgDestiny+= "."+componentInfos.get(0).subDir;
+        if (componentInfos.size() > 0 && !pkgDestiny.endsWith(componentInfos.get(0).subDir)) {
+            pkgDestiny += "." + componentInfos.get(0).subDir;
 
         }
 

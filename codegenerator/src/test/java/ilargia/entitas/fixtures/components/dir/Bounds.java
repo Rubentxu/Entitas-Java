@@ -8,6 +8,7 @@ import ilargia.entitas.codeGenerator.annotations.Contexts;
 public class Bounds implements IComponent {
     public Rectangle rectangle;
     public Tag tag;
+
     public Bounds() {
     }
 

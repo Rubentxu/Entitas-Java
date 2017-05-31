@@ -2,7 +2,6 @@ package ilargia.entitas.codeGeneration.cli.commands;
 
 
 import ilargia.entitas.codeGeneration.CodeGeneratorUtil;
-import ilargia.entitas.codeGeneration.config.Preferences;
 
 import java.io.Console;
 import java.util.List;
@@ -12,12 +11,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class Helper {
-    @FunctionalInterface
-    public interface Action<T> {
-        void apply(T param);
-
-    }
-
     public static List<String> getUnusedKeys(Set<Object> requiredKeys, Properties properties) {
         return properties.keySet().stream()
                 .filter(key -> !requiredKeys.contains(key))
@@ -48,7 +41,7 @@ public class Helper {
         System.out.println(message + ": '" + key + "'");
         //Console.ReadKey(true);
         properties.setProperty(key, value);
-        Preferences.saveProperties(properties);
+      //  Preferences.saveProperties(properties);
         System.out.println("Added: " + key);
     }
 
@@ -56,7 +49,7 @@ public class Helper {
         System.out.println(question + ": '" + key + "' ? (y / n)");
         if (getUserDecision("yes", "no")) {
             properties.setProperty(key, value);
-            Preferences.saveProperties(properties);
+     //       Preferences.saveProperties(properties);
             System.out.println("Added: " + key);
         }
     }
@@ -65,7 +58,7 @@ public class Helper {
         System.out.println(question + ": '" + key + "' ? (y / n)");
         if (getUserDecision("yes", "no")) {
             properties.remove(key);
-            Preferences.saveProperties(properties);
+      //      Preferences.saveProperties(properties);
             System.out.println("Removed: " + key);
         }
     }
@@ -75,7 +68,7 @@ public class Helper {
         if (getUserDecision("yes", "no")) {
             valueList.remove(value);
             updateAction.apply(valueList);
-            Preferences.saveProperties(properties);
+      //      Preferences.saveProperties(properties);
             System.out.println("Removed: " + value);
         }
     }
@@ -85,9 +78,15 @@ public class Helper {
         if (getUserDecision("yes", "no")) {
             valueList.add(value);
             updateAction.apply(CodeGeneratorUtil.getOrderedNames(valueList));
-            Preferences.saveProperties(properties);
+        //    Preferences.saveProperties(properties);
             System.out.println("Added: " + value);
         }
+    }
+
+    @FunctionalInterface
+    public interface Action<T> {
+        void apply(T param);
+
     }
 
 }

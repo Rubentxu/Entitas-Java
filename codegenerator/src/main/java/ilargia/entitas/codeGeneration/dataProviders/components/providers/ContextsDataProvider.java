@@ -1,8 +1,8 @@
 package ilargia.entitas.codeGeneration.dataProviders.components.providers;
 
 
-import ilargia.entitas.codeGeneration.data.SourceDataFile;
 import ilargia.entitas.codeGeneration.config.ContextNamesConfig;
+import ilargia.entitas.codeGeneration.data.SourceDataFile;
 import ilargia.entitas.codeGeneration.interfaces.IConfigurable;
 import org.jboss.forge.roaster.model.source.AnnotationSource;
 import org.jboss.forge.roaster.model.source.JavaClassSource;
@@ -16,6 +16,14 @@ public class ContextsDataProvider implements IComponentDataProvider, IConfigurab
 
     public static String COMPONENT_CONTEXTS = "component_contexts";
     ContextNamesConfig _contextNamesConfig = new ContextNamesConfig();
+
+    public static List<String> getContextNames(SourceDataFile data) {
+        return (List<String>) data.get(COMPONENT_CONTEXTS);
+    }
+
+    public static void setContextNames(SourceDataFile data, List<String> contextNames) {
+        data.put(COMPONENT_CONTEXTS, contextNames);
+    }
 
     @Override
     public Properties getDefaultProperties() {
@@ -49,14 +57,6 @@ public class ContextsDataProvider implements IComponentDataProvider, IConfigurab
             contextNames = _contextNamesConfig.getContextNames();
         }
         return contextNames;
-    }
-
-    public static List<String> getContextNames(SourceDataFile data) {
-        return (List<String>) data.get(COMPONENT_CONTEXTS);
-    }
-
-    public static void setContextNames(SourceDataFile data, List<String> contextNames) {
-        data.put(COMPONENT_CONTEXTS, contextNames);
     }
 
 }

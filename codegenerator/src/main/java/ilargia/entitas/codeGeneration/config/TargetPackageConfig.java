@@ -4,11 +4,12 @@ package ilargia.entitas.codeGeneration.config;
 import java.util.Properties;
 
 public class TargetPackageConfig extends AbstractConfigurableConfig {
-    public static String TARGET_PACKAGE_KEY = "Entitas.CodeGeneration.Plugins.TargetPackage";
+    public static String TARGET_PACKAGE_KEY = "Entitas.CodeGeneration.TargetPackage";
 
     @Override
     public Properties getDefaultProperties() {
-        properties.setProperty(TARGET_PACKAGE_KEY, "entitas.generated");
+        if (!properties.containsKey(TARGET_PACKAGE_KEY))
+            properties.setProperty(TARGET_PACKAGE_KEY, "entitas.generated");
         return properties;
     }
 
