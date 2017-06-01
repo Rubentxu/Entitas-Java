@@ -23,52 +23,19 @@ public class CodeGeneratorUtil {
                 .forEach(p -> p.configure(properties));
     }
 
-    @SuppressWarnings("finally")
-    private static boolean existClass(String className) {
-        Class<?> classname = null;
-        try {
-            classname = Class.forName(className);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } finally {
-            if (classname == null)
-                return false;
-            else
-                return true;
-        }
-    }
 
-    @SuppressWarnings("finally")
-    private static Class<? extends Object> getClass(String className) {
-        Class<?> classname = null;
-        try {
-            classname = Class.forName(className);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } finally {
-            if (classname == null)
-                return classname;
-            else
-                return classname;
-        }
-    }
 
     public static List<Class> loadTypesFromPlugins(Properties properties) {
         CodeGeneratorConfig config = new CodeGeneratorConfig();
         config.configure(properties);
 
         return config.getPlugins().stream()
-                .filter(s -> existClass(s))
-                .map(s -> getClass(s))
+                .flatMap(s -> ClassFinder.findRecursive(s).stream())
+                .sorted((typeA, typeB) -> typeA.getCanonicalName().compareTo(typeB.getCanonicalName()))
                 .collect(Collectors.toList());
 
     }
 
-    public static List<String> getOrderedNames(List<String> types) {
-        return types.stream()
-                .sorted((typeA, typeB) -> typeA.compareTo(typeB))
-                .collect(Collectors.toList());
-    }
 
     public static <T extends ICodeGeneratorInterface> List<T> getOrderedInstances(List<Class> types, Class<T> clazz) {
         return types.stream()
@@ -135,7 +102,7 @@ public class CodeGeneratorUtil {
                 .collect(Collectors.toMap(e -> (String) e.getKey(), e -> (String) e.getValue()));
     }
 
-    public void writeFile(File file, String content) {
+    public static void writeFile(File file, String content) {
         try {
             if (!file.getParentFile().exists()) file.getParentFile().mkdirs();
             FileWriter fw = new FileWriter(file.getAbsoluteFile());

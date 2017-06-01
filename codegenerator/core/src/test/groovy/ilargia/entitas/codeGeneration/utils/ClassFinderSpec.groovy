@@ -16,27 +16,21 @@ Para que pueda usarse en la generacion del codigo.
 class ClassFinderSpec extends Specification {
 
 
-    def setupSpec() {
-
-
-    }
-
-
     void 'Buscamos las clases a partir de un paquete base dentro de un jar dentro del classpath'() {
 
-        when: 'buscamos clases recursivamente en un package concreto base'
+        when:
         List<Class<?>> classes = ClassFinder.findRecursive("org.jboss.forge.roaster.model.util")
 
-        then: 'el resultado de los nombres de contextos debe ser `Core`'
-        classes.size() == 97
+        then:
+        classes.size() == 9
     }
 
     void 'Buscamos las clases a partir de un paquete base dentro de un directorio del classpath'() {
 
-        when: 'buscamos clases recursivamente en un package concreto base'
+        when:
         List<Class<?>> classes = ClassFinder.findRecursive("ilargia.entitas.codeGeneration.data")
 
-        then: 'el resultado de los nombres de contextos debe ser `Core`'
+        then:
         classes.size() == 5
     }
 

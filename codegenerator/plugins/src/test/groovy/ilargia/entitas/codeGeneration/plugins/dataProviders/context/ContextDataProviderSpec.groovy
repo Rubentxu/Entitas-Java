@@ -1,7 +1,6 @@
-package ilargia.entitas.codeGeneration.dataProviders.context
+package ilargia.entitas.codeGeneration.plugins.dataProviders.context
 
 import groovy.transform.TypeCheckingMode
-import ilargia.entitas.codeGeneration.plugins.dataProviders.context.ContextDataProvider
 import ilargia.entitas.fixtures.FixtureProvider
 import spock.lang.Narrative
 import spock.lang.Shared

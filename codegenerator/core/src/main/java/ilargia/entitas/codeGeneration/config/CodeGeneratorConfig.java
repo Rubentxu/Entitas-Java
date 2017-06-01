@@ -15,7 +15,7 @@ public class CodeGeneratorConfig extends AbstractConfigurableConfig {
     @Override
     public Properties getDefaultProperties() {
         if (!properties.containsKey(PLUGINS_SCAN_KEY))
-            properties.setProperty(PLUGINS_SCAN_KEY, "ilargia.entitas.codeGeneration");
+            properties.setProperty(PLUGINS_SCAN_KEY, "ilargia.entitas.codeGeneration.plugins");
         if (!properties.containsKey(DATA_PROVIDERS_KEY)) properties.setProperty(DATA_PROVIDERS_KEY,
                 String.join(", ",
                         "ilargia.entitas.codeGeneration.plugins.dataProviders.components.ComponentDataProvider",
@@ -35,6 +35,7 @@ public class CodeGeneratorConfig extends AbstractConfigurableConfig {
     public List<String> getPlugins() {
         return Pattern.compile(",")
                 .splitAsStream(properties.getProperty(PLUGINS_SCAN_KEY))
+                .map(p-> p.trim())
                 .sorted()
                 .collect(Collectors.toList());
 

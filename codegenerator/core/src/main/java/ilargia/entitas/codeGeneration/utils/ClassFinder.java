@@ -34,7 +34,6 @@ public class ClassFinder {
         }
         File scannedFile = new File(scannedUrl.getFile());
 
-
         if (scannedFile.exists()) {
             try {
                 return Class.forName(finalClassName);
@@ -43,11 +42,8 @@ public class ClassFinder {
             }
 
         } else {
-            return findIntoPackage(scannedUrl.getFile().substring(5, scannedUrl.getFile().lastIndexOf(JAR_FILE_SUFFIX) + 4)).stream()
-                    .filter(c -> {
-                        return c.getCanonicalName().equals(finalClassName);
-                    })
-                    .findFirst().get();
+            return findIntoPackage(scannedUrl.getFile()
+                    .substring(5, scannedUrl.getFile().lastIndexOf(JAR_FILE_SUFFIX) + 4), finalClassName).stream().findFirst().get();
         }
         return null;
     }
@@ -66,26 +62,29 @@ public class ClassFinder {
                 classes.addAll(find(file, scannedPackage));
             }
         } else {
-            classes.addAll(findIntoPackage(scannedUrl.getFile().substring(5, scannedUrl.getFile().lastIndexOf(JAR_FILE_SUFFIX) + 4)).stream()
-                    .filter(c -> !c.getCanonicalName().contains("$"))
-                    .filter(c -> {
-                        return c.getCanonicalName().contains(scannedPackage);
-
-                    })
-                    .collect(Collectors.toList()));
+            classes.addAll(findIntoPackage(scannedUrl.getFile()
+                            .substring(5, scannedUrl.getFile().lastIndexOf(JAR_FILE_SUFFIX) + 4) , scannedPackage));
         }
         return classes;
     }
 
-    public static List<Class<?>> findIntoPackage(String pathJar) {
+    public static List<Class<?>> findIntoPackage(String pathJar, String scannedPackage) {
         List<Class<?>> classNames = new ArrayList<>();
         try {
             ZipInputStream zip = new ZipInputStream(new FileInputStream(pathJar));
             for (ZipEntry entry = zip.getNextEntry(); entry != null; entry = zip.getNextEntry()) {
-                if (!entry.isDirectory() && entry.getName().endsWith(CLASS_FILE_SUFFIX)) {
-                    // This ZipEntry represents a class. Now, what class does it represent?
-                    String className = entry.getName().replace('/', '.'); // including ".class"
-                    classNames.add(Class.forName(className.substring(0, className.length() - CLASS_FILE_SUFFIX.length())));
+                if (!entry.isDirectory() && entry.getName().endsWith(CLASS_FILE_SUFFIX) && !entry.getName().contains("$")) {
+                    if(scannedPackage.contains(CLASS_FILE_SUFFIX)) {
+                        int endIndex = scannedPackage.length() - CLASS_FILE_SUFFIX.length();
+                        scannedPackage = scannedPackage.substring(0, endIndex);
+                    }
+
+                    String scannedClass = scannedPackage.replace(PKG_SEPARATOR, DIR_SEPARATOR);
+                    if(entry.getName().contains(scannedClass)) {
+                        // This ZipEntry represents a class. Now, what class does it represent?
+                        String className = entry.getName().replace('/', '.'); // including ".class"
+                        classNames.add(Class.forName(className.substring(0, className.length() - CLASS_FILE_SUFFIX.length())));
+                    }
                 }
             }
         } catch (Exception e) {
