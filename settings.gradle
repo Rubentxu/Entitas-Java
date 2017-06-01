@@ -1,2 +1,10 @@
-include 'entitas', 'codegenerator', 'entitas-gdx', /*'examples:Pong', 'examples:MatchOne',*/ 'examples:Tests', 'debugger'
+include 'entitas'
+include 'entitas-gdx'
+//include 'examples:Pong'
+//include 'examples:MatchOne'
+//include'examples:Tests'
+include 'debugger'
+include 'codegenerator:core'
+include 'codegenerator:plugins'
+include 'codegenerator:gradle'
 
