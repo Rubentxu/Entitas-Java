@@ -2,8 +2,8 @@ language: java
 sudo: required
 jdk:
   - oraclejdk8
-os:
-  - linux
+  
+dist: trusty
 
 install: true
 before_script:
