@@ -13,14 +13,9 @@
 hs_err_pid*
 
 
-.ilargia.entitas.codeGeneration.gradle
+
 build/
 
-# Ignore Gradle GUI config
-ilargia.entitas.codeGeneration.gradle-app.setting
-
-# Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
-!ilargia.entitas.codeGeneration.gradle-wrapper.jar
 
 # Cache of project
 .gradletasknamecache
@@ -29,5 +24,5 @@ ilargia.entitas.codeGeneration.gradle-app.setting
 
 gradlew
 gradlew.bat
-ilargia.entitas.codeGeneration.gradle/
 .gradle/
+

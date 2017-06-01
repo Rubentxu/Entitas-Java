@@ -45,8 +45,8 @@ public class TestEntity extends Entity {
         if (component == null) {
             component = new Motion(x, y);
         } else {
-            component.velocity.x = x;
-            component.velocity.y = y;
+            component.xVelocity = x;
+            component.yVelocity = y;
         }
         addComponent(TestComponentIds.Motion, component);
         return this;
@@ -57,9 +57,8 @@ public class TestEntity extends Entity {
         if (component == null) {
             component = new Motion(x, y);
         } else {
-            component.velocity.x = x;
-            ;
-            component.velocity.y = y;
+            component.xVelocity = x;
+            component.yVelocity = y;
         }
         replaceComponent(TestComponentIds.Motion, component);
         return this;

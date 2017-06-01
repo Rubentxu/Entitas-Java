@@ -7,12 +7,12 @@ os:
 
 install: true
 before_script:
-  - ./gradlew -S clean --console=plain
+  - gradle -S clean --console=plain
 
 script:
-  - ./gradlew -S -i --console=plain assemble
-  - ./gradlew -S -i --console=plain test
-   #gradle entitas:build
+  - gradle -S -i --console=plain entitas:assemble
+  - gradle -S -i --console=plain entitas:test
+  #- gradle entitas:build
 
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock

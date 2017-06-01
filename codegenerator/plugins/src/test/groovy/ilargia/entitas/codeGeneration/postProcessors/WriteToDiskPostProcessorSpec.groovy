@@ -4,6 +4,7 @@ import groovy.transform.TypeCheckingMode
 import ilargia.entitas.codeGeneration.config.TargetPackageConfig
 import ilargia.entitas.codeGeneration.data.CodeGenFile
 import ilargia.entitas.codeGeneration.data.SourceDataFile
+import ilargia.entitas.codeGeneration.gradle.EntitasGradleProject
 import ilargia.entitas.codeGeneration.plugins.postProcessors.WriteToDiskPostProcessor
 import ilargia.entitas.codeGeneration.utils.CodeGeneratorUtil
 import ilargia.entitas.fixtures.FixtureProvider
@@ -40,7 +41,7 @@ class WriteToDiskPostProcessorSpec extends Specification {
         codeGeneratorUtil = Mock(CodeGeneratorUtil)
         Project project = ProjectBuilder.builder().build()
         JavaPlugin plugin = project.getPlugins().apply(JavaPlugin.class)
-        postProcessor = new WriteToDiskPostProcessor(codeGeneratorUtil, project)
+        postProcessor = new WriteToDiskPostProcessor(codeGeneratorUtil, new EntitasGradleProject(project))
         fixtures = new FixtureProvider("src/test/java/ilargia/entitas/fixtures/components")
         dataFiles = fixtures.getSourceDataFiles()
         genFiles = new ArrayList<>()

@@ -1,13 +1,12 @@
 package ilargia.entitas.codeGeneration.plugins.postProcessors;
 
 
+import ilargia.entitas.codeGeneration.config.ProjectPreferences;
 import ilargia.entitas.codeGeneration.config.TargetPackageConfig;
 import ilargia.entitas.codeGeneration.data.CodeGenFile;
-import ilargia.entitas.codeGeneration.gradle.EntitasGradleProject;
 import ilargia.entitas.codeGeneration.interfaces.ICodeGenFilePostProcessor;
 import ilargia.entitas.codeGeneration.interfaces.IConfigurable;
 import ilargia.entitas.codeGeneration.utils.CodeGeneratorUtil;
-import org.gradle.api.Project;
 import org.jboss.forge.roaster.model.source.JavaClassSource;
 
 import java.io.File;
@@ -17,13 +16,13 @@ import java.util.Properties;
 public class WriteToDiskPostProcessor implements ICodeGenFilePostProcessor, IConfigurable {
 
     private final TargetPackageConfig targetPackageConfig;
-    private final EntitasGradleProject projectConfig;
+    private final ProjectPreferences projectConfig;
     private CodeGeneratorUtil codeGeneratorUtil;
 
-    public WriteToDiskPostProcessor(CodeGeneratorUtil codeGeneratorUtil, Project project) {
+    public WriteToDiskPostProcessor(CodeGeneratorUtil codeGeneratorUtil, ProjectPreferences preferences) {
         this.codeGeneratorUtil = codeGeneratorUtil;
         targetPackageConfig = new TargetPackageConfig();
-        projectConfig = new EntitasGradleProject(project);
+        projectConfig = preferences;
     }
 
 
