@@ -3,9 +3,8 @@ package ilargia.entitas.codeGeneration.plugins.dataProviders.entityIndex;
 
 import ilargia.entitas.api.IComponent;
 import ilargia.entitas.codeGeneration.config.CodeGeneratorConfig;
-import ilargia.entitas.codeGeneration.data.MemberData;
-import ilargia.entitas.codeGeneration.data.MethodData;
-import ilargia.entitas.codeGeneration.data.SourceDataFile;
+import ilargia.entitas.codeGeneration.plugins.data.MemberData;
+import ilargia.entitas.codeGeneration.plugins.data.MethodData;
 import ilargia.entitas.codeGeneration.interfaces.ICodeGeneratorDataProvider;
 import ilargia.entitas.codeGeneration.interfaces.IConfigurable;
 import ilargia.entitas.codeGeneration.plugins.dataProviders.components.providers.ContextsDataProvider;

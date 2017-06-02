@@ -1,12 +1,14 @@
 package ilargia.entitas.codeGenerator.annotations;
 
-import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import static java.lang.annotation.ElementType.*;
+
 @Retention(RetentionPolicy.SOURCE)
-@Target(ElementType.TYPE)
-public @interface Unique {
-    String prefix() default "is";
+@Target({TYPE})
+public @interface CustomComponentName {
+    String[] componentNames();
+
 }

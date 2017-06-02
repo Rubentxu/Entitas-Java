@@ -1,12 +1,10 @@
 package ilargia.entitas.codeGeneration.plugins.dataProviders.components.providers;
 
 
-import ilargia.entitas.codeGeneration.config.ContextNamesConfig;
-import ilargia.entitas.codeGeneration.data.SourceDataFile;
-import ilargia.entitas.codeGeneration.interfaces.IComponentDataProvider;
 import ilargia.entitas.codeGeneration.interfaces.IConfigurable;
-import org.jboss.forge.roaster.model.source.AnnotationSource;
-import org.jboss.forge.roaster.model.source.JavaClassSource;
+import ilargia.entitas.codeGeneration.plugins.config.ContextNamesConfig;
+import ilargia.entitas.codeGeneration.plugins.dataProviders.components.ComponentData;
+import ilargia.entitas.codeGenerator.annotations.Contexts;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,12 +16,12 @@ public class ContextsDataProvider implements IComponentDataProvider, IConfigurab
     public static String COMPONENT_CONTEXTS = "component_contexts";
     ContextNamesConfig _contextNamesConfig = new ContextNamesConfig();
 
-    public static List<String> getContextNames(SourceDataFile data) {
-        return (List<String>) data.get(COMPONENT_CONTEXTS);
+    public static void setContextNames(ComponentData data, List<String> contextNames) {
+        data.put(COMPONENT_CONTEXTS, contextNames);
     }
 
-    public static void setContextNames(SourceDataFile data, List<String> contextNames) {
-        data.put(COMPONENT_CONTEXTS, contextNames);
+    public static List<String> getContextNames(ComponentData data) {
+        return (List<String>) data.get(COMPONENT_CONTEXTS);
     }
 
     @Override
@@ -37,22 +35,20 @@ public class ContextsDataProvider implements IComponentDataProvider, IConfigurab
     }
 
     @Override
-    public void provide(SourceDataFile data) {
-        List<String> contextNames = getContextNamesOrDefault(data.getFileContent());
+    public void provide(Class type, ComponentData data) {
+        List<String> contextNames = getContextNamesOrDefault(type);
         setContextNames(data, contextNames);
     }
 
-    public List<String> extractContextNames(JavaClassSource type) {
-        AnnotationSource<JavaClassSource> annotation = type.getAnnotation("Contexts");
+    public List<String> extractContextNames(Class clazz) {
+        Contexts annotation = (Contexts) clazz.getAnnotation(Contexts.class);
         if (annotation != null) {
-            return (annotation.toString().contains("names"))
-                    ? Arrays.asList(annotation.getStringArrayValue("names"))
-                    : null;
+            return Arrays.asList(annotation.names());
         }
         return new ArrayList<>();
     }
 
-    public List<String> getContextNamesOrDefault(JavaClassSource type) {
+    public List<String> getContextNamesOrDefault(Class type) {
         List<String> contextNames = extractContextNames(type);
         if (contextNames.size() == 0) {
             contextNames = _contextNamesConfig.getContextNames();

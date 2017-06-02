@@ -3,10 +3,11 @@ package ilargia.entitas.codeGeneration.plugins.postProcessors;
 
 import ilargia.entitas.codeGeneration.data.CodeGenFile;
 import ilargia.entitas.codeGeneration.interfaces.ICodeGenFilePostProcessor;
+import org.jboss.forge.roaster.model.source.JavaClassSource;
 
 import java.util.List;
 
-public class ConsoleWriteLinePostProcessor implements ICodeGenFilePostProcessor {
+public class ConsoleWriteLinePostProcessor implements ICodeGenFilePostProcessor<JavaClassSource> {
 
 
     @Override
@@ -30,7 +31,7 @@ public class ConsoleWriteLinePostProcessor implements ICodeGenFilePostProcessor 
     }
 
     @Override
-    public List<CodeGenFile> postProcess(List<CodeGenFile> files) {
+    public List<CodeGenFile<JavaClassSource>> postProcess(List<CodeGenFile<JavaClassSource>> files) {
         for (CodeGenFile file : files) {
             System.out.println(String.format("%s - %s", file.getFileName(), file.getFileName()));
         }

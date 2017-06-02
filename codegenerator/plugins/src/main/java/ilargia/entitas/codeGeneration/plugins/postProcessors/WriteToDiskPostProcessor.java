@@ -2,7 +2,7 @@ package ilargia.entitas.codeGeneration.plugins.postProcessors;
 
 
 import ilargia.entitas.codeGeneration.interfaces.IAppDomain;
-import ilargia.entitas.codeGeneration.config.TargetPackageConfig;
+import ilargia.entitas.codeGeneration.plugins.config.TargetPackageConfig;
 import ilargia.entitas.codeGeneration.data.CodeGenFile;
 import ilargia.entitas.codeGeneration.interfaces.ICodeGenFilePostProcessor;
 import ilargia.entitas.codeGeneration.interfaces.IConfigurable;
@@ -13,7 +13,7 @@ import java.io.File;
 import java.util.List;
 import java.util.Properties;
 
-public class WriteToDiskPostProcessor implements ICodeGenFilePostProcessor, IConfigurable {
+public class WriteToDiskPostProcessor implements ICodeGenFilePostProcessor<JavaClassSource>, IConfigurable {
 
     private final TargetPackageConfig targetPackageConfig;
     private final IAppDomain projectConfig;
@@ -57,7 +57,7 @@ public class WriteToDiskPostProcessor implements ICodeGenFilePostProcessor, ICon
     }
 
     @Override
-    public List<CodeGenFile> postProcess(List<CodeGenFile> files) {
+    public List<CodeGenFile<JavaClassSource>> postProcess(List<CodeGenFile<JavaClassSource>> files) {
         files.stream().forEach(f -> createFile(f.getFileName(), f.getSubDir(), f.getFileContent()));
         return files;
 

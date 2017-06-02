@@ -4,7 +4,7 @@ import ilargia.entitas.codeGeneration.data.CodeGenFile;
 
 import java.util.List;
 
-public interface ICodeGenFilePostProcessor extends ICodeGeneratorInterface {
+public interface ICodeGenFilePostProcessor<C> extends ICodeGeneratorInterface {
 
-    List<CodeGenFile> postProcess(List<CodeGenFile> files);
+    List<CodeGenFile<C>> postProcess(List<CodeGenFile<C>> files);
 }

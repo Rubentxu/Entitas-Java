@@ -1,9 +1,9 @@
 package ilargia.entitas.codeGeneration.plugins.postProcessors
 
 import groovy.transform.TypeCheckingMode
-import ilargia.entitas.codeGeneration.config.TargetPackageConfig
+import ilargia.entitas.codeGeneration.plugins.config.TargetPackageConfig
 import ilargia.entitas.codeGeneration.data.CodeGenFile
-import ilargia.entitas.codeGeneration.data.SourceDataFile
+
 import ilargia.entitas.codeGeneration.gradle.EntitasGradleProject
 import ilargia.entitas.codeGeneration.utils.CodeGeneratorUtil
 import ilargia.entitas.fixtures.FixtureProvider

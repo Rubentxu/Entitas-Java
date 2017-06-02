@@ -1,6 +1,6 @@
 package ilargia.entitas.codeGeneration.plugins.dataProviders.context;
 
-import ilargia.entitas.codeGeneration.config.ContextNamesConfig;
+import ilargia.entitas.codeGeneration.plugins.config.ContextNamesConfig;
 import ilargia.entitas.codeGeneration.interfaces.ICodeGeneratorDataProvider;
 import ilargia.entitas.codeGeneration.interfaces.IConfigurable;
 

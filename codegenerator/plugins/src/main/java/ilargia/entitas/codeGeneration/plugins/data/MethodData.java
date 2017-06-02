@@ -1,4 +1,4 @@
-package ilargia.entitas.codeGeneration.data;
+package ilargia.entitas.codeGeneration.plugins.data;
 
 
 import org.jboss.forge.roaster.model.Type;

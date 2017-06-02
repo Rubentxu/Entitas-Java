@@ -1,28 +1,25 @@
 package ilargia.entitas.codeGeneration.plugins.dataProviders.components.providers;
 
 
-import ilargia.entitas.codeGeneration.data.SourceDataFile;
-import ilargia.entitas.codeGeneration.interfaces.IComponentDataProvider;
-import org.jboss.forge.roaster.model.source.AnnotationSource;
-import org.jboss.forge.roaster.model.source.JavaClassSource;
+import ilargia.entitas.codeGeneration.plugins.dataProviders.components.ComponentData;
+import ilargia.entitas.codeGenerator.annotations.Unique;
 
 
 public class IsUniqueDataProvider implements IComponentDataProvider {
 
-
     public static String COMPONENT_IS_UNIQUE = "component_isUnique";
 
-    public static boolean isUnique(SourceDataFile data) {
+    public static boolean isUnique(ComponentData data) {
         return (boolean) data.get(COMPONENT_IS_UNIQUE);
     }
 
-    public static void setIsUnique(SourceDataFile data, boolean isUnique) {
+    public static void setIsUnique(ComponentData data, boolean isUnique) {
         data.put(COMPONENT_IS_UNIQUE, isUnique);
     }
 
     @Override
-    public void provide(SourceDataFile data) {
-        AnnotationSource<JavaClassSource> annotation = data.getFileContent().getAnnotation("Unique");
+    public void provide(Class type, ComponentData data) {
+        Unique annotation = (Unique) type.getAnnotation(Unique.class);
         if (annotation != null) {
             setIsUnique(data, true);
         } else {
@@ -30,5 +27,6 @@ public class IsUniqueDataProvider implements IComponentDataProvider {
         }
 
     }
+
 
 }

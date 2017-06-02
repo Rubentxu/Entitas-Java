@@ -1,7 +1,6 @@
 package ilargia.entitas.fixtures;
 
 
-import ilargia.entitas.codeGeneration.data.SourceDataFile;
 import org.jboss.forge.roaster.Roaster;
 import org.jboss.forge.roaster.model.source.JavaClassSource;
 

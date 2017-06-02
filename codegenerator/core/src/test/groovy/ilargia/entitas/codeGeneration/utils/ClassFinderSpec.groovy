@@ -46,9 +46,9 @@ class ClassFinderSpec extends Specification {
     void 'Buscamos una clase en concreto dentro del classpath'() {
 
         when:
-        Class<?> clazz = ClassFinder.findClass("ilargia.entitas.codeGeneration.data.MethodData.class")
+        Class<?> clazz = ClassFinder.findClass("ilargia.entitas.codeGeneration.plugins.data.MethodData.class")
 
         then:
-        clazz.getName() == "ilargia.entitas.codeGeneration.data.MethodData"
+        clazz.getName() == "ilargia.entitas.codeGeneration.plugins.data.MethodData"
     }
 }

@@ -7,7 +7,7 @@ public class CodeGenFile<C> {
     private String generatorName;
     private String subDir;
 
-    public CodeGenFile(String fileName, C fileContent, String projectDir, String generatorName, String subDir ) {
+    public CodeGenFile(String fileName, C fileContent,  String generatorName, String subDir ) {
         this.fileName = fileName;
         this.fileContent = fileContent;
         this.generatorName = generatorName;

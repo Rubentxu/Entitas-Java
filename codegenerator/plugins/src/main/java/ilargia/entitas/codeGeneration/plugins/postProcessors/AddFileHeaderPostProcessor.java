@@ -8,7 +8,7 @@ import org.jboss.forge.roaster.model.source.JavaDocSource;
 
 import java.util.List;
 
-public class AddFileHeaderPostProcessor implements ICodeGenFilePostProcessor {
+public class AddFileHeaderPostProcessor implements ICodeGenFilePostProcessor<JavaClassSource> {
 
     public static String AUTO_GENERATED_HEADER_FORMAT =
             "    //------------------------------------------------------------------------------" +
@@ -42,8 +42,8 @@ public class AddFileHeaderPostProcessor implements ICodeGenFilePostProcessor {
     }
 
     @Override
-    public List<CodeGenFile> postProcess(List<CodeGenFile> files) {
-        for (CodeGenFile file : files) {
+    public List<CodeGenFile<JavaClassSource>> postProcess(List<CodeGenFile<JavaClassSource>> files) {
+        for (CodeGenFile<JavaClassSource> file : files) {
             JavaDocSource<JavaClassSource> javaDoc = file.getFileContent().getJavaDoc();
             javaDoc.setFullText(String.format(AUTO_GENERATED_HEADER_FORMAT, file.getFileName()));
 

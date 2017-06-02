@@ -1,26 +1,24 @@
 package ilargia.entitas.codeGeneration.plugins.dataProviders.components.providers;
 
-import ilargia.entitas.codeGeneration.data.SourceDataFile;
-import ilargia.entitas.codeGeneration.interfaces.IComponentDataProvider;
+import ilargia.entitas.codeGeneration.data.CodeGeneratorData;
+import ilargia.entitas.codeGeneration.plugins.dataProviders.components.ComponentData;
 import ilargia.entitas.codeGenerator.annotations.DontGenerate;
 
 public class ShouldGenerateMethodsDataProvider implements IComponentDataProvider {
 
     public static String COMPONENT_GENERATE_METHODS = "component_generateMethods";
 
-    public static boolean shouldGenerateMethods(SourceDataFile data) {
+    public static boolean shouldGenerateMethods(CodeGeneratorData data) {
         return (boolean) data.get(COMPONENT_GENERATE_METHODS);
     }
 
-    public static void shouldGenerateMethods(SourceDataFile data, boolean generate) {
+    public static void shouldGenerateMethods(CodeGeneratorData data, boolean generate) {
         data.put(COMPONENT_GENERATE_METHODS, generate);
     }
 
     @Override
-    public void provide(SourceDataFile data) {
-        boolean generate = !data.getFileContent().hasAnnotation(DontGenerate.class);
+    public void provide(Class type, ComponentData data) {
+        boolean generate = type.getAnnotation(DontGenerate.class) != null;
         shouldGenerateMethods(data, generate);
     }
-
-
 }

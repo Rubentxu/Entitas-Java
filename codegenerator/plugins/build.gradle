@@ -16,8 +16,9 @@ repositories {
 dependencies {
     compile project(":entitas")
     compile project(":codegenerator:core")
-    compile group: 'org.jboss.forge.roaster', name: 'roaster-api', version: '2.19.1.Final'
-    compile group: 'org.jboss.forge.roaster', name: 'roaster-jdt', version: '2.19.1.Final'
+//    compile group: 'org.jboss.forge.roaster', name: 'roaster-api', version: '2.19.1.Final'
+//    compile group: 'org.jboss.forge.roaster', name: 'roaster-jdt', version: '2.19.1.Final'
+    compile "org.jtwig:jtwig-core:5.85.3.RELEASE"
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.5'
 
     testCompile project(":codegenerator:gradle")

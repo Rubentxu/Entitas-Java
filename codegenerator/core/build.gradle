@@ -14,9 +14,6 @@ repositories {
 }
 
 dependencies {
-    compile group: 'org.jboss.forge.roaster', name: 'roaster-api', version: '2.19.1.Final'
-    compile group: 'org.jboss.forge.roaster', name: 'roaster-jdt', version: '2.19.1.Final'
-
     testCompile 'junit:junit:4.12'
     testCompile('org.spockframework:spock-core:1.1-groovy-2.4-rc-4')
 //    testRuntime 'com.athaydes:spock-reports:1.3.0'

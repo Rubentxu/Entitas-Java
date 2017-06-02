@@ -1,8 +1,6 @@
 package ilargia.entitas.codeGeneration;
 
 import ilargia.entitas.codeGeneration.data.CodeGenFile;
-import ilargia.entitas.codeGeneration.data.SourceDataFile;
-import ilargia.entitas.codeGeneration.data.StoreCodeGenerator;
 import ilargia.entitas.codeGeneration.interfaces.ICodeGenerator;
 import javafx.application.Application;
 import javafx.concurrent.Task;
