@@ -1,7 +1,7 @@
 package ilargia.entitas.codeGeneration.plugins.dataProviders.context;
 
 import ilargia.entitas.codeGeneration.config.ContextNamesConfig;
-import ilargia.entitas.codeGeneration.interfaces.ICodeDataProvider;
+import ilargia.entitas.codeGeneration.interfaces.ICodeGeneratorDataProvider;
 import ilargia.entitas.codeGeneration.interfaces.IConfigurable;
 
 import java.util.HashMap;
@@ -10,7 +10,7 @@ import java.util.Properties;
 import java.util.stream.Collectors;
 
 
-public class ContextDataProvider implements ICodeDataProvider<String, HashMap<String, String>>, IConfigurable {
+public class ContextDataProvider implements ICodeGeneratorDataProvider<String, HashMap<String, String>>, IConfigurable {
 
     public static String CONTEXT_NAME = "context_name";
     private ContextNamesConfig _contextNamesConfig = new ContextNamesConfig();

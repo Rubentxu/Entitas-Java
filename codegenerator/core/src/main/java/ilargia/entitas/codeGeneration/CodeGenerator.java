@@ -2,10 +2,10 @@ package ilargia.entitas.codeGeneration;
 
 
 import ilargia.entitas.codeGeneration.data.CodeGenFile;
-import ilargia.entitas.codeGeneration.data.SourceDataFile;
-import ilargia.entitas.codeGeneration.interfaces.ICodeDataProvider;
+import ilargia.entitas.codeGeneration.data.CodeGeneratorData;
 import ilargia.entitas.codeGeneration.interfaces.ICodeGenFilePostProcessor;
 import ilargia.entitas.codeGeneration.interfaces.ICodeGenerator;
+import ilargia.entitas.codeGeneration.interfaces.ICodeGeneratorDataProvider;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,11 +14,11 @@ import java.util.stream.Collectors;
 public class CodeGenerator {
     public GeneratorProgress OnProgress;
     boolean _cancel;
-    private List<ICodeDataProvider> _dataProviders;
+    private List<ICodeGeneratorDataProvider> _dataProviders;
     private List<ICodeGenerator> _codeGenerators;
     private List<ICodeGenFilePostProcessor> _postProcessors;
 
-    public CodeGenerator(List<ICodeDataProvider> dataProviders,
+    public CodeGenerator(List<ICodeGeneratorDataProvider> dataProviders,
                          List<ICodeGenerator> codeGenerators,
                          List<ICodeGenFilePostProcessor> postProcessors) {
 
@@ -51,16 +51,16 @@ public class CodeGenerator {
         );
     }
 
-    List<CodeGenFile> generate(String messagePrefix, List<ICodeDataProvider> dataProviders,
+    List<CodeGenFile> generate(String messagePrefix, List<ICodeGeneratorDataProvider> dataProviders,
                                List<ICodeGenerator> codeGenerators, List<ICodeGenFilePostProcessor> postProcessors) {
         _cancel = false;
 
-        List<SourceDataFile> data = new ArrayList<SourceDataFile>();
+        List<CodeGeneratorData> data = new ArrayList<>();
 
         int total = dataProviders.size() + codeGenerators.size() + postProcessors.size();
         int progress = 0;
 
-        for (ICodeDataProvider dataProvider : dataProviders) {
+        for (ICodeGeneratorDataProvider dataProvider : dataProviders) {
             if (_cancel) {
                 return new ArrayList<>();
             }
@@ -73,7 +73,7 @@ public class CodeGenerator {
             data.addAll(dataProvider.getData());
         }
 
-        List files = new ArrayList<CodeGenFile>();
+        List<CodeGenFile> files = new ArrayList<>();
 
         for (ICodeGenerator generator : codeGenerators) {
 
@@ -86,7 +86,7 @@ public class CodeGenerator {
                 OnProgress.exec(messagePrefix + "Creating files", generator.getName(), (float) progress / total);
             }
 
-            files.addAll(generator.generate(data, null));
+            files.addAll(generator.generate(data));
         }
 
 

@@ -2,7 +2,7 @@ package ilargia.entitas.codeGeneration.plugins.cli.commands;
 
 
 import ilargia.entitas.codeGeneration.config.CodeGeneratorConfig;
-import ilargia.entitas.codeGeneration.interfaces.ICodeDataProvider;
+import ilargia.entitas.codeGeneration.interfaces.ICodeGeneratorDataProvider;
 import ilargia.entitas.codeGeneration.interfaces.ICodeGenFilePostProcessor;
 import ilargia.entitas.codeGeneration.interfaces.ICodeGenerator;
 import ilargia.entitas.codeGeneration.utils.CodeGeneratorUtil;
@@ -12,7 +12,7 @@ import java.util.*;
 public class FixConfig extends AbstractCommand {
     static Map<String, String> getConfigurables(List<Class> Classs, CodeGeneratorConfig config) {
         return CodeGeneratorUtil.getConfigurables(
-                CodeGeneratorUtil.getUsed(Classs, config.getDataProviders(), ICodeDataProvider.class),
+                CodeGeneratorUtil.getUsed(Classs, config.getDataProviders(), ICodeGeneratorDataProvider.class),
                 CodeGeneratorUtil.getUsed(Classs, config.getCodeGenerators(), ICodeGenerator.class),
                 CodeGeneratorUtil.getUsed(Classs, config.getPostProcessors(), ICodeGenFilePostProcessor.class)
         );
@@ -44,11 +44,11 @@ public class FixConfig extends AbstractCommand {
     static boolean fixPlugins(Set<String> askedRemoveKeys, Set<String> askedAddKeys, List<Class> Classs, CodeGeneratorConfig config, Properties properties) {
         boolean changed = false;
 
-        List<String> unavailableDataProviders = CodeGeneratorUtil.getUnavailable(Classs, config.getDataProviders(), ICodeDataProvider.class);
+        List<String> unavailableDataProviders = CodeGeneratorUtil.getUnavailable(Classs, config.getDataProviders(), ICodeGeneratorDataProvider.class);
         List<String> unavailableCodeGenerators = CodeGeneratorUtil.getUnavailable(Classs, config.getCodeGenerators(), ICodeGenerator.class);
         List<String> unavailablePostProcessors = CodeGeneratorUtil.getUnavailable(Classs, config.getPostProcessors(), ICodeGenFilePostProcessor.class);
 
-        List<String> availableDataProviders = CodeGeneratorUtil.getAvailable(Classs, config.getDataProviders(), ICodeDataProvider.class);
+        List<String> availableDataProviders = CodeGeneratorUtil.getAvailable(Classs, config.getDataProviders(), ICodeGeneratorDataProvider.class);
         List<String> availableCodeGenerators = CodeGeneratorUtil.getAvailable(Classs, config.getCodeGenerators(), ICodeGenerator.class);
         List<String> availablePostProcessors = CodeGeneratorUtil.getAvailable(Classs, config.getPostProcessors(), ICodeGenFilePostProcessor.class);
 

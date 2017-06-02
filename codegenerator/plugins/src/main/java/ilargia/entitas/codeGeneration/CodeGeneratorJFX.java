@@ -250,7 +250,7 @@ public class CodeGeneratorJFX extends Application implements Initializable {
 //        CodeGeneratorConfig config = new CodeGeneratorConfig(Preferences.loadProperties());
 //
 //        var codeGenerator = new CodeGenerator(
-//                getEnabled < ICodeDataProvider > (config.dataProviders),
+//                getEnabled < ICodeGeneratorDataProvider > (config.dataProviders),
 //                getEnabled < ICodeGenerator > (config.codeGenerators),
 //                getEnabled < ICodeGenFilePostProcessor > (config.postProcessors)
 //        );
@@ -279,7 +279,7 @@ public class CodeGeneratorJFX extends Application implements Initializable {
 //        AssetDatabase.Refresh();
 //    }
 //
-//    static List<ICodeDataProvider> getGeneratorDataProvider(String[] types,) {
+//    static List<ICodeGeneratorDataProvider> getGeneratorDataProvider(String[] types,) {
 //        return new ArrayList<>({{
 //                add(new ComponentDataProvider())
 //        }})

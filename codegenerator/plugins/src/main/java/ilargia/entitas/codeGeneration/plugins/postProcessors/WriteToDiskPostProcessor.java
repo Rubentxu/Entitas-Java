@@ -1,7 +1,7 @@
 package ilargia.entitas.codeGeneration.plugins.postProcessors;
 
 
-import ilargia.entitas.codeGeneration.config.ProjectPreferences;
+import ilargia.entitas.codeGeneration.interfaces.IAppDomain;
 import ilargia.entitas.codeGeneration.config.TargetPackageConfig;
 import ilargia.entitas.codeGeneration.data.CodeGenFile;
 import ilargia.entitas.codeGeneration.interfaces.ICodeGenFilePostProcessor;
@@ -16,10 +16,10 @@ import java.util.Properties;
 public class WriteToDiskPostProcessor implements ICodeGenFilePostProcessor, IConfigurable {
 
     private final TargetPackageConfig targetPackageConfig;
-    private final ProjectPreferences projectConfig;
+    private final IAppDomain projectConfig;
     private CodeGeneratorUtil codeGeneratorUtil;
 
-    public WriteToDiskPostProcessor(CodeGeneratorUtil codeGeneratorUtil, ProjectPreferences preferences) {
+    public WriteToDiskPostProcessor(CodeGeneratorUtil codeGeneratorUtil, IAppDomain preferences) {
         this.codeGeneratorUtil = codeGeneratorUtil;
         targetPackageConfig = new TargetPackageConfig();
         projectConfig = preferences;

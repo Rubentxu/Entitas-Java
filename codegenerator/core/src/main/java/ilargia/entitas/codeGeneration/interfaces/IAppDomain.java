@@ -1,4 +1,4 @@
-package ilargia.entitas.codeGeneration.config;
+package ilargia.entitas.codeGeneration.interfaces;
 
 import ilargia.entitas.codeGeneration.CodeGenerator;
 
@@ -9,15 +9,15 @@ import java.util.Set;
 /**
  * Created by Ruben on 31/05/2017.
  */
-public interface ProjectPreferences {
+public interface IAppDomain {
 
     CodeGenerator getCodeGenerator();
 
-    String getProjectRoot();
+    String getAppRoot();
 
-    String getProjectName();
+    String getAppName();
 
-    String getProjectDir();
+    String getAppDir();
 
     Set<File> getSrcDirs();
 

@@ -4,7 +4,7 @@ import ilargia.entitas.api.IComponent;
 import ilargia.entitas.codeGeneration.config.AbstractConfigurableConfig;
 import ilargia.entitas.codeGeneration.config.CodeGeneratorConfig;
 import ilargia.entitas.codeGeneration.data.SourceDataFile;
-import ilargia.entitas.codeGeneration.interfaces.ICodeDataProvider;
+import ilargia.entitas.codeGeneration.interfaces.ICodeGeneratorDataProvider;
 import ilargia.entitas.codeGeneration.interfaces.IComponentDataProvider;
 import ilargia.entitas.codeGeneration.interfaces.IConfigurable;
 import ilargia.entitas.codeGeneration.plugins.dataProviders.components.providers.*;
@@ -13,7 +13,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class ComponentDataProvider extends AbstractConfigurableConfig implements ICodeDataProvider<Object, SourceDataFile> {
+public class ComponentDataProvider extends AbstractConfigurableConfig implements ICodeGeneratorDataProvider<Object, SourceDataFile> {
 
     List<SourceDataFile> _sources;
     List<IComponentDataProvider> _dataProviders;

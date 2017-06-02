@@ -2,12 +2,12 @@ package ilargia.entitas.codeGeneration.gradle;
 
 
 import ilargia.entitas.codeGeneration.CodeGenerator;
-import ilargia.entitas.codeGeneration.config.ProjectPreferences;
+import ilargia.entitas.codeGeneration.interfaces.IAppDomain;
 import org.gradle.api.DefaultTask;
 import org.gradle.api.tasks.TaskAction;
 
 public class CodeGenerationTask extends DefaultTask {
-    ProjectPreferences entitasProject;
+    IAppDomain entitasProject;
 
     public CodeGenerationTask() {
 

@@ -7,10 +7,11 @@ import java.util.stream.Collectors;
 
 public class CodeGeneratorConfig extends AbstractConfigurableConfig {
 
-    static String PLUGINS_SCAN_KEY = "CodeGeneration.Plugins.Packages.Scan";
-    static String DATA_PROVIDERS_KEY = "CodeGeneration.DataProviders";
-    static String CODE_GENERATORS_KEY = "CodeGeneration.CodeGenerators";
-    static String POST_PROCESSORS_KEY = "CodeGeneration.PostProcessors";
+    static final String SEARCH_PACKAGES_KEY = "CodeGeneration.CodeGenerator.SearchPkg";
+    static final String PLUGINS_SCAN_KEY = "CodeGeneration.Plugins.Packages.Scan";
+    static final String DATA_PROVIDERS_KEY = "CodeGeneration.DataProviders";
+    static final String CODE_GENERATORS_KEY = "CodeGeneration.CodeGenerators";
+    static final String POST_PROCESSORS_KEY = "CodeGeneration.PostProcessors";
 
     @Override
     public Properties getDefaultProperties() {
@@ -29,6 +30,24 @@ public class CodeGeneratorConfig extends AbstractConfigurableConfig {
                 "ilargia.entitas.codeGeneration.plugins.postProcessors.WriteToDiskPostProcessor"));
 
         return properties;
+    }
+
+
+    public List<String> getPackages() {
+        return Pattern.compile(",")
+                .splitAsStream(properties.getProperty(SEARCH_PACKAGES_KEY))
+                .map(p-> p.trim())
+                .sorted()
+                .collect(Collectors.toList());
+
+    }
+
+    public void setPackages(List<String> pkgKey) {
+        String values = pkgKey.stream()
+                .sorted()
+                .collect(Collectors.joining(","));
+
+        properties.setProperty(SEARCH_PACKAGES_KEY, values);
     }
 
 
@@ -52,6 +71,7 @@ public class CodeGeneratorConfig extends AbstractConfigurableConfig {
     public List<String> getDataProviders() {
         return Pattern.compile(",")
                 .splitAsStream(properties.getProperty(DATA_PROVIDERS_KEY))
+                .map(p-> p.trim())
                 .sorted()
                 .collect(Collectors.toList());
 
@@ -69,6 +89,7 @@ public class CodeGeneratorConfig extends AbstractConfigurableConfig {
     public List<String> getCodeGenerators() {
         return Pattern.compile(",")
                 .splitAsStream(properties.getProperty(CODE_GENERATORS_KEY))
+                .map(p-> p.trim())
                 .sorted()
                 .collect(Collectors.toList());
 
@@ -85,6 +106,7 @@ public class CodeGeneratorConfig extends AbstractConfigurableConfig {
     public List<String> getPostProcessors() {
         return Pattern.compile(",")
                 .splitAsStream(properties.getProperty(POST_PROCESSORS_KEY))
+                .map(p-> p.trim())
                 .sorted()
                 .collect(Collectors.toList());
 

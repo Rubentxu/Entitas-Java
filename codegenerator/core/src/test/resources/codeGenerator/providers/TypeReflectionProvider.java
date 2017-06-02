@@ -2,7 +2,7 @@ package com.ilargia.games.entitas.codeGenerator.providers;
 
 
 import com.ilargia.games.entitas.codeGenerator.data.ComponentInfo;
-import ilargia.entitas.codeGeneration.interfaces.ICodeDataProvider;
+import ilargia.entitas.codeGeneration.interfaces.ICodeGeneratorDataProvider;
 import org.jboss.forge.roaster.Roaster;
 import org.jboss.forge.roaster.model.source.*;
 
@@ -15,7 +15,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 
-public class TypeReflectionProvider implements ICodeDataProvider {
+public class TypeReflectionProvider implements ICodeGeneratorDataProvider {
 
     private List<ComponentInfo> _componentInfos;
     private Set<String> _poolNames;

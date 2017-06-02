@@ -2,7 +2,7 @@ package ilargia.entitas.codeGeneration.plugins.cli.commands;
 
 
 import ilargia.entitas.codeGeneration.config.CodeGeneratorConfig;
-import ilargia.entitas.codeGeneration.interfaces.ICodeDataProvider;
+import ilargia.entitas.codeGeneration.interfaces.ICodeGeneratorDataProvider;
 import ilargia.entitas.codeGeneration.interfaces.ICodeGenFilePostProcessor;
 import ilargia.entitas.codeGeneration.interfaces.ICodeGenerator;
 import ilargia.entitas.codeGeneration.utils.CodeGeneratorUtil;
@@ -24,12 +24,12 @@ public class Status extends AbstractCommand {
     }
 
     static void printPluginStatus(List<Class> types, CodeGeneratorConfig config) {
-        List<String> unavailableDataProviders = CodeGeneratorUtil.getUnavailable(types, config.getDataProviders(), ICodeDataProvider.class);
+        List<String> unavailableDataProviders = CodeGeneratorUtil.getUnavailable(types, config.getDataProviders(), ICodeGeneratorDataProvider.class);
 
         List<String> unavailableCodeGenerators = CodeGeneratorUtil.getUnavailable(types, config.getCodeGenerators(), ICodeGenerator.class);
         List<String> unavailablePostProcessors = CodeGeneratorUtil.getUnavailable(types, config.getPostProcessors(), ICodeGenFilePostProcessor.class);
 
-        List<String> availableDataProviders = CodeGeneratorUtil.getAvailable(types, config.getDataProviders(), ICodeDataProvider.class);
+        List<String> availableDataProviders = CodeGeneratorUtil.getAvailable(types, config.getDataProviders(), ICodeGeneratorDataProvider.class);
         List<String> availableCodeGenerators = CodeGeneratorUtil.getAvailable(types, config.getCodeGenerators(), ICodeGenerator.class);
         List<String> availablePostProcessors = CodeGeneratorUtil.getAvailable(types, config.getPostProcessors(), ICodeGenFilePostProcessor.class);
 
@@ -90,7 +90,7 @@ public class Status extends AbstractCommand {
                 try {
                     types = CodeGeneratorUtil.loadTypesFromPlugins(properties);
                     configurables = CodeGeneratorUtil.getConfigurables(
-                            CodeGeneratorUtil.getUsed(types, config.getDataProviders(), ICodeDataProvider.class),
+                            CodeGeneratorUtil.getUsed(types, config.getDataProviders(), ICodeGeneratorDataProvider.class),
                             CodeGeneratorUtil.getUsed(types, config.getCodeGenerators(), ICodeGenerator.class),
                             CodeGeneratorUtil.getUsed(types, config.getPostProcessors(), ICodeGenFilePostProcessor.class)
                     );

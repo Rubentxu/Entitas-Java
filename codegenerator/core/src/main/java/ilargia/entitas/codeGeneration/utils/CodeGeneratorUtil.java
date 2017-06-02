@@ -92,7 +92,7 @@ public class CodeGeneratorUtil {
 
     }
 
-    public static Map<String, String> getConfigurables(List<ICodeDataProvider> dataProviders, List<ICodeGenerator> codeGenerators,
+    public static Map<String, String> getConfigurables(List<ICodeGeneratorDataProvider> dataProviders, List<ICodeGenerator> codeGenerators,
                                                        List<ICodeGenFilePostProcessor> postProcessors) {
         return Stream.concat(Stream.concat(dataProviders.stream(), codeGenerators.stream()), postProcessors.stream())
                 .filter(d -> d instanceof IConfigurable)

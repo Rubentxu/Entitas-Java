@@ -6,7 +6,7 @@ import ilargia.entitas.codeGeneration.config.CodeGeneratorConfig;
 import ilargia.entitas.codeGeneration.data.MemberData;
 import ilargia.entitas.codeGeneration.data.MethodData;
 import ilargia.entitas.codeGeneration.data.SourceDataFile;
-import ilargia.entitas.codeGeneration.interfaces.ICodeDataProvider;
+import ilargia.entitas.codeGeneration.interfaces.ICodeGeneratorDataProvider;
 import ilargia.entitas.codeGeneration.interfaces.IConfigurable;
 import ilargia.entitas.codeGeneration.plugins.dataProviders.components.providers.ContextsDataProvider;
 import ilargia.entitas.codeGenerator.annotations.CustomEntityIndex;
@@ -24,7 +24,7 @@ import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 
-public class EntityIndexDataProvider implements ICodeDataProvider, IConfigurable {
+public class EntityIndexDataProvider implements ICodeGeneratorDataProvider, IConfigurable {
 
     public static String ENTITY_INDEX_TYPE = "entityIndex_type";
     public static String ENTITY_INDEX_IS_CUSTOM = "entityIndex_isCustom";

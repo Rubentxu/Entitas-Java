@@ -1,20 +1,17 @@
 package ilargia.entitas.codeGeneration.data;
 
-import org.jboss.forge.roaster.model.source.JavaClassSource;
-
-public class CodeGenFile {
+public class CodeGenFile<C> {
 
     private String fileName;
-    private String projectDir;
+    private C fileContent;
+    private String generatorName;
     private String subDir;
-    private JavaClassSource fileContent;
 
-
-    public CodeGenFile(String fileName, String projectDir, String subDir, JavaClassSource fileContent) {
+    public CodeGenFile(String fileName, C fileContent, String projectDir, String generatorName, String subDir ) {
         this.fileName = fileName;
-        this.projectDir = projectDir;
-        this.subDir = subDir;
         this.fileContent = fileContent;
+        this.generatorName = generatorName;
+        this.subDir = subDir;
 
     }
 
@@ -22,15 +19,15 @@ public class CodeGenFile {
         return fileName;
     }
 
-    public String getProjectDir() {
-        return projectDir;
+    public String getGeneratorName() {
+        return generatorName;
     }
 
     public String getSubDir() {
         return subDir;
     }
 
-    public JavaClassSource getFileContent() {
+    public C getFileContent() {
         return fileContent;
     }
 }

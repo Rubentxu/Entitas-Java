@@ -3,7 +3,7 @@ package com.ilargia.games.entitas.codeGenerator;
 
 import com.ilargia.games.entitas.codeGenerator.data.ComponentInfo;
 import ilargia.entitas.codeGeneration.data.CodeGenFile;
-import ilargia.entitas.codeGeneration.interfaces.ICodeDataProvider;
+import ilargia.entitas.codeGeneration.interfaces.ICodeGeneratorDataProvider;
 import ilargia.entitas.codeGeneration.interfaces.ICodeGenerator;
 import org.jboss.forge.roaster.model.source.JavaClassSource;
 import org.jboss.forge.roaster.model.source.JavaDocSource;
@@ -102,7 +102,7 @@ public class CodeGeneratorOld {
         }
     }
 
-    public List<CodeGenFile> generate(ICodeDataProvider provider, String destinyDirectory, List<ICodeGenerator> codeGenerators) {
+    public List<CodeGenFile> generate(ICodeGeneratorDataProvider provider, String destinyDirectory, List<ICodeGenerator> codeGenerators) {
 
         List<String> scrDir = new ArrayList<String>() {{
             add("main/java");
