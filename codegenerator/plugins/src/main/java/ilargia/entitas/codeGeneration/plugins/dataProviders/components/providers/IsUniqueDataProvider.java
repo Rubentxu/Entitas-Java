@@ -3,6 +3,8 @@ package ilargia.entitas.codeGeneration.plugins.dataProviders.components.provider
 
 import ilargia.entitas.codeGeneration.plugins.dataProviders.components.ComponentData;
 import ilargia.entitas.codeGenerator.annotations.Unique;
+import org.jboss.forge.roaster.model.source.AnnotationSource;
+import org.jboss.forge.roaster.model.source.JavaClassSource;
 
 
 public class IsUniqueDataProvider implements IComponentDataProvider {
@@ -18,13 +20,8 @@ public class IsUniqueDataProvider implements IComponentDataProvider {
     }
 
     @Override
-    public void provide(Class type, ComponentData data) {
-        Unique annotation = (Unique) type.getAnnotation(Unique.class);
-        if (annotation != null) {
-            setIsUnique(data, true);
-        } else {
-            setIsUnique(data, false);
-        }
+    public void provide(ComponentData data) {
+        setIsUnique(data, data.getSource().hasAnnotation(Unique.class));
 
     }
 

@@ -5,6 +5,8 @@ import ilargia.entitas.codeGeneration.interfaces.IConfigurable;
 import ilargia.entitas.codeGeneration.plugins.config.ContextNamesConfig;
 import ilargia.entitas.codeGeneration.plugins.dataProviders.components.ComponentData;
 import ilargia.entitas.codeGenerator.annotations.Unique;
+import org.jboss.forge.roaster.model.source.AnnotationSource;
+import org.jboss.forge.roaster.model.source.JavaClassSource;
 
 import java.util.Properties;
 
@@ -32,14 +34,14 @@ public class CustomPrefixDataProvider implements IComponentDataProvider, IConfig
     }
 
     @Override
-    public void provide(Class type, ComponentData data) {
-        setCustomComponentPrefix(data, getUniqueComponentPrefix(type));
+    public void provide(ComponentData data) {
+        setCustomComponentPrefix(data, getUniqueComponentPrefix(data.getSource()));
     }
 
-    private String getUniqueComponentPrefix(Class clazz) {
-        Unique annotation = (Unique) clazz.getAnnotation(Unique.class);
+    private String getUniqueComponentPrefix(JavaClassSource clazz) {
+        AnnotationSource<JavaClassSource> annotation = clazz.getAnnotation(Unique.class);
         if (annotation != null) {
-            return annotation.prefix();
+            return annotation.getStringValue("prefix");
         }
         return "is";
     }

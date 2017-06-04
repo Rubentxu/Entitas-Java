@@ -5,6 +5,8 @@ import ilargia.entitas.codeGeneration.interfaces.IConfigurable;
 import ilargia.entitas.codeGeneration.plugins.config.ContextNamesConfig;
 import ilargia.entitas.codeGeneration.plugins.dataProviders.components.ComponentData;
 import ilargia.entitas.codeGenerator.annotations.Contexts;
+import org.jboss.forge.roaster.model.source.AnnotationSource;
+import org.jboss.forge.roaster.model.source.JavaClassSource;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -35,20 +37,20 @@ public class ContextsDataProvider implements IComponentDataProvider, IConfigurab
     }
 
     @Override
-    public void provide(Class type, ComponentData data) {
-        List<String> contextNames = getContextNamesOrDefault(type);
+    public void provide(ComponentData data) {
+        List<String> contextNames = getContextNamesOrDefault(data.getSource());
         setContextNames(data, contextNames);
     }
 
-    public List<String> extractContextNames(Class clazz) {
-        Contexts annotation = (Contexts) clazz.getAnnotation(Contexts.class);
+    public List<String> extractContextNames(JavaClassSource clazz) {
+        AnnotationSource<JavaClassSource> annotation =  clazz.getAnnotation(Contexts.class);
         if (annotation != null) {
-            return Arrays.asList(annotation.names());
+            return Arrays.asList(annotation.getStringArrayValue("names"));
         }
         return new ArrayList<>();
     }
 
-    public List<String> getContextNamesOrDefault(Class type) {
+    public List<String> getContextNamesOrDefault(JavaClassSource type) {
         List<String> contextNames = extractContextNames(type);
         if (contextNames.size() == 0) {
             contextNames = _contextNamesConfig.getContextNames();

@@ -16,6 +16,7 @@ import java.io.*;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static ilargia.entitas.codeGeneration.utils.CodeGeneratorUtil.*;
 
@@ -74,22 +75,16 @@ public class EntitasGradleProject implements IAppDomain {
     }
 
     @Override
-    public Set<File> getSrcDirs() {
+    public List<String> getSrcDirs() {
         SourceSetContainer sourceSets = javaConvention.getSourceSets();
         SourceSet mainSourceSet = sourceSets.getByName(SourceSet.MAIN_SOURCE_SET_NAME);
-        return mainSourceSet.getAllSource().getSrcDirs();
-
-    }
-
-    @Override
-    public String getFirtsSrcDir() {
-        try {
-            return getSrcDirs().iterator().next().getCanonicalPath();
-        } catch (IOException e) {
-            System.out.println("Error no se encuentra el directorio de fuentes");
-        }
-        return "";
-
+        return mainSourceSet.getAllSource().getSrcDirs().stream().map(f -> {
+            try {
+                return f.getCanonicalPath();
+            } catch (IOException e) {
+                return "";
+            }
+        }).collect(Collectors.toList());
     }
 
     @Override

@@ -3,12 +3,10 @@ package ilargia.entitas.codeGeneration.interfaces;
 import ilargia.entitas.codeGeneration.CodeGenerator;
 
 import java.io.File;
+import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 
-/**
- * Created by Ruben on 31/05/2017.
- */
 public interface IAppDomain {
 
     CodeGenerator getCodeGenerator();
@@ -19,9 +17,7 @@ public interface IAppDomain {
 
     String getAppDir();
 
-    Set<File> getSrcDirs();
-
-    String getFirtsSrcDir();
+    List<String> getSrcDirs();
 
     boolean hasProperties();
 

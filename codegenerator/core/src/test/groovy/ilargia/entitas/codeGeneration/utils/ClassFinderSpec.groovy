@@ -2,7 +2,6 @@ package ilargia.entitas.codeGeneration.utils
 
 
 import spock.lang.Narrative
-import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Title
 
@@ -19,7 +18,7 @@ class ClassFinderSpec extends Specification {
     void 'Buscamos las clases a partir de un paquete base dentro de un jar dentro del classpath'() {
 
         when:
-        List<Class<?>> classes = ClassFinder.findRecursive("org.jboss.forge.roaster.model.util")
+        List<Class<?>> classes = CodeFinder.findClassRecursive("org.jboss.forge.roaster.model.util")
 
         then:
         classes.size() == 9
@@ -28,7 +27,7 @@ class ClassFinderSpec extends Specification {
     void 'Buscamos las clases a partir de un paquete base dentro de un directorio del classpath'() {
 
         when:
-        List<Class<?>> classes = ClassFinder.findRecursive("ilargia.entitas.codeGeneration.data")
+        List<Class<?>> classes = CodeFinder.findClassRecursive("ilargia.entitas.codeGeneration.data")
 
         then:
         classes.size() == 5
@@ -37,7 +36,7 @@ class ClassFinderSpec extends Specification {
     void 'Buscamos una clase en concreto dentro del un jar en el classpath'() {
 
         when:
-        Class<?> clazz = ClassFinder.findClass("org.jboss.forge.roaster.model.util.DesignPatterns.class")
+        Class<?> clazz = CodeFinder.findClass("org.jboss.forge.roaster.model.util.DesignPatterns.class")
 
         then:
         clazz.getName() == "org.jboss.forge.roaster.model.util.DesignPatterns"
@@ -46,7 +45,7 @@ class ClassFinderSpec extends Specification {
     void 'Buscamos una clase en concreto dentro del classpath'() {
 
         when:
-        Class<?> clazz = ClassFinder.findClass("ilargia.entitas.codeGeneration.plugins.data.MethodData.class")
+        Class<?> clazz = CodeFinder.findClass("ilargia.entitas.codeGeneration.plugins.data.MethodData.class")
 
         then:
         clazz.getName() == "ilargia.entitas.codeGeneration.plugins.data.MethodData"

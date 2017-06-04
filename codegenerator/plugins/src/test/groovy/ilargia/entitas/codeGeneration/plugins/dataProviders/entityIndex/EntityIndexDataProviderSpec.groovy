@@ -1,8 +1,12 @@
 package ilargia.entitas.codeGeneration.plugins.dataProviders.entityIndex
 
 import groovy.transform.TypeCheckingMode
-
+import ilargia.entitas.codeGeneration.data.CodeGeneratorData
+import ilargia.entitas.codeGeneration.gradle.EntitasGradleProject
 import ilargia.entitas.fixtures.FixtureProvider
+import org.gradle.api.Project
+import org.gradle.api.plugins.JavaPlugin
+import org.gradle.testfixtures.ProjectBuilder
 import spock.lang.Narrative
 import spock.lang.Shared
 import spock.lang.Specification
@@ -28,14 +32,14 @@ Para que pueda usarse en la generacion del codigo.
 class EntityIndexDataProviderSpec extends Specification {
 
     @Shared
-    FixtureProvider fixtures = new FixtureProvider("src/test/java/ilargia/entitas/fixtures/components")
-    @Shared
     EntityIndexDataProvider entityIndexDataProvider
 
 
     def setupSpec() {
-        entityIndexDataProvider = new EntityIndexDataProvider(fixtures.getSourceDataFiles())
-
+        entityIndexDataProvider = new EntityIndexDataProvider()
+        Project project = ProjectBuilder.builder().build()
+        JavaPlugin plugin = project.getPlugins().apply(JavaPlugin.class)
+        entityIndexDataProvider.setAppDomain(new EntitasGradleProject(project))
     }
 
 
@@ -43,11 +47,12 @@ class EntityIndexDataProviderSpec extends Specification {
     void 'Consultamos al proveedor ComponentDataProvider por los contextos extraidos de los componentes'() {
         given:
         Properties prop = new Properties()
+        prop.setProperty(CodeGeneratorConfig.SEARCH_PACKAGES_KEY, "ilargia.entitas.fixtures.components")
         entityIndexDataProvider.configure(prop)
 
         when:
         entityIndexDataProvider.getDefaultProperties()
-        List<SourceDataFile> datas = entityIndexDataProvider.getData()
+        List<CodeGeneratorData> datas = entityIndexDataProvider.getData()
 
         then:
         datas.size() == 2

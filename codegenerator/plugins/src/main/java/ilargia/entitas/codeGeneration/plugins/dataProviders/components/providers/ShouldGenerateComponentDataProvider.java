@@ -28,13 +28,12 @@ public class ShouldGenerateComponentDataProvider implements IComponentDataProvid
     }
 
     @Override
-    public void provide(Class type, ComponentData data) {
-        boolean shouldGenerateComponent = !Arrays.stream(type.getInterfaces())
-                .anyMatch(t -> t.equals(IComponent.class));
+    public void provide(ComponentData data) {
+        boolean shouldGenerateComponent = !data.getSource().hasInterface(IComponent.class);
         shouldGenerateComponent(data, shouldGenerateComponent);
 
         if (shouldGenerateComponent) {
-            setObjectType(data, type.getCanonicalName());
+            setObjectType(data, data.getSource().getCanonicalName());
         }
 
     }

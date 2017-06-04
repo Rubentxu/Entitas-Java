@@ -5,17 +5,18 @@ import java.io.FileInputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-public class ClassFinder {
+public class CodeFinder {
 
     private static final char PKG_SEPARATOR = '.';
 
     private static final char DIR_SEPARATOR = '/';
 
     private static final String CLASS_FILE_SUFFIX = ".class";
+
+    private static final String JAVA_FILE_SUFFIX = ".java";
 
     private static final String JAR_FILE_SUFFIX = ".jar!";
 
@@ -33,7 +34,6 @@ public class ClassFinder {
             throw new IllegalArgumentException(String.format(BAD_FILE_ERROR, scannedClass, finalClassName));
         }
         File scannedFile = new File(scannedUrl.getFile());
-
         if (scannedFile.exists()) {
             try {
                 return Class.forName(finalClassName);
@@ -48,7 +48,7 @@ public class ClassFinder {
         return null;
     }
 
-    public static List<Class<?>> findRecursive(String scannedPackage) {
+    public static List<Class<?>> findClassRecursive(String scannedPackage) {
         String scannedPath = scannedPackage.replace(PKG_SEPARATOR, DIR_SEPARATOR);
         URL scannedUrl = Thread.currentThread().getContextClassLoader().getResource(scannedPath);
         if (scannedUrl == null) {
@@ -59,7 +59,7 @@ public class ClassFinder {
         List<Class<?>> classes = new ArrayList<Class<?>>();
         if (scannedDir.exists()) {
             for (File file : scannedDir.listFiles()) {
-                classes.addAll(find(file, scannedPackage));
+                classes.addAll(findClasses(file, scannedPackage));
             }
         } else {
             classes.addAll(findIntoPackage(scannedUrl.getFile()
@@ -93,12 +93,42 @@ public class ClassFinder {
         return classNames;
     }
 
-    private static List<Class<?>> find(File file, String scannedPackage) {
+    public static List<File> findSourcesRecursive(String scannedPackage) {
+        String scannedPath = scannedPackage.replace(PKG_SEPARATOR, DIR_SEPARATOR);
+        URL scannedUrl = Thread.currentThread().getContextClassLoader().getResource(scannedPath);
+        if (scannedUrl == null) {
+            throw new IllegalArgumentException(String.format(BAD_PACKAGE_ERROR, scannedPath, scannedPackage));
+        }
+        File scannedDir = new File(scannedUrl.getFile());
+
+        List<File> files = new ArrayList<>();
+        if (scannedDir.exists()) {
+            for (File file : scannedDir.listFiles()) {
+                files.addAll(findFiles(file, scannedPackage));
+            }
+        }
+        return files;
+    }
+
+    private static List<File> findFiles(File file, String scannedPackage) {
+        List<File> files = new ArrayList<>();
+        String resource = scannedPackage + PKG_SEPARATOR + file.getName();
+        if (file.isDirectory()) {
+            for (File child : file.listFiles()) {
+                files.addAll(findFiles(child, resource));
+            }
+        } else if (resource.endsWith(JAVA_FILE_SUFFIX)) {
+            files.add(file);
+        }
+        return files;
+    }
+
+    private static List<Class<?>> findClasses(File file, String scannedPackage) {
         List<Class<?>> classes = new ArrayList<Class<?>>();
         String resource = scannedPackage + PKG_SEPARATOR + file.getName();
         if (file.isDirectory()) {
             for (File child : file.listFiles()) {
-                classes.addAll(find(child, resource));
+                classes.addAll(findClasses(child, resource));
             }
         } else if (resource.endsWith(CLASS_FILE_SUFFIX)) {
             int endIndex = resource.length() - CLASS_FILE_SUFFIX.length();
@@ -110,23 +140,8 @@ public class ClassFinder {
         }
         return classes;
     }
-//
-//    private static Class<?> findOneClass(File file, String scannedPackage) {
-//        List<Class<?>> classes = new ArrayList<Class<?>>();
-//        String resource = scannedPackage + PKG_SEPARATOR + file.getName();
-//        if (!file.isDirectory()) {
-//            for (File child : file.listFiles()) {
-//                classes.addAll(find(child, resource));
-//            }
-//        } else if (resource.endsWith(CLASS_FILE_SUFFIX)) {
-//            int endIndex = resource.length() - CLASS_FILE_SUFFIX.length();
-//            String className = resource.substring(0, endIndex);
-//            try {
-//                classes.add(Class.forName(className));
-//            } catch (ClassNotFoundException ignore) {
-//            }
-//        }
-//        return classes;
-//    }
+
+
+
 
 }

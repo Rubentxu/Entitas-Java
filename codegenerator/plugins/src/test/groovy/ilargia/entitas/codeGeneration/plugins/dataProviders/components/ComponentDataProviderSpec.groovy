@@ -1,8 +1,13 @@
 package ilargia.entitas.codeGeneration.plugins.dataProviders.components
 
 import groovy.transform.TypeCheckingMode
-
+import ilargia.entitas.codeGeneration.data.CodeGeneratorData
+import ilargia.entitas.codeGeneration.gradle.EntitasGradleProject
+import ilargia.entitas.codeGeneration.interfaces.IAppDomain
 import ilargia.entitas.fixtures.FixtureProvider
+import org.gradle.api.Project
+import org.gradle.api.plugins.JavaPlugin
+import org.gradle.testfixtures.ProjectBuilder
 import spock.lang.Narrative
 import spock.lang.Shared
 import spock.lang.Specification
@@ -31,14 +36,14 @@ class ComponentDataProviderSpec extends Specification {
     String CONTEXTS_KEY = "Entitas.CodeGeneration.Contexts";
 
     @Shared
-    FixtureProvider fixtures = new FixtureProvider("src/test/java/ilargia/entitas/fixtures/components")
-    @Shared
     ComponentDataProvider componentDataProvider
 
 
     def setupSpec() {
-        componentDataProvider = new ComponentDataProvider(fixtures.getSourceDataFiles())
-
+        componentDataProvider = new ComponentDataProvider()
+        Project project = ProjectBuilder.builder().build()
+        JavaPlugin plugin = project.getPlugins().apply(JavaPlugin.class)
+        componentDataProvider.setAppDomain(new EntitasGradleProject(project))
     }
 
 
@@ -67,7 +72,7 @@ class ComponentDataProviderSpec extends Specification {
 
         when:
         componentDataProvider.getDefaultProperties()
-        List<SourceDataFile> datas = componentDataProvider.getData()
+        List<CodeGeneratorData> datas = componentDataProvider.getData()
 
         then:
         datas.size() == 9

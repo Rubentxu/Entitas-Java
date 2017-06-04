@@ -4,25 +4,27 @@ import ilargia.entitas.api.IComponent;
 import ilargia.entitas.codeGeneration.config.AbstractConfigurableConfig;
 import ilargia.entitas.codeGeneration.config.CodeGeneratorConfig;
 import ilargia.entitas.codeGeneration.data.CodeGeneratorData;
+import ilargia.entitas.codeGeneration.interfaces.IAppDomain;
 import ilargia.entitas.codeGeneration.interfaces.ICodeGeneratorDataProvider;
-import ilargia.entitas.codeGeneration.plugins.data.MemberData;
-import ilargia.entitas.codeGeneration.plugins.dataProviders.components.providers.IComponentDataProvider;
 import ilargia.entitas.codeGeneration.interfaces.IConfigurable;
+import ilargia.entitas.codeGeneration.plugins.dataProviders.ProviderUtils;
 import ilargia.entitas.codeGeneration.plugins.dataProviders.components.providers.*;
-import ilargia.entitas.codeGeneration.utils.ClassFinder;
 import ilargia.entitas.codeGenerator.annotations.CustomComponentName;
+import org.jboss.forge.roaster.model.impl.FieldImpl;
+import org.jboss.forge.roaster.model.source.AnnotationSource;
+import org.jboss.forge.roaster.model.source.FieldSource;
+import org.jboss.forge.roaster.model.source.JavaClassSource;
 
-import java.lang.reflect.Modifier;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class ComponentDataProvider extends AbstractConfigurableConfig implements ICodeGeneratorDataProvider {
 
-    List<Class> _types;
     List<IComponentDataProvider> _dataProviders;
     private CodeGeneratorConfig _codeGeneratorConfig;
     private ContextsDataProvider _contextsComponentDataProvider = new ContextsDataProvider();
+    private IAppDomain appDomain;
 
     public ComponentDataProvider() {
         this(getComponentDataProviders());
@@ -31,6 +33,7 @@ public class ComponentDataProvider extends AbstractConfigurableConfig implements
     protected ComponentDataProvider(List<IComponentDataProvider> dataProviders) {
         _dataProviders = dataProviders;
         _codeGeneratorConfig = new CodeGeneratorConfig();
+
     }
 
     public static Map<String, String> propertiesToMap(Properties props) {
@@ -105,67 +108,61 @@ public class ComponentDataProvider extends AbstractConfigurableConfig implements
     }
 
     @Override
-    public List<CodeGeneratorData> getData() {
-        if (_types == null) {
-            _types = _codeGeneratorConfig.getPackages().stream()
-                    .flatMap(pkg-> ClassFinder.findRecursive(pkg).stream())
-                    .collect(Collectors.toList());                  
-        }
+    public void setAppDomain(IAppDomain appDomain) {
+        this.appDomain = appDomain;
+    }
 
-        List<ComponentData> dataFromComponents = _types.stream()
-                .filter(s -> s.isAssignableFrom(IComponent.class))
-                .filter(s -> !Modifier.isAbstract(s.getModifiers()))
-                .map(s -> createDataForComponent(s))
+    @Override
+    public List<CodeGeneratorData> getData() {
+        List<ComponentData> datas = ProviderUtils.getComponentDatas(appDomain, _codeGeneratorConfig.getPackages());
+
+        List<ComponentData> dataFromComponents = datas.stream()
+                .filter(s -> s.getSource().hasInterface(IComponent.class))
+                .filter(s -> s.getSource().isAbstract())
+                .map(s -> providedDataForComponent(s))
                 .collect(Collectors.toList());
 
-        List<ComponentData> dataFromNonComponents = _types.stream()
-                .filter(s -> !s.isAssignableFrom(IComponent.class))
-                .filter(s -> !Modifier.isInterface(s.getModifiers()))
-                .filter(s -> hasContexts(s))
+        List<ComponentData> dataFromNonComponents = datas.stream()
+                .filter(s -> !s.getSource().hasInterface(IComponent.class))
+                .filter(s -> !s.getSource().isAbstract())
+                .filter(s -> _contextsComponentDataProvider.extractContextNames(s.getSource()).size() != 0)
                 .flatMap(s -> createDataForNonComponent(s).stream())
                 .collect(Collectors.toList());
-
 
         return Stream.concat(dataFromComponents.stream(),
                 dataFromNonComponents.stream())
                 .collect(Collectors.toList());
 
-
     }
 
-    private boolean hasContexts(Class type) {
-        return _contextsComponentDataProvider.extractContextNames(type).size() != 0;
-    }
-
-    private ComponentData createDataForComponent(Class type) {
-        ComponentData data = new ComponentData();
+    private ComponentData providedDataForComponent(ComponentData data) {
         for (IComponentDataProvider dataProvider : _dataProviders) {
-            dataProvider.provide(type, data);
+            dataProvider.provide(data);
         }
         return data;
     }
 
-    List<ComponentData> createDataForNonComponent(Class type) {
-        return getComponentNames(type).stream()
-                .map( componentName -> {
-                    ComponentData data = createDataForComponent(type);
+    List<ComponentData> createDataForNonComponent(ComponentData data) {
+        return getComponentNames(data.getSource()).stream()
+                .map(componentName -> {
                     ComponentTypeDataProvider.setFullTypeName(data, componentName);
-                    MemberDataProvider.setMemberData(data, new ArrayList<MemberData>() {{
-                        add(new MemberData(type, "value", null));
+                    MemberDataProvider.setMemberData(data, new ArrayList<FieldSource<JavaClassSource>>() {{
+                        add(new FieldImpl<JavaClassSource>(data.getSource()));
                     }});
                     return data;
                 }).collect(Collectors.toList());
 
     }
 
-    List<String> getComponentNames(Class type) {
-        CustomComponentName annotation = (CustomComponentName) type.getAnnotation(CustomComponentName.class);
+    List<String> getComponentNames(JavaClassSource type) {
+        AnnotationSource<JavaClassSource> annotation = type.getAnnotation(CustomComponentName.class);
         if (annotation != null) {
-            return Arrays.asList(annotation.componentNames());
+            return Arrays.asList(annotation.getStringArrayValue("componentNames"));
 
         } else {
             return new ArrayList<>();
         }
 
     }
+
 }

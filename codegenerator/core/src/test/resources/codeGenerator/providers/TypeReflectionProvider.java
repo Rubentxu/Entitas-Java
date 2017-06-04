@@ -94,7 +94,7 @@ public class TypeReflectionProvider implements ICodeGeneratorDataProvider {
         String fullName = component.getCanonicalName();
         List<FieldSource<JavaClassSource>> fields = component.getFields();
         List<MethodSource<JavaClassSource>> contructores = component.getMethods().stream()
-                .filter(method -> method.isPublic())
+                .filter(method -> mefthod.isPublic())
                 .filter(method -> method.isConstructor())
 //                .filter(method -> method.getParameters().size() > 0)
                 .collect(Collectors.toList());
@@ -102,7 +102,7 @@ public class TypeReflectionProvider implements ICodeGeneratorDataProvider {
         List<String> enums = component.getNestedTypes().stream()
                 .filter(method -> method.isPublic())
                 .filter(method -> method.isEnum())
-                .map(method -> method.getCanonicalName())
+        FieldSource<JavaClassSource>       .map(method -> method.getCanonicalName())
                 .collect(Collectors.toList());
 
         List<TypeVariableSource<JavaClassSource>> generics = component.getOrigin().getTypeVariables();

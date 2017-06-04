@@ -1,10 +1,8 @@
 package ilargia.entitas.codeGeneration;
 
 
-import ilargia.entitas.codeGeneration.interfaces.IAppDomain;
-import ilargia.entitas.codeGeneration.utils.ClassFinder;
+import ilargia.entitas.codeGeneration.utils.CodeFinder;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,7 +16,7 @@ public class PackageResolver {
 
     public List<Class> getTypes() {
         return _basePaths.stream()
-                .flatMap(p-> ClassFinder.findRecursive(p).stream())
+                .flatMap(p-> CodeFinder.findClassRecursive(p).stream())
                 .collect(Collectors.toList());
 
     }

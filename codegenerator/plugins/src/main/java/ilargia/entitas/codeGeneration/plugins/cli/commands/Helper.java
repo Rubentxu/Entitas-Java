@@ -77,7 +77,7 @@ public class Helper {
         System.out.println(question + ": '" + value + "' ? (y / n)");
         if (getUserDecision("yes", "no")) {
             valueList.add(value);
-            updateAction.apply(CodeGeneratorUtil.getOrderedNames(valueList));
+           // updateAction.apply(CodeGeneratorUtil.getOrderedNames(valueList));
             //    Preferences.saveProperties(properties);
             System.out.println("Added: " + value);
         }

@@ -4,5 +4,5 @@ package ilargia.entitas.codeGeneration.plugins.dataProviders.components.provider
 import ilargia.entitas.codeGeneration.plugins.dataProviders.components.ComponentData;
 
 public interface IComponentDataProvider {
-    void provide(Class type, ComponentData data);
+    void provide(ComponentData data);
 }

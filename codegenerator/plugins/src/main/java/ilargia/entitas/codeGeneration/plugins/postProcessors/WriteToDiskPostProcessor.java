@@ -16,15 +16,12 @@ import java.util.Properties;
 public class WriteToDiskPostProcessor implements ICodeGenFilePostProcessor<JavaClassSource>, IConfigurable {
 
     private final TargetPackageConfig targetPackageConfig;
-    private final IAppDomain projectConfig;
-    private CodeGeneratorUtil codeGeneratorUtil;
+    private IAppDomain projectConfig;
 
-    public WriteToDiskPostProcessor(CodeGeneratorUtil codeGeneratorUtil, IAppDomain preferences) {
-        this.codeGeneratorUtil = codeGeneratorUtil;
+    public WriteToDiskPostProcessor() {
         targetPackageConfig = new TargetPackageConfig();
-        projectConfig = preferences;
-    }
 
+    }
 
     @Override
     public Properties getDefaultProperties() {
@@ -57,6 +54,11 @@ public class WriteToDiskPostProcessor implements ICodeGenFilePostProcessor<JavaC
     }
 
     @Override
+    public void setAppDomain(IAppDomain appDomain) {
+        projectConfig = appDomain;
+    }
+
+    @Override
     public List<CodeGenFile<JavaClassSource>> postProcess(List<CodeGenFile<JavaClassSource>> files) {
         files.stream().forEach(f -> createFile(f.getFileName(), f.getSubDir(), f.getFileContent()));
         return files;
@@ -72,11 +74,11 @@ public class WriteToDiskPostProcessor implements ICodeGenFilePostProcessor<JavaC
 
         String pathPackage = targetPackage.replace(".", "/");
         String pathFile = subDir.equals("") ?
-                String.format("%s/%s/%s.java", projectConfig.getFirtsSrcDir(), pathPackage, className) :
-                String.format("%s/%s/%s/%s.java", projectConfig.getFirtsSrcDir(), pathPackage, subDir, className);
+                String.format("%s/%s/%s.java", projectConfig.getSrcDirs().get(0), pathPackage, className) :
+                String.format("%s/%s/%s/%s.java", projectConfig.getSrcDirs().get(0), pathPackage, subDir, className);
 
         File file = new File(pathFile);
-        codeGeneratorUtil.writeFile(file, content.toString());
+        CodeGeneratorUtil.writeFile(file, content.toString());
         return file;
     }
 

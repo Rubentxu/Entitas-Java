@@ -31,7 +31,7 @@ public class CodeGeneratorJFX extends Application implements Initializable {
     ProgressIndicator progress;
     @FXML
     Label result;
-    private StoreCodeGenerator storeCodeGenerator;
+
     @FXML
     private CheckBox componentIndicesGenerator;
     @FXML
@@ -47,7 +47,7 @@ public class CodeGeneratorJFX extends Application implements Initializable {
     private Properties props;
 
     public CodeGeneratorJFX() {
-        this.storeCodeGenerator = new StoreCodeGenerator();
+
     }
 
     public static void main(String[] args) {
@@ -225,21 +225,21 @@ public class CodeGeneratorJFX extends Application implements Initializable {
     }
 
     private void getSourceDataFile() {
-        List<SourceDataFile> sources = new ArrayList<>();
+
         Map<String, List<File>> mapFiles = readFileComponents(path);
-        mapFiles.forEach((subDir, files) -> {
-            sources.addAll(files.stream()
-                    .map((file) -> {
-                        try {
-                            return Roaster.parse(JavaClassSource.class, file);
-                        } catch (FileNotFoundException e) {
-                            return null;
-                        }
-                    }).filter((source) -> source != null)
-                    .filter((source) -> source.getInterfaces().toString().matches(".*\\bIComponent\\b.*"))
-                    .map((source) -> new SourceDataFile(source.getName(), null, subDir, source))
-                    .collect(Collectors.toList()));
-        });
+//        mapFiles.forEach((subDir, files) -> {
+//            sources.addAll(files.stream()
+//                    .map((file) -> {
+//                        try {
+//                            return Roaster.parse(JavaClassSource.class, file);
+//                        } catch (FileNotFoundException e) {
+//                            return null;
+//                        }
+//                    }).filter((source) -> source != null)
+//                    .filter((source) -> source.getInterfaces().toString().matches(".*\\bIComponent\\b.*"))
+//                    .map((source) -> new SourceDataFile(source.getName(), null, subDir, source))
+//                    .collect(Collectors.toList()));
+//        });
     }
 
 

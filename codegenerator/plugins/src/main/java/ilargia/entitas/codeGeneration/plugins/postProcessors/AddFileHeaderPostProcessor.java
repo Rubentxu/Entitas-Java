@@ -2,6 +2,7 @@ package ilargia.entitas.codeGeneration.plugins.postProcessors;
 
 
 import ilargia.entitas.codeGeneration.data.CodeGenFile;
+import ilargia.entitas.codeGeneration.interfaces.IAppDomain;
 import ilargia.entitas.codeGeneration.interfaces.ICodeGenFilePostProcessor;
 import org.jboss.forge.roaster.model.source.JavaClassSource;
 import org.jboss.forge.roaster.model.source.JavaDocSource;
@@ -39,6 +40,11 @@ public class AddFileHeaderPostProcessor implements ICodeGenFilePostProcessor<Jav
     @Override
     public boolean runInDryMode() {
         return true;
+    }
+
+    @Override
+    public void setAppDomain(IAppDomain appDomain) {
+
     }
 
     @Override

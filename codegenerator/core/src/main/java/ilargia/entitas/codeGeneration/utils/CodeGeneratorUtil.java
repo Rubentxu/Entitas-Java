@@ -8,9 +8,9 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Modifier;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -23,19 +23,16 @@ public class CodeGeneratorUtil {
                 .forEach(p -> p.configure(properties));
     }
 
-
-
     public static List<Class> loadTypesFromPlugins(Properties properties) {
         CodeGeneratorConfig config = new CodeGeneratorConfig();
         config.configure(properties);
 
         return config.getPlugins().stream()
-                .flatMap(s -> ClassFinder.findRecursive(s).stream())
+                .flatMap(s -> CodeFinder.findClassRecursive(s).stream())
                 .sorted((typeA, typeB) -> typeA.getCanonicalName().compareTo(typeB.getCanonicalName()))
                 .collect(Collectors.toList());
 
     }
-
 
     public static <T extends ICodeGeneratorInterface> List<T> getOrderedInstances(List<Class> types, Class<T> clazz) {
         return types.stream()
@@ -112,5 +109,31 @@ public class CodeGeneratorUtil {
         } catch (IOException e) {
             System.out.println("Unable to create file " + file.getName());
         }
+    }
+
+    public static Map<String, List<File>> readFileComponents(String pathname, String pkg) {
+        String finalPathName = pathname+ "/" + pkg.replace(".", "/");
+        Map<String, List<File>> recursiveList = new HashMap() {{
+            put("", new ArrayList<>());
+        }};
+        File d = new File(finalPathName);
+        if (d.exists() && d.isDirectory()) {
+            for (File listFile : d.listFiles()) {
+                if (listFile.isDirectory()) {
+                    List<File> listSubDir = Arrays.asList(listFile.listFiles());
+                    if (listSubDir.size() > 0) {
+                        Path path = Paths.get(listSubDir.get(0).getAbsolutePath());
+                        String subDir = path.getName(path.getNameCount() - 2).toString();
+                        recursiveList.put(subDir, listSubDir);
+                    }
+
+                } else {
+                    recursiveList.get("").add(listFile);
+                }
+            }
+
+        }
+        return recursiveList;
+
     }
 }

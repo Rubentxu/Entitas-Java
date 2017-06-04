@@ -1,25 +1,27 @@
 package ilargia.entitas.codeGeneration.plugins.dataProviders.context;
 
-import ilargia.entitas.codeGeneration.plugins.config.ContextNamesConfig;
+import ilargia.entitas.codeGeneration.data.CodeGeneratorData;
+import ilargia.entitas.codeGeneration.interfaces.IAppDomain;
 import ilargia.entitas.codeGeneration.interfaces.ICodeGeneratorDataProvider;
 import ilargia.entitas.codeGeneration.interfaces.IConfigurable;
+import ilargia.entitas.codeGeneration.plugins.config.ContextNamesConfig;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
 import java.util.stream.Collectors;
 
 
-public class ContextDataProvider implements ICodeGeneratorDataProvider<String, HashMap<String, String>>, IConfigurable {
+public class ContextDataProvider implements ICodeGeneratorDataProvider, IConfigurable {
 
     public static String CONTEXT_NAME = "context_name";
     private ContextNamesConfig _contextNamesConfig = new ContextNamesConfig();
+    private IAppDomain appDomain;
 
-    public static String getContextName(HashMap<String, String> data) {
-        return data.get(CONTEXT_NAME);
+    public static String getContextName(CodeGeneratorData data) {
+        return (String) data.get(CONTEXT_NAME);
     }
 
-    public static void setContextName(HashMap<String, String> data, String contextName) {
+    public static void setContextName(CodeGeneratorData data, String contextName) {
         data.put(CONTEXT_NAME, contextName);
     }
 
@@ -54,10 +56,15 @@ public class ContextDataProvider implements ICodeGeneratorDataProvider<String, H
     }
 
     @Override
-    public List<HashMap<String, String>> getData() {
+    public void setAppDomain(IAppDomain appDomain) {
+        this.appDomain = appDomain;
+    }
+
+    @Override
+    public List<CodeGeneratorData> getData() {
         return _contextNamesConfig.getContextNames().stream()
                 .map(contextName -> {
-                    HashMap<String, String> data = new HashMap<>();
+                    CodeGeneratorData data = new CodeGeneratorData();
                     setContextName(data, contextName);
                     return data;
                 }).collect(Collectors.toList());

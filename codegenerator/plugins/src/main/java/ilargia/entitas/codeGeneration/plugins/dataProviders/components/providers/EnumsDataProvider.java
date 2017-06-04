@@ -1,6 +1,7 @@
 package ilargia.entitas.codeGeneration.plugins.dataProviders.components.providers;
 
 import ilargia.entitas.codeGeneration.plugins.dataProviders.components.ComponentData;
+import org.jboss.forge.roaster.model.source.JavaClassSource;
 
 import java.lang.reflect.Modifier;
 import java.util.List;
@@ -21,11 +22,10 @@ public class EnumsDataProvider implements IComponentDataProvider {
     }
 
     @Override
-    public void provide(Class type, ComponentData data) {
-        List<String> enums = Stream.of(type.getFields())
-                .map(f -> f.getType())
-                .filter(c -> Modifier.isPublic(c.getModifiers()))
-                .filter(c -> c.isEnum())
+    public void provide(ComponentData data) {
+        List<String> enums = data.getSource().getNestedTypes().stream()
+                .filter(method -> method.isPublic())
+                .filter(method -> method.isEnum())
                 .map(method -> method.getCanonicalName())
                 .collect(Collectors.toList());
         setEnumData(data, enums);

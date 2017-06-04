@@ -17,8 +17,6 @@ Para que pueda usarse en la generacion del codigo.
 class ContextDataProviderSpec extends Specification {
 
     @Shared
-    FixtureProvider fixtures = new FixtureProvider("src/test/java/ilargia/entitas/fixtures/components")
-    @Shared
     ContextDataProvider contextDataProvider
 
     def setupSpec() {
