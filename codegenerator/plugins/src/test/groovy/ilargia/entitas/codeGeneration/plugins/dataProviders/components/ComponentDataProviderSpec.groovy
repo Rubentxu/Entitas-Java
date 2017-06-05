@@ -3,8 +3,7 @@ package ilargia.entitas.codeGeneration.plugins.dataProviders.components
 import groovy.transform.TypeCheckingMode
 import ilargia.entitas.codeGeneration.data.CodeGeneratorData
 import ilargia.entitas.codeGeneration.gradle.EntitasGradleProject
-import ilargia.entitas.codeGeneration.interfaces.IAppDomain
-import ilargia.entitas.fixtures.FixtureProvider
+import ilargia.entitas.fixtures.TestProject
 import org.gradle.api.Project
 import org.gradle.api.plugins.JavaPlugin
 import org.gradle.testfixtures.ProjectBuilder
@@ -23,7 +22,6 @@ import static ilargia.entitas.codeGeneration.plugins.dataProviders.components.pr
 import static ilargia.entitas.codeGeneration.plugins.dataProviders.components.providers.ShouldGenerateComponentDataProvider.shouldGenerateComponent
 import static ilargia.entitas.codeGeneration.plugins.dataProviders.components.providers.ShouldGenerateMethodsDataProvider.shouldGenerateMethods
 
-
 @Narrative("""
 Como usuario de la aplicacion
 Quiero poder obtener los datos necesarios del proveedor de datos de Componentes
@@ -33,7 +31,7 @@ Para que pueda usarse en la generacion del codigo.
 @groovy.transform.TypeChecked
 class ComponentDataProviderSpec extends Specification {
 
-    String CONTEXTS_KEY = "Entitas.CodeGeneration.Contexts";
+    String CONTEXTS_KEY = "CodeGeneration.Contexts";
 
     @Shared
     ComponentDataProvider componentDataProvider
@@ -41,15 +39,17 @@ class ComponentDataProviderSpec extends Specification {
 
     def setupSpec() {
         componentDataProvider = new ComponentDataProvider()
-        Project project = ProjectBuilder.builder().build()
+        Project project = ProjectBuilder.builder().withProjectDir(new File("./")).withGradleUserHomeDir(new File("./build")).build()
         JavaPlugin plugin = project.getPlugins().apply(JavaPlugin.class)
-        componentDataProvider.setAppDomain(new EntitasGradleProject(project))
+        componentDataProvider.setAppDomain(new TestProject(project))
+
     }
 
 
     void 'Consultamos al proveedor ComponentDataProvider por los contextos por defecto'() {
         given: "que iniciamos la configuracion en ComponentDataProvider"
         Properties prop = new Properties()
+        prop.setProperty("CodeGeneration.CodeGenerator.SearchPkg","ilargia.entitas.fixtures.components")
         componentDataProvider.configure(prop)
 
         when: 'recogemos las propiedades por defecto'
@@ -68,6 +68,7 @@ class ComponentDataProviderSpec extends Specification {
     void 'Consultamos al proveedor ComponentDataProvider por los contextos extraidos de los componentes'() {
         given:
         Properties prop = new Properties()
+        prop.setProperty("CodeGeneration.CodeGenerator.SearchPkg","ilargia.entitas.fixtures.components")
         componentDataProvider.configure(prop)
 
         when:
@@ -75,7 +76,7 @@ class ComponentDataProviderSpec extends Specification {
         List<CodeGeneratorData> datas = componentDataProvider.getData()
 
         then:
-        datas.size() == 9
+        datas.size() == 8
         getContextNames(datas.get(id)).get(id2).equals(result)
         getFullTypeName(datas.get(id)).contains(result2)
         isUnique(datas.get(id)) == result3
@@ -90,13 +91,12 @@ class ComponentDataProviderSpec extends Specification {
         id | id2 || result  | result2       | result3 | result4 | result5 | result6 | result7 | result8 | result9
         0  | 0   || "Game"  | "Ball"        | true    | false   | 2       | 1       | 0       | true    | []
         1  | 0   || "Game"  | "Bounds"      | false   | false   | 2       | 5       | 0       | true    | ["ilargia.entitas.fixtures.components.dir.Bounds.Tag"]
-        2  | 0   || "Core"  | "Interactive" | false   | false   | 0       | 0       | 0       | true    | []
+        2  | 0   || "Test"  | "Interactive" | false   | false   | 0       | 0       | 0       | true    | []
         3  | 0   || "Test"  | "Motion"      | false   | false   | 1       | 2       | 0       | true    | []
         4  | 0   || "Input" | "Player"      | false   | false   | 1       | 1       | 0       | true    | ["ilargia.entitas.fixtures.components.dir2.Player.ID"]
-        5  | 0   || "Core"  | "Position"    | false   | false   | 2       | 2       | 0       | true    | []
-        6  | 0   || "Game"  | "Score"       | false   | true    | 1       | 1       | 0       | true    | []
-        7  | 0   || "Test"  | "Size"        | false   | false   | 1       | 2       | 0       | true    | []
-        8  | 0   || "Input" | "View"        | false   | false   | 1       | 1       | 1       | false   | []
+        5  | 0   || "Test"  | "Position"    | false   | false   | 2       | 2       | 0       | true    | []
+        6  | 0   || "Test"  | "Size"        | false   | false   | 1       | 2       | 0       | true    | []
+        7  | 0   || "Input" | "View"        | false   | false   | 1       | 1       | 1       | false    | []
 
 
     }

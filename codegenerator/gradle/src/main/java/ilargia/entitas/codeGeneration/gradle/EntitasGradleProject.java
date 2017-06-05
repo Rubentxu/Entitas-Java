@@ -40,23 +40,23 @@ public class EntitasGradleProject implements IAppDomain {
 
     }
 
-    @Override
-    public CodeGenerator getCodeGenerator() {
-        Properties properties = loadProperties();
-        CodeGeneratorConfig config = new CodeGeneratorConfig();
-        config.configure(properties);
-        List<Class> types = loadTypesFromPlugins(properties);
-
-        List<ICodeGeneratorDataProvider> dataProviders = getEnabledInstances(types, config.getDataProviders(), ICodeGeneratorDataProvider.class);
-        List<ICodeGenerator> codeGenerators = getEnabledInstances(types, config.getCodeGenerators(), ICodeGenerator.class);
-        List<ICodeGenFilePostProcessor> postProcessors = getEnabledInstances(types, config.getPostProcessors(), ICodeGenFilePostProcessor.class);
-
-        configure(dataProviders, properties);
-        configure(codeGenerators, properties);
-        configure(postProcessors, properties);
-
-        return new CodeGenerator(dataProviders, codeGenerators, postProcessors);
-    }
+//    @Override
+//    public CodeGenerator getCodeGenerator() {
+//        Properties properties = loadProperties();
+//        CodeGeneratorConfig config = new CodeGeneratorConfig();
+//        config.configure(properties);
+//        List<Class> types = loadTypesFromPlugins(properties);
+//
+//        List<ICodeGeneratorDataProvider> dataProviders = getEnabledInstances(types, config.getDataProviders(), ICodeGeneratorDataProvider.class);
+//        List<ICodeGenerator> codeGenerators = getEnabledInstances(types, config.getCodeGenerators(), ICodeGenerator.class);
+//        List<ICodeGenFilePostProcessor> postProcessors = getEnabledInstances(types, config.getPostProcessors(), ICodeGenFilePostProcessor.class);
+//
+//        configure(dataProviders, properties);
+//        configure(codeGenerators, properties);
+//        configure(postProcessors, properties);
+//
+//        return new CodeGenerator(dataProviders, codeGenerators, postProcessors);
+//    }
 
 
     @Override
@@ -87,48 +87,48 @@ public class EntitasGradleProject implements IAppDomain {
         }).collect(Collectors.toList());
     }
 
-    @Override
-    public boolean hasProperties() {
-        return new File(getAppDir() + "/" + extension.getConfigFile()).exists();
-    }
-
-    @Override
-    public Properties loadProperties() {
-        if (hasProperties()) {
-            try {
-                EntitasGradleProject.prop.load(new FileInputStream(getAppDir() + "/" + extension.getConfigFile()));
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                if (EntitasGradleProject.input != null) {
-                    try {
-                        EntitasGradleProject.input.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }
-        return EntitasGradleProject.prop;
-    }
-
-    @Override
-    public void saveProperties(Properties properties) {
-        try {
-            properties.store(new FileOutputStream(getAppDir() + "/" + extension.getConfigFile()),
-                    "Entitas codeGeneration config file");
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        } finally {
-            if (EntitasGradleProject.output != null) {
-                try {
-                    EntitasGradleProject.output.close();
-                } catch (Exception e) {
-                    System.out.printf(e.getMessage());
-                }
-            }
-
-        }
-    }
+//    @Override
+//    public boolean hasProperties() {
+//        return new File(getAppDir() + "/" + extension.getConfigFile()).exists();
+//    }
+//
+//    @Override
+//    public Properties loadProperties() {
+//        if (hasProperties()) {
+//            try {
+//                EntitasGradleProject.prop.load(new FileInputStream(getAppDir() + "/" + extension.getConfigFile()));
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            } finally {
+//                if (EntitasGradleProject.input != null) {
+//                    try {
+//                        EntitasGradleProject.input.close();
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//            }
+//        }
+//        return EntitasGradleProject.prop;
+//    }
+//
+//    @Override
+//    public void saveProperties(Properties properties) {
+//        try {
+//            properties.store(new FileOutputStream(getAppDir() + "/" + extension.getConfigFile()),
+//                    "Entitas codeGeneration config file");
+//        } catch (Exception e) {
+//            System.out.println(e.getMessage());
+//        } finally {
+//            if (EntitasGradleProject.output != null) {
+//                try {
+//                    EntitasGradleProject.output.close();
+//                } catch (Exception e) {
+//                    System.out.printf(e.getMessage());
+//                }
+//            }
+//
+//        }
+//    }
 
 }

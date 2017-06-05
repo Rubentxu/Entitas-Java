@@ -118,7 +118,7 @@ public class ComponentDataProvider extends AbstractConfigurableConfig implements
 
         List<ComponentData> dataFromComponents = datas.stream()
                 .filter(s -> s.getSource().hasInterface(IComponent.class))
-                .filter(s -> s.getSource().isAbstract())
+                .filter(s -> !s.getSource().isAbstract())
                 .map(s -> providedDataForComponent(s))
                 .collect(Collectors.toList());
 
@@ -126,11 +126,12 @@ public class ComponentDataProvider extends AbstractConfigurableConfig implements
                 .filter(s -> !s.getSource().hasInterface(IComponent.class))
                 .filter(s -> !s.getSource().isAbstract())
                 .filter(s -> _contextsComponentDataProvider.extractContextNames(s.getSource()).size() != 0)
-                .flatMap(s -> createDataForNonComponent(s).stream())
+                .flatMap(s -> provideDataForNonComponent(s).stream())
                 .collect(Collectors.toList());
 
         return Stream.concat(dataFromComponents.stream(),
                 dataFromNonComponents.stream())
+                .sorted((a, b)-> a.getSource().getName().compareTo(b.getSource().getName()))
                 .collect(Collectors.toList());
 
     }
@@ -142,7 +143,7 @@ public class ComponentDataProvider extends AbstractConfigurableConfig implements
         return data;
     }
 
-    List<ComponentData> createDataForNonComponent(ComponentData data) {
+    List<ComponentData> provideDataForNonComponent(ComponentData data) {
         return getComponentNames(data.getSource()).stream()
                 .map(componentName -> {
                     ComponentTypeDataProvider.setFullTypeName(data, componentName);

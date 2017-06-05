@@ -18,11 +18,21 @@ public class ProviderUtils {
     public static List<ComponentData> getComponentDatas(IAppDomain appDomain, List<String> packages) {
         List<ComponentData> datas = new ArrayList<>();
         appDomain.getSrcDirs().forEach(path -> {
-            packages.forEach(pkg -> {
-                Map<String, List<File>> mapFiles = CodeGeneratorUtil.readFileComponents(path, pkg);
+            packages.forEach(p -> {
+                String pkg= "";
+                if(System.getProperty("os.name").toLowerCase().contains("win")) {
+                    pkg = p.replace(".", "\\");
+                } else {
+                    pkg = p.replace(".", "/");
+                }
+                String finalPkg = pkg;
+                Map<String, List<File>> mapFiles = CodeGeneratorUtil.readFileComponents(path, finalPkg);
                 mapFiles.forEach((subDir, files) -> {
+
                     datas.addAll(files.stream()
-                            .filter(f -> f.getAbsolutePath().contains(pkg))
+                            .filter(f -> {
+                                return f.getAbsolutePath().contains(finalPkg);
+                            })
                             .map((file) -> {
                                 try {
                                     return Roaster.parse(JavaClassSource.class, file);

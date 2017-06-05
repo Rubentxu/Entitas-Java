@@ -9,8 +9,6 @@ import java.util.Set;
 
 public interface IAppDomain {
 
-    CodeGenerator getCodeGenerator();
-
     String getAppRoot();
 
     String getAppName();
@@ -19,10 +17,5 @@ public interface IAppDomain {
 
     List<String> getSrcDirs();
 
-    boolean hasProperties();
-
-    Properties loadProperties();
-
-    void saveProperties(Properties properties);
 
 }

@@ -1,9 +1,9 @@
 package ilargia.entitas.codeGeneration.plugins.dataProviders.entityIndex
 
 import groovy.transform.TypeCheckingMode
+import ilargia.entitas.codeGeneration.config.CodeGeneratorConfig
 import ilargia.entitas.codeGeneration.data.CodeGeneratorData
-import ilargia.entitas.codeGeneration.gradle.EntitasGradleProject
-import ilargia.entitas.fixtures.FixtureProvider
+import ilargia.entitas.fixtures.TestProject
 import org.gradle.api.Project
 import org.gradle.api.plugins.JavaPlugin
 import org.gradle.testfixtures.ProjectBuilder
@@ -12,15 +12,7 @@ import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Title
 
-import static ilargia.entitas.codeGeneration.plugins.dataProviders.entityIndex.EntityIndexDataProvider.getComponentType
-import static ilargia.entitas.codeGeneration.plugins.dataProviders.entityIndex.EntityIndexDataProvider.getContextNames
-import static ilargia.entitas.codeGeneration.plugins.dataProviders.entityIndex.EntityIndexDataProvider.getCustomMethods
-import static ilargia.entitas.codeGeneration.plugins.dataProviders.entityIndex.EntityIndexDataProvider.getEntityIndexName
-import static ilargia.entitas.codeGeneration.plugins.dataProviders.entityIndex.EntityIndexDataProvider.getEntityIndexType
-import static ilargia.entitas.codeGeneration.plugins.dataProviders.entityIndex.EntityIndexDataProvider.getKeyType
-import static ilargia.entitas.codeGeneration.plugins.dataProviders.entityIndex.EntityIndexDataProvider.getMemberName
-import static ilargia.entitas.codeGeneration.plugins.dataProviders.entityIndex.EntityIndexDataProvider.isCustom
-
+import static ilargia.entitas.codeGeneration.plugins.dataProviders.entityIndex.EntityIndexDataProvider.*
 
 @Narrative("""
 Como usuario de la aplicacion
@@ -37,9 +29,9 @@ class EntityIndexDataProviderSpec extends Specification {
 
     def setupSpec() {
         entityIndexDataProvider = new EntityIndexDataProvider()
-        Project project = ProjectBuilder.builder().build()
+        Project project = ProjectBuilder.builder().withProjectDir(new File("./")).withGradleUserHomeDir(new File("./build")).build()
         JavaPlugin plugin = project.getPlugins().apply(JavaPlugin.class)
-        entityIndexDataProvider.setAppDomain(new EntitasGradleProject(project))
+        entityIndexDataProvider.setAppDomain(new TestProject(project))
     }
 
 

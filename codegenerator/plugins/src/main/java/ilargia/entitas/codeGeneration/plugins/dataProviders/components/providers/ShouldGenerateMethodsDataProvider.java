@@ -18,7 +18,7 @@ public class ShouldGenerateMethodsDataProvider implements IComponentDataProvider
 
     @Override
     public void provide(ComponentData data) {
-        boolean generate = data.getSource().getAnnotation(DontGenerate.class) != null;
+        boolean generate = data.getSource().getAnnotation(DontGenerate.class) == null;
         shouldGenerateMethods(data, generate);
     }
 }

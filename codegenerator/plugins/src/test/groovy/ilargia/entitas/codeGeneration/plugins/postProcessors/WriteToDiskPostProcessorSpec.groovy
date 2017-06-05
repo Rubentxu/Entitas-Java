@@ -10,8 +10,11 @@ import ilargia.entitas.codeGeneration.plugins.dataProviders.ProviderUtils
 import ilargia.entitas.codeGeneration.plugins.dataProviders.components.ComponentData
 import ilargia.entitas.codeGeneration.utils.CodeGeneratorUtil
 import ilargia.entitas.fixtures.FixtureProvider
+import ilargia.entitas.fixtures.TestProject
 import org.gradle.api.Project
 import org.gradle.api.plugins.JavaPlugin
+import org.gradle.api.plugins.JavaPluginConvention
+import org.gradle.api.tasks.SourceSet
 import org.gradle.testfixtures.ProjectBuilder
 import org.jboss.forge.roaster.model.source.JavaClassSource
 import spock.lang.Narrative
@@ -36,14 +39,16 @@ class WriteToDiskPostProcessorSpec extends Specification {
     List<CodeGenFile<JavaClassSource>> genFiles
     @Shared
     List<ComponentData> dataFiles
+    @Shared
+    Project project
 
     def setupSpec() {
-        Project project = ProjectBuilder.builder().build()
+        project = ProjectBuilder.builder().withProjectDir(new File("./")).withGradleUserHomeDir(new File("./build")).build()
         JavaPlugin plugin = project.getPlugins().apply(JavaPlugin.class)
-        IAppDomain appProject = new EntitasGradleProject(project)
+        IAppDomain appProject = new TestProject(project)
         postProcessor = new WriteToDiskPostProcessor()
         postProcessor.setAppDomain(appProject)
-        dataFiles = ProviderUtils.getComponentDatas(appProject, new ArrayList<String>(){{ add("ilargia.entitas.codeGeneration.plugins.config")}})
+        dataFiles = ProviderUtils.getComponentDatas(appProject, new ArrayList<String>(){{ add("ilargia.entitas.fixtures.components.dir")}})
         genFiles = new ArrayList<>()
 
 
@@ -53,7 +58,6 @@ class WriteToDiskPostProcessorSpec extends Specification {
     @groovy.transform.TypeChecked(TypeCheckingMode.SKIP)
     void 'Consultamos al proveedor ComponentDataProvider por los contextos extraidos de los componentes'() {
         given:
-        Spy(CodeGeneratorUtil)
         Properties prop = new Properties()
         postProcessor.configure(prop)
 
@@ -78,18 +82,18 @@ class WriteToDiskPostProcessorSpec extends Specification {
         postProcessor.configure(prop)
         postProcessor.getDefaultProperties()
         for (ComponentData df : dataFiles) {
-            CodeGenFile<JavaClassSource> codeGenFile = new CodeGenFile("", df.getSource(), df.getSubDir())
+            CodeGenFile<JavaClassSource> codeGenFile = new CodeGenFile(df.getSource().getName(), df.getSource(), df.getSubDir())
             genFiles.add(codeGenFile)
         }
+      
 
         when:
         File file = postProcessor.createFile(genFiles.get(0).fileName, genFiles.get(0).subDir, genFiles.get(0).fileContent);
 
         then:
-        1 * CodeGeneratorUtil.writeFile(*_)
         println file.getCanonicalPath()
-        file.getName().contains('CustomIndex.java')
-        file.getCanonicalPath().contains('CustomIndex.java')
+        file.getName().contains('Ball.java')
+        file.getCanonicalPath().contains('Ball.java')
 
 
     }

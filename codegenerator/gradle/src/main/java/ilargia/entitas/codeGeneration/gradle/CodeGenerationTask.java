@@ -16,8 +16,8 @@ public class CodeGenerationTask extends DefaultTask {
     @TaskAction
     public void run() {
         entitasProject = new EntitasGradleProject(getProject());
-        CodeGenerator codeGenerator = entitasProject.getCodeGenerator();
-        codeGenerator.generate();
+//        CodeGenerator codeGenerator = entitasProject.getCodeGenerator();
+//        codeGenerator.generate();
 
     }
 }

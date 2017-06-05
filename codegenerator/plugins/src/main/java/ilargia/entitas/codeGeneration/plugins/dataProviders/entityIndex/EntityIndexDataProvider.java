@@ -214,7 +214,7 @@ public class EntityIndexDataProvider implements ICodeGeneratorDataProvider, ICon
         setEntityIndexName(data, data.getSource().getCanonicalName());
 
         setContextNames(data, Arrays.asList(annotation.getStringValue()));
-        setCustomMethods(data, data.getSource().getMethods());
+        setCustomMethods(data, data.getSource().getMethods().stream().filter(m-> !m.isConstructor()).collect(Collectors.toList()));
         return data;
     }
 
