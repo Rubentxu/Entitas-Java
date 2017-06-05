@@ -18,10 +18,10 @@ class ClassFinderSpec extends Specification {
     void 'Buscamos las clases a partir de un paquete base dentro de un jar dentro del classpath'() {
 
         when:
-        List<Class<?>> classes = CodeFinder.findClassRecursive("org.jboss.forge.roaster.model.util")
+        List<Class<?>> classes = CodeFinder.findClassRecursive("junit.extensions")
 
         then:
-        classes.size() == 9
+        classes.size() == 4
     }
 
     void 'Buscamos las clases a partir de un paquete base dentro de un directorio del classpath'() {
@@ -30,24 +30,24 @@ class ClassFinderSpec extends Specification {
         List<Class<?>> classes = CodeFinder.findClassRecursive("ilargia.entitas.codeGeneration.data")
 
         then:
-        classes.size() == 5
+        classes.size() == 2
     }
 
     void 'Buscamos una clase en concreto dentro del un jar en el classpath'() {
 
         when:
-        Class<?> clazz = CodeFinder.findClass("org.jboss.forge.roaster.model.util.DesignPatterns.class")
+        Class<?> clazz = CodeFinder.findClass("junit.extensions.TestDecorator.class")
 
         then:
-        clazz.getName() == "org.jboss.forge.roaster.model.util.DesignPatterns"
+        clazz.getName() == "junit.extensions.TestDecorator"
     }
 
     void 'Buscamos una clase en concreto dentro del classpath'() {
 
         when:
-        Class<?> clazz = CodeFinder.findClass("ilargia.entitas.codeGeneration.plugins.data.MethodData.class")
+        Class<?> clazz = CodeFinder.findClass("ilargia.entitas.codeGeneration.data.CodeGenFile.class")
 
         then:
-        clazz.getName() == "ilargia.entitas.codeGeneration.plugins.data.MethodData"
+        clazz.getName() == "ilargia.entitas.codeGeneration.data.CodeGenFile"
     }
 }

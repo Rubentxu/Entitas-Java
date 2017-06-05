@@ -85,7 +85,7 @@ class WriteToDiskPostProcessorSpec extends Specification {
             CodeGenFile<JavaClassSource> codeGenFile = new CodeGenFile(df.getSource().getName(), df.getSource(), df.getSubDir())
             genFiles.add(codeGenFile)
         }
-      
+
 
         when:
         File file = postProcessor.createFile(genFiles.get(0).fileName, genFiles.get(0).subDir, genFiles.get(0).fileContent);

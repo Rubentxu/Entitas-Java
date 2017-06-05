@@ -22,7 +22,7 @@ class CodeGeneratorUtilSpec extends Specification {
         List<Class<?>> classes = CodeGeneratorUtil.loadTypesFromPlugins(prop)
 
         then:
-        classes.size() == 7
+        classes.size() == 4
     }
 
 
