@@ -23,4 +23,13 @@ public class CodeGenFile<C> {
     public C getFileContent() {
         return fileContent;
     }
+
+
+    @Override
+    public String toString() {
+        return "CodeGenFile{" +
+                "fileName='" + fileName + '\'' +
+                ", subDir='" + subDir + '\'' +
+                '}';
+    }
 }

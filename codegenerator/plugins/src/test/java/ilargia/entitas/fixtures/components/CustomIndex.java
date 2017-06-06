@@ -6,8 +6,8 @@ import ilargia.entitas.fixtures.IntVector2;
 import ilargia.entitas.fixtures.TestContext;
 import ilargia.entitas.fixtures.TestEntity;
 import ilargia.entitas.fixtures.TestMatcher;
-import ilargia.entitas.fixtures.components.dir.Size;
-import ilargia.entitas.fixtures.components.dir2.Position;
+import ilargia.entitas.fixtures.components.test.Size;
+import ilargia.entitas.fixtures.components.test.Position;
 import ilargia.entitas.index.EntityIndex;
 import ilargia.entitas.matcher.Matcher;
 

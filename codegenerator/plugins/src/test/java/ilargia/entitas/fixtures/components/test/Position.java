@@ -1,7 +1,6 @@
-package ilargia.entitas.fixtures.components.dir2;
+package ilargia.entitas.fixtures.components.test;
 
 import ilargia.entitas.api.IComponent;
-import ilargia.entitas.codeGenerator.Component;
 import ilargia.entitas.codeGenerator.annotations.Contexts;
 
 @Contexts(names = {"Test"})

@@ -90,10 +90,10 @@ class ComponentDataProviderSpec extends Specification {
         where: 'la Propiedad: #ContextName para el id: #id  result: #result'
         id | id2 || result  | result2       | result3 | result4 | result5 | result6 | result7 | result8 | result9
         0  | 0   || "Game"  | "Ball"        | true    | false   | 2       | 1       | 0       | true    | []
-        1  | 0   || "Game"  | "Bounds"      | false   | false   | 2       | 5       | 0       | true    | ["ilargia.entitas.fixtures.components.dir.Bounds.Tag"]
+        1  | 0   || "Game"  | "Bounds"      | false   | false   | 2       | 5       | 0       | true    | ["ilargia.entitas.fixtures.components.game.Bounds.Tag"]
         2  | 0   || "Test"  | "Interactive" | false   | false   | 0       | 0       | 0       | true    | []
         3  | 0   || "Test"  | "Motion"      | false   | false   | 1       | 2       | 0       | true    | []
-        4  | 0   || "Input" | "Player"      | false   | false   | 1       | 1       | 0       | true    | ["ilargia.entitas.fixtures.components.dir2.Player.ID"]
+        4  | 0   || "Core"  | "Player"      | false   | false   | 1       | 1       | 0       | true    | ["ilargia.entitas.fixtures.components.test.Player.ID"]
         5  | 0   || "Test"  | "Position"    | false   | false   | 2       | 2       | 0       | true    | []
         6  | 0   || "Test"  | "Size"        | false   | false   | 1       | 2       | 0       | true    | []
         7  | 0   || "Input" | "View"        | false   | false   | 1       | 1       | 1       | false    | []

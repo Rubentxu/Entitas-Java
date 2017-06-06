@@ -46,7 +46,7 @@ public class ProviderUtils {
                 });
             });
         });
-        return datas;
+        return datas.stream().sorted((a, b)-> a.getSource().getName().compareTo(b.getSource().getName())).collect(Collectors.toList());
 
     }
 }

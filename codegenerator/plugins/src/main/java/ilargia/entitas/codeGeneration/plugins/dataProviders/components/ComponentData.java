@@ -32,4 +32,11 @@ public class ComponentData extends CodeGeneratorData {
         return subDir;
     }
 
+    @Override
+    public String toString() {
+        return "ComponentData{" +
+                "source=" + source.getName() +
+                ", subDir='" + subDir + '\'' +
+                '}';
+    }
 }

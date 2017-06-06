@@ -18,11 +18,11 @@ public class TestComponentIds {
     public static Class[] componentTypes() {
         return new Class[]{
                 ilargia.entitas.fixtures.components.View.class,
-                ilargia.entitas.fixtures.components.dir.Motion.class,
-                ilargia.entitas.fixtures.components.dir2.Interactive.class,
-                ilargia.entitas.fixtures.components.dir2.Player.class,
-                ilargia.entitas.fixtures.components.dir2.Position.class,
-                ilargia.entitas.fixtures.components.dir.Size.class
+                ilargia.entitas.fixtures.components.test.Motion.class,
+                ilargia.entitas.fixtures.components.test.Interactive.class,
+                ilargia.entitas.fixtures.components.test.Player.class,
+                ilargia.entitas.fixtures.components.test.Position.class,
+                ilargia.entitas.fixtures.components.test.Size.class
         };
     }
 }

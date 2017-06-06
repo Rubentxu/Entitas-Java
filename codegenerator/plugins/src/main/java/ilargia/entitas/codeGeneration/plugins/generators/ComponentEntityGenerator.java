@@ -1,5 +1,6 @@
 package ilargia.entitas.codeGeneration.plugins.generators;
 
+import ilargia.entitas.Entity;
 import ilargia.entitas.codeGeneration.data.CodeGenFile;
 import ilargia.entitas.codeGeneration.data.CodeGeneratorData;
 import ilargia.entitas.codeGeneration.interfaces.ICodeGenerator;
@@ -10,7 +11,9 @@ import org.apache.commons.lang3.text.WordUtils;
 import org.jboss.forge.roaster.Roaster;
 import org.jboss.forge.roaster.model.source.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.stream.Collectors;
 
@@ -29,9 +32,11 @@ public class ComponentEntityGenerator implements ICodeGenerator<JavaClassSource>
 
     public static final String DEFAULT_COMPONENT_LOOKUP_TAG = "ComponentsLookup";
     private TargetPackageConfig targetPackageConfig;
+    private Map<String,CodeGenFile<JavaClassSource>> entities;
 
     public ComponentEntityGenerator() {
         targetPackageConfig =  new TargetPackageConfig();
+        entities = new HashMap<>();
     }
 
     @Override
@@ -66,23 +71,25 @@ public class ComponentEntityGenerator implements ICodeGenerator<JavaClassSource>
 
     @Override
     public List<CodeGenFile<JavaClassSource>> generate(List<CodeGeneratorData> data) {
-        return data.stream()
+        data.stream()
                 .filter(d-> d instanceof ComponentData)
                 .map(d-> (ComponentData) d)
                 .filter(d-> shouldGenerateMethods(d))
-                .flatMap(d-> generateEntities(d).stream())
-                .collect(Collectors.toList());
+                .forEach(d-> generateEntities(d));
+
+        entities.values().forEach(f-> System.out.println(f.getFileContent().toString()));
+        return entities.values().stream().collect(Collectors.toList());
     }
 
-    List<CodeGenFile<JavaClassSource>> generateEntities(ComponentData data) {
-        return getContextNames(data).stream()
-                .map(contextName -> generateEntity(contextName, data))
-                .collect(Collectors.toList());
+    private void generateEntities(ComponentData data) {
+         getContextNames(data).stream()
+                .forEach(contextName -> generateEntity(contextName, data));
     }
 
-    private CodeGenFile<JavaClassSource> generateEntity(String contextName, ComponentData data){
+    private void generateEntity(String contextName, ComponentData data){
         String pkgDestiny = targetPackageConfig.targetPackage();
-        JavaClassSource codeGenerated = Roaster.parse(JavaClassSource.class, String.format("public class %1$sEntity extends Entity {}", contextName));
+        CodeGenFile<JavaClassSource> genFile = getCodeGenFile(contextName, data);
+        JavaClassSource codeGenerated = genFile.getFileContent();
 
         if (!pkgDestiny.endsWith(data.getSubDir())) {
             pkgDestiny += "." + data.getSubDir();
@@ -94,8 +101,8 @@ public class ComponentEntityGenerator implements ICodeGenerator<JavaClassSource>
                 .setPublic()
                 .setConstructor(true)
                 .setBody("");
-        codeGenerated.addImport("com.ilargia.games.entitas.api.*");
-        codeGenerated.addImport("Entity");
+        codeGenerated.addImport("ilargia.entitas.api.*");
+        codeGenerated.addImport(Entity.class);
         codeGenerated.addImport("java.util.Stack");
 
 
@@ -104,9 +111,18 @@ public class ComponentEntityGenerator implements ICodeGenerator<JavaClassSource>
                 addEntityMethods(contextName, data, codeGenerated);
             }
 
+    }
 
-        System.out.println(Roaster.format(codeGenerated.toString()));
-        return new CodeGenFile<JavaClassSource>(contextName+"Entity.java",  codeGenerated, data.getSubDir());
+    private CodeGenFile<JavaClassSource> getCodeGenFile(String contextName, ComponentData data) {
+
+        if(entities.containsKey(contextName)) {
+            return entities.get(contextName);
+        } else {
+            JavaClassSource sourceGen = Roaster.parse(JavaClassSource.class, String.format("public class %1$sEntity extends Entity {}", contextName));
+            CodeGenFile<JavaClassSource> genFile = new CodeGenFile<JavaClassSource>(contextName + "Entity.java", sourceGen, data.getSubDir());
+            entities.put(contextName, genFile);
+            return genFile;
+        }
     }
 
     private void addImporEnums(ComponentData data, JavaClassSource codeGenerated) {
@@ -206,7 +222,7 @@ public class ComponentEntityGenerator implements ICodeGenerator<JavaClassSource>
     public void addImportClass(ComponentData data, JavaClassSource codeGenerated) {
         if (data.getSource().getImports()!= null) {
             for (Import imp : data.getSource().getImports()) {
-                if (!imp.getQualifiedName().equals("com.ilargia.games.entitas.generators.Component")) {
+                if (!imp.getQualifiedName().equals("ilargia.entitas.generators.Component")) {
                     codeGenerated.addImport(imp);
                 }
             }

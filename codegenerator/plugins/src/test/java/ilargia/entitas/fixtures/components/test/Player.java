@@ -1,10 +1,10 @@
-package ilargia.entitas.fixtures.components.dir2;
+package ilargia.entitas.fixtures.components.test;
 
 import ilargia.entitas.api.IComponent;
 import ilargia.entitas.codeGenerator.annotations.Contexts;
 import ilargia.entitas.codeGenerator.annotations.EntityIndex;
 
-@Contexts(names = {"Input", "Core", "Test"})
+@Contexts(names = {"Core", "Test"})
 public class Player implements IComponent {
     @EntityIndex
     public ID id;

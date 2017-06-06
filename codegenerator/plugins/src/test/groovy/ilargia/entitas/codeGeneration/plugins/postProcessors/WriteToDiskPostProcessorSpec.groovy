@@ -48,7 +48,7 @@ class WriteToDiskPostProcessorSpec extends Specification {
         IAppDomain appProject = new TestProject(project)
         postProcessor = new WriteToDiskPostProcessor()
         postProcessor.setAppDomain(appProject)
-        dataFiles = ProviderUtils.getComponentDatas(appProject, new ArrayList<String>(){{ add("ilargia.entitas.fixtures.components.dir")}})
+        dataFiles = ProviderUtils.getComponentDatas(appProject, new ArrayList<String>(){{ add("ilargia.entitas.fixtures.components.game")}})
         genFiles = new ArrayList<>()
 
 

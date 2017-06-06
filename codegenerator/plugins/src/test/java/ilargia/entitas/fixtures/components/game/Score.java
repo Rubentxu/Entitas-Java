@@ -1,4 +1,4 @@
-package ilargia.entitas.fixtures.components;
+package ilargia.entitas.fixtures.components.game;
 
 
 import ilargia.entitas.codeGenerator.annotations.Contexts;

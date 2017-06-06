@@ -2,11 +2,11 @@ package ilargia.entitas.fixtures;
 
 import ilargia.entitas.Entity;
 import ilargia.entitas.fixtures.components.View;
-import ilargia.entitas.fixtures.components.dir.Motion;
-import ilargia.entitas.fixtures.components.dir.Size;
-import ilargia.entitas.fixtures.components.dir2.Interactive;
-import ilargia.entitas.fixtures.components.dir2.Player;
-import ilargia.entitas.fixtures.components.dir2.Position;
+import ilargia.entitas.fixtures.components.test.Motion;
+import ilargia.entitas.fixtures.components.test.Size;
+import ilargia.entitas.fixtures.components.test.Interactive;
+import ilargia.entitas.fixtures.components.test.Player;
+import ilargia.entitas.fixtures.components.test.Position;
 
 public class TestEntity extends Entity {
 
