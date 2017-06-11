@@ -6,6 +6,7 @@ import ilargia.entitas.codeGeneration.interfaces.ICodeGenerator;
 import ilargia.entitas.codeGeneration.interfaces.IConfigurable;
 import ilargia.entitas.codeGeneration.plugins.config.TargetPackageConfig;
 import ilargia.entitas.codeGeneration.plugins.dataProviders.components.ComponentData;
+import ilargia.entitas.matcher.Matcher;
 import org.apache.commons.lang3.text.WordUtils;
 import org.jboss.forge.roaster.Roaster;
 import org.jboss.forge.roaster.model.source.JavaClassSource;
@@ -17,7 +18,7 @@ import java.util.Properties;
 import java.util.stream.Collectors;
 
 import static ilargia.entitas.codeGeneration.plugins.dataProviders.components.providers.ComponentTypeDataProvider.getTypeName;
-import static ilargia.entitas.codeGeneration.plugins.dataProviders.components.providers.ContextsDataProvider.getContextNames;
+import static ilargia.entitas.codeGeneration.plugins.dataProviders.components.providers.ContextsComponentDataProvider.getContextNames;
 import static ilargia.entitas.codeGeneration.plugins.dataProviders.components.providers.ShouldGenerateMethodsDataProvider.shouldGenerateMethods;
 import static ilargia.entitas.codeGeneration.plugins.generators.ComponentEntityGenerator.DEFAULT_COMPONENT_LOOKUP_TAG;
 
@@ -89,7 +90,7 @@ public class ComponentMatcherGenerator implements ICodeGenerator<JavaClassSource
         }
 
         codeGenerated.setPackage(pkgDestiny);
-        codeGenerated.addImport("Matcher");
+        codeGenerated.addImport(Matcher.class);
 
         addMatcher(contextName, data, codeGenerated);
         addMatcherMethods(contextName, data, codeGenerated);
@@ -102,7 +103,7 @@ public class ComponentMatcherGenerator implements ICodeGenerator<JavaClassSource
         } else {
             JavaClassSource sourceGen = Roaster.parse(JavaClassSource.class, String.format("public class %1$s {}",
                     WordUtils.capitalize(contextName) + "Matcher"));
-            CodeGenFile<JavaClassSource> genFile = new CodeGenFile<JavaClassSource>(contextName + "Context.java", sourceGen, data.getSubDir());
+            CodeGenFile<JavaClassSource> genFile = new CodeGenFile<JavaClassSource>(contextName + "Matcher", sourceGen, data.getSubDir());
             contexts.put(contextName, genFile);
             return genFile;
         }

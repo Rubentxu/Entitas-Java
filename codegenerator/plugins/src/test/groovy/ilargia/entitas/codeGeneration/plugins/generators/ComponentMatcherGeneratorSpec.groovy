@@ -20,17 +20,17 @@ Para poder referenciarlos en la  el desarrollo en la aplicacion.
 """)
 @Title(""" """)
 //@groovy.transform.TypeChecked
-class ComponentLookupGeneratorSpec extends Specification {
+class ComponentMatcherGeneratorSpec extends Specification {
 
     @Shared
-    ComponentLookupGenerator lookupGenerator
+    ComponentMatcherGenerator matcherGenerator
     @Shared
     Project project
     @Shared
     ComponentDataProvider componentDataProvider
 
     def setupSpec() {
-        lookupGenerator =  new ComponentLookupGenerator()
+        matcherGenerator =  new ComponentMatcherGenerator()
         componentDataProvider = new ComponentDataProvider()
         project = ProjectBuilder.builder().withProjectDir(new File("./")).withGradleUserHomeDir(new File("./build")).build()
         JavaPlugin plugin = project.getPlugins().apply(JavaPlugin.class)
@@ -40,20 +40,20 @@ class ComponentLookupGeneratorSpec extends Specification {
     }
 
 
-    void 'Consultamos al generador ComponentLookupGenerator por la configuracion por defecto'() {
+    void 'Consultamos al generador ComponentMatcherGenerator por la configuracion por defecto'() {
         given:
         Properties prop = new Properties()
         prop.setProperty("CodeGeneration.CodeGenerator.SearchPkg","ilargia.entitas.fixtures.components")
 
         when:
         componentDataProvider.configure(prop)
-        lookupGenerator.configure(prop)
+        matcherGenerator.configure(prop)
 
         then:
-        lookupGenerator.gePriority() == 0
-        lookupGenerator.getName() == "Components Lookup"
-        lookupGenerator.isEnableByDefault() == true
-        lookupGenerator.runInDryMode() == true
+        matcherGenerator.gePriority() == 0
+        matcherGenerator.getName() == "Component (Matcher API)"
+        matcherGenerator.isEnableByDefault() == true
+        matcherGenerator.runInDryMode() == true
 
     }
 
@@ -64,20 +64,21 @@ class ComponentLookupGeneratorSpec extends Specification {
         prop.setProperty("CodeGeneration.CodeGenerator.SearchPkg","ilargia.entitas.fixtures.components")
         componentDataProvider.configure(prop)
         componentDataProvider.getDefaultProperties()
-        lookupGenerator.configure(prop)
-        lookupGenerator.getDefaultProperties()
+        matcherGenerator.configure(prop)
+        matcherGenerator.getDefaultProperties()
 
         when:
-        List<CodeGenFile<JavaClassSource>> genFiles = lookupGenerator.generate(componentDataProvider.getData())
+        List<CodeGenFile<JavaClassSource>> genFiles = matcherGenerator.generate(componentDataProvider.getData())
 
         then:
         genFiles.size() == 3
-        genFiles.get(0).fileName == "SharedComponentsLookup"
-        genFiles.get(0).fileContent.getPackage() == "entitas.generated.shared"
-        genFiles.get(1).fileName == "GameComponentsLookup"
-        genFiles.get(1).subDir == "game"
-        genFiles.get(1).fileContent.getPackage() == "entitas.generated.game"
-        genFiles.get(2).fileName == "TestComponentsLookup"
+        genFiles.get(0).fileName == "GameMatcher"
+        genFiles.get(0).subDir == "game"
+        genFiles.get(0).fileContent.getPackage() == "entitas.generated.game"
+        genFiles.get(1).fileName == "TestMatcher"
+        genFiles.get(1).subDir == "test"
+        genFiles.get(1).fileContent.getPackage() == "entitas.generated.test"
+        genFiles.get(2).fileName == "CoreMatcher"
         genFiles.get(2).subDir == "test"
         genFiles.get(2).fileContent.getPackage() == "entitas.generated.test"
 

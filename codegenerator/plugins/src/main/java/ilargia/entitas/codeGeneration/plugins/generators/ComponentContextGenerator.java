@@ -1,13 +1,11 @@
 package ilargia.entitas.codeGeneration.plugins.generators;
 
-import ilargia.entitas.Entity;
 import ilargia.entitas.codeGeneration.data.CodeGenFile;
 import ilargia.entitas.codeGeneration.data.CodeGeneratorData;
 import ilargia.entitas.codeGeneration.interfaces.ICodeGenerator;
 import ilargia.entitas.codeGeneration.interfaces.IConfigurable;
 import ilargia.entitas.codeGeneration.plugins.config.TargetPackageConfig;
 import ilargia.entitas.codeGeneration.plugins.dataProviders.components.ComponentData;
-import ilargia.entitas.codeGeneration.plugins.dataProviders.components.providers.MemberDataProvider;
 import org.apache.commons.lang3.text.WordUtils;
 import org.jboss.forge.roaster.Roaster;
 import org.jboss.forge.roaster.model.source.FieldSource;
@@ -23,7 +21,7 @@ import java.util.stream.Collectors;
 import static ilargia.entitas.codeGeneration.plugins.dataProviders.components.providers.ComponentTypeDataProvider.getFullTypeName;
 import static ilargia.entitas.codeGeneration.plugins.dataProviders.components.providers.ComponentTypeDataProvider.getTypeName;
 import static ilargia.entitas.codeGeneration.plugins.dataProviders.components.providers.ConstructorDataProvider.getConstructorData;
-import static ilargia.entitas.codeGeneration.plugins.dataProviders.components.providers.ContextsDataProvider.getContextNames;
+import static ilargia.entitas.codeGeneration.plugins.dataProviders.components.providers.ContextsComponentDataProvider.getContextNames;
 import static ilargia.entitas.codeGeneration.plugins.dataProviders.components.providers.IsUniqueDataProvider.isUnique;
 import static ilargia.entitas.codeGeneration.plugins.dataProviders.components.providers.MemberDataProvider.getMemberData;
 import static ilargia.entitas.codeGeneration.plugins.dataProviders.components.providers.ShouldGenerateMethodsDataProvider.shouldGenerateMethods;
@@ -74,54 +72,45 @@ public class ComponentContextGenerator implements ICodeGenerator<JavaClassSource
                 .filter(d -> d instanceof ComponentData)
                 .map(d -> (ComponentData) d)
                 .filter(d -> shouldGenerateMethods(d))
-                .forEach(d -> generateEntities(d));
+                .forEach(d -> generateContexts(d));
 
         contexts.values().forEach(f -> System.out.println(f.getFileContent().toString()));
         return contexts.values().stream().collect(Collectors.toList());
     }
 
-    private void generateEntities(ComponentData data) {
+    private void generateContexts(ComponentData data) {
         getContextNames(data).stream()
-                .forEach(contextName -> generateEntity(contextName, data));
+                .forEach(contextName -> generateContext(contextName, data));
     }
 
-    private void generateEntity(String contextName, ComponentData data) {
+    private void generateContext(String contextName, ComponentData data) {
         String pkgDestiny = targetPackageConfig.targetPackage();
-        CodeGenFile<JavaClassSource> genFile = getCodeGenFile(contextName, data);
-        JavaClassSource codeGenerated = genFile.getFileContent();
 
-        if (!pkgDestiny.endsWith(data.getSubDir())) {
-            pkgDestiny += "." + data.getSubDir();
-
-        }
-
-        codeGenerated.setPackage(pkgDestiny);
-        codeGenerated.addMethod()
-                .setName(contextName + "Context")
-                .setPublic()
-                .setConstructor(true)
-                .setParameters(String.format("int totalComponents, int startCreationIndex, ContextInfo contextInfo, EntityBaseFactory<%1$sEntity> factoryMethod", contextName))
-                .setBody("super(totalComponents, startCreationIndex, contextInfo, factoryMethod);");
-        codeGenerated.addImport("com.ilargia.games.entitas.api.*");
-
-        if (isUnique(data)) {
-            addContextMethods(contextName, data, codeGenerated);
-        }
-
-    }
-
-    private CodeGenFile<JavaClassSource> getCodeGenFile(String contextName, ComponentData data) {
-        if (contexts.containsKey(contextName)) {
-            return contexts.get(contextName);
-        } else {
+        if (!contexts.containsKey(contextName)) {
             JavaClassSource sourceGen = Roaster.parse(JavaClassSource.class, String.format("public class %1$sContext extends Context<%1$sEntity> {}", contextName));
-            CodeGenFile<JavaClassSource> genFile = new CodeGenFile<JavaClassSource>(contextName + "Context.java", sourceGen, data.getSubDir());
+            CodeGenFile<JavaClassSource> genFile = new CodeGenFile<JavaClassSource>(contextName + "Context", sourceGen, data.getSubDir());
             contexts.put(contextName, genFile);
-            return genFile;
+            JavaClassSource codeGenerated = genFile.getFileContent();
+
+            if (!pkgDestiny.endsWith(data.getSubDir())) {
+                pkgDestiny += "." + data.getSubDir();
+
+            }
+
+            codeGenerated.setPackage(pkgDestiny);
+            codeGenerated.addMethod()
+                    .setName(contextName + "Context")
+                    .setPublic()
+                    .setConstructor(true)
+                    .setParameters(String.format("int totalComponents, int startCreationIndex, ContextInfo contextInfo, EntityBaseFactory<%1$sEntity> factoryMethod", contextName))
+                    .setBody("super(totalComponents, startCreationIndex, contextInfo, factoryMethod);");
+            codeGenerated.addImport("com.ilargia.games.entitas.api.*");
+
+            if (isUnique(data)) {
+                addContextMethods(contextName, data, codeGenerated);
+            }
         }
     }
-
-
 
     private void addContextMethods(String contextName, ComponentData data, JavaClassSource codeGenerated) {
         addImports(getMemberData(data), codeGenerated);

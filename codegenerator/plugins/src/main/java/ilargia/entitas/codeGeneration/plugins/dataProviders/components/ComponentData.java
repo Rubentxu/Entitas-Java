@@ -12,18 +12,6 @@ public class ComponentData extends CodeGeneratorData {
         this.subDir = subDir;
     }
 
-    public String toComponentName(String fullTypeName, boolean ignoreNamespaces) {
-        try {
-            return ignoreNamespaces
-                    ? Class.forName(fullTypeName).getName()
-                    : fullTypeName;
-        } catch (ClassNotFoundException e) {
-            System.out.println("Error to component name");
-
-        }
-        return fullTypeName;
-    }
-
     public JavaClassSource getSource() {
         return source;
     }

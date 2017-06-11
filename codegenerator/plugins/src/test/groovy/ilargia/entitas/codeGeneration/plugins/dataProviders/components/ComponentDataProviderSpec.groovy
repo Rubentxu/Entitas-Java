@@ -2,7 +2,6 @@ package ilargia.entitas.codeGeneration.plugins.dataProviders.components
 
 import groovy.transform.TypeCheckingMode
 import ilargia.entitas.codeGeneration.data.CodeGeneratorData
-import ilargia.entitas.codeGeneration.gradle.EntitasGradleProject
 import ilargia.entitas.fixtures.TestProject
 import org.gradle.api.Project
 import org.gradle.api.plugins.JavaPlugin
@@ -14,7 +13,7 @@ import spock.lang.Title
 
 import static ilargia.entitas.codeGeneration.plugins.dataProviders.components.providers.ComponentTypeDataProvider.getFullTypeName
 import static ilargia.entitas.codeGeneration.plugins.dataProviders.components.providers.ConstructorDataProvider.getConstructorData
-import static ilargia.entitas.codeGeneration.plugins.dataProviders.components.providers.ContextsDataProvider.getContextNames
+import static ilargia.entitas.codeGeneration.plugins.dataProviders.components.providers.ContextsComponentDataProvider.getContextNames
 import static ilargia.entitas.codeGeneration.plugins.dataProviders.components.providers.EnumsDataProvider.getEnumData
 import static ilargia.entitas.codeGeneration.plugins.dataProviders.components.providers.GenericsDataProvider.getGenericsData
 import static ilargia.entitas.codeGeneration.plugins.dataProviders.components.providers.IsUniqueDataProvider.isUnique

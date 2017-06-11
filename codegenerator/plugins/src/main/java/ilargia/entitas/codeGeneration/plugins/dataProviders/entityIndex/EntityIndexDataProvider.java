@@ -9,7 +9,7 @@ import ilargia.entitas.codeGeneration.interfaces.ICodeGeneratorDataProvider;
 import ilargia.entitas.codeGeneration.interfaces.IConfigurable;
 import ilargia.entitas.codeGeneration.plugins.dataProviders.ProviderUtils;
 import ilargia.entitas.codeGeneration.plugins.dataProviders.components.ComponentData;
-import ilargia.entitas.codeGeneration.plugins.dataProviders.components.providers.ContextsDataProvider;
+import ilargia.entitas.codeGeneration.plugins.dataProviders.components.providers.ContextsComponentDataProvider;
 import ilargia.entitas.codeGenerator.annotations.CustomEntityIndex;
 import ilargia.entitas.codeGenerator.annotations.EntityIndex;
 import org.jboss.forge.roaster.model.source.AnnotationSource;
@@ -38,7 +38,7 @@ public class EntityIndexDataProvider implements ICodeGeneratorDataProvider, ICon
     public static String ENTITY_INDEX_MEMBER_NAME = "entityIndex_memberName";
 
     private CodeGeneratorConfig _codeGeneratorConfig = new CodeGeneratorConfig();
-    private ContextsDataProvider _contextsComponentDataProvider = new ContextsDataProvider();
+    private ContextsComponentDataProvider _contextsComponentDataProvider = new ContextsComponentDataProvider();
     private IAppDomain appDomain;
 
     public static <T> Collector<T, List<T>, T> singletonCollector() {
@@ -201,7 +201,8 @@ public class EntityIndexDataProvider implements ICodeGeneratorDataProvider, ICon
         setKeyType(data, info.getType().getName());
         setComponentType(data, data.getSource().getCanonicalName());
         setMemberName(data, info.getName());
-        setContextNames(data, _contextsComponentDataProvider.getContextNamesOrDefault(data.getSource()));
+        _contextsComponentDataProvider.provide(data);
+        setContextNames(data, _contextsComponentDataProvider.getContextNames(data));
 
         return data;
     }

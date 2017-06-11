@@ -23,7 +23,7 @@ public class ComponentDataProvider extends AbstractConfigurableConfig implements
 
     List<IComponentDataProvider> _dataProviders;
     private CodeGeneratorConfig _codeGeneratorConfig;
-    private ContextsDataProvider _contextsComponentDataProvider = new ContextsDataProvider();
+    private ContextsComponentDataProvider _contextsComponentDataProvider;
     private IAppDomain appDomain;
 
     public ComponentDataProvider() {
@@ -33,6 +33,7 @@ public class ComponentDataProvider extends AbstractConfigurableConfig implements
     protected ComponentDataProvider(List<IComponentDataProvider> dataProviders) {
         _dataProviders = dataProviders;
         _codeGeneratorConfig = new CodeGeneratorConfig();
+        _contextsComponentDataProvider = new ContextsComponentDataProvider();
 
     }
 
@@ -50,7 +51,7 @@ public class ComponentDataProvider extends AbstractConfigurableConfig implements
         return new ArrayList<IComponentDataProvider>() {{
             add(new ComponentTypeDataProvider());
             add(new ConstructorDataProvider());
-            add(new ContextsDataProvider());
+            add(new ContextsComponentDataProvider());
             add(new CustomPrefixDataProvider());
             add(new EnumsDataProvider());
             add(new GenericsDataProvider());
@@ -83,13 +84,14 @@ public class ComponentDataProvider extends AbstractConfigurableConfig implements
 
     @Override
     public Properties getDefaultProperties() {
-        _codeGeneratorConfig.configure(properties);
         return _dataProviders.stream()
                 .filter(p -> p instanceof IConfigurable)
                 .map(p -> (IConfigurable) p)
                 .map(p -> p.getDefaultProperties())
                 .reduce(properties, (a, b) -> {
                     a.putAll(propertiesToMap(b));
+                    a.putAll(_codeGeneratorConfig.getDefaultProperties());
+                    a.putAll(_contextsComponentDataProvider.getDefaultProperties());
                     return a;
                 });
 
@@ -99,12 +101,13 @@ public class ComponentDataProvider extends AbstractConfigurableConfig implements
     public void configure(Properties properties) {
         super.configure(properties);
         _codeGeneratorConfig.configure(properties);
+        _contextsComponentDataProvider.configure(properties);
         _dataProviders.stream()
                 .filter(p -> p instanceof IConfigurable)
                 .map(p -> (IConfigurable) p)
                 .forEach(p -> p.configure(properties));
 
-        _contextsComponentDataProvider.configure(properties);
+
     }
 
     @Override
@@ -125,7 +128,12 @@ public class ComponentDataProvider extends AbstractConfigurableConfig implements
         List<ComponentData> dataFromNonComponents = datas.stream()
                 .filter(s -> !s.getSource().hasInterface(IComponent.class))
                 .filter(s -> !s.getSource().isAbstract())
-                .filter(s -> _contextsComponentDataProvider.extractContextNames(s.getSource()).size() != 0)
+
+                .map(s->  {
+                    _contextsComponentDataProvider.provide(s);
+                    return s;
+                })
+                .filter(s -> _contextsComponentDataProvider.getContextNames(s).size() != 0)
                 .flatMap(s -> provideDataForNonComponent(s).stream())
                 .collect(Collectors.toList());
 
@@ -140,10 +148,12 @@ public class ComponentDataProvider extends AbstractConfigurableConfig implements
         for (IComponentDataProvider dataProvider : _dataProviders) {
             dataProvider.provide(data);
         }
+        _contextsComponentDataProvider.provide(data);
         return data;
     }
 
     List<ComponentData> provideDataForNonComponent(ComponentData data) {
+        _contextsComponentDataProvider.provide(data);
         return getComponentNames(data.getSource()).stream()
                 .map(componentName -> {
                     ComponentTypeDataProvider.setFullTypeName(data, componentName);

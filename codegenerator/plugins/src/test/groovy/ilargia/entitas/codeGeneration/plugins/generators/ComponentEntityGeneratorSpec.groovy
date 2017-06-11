@@ -1,16 +1,8 @@
 package ilargia.entitas.codeGeneration.plugins.generators
 
-import groovy.transform.TypeCheckingMode
 import ilargia.entitas.codeGeneration.data.CodeGenFile
-import ilargia.entitas.codeGeneration.data.CodeGeneratorData
 import ilargia.entitas.codeGeneration.interfaces.IAppDomain
-import ilargia.entitas.codeGeneration.plugins.config.TargetPackageConfig
-import ilargia.entitas.codeGeneration.plugins.dataProviders.ProviderUtils
-import ilargia.entitas.codeGeneration.plugins.dataProviders.components.ComponentData
 import ilargia.entitas.codeGeneration.plugins.dataProviders.components.ComponentDataProvider
-import ilargia.entitas.codeGeneration.plugins.postProcessors.WriteToDiskPostProcessor
-import ilargia.entitas.codeGeneration.utils.CodeGeneratorUtil
-import ilargia.entitas.fixtures.FixtureProvider
 import ilargia.entitas.fixtures.TestProject
 import org.gradle.api.Project
 import org.gradle.api.plugins.JavaPlugin
@@ -20,16 +12,6 @@ import spock.lang.Narrative
 import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Title
-
-import static ilargia.entitas.codeGeneration.plugins.dataProviders.components.providers.ComponentTypeDataProvider.getFullTypeName
-import static ilargia.entitas.codeGeneration.plugins.dataProviders.components.providers.ConstructorDataProvider.getConstructorData
-import static ilargia.entitas.codeGeneration.plugins.dataProviders.components.providers.ContextsDataProvider.getContextNames
-import static ilargia.entitas.codeGeneration.plugins.dataProviders.components.providers.EnumsDataProvider.getEnumData
-import static ilargia.entitas.codeGeneration.plugins.dataProviders.components.providers.GenericsDataProvider.getGenericsData
-import static ilargia.entitas.codeGeneration.plugins.dataProviders.components.providers.IsUniqueDataProvider.isUnique
-import static ilargia.entitas.codeGeneration.plugins.dataProviders.components.providers.MemberDataProvider.getMemberData
-import static ilargia.entitas.codeGeneration.plugins.dataProviders.components.providers.ShouldGenerateComponentDataProvider.shouldGenerateComponent
-import static ilargia.entitas.codeGeneration.plugins.dataProviders.components.providers.ShouldGenerateMethodsDataProvider.shouldGenerateMethods
 
 @Narrative("""
 Como usuario de la aplicacion
@@ -76,11 +58,12 @@ class ComponentEntityGeneratorSpec extends Specification {
     }
 
 
-    void 'Consultamos al generador ComponentEntityGenerator por las propiedades que se extraen'() {
+    void 'Generamos las fuentes con los datos del proveedor'() {
         given:
         Properties prop = new Properties()
         prop.setProperty("CodeGeneration.CodeGenerator.SearchPkg","ilargia.entitas.fixtures.components")
         componentDataProvider.configure(prop)
+        componentDataProvider.getDefaultProperties()
         entityGenerator.configure(prop)
         entityGenerator.getDefaultProperties()
 
