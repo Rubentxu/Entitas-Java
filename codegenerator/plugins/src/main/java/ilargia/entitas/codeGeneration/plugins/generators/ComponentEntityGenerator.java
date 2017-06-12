@@ -31,7 +31,7 @@ import static ilargia.entitas.codeGeneration.plugins.dataProviders.components.pr
 
 public class ComponentEntityGenerator implements ICodeGenerator<JavaClassSource>, IConfigurable {
 
-    public static final String DEFAULT_COMPONENT_LOOKUP_TAG = "ComponentsLookup";
+    private static final String DEFAULT_COMPONENT_LOOKUP_TAG = "ComponentsLookup";
     private TargetPackageConfig targetPackageConfig;
     private Map<String,CodeGenFile<JavaClassSource>> entities;
 
