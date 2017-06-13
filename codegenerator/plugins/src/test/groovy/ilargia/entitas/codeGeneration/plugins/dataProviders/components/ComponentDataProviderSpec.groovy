@@ -67,7 +67,7 @@ class ComponentDataProviderSpec extends Specification {
     void 'Consultamos al proveedor ComponentDataProvider por los contextos extraidos de los componentes'() {
         given:
         Properties prop = new Properties()
-        prop.setProperty("CodeGeneration.CodeGenerator.SearchPkg","ilargia.entitas.fixtures.components")
+        prop.setProperty("CodeGeneration.SearchPkg","ilargia.entitas.fixtures.components")
         componentDataProvider.configure(prop)
 
         when:

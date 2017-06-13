@@ -15,8 +15,12 @@ public class TargetPackageConfig extends AbstractConfigurableConfig {
         return properties;
     }
 
-    public String targetPackage() {
+    public String getTargetPackage() {
         return properties.getProperty(TARGET_PACKAGE_KEY);
+    }
+
+    public void setTargetPackage(String target) {
+        properties.setProperty(TARGET_PACKAGE_KEY, target);
     }
 
 }

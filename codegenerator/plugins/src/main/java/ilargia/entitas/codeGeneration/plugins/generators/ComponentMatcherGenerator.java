@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 import static ilargia.entitas.codeGeneration.plugins.dataProviders.components.providers.ComponentTypeDataProvider.getTypeName;
 import static ilargia.entitas.codeGeneration.plugins.dataProviders.components.providers.ContextsComponentDataProvider.getContextNames;
 import static ilargia.entitas.codeGeneration.plugins.dataProviders.components.providers.ShouldGenerateMethodsDataProvider.shouldGenerateMethods;
-import static ilargia.entitas.codeGeneration.plugins.generators.ComponentEntityGenerator.DEFAULT_COMPONENT_LOOKUP_TAG;
+import static ilargia.entitas.codeGeneration.plugins.generators.EntitasGenerator.DEFAULT_COMPONENT_LOOKUP_TAG;
 
 
 public class ComponentMatcherGenerator implements ICodeGenerator<JavaClassSource>, IConfigurable {

@@ -6,7 +6,7 @@ import org.gradle.api.Project;
 public class CodegenPlugin implements Plugin<Project> {
     @Override
     public void apply(Project project) {
-        project.getExtensions().create("EntitasSetting", CodeGenerationPluginExtension.class);
+        CodeGenerationPluginExtension config = project.getExtensions().create("EntitasSetting", CodeGenerationPluginExtension.class);
         project.getTasks().create("codegen", CodeGenerationTask.class);
     }
 }

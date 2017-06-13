@@ -20,17 +20,17 @@ Para falicitarme el desarrollo en la aplicacion.
 """)
 @Title(""" """)
 @groovy.transform.TypeChecked
-class ComponentEntityGeneratorSpec extends Specification {
+class EntitasGeneratorSpec extends Specification {
 
     @Shared
-    ComponentEntityGenerator entityGenerator
+    EntitasGenerator entitasGenerator
     @Shared
     Project project
     @Shared
     ComponentDataProvider componentDataProvider
 
     def setupSpec() {
-        entityGenerator =  new ComponentEntityGenerator()
+        entitasGenerator =  new EntitasGenerator()
         componentDataProvider = new ComponentDataProvider()
         project = ProjectBuilder.builder().withProjectDir(new File("./")).withGradleUserHomeDir(new File("./build")).build()
         JavaPlugin plugin = project.getPlugins().apply(JavaPlugin.class)
@@ -40,20 +40,20 @@ class ComponentEntityGeneratorSpec extends Specification {
     }
 
 
-    void 'Consultamos al generador ComponentEntityGenerator por la configuracion por defecto'() {
+    void 'Consultamos al generador EntitasGenerator por la configuracion por defecto'() {
         given:
         Properties prop = new Properties()
         prop.setProperty("CodeGeneration.CodeGenerator.SearchPkg","ilargia.entitas.fixtures.components")
 
         when:
         componentDataProvider.configure(prop)
-        entityGenerator.configure(prop)
+        entitasGenerator.configure(prop)
 
         then:
-        entityGenerator.gePriority() == 0
-        entityGenerator.getName() == "Component (Entity API)"
-        entityGenerator.isEnableByDefault() == true
-        entityGenerator.runInDryMode() == true
+        entitasGenerator.gePriority() == 0
+        entitasGenerator.getName() == "Entitas contexts"
+        entitasGenerator.isEnableByDefault() == true
+        entitasGenerator.runInDryMode() == true
 
     }
 
@@ -64,14 +64,14 @@ class ComponentEntityGeneratorSpec extends Specification {
         prop.setProperty("CodeGeneration.SearchPkg","ilargia.entitas.fixtures.components")
         componentDataProvider.configure(prop)
         componentDataProvider.getDefaultProperties()
-        entityGenerator.configure(prop)
-        entityGenerator.getDefaultProperties()
+        entitasGenerator.configure(prop)
+        entitasGenerator.getDefaultProperties()
 
         when:
-        List<CodeGenFile<JavaClassSource>> genFiles = entityGenerator.generate(componentDataProvider.getData())
+        List<CodeGenFile<JavaClassSource>> genFiles = entitasGenerator.generate(componentDataProvider.getData())
 
         then:
-        genFiles.size() == 3
+        genFiles.size() == 1
 
 
     }

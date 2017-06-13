@@ -27,11 +27,10 @@ import static ilargia.entitas.codeGeneration.plugins.dataProviders.components.pr
 import static ilargia.entitas.codeGeneration.plugins.dataProviders.components.providers.MemberDataProvider.getMemberData;
 import static ilargia.entitas.codeGeneration.plugins.dataProviders.components.providers.MemberDataProvider.isFlagComponent;
 import static ilargia.entitas.codeGeneration.plugins.dataProviders.components.providers.ShouldGenerateMethodsDataProvider.shouldGenerateMethods;
+import static ilargia.entitas.codeGeneration.plugins.generators.EntitasGenerator.DEFAULT_COMPONENT_LOOKUP_TAG;
 
 
 public class ComponentEntityGenerator implements ICodeGenerator<JavaClassSource>, IConfigurable {
-
-    private static final String DEFAULT_COMPONENT_LOOKUP_TAG = "ComponentsLookup";
     private TargetPackageConfig targetPackageConfig;
     private Map<String,CodeGenFile<JavaClassSource>> entities;
 

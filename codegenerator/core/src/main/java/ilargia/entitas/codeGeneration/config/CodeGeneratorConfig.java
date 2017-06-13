@@ -7,8 +7,8 @@ import java.util.stream.Collectors;
 
 public class CodeGeneratorConfig extends AbstractConfigurableConfig {
 
-    public static final String SEARCH_PACKAGES_KEY = "CodeGeneration.CodeGenerator.SearchPkg";
-    public static final String PLUGINS_SCAN_KEY = "CodeGeneration.Plugins.Packages.Scan";
+    public static final String SEARCH_PACKAGES_KEY = "CodeGeneration.SearchPkg";
+    public static final String PLUGINS_SCAN_KEY = "CodeGeneration.Plugins.Packages";
     public static final String DATA_PROVIDERS_KEY = "CodeGeneration.DataProviders";
     public static final String CODE_GENERATORS_KEY = "CodeGeneration.CodeGenerators";
     public static final String POST_PROCESSORS_KEY = "CodeGeneration.PostProcessors";

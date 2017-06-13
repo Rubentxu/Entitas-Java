@@ -1,5 +1,6 @@
 package ilargia.entitas.codeGeneration.plugins.generators;
 
+import ilargia.entitas.Context;
 import ilargia.entitas.codeGeneration.data.CodeGenFile;
 import ilargia.entitas.codeGeneration.data.CodeGeneratorData;
 import ilargia.entitas.codeGeneration.interfaces.ICodeGenerator;
@@ -10,10 +11,7 @@ import org.apache.commons.lang3.text.WordUtils;
 import org.jboss.forge.roaster.Roaster;
 import org.jboss.forge.roaster.model.source.JavaClassSource;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Properties;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static ilargia.entitas.codeGeneration.plugins.dataProviders.components.providers.ContextsComponentDataProvider.getContextNames;
@@ -21,7 +19,7 @@ import static ilargia.entitas.codeGeneration.plugins.dataProviders.components.pr
 
 
 public class EntitasGenerator implements ICodeGenerator<JavaClassSource>, IConfigurable {
-    private static final String DEFAULT_COMPONENT_LOOKUP_TAG = "ComponentsLookup";
+    public static final String DEFAULT_COMPONENT_LOOKUP_TAG = "ComponentsLookup";
     private TargetPackageConfig targetPackageConfig;
     private Set<String> contexts;
 
@@ -32,7 +30,7 @@ public class EntitasGenerator implements ICodeGenerator<JavaClassSource>, IConfi
 
     @Override
     public String getName() {
-        return "Component (Context API)";
+        return "Entitas contexts";
     }
 
     @Override
@@ -68,15 +66,18 @@ public class EntitasGenerator implements ICodeGenerator<JavaClassSource>, IConfi
                 .filter(d -> shouldGenerateMethods(d))
                 .forEach(d -> generateContexts(d));
 
-         subDir = ((CodeGeneratorData)dataList.get(0)).getSubDir();
+        String subDir = ((ComponentData)dataList.get(0)).getSubDir();
         String pkgDestiny = targetPackageConfig.targetPackage();
-        if (!pkgDestiny.endsWith(subDir.getSubDir())) {
-            pkgDestiny += "." + dataList.getSubDir();
+        if (!pkgDestiny.endsWith(subDir)) {
+            pkgDestiny += "." + subDir;
 
         }
 
+        String finalPkgDestiny = pkgDestiny;
+        return new ArrayList<CodeGenFile<JavaClassSource>>(){{
+            add(generateEntitas(contexts, finalPkgDestiny));
+        }};
 
-        return contexts.stream().collect(Collectors.toList());
     }
 
     private void generateContexts(ComponentData data) {
@@ -86,29 +87,18 @@ public class EntitasGenerator implements ICodeGenerator<JavaClassSource>, IConfi
                 });
     }
 
-    private void generateContext(String contextName, ComponentData data) {
-        String pkgDestiny = targetPackageConfig.targetPackage();
 
-        if (!contexts.contains(contextName)) {
-            JavaClassSource sourceGen = Roaster.parse(JavaClassSource.class, String.format("public class %1$sContext extends Context<%1$sEntity> {}", contextName));
-            CodeGenFile<JavaClassSource> genFile = new CodeGenFile<JavaClassSource>(contextName + "Context", sourceGen, data.getSubDir());
-            contexts.put(contextName, genFile);
-            JavaClassSource codeGenerated = genFile.getFileContent();
+    private CodeGenFile<JavaClassSource> generateEntitas(Set<String> contextNames, String pkgDestiny) {
+        JavaClassSource sourceGen = Roaster.parse(JavaClassSource.class, "public class Entitas implements IContexts{}");
+        CodeGenFile<JavaClassSource> genFile = new CodeGenFile<JavaClassSource>( "Entitas", sourceGen, "");
+        sourceGen.setPackage(pkgDestiny);
+        createMethodConstructor(sourceGen, contextNames);
+        createContextsMethod(sourceGen, contextNames);
+        createMethodAllContexts(sourceGen, contextNames);
+        createContextFields(sourceGen, contextNames);
 
-
-
-        }
-    }
-
-    public JavaClassSource generateEntitas(Set<String> contextNames, String pkgDestiny) {
-        JavaClassSource javaClass = Roaster.parse(JavaClassSource.class, "public class Entitas implements IContexts{}");
-        javaClass.setPackage(pkgDestiny);
-        createMethodConstructor(javaClass, contextNames);
-        createContextsMethod(javaClass, contextNames);
-        createMethodAllContexts(javaClass, contextNames);
-        createContextFields(javaClass, contextNames);
-
-        return javaClass;
+        System.out.println(genFile.getFileContent());
+        return genFile;
 
     }
 
@@ -157,7 +147,7 @@ public class EntitasGenerator implements ICodeGenerator<JavaClassSource>, IConfi
     }
 
     private void createContextFields(JavaClassSource javaClass, Set<String> contextNames) {
-        javaClass.addImport("Context");
+        javaClass.addImport(Context.class);
         javaClass.addImport("com.ilargia.games.entitas.api.*");
         contextNames.forEach((contextName) -> {
 

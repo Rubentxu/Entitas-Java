@@ -62,7 +62,7 @@ class ComponentContextGeneratorSpec extends Specification {
     void 'Generamos las fuentes con los datos del proveedor'() {
         given:
         Properties prop = new Properties()
-        prop.setProperty("CodeGeneration.CodeGenerator.SearchPkg","ilargia.entitas.fixtures.components")
+        prop.setProperty("CodeGeneration.SearchPkg","ilargia.entitas.fixtures.components")
         componentDataProvider.configure(prop)
         componentDataProvider.getDefaultProperties()
         contextGenerator.configure(prop)
