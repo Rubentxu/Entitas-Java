@@ -88,7 +88,7 @@ public class Status extends AbstractCommand {
                 Map<String, String> configurables = null;
 
                 try {
-                    types = CodeGeneratorUtil.loadTypesFromPlugins(properties);
+                    types = CodeGeneratorUtil.loadTypesFromPlugins(config);
                     configurables = CodeGeneratorUtil.getConfigurables(
                             CodeGeneratorUtil.getUsed(types, config.getDataProviders(), ICodeGeneratorDataProvider.class),
                             CodeGeneratorUtil.getUsed(types, config.getCodeGenerators(), ICodeGenerator.class),

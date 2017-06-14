@@ -40,10 +40,6 @@ public class EntitasGradleProject implements IAppDomain {
 
     }
 
-
-
-
-
     @Override
     public String getAppRoot() {
         return project.getRootProject().toString();

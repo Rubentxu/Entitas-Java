@@ -24,7 +24,7 @@ public class CodeGeneratorConfig extends AbstractConfigurableConfig {
                         "ilargia.entitas.codeGeneration.plugins.dataProviders.entityIndex.EntityIndexDataProvider"));
         if (!properties.containsKey(CODE_GENERATORS_KEY)) properties.setProperty(CODE_GENERATORS_KEY, String.join(", ",
                 "ilargia.entitas.codeGeneration.plugins.generators.ComponentEntityGenerator"));
-        if (properties.containsKey(POST_PROCESSORS_KEY)) properties.setProperty(POST_PROCESSORS_KEY, String.join(", ",
+        if (!properties.containsKey(POST_PROCESSORS_KEY)) properties.setProperty(POST_PROCESSORS_KEY, String.join(", ",
                 "ilargia.entitas.codeGeneration.plugins.postProcessors.AddFileHeaderPostProcessor",
                 "ilargia.entitas.codeGeneration.plugins.postProcessors.ConsoleWriteLinePostProcessor",
                 "ilargia.entitas.codeGeneration.plugins.postProcessors.WriteToDiskPostProcessor"));

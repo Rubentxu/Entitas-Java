@@ -150,7 +150,7 @@ public class FixConfig extends AbstractCommand {
                 List<Class> Classs = null;
 
                 try {
-                    Classs = CodeGeneratorUtil.loadTypesFromPlugins(properties);
+                    Classs = CodeGeneratorUtil.loadTypesFromPlugins(config);
                     getConfigurables(Classs, config);
                 } catch (Exception ex) {
                     throw ex;

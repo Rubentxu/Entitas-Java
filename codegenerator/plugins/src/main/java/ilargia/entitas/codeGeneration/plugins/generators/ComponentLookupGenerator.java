@@ -94,7 +94,7 @@ public class ComponentLookupGenerator implements ICodeGenerator<JavaClassSource>
     }
 
     private JavaClassSource generateIndicesLookup(String contextName, List<ComponentData> dataList) {
-        String pkgDestiny = targetPackageConfig.targetPackage();
+        String pkgDestiny = targetPackageConfig.getTargetPackage();
 
         JavaClassSource javaClass = Roaster.parse(JavaClassSource.class, String.format("public class %1$s {}",
                 WordUtils.capitalize(contextName) + DEFAULT_COMPONENT_LOOKUP_TAG));

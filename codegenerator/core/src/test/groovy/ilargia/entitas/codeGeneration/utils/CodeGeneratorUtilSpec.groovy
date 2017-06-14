@@ -1,5 +1,6 @@
 package ilargia.entitas.codeGeneration.utils
 
+import ilargia.entitas.codeGeneration.config.CodeGeneratorConfig
 import spock.lang.Narrative
 import spock.lang.Specification
 import spock.lang.Title
@@ -16,10 +17,14 @@ class CodeGeneratorUtilSpec extends Specification {
     void 'Buscamos los plugins configurados en las properties'() {
         given:
         Properties prop = new Properties()
-        prop.setProperty("CodeGeneration.Plugins.Packages.Scan", "ilargia.entitas.codeGeneration.utils, ilargia.entitas.codeGeneration.data ");
-
+        CodeGeneratorConfig codeGeneratorConfig = new CodeGeneratorConfig()
+        codeGeneratorConfig.configure(prop)
+        codeGeneratorConfig.setPlugins(new ArrayList<String>()
+        {{  add("ilargia.entitas.codeGeneration.utils")
+            add("ilargia.entitas.codeGeneration.data")
+        }})
         when:
-        List<Class<?>> classes = CodeGeneratorUtil.loadTypesFromPlugins(prop)
+        List<Class<?>> classes = CodeGeneratorUtil.loadTypesFromPlugins(codeGeneratorConfig)
 
         then:
         classes.size() == 4

@@ -23,13 +23,13 @@ public class CodeGeneratorUtil {
                 .forEach(p -> p.configure(properties));
     }
 
-    public static List<Class> loadTypesFromPlugins(Properties properties) {
-        CodeGeneratorConfig config = new CodeGeneratorConfig();
-        config.configure(properties);
-
+    public static List<Class> loadTypesFromPlugins(CodeGeneratorConfig config) {
         return config.getPlugins().stream()
-                .flatMap(s -> CodeFinder.findClassRecursive(s).stream())
-                .sorted((typeA, typeB) -> typeA.getCanonicalName().compareTo(typeB.getCanonicalName()))
+                .flatMap(s-> CodeFinder.findClassRecursive(s).stream())
+                .filter(s-> s.getCanonicalName() != null )
+                .sorted((typeA, typeB) -> {
+                   return typeA.getCanonicalName().compareTo(typeB.getCanonicalName());
+                })
                 .collect(Collectors.toList());
 
     }

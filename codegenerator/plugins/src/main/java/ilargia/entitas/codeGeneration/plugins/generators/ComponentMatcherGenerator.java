@@ -80,7 +80,7 @@ public class ComponentMatcherGenerator implements ICodeGenerator<JavaClassSource
     }
 
     private void generateEntity(String contextName, ComponentData data) {
-        String pkgDestiny = targetPackageConfig.targetPackage();
+        String pkgDestiny = targetPackageConfig.getTargetPackage();
         CodeGenFile<JavaClassSource> genFile = getCodeGenFile(contextName, data);
         JavaClassSource codeGenerated = genFile.getFileContent();
 

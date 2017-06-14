@@ -67,7 +67,7 @@ public class EntitasGenerator implements ICodeGenerator<JavaClassSource>, IConfi
                 .forEach(d -> generateContexts(d));
 
         String subDir = ((ComponentData)dataList.get(0)).getSubDir();
-        String pkgDestiny = targetPackageConfig.targetPackage();
+        String pkgDestiny = targetPackageConfig.getTargetPackage();
         if (!pkgDestiny.endsWith(subDir)) {
             pkgDestiny += "." + subDir;
 

@@ -2,6 +2,7 @@ package ilargia.entitas.codeGeneration.gradle;
 
 import ilargia.entitas.codeGeneration.CodeGenerator;
 import ilargia.entitas.codeGeneration.config.CodeGeneratorConfig;
+import ilargia.entitas.codeGeneration.data.CodeGenFile;
 import ilargia.entitas.codeGeneration.interfaces.ICodeGenFilePostProcessor;
 import ilargia.entitas.codeGeneration.interfaces.ICodeGenerator;
 import ilargia.entitas.codeGeneration.interfaces.ICodeGeneratorDataProvider;
@@ -12,19 +13,12 @@ import java.util.List;
 import java.util.Properties;
 
 public class CodeGenerationTask extends DefaultTask {
-    private EntitasGradleProject entitasProject;
-    private CodeGeneratorConfig codeGeneratorConfig;
-    private Properties properties;
 
-    public CodeGenerationTask() {
-        entitasProject = new EntitasGradleProject(getProject());
-        properties = new Properties();
-        codeGeneratorConfig = new CodeGeneratorConfig();
-    }
 
     public CodeGenerator getCodeGenerator(CodeGenerationPluginExtension extension) {
+        Properties properties = new Properties();
         extension.configure(properties);
-        List<Class> types = CodeGeneratorUtil.loadTypesFromPlugins(properties);
+        List<Class> types = CodeGeneratorUtil.loadTypesFromPlugins(extension);
 
         List<ICodeGeneratorDataProvider> dataProviders = CodeGeneratorUtil.getEnabledInstances(types,
                 extension.getDataProviders(), ICodeGeneratorDataProvider.class);
@@ -43,12 +37,13 @@ public class CodeGenerationTask extends DefaultTask {
 
     @TaskAction
     public void run() {
+        EntitasGradleProject entitasProject = new EntitasGradleProject(getProject());
         CodeGenerationPluginExtension extension = getProject().getExtensions().findByType(CodeGenerationPluginExtension.class);
         if (extension == null) {
             extension = new CodeGenerationPluginExtension();
         }
         CodeGenerator codeGenerator = getCodeGenerator(extension);
-        codeGenerator.generate();
+        List<CodeGenFile> gen = codeGenerator.generate();
 
     }
 

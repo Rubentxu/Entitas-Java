@@ -84,7 +84,7 @@ public class ComponentContextGenerator implements ICodeGenerator<JavaClassSource
     }
 
     private void generateContext(String contextName, ComponentData data) {
-        String pkgDestiny = targetPackageConfig.targetPackage();
+        String pkgDestiny = targetPackageConfig.getTargetPackage();
 
         if (!contexts.containsKey(contextName)) {
             JavaClassSource sourceGen = Roaster.parse(JavaClassSource.class, String.format("public class %1$sContext extends Context<%1$sEntity> {}", contextName));
