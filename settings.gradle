@@ -6,5 +6,5 @@ include 'entitas-gdx'
 include 'debugger'
 include 'codegenerator:core'
 include 'codegenerator:plugins'
-include 'codegenerator:gradle'
+include 'codegenerator:codeGenGradle'
 

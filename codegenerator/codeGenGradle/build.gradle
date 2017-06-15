@@ -1,3 +1,9 @@
+plugins {
+    id 'java-gradle-plugin'
+    id 'maven-publish'
+    id 'ivy-publish'
+}
+
 apply plugin: 'java'
 apply plugin: 'groovy'
 apply plugin: 'maven'
@@ -21,12 +27,33 @@ repositories {
     mavenLocal()
 }
 
+gradlePlugin {
+    plugins {
+        codegen {
+            id = "entitas.codegen"
+            implementationClass = "ilargia.entitas.codeGeneration.gradle.CodegenPlugin"
+        }
+
+
+    }
+}
+
+publishing {
+    repositories {
+        maven {
+            url "build/consuming/maven-repo"
+        }
+        ivy {
+            url "build/consuming/ivy-repo"
+        }
+    }
+}
+
+
 dependencies {
-    compile gradleApi()
     compile project(":codegenerator:core")
     compile project(":codegenerator:plugins")
 
-    testCompile gradleTestKit()
     testCompile 'junit:junit:4.12'
     testCompile('org.spockframework:spock-core:1.1-groovy-2.4-rc-4') {
         exclude module: "junit-dep"

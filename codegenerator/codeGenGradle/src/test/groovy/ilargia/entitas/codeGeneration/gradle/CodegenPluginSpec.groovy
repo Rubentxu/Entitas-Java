@@ -13,7 +13,7 @@ class CodegenPluginSpec extends Specification {
         Project project = ProjectBuilder.builder().build()
 
         when:
-        project.getPlugins().apply 'ilargia.entitas.codeGeneration.gradle.codegen.plugin'
+        project.getPlugins().apply 'entitas.codegen'
 
         then:
         project.getTasks().getByPath("codegen") instanceof CodeGenerationTask
@@ -37,14 +37,18 @@ class CodegenPluginSpec extends Specification {
 
     void 'Queremos comprobar que se genero correctamente la configuracion de generacion de codigo'() {
         given:
+        Properties prop = new Properties()
         Project project = ProjectBuilder.builder().build()
-        project.getPlugins().apply 'ilargia.entitas.codeGeneration.gradle.codegen.plugin'
+        project.getPlugins().apply 'entitas.codegen'
 
         when:
-        CodeGenerationPluginExtension ext = project.getExtensions().getByName("EntitasSetting") as CodeGenerationPluginExtension
+        CodeGenerationPluginExtension ext = project.getExtensions().getByName("entitas") as CodeGenerationPluginExtension
+        ext.configure(prop)
+        ext.getDefaultProperties()
 
         then:
-        ext.getProperties().get("configFile") == "Entitas.properties"
+        ext.getProperties().get("targetPackage") == "entitas.generated"
+        ext.getTargetPackage() == "entitas.generated"
 
     }
 
