@@ -7,7 +7,7 @@ dist: trusty
 
 install: true
 before_script:
-  - gradle -S clean --console=plain
+  - gradle -S entitas:clean --console=plain
 
 script:
   - gradle -S -i --console=plain entitas:assemble

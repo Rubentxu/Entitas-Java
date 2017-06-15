@@ -13,6 +13,7 @@ public class CodeGenerationPluginExtension extends CodeGeneratorConfig {
 
     public CodeGenerationPluginExtension() {
         targetPackageConfig = new TargetPackageConfig();
+        configure(new Properties());
     }
 
     @Override
@@ -36,44 +37,24 @@ public class CodeGenerationPluginExtension extends CodeGeneratorConfig {
         targetPackageConfig.setTargetPackage(target);
     }
 
-    public List<String> getSearchPackagesKey() {
-        return getPackages();
-    }
-
     public void setSearchPackagesKey(String ...packages) {
-        this.setPackages(Arrays.asList(packages));
-    }
-
-    public List<String> getPluginsPackages() {
-        return getPlugins();
+        super.setPackages(Arrays.asList(packages));
     }
 
     public void setPluginsPackages(String ...plugins) {
-        setPlugins(Arrays.asList(plugins));
-    }
-
-    public List<String> getDataProviders() {
-        return getDataProviders();
+        super.setPlugins(Arrays.asList(plugins));
     }
 
     public void setDataProviders(String ...plugins) {
-        setDataProviders(Arrays.asList(plugins));
-    }
-
-    public List<String> getGenerators() {
-        return getCodeGenerators();
+        super.setDataProviders(Arrays.asList(plugins));
     }
 
     public void setGenerators(String ...plugins) {
-        setCodeGenerators(Arrays.asList(plugins));
-    }
-
-    public List<String> getPostProcessors() {
-        return getPostProcessors();
+        super.setCodeGenerators(Arrays.asList(plugins));
     }
 
     public void setPostProcessors(String ...plugins) {
-        setPostProcessors(Arrays.asList(plugins));
+        super.setPostProcessors(Arrays.asList(plugins));
     }
 
 }

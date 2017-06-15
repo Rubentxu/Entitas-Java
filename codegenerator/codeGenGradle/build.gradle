@@ -33,10 +33,17 @@ gradlePlugin {
             id = "entitas.codegen"
             implementationClass = "ilargia.entitas.codeGeneration.gradle.CodegenPlugin"
         }
-
-
     }
 }
+
+//create a single Jar with all dependencies
+//task jar(type: Jar, overwrite: true) {
+//    manifest {
+//        attributes 'Implementation-Title': 'Plugin Entitas CodeGen',
+//                'Implementation-Version': version
+//    }
+//    from { configurations.runtime.collect { it.isDirectory() ? it : zipTree(it) } }
+//}
 
 publishing {
     repositories {

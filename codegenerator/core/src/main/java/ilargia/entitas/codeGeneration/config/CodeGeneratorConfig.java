@@ -34,12 +34,14 @@ public class CodeGeneratorConfig extends AbstractConfigurableConfig {
 
 
     public List<String> getPackages() {
-        return Pattern.compile(",")
-                .splitAsStream(properties.getProperty(SEARCH_PACKAGES_KEY))
-                .map(p-> p.trim())
-                .sorted()
-                .collect(Collectors.toList());
-
+        if(properties.containsKey(SEARCH_PACKAGES_KEY)) {
+            return Pattern.compile(",")
+                    .splitAsStream(properties.getProperty(SEARCH_PACKAGES_KEY))
+                    .map(p -> p.trim())
+                    .sorted()
+                    .collect(Collectors.toList());
+        }
+        return null;
     }
 
     public void setPackages(List<String> pkgKey) {
