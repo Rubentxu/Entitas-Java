@@ -36,8 +36,8 @@ public class CodeGeneratorUtil {
 
     public static <T extends ICodeGeneratorInterface> List<T> getOrderedInstances(List<Class> types, Class<T> clazz) {
         return types.stream()
-                .filter(type -> type.isAssignableFrom(clazz))
-                .filter(type -> Modifier.isAbstract(type.getModifiers()))
+                .filter(type -> Stream.of(type.getInterfaces()).anyMatch(c-> c.getSimpleName().contains(clazz.getSimpleName())))
+                .filter(type -> !Modifier.isAbstract(type.getModifiers()))
                 .map(type -> (T) newClass(type))
                 .sorted((a, b) -> a.gePriority().compareTo(b.gePriority()))
                 .collect(Collectors.toList());
@@ -65,7 +65,10 @@ public class CodeGeneratorUtil {
 
     public static <T extends ICodeGeneratorInterface> List<T> getEnabledInstances(List<Class> types, List<String> enabledTypeNames, Class<T> clazz) {
         return getOrderedInstances(types, clazz).stream()
-                .filter(instance -> enabledTypeNames.contains(instance.getClass().getSimpleName()))
+                .filter(instance ->{
+                    return enabledTypeNames.contains(instance.getClass().getCanonicalName());
+
+                })
                 .collect(Collectors.toList());
     }
 

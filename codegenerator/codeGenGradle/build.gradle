@@ -8,7 +8,7 @@ apply plugin: 'java'
 apply plugin: 'groovy'
 apply plugin: 'maven'
 
-group = 'ilargia.entitas.codeGeneration'
+group = 'entitas.gradle'
 version '0.3.0'
 
 sourceCompatibility = 1.8
@@ -27,23 +27,15 @@ repositories {
     mavenLocal()
 }
 
-gradlePlugin {
-    plugins {
-        codegen {
-            id = "entitas.codegen"
-            implementationClass = "ilargia.entitas.codeGeneration.gradle.CodegenPlugin"
-        }
-    }
-}
-
-//create a single Jar with all dependencies
-//task jar(type: Jar, overwrite: true) {
-//    manifest {
-//        attributes 'Implementation-Title': 'Plugin Entitas CodeGen',
-//                'Implementation-Version': version
+//gradlePlugin {
+//    plugins {
+//        codegen {
+//            id = "entitas.codegen"
+//            implementationClass = "entitas.gradle.CodegenPlugin"
+//        }
 //    }
-//    from { configurations.runtime.collect { it.isDirectory() ? it : zipTree(it) } }
 //}
+
 
 publishing {
     repositories {
@@ -58,9 +50,11 @@ publishing {
 
 
 dependencies {
+    compile gradleApi()
     compile project(":codegenerator:core")
     compile project(":codegenerator:plugins")
 
+    testCompile gradleTestKit()
     testCompile 'junit:junit:4.12'
     testCompile('org.spockframework:spock-core:1.1-groovy-2.4-rc-4') {
         exclude module: "junit-dep"

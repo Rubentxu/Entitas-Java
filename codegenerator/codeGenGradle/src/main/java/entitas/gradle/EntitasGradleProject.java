@@ -1,13 +1,7 @@
-package ilargia.entitas.codeGeneration.gradle;
+package entitas.gradle;
 
 
-import entitas.gradle.CodeGenerationPluginExtension;
-import ilargia.entitas.codeGeneration.CodeGenerator;
-import ilargia.entitas.codeGeneration.config.CodeGeneratorConfig;
 import ilargia.entitas.codeGeneration.interfaces.IAppDomain;
-import ilargia.entitas.codeGeneration.interfaces.ICodeGeneratorDataProvider;
-import ilargia.entitas.codeGeneration.interfaces.ICodeGenFilePostProcessor;
-import ilargia.entitas.codeGeneration.interfaces.ICodeGenerator;
 import org.gradle.api.Project;
 import org.gradle.api.plugins.JavaPluginConvention;
 import org.gradle.api.tasks.SourceSet;
@@ -16,10 +10,7 @@ import org.gradle.api.tasks.SourceSetContainer;
 import java.io.*;
 import java.util.List;
 import java.util.Properties;
-import java.util.Set;
 import java.util.stream.Collectors;
-
-import static ilargia.entitas.codeGeneration.utils.CodeGeneratorUtil.*;
 
 public class EntitasGradleProject implements IAppDomain {
     private static Properties prop = new Properties();

@@ -1,4 +1,4 @@
-package ilargia.entitas.codeGeneration.gradle;
+package entitas.gradle;
 
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;

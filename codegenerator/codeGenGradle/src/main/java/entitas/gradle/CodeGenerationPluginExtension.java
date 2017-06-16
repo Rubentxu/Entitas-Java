@@ -1,4 +1,4 @@
-package ilargia.entitas.codeGeneration.gradle;
+package entitas.gradle;
 
 import ilargia.entitas.codeGeneration.config.CodeGeneratorConfig;
 import ilargia.entitas.codeGeneration.plugins.config.TargetPackageConfig;

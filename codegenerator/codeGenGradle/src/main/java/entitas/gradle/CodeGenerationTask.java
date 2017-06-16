@@ -1,8 +1,8 @@
-package ilargia.entitas.codeGeneration.gradle;
+package entitas.gradle;
 
 import ilargia.entitas.codeGeneration.CodeGenerator;
-import ilargia.entitas.codeGeneration.config.CodeGeneratorConfig;
 import ilargia.entitas.codeGeneration.data.CodeGenFile;
+import ilargia.entitas.codeGeneration.interfaces.IAppDomain;
 import ilargia.entitas.codeGeneration.interfaces.ICodeGenFilePostProcessor;
 import ilargia.entitas.codeGeneration.interfaces.ICodeGenerator;
 import ilargia.entitas.codeGeneration.interfaces.ICodeGeneratorDataProvider;
@@ -15,9 +15,10 @@ import java.util.Properties;
 public class CodeGenerationTask extends DefaultTask {
 
 
-    public CodeGenerator getCodeGenerator(CodeGenerationPluginExtension extension) {
+    public CodeGenerator getCodeGenerator(CodeGenerationPluginExtension extension, IAppDomain appDomain) {
         Properties properties = new Properties();
         extension.configure(properties);
+        extension.getDefaultProperties();
         List<Class> types = CodeGeneratorUtil.loadTypesFromPlugins(extension);
 
         List<ICodeGeneratorDataProvider> dataProviders = CodeGeneratorUtil.getEnabledInstances(types,
@@ -26,6 +27,9 @@ public class CodeGenerationTask extends DefaultTask {
                 extension.getCodeGenerators(), ICodeGenerator.class);
         List<ICodeGenFilePostProcessor> postProcessors = CodeGeneratorUtil.getEnabledInstances(types,
                 extension.getPostProcessors(), ICodeGenFilePostProcessor.class);
+
+        dataProviders.stream().forEach(p-> p.setAppDomain(appDomain));
+        postProcessors.stream().forEach(p-> p.setAppDomain(appDomain));
 
         CodeGeneratorUtil.configure(dataProviders, properties);
         CodeGeneratorUtil.configure(codeGenerators, properties);
@@ -42,7 +46,7 @@ public class CodeGenerationTask extends DefaultTask {
         if (extension == null) {
             extension = new CodeGenerationPluginExtension();
         }
-        CodeGenerator codeGenerator = getCodeGenerator(extension);
+        CodeGenerator codeGenerator = getCodeGenerator(extension, entitasProject);
         List<CodeGenFile> gen = codeGenerator.generate();
 
     }

@@ -1,10 +1,8 @@
-package ilargia.entitas.codeGeneration.gradle
+package entitas.gradle
 
 import org.gradle.api.Project
 import org.gradle.api.Task
 import org.gradle.testfixtures.ProjectBuilder
-import org.gradle.testkit.runner.BuildResult
-import org.gradle.testkit.runner.GradleRunner
 import spock.lang.Specification
 
 //@groovy.transform.TypeChecked
@@ -71,7 +69,7 @@ class CodegenPluginSpec extends Specification {
         CodeGenerationPluginExtension ext = project.getExtensions().getByName("entitas") as CodeGenerationPluginExtension
 
         ext.configure(prop)
-        ext.targetPackage("test.gen")
+        ext.setTargetPackage("test.gen")
 
 
         then:
@@ -82,6 +80,29 @@ class CodegenPluginSpec extends Specification {
 //        ext.getCodeGenerators().size() == 1
 //        ext.getPlugins().size() == 1
 //        ext.getPackages() == null
+
+
+    }
+
+    void 'Queremos comprobar que se lanza correctamente la tarea de generacion de codigo'() {
+        given:
+        Properties prop = new Properties()
+        Project project = ProjectBuilder.builder().build()
+        project.getPlugins().apply 'java'
+        project.getPlugins().apply 'entitas.codegen'
+
+        CodeGenerationTask task = project.getTasks().getByPath("codegen") as CodeGenerationTask
+        CodeGenerationPluginExtension ext = project.getExtensions().create("entitas",CodeGenerationPluginExtension.class)
+
+        ext.configure(prop)
+        ext.setTargetPackage("test.gen")
+        ext.setSearchPackagesKey("ilargia.entitas.fixtures.components")
+
+        when:
+        task.run()
+
+        then:
+        task instanceof CodeGenerationTask
 
 
     }

@@ -4,8 +4,6 @@ import groovy.transform.TypeCheckingMode
 import ilargia.entitas.codeGeneration.interfaces.IAppDomain
 import ilargia.entitas.codeGeneration.plugins.config.TargetPackageConfig
 import ilargia.entitas.codeGeneration.data.CodeGenFile
-
-import ilargia.entitas.codeGeneration.gradle.EntitasGradleProject
 import ilargia.entitas.codeGeneration.plugins.dataProviders.ProviderUtils
 import ilargia.entitas.codeGeneration.plugins.dataProviders.components.ComponentData
 import ilargia.entitas.codeGeneration.utils.CodeGeneratorUtil
@@ -13,8 +11,6 @@ import ilargia.entitas.fixtures.FixtureProvider
 import ilargia.entitas.fixtures.TestProject
 import org.gradle.api.Project
 import org.gradle.api.plugins.JavaPlugin
-import org.gradle.api.plugins.JavaPluginConvention
-import org.gradle.api.tasks.SourceSet
 import org.gradle.testfixtures.ProjectBuilder
 import org.jboss.forge.roaster.model.source.JavaClassSource
 import spock.lang.Narrative
