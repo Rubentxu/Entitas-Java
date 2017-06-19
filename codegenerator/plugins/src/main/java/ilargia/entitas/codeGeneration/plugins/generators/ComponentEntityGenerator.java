@@ -32,10 +32,10 @@ import static ilargia.entitas.codeGeneration.plugins.generators.EntitasGenerator
 
 public class ComponentEntityGenerator implements ICodeGenerator<JavaClassSource>, IConfigurable {
     private TargetPackageConfig targetPackageConfig;
-    private Map<String,CodeGenFile<JavaClassSource>> entities;
+    private Map<String, CodeGenFile<JavaClassSource>> entities;
 
     public ComponentEntityGenerator() {
-        targetPackageConfig =  new TargetPackageConfig();
+        targetPackageConfig = new TargetPackageConfig();
         entities = new HashMap<>();
     }
 
@@ -72,22 +72,22 @@ public class ComponentEntityGenerator implements ICodeGenerator<JavaClassSource>
     @Override
     public List<CodeGenFile<JavaClassSource>> generate(List<CodeGeneratorData> data) {
         data.stream()
-                .filter(d-> d instanceof ComponentData)
-                .filter(d-> !d.containsKey("entityIndex_type"))
-                .map(d-> (ComponentData) d)
-                .filter(d-> shouldGenerateMethods(d))
-                .forEach(d-> generateEntities(d));
+                .filter(d -> d instanceof ComponentData)
+                .filter(d -> !d.containsKey("entityIndex_type"))
+                .map(d -> (ComponentData) d)
+                .filter(d -> shouldGenerateMethods(d))
+                .forEach(d -> generateEntities(d));
 
-        entities.values().forEach(f-> System.out.println(f.getFileContent().toString()));
+        entities.values().forEach(f -> System.out.println(f.getFileContent().toString()));
         return entities.values().stream().collect(Collectors.toList());
     }
 
     private void generateEntities(ComponentData data) {
-         getContextNames(data).stream()
+        getContextNames(data).stream()
                 .forEach(contextName -> generateEntity(contextName, data));
     }
 
-    private void generateEntity(String contextName, ComponentData data){
+    private void generateEntity(String contextName, ComponentData data) {
         String pkgDestiny = targetPackageConfig.getTargetPackage();
         CodeGenFile<JavaClassSource> genFile = getCodeGenFile(contextName, data);
         JavaClassSource codeGenerated = genFile.getFileContent();
@@ -96,27 +96,27 @@ public class ComponentEntityGenerator implements ICodeGenerator<JavaClassSource>
             pkgDestiny += "." + data.getSubDir();
 
         }
-        codeGenerated.setPackage(pkgDestiny);
-        codeGenerated.addMethod()
-                .setName(contextName + "Entity")
-                .setPublic()
-                .setConstructor(true)
-                .setBody("");
-        codeGenerated.addImport("ilargia.entitas.api.*");
-        codeGenerated.addImport(Entity.class);
-        codeGenerated.addImport("java.util.Stack");
+        if (codeGenerated.getPackage() == null) {
+            codeGenerated.setPackage(pkgDestiny);
+            codeGenerated.addMethod()
+                    .setName(contextName + "Entity")
+                    .setPublic()
+                    .setConstructor(true)
+                    .setBody("");
+            codeGenerated.addImport("ilargia.entitas.Entity");
 
+        }
 
-            if (shouldGenerateMethods(data)) {
-                addImporEnums(data, codeGenerated);
-                addEntityMethods(contextName, data, codeGenerated);
-            }
+        if (shouldGenerateMethods(data)) {
+            addImporEnums(data, codeGenerated);
+            addEntityMethods(contextName, data, codeGenerated);
+        }
 
     }
 
     private CodeGenFile<JavaClassSource> getCodeGenFile(String contextName, ComponentData data) {
 
-        if(entities.containsKey(contextName)) {
+        if (entities.containsKey(contextName)) {
             return entities.get(contextName);
         } else {
             JavaClassSource sourceGen = Roaster.parse(JavaClassSource.class, String.format("public class %1$sEntity extends Entity {}", contextName));
@@ -128,7 +128,7 @@ public class ComponentEntityGenerator implements ICodeGenerator<JavaClassSource>
 
     private void addImporEnums(ComponentData data, JavaClassSource codeGenerated) {
         List<String> enums = getEnumData(data);
-        if ( enums != null)
+        if (enums != null)
             enums.forEach(e -> codeGenerated.addImport(e));
 
     }
@@ -176,7 +176,7 @@ public class ComponentEntityGenerator implements ICodeGenerator<JavaClassSource>
 
             }
             methodGET.setBody(String.format("return (%1$s)getComponent(%2$s.%3$s);"
-                    , typeName, (isSharedContext(data)? "Shared": contextName) + DEFAULT_COMPONENT_LOOKUP_TAG, getTypeName(data)));
+                    , typeName, (isSharedContext(data) ? "Shared" : contextName) + DEFAULT_COMPONENT_LOOKUP_TAG, getTypeName(data)));
         }
     }
 
@@ -189,7 +189,7 @@ public class ComponentEntityGenerator implements ICodeGenerator<JavaClassSource>
                     .setReturnType("boolean")
                     .setPublic()
                     .setBody(String.format("return hasComponent(%1$s.%2$s);",
-                            WordUtils.capitalize(isSharedContext(data)? "Shared": contextName) + DEFAULT_COMPONENT_LOOKUP_TAG,
+                            WordUtils.capitalize(isSharedContext(data) ? "Shared" : contextName) + DEFAULT_COMPONENT_LOOKUP_TAG,
                             getTypeName(data)));
 
             source.addMethod()
@@ -203,7 +203,7 @@ public class ComponentEntityGenerator implements ICodeGenerator<JavaClassSource>
                                     "                    } else {\n" +
                                     "                        removeComponent(%1$s.%2$s);\n" +
                                     "                    }\n" +
-                                    "                }\n return this;", WordUtils.capitalize((isSharedContext(data)? "Shared": contextName) + DEFAULT_COMPONENT_LOOKUP_TAG),
+                                    "                }\n return this;", WordUtils.capitalize((isSharedContext(data) ? "Shared" : contextName) + DEFAULT_COMPONENT_LOOKUP_TAG),
                             getTypeName(data), getTypeNameSuffix(data)));
 
 
@@ -213,7 +213,7 @@ public class ComponentEntityGenerator implements ICodeGenerator<JavaClassSource>
                     .setReturnType("boolean")
                     .setPublic()
                     .setBody(String.format("return hasComponent(%1$s.%2$s);",
-                            WordUtils.capitalize((isSharedContext(data)? "Shared": contextName) + DEFAULT_COMPONENT_LOOKUP_TAG),
+                            WordUtils.capitalize((isSharedContext(data) ? "Shared" : contextName) + DEFAULT_COMPONENT_LOOKUP_TAG),
                             getTypeName(data)));
 
         }
@@ -221,7 +221,7 @@ public class ComponentEntityGenerator implements ICodeGenerator<JavaClassSource>
 
 
     public void addImportClass(ComponentData data, JavaClassSource codeGenerated) {
-        if (data.getSource().getImports()!= null) {
+        if (data.getSource().getImports() != null) {
             for (Import imp : data.getSource().getImports()) {
                 if (!imp.getQualifiedName().equals("ilargia.entitas.generators.Component")) {
                     codeGenerated.addImport(imp);
@@ -258,17 +258,17 @@ public class ComponentEntityGenerator implements ICodeGenerator<JavaClassSource>
             String method = "";
 
             List<MethodSource<JavaClassSource>> constructors = getConstructorData(data);
-            if ( constructors != null && constructors.size() > 0) {
+            if (constructors != null && constructors.size() > 0) {
                 method = String.format("%2$s component = (%2$s) recoverComponent(%1$s.%5$s);\n if(component == null) { " +
                                 "component = new %2$s(%4$s);\n } else {\n%3$s\n} addComponent(%1$s.%5$s, component);\n return this;",
-                        WordUtils.capitalize(isSharedContext(data)? "Shared": contextName) + DEFAULT_COMPONENT_LOOKUP_TAG,
+                        WordUtils.capitalize(isSharedContext(data) ? "Shared" : contextName) + DEFAULT_COMPONENT_LOOKUP_TAG,
                         typeName, bodyFromConstructor(constructors.get(0)), memberNamesFromConstructor(constructors.get(0))
                         , getTypeName(data));
 
             } else {
                 method = String.format("%2$s component = (%2$s) recoverComponent(%1$s.%2$s);\n if(component == null) { " +
                                 "component = new %2$s();\n } \n%3$s\n addComponent(%1$s.%2$s, component);\n return this;",
-                        WordUtils.capitalize(isSharedContext(data)? "Shared": contextName) + DEFAULT_COMPONENT_LOOKUP_TAG,
+                        WordUtils.capitalize(isSharedContext(data) ? "Shared" : contextName) + DEFAULT_COMPONENT_LOOKUP_TAG,
                         typeName, memberAssignments(getMemberData(data)), getTypeName(data));
             }
             addMethod.setBody(method);
@@ -307,13 +307,13 @@ public class ComponentEntityGenerator implements ICodeGenerator<JavaClassSource>
             if (constructors != null && constructors.size() > 0) {
                 method = String.format("%2$s component = (%2$s) recoverComponent(%1$s.%5$s);\n if(component == null) { " +
                                 "component = new %2$s(%4$s);\n } else {\n%3$s\n} replaceComponent(%1$s.%5$s, component);\n return this;"
-                        , WordUtils.capitalize(isSharedContext(data)? "Shared": contextName) + DEFAULT_COMPONENT_LOOKUP_TAG,
+                        , WordUtils.capitalize(isSharedContext(data) ? "Shared" : contextName) + DEFAULT_COMPONENT_LOOKUP_TAG,
                         typeName, bodyFromConstructor(constructors.get(0)), memberNamesFromConstructor(constructors.get(0))
                         , getTypeName(data));
             } else {
                 method = String.format("%2$s component = (%2$s) recoverComponent(%1$s.%2$s);\n if(component == null) { " +
                                 "component = new %2$s();\n} %3$s\n replaceComponent(%1$s.%2$s, component);\n return this;",
-                        WordUtils.capitalize(isSharedContext(data)? "Shared": contextName) + DEFAULT_COMPONENT_LOOKUP_TAG,
+                        WordUtils.capitalize(isSharedContext(data) ? "Shared" : contextName) + DEFAULT_COMPONENT_LOOKUP_TAG,
                         typeName, memberAssignments(getMemberData(data)), getTypeName(data));
             }
             replaceMethod.setBody(method);
@@ -329,7 +329,7 @@ public class ComponentEntityGenerator implements ICodeGenerator<JavaClassSource>
                     .setReturnType(contextName + "Entity")
                     .setPublic()
                     .setBody(String.format(method,
-                            WordUtils.capitalize(isSharedContext(data)? "Shared": contextName) + DEFAULT_COMPONENT_LOOKUP_TAG,
+                            WordUtils.capitalize(isSharedContext(data) ? "Shared" : contextName) + DEFAULT_COMPONENT_LOOKUP_TAG,
                             getTypeName(data)));
 
 

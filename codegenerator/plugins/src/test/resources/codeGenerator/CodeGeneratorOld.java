@@ -1,7 +1,7 @@
-package com.ilargia.games.entitas.codeGenerator;
+package ilargia.entitas.codeGenerator;
 
 
-import com.ilargia.games.entitas.codeGenerator.data.ComponentInfo;
+import ilargia.entitas.codeGenerator.data.ComponentInfo;
 import ilargia.entitas.codeGeneration.data.CodeGenFile;
 import ilargia.entitas.codeGeneration.interfaces.ICodeGeneratorDataProvider;
 import ilargia.entitas.codeGeneration.interfaces.ICodeGenerator;

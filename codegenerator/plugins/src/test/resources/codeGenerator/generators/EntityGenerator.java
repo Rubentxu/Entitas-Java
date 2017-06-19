@@ -1,9 +1,9 @@
-package com.ilargia.games.entitas.codeGenerator.generators;
+package ilargia.entitas.codeGenerator.generators;
 
 
-import com.ilargia.games.entitas.codeGenerator.CodeGeneratorOld;
-import com.ilargia.games.entitas.codeGenerator.data.ComponentInfo;
-import com.ilargia.games.entitas.codeGenerator.interfaces.IComponentCodeGenerator;
+import ilargia.entitas.codeGenerator.CodeGeneratorOld;
+import ilargia.entitas.codeGenerator.data.ComponentInfo;
+import ilargia.entitas.codeGenerator.interfaces.IComponentCodeGenerator;
 import ilargia.entitas.codeGeneration.interfaces.ICodeGenerator;
 import org.jboss.forge.roaster.Roaster;
 import org.jboss.forge.roaster.model.source.*;
@@ -42,7 +42,7 @@ public class EntityGenerator implements IComponentCodeGenerator, ICodeGenerator 
                 .setPublic()
                 .setConstructor(true)
                 .setBody("");
-        entityClass.addImport("com.ilargia.games.entitas.api.*");
+        entityClass.addImport("ilargia.entitas.api.*");
         entityClass.addImport("Entity");
         entityClass.addImport("java.util.Stack");
 
@@ -155,7 +155,7 @@ public class EntityGenerator implements IComponentCodeGenerator, ICodeGenerator 
     public void addImportClass(ComponentInfo componentInfo, JavaClassSource source) {
         if (componentInfo.imports != null) {
             for (Import imp : componentInfo.imports) {
-                if (!imp.getQualifiedName().equals("com.ilargia.games.entitas.generators.Component")) {
+                if (!imp.getQualifiedName().equals("ilargia.entitas.generators.Component")) {
                     source.addImport(imp);
                 }
             }
@@ -312,7 +312,7 @@ public class EntityGenerator implements IComponentCodeGenerator, ICodeGenerator 
         JavaClassSource javaClass = Roaster.parse(JavaClassSource.class, String.format("public class %1$s {}",
                 CodeGeneratorOld.capitalize(contextName) + "Matcher"));
         javaClass.setPackage(pkgDestiny);
-        //javaClass.addImport("com.ilargia.games.entitas.interfaces.IMatcher");
+        //javaClass.addImport("ilargia.entitas.interfaces.IMatcher");
         javaClass.addImport("Matcher");
 
         for (ComponentInfo info : componentInfos) {

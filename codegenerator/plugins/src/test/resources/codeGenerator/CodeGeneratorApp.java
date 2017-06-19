@@ -1,6 +1,6 @@
-package com.ilargia.games.entitas.codeGenerator;
+package ilargia.entitas.codeGenerator;
 
-import com.ilargia.games.entitas.codeGenerator.providers.TypeReflectionProvider;
+import ilargia.entitas.codeGenerator.providers.TypeReflectionProvider;
 import ilargia.entitas.codeGeneration.data.CodeGenFile;
 import ilargia.entitas.codeGeneration.interfaces.ICodeGenerator;
 import javafx.application.Application;

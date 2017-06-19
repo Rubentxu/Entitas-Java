@@ -8,7 +8,7 @@
 <AnchorPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
             minWidth="-Infinity"
             prefHeight="575.0" prefWidth="560.0" xmlns="http://javafx.com/javafx/8.0.112-ea"
-            fx:controller="com.ilargia.games.entitas.codeGenerator.CodeGeneratorApp">
+            fx:controller="ilargia.entitas.codeGenerator.CodeGeneratorApp">
     <children>
         <ImageView id="progress" disable="true" fitHeight="258.0" fitWidth="560.0" layoutY="-6.0" opacity="0.85"
                    pickOnBounds="true" preserveRatio="true" smooth="false">

@@ -1,4 +1,4 @@
-package com.ilargia.games.entitas.codeGenerator.interfaces;
+package ilargia.entitas.codeGenerator.interfaces;
 
 
 import ilargia.entitas.codeGeneration.interfaces.ICodeGenerator;

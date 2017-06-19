@@ -1,7 +1,7 @@
-package com.ilargia.games.entitas.codeGenerator.interfaces;
+package ilargia.entitas.codeGenerator.interfaces;
 
 
-import com.ilargia.games.entitas.codeGenerator.data.ComponentInfo;
+import ilargia.entitas.codeGenerator.data.ComponentInfo;
 import ilargia.entitas.codeGeneration.interfaces.ICodeGenerator;
 import org.jboss.forge.roaster.model.source.JavaClassSource;
 

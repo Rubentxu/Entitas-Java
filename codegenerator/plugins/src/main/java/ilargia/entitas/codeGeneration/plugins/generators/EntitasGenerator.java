@@ -148,7 +148,7 @@ public class EntitasGenerator implements ICodeGenerator<JavaClassSource>, IConfi
 
     private void createContextFields(JavaClassSource javaClass, Set<String> contextNames) {
         javaClass.addImport(Context.class);
-        javaClass.addImport("com.ilargia.games.entitas.api.*");
+        javaClass.addImport("ilargia.entitas.api.*");
         contextNames.forEach((contextName) -> {
 
             javaClass.addMethod()

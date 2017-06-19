@@ -91,7 +91,10 @@ class CodegenPluginSpec extends Specification {
     void 'Queremos comprobar que se lanza correctamente la tarea de generacion de codigo'() {
         given:
         Properties prop = new Properties()
-        Project project = ProjectBuilder.builder().withProjectDir(new File("src/test/java")).build()
+        Project project = ProjectBuilder.builder()
+                .withProjectDir(new File("src/test/java"))
+                .withGradleUserHomeDir(new File("../../build"))
+                .build()
         project.getPlugins().apply 'java'
         project.getPlugins().apply 'entitas.codegen'
 
@@ -109,7 +112,8 @@ class CodegenPluginSpec extends Specification {
             public List<String> getSrcDirs() {
                 List<String> temp =new ArrayList<String>()
                 for (String src : super.getSrcDirs()) {
-                    temp.add(src.replaceAll("/src/main/java", ""))
+                    if(src.contains("/src/main/java")) temp.add(src.replaceAll("/src/main/java", ""))
+                    if(src.contains("\\src\\main\\java")) temp.add(src.replace("\\src\\main\\java", ""))
                 }
 
                 return temp

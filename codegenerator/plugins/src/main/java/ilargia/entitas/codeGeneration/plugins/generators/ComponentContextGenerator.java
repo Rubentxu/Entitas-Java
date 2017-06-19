@@ -104,8 +104,10 @@ public class ComponentContextGenerator implements ICodeGenerator<JavaClassSource
                     .setPublic()
                     .setConstructor(true)
                     .setParameters(String.format("int totalComponents, int startCreationIndex, ContextInfo contextInfo, EntityBaseFactory<%1$sEntity> factoryMethod", contextName))
-                    .setBody("super(totalComponents, startCreationIndex, contextInfo, factoryMethod);");
-            codeGenerated.addImport("com.ilargia.games.entitas.api.*");
+                    .setBody("super(totalComponents, startCreationIndex, contextInfo, factoryMethod, null);");
+            codeGenerated.addImport("ilargia.entitas.Context");
+            codeGenerated.addImport("ilargia.entitas.api.*");
+            codeGenerated.addImport("ilargia.entitas.api.entitas.EntityBaseFactory");
 
             if (isUnique(data)) {
                 addContextMethods(contextName, data, codeGenerated);

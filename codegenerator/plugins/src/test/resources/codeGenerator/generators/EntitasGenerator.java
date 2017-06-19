@@ -1,9 +1,9 @@
-package com.ilargia.games.entitas.codeGenerator.generators;
+package ilargia.entitas.codeGenerator.generators;
 
 
-import com.ilargia.games.entitas.codeGenerator.CodeGeneratorOld;
-import com.ilargia.games.entitas.codeGenerator.data.ComponentInfo;
-import com.ilargia.games.entitas.codeGenerator.interfaces.IComponentCodeGenerator;
+import ilargia.entitas.codeGenerator.CodeGeneratorOld;
+import ilargia.entitas.codeGenerator.data.ComponentInfo;
+import ilargia.entitas.codeGenerator.interfaces.IComponentCodeGenerator;
 import org.jboss.forge.roaster.Roaster;
 import org.jboss.forge.roaster.model.source.JavaClassSource;
 
@@ -88,7 +88,7 @@ public class EntitasGenerator implements IComponentCodeGenerator {
 
     private void createContextFields(JavaClassSource javaClass, Set<String> contextNames) {
         javaClass.addImport("Context");
-        javaClass.addImport("com.ilargia.games.entitas.api.*");
+        javaClass.addImport("ilargia.entitas.api.*");
         contextNames.forEach((contextName) -> {
 
             javaClass.addMethod()

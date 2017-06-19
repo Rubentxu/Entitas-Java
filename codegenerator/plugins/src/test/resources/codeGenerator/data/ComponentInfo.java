@@ -1,6 +1,6 @@
-package com.ilargia.games.entitas.codeGenerator.data;
+package ilargia.entitas.codeGenerator.data;
 
-import com.ilargia.games.entitas.codeGenerator.CodeGeneratorOld;
+import ilargia.entitas.codeGenerator.CodeGeneratorOld;
 import org.jboss.forge.roaster.model.source.*;
 
 import java.util.List;
