@@ -39,11 +39,11 @@ class EntityIndexDataProviderSpec extends Specification {
     void 'Consultamos al proveedor ComponentDataProvider por los contextos extraidos de los componentes'() {
         given:
         Properties prop = new Properties()
-        prop.setProperty(CodeGeneratorConfig.SEARCH_PACKAGES_KEY, "ilargia.entitas.fixtures.components")
-        entityIndexDataProvider.configure(prop)
+        prop.setProperty(CodeGeneratorConfig.SEARCH_PACKAGES_KEY, "ilargia.entitas.fixtures.src.main.java.ilargia.components")
+        entityIndexDataProvider.setProperties(prop)
 
         when:
-        entityIndexDataProvider.getDefaultProperties()
+        entityIndexDataProvider.defaultProperties()
         List<CodeGeneratorData> datas = entityIndexDataProvider.getData()
 
         then:

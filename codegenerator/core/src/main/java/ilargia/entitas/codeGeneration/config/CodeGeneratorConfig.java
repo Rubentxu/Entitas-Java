@@ -14,16 +14,20 @@ public class CodeGeneratorConfig extends AbstractConfigurableConfig {
     public static final String POST_PROCESSORS_KEY = "CodeGeneration.PostProcessors";
 
     @Override
-    public Properties getDefaultProperties() {
+    public Properties defaultProperties() {
         if (!properties.containsKey(PLUGINS_SCAN_KEY))
             properties.setProperty(PLUGINS_SCAN_KEY, "ilargia.entitas.codeGeneration.plugins");
         if (!properties.containsKey(DATA_PROVIDERS_KEY)) properties.setProperty(DATA_PROVIDERS_KEY,
                 String.join(", ",
                         "ilargia.entitas.codeGeneration.plugins.dataProviders.components.ComponentDataProvider",
-                        "ilargia.entitas.codeGeneration.plugins.dataProviders.context.ContextDataProvider",
                         "ilargia.entitas.codeGeneration.plugins.dataProviders.entityIndex.EntityIndexDataProvider"));
         if (!properties.containsKey(CODE_GENERATORS_KEY)) properties.setProperty(CODE_GENERATORS_KEY, String.join(", ",
-                "ilargia.entitas.codeGeneration.plugins.generators.ComponentEntityGenerator"));
+                "ilargia.entitas.codeGeneration.plugins.generators.ComponentContextGenerator",
+                "ilargia.entitas.codeGeneration.plugins.generators.ComponentEntityGenerator",
+                "ilargia.entitas.codeGeneration.plugins.generators.ComponentLookupGenerator",
+                "ilargia.entitas.codeGeneration.plugins.generators.ComponentMatcherGenerator",
+                "ilargia.entitas.codeGeneration.plugins.generators.EntitasGenerator"
+        ));
         if (!properties.containsKey(POST_PROCESSORS_KEY)) properties.setProperty(POST_PROCESSORS_KEY, String.join(", ",
                 "ilargia.entitas.codeGeneration.plugins.postProcessors.AddFileHeaderPostProcessor",
                 "ilargia.entitas.codeGeneration.plugins.postProcessors.ConsoleWriteLinePostProcessor",

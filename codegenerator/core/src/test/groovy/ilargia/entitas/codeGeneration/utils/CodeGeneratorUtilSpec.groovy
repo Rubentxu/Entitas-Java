@@ -18,7 +18,7 @@ class CodeGeneratorUtilSpec extends Specification {
         given:
         Properties prop = new Properties()
         CodeGeneratorConfig codeGeneratorConfig = new CodeGeneratorConfig()
-        codeGeneratorConfig.configure(prop)
+        codeGeneratorConfig.setProperties(prop)
         codeGeneratorConfig.setPlugins(new ArrayList<String>()
         {{  add("ilargia.entitas.codeGeneration.utils")
             add("ilargia.entitas.codeGeneration.data")

@@ -24,13 +24,13 @@ public class CustomPrefixDataProvider implements IComponentDataProvider, IConfig
     }
 
     @Override
-    public Properties getDefaultProperties() {
-        return _contextNamesConfig.getDefaultProperties();
+    public Properties defaultProperties() {
+        return _contextNamesConfig.defaultProperties();
     }
 
     @Override
-    public void configure(Properties properties) {
-        _contextNamesConfig.configure(properties);
+    public void setProperties(Properties properties) {
+        _contextNamesConfig.setProperties(properties);
     }
 
     @Override

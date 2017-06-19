@@ -12,7 +12,6 @@ import org.jboss.forge.roaster.Roaster;
 import org.jboss.forge.roaster.model.source.JavaClassSource;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static ilargia.entitas.codeGeneration.plugins.dataProviders.components.providers.ContextsComponentDataProvider.getContextNames;
 import static ilargia.entitas.codeGeneration.plugins.dataProviders.components.providers.ShouldGenerateMethodsDataProvider.shouldGenerateMethods;
@@ -49,13 +48,13 @@ public class EntitasGenerator implements ICodeGenerator<JavaClassSource>, IConfi
     }
 
     @Override
-    public Properties getDefaultProperties() {
-        return targetPackageConfig.getDefaultProperties();
+    public Properties defaultProperties() {
+        return targetPackageConfig.defaultProperties();
     }
 
     @Override
-    public void configure(Properties properties) {
-        targetPackageConfig.configure(properties);
+    public void setProperties(Properties properties) {
+        targetPackageConfig.setProperties(properties);
     }
 
     @Override
@@ -63,6 +62,7 @@ public class EntitasGenerator implements ICodeGenerator<JavaClassSource>, IConfi
         dataList.stream()
                 .filter(d -> d instanceof ComponentData)
                 .map(d -> (ComponentData) d)
+                .filter(d-> !d.containsKey("entityIndex_type"))
                 .filter(d -> shouldGenerateMethods(d))
                 .forEach(d -> generateContexts(d));
 

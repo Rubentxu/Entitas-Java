@@ -44,7 +44,7 @@ class WriteToDiskPostProcessorSpec extends Specification {
         IAppDomain appProject = new TestProject(project)
         postProcessor = new WriteToDiskPostProcessor()
         postProcessor.setAppDomain(appProject)
-        dataFiles = ProviderUtils.getComponentDatas(appProject, new ArrayList<String>(){{ add("ilargia.entitas.fixtures.components.game")}})
+        dataFiles = ProviderUtils.getComponentDatas(appProject, new ArrayList<String>(){{ add("ilargia.entitas.fixtures.src.main.java.ilargia.components.game")}})
         genFiles = new ArrayList<>()
 
 
@@ -55,10 +55,10 @@ class WriteToDiskPostProcessorSpec extends Specification {
     void 'Consultamos al proveedor ComponentDataProvider por los contextos extraidos de los componentes'() {
         given:
         Properties prop = new Properties()
-        postProcessor.configure(prop)
+        postProcessor.setProperties(prop)
 
         when:
-        Properties prop2 = postProcessor.getDefaultProperties()
+        Properties prop2 = postProcessor.defaultProperties()
 
         then:
         prop == prop2
@@ -75,8 +75,8 @@ class WriteToDiskPostProcessorSpec extends Specification {
         given:
         Spy(CodeGeneratorUtil)
         Properties prop = new Properties()
-        postProcessor.configure(prop)
-        postProcessor.getDefaultProperties()
+        postProcessor.setProperties(prop)
+        postProcessor.defaultProperties()
         for (ComponentData df : dataFiles) {
             CodeGenFile<JavaClassSource> codeGenFile = new CodeGenFile(df.getSource().getName(), df.getSource(), df.getSubDir())
             genFiles.add(codeGenFile)

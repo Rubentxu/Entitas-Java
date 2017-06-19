@@ -83,29 +83,25 @@ public class ComponentDataProvider extends AbstractConfigurableConfig implements
     }
 
     @Override
-    public Properties getDefaultProperties() {
-        return _dataProviders.stream()
-                .filter(p -> p instanceof IConfigurable)
-                .map(p -> (IConfigurable) p)
-                .map(p -> p.getDefaultProperties())
-                .reduce(properties, (a, b) -> {
-                    a.putAll(propertiesToMap(b));
-                    a.putAll(_codeGeneratorConfig.getDefaultProperties());
-                    a.putAll(_contextsComponentDataProvider.getDefaultProperties());
-                    return a;
-                });
-
-    }
-
-    @Override
-    public void configure(Properties properties) {
-        super.configure(properties);
-        _codeGeneratorConfig.configure(properties);
-        _contextsComponentDataProvider.configure(properties);
+    public Properties defaultProperties() {
+        _codeGeneratorConfig.defaultProperties();
+        _contextsComponentDataProvider.defaultProperties();
         _dataProviders.stream()
                 .filter(p -> p instanceof IConfigurable)
                 .map(p -> (IConfigurable) p)
-                .forEach(p -> p.configure(properties));
+                .forEach(p -> p.defaultProperties());
+        return properties;
+    }
+
+    @Override
+    public void setProperties(Properties properties) {
+        super.setProperties(properties);
+        _codeGeneratorConfig.setProperties(properties);
+        _contextsComponentDataProvider.setProperties(properties);
+        _dataProviders.stream()
+                .filter(p -> p instanceof IConfigurable)
+                .map(p -> (IConfigurable) p)
+                .forEach(p -> p.setProperties(properties));
 
 
     }

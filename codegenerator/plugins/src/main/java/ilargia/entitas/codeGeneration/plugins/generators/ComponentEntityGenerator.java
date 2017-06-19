@@ -60,19 +60,20 @@ public class ComponentEntityGenerator implements ICodeGenerator<JavaClassSource>
     }
 
     @Override
-    public Properties getDefaultProperties() {
-        return targetPackageConfig.getDefaultProperties();
+    public Properties defaultProperties() {
+        return targetPackageConfig.defaultProperties();
     }
 
     @Override
-    public void configure(Properties properties) {
-        targetPackageConfig.configure(properties);
+    public void setProperties(Properties properties) {
+        targetPackageConfig.setProperties(properties);
     }
 
     @Override
     public List<CodeGenFile<JavaClassSource>> generate(List<CodeGeneratorData> data) {
         data.stream()
                 .filter(d-> d instanceof ComponentData)
+                .filter(d-> !d.containsKey("entityIndex_type"))
                 .map(d-> (ComponentData) d)
                 .filter(d-> shouldGenerateMethods(d))
                 .forEach(d-> generateEntities(d));

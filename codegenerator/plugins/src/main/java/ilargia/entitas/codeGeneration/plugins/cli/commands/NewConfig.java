@@ -38,8 +38,8 @@ public class NewConfig extends AbstractCommand {
 
         if (ArgsExtension.isForce(Arrays.asList(args)) || !path.exists()) {
             CodeGeneratorConfig defaultConfig = new CodeGeneratorConfig();
-            Properties properties = new Properties(defaultConfig.getDefaultProperties());
-            defaultConfig.configure(properties);
+            Properties properties = new Properties(defaultConfig.defaultProperties());
+            defaultConfig.setProperties(properties);
 
             saveProperties(properties, path.getAbsolutePath());
 

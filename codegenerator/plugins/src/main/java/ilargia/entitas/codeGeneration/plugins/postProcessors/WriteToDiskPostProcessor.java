@@ -24,13 +24,13 @@ public class WriteToDiskPostProcessor implements ICodeGenFilePostProcessor<JavaC
     }
 
     @Override
-    public Properties getDefaultProperties() {
-        return targetPackageConfig.getDefaultProperties();
+    public Properties defaultProperties() {
+        return targetPackageConfig.defaultProperties();
     }
 
     @Override
-    public void configure(Properties properties) {
-        targetPackageConfig.configure(properties);
+    public void setProperties(Properties properties) {
+        targetPackageConfig.setProperties(properties);
     }
 
     @Override

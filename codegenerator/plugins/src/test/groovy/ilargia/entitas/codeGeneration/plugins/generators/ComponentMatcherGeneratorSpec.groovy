@@ -43,11 +43,11 @@ class ComponentMatcherGeneratorSpec extends Specification {
     void 'Consultamos al generador ComponentMatcherGenerator por la configuracion por defecto'() {
         given:
         Properties prop = new Properties()
-        prop.setProperty("CodeGeneration.CodeGenerator.SearchPkg","ilargia.entitas.fixtures.components")
+        prop.setProperty("CodeGeneration.CodeGenerator.SearchPkg","ilargia.entitas.fixtures.src.main.java.ilargia.components")
 
         when:
-        componentDataProvider.configure(prop)
-        matcherGenerator.configure(prop)
+        componentDataProvider.setProperties(prop)
+        matcherGenerator.setProperties(prop)
 
         then:
         matcherGenerator.gePriority() == 0
@@ -61,11 +61,11 @@ class ComponentMatcherGeneratorSpec extends Specification {
     void 'Generamos las fuentes con los datos del proveedor'() {
         given:
         Properties prop = new Properties()
-        prop.setProperty("CodeGeneration.SearchPkg","ilargia.entitas.fixtures.components")
-        componentDataProvider.configure(prop)
-        componentDataProvider.getDefaultProperties()
-        matcherGenerator.configure(prop)
-        matcherGenerator.getDefaultProperties()
+        prop.setProperty("CodeGeneration.SearchPkg","ilargia.entitas.fixtures.src.main.java.ilargia.components")
+        componentDataProvider.setProperties(prop)
+        componentDataProvider.defaultProperties()
+        matcherGenerator.setProperties(prop)
+        matcherGenerator.defaultProperties()
 
         when:
         List<CodeGenFile<JavaClassSource>> genFiles = matcherGenerator.generate(componentDataProvider.getData())

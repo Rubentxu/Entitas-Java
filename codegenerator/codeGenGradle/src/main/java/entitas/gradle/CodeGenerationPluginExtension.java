@@ -4,7 +4,6 @@ import ilargia.entitas.codeGeneration.config.CodeGeneratorConfig;
 import ilargia.entitas.codeGeneration.plugins.config.TargetPackageConfig;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.Properties;
 
 public class CodeGenerationPluginExtension extends CodeGeneratorConfig {
@@ -13,19 +12,18 @@ public class CodeGenerationPluginExtension extends CodeGeneratorConfig {
 
     public CodeGenerationPluginExtension() {
         targetPackageConfig = new TargetPackageConfig();
-        configure(new Properties());
+        super.setProperties(new Properties());
+        targetPackageConfig.setProperties(properties);
     }
 
     @Override
-    public void configure(Properties properties) {
-        super.configure(properties);
-        targetPackageConfig.configure(properties);
+    public void setProperties(Properties properties) {
     }
 
     @Override
-    public Properties getDefaultProperties() {
-        targetPackageConfig.getDefaultProperties();
-        super.getDefaultProperties();
+    public Properties defaultProperties() {
+        targetPackageConfig.defaultProperties();
+        super.defaultProperties();
         return properties;
     }
 

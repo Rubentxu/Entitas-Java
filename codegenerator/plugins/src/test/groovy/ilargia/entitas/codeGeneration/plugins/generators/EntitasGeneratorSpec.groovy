@@ -43,11 +43,11 @@ class EntitasGeneratorSpec extends Specification {
     void 'Consultamos al generador EntitasGenerator por la configuracion por defecto'() {
         given:
         Properties prop = new Properties()
-        prop.setProperty("CodeGeneration.CodeGenerator.SearchPkg","ilargia.entitas.fixtures.components")
+        prop.setProperty("CodeGeneration.CodeGenerator.SearchPkg","ilargia.entitas.fixtures.src.main.java.ilargia.components")
 
         when:
-        componentDataProvider.configure(prop)
-        entitasGenerator.configure(prop)
+        componentDataProvider.setProperties(prop)
+        entitasGenerator.setProperties(prop)
 
         then:
         entitasGenerator.gePriority() == 0
@@ -61,11 +61,11 @@ class EntitasGeneratorSpec extends Specification {
     void 'Generamos las fuentes con los datos del proveedor'() {
         given:
         Properties prop = new Properties()
-        prop.setProperty("CodeGeneration.SearchPkg","ilargia.entitas.fixtures.components")
-        componentDataProvider.configure(prop)
-        componentDataProvider.getDefaultProperties()
-        entitasGenerator.configure(prop)
-        entitasGenerator.getDefaultProperties()
+        prop.setProperty("CodeGeneration.SearchPkg","ilargia.entitas.fixtures.src.main.java.ilargia.components")
+        componentDataProvider.setProperties(prop)
+        componentDataProvider.defaultProperties()
+        entitasGenerator.setProperties(prop)
+        entitasGenerator.defaultProperties()
 
         when:
         List<CodeGenFile<JavaClassSource>> genFiles = entitasGenerator.generate(componentDataProvider.getData())

@@ -53,13 +53,13 @@ public class ComponentMatcherGenerator implements ICodeGenerator<JavaClassSource
     }
 
     @Override
-    public Properties getDefaultProperties() {
-        return targetPackageConfig.getDefaultProperties();
+    public Properties defaultProperties() {
+        return targetPackageConfig.defaultProperties();
     }
 
     @Override
-    public void configure(Properties properties) {
-        targetPackageConfig.configure(properties);
+    public void setProperties(Properties properties) {
+        targetPackageConfig.setProperties(properties);
     }
 
     @Override
@@ -67,6 +67,7 @@ public class ComponentMatcherGenerator implements ICodeGenerator<JavaClassSource
         data.stream()
                 .filter(d -> d instanceof ComponentData)
                 .map(d -> (ComponentData) d)
+                .filter(d-> !d.containsKey("entityIndex_type"))
                 .filter(d -> shouldGenerateMethods(d))
                 .forEach(d -> generateEntities(d));
 

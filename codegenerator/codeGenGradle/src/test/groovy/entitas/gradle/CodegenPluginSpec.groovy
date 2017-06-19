@@ -2,8 +2,12 @@ package entitas.gradle
 
 import org.gradle.api.Project
 import org.gradle.api.Task
+import org.gradle.api.tasks.SourceSet
+import org.gradle.api.tasks.SourceSetContainer
 import org.gradle.testfixtures.ProjectBuilder
 import spock.lang.Specification
+
+import java.util.stream.Collectors
 
 //@groovy.transform.TypeChecked
 class CodegenPluginSpec extends Specification {
@@ -44,8 +48,8 @@ class CodegenPluginSpec extends Specification {
 
         when:
         CodeGenerationPluginExtension ext = project.getExtensions().getByName("entitas") as CodeGenerationPluginExtension
-        ext.configure(prop)
-        ext.getDefaultProperties()
+        ext.setProperties(prop)
+        ext.defaultProperties()
 
         then:
         ext.getProperties().get("targetPackage") == "entitas.generated"
@@ -68,7 +72,7 @@ class CodegenPluginSpec extends Specification {
         when:
         CodeGenerationPluginExtension ext = project.getExtensions().getByName("entitas") as CodeGenerationPluginExtension
 
-        ext.configure(prop)
+        ext.setProperties(prop)
         ext.setTargetPackage("test.gen")
 
 
@@ -87,19 +91,32 @@ class CodegenPluginSpec extends Specification {
     void 'Queremos comprobar que se lanza correctamente la tarea de generacion de codigo'() {
         given:
         Properties prop = new Properties()
-        Project project = ProjectBuilder.builder().build()
+        Project project = ProjectBuilder.builder().withProjectDir(new File("src/test/java")).build()
         project.getPlugins().apply 'java'
         project.getPlugins().apply 'entitas.codegen'
 
         CodeGenerationTask task = project.getTasks().getByPath("codegen") as CodeGenerationTask
-        CodeGenerationPluginExtension ext = project.getExtensions().create("entitas",CodeGenerationPluginExtension.class)
+        CodeGenerationPluginExtension ext = project.getExtensions().getByName("entitas") as CodeGenerationPluginExtension
 
-        ext.configure(prop)
+
+        ext.setProperties(prop)
         ext.setTargetPackage("test.gen")
-        ext.setSearchPackagesKey("ilargia.entitas.fixtures.components")
+        ext.setSearchPackagesKey("ilargia.fixtures.components")
 
         when:
-        task.run()
+        task.setAppDomain(new EntitasGradleProject(project){
+            @Override
+            public List<String> getSrcDirs() {
+                List<String> temp =new ArrayList<String>()
+                for (String src : super.getSrcDirs()) {
+                    temp.add(src.replaceAll("/src/main/java", ""))
+                }
+
+                return temp
+            }
+
+        }).run()
+
 
         then:
         task instanceof CodeGenerationTask

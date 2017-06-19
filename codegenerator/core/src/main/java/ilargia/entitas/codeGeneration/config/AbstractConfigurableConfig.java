@@ -10,7 +10,7 @@ public abstract class AbstractConfigurableConfig implements IConfigurable {
     protected Properties properties;
 
     @Override
-    public void configure(Properties properties) {
+    public void setProperties(Properties properties) {
         this.properties = properties;
     }
 }

@@ -5,8 +5,8 @@ import java.util.Properties;
 
 public interface IConfigurable {
 
-    Properties getDefaultProperties();
+    Properties defaultProperties();
 
-    void configure(Properties properties);
+    void setProperties(Properties properties);
 
 }

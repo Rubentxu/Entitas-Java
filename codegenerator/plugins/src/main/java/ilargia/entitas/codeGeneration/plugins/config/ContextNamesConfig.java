@@ -12,12 +12,13 @@ public class ContextNamesConfig extends AbstractConfigurableConfig {
     static String CONTEXTS_KEY = "CodeGeneration.Contexts";
 
     @Override
-    public Properties getDefaultProperties() {
+    public Properties defaultProperties() {
         if (!properties.containsKey(CONTEXTS_KEY)) properties.setProperty(CONTEXTS_KEY, "Core");
         return properties;
     }
 
     public List<String> getContextNames() {
+        if(!properties.contains(CONTEXTS_KEY)) defaultProperties();
         return Pattern.compile(",")
                 .splitAsStream(properties.getProperty(CONTEXTS_KEY))
                 .sorted()

@@ -34,7 +34,7 @@ public class FixConfig extends AbstractCommand {
         prop.putAll(getConfigurables(Classs, config));
         forceAddKeys(prop, properties);
 
-        Properties requiredKeys = config.getDefaultProperties();
+        Properties requiredKeys = config.defaultProperties();
         requiredKeys.putAll(getConfigurables(Classs, config));
         removeUnusedKeys(askedRemoveKeys, requiredKeys, properties);
 
@@ -143,9 +143,9 @@ public class FixConfig extends AbstractCommand {
                 Properties properties = null;//loadProperties();
 
                 CodeGeneratorConfig config = new CodeGeneratorConfig();
-                config.configure(properties);
+                config.setProperties(properties);
 
-                forceAddKeys(config.getDefaultProperties(), properties);
+                forceAddKeys(config.defaultProperties(), properties);
 
                 List<Class> Classs = null;
 

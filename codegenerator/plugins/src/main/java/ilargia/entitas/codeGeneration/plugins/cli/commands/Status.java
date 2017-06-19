@@ -80,7 +80,7 @@ public class Status extends AbstractCommand {
             try {
                 properties = loadProperties();
                 CodeGeneratorConfig config = new CodeGeneratorConfig();
-                config.configure(properties);
+                config.setProperties(properties);
 
                 System.out.println(config.toString());
 
@@ -96,12 +96,12 @@ public class Status extends AbstractCommand {
                     );
 
                 } catch (Exception ex) {
-                    printKeyStatus(config.getDefaultProperties().keySet(), properties);
+                    printKeyStatus(config.defaultProperties().keySet(), properties);
                     throw ex;
                 }
 
-                config.getDefaultProperties().putAll(configurables);
-                Set<Object> requiredKeys = config.getDefaultProperties().keySet();
+                config.defaultProperties().putAll(configurables);
+                Set<Object> requiredKeys = config.defaultProperties().keySet();
 
                 printKeyStatus(requiredKeys, properties);
                 printPluginStatus(types, config);

@@ -10,7 +10,7 @@ public class CodegenPlugin implements Plugin<Project> {
     public void apply(Project project) {
         Properties properties = new Properties();
         CodeGenerationPluginExtension config = project.getExtensions().create("entitas", CodeGenerationPluginExtension.class);
-        config.configure(properties);
+        config.setProperties(properties);
         project.getTasks().create("codegen", CodeGenerationTask.class);
     }
 }

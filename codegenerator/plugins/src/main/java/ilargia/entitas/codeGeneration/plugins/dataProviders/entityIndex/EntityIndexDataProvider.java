@@ -157,14 +157,14 @@ public class EntityIndexDataProvider implements ICodeGeneratorDataProvider, ICon
     }
 
     @Override
-    public Properties getDefaultProperties() {
-        return _contextsComponentDataProvider.getDefaultProperties();
+    public Properties defaultProperties() {
+        return _contextsComponentDataProvider.defaultProperties();
     }
 
     @Override
-    public void configure(Properties properties) {
-        _codeGeneratorConfig.configure(properties);
-        _contextsComponentDataProvider.configure(properties);
+    public void setProperties(Properties properties) {
+        _codeGeneratorConfig.setProperties(properties);
+        _contextsComponentDataProvider.setProperties(properties);
     }
 
     @Override

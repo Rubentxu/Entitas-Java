@@ -43,11 +43,11 @@ class ComponentLookupGeneratorSpec extends Specification {
     void 'Consultamos al generador ComponentLookupGenerator por la configuracion por defecto'() {
         given:
         Properties prop = new Properties()
-        prop.setProperty("CodeGeneration.CodeGenerator.SearchPkg","ilargia.entitas.fixtures.components")
+        prop.setProperty("CodeGeneration.CodeGenerator.SearchPkg","ilargia.entitas.fixtures.src.main.java.ilargia.components")
 
         when:
-        componentDataProvider.configure(prop)
-        lookupGenerator.configure(prop)
+        componentDataProvider.setProperties(prop)
+        lookupGenerator.setProperties(prop)
 
         then:
         lookupGenerator.gePriority() == 0
@@ -61,11 +61,11 @@ class ComponentLookupGeneratorSpec extends Specification {
     void 'Generamos las fuentes con los datos del proveedor'() {
         given:
         Properties prop = new Properties()
-        prop.setProperty("CodeGeneration.SearchPkg","ilargia.entitas.fixtures.components")
-        componentDataProvider.configure(prop)
-        componentDataProvider.getDefaultProperties()
-        lookupGenerator.configure(prop)
-        lookupGenerator.getDefaultProperties()
+        prop.setProperty("CodeGeneration.SearchPkg","ilargia.entitas.fixtures.src.main.java.ilargia.components")
+        componentDataProvider.setProperties(prop)
+        componentDataProvider.defaultProperties()
+        lookupGenerator.setProperties(prop)
+        lookupGenerator.defaultProperties()
 
         when:
         List<CodeGenFile<JavaClassSource>> genFiles = lookupGenerator.generate(componentDataProvider.getData())

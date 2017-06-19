@@ -48,11 +48,11 @@ class ComponentDataProviderSpec extends Specification {
     void 'Consultamos al proveedor ComponentDataProvider por los contextos por defecto'() {
         given: "que iniciamos la configuracion en ComponentDataProvider"
         Properties prop = new Properties()
-        prop.setProperty("CodeGeneration.CodeGenerator.SearchPkg","ilargia.entitas.fixtures.components")
-        componentDataProvider.configure(prop)
+        prop.setProperty("CodeGeneration.CodeGenerator.SearchPkg","ilargia.entitas.fixtures.src.main.java.ilargia.components")
+        componentDataProvider.setProperties(prop)
 
         when: 'recogemos las propiedades por defecto'
-        Properties prop2 = componentDataProvider.getDefaultProperties()
+        Properties prop2 = componentDataProvider.defaultProperties()
 
         then: 'el resultado de los nombres de contextos debe ser `Core`'
         componentDataProvider.gePriority() == 0
@@ -67,11 +67,11 @@ class ComponentDataProviderSpec extends Specification {
     void 'Consultamos al proveedor ComponentDataProvider por los contextos extraidos de los componentes'() {
         given:
         Properties prop = new Properties()
-        prop.setProperty("CodeGeneration.SearchPkg","ilargia.entitas.fixtures.components")
-        componentDataProvider.configure(prop)
+        prop.setProperty("CodeGeneration.SearchPkg","ilargia.entitas.fixtures.src.main.java.ilargia.components")
+        componentDataProvider.setProperties(prop)
 
         when:
-        componentDataProvider.getDefaultProperties()
+        componentDataProvider.defaultProperties()
         List<CodeGeneratorData> datas = componentDataProvider.getData()
 
         then:
@@ -89,10 +89,10 @@ class ComponentDataProviderSpec extends Specification {
         where: 'la Propiedad: #ContextName para el id: #id  result: #result'
         id | id2 || result  | result2       | result3 | result4 | result5 | result6 | result7 | result8 | result9
         0  | 0   || "Game"  | "Ball"        | true    | false   | 2       | 1       | 0       | true    | []
-        1  | 0   || "Game"  | "Bounds"      | false   | false   | 2       | 5       | 0       | true    | ["ilargia.entitas.fixtures.components.game.Bounds.Tag"]
+        1  | 0   || "Game"  | "Bounds"      | false   | false   | 2       | 5       | 0       | true    | ["ilargia.entitas.fixtures.src.main.java.ilargia.components.game.Bounds.Tag"]
         2  | 0   || "Test"  | "Interactive" | false   | false   | 0       | 0       | 0       | true    | []
         3  | 0   || "Test"  | "Motion"      | false   | false   | 1       | 2       | 0       | true    | []
-        4  | 0   || "Core"  | "Player"      | false   | false   | 1       | 1       | 0       | true    | ["ilargia.entitas.fixtures.components.test.Player.ID"]
+        4  | 0   || "Core"  | "Player"      | false   | false   | 1       | 1       | 0       | true    | ["ilargia.entitas.fixtures.src.main.java.ilargia.components.test.Player.ID"]
         5  | 0   || "Test"  | "Position"    | false   | false   | 2       | 2       | 0       | true    | []
         6  | 0   || "Test"  | "Size"        | false   | false   | 1       | 2       | 0       | true    | []
         7  | 0   || "Input" | "View"        | false   | false   | 1       | 1       | 1       | false    | []

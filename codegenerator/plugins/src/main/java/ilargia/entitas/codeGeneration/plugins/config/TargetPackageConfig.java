@@ -9,7 +9,7 @@ public class TargetPackageConfig extends AbstractConfigurableConfig {
     public static String TARGET_PACKAGE_KEY = "CodeGeneration.TargetPackage";
 
     @Override
-    public Properties getDefaultProperties() {
+    public Properties defaultProperties() {
         if (!properties.containsKey(TARGET_PACKAGE_KEY))
             properties.setProperty(TARGET_PACKAGE_KEY, "entitas.generated");
         return properties;

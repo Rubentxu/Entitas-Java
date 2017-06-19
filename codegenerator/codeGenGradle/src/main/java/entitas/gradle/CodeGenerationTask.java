@@ -14,11 +14,11 @@ import java.util.Properties;
 
 public class CodeGenerationTask extends DefaultTask {
 
+    private IAppDomain appDomain;
 
-    public CodeGenerator getCodeGenerator(CodeGenerationPluginExtension extension, IAppDomain appDomain) {
-        Properties properties = new Properties();
-        extension.configure(properties);
-        extension.getDefaultProperties();
+    private CodeGenerator getCodeGenerator(CodeGenerationPluginExtension extension, IAppDomain appDomain) {
+
+        Properties properties = extension.defaultProperties();
         List<Class> types = CodeGeneratorUtil.loadTypesFromPlugins(extension);
 
         List<ICodeGeneratorDataProvider> dataProviders = CodeGeneratorUtil.getEnabledInstances(types,
@@ -38,15 +38,18 @@ public class CodeGenerationTask extends DefaultTask {
         return new CodeGenerator(dataProviders, codeGenerators, postProcessors);
     }
 
+    public CodeGenerationTask setAppDomain(IAppDomain appDomain) {
+        this.appDomain = appDomain;
+        return this;
+    }
 
     @TaskAction
     public void run() {
-        EntitasGradleProject entitasProject = new EntitasGradleProject(getProject());
         CodeGenerationPluginExtension extension = getProject().getExtensions().findByType(CodeGenerationPluginExtension.class);
         if (extension == null) {
             extension = new CodeGenerationPluginExtension();
         }
-        CodeGenerator codeGenerator = getCodeGenerator(extension, entitasProject);
+        CodeGenerator codeGenerator = getCodeGenerator(extension, appDomain);
         List<CodeGenFile> gen = codeGenerator.generate();
 
     }

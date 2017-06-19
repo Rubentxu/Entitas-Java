@@ -20,13 +20,19 @@ public class CodeGeneratorUtil {
         plugins.stream()
                 .filter(p -> p instanceof IConfigurable)
                 .map(p -> (IConfigurable) p)
-                .forEach(p -> p.configure(properties));
+                .forEach(p -> p.setProperties(properties));
     }
 
     public static List<Class> loadTypesFromPlugins(CodeGeneratorConfig config) {
+        List<String> plugins = new ArrayList<String>() {{
+            addAll(config.getDataProviders());
+            addAll(config.getCodeGenerators());
+            addAll(config.getPostProcessors());
+        }};
         return config.getPlugins().stream()
                 .flatMap(s-> CodeFinder.findClassRecursive(s).stream())
                 .filter(s-> s.getCanonicalName() != null )
+                .filter(s-> plugins.contains(s.getCanonicalName()))
                 .sorted((typeA, typeB) -> {
                    return typeA.getCanonicalName().compareTo(typeB.getCanonicalName());
                 })
@@ -97,7 +103,7 @@ public class CodeGeneratorUtil {
         return Stream.concat(Stream.concat(dataProviders.stream(), codeGenerators.stream()), postProcessors.stream())
                 .filter(d -> d instanceof IConfigurable)
                 .map(d -> (IConfigurable) d)
-                .map(instance -> instance.getDefaultProperties())
+                .map(instance -> instance.defaultProperties())
                 .flatMap(prop -> prop.<String, String>entrySet().stream())
                 .collect(Collectors.toMap(e -> (String) e.getKey(), e -> (String) e.getValue()));
     }
