@@ -20,11 +20,11 @@ import static ilargia.entitas.codeGeneration.plugins.dataProviders.components.pr
 public class EntitasGenerator implements ICodeGenerator<JavaClassSource>, IConfigurable {
     public static final String DEFAULT_COMPONENT_LOOKUP_TAG = "ComponentsLookup";
     private TargetPackageConfig targetPackageConfig;
-    private Set<String> contexts;
+    private Map<String, String> contexts;
 
     public EntitasGenerator() {
         targetPackageConfig = new TargetPackageConfig();
-        contexts = new HashSet<>();
+        contexts = new HashMap<>();
     }
 
     @Override
@@ -75,7 +75,7 @@ public class EntitasGenerator implements ICodeGenerator<JavaClassSource>, IConfi
 
         String finalPkgDestiny = pkgDestiny;
         return new ArrayList<CodeGenFile<JavaClassSource>>(){{
-            add(generateEntitas(contexts, finalPkgDestiny));
+            add(generateEntitas(contexts.keySet(), finalPkgDestiny));
         }};
 
     }
@@ -83,8 +83,16 @@ public class EntitasGenerator implements ICodeGenerator<JavaClassSource>, IConfi
     private void generateContexts(ComponentData data) {
         getContextNames(data).stream()
                 .forEach(contextName -> {
-                    if (!contexts.contains(contextName)) contexts.add(contextName);
+                    if (!contexts.containsKey(contextName)) {
+                        String pkgDestiny = targetPackageConfig.getTargetPackage();
+                        if (!pkgDestiny.endsWith(data.getSubDir())) {
+                            pkgDestiny += "." + data.getSubDir();
+
+                        }
+                        contexts.put(contextName, pkgDestiny);
+                    }
                 });
+
     }
 
 
@@ -103,12 +111,12 @@ public class EntitasGenerator implements ICodeGenerator<JavaClassSource>, IConfi
     }
 
 
-    private void createContextsMethod(JavaClassSource javaClass, Set<String> contextNames) {
+    private void createContextsMethod(JavaClassSource codeGen, Set<String> contextNames) {
         contextNames.forEach((contextName) -> {
             String createMethodName = String.format("create%1$sContext", WordUtils.capitalize(contextName));
             String body = String.format("return new %1$sContext(%2$s.totalComponents, 0, new ContextInfo(\"%1$s\", %2$s.componentNames(), %2$s.componentTypes()), factory%1$sEntity());",
                     contextName, WordUtils.capitalize(contextName) + DEFAULT_COMPONENT_LOOKUP_TAG);
-            javaClass.addMethod()
+            codeGen.addMethod()
                     .setPublic()
                     .setName(createMethodName)
                     .setReturnType(contextName + "Context")
@@ -146,19 +154,25 @@ public class EntitasGenerator implements ICodeGenerator<JavaClassSource>, IConfi
                 .setBody(setAllContexts);
     }
 
-    private void createContextFields(JavaClassSource javaClass, Set<String> contextNames) {
-        javaClass.addImport(Context.class);
-        javaClass.addImport("ilargia.entitas.api.*");
-        contextNames.forEach((contextName) -> {
+    private void createContextFields(JavaClassSource codeGen, Set<String> contextNames) {
+        codeGen.addImport(Context.class);
+        codeGen.addImport("ilargia.entitas.api.*");
+        codeGen.addImport("ilargia.entitas.api.entitas.EntityBaseFactory");
 
-            javaClass.addMethod()
+        contextNames.forEach((contextName) -> {
+            if(contexts.containsKey(contextName)) {
+                codeGen.addImport(contexts.get(contextName) + "." + contextName + "Context");
+                codeGen.addImport(contexts.get(contextName) + "." + contextName + "ComponentsLookup");
+                codeGen.addImport(contexts.get(contextName) + "." + contextName + "Entity");
+            }
+            codeGen.addMethod()
                     .setName(String.format("factory%1$sEntity", contextName))
                     .setReturnType(String.format("EntityBaseFactory<%1$sEntity>", contextName))
                     .setPublic()
                     .setBody(String.format("  return () -> { \n" +
                             "                   return new %1$sEntity();\n" +
                             "        };", contextName));
-            javaClass.addField()
+            codeGen.addField()
                     .setName(contextName.toLowerCase())
                     .setType(contextName + "Context")
                     .setPublic();

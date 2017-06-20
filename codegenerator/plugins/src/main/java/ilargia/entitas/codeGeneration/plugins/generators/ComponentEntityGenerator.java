@@ -1,6 +1,5 @@
 package ilargia.entitas.codeGeneration.plugins.generators;
 
-import ilargia.entitas.Entity;
 import ilargia.entitas.codeGeneration.data.CodeGenFile;
 import ilargia.entitas.codeGeneration.data.CodeGeneratorData;
 import ilargia.entitas.codeGeneration.interfaces.ICodeGenerator;
@@ -9,7 +8,10 @@ import ilargia.entitas.codeGeneration.plugins.config.TargetPackageConfig;
 import ilargia.entitas.codeGeneration.plugins.dataProviders.components.ComponentData;
 import org.apache.commons.lang3.text.WordUtils;
 import org.jboss.forge.roaster.Roaster;
-import org.jboss.forge.roaster.model.source.*;
+import org.jboss.forge.roaster.model.source.FieldSource;
+import org.jboss.forge.roaster.model.source.JavaClassSource;
+import org.jboss.forge.roaster.model.source.MethodSource;
+import org.jboss.forge.roaster.model.source.TypeVariableSource;
 
 import java.util.HashMap;
 import java.util.List;
@@ -110,6 +112,9 @@ public class ComponentEntityGenerator implements ICodeGenerator<JavaClassSource>
         if (shouldGenerateMethods(data)) {
             addImporEnums(data, codeGenerated);
             addEntityMethods(contextName, data, codeGenerated);
+        }
+        if (isSharedContext(data) && codeGenerated.getImport(targetPackageConfig.getTargetPackage()) == null) {
+            codeGenerated.addImport(targetPackageConfig.getTargetPackage() + ".SharedComponentsLookup");
         }
 
     }
@@ -222,11 +227,10 @@ public class ComponentEntityGenerator implements ICodeGenerator<JavaClassSource>
 
     public void addImportClass(ComponentData data, JavaClassSource codeGenerated) {
         if (data.getSource().getImports() != null) {
-            for (Import imp : data.getSource().getImports()) {
-                if (!imp.getQualifiedName().equals("ilargia.entitas.generators.Component")) {
-                    codeGenerated.addImport(imp);
-                }
-            }
+            data.getSource().getImports().stream()
+                    .filter(i -> !i.getQualifiedName().contains("ilargia.entitas.codeGenerator.annotations"))
+                    .filter(i -> !i.getQualifiedName().equals("ilargia.entitas.api.IComponent"))
+                    .forEach(imp -> codeGenerated.addImport(imp));
         }
     }
 

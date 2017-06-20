@@ -76,11 +76,16 @@ public class ComponentMatcherGenerator implements ICodeGenerator<JavaClassSource
     }
 
     private void generateEntities(ComponentData data) {
-        getContextNames(data).stream()
-                .forEach(contextName -> generateEntity(contextName, data));
+        List<String> contexts=  getContextNames(data);
+        if(contexts.size()>1) {
+            generateMatcher("Shared", data);
+        } else {
+            generateMatcher(contexts.get(0), data);
+        }
+
     }
 
-    private void generateEntity(String contextName, ComponentData data) {
+    private void generateMatcher(String contextName, ComponentData data) {
         String pkgDestiny = targetPackageConfig.getTargetPackage();
         CodeGenFile<JavaClassSource> genFile = getCodeGenFile(contextName, data);
         JavaClassSource codeGenerated = genFile.getFileContent();

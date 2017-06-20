@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 import static ilargia.entitas.codeGeneration.plugins.dataProviders.components.providers.ComponentTypeDataProvider.getFullTypeName;
 import static ilargia.entitas.codeGeneration.plugins.dataProviders.components.providers.ComponentTypeDataProvider.getTypeName;
 import static ilargia.entitas.codeGeneration.plugins.dataProviders.components.providers.ContextsComponentDataProvider.getContextNames;
+import static ilargia.entitas.codeGeneration.plugins.dataProviders.components.providers.ContextsComponentDataProvider.isSharedContext;
 import static ilargia.entitas.codeGeneration.plugins.dataProviders.components.providers.ShouldGenerateMethodsDataProvider.shouldGenerateMethods;
 
 
@@ -97,23 +98,20 @@ public class ComponentLookupGenerator implements ICodeGenerator<JavaClassSource>
     private JavaClassSource generateIndicesLookup(String contextName, List<ComponentData> dataList) {
         String pkgDestiny = targetPackageConfig.getTargetPackage();
 
-        JavaClassSource javaClass = Roaster.parse(JavaClassSource.class, String.format("public class %1$s {}",
+        JavaClassSource codeGen = Roaster.parse(JavaClassSource.class, String.format("public class %1$s {}",
                 WordUtils.capitalize(contextName) + DEFAULT_COMPONENT_LOOKUP_TAG));
-        if (dataList.size() > 0 && contextName == "shared") {
-            pkgDestiny += "." + "shared";
-
-        } else if (dataList.size() > 0 && !pkgDestiny.endsWith(dataList.get(0).getSubDir())) {
-            pkgDestiny += "." + dataList.get(0).getSubDir();
+        if (dataList.size() > 0 && !pkgDestiny.endsWith(dataList.get(0).getSubDir()) ) {
+           // pkgDestiny += "." + dataList.get(0).getSubDir();
 
         }
-        javaClass.setPackage(pkgDestiny);
+        codeGen.setPackage(pkgDestiny);
 
-        addIndices(dataList, javaClass);
-        addComponentNames(dataList, javaClass);
-        addComponentTypes(dataList, javaClass);
-        System.out.println(javaClass);
+        addIndices(dataList, codeGen);
+        addComponentNames(dataList, codeGen);
+        addComponentTypes(dataList, codeGen);
+        System.out.println(codeGen);
 
-        return javaClass;
+        return codeGen;
     }
 
 

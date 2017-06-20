@@ -93,7 +93,7 @@ class CodegenPluginSpec extends Specification {
         Properties prop = new Properties()
         Project project = ProjectBuilder.builder()
                 .withProjectDir(new File("src/test/java"))
-                .withGradleUserHomeDir(new File("../../build"))
+                .withGradleUserHomeDir(new File("../build/"))
                 .build()
         project.getPlugins().apply 'java'
         project.getPlugins().apply 'entitas.codegen'

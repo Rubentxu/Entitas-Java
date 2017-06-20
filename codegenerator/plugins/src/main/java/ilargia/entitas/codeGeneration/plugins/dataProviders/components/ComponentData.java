@@ -5,7 +5,7 @@ import org.jboss.forge.roaster.model.source.JavaClassSource;
 
 public class ComponentData extends CodeGeneratorData {
     private final JavaClassSource source;
-    private final String subDir;
+    private String subDir;
 
     public ComponentData(JavaClassSource source, String subDir) {
         this.source = source;

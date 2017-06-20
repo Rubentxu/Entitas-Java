@@ -67,13 +67,13 @@ public class WriteToDiskPostProcessor implements ICodeGenFilePostProcessor<JavaC
 
     public File createFile(String className, String subDir, JavaClassSource content) {
         String targetPackage = targetPackageConfig.getTargetPackage();
-        String finalPackage = subDir.equals("") ?
+        String finalPackage = subDir.equals("") || className.contains("Shared")?
                 String.format("%s", targetPackage) :
                 String.format("%s.%s", targetPackage, subDir);
         content.setPackage(finalPackage);
 
         String pathPackage = targetPackage.replace(".", "/");
-        String pathFile = subDir.equals("") ?
+        String pathFile = subDir.equals("") || className.contains("Shared")?
                 String.format("%s/%s/%s.java", projectConfig.getSrcDirs().get(0), pathPackage, className) :
                 String.format("%s/%s/%s/%s.java", projectConfig.getSrcDirs().get(0), pathPackage, subDir, className);
 
