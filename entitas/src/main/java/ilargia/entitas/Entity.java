@@ -70,6 +70,16 @@ public class Entity implements IEntity {
         return _contextInfo;
     }
 
+
+    /**
+     * Initialize Entity
+     *
+     * @param creationIndex
+     * @param totalComponents
+     * @param componentPools
+     * @param contextInfo
+     * @param aerc
+     */
     @Override
     public void initialize(int creationIndex, int totalComponents, Stack<IComponent>[] componentPools, ContextInfo contextInfo, IAERC aerc) {
         reactivate(creationIndex);
@@ -83,7 +93,7 @@ public class Entity implements IEntity {
         } else {
             _contextInfo = createDefaultContextInfo();
         }
-        this.aerc = (aerc==null)? new SafeAERC(this): aerc;
+        this.aerc = (aerc == null) ? new SafeAERC(this) : aerc;
 
     }
 
@@ -102,6 +112,16 @@ public class Entity implements IEntity {
         _isEnabled = true;
     }
 
+    /**
+     * Adds a component at the specified index.
+     * You can only have one component at an index.
+     * Each component type must have its own constant index.
+     * The prefered way is to use the
+     * generated methods from the code generator.
+     *
+     * @param index
+     * @param component
+     */
     @Override
     public void addComponent(int index, IComponent component) {
         if (!_isEnabled) {
@@ -121,6 +141,13 @@ public class Entity implements IEntity {
 
     }
 
+    /**
+     * Removes a component at the specified index.
+     * You can only remove a component at an index if it exists.
+     * The prefered way is to use the generated methods from the code generator.
+     *
+     * @param index
+     */
     @Override
     public void removeComponent(int index) {
         if (!_isEnabled) {
@@ -137,6 +164,14 @@ public class Entity implements IEntity {
 
     }
 
+    /**
+     * Replaces an existing component at the specified index
+     * or adds it if it doesn't exist yet.
+     * The prefered way is to use the generated methods from the code generator.
+     *
+     * @param index
+     * @param component
+     */
     @Override
     public void replaceComponent(int index, IComponent component) {
         if (!_isEnabled) {
@@ -172,6 +207,14 @@ public class Entity implements IEntity {
 
     }
 
+    /**
+     * Returns a component at the specified index.
+     * You can only get a component at an index if it exists.
+     * The prefered way is to use the generated methods from the code generator.
+     *
+     * @param index
+     * @return IComponent
+     */
     @Override
     public IComponent getComponent(int index) {
         if (!hasComponent(index)) {
@@ -184,6 +227,9 @@ public class Entity implements IEntity {
 
     }
 
+    /**
+     * @return IComponent[] Returns all added components.
+     */
     @Override
     public IComponent[] getComponents() {
         if (_componentsCache == null) {
@@ -203,6 +249,9 @@ public class Entity implements IEntity {
 
     }
 
+    /**
+     * @return int[] Returns all indices of added components.
+     */
     @Override
     public int[] getComponentIndices() {
         if (_componentIndicesCache == null) {
@@ -223,6 +272,12 @@ public class Entity implements IEntity {
 
     }
 
+    /**
+     * Determines whether this entity has a component at the specified index.
+     *
+     * @param index
+     * @return boolean
+     */
     @Override
     public boolean hasComponent(int index) {
         if (index < _components.length)
@@ -232,6 +287,12 @@ public class Entity implements IEntity {
 
     }
 
+    /**
+     * Determines whether this entity has components at all the specified indices.
+     *
+     * @param indices
+     * @return boolean
+     */
     @Override
     public boolean hasComponents(int... indices) {
         for (int index : indices) {
@@ -243,6 +304,12 @@ public class Entity implements IEntity {
 
     }
 
+    /**
+     * Determines whether this entity has a component at any of the specified indices.
+     *
+     * @param indices
+     * @return boolean
+     */
     @Override
     public boolean hasAnyComponent(int... indices) {
         for (int i = 0; i < indices.length; i++) {
@@ -254,6 +321,9 @@ public class Entity implements IEntity {
 
     }
 
+    /**
+     * Removes all components.
+     */
     @Override
     public void removeAllComponents() {
         for (int i = 0; i < _components.length; i++) {
@@ -263,6 +333,15 @@ public class Entity implements IEntity {
         }
     }
 
+    /**
+     * Returns the componentPool for the specified component index.
+     * componentPools is set by the context which created the entity and is used to reuse removed components.
+     * Removed components will be pushed to the componentPool.
+     * Use entity.CreateComponent(index, type) to get a new or reusable component from the componentPool.
+     *
+     * @param index
+     * @return Stack<IComponent>
+     */
     @Override
     public Stack<IComponent> getComponentPool(int index) {
         Stack<IComponent> componentPool = _componentPools[index];
@@ -274,6 +353,13 @@ public class Entity implements IEntity {
         return componentPool;
     }
 
+    /**
+     * Returns a new or reusable component from the componentPool for the specified component index.
+     *
+     * @param index
+     * @param clazz
+     * @return IComponent
+     */
     @Override
     public IComponent createComponent(int index, Class clazz) {
         Stack<IComponent> componentContext = getComponentPool(index);
@@ -288,6 +374,12 @@ public class Entity implements IEntity {
         }
     }
 
+    /**
+     * Returns a new or reusable component from the componentPool for the specified component index.
+     *
+     * @param index
+     * @return IComponent
+     */
     @Override
     public IComponent createComponent(int index) {
         Stack<IComponent> componentPool = getComponentPool(index);
@@ -311,17 +403,33 @@ public class Entity implements IEntity {
         return null;
     }
 
+    /**
+     * @return Returns the number of objects that retain this entity.
+     */
     @Override
     public int retainCount() {
         return aerc.retainCount();
     }
 
+    /**
+     * Retains the entity. An owner can only retain the same entity once.
+     * Retain/Release is part of AERC (Automatic Entity Reference Counting) and is used internally to prevent pooling retained entities.
+     * If you use retain manually you also have to release it manually at some point.
+     * @param owner
+     *
+     */
     @Override
     public void retain(Object owner) {
         aerc.retain(owner);
 
     }
 
+    /**
+     * Releases the entity. An owner can only release an entity if it retains it.
+     * Retain/Release is part of AERC (Automatic Entity Reference Counting) and is used internally to prevent pooling retained entities.
+     * If you use retain manually you also have to release it manually at some point.
+     * @param owner
+     */
     @Override
     public void release(Object owner) {
         aerc.release(owner);
@@ -331,6 +439,9 @@ public class Entity implements IEntity {
 
     }
 
+    /**
+     * Dispatches OnDestroyEntity which will start the destroy process.
+     */
     @Override
     public void destroy() {
         if (!_isEnabled) {
@@ -340,6 +451,10 @@ public class Entity implements IEntity {
 
     }
 
+    /**
+     *  This method is used internally. Don't call it yourself.
+     *  Use entity.Destroy();
+     */
     @Override
     public void internalDestroy() {
         removeAllComponents();
@@ -355,6 +470,7 @@ public class Entity implements IEntity {
 
     }
 
+    /** Do not call this method manually. This method is called by the context. */
     public void removeAllOnEntityReleasedHandlers() {
         OnEntityReleased.clear();
     }
