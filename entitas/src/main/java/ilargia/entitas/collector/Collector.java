@@ -12,7 +12,15 @@ import ilargia.entitas.group.Group;
 import java.util.Arrays;
 import java.util.Set;
 
-public class Collector<TEntity extends IEntity> implements ICollector{
+/**
+ * A Collector can observe one or more groups from the same context
+ * and collects changed entities based on the specified groupEvent.
+ *
+ * @author Rubentxu
+ * @param <TEntity>
+ */
+public class Collector<TEntity extends IEntity> implements ICollector {
+
 
     private Set<TEntity> _collectedEntities; //ObjectOpenHashSet
     private IGroup<TEntity>[] _groups;
@@ -21,12 +29,21 @@ public class Collector<TEntity extends IEntity> implements ICollector{
     String _toStringCache;
     StringBuilder _toStringBuilder;
 
-
+    /**
+     * Creates a Collector and will collect changed entities based on the specified groupEvent.
+     * @param group
+     * @param eventType
+     */
     public Collector(IGroup<TEntity> group, GroupEvent eventType) {
         this(new IGroup[]{group}, new GroupEvent[]{eventType});
 
     }
 
+    /**
+     * Creates a Collector and will collect changed entities based on the specified groupEvents.
+     * @param groups
+     * @param groupEvents
+     */
     public Collector(IGroup<TEntity>[] groups, GroupEvent[] groupEvents) {
         _groups = groups;
         _collectedEntities = EntitasCollections.createSet(IEntity.class);
@@ -45,16 +62,28 @@ public class Collector<TEntity extends IEntity> implements ICollector{
         activate();
     }
 
+    /**
+     * Returns all collected entities.
+     * Call collector.clearCollectedEntities() once you processed all entities.
+     *
+     * @returns Set<TEntity>
+     */
     @Override
     public Set collectedEntities() {
         return _collectedEntities;
     }
 
+    /**
+     * @return int  Returns the number of all collected entities.
+     */
     @Override
     public int getCount() {
         return _collectedEntities.size();
     }
 
+    /**
+     * Activates the Collector and will start collecting changed entities. Collectors are activated by default.
+     */
     @Override
     public void activate() {
         for (int i = 0; i < _groups.length; i++) {
@@ -76,6 +105,11 @@ public class Collector<TEntity extends IEntity> implements ICollector{
         }
     }
 
+    /**
+     * Deactivates the Collector.
+     * This will also clear all collected entities.
+     * Collectors are activated by default.
+     */
     @Override
     public void deactivate() {
         for (int i = 0; i < _groups.length; i++) {
@@ -87,6 +121,9 @@ public class Collector<TEntity extends IEntity> implements ICollector{
         clearCollectedEntities();
     }
 
+    /**
+     *  Clears all collected entities.
+     */
     @Override
     public void clearCollectedEntities() {
         for (IEntity entity : _collectedEntities) {

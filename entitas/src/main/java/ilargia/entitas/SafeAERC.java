@@ -8,6 +8,14 @@ import ilargia.entitas.factories.EntitasCollections;
 
 import java.util.Set;
 
+/**
+ * Automatic Entity Reference Counting (AERC) is used internally to prevent pooling retained entities.
+ * If you use retain manually you also have to release it manually at some point.
+ * SafeAERC checks if the entity has already been retained or released.
+ * It's slower, but you keep the information about the owners.
+ * @author  Rubentxu
+ *
+ */
 public class SafeAERC implements IAERC {
     private IEntity _entity;
     private Set<Object> _owners;

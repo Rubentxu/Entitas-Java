@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 public @interface Component {
 
-    String[] pools() default {"SplashPool"};
+    String[] pools() default {"Pool"};
 
     boolean isSingleEntity() default false;
 

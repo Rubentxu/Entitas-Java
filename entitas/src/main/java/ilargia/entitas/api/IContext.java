@@ -36,7 +36,7 @@ public interface IContext<TEntity extends IEntity> {
 
     void destroyAllEntities();
 
-    void addEntityIndex(String name, IEntityIndex entityIndex);
+    void addEntityIndex(IEntityIndex entityIndex);
 
     IEntityIndex getEntityIndex(String name);
 

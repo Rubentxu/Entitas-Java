@@ -18,13 +18,42 @@ import java.util.List;
 import java.util.Set;
 import java.util.Stack;
 
+/**
+ * Use context.CreateEntity() to create a new entity and entity.Destroy() to destroy it.
+ * You can add, replace and remove IComponent to an entity.
+ *
+ * @author Rubentxu
+ **/
 public class Entity implements IEntity {
 
-    // Eventos
+    /**
+    * Occurs when a component gets added.
+    * All event handlers will be removed when the entity gets destroyed by the context.
+    */
     public Set<EntityComponentChanged> OnComponentAdded = EntitasCollections.createSet(EntityComponentChanged.class);
+
+    /**
+    * Occurs when a component gets removed.
+    * All event handlers will be removed when the entity gets destroyed by the context.
+    */
     public Set<EntityComponentChanged> OnComponentRemoved = EntitasCollections.createSet(EntityComponentChanged.class);
+
+    /**
+    * Occurs when a component gets replaced.
+    * All event handlers will be removed when the entity gets destroyed by the context.
+    */
     public Set<EntityComponentReplaced> OnComponentReplaced = EntitasCollections.createSet(EntityComponentReplaced.class);
+
+    /**
+     * Occurs when an entity gets released and is not retained anymore.
+     * All event handlers will be removed when the entity gets destroyed by the context.
+     */
     public Set<EntityEvent> OnEntityReleased = EntitasCollections.createSet(EntityEvent.class);
+
+    /**
+     * Occurs when calling entity.Destroy().
+     * All event handlers will be removed when the entity gets destroyed by the context.
+     */
     public Set<EntityEvent> OnDestroyEntity = EntitasCollections.createSet(EntityEvent.class);
 
 
@@ -40,34 +69,65 @@ public class Entity implements IEntity {
     private int[] _componentIndicesCache;
 
 
-    @Override
-    public IAERC getAERC() {
-        return aerc;
-    }
-
+    /**
+     *  The total amount of components an entity can possibly have.
+     *  @return int
+     */
     @Override
     public int getTotalComponents() {
         return _totalComponents;
     }
 
+    /**
+    * Each entity has its own unique creationIndex which will be set by the context when you create the entity.
+    * @return int
+    */
     @Override
     public int getCreationIndex() {
         return _creationIndex;
     }
 
+    /**
+    * The context manages the state of an entity.
+    * Active entities are enabled, destroyed entities are not.
+    * @return boolean
+    */
     @Override
     public boolean isEnabled() {
         return _isEnabled;
     }
 
+    /**
+     * componentPools is set by the context which created the entity and is used to reuse removed components.
+     * Removed components will be pushed to the componentPool.
+     * Use entity.CreateComponent(index, type) to get a new or reusable component from the componentPool.
+     * Use entity.GetComponentPool(index) to get a componentPool for a specific component index.
+     * @return Stack<IComponent>[]
+     */
     @Override
     public Stack<IComponent>[] componentPools() {
         return _componentPools;
     }
 
+    /**
+     * The contextInfo is set by the context which created the entity and
+     * contains information about the context.
+     * It's used to provide better error messages.
+     * @return ContextInfo
+     */
     @Override
     public ContextInfo contextInfo() {
         return _contextInfo;
+    }
+
+    /**
+     * Automatic Entity Reference Counting (AERC) is used internally to prevent pooling retained entities.
+     * If you use retain manually you also have to release it manually at some point.
+     * @return IAERC
+     */
+    @Override
+    public IAERC getAERC() {
+        return aerc;
     }
 
 
@@ -415,8 +475,8 @@ public class Entity implements IEntity {
      * Retains the entity. An owner can only retain the same entity once.
      * Retain/Release is part of AERC (Automatic Entity Reference Counting) and is used internally to prevent pooling retained entities.
      * If you use retain manually you also have to release it manually at some point.
-     * @param owner
      *
+     * @param owner
      */
     @Override
     public void retain(Object owner) {
@@ -428,6 +488,7 @@ public class Entity implements IEntity {
      * Releases the entity. An owner can only release an entity if it retains it.
      * Retain/Release is part of AERC (Automatic Entity Reference Counting) and is used internally to prevent pooling retained entities.
      * If you use retain manually you also have to release it manually at some point.
+     *
      * @param owner
      */
     @Override
@@ -452,8 +513,8 @@ public class Entity implements IEntity {
     }
 
     /**
-     *  This method is used internally. Don't call it yourself.
-     *  Use entity.Destroy();
+     * This method is used internally. Don't call it yourself.
+     * Use entity.Destroy();
      */
     @Override
     public void internalDestroy() {
@@ -470,7 +531,9 @@ public class Entity implements IEntity {
 
     }
 
-    /** Do not call this method manually. This method is called by the context. */
+    /**
+     * Do not call this method manually. This method is called by the context.
+     */
     public void removeAllOnEntityReleasedHandlers() {
         OnEntityReleased.clear();
     }
