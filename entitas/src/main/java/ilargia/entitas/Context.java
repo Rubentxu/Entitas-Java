@@ -164,32 +164,6 @@ public class Context<TEntity extends Entity> implements IContext<TEntity> {
     }
 
 
-    @Override
-    public void destroyEntity(TEntity entity) {
-        if (!_entities.remove(entity)) {
-            throw new ContextDoesNotContainEntityException("'" + this + "' cannot destroy " + entity + "!",
-                    "Did you call context.DestroyEntity() on a wrong context?");
-        }
-        _entitiesCache = null;
-        notifyEntityWillBeDestroyed(entity);
-
-        entity.internalDestroy();
-
-        notifyEntityDestroyed(entity);
-
-        if (entity.retainCount() == 1) {
-            entity.OnEntityReleased(_cachedEntityReleased);
-            _reusableEntities.push(entity);
-            entity.release(this);
-            entity.removeAllOnEntityReleasedHandlers();
-
-        } else {
-            _retainedEntities.add(entity);
-            entity.release(this);
-        }
-
-    }
-
     /**
      *  Destroys all entities in the context.
      * Throws an exception if there are still retained entities.
@@ -383,8 +357,28 @@ public class Context<TEntity extends Entity> implements IContext<TEntity> {
         _reusableEntities.push(entity);
     }
 
-    void onDestroyEntity(IEntity entity) {
-        destroyEntity((TEntity)entity);
+    void onDestroyEntity(TEntity entity) {
+        if (!_entities.remove(entity)) {
+            throw new ContextDoesNotContainEntityException("'" + this + "' cannot destroy " + entity + "!",
+                    "Did you call context.DestroyEntity() on a wrong context?");
+        }
+        _entitiesCache = null;
+        notifyEntityWillBeDestroyed(entity);
+
+        entity.internalDestroy();
+
+        notifyEntityDestroyed(entity);
+
+        if (entity.retainCount() == 1) {
+            entity.OnEntityReleased(_cachedEntityReleased);
+            _reusableEntities.push(entity);
+            entity.release(this);
+            entity.removeAllOnEntityReleasedHandlers();
+
+        } else {
+            _retainedEntities.add(entity);
+            entity.release(this);
+        }
     }
 
     /**

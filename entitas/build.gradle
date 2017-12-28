@@ -1,6 +1,5 @@
 apply plugin: 'java'
 apply plugin: 'groovy'
-apply plugin: "jacoco"
 
 
 archivesBaseName = 'Entitas-Java'
@@ -8,18 +7,18 @@ archivesBaseName = 'Entitas-Java'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
-jacoco {
-    toolVersion = "0.7.6.201602180812"
-    reportsDir = file("$buildDir/customJacocoReportDir")
-}
+//jacoco {
+//    toolVersion = "0.7.6.201602180812"
+//    reportsDir = file("$buildDir/customJacocoReportDir")
+//}
 
-jacocoTestReport {
-    reports {
-        xml.enabled true
-        csv.enabled false
-        html.destination "${buildDir}/jacocoHtml"
-    }
-}
+//jacocoTestReport {
+//    reports {
+//        xml.enabled true
+//        csv.enabled false
+//        html.destination "${buildDir}/jacocoHtml"
+//    }
+//}
 
 
 dependencies {

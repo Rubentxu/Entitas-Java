@@ -167,8 +167,8 @@ public class ContextTest {
     public void entityIndexTest() {
         entity.addComponent(TestComponentIds.Position, new Position());
         Group group = context.getGroup(TestMatcher.Position());
-        PrimaryEntityIndex<Entity, String> index = new PrimaryEntityIndex("", (e, c) -> "positionEntities", group);
-        context.addEntityIndex("positions", index);
+        PrimaryEntityIndex<Entity, String> index = new PrimaryEntityIndex("positions", (e, c) -> "positionEntities", group);
+        context.addEntityIndex(index);
         index = (PrimaryEntityIndex<Entity, String>) context.getEntityIndex("positions");
         assertNotNull(index);
         assertNotNull(index.getEntity("positionEntities"));
@@ -179,9 +179,9 @@ public class ContextTest {
     public void duplicateEntityIndexTest() {
         entity.addComponent(TestComponentIds.Position, new Position());
         Group group = context.getGroup(TestMatcher.Position());
-        PrimaryEntityIndex<Entity, String> index = new PrimaryEntityIndex("", group, (e, c) -> new String [] {"positionEntities"});
-        context.addEntityIndex("duplicate", index);
-        context.addEntityIndex("duplicate", index);
+        PrimaryEntityIndex<Entity, String> index = new PrimaryEntityIndex("duplicate", group, (e, c) -> new String [] {"positionEntities"});
+        context.addEntityIndex( index);
+        context.addEntityIndex(index);
 
     }
 

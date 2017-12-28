@@ -13,7 +13,7 @@ allprojects {
     apply plugin: "idea"
 
     ext {
-        gdxVersion = '1.9.5'
+        gdxVersion = '1.9.8'
         box2dlightsVersion = '1.4'
     }
 

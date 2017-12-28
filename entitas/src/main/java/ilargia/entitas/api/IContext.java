@@ -13,9 +13,6 @@ public interface IContext<TEntity extends IEntity> {
 
     TEntity createEntity();
 
-    @Deprecated
-    void destroyEntity(TEntity entity);
-
     boolean hasEntity(TEntity entity);
 
     TEntity[] getEntities();

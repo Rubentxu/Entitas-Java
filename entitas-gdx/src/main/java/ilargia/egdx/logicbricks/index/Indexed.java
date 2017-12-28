@@ -29,8 +29,7 @@ public class Indexed {
         _entitas = entitas;
          index = new KeyIndex(-1,null);
         // GameEntity contains Sensors entities
-        _entitas.sensor.addEntityIndex(Indexed.SensorsEntityIndex,  new PrimaryEntityIndex<SensorEntity, KeyIndex>(
-                Indexed.SensorsEntityIndex,
+        _entitas.sensor.addEntityIndex(new PrimaryEntityIndex<SensorEntity, KeyIndex>(Indexed.SensorsEntityIndex,
                 ((e, c) -> {
                     if(c != null) {
                         ilargia.egdx.logicbricks.component.sensor.Link link= (ilargia.egdx.logicbricks.component.sensor.Link) c;
@@ -39,8 +38,7 @@ public class Indexed {
                     return new KeyIndex(e.getLink().ownerEntity, e.getLink().sensorReference);
                 }), _entitas.sensor.getGroup(SensorMatcher.Link())));
         // GameEntity contains Actuator entities
-        _entitas.actuator.addEntityIndex(Indexed.ActuatorsEntityIndex,  new PrimaryEntityIndex<ActuatorEntity, KeyIndex>(
-                Indexed.ActuatorsEntityIndex,
+        _entitas.actuator.addEntityIndex(new PrimaryEntityIndex<ActuatorEntity, KeyIndex>(Indexed.ActuatorsEntityIndex,
                 ((e, c) -> {
                     if(c != null) {
                         Link link= (Link) c;
@@ -50,19 +48,16 @@ public class Indexed {
                 }), _entitas.actuator.getGroup(ActuatorMatcher.Link())));
 
         // Interactive GameEntity index
-        _entitas.game.addEntityIndex(Indexed.InteractiveEntityIndex,  new PrimaryEntityIndex<GameEntity, Integer>(
-                Indexed.InteractiveEntityIndex,
+        _entitas.game.addEntityIndex(new PrimaryEntityIndex<GameEntity, Integer>(Indexed.InteractiveEntityIndex,
                 ((e, c) -> e.getCreationIndex()), _entitas.game.getGroup(GameMatcher.Interactive())));
 
         // Tags GameEntity index
-        _entitas.game.addEntityIndex(Indexed.TagEntityIndex, new EntityIndex<GameEntity, String>(
-                Indexed.TagEntityIndex,
+        _entitas.game.addEntityIndex(new EntityIndex<GameEntity, String>(Indexed.TagEntityIndex,
                 _entitas.game.getGroup(Matcher.AllOf(GameMatcher.Tags(),GameMatcher.Interactive())),
                 ((e, c) -> e.getTags().values.toArray(new String[0]))));
 
         // Sensors context GameEntities
-        _entitas.game.addEntityIndex(Indexed.GameEntitiesInSensorIndex, new EntityIndex<GameEntity, Integer>(
-                Indexed.GameEntitiesInSensorIndex,
+        _entitas.game.addEntityIndex(new EntityIndex<GameEntity, Integer>(Indexed.GameEntitiesInSensorIndex,
                 _entitas.game.getGroup(GameMatcher.Interactive()),
                 ((e, c) -> new Integer[0])));
 
